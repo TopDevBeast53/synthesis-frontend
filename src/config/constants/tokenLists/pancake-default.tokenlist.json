@@ -11,6 +11,14 @@
   "keywords": ["pancake", "default"],
   "tokens": [
     {
+      "name": "Aura",
+      "symbol": "AURA",
+      "address": "0xdf2b1082ee98b48b5933378c8f58ce2f5aaff135",
+      "chainId": 97,
+      "decimals": 18,
+      "logoURI": "https://avatars.githubusercontent.com/u/97184126?s=200&v=4"
+    },
+    {
       "name": "Wrapped BNB",
       "symbol": "WBNB",
       "address": "0x094616F0BdFB0b526bD735Bf66Eca0Ad254ca81F",
