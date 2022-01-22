@@ -1,5 +1,5 @@
 import React from 'react'
-import { Trade, TradeType } from '@pancakeswap/sdk'
+import { Trade, TradeType } from 'sdk'
 import { Text } from '@pancakeswap/uikit'
 import { Field } from 'state/swap/actions'
 import { useTranslation } from 'contexts/Localization'

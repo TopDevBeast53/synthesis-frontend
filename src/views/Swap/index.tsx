@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
-import { CurrencyAmount, JSBI, Token, Trade } from '@pancakeswap/sdk'
+import { CurrencyAmount, JSBI, Token, Trade } from 'sdk'
 import {
   Button,
   Text,
@@ -9,7 +9,7 @@ import {
   useModal,
   Flex,
   IconButton,
-  BottomDrawer,
+  // BottomDrawer,
   useMatchBreakpoints,
   ArrowUpDownIcon,
 } from '@pancakeswap/uikit'
@@ -59,7 +59,7 @@ import { computeTradePriceBreakdown, warningSeverity } from '../../utils/prices'
 import CircleLoader from '../../components/Loader/CircleLoader'
 import Page from '../Page'
 import SwapWarningModal from './components/SwapWarningModal'
-import PriceChartContainer from './components/Chart/PriceChartContainer'
+// import PriceChartContainer from './components/Chart/PriceChartContainer'
 import { StyledInputCurrencyWrapper, StyledSwapContainer } from './styles'
 import CurrencyInputHeader from './components/CurrencyInputHeader'
 
@@ -357,7 +357,7 @@ export default function Swap({ history }: RouteComponentProps) {
   return (
     <Page removePadding={isChartExpanded} hideFooterOnDesktop={isChartExpanded}>
       <Flex width="100%" justifyContent="center" position="relative">
-        {!isMobile && (
+        {/* {!isMobile && (
           <PriceChartContainer
             inputCurrencyId={inputCurrencyId}
             inputCurrency={currencies[Field.INPUT]}
@@ -385,7 +385,7 @@ export default function Swap({ history }: RouteComponentProps) {
           }
           isOpen={isChartDisplayed}
           setIsOpen={setIsChartDisplayed}
-        />
+        /> */}
         <Flex flexDirection="column">
           <StyledSwapContainer $isChartExpanded={isChartExpanded}>
             <StyledInputCurrencyWrapper mt={isChartExpanded ? '24px' : '0'}>
