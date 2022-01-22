@@ -10,7 +10,7 @@ import config from './config/config'
 import UserMenu from './UserMenu'
 import GlobalSettings from './GlobalSettings'
 import { getActiveMenuItem, getActiveSubMenuItem } from './utils'
-import { footerLinks } from './config/footerConfig'
+// import { footerLinks } from './config/footerConfig'
 
 const Menu = (props) => {
   const { isDark, toggleTheme } = useTheme()
@@ -35,7 +35,8 @@ const Menu = (props) => {
       cakePriceUsd={11}
       links={config(t)}
       subLinks={activeMenuItem?.hideSubNav ? [] : activeMenuItem?.items}
-      footerLinks={footerLinks(t)}
+      // footerLinks={footerLinks(t)}
+      footerLings={{}}
       activeItem={activeMenuItem?.href}
       activeSubItem={activeSubMenuItem?.href}
       buyCakeLabel={t('Buy CAKE')}

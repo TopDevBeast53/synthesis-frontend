@@ -46,7 +46,7 @@ import {
   useDerivedSwapInfo,
   useSwapActionHandlers,
   useSwapState,
-  useSingleTokenSwapInfo,
+  // useSingleTokenSwapInfo,
 } from '../../state/swap/hooks'
 import {
   useExpertModeManager,
@@ -91,7 +91,7 @@ export default function Swap({ history }: RouteComponentProps) {
   const loadedUrlParams = useDefaultsFromURLSearch()
   const { t } = useTranslation()
   const { isMobile } = useMatchBreakpoints()
-  const [isChartExpanded, setIsChartExpanded] = useState(false)
+  const [isChartExpanded /* setIsChartExpanded */] = useState(false)
   const [userChartPreference, setUserChartPreference] = useExchangeChartManager(isMobile)
   const [isChartDisplayed, setIsChartDisplayed] = useState(userChartPreference)
 
@@ -130,10 +130,10 @@ export default function Swap({ history }: RouteComponentProps) {
   const { v2Trade, currencyBalances, parsedAmount, currencies, inputError: swapInputError } = useDerivedSwapInfo()
 
   // Price data
-  const {
-    [Field.INPUT]: { currencyId: inputCurrencyId },
-    [Field.OUTPUT]: { currencyId: outputCurrencyId },
-  } = useSwapState()
+  // const {
+  //   [Field.INPUT]: { currencyId: inputCurrencyId },
+  //   [Field.OUTPUT]: { currencyId: outputCurrencyId },
+  // } = useSwapState()
 
   const {
     wrapType,
@@ -143,7 +143,7 @@ export default function Swap({ history }: RouteComponentProps) {
   const showWrap: boolean = wrapType !== WrapType.NOT_APPLICABLE
   const trade = showWrap ? undefined : v2Trade
 
-  const singleTokenPrice = useSingleTokenSwapInfo()
+  // const singleTokenPrice = useSingleTokenSwapInfo()
 
   const parsedAmounts = showWrap
     ? {
