@@ -36,19 +36,19 @@ const ColoredIconButton = styled(IconButton)`
 
 const CurrencyInputHeader: React.FC<Props> = ({ title, subtitle, setIsChartDisplayed, isChartDisplayed }) => {
   const [expertMode] = useExpertModeManager()
-  const toggleChartDisplayed = () => {
-    setIsChartDisplayed((currentIsChartDisplayed) => !currentIsChartDisplayed)
-  }
+  // const toggleChartDisplayed = () => {
+  //   setIsChartDisplayed((currentIsChartDisplayed) => !currentIsChartDisplayed)
+  // }
   const [onPresentTransactionsModal] = useModal(<TransactionsModal />)
 
   return (
     <CurrencyInputContainer>
       <Flex width="100%" alignItems="flex-start" justifyContent="space-between">
-        {setIsChartDisplayed && (
+        {/* {setIsChartDisplayed && (
           <ColoredIconButton onClick={toggleChartDisplayed} variant="text" scale="sm">
             {isChartDisplayed ? <ChartDisableIcon color="textSubtle" /> : <ChartIcon width="24px" color="textSubtle" />}
           </ColoredIconButton>
-        )}
+        )} */}
         <Flex flexDirection="column" alignItems="center">
           <Heading as="h2" mb="8px">
             {title}

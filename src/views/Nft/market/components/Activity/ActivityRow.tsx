@@ -13,7 +13,7 @@ import {
 } from '@pancakeswap/uikit'
 import { Link as RouterLink } from 'react-router-dom'
 import { Activity, NftToken } from 'state/nftMarket/types'
-import { Price } from '@pancakeswap/sdk'
+import { Price } from 'sdk'
 import styled from 'styled-components'
 import { getBscScanLink } from 'utils'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'

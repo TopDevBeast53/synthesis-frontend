@@ -1,7 +1,10 @@
-import { ChainId, JSBI, Percent, Token } from '@pancakeswap/sdk'
+import { ChainId, JSBI, Percent, Token } from 'sdk'
 import { mainnetTokens, testnetTokens } from './tokens'
 
-export const ROUTER_ADDRESS = '0x10ED43C718714eb63d5aA57B78B54704E256024E'
+// Pancake test router address 0x9Ac64Cc6e4415144C455BD8E4837Fea55603e5c3
+// Pancake prod router address 0x10ED43C718714eb63d5aA57B78B54704E256024E
+// Aura test net router address 0x38433227c7a606ebb9ccb0acfcd7504224659b74
+export const ROUTER_ADDRESS = '0x38433227c7a606ebb9ccb0acfcd7504224659b74'
 
 // a list of tokens by chain
 type ChainTokenList = {
