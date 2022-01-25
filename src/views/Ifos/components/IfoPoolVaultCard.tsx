@@ -17,7 +17,7 @@ import { TokenPairImage } from 'components/TokenImage'
 import tokens from 'config/constants/tokens'
 import { useTranslation } from 'contexts/Localization'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import { useBUSDCakeAmount } from 'hooks/useBUSDPrice'
+import { useBUSDAuraAmount } from 'hooks/useBUSDPrice'
 import React, { useState } from 'react'
 import { useIfoPoolCredit, useIfoPoolVault, useIfoWithApr } from 'state/pools/hooks'
 import { VaultKey } from 'state/types'
@@ -72,7 +72,7 @@ const IfoPoolVaultCardMobile: React.FC = () => {
   const [isExpanded, setIsExpanded] = useState(false)
 
   const cakeAsNumberBalance = getBalanceNumber(credit)
-  const stakedDollarValue = useBUSDCakeAmount(cakeAsNumberBalance)
+  const stakedDollarValue = useBUSDAuraAmount(cakeAsNumberBalance)
 
   const { targetRef, tooltip, tooltipVisible } = useTooltip(
     t('Any funds you stake in this pool will be automagically harvested and restaked (compounded) for you.'),

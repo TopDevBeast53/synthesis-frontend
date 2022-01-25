@@ -16,7 +16,7 @@ import {
 } from '@pancakeswap/uikit'
 import { useTranslation } from 'contexts/Localization'
 import { getBalanceNumber } from 'utils/formatBalance'
-import { usePriceCakeBusd } from 'state/farms/hooks'
+import { usePriceAuraBusd } from 'state/farms/hooks'
 import { useCakeVault } from 'state/pools/hooks'
 import Balance from 'components/Balance'
 import BountyModal from './BountyModal'
@@ -35,7 +35,7 @@ const BountyCard = () => {
     estimatedCakeBountyReward,
     fees: { callFee },
   } = useCakeVault()
-  const cakePriceBusd = usePriceCakeBusd()
+  const cakePriceBusd = usePriceAuraBusd()
 
   const estimatedDollarBountyReward = useMemo(() => {
     return new BigNumber(estimatedCakeBountyReward).multipliedBy(cakePriceBusd)

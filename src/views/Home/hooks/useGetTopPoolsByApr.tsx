@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react'
-import { usePriceCakeBusd } from 'state/farms/hooks'
+import { usePriceAuraBusd } from 'state/farms/hooks'
 import { useAppDispatch } from 'state'
 import { orderBy } from 'lodash'
 import { VaultKey, DeserializedPool } from 'state/types'
@@ -41,7 +41,7 @@ const useGetTopPoolsByApr = (isIntersecting: boolean) => {
 
   const pools = usePoolsWithVault()
 
-  const cakePriceBusd = usePriceCakeBusd()
+  const cakePriceBusd = usePriceAuraBusd()
 
   useEffect(() => {
     const fetchPoolsPublicData = async () => {

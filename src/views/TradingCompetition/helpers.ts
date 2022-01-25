@@ -2,7 +2,7 @@ import { ReactText } from 'react'
 import { getBalanceNumber } from 'utils/formatBalance'
 import prizes from 'config/constants/trading-competition/prizes'
 import BigNumber from 'bignumber.js'
-import useBUSDPrice, { useCakeBusdPrice } from 'hooks/useBUSDPrice'
+import useBUSDPrice, { useAuraBusdPrice } from 'hooks/useBUSDPrice'
 import tokens from 'config/constants/tokens'
 import { multiplyPriceByAmount } from 'utils/prices'
 
@@ -32,7 +32,7 @@ export const useCompetitionRewards = ({
   const lazioBalance = getBalanceNumber(lazioAsBigNumber, 8)
   const portoBalance = getBalanceNumber(portoAsBigNumber, 8)
   const santosBalance = getBalanceNumber(santosAsBigNumber, 8)
-  const cakePriceBusd = useCakeBusdPrice()
+  const cakePriceBusd = useAuraBusdPrice()
 
   const dollarValueOfTokensReward =
     cakePriceBusd && lazioPriceBUSD && portoPriceBUSD && santosPriceBUSD
