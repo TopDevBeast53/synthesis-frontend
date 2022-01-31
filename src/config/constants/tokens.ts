@@ -11,6 +11,13 @@ interface TokenList {
 const defineTokens = <T extends TokenList>(t: T) => t
 
 export const mainnetTokens = defineTokens({
+  aura: new Token(
+    TESTNET,
+    '0xdf2b1082ee98b48b5933378c8f58ce2f5aaff135',
+    18,
+    'AURA',
+    'Aura',
+  ),
   wbnb: new Token(
     MAINNET,
     '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',
@@ -1945,6 +1952,13 @@ export const mainnetTokens = defineTokens({
 } as const)
 
 export const testnetTokens = defineTokens({
+  aura: new Token(
+    TESTNET,
+    '0xdf2b1082ee98b48b5933378c8f58ce2f5aaff135',
+    18,
+    'AURA',
+    'Aura',
+  ),
   wbnb: new Token(
     TESTNET,
     '0xae13d989dac2f0debff460ac112a837c89baa7cd',
@@ -1963,7 +1977,8 @@ export const testnetTokens = defineTokens({
   ),
   busd: new Token(
     TESTNET,
-    '0xeD24FC36d5Ee211Ea25A80239Fb8C4Cfd80f12Ee',
+    // '0xeD24FC36d5Ee211Ea25A80239Fb8C4Cfd80f12Ee',
+    '0x78867bbeef44f2326bf8ddd1941a4439382ef2a7',
     18,
     'BUSD',
     'Binance USD',

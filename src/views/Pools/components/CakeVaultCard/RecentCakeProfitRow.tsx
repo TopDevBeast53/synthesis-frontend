@@ -2,7 +2,7 @@ import React from 'react'
 import { Flex, Text } from '@pancakeswap/uikit'
 import { useWeb3React } from '@web3-react/core'
 import { useTranslation } from 'contexts/Localization'
-import { usePriceCakeBusd } from 'state/farms/hooks'
+import { usePriceAuraBusd } from 'state/farms/hooks'
 import { useVaultPoolByKey } from 'state/pools/hooks'
 import { VaultKey } from 'state/types'
 import { getCakeVaultEarnings } from 'views/Pools/helpers'
@@ -15,7 +15,7 @@ const RecentCakeProfitCountdownRow = ({ vaultKey }: { vaultKey: VaultKey }) => {
     pricePerFullShare,
     userData: { cakeAtLastUserAction, userShares, lastUserActionTime },
   } = useVaultPoolByKey(vaultKey)
-  const cakePriceBusd = usePriceCakeBusd()
+  const cakePriceBusd = usePriceAuraBusd()
   const { hasAutoEarnings, autoCakeToDisplay, autoUsdToDisplay } = getCakeVaultEarnings(
     account,
     cakeAtLastUserAction,

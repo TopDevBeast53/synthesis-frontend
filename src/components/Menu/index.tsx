@@ -14,7 +14,7 @@ import { getActiveMenuItem, getActiveSubMenuItem } from './utils'
 
 const Menu = (props) => {
   const { isDark, toggleTheme } = useTheme()
-  // const cakePriceUsd = usePriceCakeBusd()
+  // const cakePriceUsd = usePriceAuraBusd()
   const { currentLanguage, setLanguage, t } = useTranslation()
   const { pathname } = useLocation()
   const [showPhishingWarningBanner] = usePhishingBannerManager()
@@ -39,7 +39,7 @@ const Menu = (props) => {
       footerLings={{}}
       activeItem={activeMenuItem?.href}
       activeSubItem={activeSubMenuItem?.href}
-      buyCakeLabel={t('Buy CAKE')}
+      buyCakeLabel={t('Buy Aura')}
       {...props}
     />
   )

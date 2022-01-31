@@ -37,7 +37,7 @@ import VaultStakeModal from 'views/Pools/components/CakeVaultCard/VaultStakeModa
 import { BIG_ZERO } from 'utils/bigNumber'
 import BigNumber from 'bignumber.js'
 import { useIfoPoolVault, useIfoPoolCredit, useIfoWithApr } from 'state/pools/hooks'
-import { useBUSDCakeAmount } from 'hooks/useBUSDPrice'
+import { useBUSDAuraAmount } from 'hooks/useBUSDPrice'
 
 interface Props {
   ifo: Ifo
@@ -89,7 +89,7 @@ const Step1 = ({ hasProfile }: { hasProfile: boolean }) => {
     {},
   )
 
-  const creditDollarValue = useBUSDCakeAmount(getBalanceNumber(credit))
+  const creditDollarValue = useBUSDAuraAmount(getBalanceNumber(credit))
 
   const stakingTokenBalance = pool?.userData?.stakingTokenBalance
     ? new BigNumber(pool.userData.stakingTokenBalance)

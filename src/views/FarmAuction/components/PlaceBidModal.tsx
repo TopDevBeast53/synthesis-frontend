@@ -16,7 +16,7 @@ import useToast from 'hooks/useToast'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import ApproveConfirmButtons, { ButtonArrangement } from 'components/ApproveConfirmButtons'
 import { ConnectedBidder, FetchStatus } from 'config/constants/types'
-import { usePriceCakeBusd } from 'state/farms/hooks'
+import { usePriceAuraBusd } from 'state/farms/hooks'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import tokens from 'config/constants/tokens'
@@ -67,7 +67,7 @@ const PlaceBidModal: React.FC<PlaceBidModalProps> = ({
   const { balance: userCake, fetchStatus } = useTokenBalance(tokens.cake.address)
   const userCakeBalance = getBalanceAmount(userCake)
 
-  const cakePriceBusd = usePriceCakeBusd()
+  const cakePriceBusd = usePriceAuraBusd()
   const farmAuctionContract = useFarmAuctionContract()
   const cakeContract = useCake()
 

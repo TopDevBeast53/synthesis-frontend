@@ -9,7 +9,7 @@ import { BIG_ZERO } from 'utils/bigNumber'
 import { useIfoPoolCredit } from 'state/pools/hooks'
 import QuestionHelper from 'components/QuestionHelper'
 import { FlexGap } from 'components/Layout/Flex'
-import { useBUSDCakeAmount } from 'hooks/useBUSDPrice'
+import { useBUSDAuraAmount } from 'hooks/useBUSDPrice'
 import { getBalanceNumber } from 'utils/formatBalance'
 import VaultApprovalAction from './VaultApprovalAction'
 import VaultStakeActions from './VaultStakeActions'
@@ -24,7 +24,7 @@ export const IfoVaultCardAvgBalance = () => {
   const credit = useIfoPoolCredit()
 
   const cakeAsNumberBalance = getBalanceNumber(credit)
-  const creditsDollarValue: number | undefined = useBUSDCakeAmount(cakeAsNumberBalance)
+  const creditsDollarValue: number | undefined = useBUSDAuraAmount(cakeAsNumberBalance)
 
   return (
     <>

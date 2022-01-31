@@ -1,7 +1,7 @@
 import { Box, Flex, HelpIcon, Skeleton, Text, useMatchBreakpoints, useTooltip } from '@pancakeswap/uikit'
 import Balance from 'components/Balance'
 import { useTranslation } from 'contexts/Localization'
-import { useBUSDCakeAmount } from 'hooks/useBUSDPrice'
+import { useBUSDAuraAmount } from 'hooks/useBUSDPrice'
 import React from 'react'
 import { VaultKey } from 'state/types'
 import { useIfoPoolCredit, useVaultPoolByKey } from 'state/pools/hooks'
@@ -38,7 +38,7 @@ const IFOCreditCell: React.FC<IFOCreditCellProps> = ({ account }) => {
   const hasCredit = credit.gt(0)
 
   const cakeAsNumberBalance = getBalanceNumber(credit)
-  const avgBalanceDollarValue = useBUSDCakeAmount(cakeAsNumberBalance)
+  const avgBalanceDollarValue = useBUSDAuraAmount(cakeAsNumberBalance)
 
   const labelText = t('IFO Credit')
 
