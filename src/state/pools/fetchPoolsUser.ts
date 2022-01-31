@@ -87,8 +87,8 @@ export const fetchUserPendingRewards = async (account) => {
     {},
   )
 
-  // Cake / Cake pool
-  const pendingReward = await masterChefContract.pendingCake('0', account)
+  // Aura / Aura pool
+  const pendingReward = await masterChefContract.pendingAuraToken('0', account)
 
   return { ...pendingRewards, 0: new BigNumber(pendingReward.toString()).toJSON() }
 }

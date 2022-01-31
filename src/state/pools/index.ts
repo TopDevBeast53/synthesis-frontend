@@ -95,7 +95,7 @@ export const fetchCakePoolUserDataAsync = (account: string) => async (dispatch) 
   const allowance = await cakeContract.allowance(account, cakePoolAddress)
   const stakingTokenBalance = await cakeContract.balanceOf(account)
   const masterChefContract = getMasterchefContract()
-  const pendingReward = await masterChefContract.pendingCake('0', account)
+  const pendingReward = await masterChefContract.pendingAuraToken('0', account)
   const { amount: masterPoolAmount } = await masterChefContract.userInfo('0', account)
 
   dispatch(
