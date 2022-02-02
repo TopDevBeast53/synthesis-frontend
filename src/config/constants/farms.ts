@@ -47,6 +47,36 @@ const farms: SerializedFarmConfig[] = [
     token: serializedTokens.wbnb,
     quoteToken: serializedTokens.busd,
   },
+  {
+    pid: 4,
+    lpSymbol: 'AURA-CAKE LP',
+    lpAddresses: {
+      97: '0x17a8d8d27afe6fa84ecf317e0090d0e46c4db337',
+      56: '',
+    },
+    token: serializedTokens.aura,
+    quoteToken: serializedTokens.cake,
+  },
+  {
+    pid: 5,
+    lpSymbol: 'AURA-DAI LP',
+    lpAddresses: {
+      97: '0xf51c802f7a6fd798548d006a5e5b9855a48c49c1',
+      56: '',
+    },
+    token: serializedTokens.aura,
+    quoteToken: serializedTokens.dai,
+  },
+  {
+    pid: 6,
+    lpSymbol: 'DAI-BNB LP',
+    lpAddresses: {
+      97: '0xf912963eb31a980befe3dd72e0b62b0bbddd18ac',
+      56: '',
+    },
+    token: serializedTokens.dai,
+    quoteToken: serializedTokens.bnb,
+  },
   
   // {
   //   pid: 0,

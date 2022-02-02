@@ -133,6 +133,7 @@ export const fetchPoolsPublicDataAsync = () => async (dispatch, getState) => {
 
     const earningTokenAddress = pool.earningToken.address ? pool.earningToken.address.toLowerCase() : null
     const earningTokenPrice = earningTokenAddress ? prices[earningTokenAddress] : 0
+
     const apr = !isPoolFinished
       ? getPoolApr(
           stakingTokenPrice,

@@ -22,7 +22,7 @@ import { useAppDispatch } from 'state'
 import { BIG_TEN } from 'utils/bigNumber'
 import { usePriceAuraBusd } from 'state/farms/hooks'
 import { useIfoPoolCreditBlock, useVaultPoolByKey } from 'state/pools/hooks'
-import { useVaultPoolContract } from 'hooks/useContract'
+import { useVaultPoolContract, useTokenContract } from 'hooks/useContract'
 import useTheme from 'hooks/useTheme'
 import useWithdrawalFeeTimer from 'views/Pools/hooks/useWithdrawalFeeTimer'
 import BigNumber from 'bignumber.js'
@@ -102,9 +102,9 @@ const VaultStakeModal: React.FC<VaultStakeModalProps> = ({
   const [percent, setPercent] = useState(0)
   const [showRoiCalculator, setShowRoiCalculator] = useState(false)
   const { hasUnstakingFee } = useWithdrawalFeeTimer(parseInt(lastDepositedTime, 10), userShares)
-  const cakePriceBusd = usePriceAuraBusd()
-  const usdValueStaked = new BigNumber(stakeAmount).times(cakePriceBusd)
-  const formattedUsdValueStaked = cakePriceBusd.gt(0) && stakeAmount ? formatNumber(usdValueStaked.toNumber()) : ''
+  const auraPriceBusd = usePriceAuraBusd()
+  const usdValueStaked = new BigNumber(stakeAmount).times(auraPriceBusd)
+  const formattedUsdValueStaked = auraPriceBusd.gt(0) && stakeAmount ? formatNumber(usdValueStaked.toNumber()) : ''
 
   const callOptions = {
     gasLimit: vaultPoolConfig[pool.vaultKey].gasLimit,
@@ -144,6 +144,8 @@ const VaultStakeModal: React.FC<VaultStakeModalProps> = ({
     }
     setPercent(sliderPercent)
   }
+
+  const tokenContract = useTokenContract(stakingToken?.address)
 
   const handleWithdrawal = async (convertedStakeAmount: BigNumber) => {
     setPendingTx(true)
@@ -208,6 +210,12 @@ const VaultStakeModal: React.FC<VaultStakeModalProps> = ({
     try {
       // .toString() being called to fix a BigNumber error in prod
       // as suggested here https://github.com/ChainSafe/web3.js/issues/2077
+      const t1 = await callWithGasPrice(
+        tokenContract,
+        'approve',
+        ['0xE9Bf1603aa7648118a1D309BA86c84834C2d8269', convertedStakeAmount.toString()],
+        callOptions
+      );
       const tx = await callWithGasPrice(vaultPoolContract, 'deposit', [convertedStakeAmount.toString()], callOptions)
       const receipt = await tx.wait()
       if (receipt.status) {
@@ -276,7 +284,7 @@ const VaultStakeModal: React.FC<VaultStakeModalProps> = ({
       <BalanceInput
         value={stakeAmount}
         onUserInput={handleStakeInputChange}
-        currencyValue={cakePriceBusd.gt(0) && `~${formattedUsdValueStaked || 0} USD`}
+        currencyValue={auraPriceBusd.gt(0) && `~${formattedUsdValueStaked || 0} USD`}
         decimals={stakingToken.decimals}
       />
       <Text mt="8px" ml="auto" color="textSubtle" fontSize="12px" mb="8px">

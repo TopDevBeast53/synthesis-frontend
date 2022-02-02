@@ -11,24 +11,26 @@ import { FetchStatus } from 'config/constants/types'
 export function usePoolsWithVault() {
   const { pools: poolsWithoutAutoVault } = usePools()
   const cakeVault = useCakeVault()
-  const ifoPool = useIfoPoolVault()
+  // const ifoPool = useIfoPoolVault()
   const pools = useMemo(() => {
     const activePools = poolsWithoutAutoVault.filter((pool) => !pool.isFinished)
-    const cakePool = activePools.find((pool) => pool.sousId === 0)
-    const cakeAutoVault = { ...cakePool, vaultKey: VaultKey.CakeVault }
-    const ifoPoolVault = { ...cakePool, vaultKey: VaultKey.IfoPool }
+    const auraPool = activePools.find((pool) => pool.sousId === 0)
+    const auraAutoVault = { ...auraPool, vaultKey: VaultKey.CakeVault }
+    // const ifoPoolVault = { ...auraPool, vaultKey: VaultKey.IfoPool }
     const cakeAutoVaultWithApr = {
-      ...cakeAutoVault,
-      apr: getAprData(cakeAutoVault, cakeVault.fees.performanceFeeAsDecimal).apr,
-      rawApr: cakePool.apr,
+      ...auraAutoVault,
+      apr: getAprData(auraAutoVault, cakeVault.fees.performanceFeeAsDecimal).apr,
+      rawApr: auraPool.apr,
     }
-    const ifoPoolWithApr = {
-      ...ifoPoolVault,
-      apr: getAprData(ifoPoolVault, ifoPool.fees.performanceFeeAsDecimal).apr,
-      rawApr: cakePool.apr,
-    }
-    return [ifoPoolWithApr, cakeAutoVaultWithApr, ...poolsWithoutAutoVault]
-  }, [poolsWithoutAutoVault, cakeVault.fees.performanceFeeAsDecimal, ifoPool.fees.performanceFeeAsDecimal])
+    // const ifoPoolWithApr = {
+    //   ...ifoPoolVault,
+    //   apr: getAprData(ifoPoolVault, ifoPool.fees.performanceFeeAsDecimal).apr,
+    //   rawApr: auraPool.apr,
+    // }
+    // return [ifoPoolWithApr, cakeAutoVaultWithApr, ...poolsWithoutAutoVault]
+    return [cakeAutoVaultWithApr, ...poolsWithoutAutoVault]
+  // }, [poolsWithoutAutoVault, cakeVault.fees.performanceFeeAsDecimal, ifoPool.fees.performanceFeeAsDecimal])
+}, [poolsWithoutAutoVault, cakeVault.fees.performanceFeeAsDecimal])
 
   return pools
 }

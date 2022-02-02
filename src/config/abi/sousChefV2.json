@@ -3,7 +3,7 @@
     "inputs": [
       {
         "internalType": "contract IBEP20",
-        "name": "_stakedToken",
+        "name": "_aura",
         "type": "address"
       },
       {
@@ -25,34 +25,10 @@
         "internalType": "uint256",
         "name": "_bonusEndBlock",
         "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_poolLimitPerUser",
-        "type": "uint256"
       }
     ],
     "stateMutability": "nonpayable",
     "type": "constructor"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "tokenRecovered",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      }
-    ],
-    "name": "AdminTokenRecovery",
-    "type": "event"
   },
   {
     "anonymous": false,
@@ -96,51 +72,6 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "poolLimitPerUser",
-        "type": "uint256"
-      }
-    ],
-    "name": "NewPoolLimit",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "rewardPerBlock",
-        "type": "uint256"
-      }
-    ],
-    "name": "NewRewardPerBlock",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "startBlock",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "endBlock",
-        "type": "uint256"
-      }
-    ],
-    "name": "NewStartAndEndBlocks",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
         "indexed": true,
         "internalType": "address",
         "name": "previousOwner",
@@ -162,11 +93,11 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "blockNumber",
+        "name": "currentPercent",
         "type": "uint256"
       }
     ],
-    "name": "RewardsStop",
+    "name": "RefPercentChanged",
     "type": "event"
   },
   {
@@ -203,12 +134,12 @@
   },
   {
     "inputs": [],
-    "name": "accTokenPerShare",
+    "name": "auraToken",
     "outputs": [
       {
-        "internalType": "uint256",
+        "internalType": "contract IBEP20",
         "name": "",
-        "type": "uint256"
+        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -261,21 +192,19 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "hasUserLimit",
-    "outputs": [
+    "inputs": [
       {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
+        "internalType": "uint256",
+        "name": "_from",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_to",
+        "type": "uint256"
       }
     ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "lastRewardBlock",
+    "name": "getMultiplier",
     "outputs": [
       {
         "internalType": "uint256",
@@ -284,6 +213,26 @@
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "limitAmount",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "massUpdatePools",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -319,8 +268,42 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "poolInfo",
+    "outputs": [
+      {
+        "internalType": "contract IBEP20",
+        "name": "lpToken",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "allocPoint",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "lastRewardBlock",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "accAuraPerShare",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [],
-    "name": "poolLimitPerUser",
+    "name": "remainingLimitAmount",
     "outputs": [
       {
         "internalType": "uint256",
@@ -329,24 +312,6 @@
       }
     ],
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_tokenAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_tokenAmount",
-        "type": "uint256"
-      }
-    ],
-    "name": "recoverWrongTokens",
-    "outputs": [],
-    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -383,16 +348,16 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "stakedToken",
-    "outputs": [
+    "inputs": [
       {
-        "internalType": "contract IBEP20",
-        "name": "",
-        "type": "address"
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
       }
     ],
-    "stateMutability": "view",
+    "name": "setLimitAmount",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -410,9 +375,15 @@
   },
   {
     "inputs": [],
-    "name": "stopReward",
-    "outputs": [],
-    "stateMutability": "nonpayable",
+    "name": "totalAllocPoint",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -431,48 +402,12 @@
   {
     "inputs": [
       {
-        "internalType": "bool",
-        "name": "_hasUserLimit",
-        "type": "bool"
-      },
-      {
         "internalType": "uint256",
-        "name": "_poolLimitPerUser",
+        "name": "_pid",
         "type": "uint256"
       }
     ],
-    "name": "updatePoolLimitPerUser",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_rewardPerBlock",
-        "type": "uint256"
-      }
-    ],
-    "name": "updateRewardPerBlock",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_startBlock",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_bonusEndBlock",
-        "type": "uint256"
-      }
-    ],
-    "name": "updateStartAndEndBlocks",
+    "name": "updatePool",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

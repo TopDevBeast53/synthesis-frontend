@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js'
 import { convertSharesToCake } from 'views/Pools/helpers'
 import { multicallv2 } from 'utils/multicall'
-import cakeVaultAbi from 'config/abi/cakeVault.json'
+import auraVaultAbi from 'config/abi/auraVault.json'
 import { getCakeVaultAddress } from 'utils/addressHelpers'
 import { BIG_ZERO } from 'utils/bigNumber'
 
@@ -18,7 +18,7 @@ export const fetchPublicVaultData = async () => {
     }))
 
     const [[sharePrice], [shares], [estimatedCakeBountyReward], [totalPendingCakeHarvest]] = await multicallv2(
-      cakeVaultAbi,
+      auraVaultAbi,
       calls,
     )
 
@@ -50,7 +50,7 @@ export const fetchVaultFees = async () => {
       name: method,
     }))
 
-    const [[performanceFee], [callFee], [withdrawalFee], [withdrawalFeePeriod]] = await multicallv2(cakeVaultAbi, calls)
+    const [[performanceFee], [callFee], [withdrawalFee], [withdrawalFeePeriod]] = await multicallv2(auraVaultAbi, calls)
 
     return {
       performanceFee: performanceFee.toNumber(),

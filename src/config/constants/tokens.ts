@@ -1969,7 +1969,7 @@ export const testnetTokens = defineTokens({
   ),
   cake: new Token(
     TESTNET,
-    '0xa35062141Fa33BCA92Ce69FeD37D0E8908868AAe',
+    '0xF9f93cF501BFaDB6494589Cb4b4C15dE49E85D0e',
     18,
     'CAKE',
     'PancakeSwap Token',
@@ -1983,6 +1983,14 @@ export const testnetTokens = defineTokens({
     'BUSD',
     'Binance USD',
     'https://www.paxos.com/busd/',
+  ),
+  dai: new Token(
+    TESTNET,
+    '0x8a9424745056eb399fd19a0ec26a14316684e274',
+    18,
+    'DAI',
+    'Dai Stablecoin',
+    'https://www.makerdao.com/',
   ),
   syrup: new Token(
     TESTNET,
