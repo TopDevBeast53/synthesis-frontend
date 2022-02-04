@@ -75,7 +75,7 @@ const farms: SerializedFarmConfig[] = [
       56: '',
     },
     token: serializedTokens.dai,
-    quoteToken: serializedTokens.bnb,
+    quoteToken: serializedTokens.wbnb,
   },
   
   // {
