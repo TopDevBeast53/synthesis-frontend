@@ -1,6 +1,6 @@
 import React from 'react'
 import { Trade, TradeType } from 'sdk'
-import { Text } from '@pancakeswap/uikit'
+import { Text } from 'uikit'
 import { Field } from 'state/swap/actions'
 import { useTranslation } from 'contexts/Localization'
 import { useUserSlippageTolerance } from 'state/user/hooks'
@@ -107,6 +107,7 @@ export function AdvancedSwapDetails({ trade }: AdvancedSwapDetailsProps) {
                     text={t('Routing through these tokens resulted in the best price for your trade.')}
                     ml="4px"
                     placement="top-start"
+                    background="#090B09"
                   />
                 </span>
                 <SwapRoute trade={trade} />

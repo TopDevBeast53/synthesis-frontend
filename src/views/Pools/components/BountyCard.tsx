@@ -13,7 +13,7 @@ import {
   useModal,
   Box,
   useTooltip,
-} from '@pancakeswap/uikit'
+} from 'uikit'
 import { useTranslation } from 'contexts/Localization'
 import { getBalanceNumber } from 'utils/formatBalance'
 import { usePriceAuraBusd } from 'state/farms/hooks'

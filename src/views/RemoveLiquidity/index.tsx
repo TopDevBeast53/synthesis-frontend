@@ -4,7 +4,7 @@ import { splitSignature } from '@ethersproject/bytes'
 import { Contract } from '@ethersproject/contracts'
 import { TransactionResponse } from '@ethersproject/providers'
 import { Currency, currencyEquals, ETHER, Percent, WETH } from 'sdk'
-import { Button, Text, AddIcon, ArrowDownIcon, CardBody, Slider, Box, Flex, useModal } from '@pancakeswap/uikit'
+import { Button, Text, AddIcon, ArrowDownIcon, CardBody, Slider, Box, Flex, useModal } from 'uikit'
 import { RouteComponentProps } from 'react-router'
 import { BigNumber } from '@ethersproject/bignumber'
 import { useTranslation } from 'contexts/Localization'
@@ -375,6 +375,7 @@ export default function RemoveLiquidity({
             </RowBetween>
           </>
         )}
+        {/* eslint-disable-next-line react/jsx-no-bind */}
         <Button disabled={!(approval === ApprovalState.APPROVED || signatureData !== null)} onClick={onRemove}>
           {t('Confirm')}
         </Button>
@@ -444,6 +445,7 @@ export default function RemoveLiquidity({
       customOnDismiss={handleDismissConfirmation}
       attemptingTxn={attemptingTxn}
       hash={txHash || ''}
+      /* eslint-disable-next-line react/jsx-no-bind */
       content={() => <ConfirmationModalContent topContent={modalHeader} bottomContent={modalBottom} />}
       pendingText={pendingText}
     />,
@@ -637,6 +639,7 @@ export default function RemoveLiquidity({
               <RowBetween>
                 <Button
                   variant={approval === ApprovalState.APPROVED || signatureData !== null ? 'success' : 'primary'}
+                  /* eslint-disable-next-line react/jsx-no-bind */
                   onClick={onAttemptToApprove}
                   disabled={approval !== ApprovalState.NOT_APPROVED || signatureData !== null}
                   width="100%"

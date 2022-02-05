@@ -14,7 +14,7 @@ import {
   Slider,
   Box,
   AutoRenewIcon,
-} from '@pancakeswap/uikit'
+} from 'uikit'
 import { ethers } from 'ethers'
 import { parseUnits } from 'ethers/lib/utils'
 import { useWeb3React } from '@web3-react/core'
@@ -268,6 +268,10 @@ const SetPositionCard: React.FC<SetPositionCardProps> = ({ position, togglePosit
               onClick={handleEnterPosition}
               isLoading={isTxPending}
               endIcon={isTxPending ? <AutoRenewIcon color="currentColor" spin /> : null}
+              style={{
+                background: "rgba(249, 250, 250, 0.08)",
+                backdropFilter: "blur(80px)",
+              }}
             >
               {t(key)}
             </Button>

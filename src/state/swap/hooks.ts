@@ -231,7 +231,7 @@ export function useDerivedSwapInfo(): {
   const slippageAdjustedAmounts = v2Trade && allowedSlippage && computeSlippageAdjustedAmounts(v2Trade, allowedSlippage)
 
   // compare input balance to max input based on version
-  const [balanceIn, amountIn] = [
+  const [balanceIn, amountIn] = [ 
     currencyBalances[Field.INPUT],
     slippageAdjustedAmounts ? slippageAdjustedAmounts[Field.INPUT] : null,
   ]

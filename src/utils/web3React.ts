@@ -2,7 +2,7 @@ import { InjectedConnector } from '@web3-react/injected-connector'
 import { WalletConnectConnector } from '@web3-react/walletconnect-connector'
 import { AbstractConnector } from '@web3-react/abstract-connector'
 import { BscConnector } from '@binance-chain/bsc-connector'
-import { ConnectorNames } from '@pancakeswap/uikit'
+import { ConnectorNames } from 'uikit'
 import { ethers } from 'ethers'
 import getNodeUrl from './getRpcUrl'
 
@@ -15,7 +15,7 @@ const injected = new InjectedConnector({ supportedChainIds: [chainId] })
 const walletconnect = new WalletConnectConnector({
   rpc: { [chainId]: rpcUrl },
   qrcode: true,
-  pollingInterval: POLLING_INTERVAL,
+  // pollingInterval: POLLING_INTERVAL,
 })
 
 const bscConnector = new BscConnector({ supportedChainIds: [chainId] })

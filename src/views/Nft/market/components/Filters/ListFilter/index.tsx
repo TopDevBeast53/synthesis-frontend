@@ -11,7 +11,7 @@ import {
   InputGroup,
   SearchIcon,
   Text,
-} from '@pancakeswap/uikit'
+} from 'uikit'
 import { FetchStatus } from 'config/constants/types'
 import { useTranslation } from 'contexts/Localization'
 import orderBy from 'lodash/orderBy'

@@ -1,6 +1,6 @@
 import React from 'react'
 import styled, { keyframes } from 'styled-components'
-import { Box, Flex, Heading, Skeleton } from '@pancakeswap/uikit'
+import { Box, Flex, Heading, Skeleton } from 'uikit'
 import { LotteryStatus } from 'config/constants/types'
 import { useTranslation } from 'contexts/Localization'
 import { usePriceAuraBusd } from 'state/farms/hooks'

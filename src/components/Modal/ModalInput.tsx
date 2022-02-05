@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Text, Button, Input, InputProps, Flex, Link } from '@pancakeswap/uikit'
+import { Text, Button, Input, InputProps, Flex, Link } from 'uikit'
 import { useTranslation } from 'contexts/Localization'
 import { parseUnits } from 'ethers/lib/utils'
 import { formatBigNumber } from 'utils/formatBalance'
@@ -68,6 +68,7 @@ const ModalInput: React.FC<ModalInputProps> = ({
   value,
   addLiquidityUrl,
   inputTitle,
+  placeholder = "0",
   decimals = 18,
 }) => {
   const { t } = useTranslation()
@@ -96,7 +97,7 @@ const ModalInput: React.FC<ModalInputProps> = ({
             step="any"
             min="0"
             onChange={onChange}
-            placeholder="0"
+            placeholder={placeholder ?? "0"}
             value={value}
           />
           <Button scale="sm" onClick={onSelectMax} mr="8px">

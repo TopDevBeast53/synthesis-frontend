@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link as ReactRouterLink } from 'react-router-dom'
 import styled from 'styled-components'
-import { BscScanIcon, Flex, IconButton, Link, Button, useModal } from '@pancakeswap/uikit'
+import { BscScanIcon, Flex, IconButton, Link, Button, useModal } from 'uikit'
 import { useTranslation } from 'contexts/Localization'
 import { getBscScanLink } from 'utils'
 import { formatNumber } from 'utils/formatBalance'
@@ -76,10 +76,9 @@ const ProfileHeader: React.FC<HeaderProps> = ({
       return (
         // TODO: Share functionality once user profiles routed by ID
         <Flex display="inline-flex">
-          {accountPath && (
+          {accountPath && (    
             <StyledIconButton
               target="_blank"
-              as="a"
               href={getBscScanLink(accountPath, 'address')}
               alt={t('View BscScan for user address')}
             >

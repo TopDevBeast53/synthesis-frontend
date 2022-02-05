@@ -1,6 +1,6 @@
 import * as Sentry from '@sentry/react'
 import { Dispatch } from '@reduxjs/toolkit'
-import { connectorLocalStorageKey } from '@pancakeswap/uikit'
+import { connectorLocalStorageKey } from 'uikit'
 import { profileClear } from '../state/profile'
 import { resetUserNftState } from '../state/nftMarket/reducer'
 import { connectorsByName } from './web3React'

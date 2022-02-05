@@ -10,7 +10,7 @@ import {
   useMatchBreakpoints,
   useModal,
   Box,
-} from '@pancakeswap/uikit'
+} from 'uikit'
 import { Link as RouterLink } from 'react-router-dom'
 import { Activity, NftToken } from 'state/nftMarket/types'
 import { Price } from 'sdk'

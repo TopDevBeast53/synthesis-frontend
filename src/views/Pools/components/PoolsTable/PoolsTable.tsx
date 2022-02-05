@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 import styled from 'styled-components'
-import { Button, ChevronUpIcon } from '@pancakeswap/uikit'
+import { Button, ChevronUpIcon } from 'uikit'
 import { useTranslation } from 'contexts/Localization'
 import { DeserializedPool } from 'state/types'
 import PoolRow from './PoolRow'
@@ -15,15 +15,18 @@ const StyledTable = styled.div`
   border-radius: ${({ theme }) => theme.radii.card};
   scroll-margin-top: 64px;
 
-  background-color: ${({ theme }) => theme.card.background};
   > div:not(:last-child) {
     border-bottom: 2px solid ${({ theme }) => theme.colors.disabled};
   }
 `
 
+
+// background-color: ${({ theme }) => theme.colors.cardBorder};
+
 const StyledTableBorder = styled.div`
   border-radius: ${({ theme }) => theme.radii.card};
-  background-color: ${({ theme }) => theme.colors.cardBorder};
+  background: rgba(249, 250, 250, 0.08);
+  backdrop-filter: blur(80px);
   padding: 1px 1px 3px 1px;
   background-size: 400% 400%;
 `

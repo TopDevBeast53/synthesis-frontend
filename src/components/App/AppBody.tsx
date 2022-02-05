@@ -1,10 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Card } from '@pancakeswap/uikit'
+import { Card } from 'uikit'
 
 export const BodyWrapper = styled(Card)`
-  border-radius: 24px;
-  max-width: 436px;
+  border-radius: 12px;
+  max-width: 468px;
   width: 100%;
   z-index: 1;
 `

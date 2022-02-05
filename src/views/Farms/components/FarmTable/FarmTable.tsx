@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 import styled from 'styled-components'
-import { useTable, Button, ChevronUpIcon, ColumnType } from '@pancakeswap/uikit'
+import { useTable, Button, ChevronUpIcon, ColumnType } from 'uikit'
 import { useTranslation } from 'contexts/Localization'
 
 import Row, { RowProps } from './Row'
@@ -18,6 +18,8 @@ const Container = styled.div`
   background: ${({ theme }) => theme.card.background};
   border-radius: 16px;
   margin: 16px 0px;
+  background: rgba(249, 250, 250, 0.08);
+  backdrop-filter: blur(80px);
 `
 
 const TableWrapper = styled.div`

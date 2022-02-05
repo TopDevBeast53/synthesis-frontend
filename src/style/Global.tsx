@@ -1,6 +1,6 @@
 import { createGlobalStyle } from 'styled-components'
 // eslint-disable-next-line import/no-unresolved
-import { PancakeTheme } from '@pancakeswap/uikit/dist/theme'
+import { PancakeTheme } from 'uikit/theme'
 
 declare module 'styled-components' {
   /* eslint-disable @typescript-eslint/no-empty-interface */
@@ -9,11 +9,14 @@ declare module 'styled-components' {
 
 const GlobalStyle = createGlobalStyle`
   * {
-    font-family: 'Kanit', sans-serif;
+    font-family: 'Helvetica Neue', sans-serif;
   }
   body {
     background-color: ${({ theme }) => theme.colors.background};
-
+    background-image: url('/images/SwapBackground.svg');
+    background-size: 100%;
+    background-repeat: no-repeat;
+    
     img {
       height: auto;
       max-width: 100%;

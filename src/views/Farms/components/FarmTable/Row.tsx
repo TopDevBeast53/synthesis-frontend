@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'
-import { useMatchBreakpoints } from '@pancakeswap/uikit'
+import { useMatchBreakpoints } from 'uikit'
 import { useTranslation } from 'contexts/Localization'
 import useDelayedUnmount from 'hooks/useDelayedUnmount'
 import { useFarmUser } from 'state/farms/hooks'
@@ -115,6 +115,7 @@ const Row: React.FunctionComponent<RowPropsWithLoading> = (props) => {
                   <td key={key}>
                     <CellInner>
                       <CellLayout label={t('APR')}>
+                        {/* eslint-disable-next-line react/destructuring-assignment */}
                         <Apr {...props.apr} hideButton={isSmallerScreen} />
                       </CellLayout>
                     </CellInner>
@@ -125,6 +126,7 @@ const Row: React.FunctionComponent<RowPropsWithLoading> = (props) => {
                   <td key={key}>
                     <CellInner>
                       <CellLayout label={t(tableSchema[columnIndex].label)}>
+                        {/* eslint-disable-next-line react/destructuring-assignment */}
                         {React.createElement(cells[key], { ...props[key], userDataReady })}
                       </CellLayout>
                     </CellInner>
@@ -142,6 +144,7 @@ const Row: React.FunctionComponent<RowPropsWithLoading> = (props) => {
           <tr>
             <FarmMobileCell>
               <CellLayout>
+                {/* eslint-disable-next-line react/destructuring-assignment */}
                 <Farm {...props.farm} />
               </CellLayout>
             </FarmMobileCell>
@@ -149,11 +152,13 @@ const Row: React.FunctionComponent<RowPropsWithLoading> = (props) => {
           <tr>
             <EarnedMobileCell>
               <CellLayout label={t('Earned')}>
+                {/* eslint-disable-next-line react/destructuring-assignment */}
                 <Earned {...props.earned} userDataReady={userDataReady} />
               </CellLayout>
             </EarnedMobileCell>
             <AprMobileCell>
               <CellLayout label={t('APR')}>
+                {/* eslint-disable-next-line react/destructuring-assignment */}
                 <Apr {...props.apr} hideButton />
               </CellLayout>
             </AprMobileCell>

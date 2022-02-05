@@ -1,5 +1,5 @@
 import React from 'react'
-import { BackgroundImage, BoxProps } from '@pancakeswap/uikit'
+import { BackgroundImage, BoxProps } from 'uikit'
 import PlaceholderImage from './PlaceholderImage'
 
 interface PreviewImageProps extends BoxProps {

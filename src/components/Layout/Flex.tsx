@@ -1,4 +1,4 @@
-import { Flex } from '@pancakeswap/uikit'
+import { Flex } from 'uikit'
 import styled from 'styled-components'
 
 const FlexLayout = styled.div`

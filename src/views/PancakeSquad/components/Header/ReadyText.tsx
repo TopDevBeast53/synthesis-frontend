@@ -1,4 +1,4 @@
-import { CheckmarkIcon, Flex, FlexProps, Text } from '@pancakeswap/uikit'
+import { CheckmarkIcon, Flex, FlexProps, Text } from 'uikit'
 import React from 'react'
 
 type ReadyTextProps = {

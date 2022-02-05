@@ -14,7 +14,7 @@ import {
   ModalProps,
   ModalTitle,
   Text,
-} from '@pancakeswap/uikit'
+} from 'uikit'
 import { useTranslation } from 'contexts/Localization'
 import useTheme from 'hooks/useTheme'
 import React, { useState } from 'react'

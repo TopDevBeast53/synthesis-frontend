@@ -1,8 +1,17 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Box, Flex } from '@pancakeswap/uikit'
+import { Box, Flex } from 'uikit'
 import Footer from 'components/Menu/Footer'
 import { PageMeta } from 'components/Layout/Page'
+
+
+// background: ${({ theme }) => theme.colors.gradients.bubblegum};
+// ${({ theme }) => theme.mediaQueries.xs} {
+//   background-size: auto;
+// }
+
+
+// background-image: url('./images/SwapBackground.svg');
 
 const StyledPage = styled.div<{ $removePadding: boolean }>`
   display: flex;
@@ -12,17 +21,12 @@ const StyledPage = styled.div<{ $removePadding: boolean }>`
   padding: ${({ $removePadding }) => ($removePadding ? '0' : '16px')};
   padding-bottom: 0;
   min-height: calc(100vh - 64px);
-  background: ${({ theme }) => theme.colors.gradients.bubblegum};
-
-  ${({ theme }) => theme.mediaQueries.xs} {
-    background-size: auto;
-  }
 
   ${({ theme }) => theme.mediaQueries.sm} {
     padding: ${({ $removePadding }) => ($removePadding ? '0' : '24px')};
     padding-bottom: 0;
   }
-
+  
   ${({ theme }) => theme.mediaQueries.lg} {
     padding: ${({ $removePadding }) => ($removePadding ? '0' : '32px')};
     padding-bottom: 0;

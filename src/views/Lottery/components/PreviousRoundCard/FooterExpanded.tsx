@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import BigNumber from 'bignumber.js'
-import { Flex, Skeleton, Heading, Box, Text } from '@pancakeswap/uikit'
+import { Flex, Skeleton, Heading, Box, Text } from 'uikit'
 import { useTranslation } from 'contexts/Localization'
 import { LotteryRound, LotteryRoundGraphEntity } from 'state/types'
 import { usePriceAuraBusd } from 'state/farms/hooks'

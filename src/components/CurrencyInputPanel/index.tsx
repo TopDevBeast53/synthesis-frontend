@@ -1,6 +1,6 @@
 import React from 'react'
 import { Currency, Pair } from 'sdk'
-import { Button, ChevronDownIcon, Text, useModal, Flex, Box } from '@pancakeswap/uikit'
+import { Button, ChevronDownIcon, Text, useModal, Flex, Box } from 'uikit'
 import styled from 'styled-components'
 import { useTranslation } from 'contexts/Localization'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
@@ -28,18 +28,20 @@ const LabelRow = styled.div`
   color: ${({ theme }) => theme.colors.text};
   font-size: 0.75rem;
   line-height: 1rem;
-  padding: 0.75rem 1rem 0 1rem;
+  padding: 14px 20px 13px 20px;
 `
+// padding: 0.75rem 1rem 0 1rem;
+
 const InputPanel = styled.div`
   display: flex;
   flex-flow: column nowrap;
   position: relative;
-  border-radius: '20px';
+  border-radius: 8px;
   background-color: ${({ theme }) => theme.colors.backgroundAlt};
   z-index: 1;
 `
 const Container = styled.div`
-  border-radius: 16px;
+  border-radius: 8px;
   background-color: ${({ theme }) => theme.colors.input};
   box-shadow: ${({ theme }) => theme.shadows.inset};
 `
@@ -131,23 +133,22 @@ export default function CurrencyInputPanel({
       <InputPanel>
         <Container>
           <LabelRow>
-            <RowBetween>
+            {/* <RowBetween> */}
               <NumericalInput
-                className="token-amount-input"
                 value={value}
                 onUserInput={(val) => {
                   onUserInput(val)
                 }}
               />
-            </RowBetween>
+            {/* </RowBetween> */}
           </LabelRow>
-          <InputRow selected={disableCurrencySelect}>
+          {/* <InputRow selected={disableCurrencySelect}>
             {account && currency && showMaxButton && label !== 'To' && (
               <Button onClick={onMax} scale="xs" variant="secondary">
                 MAX
               </Button>
             )}
-          </InputRow>
+          </InputRow> */}
         </Container>
       </InputPanel>
     </Box>

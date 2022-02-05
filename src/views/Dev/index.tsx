@@ -1,5 +1,5 @@
 import React, {useState, ChangeEvent, useCallback, useMemo} from 'react'
-import { Flex, Button, Input, Card, Text, Heading} from '@pancakeswap/uikit'
+import { Flex, Button, Input, Card, Text, Heading} from 'uikit'
 import Select from 'components/Select/Select'
 import styled from 'styled-components'
 

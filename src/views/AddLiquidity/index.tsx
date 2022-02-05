@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { BigNumber } from '@ethersproject/bignumber'
 import { TransactionResponse } from '@ethersproject/providers'
 import { Currency, currencyEquals, ETHER, TokenAmount, WETH } from 'sdk'
-import { Button, Text, Flex, AddIcon, CardBody, Message, useModal } from '@pancakeswap/uikit'
+import { Button, Text, Flex, AddIcon, CardBody, Message, useModal } from 'uikit'
 import { RouteComponentProps } from 'react-router-dom'
 import { useIsTransactionUnsupported } from 'hooks/Trades'
 import { useTranslation } from 'contexts/Localization'
@@ -248,6 +248,7 @@ export default function AddLiquidity({
         currencies={currencies}
         parsedAmounts={parsedAmounts}
         noLiquidity={noLiquidity}
+        // eslint-disable-next-line react/jsx-no-bind
         onAdd={onAdd}
         poolTokenPercentage={poolTokenPercentage}
       />

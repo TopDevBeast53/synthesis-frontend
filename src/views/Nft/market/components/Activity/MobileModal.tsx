@@ -1,5 +1,5 @@
 import React from 'react'
-import { InjectedModalProps, Modal, Flex, Text, Button, Image, Link, BinanceIcon } from '@pancakeswap/uikit'
+import { InjectedModalProps, Modal, Flex, Text, Button, Image, Link, BinanceIcon } from 'uikit'
 import { Price } from 'sdk'
 import useTheme from 'hooks/useTheme'
 import styled from 'styled-components'

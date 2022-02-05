@@ -3,6 +3,9 @@ import styled from 'styled-components'
 import useLastTruthy from 'hooks/useLast'
 import { AdvancedSwapDetails, AdvancedSwapDetailsProps } from './AdvancedSwapDetails'
 
+
+// background-color: ${({ theme }) => theme.colors.invertedContrast};
+
 const AdvancedDetailsFooter = styled.div<{ show: boolean }>`
   margin-top: ${({ show }) => (show ? '16px' : 0)};
   padding-top: 16px;
@@ -10,10 +13,15 @@ const AdvancedDetailsFooter = styled.div<{ show: boolean }>`
   width: 100%;
   max-width: 400px;
   border-radius: 20px;
-  background-color: ${({ theme }) => theme.colors.invertedContrast};
+
+  margin-left: auto;
+  margin-right: auto;
 
   transform: ${({ show }) => (show ? 'translateY(0%)' : 'translateY(-100%)')};
   transition: transform 300ms ease-in-out;
+
+  background: rgba(249, 250, 250, 0.08);
+  backdrop-filter: blur(80px);
 `
 
 export default function AdvancedSwapDetailsDropdown({ trade, ...rest }: AdvancedSwapDetailsProps) {

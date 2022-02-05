@@ -1,6 +1,6 @@
 import React, { lazy } from 'react'
 import { Router, Redirect, Route, Switch } from 'react-router-dom'
-import { ResetCSS } from '@pancakeswap/uikit'
+import { ResetCSS } from 'uikit'
 // import { useWeb3React } from '@web3-react/core'
 import BigNumber from 'bignumber.js'
 import useEagerConnect from 'hooks/useEagerConnect'
@@ -185,7 +185,6 @@ const App: React.FC = () => {
           </Switch>
         </SuspenseWithChunkError>
       </Menu>
-      <EasterEgg iterations={2} />
       <ToastListener />
       <SubgraphHealthIndicator />
     </Router>

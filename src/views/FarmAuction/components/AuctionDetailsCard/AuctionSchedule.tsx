@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Text, Flex, Box } from '@pancakeswap/uikit'
+import { Text, Flex, Box } from 'uikit'
 import { Auction, AuctionStatus } from 'config/constants/types'
 import { useTranslation } from 'contexts/Localization'
 
@@ -14,7 +14,7 @@ const ScheduleInner = styled(Flex)`
 
 interface ScheduleProps {
   auction: Auction
-  showForClosedAuction?: boolean
+  // showForClosedAuction?: boolean
 }
 
 const AuctionSchedule: React.FC<ScheduleProps> = ({ auction }) => {

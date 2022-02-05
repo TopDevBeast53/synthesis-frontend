@@ -1,4 +1,4 @@
-import { Box, Flex, HelpIcon, Skeleton, Text, useMatchBreakpoints, useTooltip } from '@pancakeswap/uikit'
+import { Box, Flex, HelpIcon, Skeleton, Text, useMatchBreakpoints, useTooltip } from 'uikit'
 import Balance from 'components/Balance'
 import { useTranslation } from 'contexts/Localization'
 import { useBUSDAuraAmount } from 'hooks/useBUSDPrice'

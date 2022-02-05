@@ -1,5 +1,5 @@
 {
-  "name": "pancake-frontend",
+  "name": "aura-frontend",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -34,7 +34,6 @@
     "@binance-chain/bsc-connector": "^1.0.0",
     "@ethersproject/experimental": "^5.5.0",
     "@pancakeswap-libs/pancake-swap-core": "^0.1.0",
-    "@pancakeswap/uikit": "^0.62.0",
     "@reduxjs/toolkit": "^1.5.0",
     "@sentry/react": "^6.15.0",
     "@sentry/tracing": "^6.15.0",
@@ -46,6 +45,7 @@
     "@types/react-router-dom": "^5.1.5",
     "@types/react-window": "^1.8.3",
     "@types/styled-components": "^5.1.7",
+    "@types/styled-system": "^5.1.15",
     "@uniswap/token-lists": "^1.0.0-beta.19",
     "@uniswap/v2-core": "^1.0.0",
     "@uniswap/v2-periphery": "^1.1.0-beta.0",
@@ -88,12 +88,13 @@
     "remark-gfm": "^1.0.0",
     "split-grid": "^1.0.11",
     "styled-components": "^5.3.0",
+    "styled-system": "^5.1.5",
     "swiper": "^6.8.4",
     "swr": "^1.1.2",
     "tiny-invariant": "^1.1.0",
     "tiny-warning": "^1.0.3",
     "toformat": "^2.0.0",
-    "typescript": "^4.5.4"
+    "typescript": "^4.5.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^13.1.0",

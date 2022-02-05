@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import BigNumber from 'bignumber.js'
 import styled from 'styled-components'
 import { useTranslation } from 'contexts/Localization'
-import { Flex, CardFooter, ExpandableLabel, HelpIcon, useTooltip } from '@pancakeswap/uikit'
+import { Flex, CardFooter, ExpandableLabel, HelpIcon, useTooltip } from 'uikit'
 import { DeserializedPool } from 'state/types'
 import { CompoundingPoolTag, ManualPoolTag } from 'components/Tags'
 import ExpandedFooter from './ExpandedFooter'
@@ -10,7 +10,7 @@ import ExpandedFooter from './ExpandedFooter'
 interface FooterProps {
   pool: DeserializedPool
   account: string
-  totalCakeInVault?: BigNumber
+  // totalCakeInVault?: BigNumber
   defaultExpanded?: boolean
 }
 
