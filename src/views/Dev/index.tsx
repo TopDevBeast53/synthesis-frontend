@@ -11,6 +11,11 @@ import masterChefABI from 'config/abi/masterchef.json';
 import sousChefABI from 'config/abi/sousChef.json';
 import auraVaultABI from 'config/abi/auraVault.json';
 import auraABI from 'config/abi/cake.json';
+import auraRouterV1ABI from 'config/abi/AuraRouterV1.json';
+import auraFactoryABI from 'config/abi/AuraFactory.json';
+import auraPairABI from 'config/abi/AuraPair.json';
+import testTokenABI from 'config/abi/TestToken.json';
+
 import { simpleRpcProvider } from 'utils/providers'
 import Page from '../Page'
 
@@ -45,6 +50,10 @@ function DevTool() {
         'smartChef': sousChefABI,
         'auraVault': auraVaultABI,
         'aura': auraABI,
+        'router': auraRouterV1ABI,
+        'factory': auraFactoryABI,
+        'pair': auraPairABI,
+        'testToken': testTokenABI,
     }), []);
 
     const handleContractCall = useCallback(async () => {
@@ -109,7 +118,7 @@ function DevTool() {
                         Contract Arguments
                     </Text>
                     <Input
-                        placeholder='Fucntion arguments'
+                        placeholder='Function arguments'
                         value={functionArguments.join(',')}
                         onChange={(evt: ChangeEvent<HTMLInputElement>) => 
                             setFunctionArguments(
@@ -136,6 +145,5 @@ function DevTool() {
         </Page>
     );
 }
-
 
 export default DevTool; 
