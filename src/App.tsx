@@ -1,5 +1,5 @@
 import React, { lazy } from 'react'
-import { Router, Redirect, Route, Switch } from 'react-router-dom'
+import { Router, Redirect, Route, Switch, useLocation } from 'react-router-dom'
 import { ResetCSS } from 'uikit'
 // import { useWeb3React } from '@web3-react/core'
 import BigNumber from 'bignumber.js'
@@ -79,7 +79,10 @@ const App: React.FC = () => {
   return (
     <Router history={history}>
       <ResetCSS />
-      <GlobalStyle />
+      <GlobalStyle backgroundImageURL={
+        window.location.href.split('/')?.[3] === 'swap' ? 
+        '/images/SwapBackground.svg' : '/images/MainBackground.svg'}
+        />
       <GlobalCheckClaimStatus excludeLocations={[]} />
       <Menu>
         <SuspenseWithChunkError fallback={<PageLoader />}>
