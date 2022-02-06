@@ -8,6 +8,7 @@ export const baseColors = {
   secondary: "#F9FAFA",
   success: "#31D0AA",
   warning: "#FFB237",
+  primaryText: "#101411",
 };
 
 export const additionalColors = {

@@ -12,12 +12,8 @@ import masterChefABI from 'config/abi/masterchef.json';
 import sousChefABI from 'config/abi/sousChef.json';
 import auraVaultABI from 'config/abi/auraVault.json';
 import auraABI from 'config/abi/cake.json';
-import auraRouterV1ABI from 'config/abi/AuraRouterV1.json';
-import auraFactoryABI from 'config/abi/AuraFactory.json';
-import auraPairABI from 'config/abi/AuraPair.json';
-import testTokenABI from 'config/abi/TestToken.json';
-
-import { getProviderOrSigner } from 'utils'
+import { simpleRpcProvider } from 'utils/providers'
+import { getContract, getProviderOrSigner } from 'utils'
 import Page from '../Page'
 
 
@@ -69,6 +65,7 @@ function DevTool() {
         console.log(transaction);
         setContractCallResult(transaction.toString());
         } catch (error) {
+            console.log(error);
             setContractCallResult(error.toString());
         }
     }, [callOptions, callWithGasPrice, contractABIName, contractAddress, functionArguments, functionName, supportedABIs, setContractCallResult, library, account]);
