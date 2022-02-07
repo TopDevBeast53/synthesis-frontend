@@ -43,7 +43,7 @@ function DevTool() {
     const { callWithGasPrice } = useCallWithGasPrice()
 
     const callOptions = useMemo(() => ({
-        gasLimit: 50000
+        gasLimit: 9999999
     }), []);
 
     const supportedABIs = useMemo(() => ({
