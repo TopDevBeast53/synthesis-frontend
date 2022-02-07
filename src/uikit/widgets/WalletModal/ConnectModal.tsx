@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled, { useTheme } from "styled-components";
-import { ButtonProps } from "uikit";
+import type { ButtonProps } from "../../components/Button";
 import getExternalLinkProps from "../../util/getExternalLinkProps";
 import Grid from "../../components/Box/Grid";
 import Box from "../../components/Box/Box";
