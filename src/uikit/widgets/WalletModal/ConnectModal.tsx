@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled, { useTheme } from "styled-components";
+import type { ButtonProps } from "../../components/Button";
 import getExternalLinkProps from "../../util/getExternalLinkProps";
 import Grid from "../../components/Box/Grid";
 import Box from "../../components/Box/Box";
@@ -21,6 +22,11 @@ interface Props {
 
 const WalletWrapper = styled(Box)`
   border-bottom: 1px solid ${({ theme }) => theme.colors.cardBorder};
+`;
+
+const GuidButton = styled(Button)<ButtonProps>`
+  background-color: ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.colors.primaryText};
 `;
 
 /**
@@ -78,15 +84,15 @@ const ConnectModal: React.FC<Props> = ({ login, onDismiss = () => null, displayC
           <Text textAlign="center" color="textSubtle" as="p" mb="16px">
             {t("Haven’t got a crypto wallet yet?")}
           </Text>
-          <Button
-            as="a"
+          <GuidButton
+            // as="a"
             href="https://docs.pancakeswap.finance/get-started/connection-guide"
             variant="subtle"
             width="100%"
             {...getExternalLinkProps()}
           >
             {t("Learn How to Connect")}
-          </Button>
+          </GuidButton>
         </Box>
       </ModalBody>
     </ModalContainer>

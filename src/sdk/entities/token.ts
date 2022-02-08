@@ -23,7 +23,7 @@ export class Token extends Currency {
   ) {
     super(decimals, symbol, name)
     this.chainId = chainId
-    this.address = validateAndParseAddress(address)
+    this.address = validateAndParseAddress(address.toLocaleLowerCase())
     this.projectLink = projectLink
   }
 

@@ -22,13 +22,15 @@ const DropdownContent = styled.div<{ position: Position }>`
   flex-direction: column;
   position: absolute;
   transform: translate(-50%, 0);
+  border: 1px solid ${({ theme }) => theme.colors.cardBorder};
   left: ${getLeft};
   bottom: ${getBottom};
-  background-color: ${({ theme }) => theme.nav.background};
+  background-color: #101411;
   box-shadow: ${({ theme }) => theme.shadows.level1};
   padding: 16px;
   max-height: 400px;
   overflow-y: auto;
+  margin-top: 6px;
   z-index: ${({ theme }) => theme.zIndices.dropdown};
   border-radius: ${({ theme }) => theme.radii.small};
 `;

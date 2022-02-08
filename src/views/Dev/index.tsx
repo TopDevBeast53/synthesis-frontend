@@ -2,6 +2,7 @@ import React, {useState, ChangeEvent, useCallback, useMemo} from 'react'
 import { Flex, Button, Input, Card, Text, Heading} from 'uikit'
 import Select from 'components/Select/Select'
 import styled from 'styled-components'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
@@ -11,7 +12,12 @@ import masterChefABI from 'config/abi/masterchef.json';
 import sousChefABI from 'config/abi/sousChef.json';
 import auraVaultABI from 'config/abi/auraVault.json';
 import auraABI from 'config/abi/cake.json';
-import { simpleRpcProvider } from 'utils/providers'
+import auraRouterV1ABI from 'config/abi/AuraRouterV1.json';
+import auraFactoryABI from 'config/abi/AuraFactory.json';
+import auraPairABI from 'config/abi/AuraPair.json';
+import testTokenABI from 'config/abi/TestToken.json';
+
+import { getProviderOrSigner } from 'utils'
 import Page from '../Page'
 
 
@@ -27,7 +33,7 @@ function AppBody({ children }: { children: React.ReactNode }) {
 }
 
 function DevTool() {
-
+    const { library, account } = useActiveWeb3React()
     const [contractAddress, setContractAddress] = useState('0x3E54EdDd13b2909A4047188A1C7b2e4BAF7b656c');
     const [contractABIName, setContractABIName] = useState('masterChef');
     const [functionName, setFunctionName] = useState('auraToken');
@@ -37,7 +43,7 @@ function DevTool() {
     const { callWithGasPrice } = useCallWithGasPrice()
 
     const callOptions = useMemo(() => ({
-        gasLimit: 50000
+        gasLimit: 9999999
     }), []);
 
     const supportedABIs = useMemo(() => ({
@@ -45,11 +51,15 @@ function DevTool() {
         'smartChef': sousChefABI,
         'auraVault': auraVaultABI,
         'aura': auraABI,
+        'router': auraRouterV1ABI,
+        'factory': auraFactoryABI,
+        'pair': auraPairABI,
+        'testToken': testTokenABI,
     }), []);
 
     const handleContractCall = useCallback(async () => {
         try {
-        const contract = new Contract(contractAddress, supportedABIs[contractABIName], simpleRpcProvider);
+        const contract = new Contract(contractAddress, supportedABIs[contractABIName], getProviderOrSigner(library, account));
         const transaction = await callWithGasPrice(
             contract,
             functionName, 
@@ -61,7 +71,7 @@ function DevTool() {
         } catch (error) {
             setContractCallResult(error.toString());
         }
-    }, [callOptions, callWithGasPrice, contractABIName, contractAddress, functionArguments, functionName, supportedABIs, setContractCallResult]);
+    }, [callOptions, callWithGasPrice, contractABIName, contractAddress, functionArguments, functionName, supportedABIs, setContractCallResult, library, account]);
     
     return (
         <Page>
@@ -109,7 +119,7 @@ function DevTool() {
                         Contract Arguments
                     </Text>
                     <Input
-                        placeholder='Fucntion arguments'
+                        placeholder='Function arguments'
                         value={functionArguments.join(',')}
                         onChange={(evt: ChangeEvent<HTMLInputElement>) => 
                             setFunctionArguments(

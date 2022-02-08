@@ -8,7 +8,7 @@ import { useAuraBusdPrice } from 'hooks/useBUSDPrice'
 import Container from './Container'
 
 const StyledPage = styled(Container)`
-  min-height: calc(100vh - 64px);
+  min-height: calc(100vh - 404px);
   padding-top: 16px;
   padding-bottom: 16px;
 

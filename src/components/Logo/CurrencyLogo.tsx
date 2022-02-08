@@ -2,6 +2,7 @@ import { Currency, ETHER, Token } from 'sdk'
 import { BinanceIcon } from 'uikit'
 import React, { useMemo } from 'react'
 import styled from 'styled-components'
+import tokens from 'config/constants/tokens'
 import useHttpLocations from '../../hooks/useHttpLocations'
 import { WrappedTokenInfo } from '../../state/lists/hooks'
 import getTokenLogoURL from '../../utils/getTokenLogoURL'
@@ -11,6 +12,11 @@ const StyledLogo = styled(Logo)<{ size: string }>`
   width: ${({ size }) => size};
   height: ${({ size }) => size};
 `
+
+const getImageUrlFromToken = (token: Token) => {
+  const address = token.symbol === 'BNB' ? tokens.wbnb.address : token.address.toLowerCase()
+  return `images/tokens/${address}.svg`
+}
 
 export default function CurrencyLogo({
   currency,
@@ -28,9 +34,9 @@ export default function CurrencyLogo({
 
     if (currency instanceof Token) {
       if (currency instanceof WrappedTokenInfo) {
-        return [...uriLocations, getTokenLogoURL(currency.address)]
+        return [...uriLocations, getImageUrlFromToken(currency), getTokenLogoURL(currency.address)]
       }
-      return [getTokenLogoURL(currency.address)]
+      return [getImageUrlFromToken(currency), getTokenLogoURL(currency.address)]
     }
     return []
   }, [currency, uriLocations])

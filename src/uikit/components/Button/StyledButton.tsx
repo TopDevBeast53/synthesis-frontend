@@ -1,5 +1,4 @@
 import styled, { DefaultTheme } from "styled-components";
-// eslint-disable-next-line import/no-unresolved
 import { space, layout, variant } from "styled-system";
 import { scaleVariants, styleVariants } from "./theme";
 import { BaseButtonProps } from "./types";
