@@ -3,6 +3,7 @@ import { Flex, Button, Input, Card, Text, Heading} from 'uikit'
 
 import styled from 'styled-components'
 import { useMigrateLiquidity } from './hooks/useMigrateLiquidity';
+import { useSplitPair } from './hooks/useSplitPair';
 
 import Page from '../Page';
 
@@ -26,7 +27,19 @@ export default function Migrator() {
     const [functionCallResult, setFunctionCallResult] = useState('');
     const [isButtonClicked, setIsButtonClicked] = useState(false);
 
+    const { splitPair } = useSplitPair();
     const { migrateLiquidity } = useMigrateLiquidity();
+
+    const handleLpTokenChange = useCallback(async (addressLpToken) => {
+        try {
+            const [addressTokenA, addressTokenB] = await splitPair(addressLpToken);
+            setTokenA(addressTokenA);
+            setTokenB(addressTokenB);
+            setLpToken(addressLpToken);
+        } catch(error) {
+            console.log(error);
+        }
+    }, [splitPair]);
 
     const migrateLiquidityCall = useCallback(async () => {
         try {
@@ -59,32 +72,12 @@ export default function Migrator() {
                     />
 
                     <Text fontSize="12px" color="secondary" textTransform="uppercase" bold mb="8px" ml="4px">
-                        Token A Address
-                    </Text>
-                    <Input 
-                        placeholder="Token A Address"
-                        value={tokenA}
-                        onChange={ (evt: ChangeEvent<HTMLInputElement>) => setTokenA(evt.target.value)}
-                        style={{ position: 'relative', zIndex: 16, paddingRight: '40px', marginBottom: '16px'}}
-                    />
-
-                    <Text fontSize="12px" color="secondary" textTransform="uppercase" bold mb="8px" ml="4px">
-                        Token B Address
-                    </Text>
-                    <Input 
-                        placeholder="Token B Address"
-                        value={tokenB}
-                        onChange={ (evt: ChangeEvent<HTMLInputElement>) => setTokenB(evt.target.value)}
-                        style={{ position: 'relative', zIndex: 16, paddingRight: '40px', marginBottom: '16px'}}
-                    />
-
-                    <Text fontSize="12px" color="secondary" textTransform="uppercase" bold mb="8px" ml="4px">
                         LP Token Address
                     </Text>
                     <Input 
                         placeholder="LP Token Address"
                         value={lpToken}
-                        onChange={ (evt: ChangeEvent<HTMLInputElement>) => setLpToken(evt.target.value)}
+                        onChange={ (evt: ChangeEvent<HTMLInputElement>) => handleLpTokenChange(evt.target.value)}
                         style={{ position: 'relative', zIndex: 16, paddingRight: '40px', marginBottom: '16px'}}
                     />
 
