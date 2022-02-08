@@ -104,4 +104,12 @@ export default {
     56: '0x0a8901b0E25DEb55A87524f0cC164E9644020EBA',
     97: '0xfC0c3F11fDA72Cb9A56F28Ec8D44C0ae4B3ABF86',
   },
+  auraChefNFT: {
+    56: '',
+    97: '0x2fFe8dA169ce2c297fDd97F375782a6C53f1EEf7',
+  },
+  auraNFT: {
+    56: '',
+    97: '0xb83f10ea161aF7Be1B09eF6bDc73E5827704a040',
+  },
 }
