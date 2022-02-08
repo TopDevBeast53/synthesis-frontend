@@ -1,11 +1,12 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import { Flex, Button, Input, Card, Text, Heading} from 'uikit'
 import styled from 'styled-components'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice';
 import { Contract } from '@ethersproject/contracts';
 
-import { simpleRpcProvider } from 'utils/providers';
+import { getProviderOrSigner } from 'utils'
 import migratorABI from 'config/abi/AuraMigrator.json';
 import Page from '../Page';
 
@@ -21,24 +22,28 @@ function AppBody({ children }: { children: React.ReactNode }) {
 }
 
 function Migrator() {
+    const { library, account } = useActiveWeb3React()
+
     const [externalRouter, setExternalRouter] = useState('');
     const [tokenA, setTokenA] = useState('');
     const [tokenB, setTokenB] = useState('');
     const [lpToken, setLpToken] = useState('');
     const [functionCallResult, setFunctionCallResult] = useState('');
 
+    const { callWithGasPrice } = useCallWithGasPrice()
+
     const overrides = useMemo(() => ({
-        gasLimit: 50000
+        gasLimit: 9999999
     }), []);
 
     const migrateLiquidityCall = useCallback(async () => {
         try {
-            const migratorAddress = '0xA95c10feBBB13f7730FecD4167c9A612e468A42b';
-            const migrator = new Contract(migratorAddress, migratorABI, simpleRpcProvider);
+            const migratorAddress = '0x6D237B35cCa79f367Ecac7743555C3f3213fA77f';
+            const migrator = new Contract(migratorAddress, migratorABI, getProviderOrSigner(library, account));
             const migrateLiquidityArguments = [tokenA, tokenB, lpToken, externalRouter];
             const transaction = await callWithGasPrice(
                 migrator,
-                migrateLiquidity,
+                'migrateLiquidity',
                 migrateLiquidityArguments,
                 overrides,
             );
@@ -47,7 +52,7 @@ function Migrator() {
         } catch(error) {
             setFunctionCallResult(error.toString());
         }
-    }, [overrides, tokenA, tokenB, lpToken, externalRouter, setFunctionCallResult]);
+    }, [overrides, tokenA, tokenB, lpToken, externalRouter, setFunctionCallResult, library, account]);
 
     return (
         <Page>
