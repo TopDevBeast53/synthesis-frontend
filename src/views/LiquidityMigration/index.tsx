@@ -1,13 +1,9 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Flex, Button, Input, Card, Text, Heading} from 'uikit'
+
 import styled from 'styled-components'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import { useMigrateLiquidity } from './hooks/useMigrateLiquidity';
 
-import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice';
-import { Contract } from '@ethersproject/contracts';
-
-import { getProviderOrSigner } from 'utils'
-import migratorABI from 'config/abi/AuraMigrator.json';
 import Page from '../Page';
 
 const BodyWrapper = styled(Card)`
@@ -21,38 +17,28 @@ function AppBody({ children }: { children: React.ReactNode }) {
     return <BodyWrapper>{children}</BodyWrapper>
 }
 
-function Migrator() {
-    const { library, account } = useActiveWeb3React()
-
+export default function Migrator() {
     const [externalRouter, setExternalRouter] = useState('');
     const [tokenA, setTokenA] = useState('');
     const [tokenB, setTokenB] = useState('');
     const [lpToken, setLpToken] = useState('');
+
     const [functionCallResult, setFunctionCallResult] = useState('');
+    const [isButtonClicked, setIsButtonClicked] = useState(false);
 
-    const { callWithGasPrice } = useCallWithGasPrice()
-
-    const overrides = useMemo(() => ({
-        gasLimit: 9999999
-    }), []);
+    const { migrateLiquidity } = useMigrateLiquidity();
 
     const migrateLiquidityCall = useCallback(async () => {
         try {
-            const migratorAddress = '0x6D237B35cCa79f367Ecac7743555C3f3213fA77f';
-            const migrator = new Contract(migratorAddress, migratorABI, getProviderOrSigner(library, account));
-            const migrateLiquidityArguments = [tokenA, tokenB, lpToken, externalRouter];
-            const transaction = await callWithGasPrice(
-                migrator,
-                'migrateLiquidity',
-                migrateLiquidityArguments,
-                overrides,
-            );
-            console.log(transaction);
-            setFunctionCallResult(transaction.toString());
+            setIsButtonClicked(true);
+            const tx = await migrateLiquidity([tokenA, tokenB, lpToken, externalRouter]);
+            setFunctionCallResult(tx);
         } catch(error) {
             setFunctionCallResult(error.toString());
+        } finally {
+            setIsButtonClicked(false);
         }
-    }, [overrides, tokenA, tokenB, lpToken, externalRouter, setFunctionCallResult, library, account]);
+    }, [migrateLiquidity, tokenA, tokenB, lpToken, externalRouter]);
 
     return (
         <Page>
@@ -119,5 +105,3 @@ function Migrator() {
         </Page>
     );
 }
-
-export default Migrator;
