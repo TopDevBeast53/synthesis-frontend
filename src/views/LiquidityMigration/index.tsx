@@ -55,7 +55,7 @@ export default function Migrator() {
                     <Input 
                         placeholder="External Router Address"
                         value={externalRouter}
-                        onChange={ (evt: ChangeEvent<HTMLInputElement>) => setExternalRouter(evt.target.value)}
+                        onChange={ (evt: React.ChangeEvent<HTMLInputElement>) => setExternalRouter(evt.target.value)}
                         style={{ position: 'relative', zIndex: 16, paddingRight: '40px', marginBottom: '16px'}}
                     />
 
@@ -65,7 +65,7 @@ export default function Migrator() {
                     <Input 
                         placeholder="LP Token Address"
                         value={lpToken}
-                        onChange={ (evt: ChangeEvent<HTMLInputElement>) => setLpToken(evt.target.value)}
+                        onChange={ (evt: React.ChangeEvent<HTMLInputElement>) => setLpToken(evt.target.value)}
                         style={{ position: 'relative', zIndex: 16, paddingRight: '40px', marginBottom: '16px'}}
                     />
 
