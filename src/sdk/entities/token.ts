@@ -23,7 +23,7 @@ export class Token extends Currency {
   ) {
     super(decimals, symbol, name)
     this.chainId = chainId
-    this.address = validateAndParseAddress(address.toLocaleLowerCase())
+    this.address = validateAndParseAddress(address)
     this.projectLink = projectLink
   }
 
@@ -82,7 +82,7 @@ export const WETH = {
   ),
   [ChainId.TESTNET]: new Token(
     ChainId.TESTNET,
-    '0xae13d989dac2f0debff460ac112a837c89baa7cd',
+    '0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd',
     18,
     'WBNB',
     'Wrapped BNB',

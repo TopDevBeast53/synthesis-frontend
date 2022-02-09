@@ -14,7 +14,7 @@ const StyledLogo = styled(Logo)<{ size: string }>`
 `
 
 const getImageUrlFromToken = (token: Token) => {
-  const address = token.symbol === 'BNB' ? tokens.wbnb.address : token.address.toLowerCase()
+  const address = token.symbol === 'BNB' ? tokens.wbnb.address : token.address
   return `images/tokens/${address}.svg`
 }
 
