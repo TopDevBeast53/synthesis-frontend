@@ -94,3 +94,9 @@ export const getPancakeSquadAddress = () => {
 export const getAuraMigratorAddress = () => {
     return getAddress(addresses.auraMigrator);
 }
+export const getAuraNftAddress = () => {
+  return getAddress(addresses.auraNFT)
+}
+export const getAuraChefNftAddress = () => {
+  return getAddress(addresses.auraChefNFT)
+}
