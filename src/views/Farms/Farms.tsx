@@ -329,7 +329,7 @@ const Farms: React.FC = () => {
               key={farm.pid}
               farm={farm}
               displayApr={getDisplayApr(farm.apr, farm.lpRewardsApr)}
-              cakePrice={auraPrice}
+              auraPrice={auraPrice}
               account={account}
               removed={false}
             />
@@ -341,7 +341,7 @@ const Farms: React.FC = () => {
               key={farm.pid}
               farm={farm}
               displayApr={getDisplayApr(farm.apr, farm.lpRewardsApr)}
-              cakePrice={auraPrice}
+              auraPrice={auraPrice}
               account={account}
               removed
             />
@@ -353,7 +353,7 @@ const Farms: React.FC = () => {
               key={farm.pid}
               farm={farm}
               displayApr={getDisplayApr(farm.apr, farm.lpRewardsApr)}
-              cakePrice={auraPrice}
+              auraPrice={auraPrice}
               account={account}
               removed
             />
