@@ -8,9 +8,9 @@ import {
   StyledList,
   StyledListItem,
   StyledText,
-  StyledSocialLinks,
   StyledToolsContainer,
 } from "./styles";
+import SocialLinks from "./Components/SocialLinks";
 import { FooterProps } from "./types";
 import { ThemeSwitcher } from "../ThemeSwitcher";
 import LangSelector from "../LangSelector/LangSelector";
@@ -69,7 +69,7 @@ const MenuItem: React.FC<FooterProps> = ({
             <LogoWithTextIcon isDark width="160px" />
           </Box>
         </Flex>
-        <StyledSocialLinks order={[2]} pb={["42px", null, "32px"]} mb={["0", null, "32px"]} />
+        <SocialLinks order={[2]} pb={["42px", null, "32px"]} mb={["0", null, "32px"]} />
       </Flex>
     </StyledFooter>
   );
