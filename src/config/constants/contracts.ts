@@ -52,8 +52,8 @@ export default {
     56: '0x23c41D28A239dDCAABd1bb1deF8d057189510066',
     97: '0x24ec6962dbe874F6B67B5C50857565667fA0854F',
   },
-  cakeVault: {
-    56: '0xa80240Eb5d7E05d3F250cF000eEc0891d00b51CC',
+  auraVault: {
+    56: '',
     97: '0xE9Bf1603aa7648118a1D309BA86c84834C2d8269',
   },
   ifoPool: {

@@ -4,7 +4,7 @@ import { useAppDispatch } from 'state'
 import { orderBy } from 'lodash'
 import { VaultKey, DeserializedPool } from 'state/types'
 import { fetchCakeVaultFees, fetchPoolsPublicDataAsync } from 'state/pools'
-import { useCakeVault, useIfoPoolVault, usePools } from 'state/pools/hooks'
+import { useCakeVault, usePools } from 'state/pools/hooks'
 import { getAprData } from 'views/Pools/helpers'
 import { FetchStatus } from 'config/constants/types'
 

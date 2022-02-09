@@ -1,5 +1,5 @@
 import React from "react";
-import { baseColors, darkColors, lightColors } from "../../theme/colors";
+import { baseColors, darkColors } from "../../theme/colors";
 import { Flex, Box } from "../Box";
 import { Link } from "../Link";
 import {
@@ -8,33 +8,27 @@ import {
   StyledList,
   StyledListItem,
   StyledText,
-  StyledToolsContainer,
 } from "./styles";
 import SocialLinks from "./Components/SocialLinks";
 import { FooterProps } from "./types";
-import { ThemeSwitcher } from "../ThemeSwitcher";
-import LangSelector from "../LangSelector/LangSelector";
-import CakePrice from "../CakePrice/CakePrice";
-import { LogoWithTextIcon, ArrowForwardIcon } from "../Svg";
-import { Button } from "../Button";
-import { Colors } from "../..";
+import { LogoWithTextIcon } from "../Svg";
 
 const MenuItem: React.FC<FooterProps> = ({
   items,
   isDark,
-  toggleTheme,
-  currentLang,
-  langs,
-  setLang,
-  cakePriceUsd,
-  buyCakeLabel,
+  // toggleTheme,
+  // currentLang,
+  // langs,
+  // setLang,
+  // cakePriceUsd,
+  // buyCakeLabel,
   ...props
 }) => {
   return (
     <StyledFooter p={["40px 16px", null, "56px 40px 32px 40px"]} {...props} justifyContent="center">
       <Flex flexDirection="column" width={["100%", null, "1200px;"]}>
         <StyledIconMobileContainer display={["block", null, "none"]}>
-          <LogoWithTextIcon isDark width="130px" />
+          <LogoWithTextIcon isDark={isDark} width="130px" />
         </StyledIconMobileContainer>
         <Flex
           order={[2, null, 1]}

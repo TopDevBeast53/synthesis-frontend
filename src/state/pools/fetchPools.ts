@@ -3,13 +3,9 @@ import poolsConfig from 'config/constants/pools'
 import sousChefABI from 'config/abi/sousChef.json'
 import cakeABI from 'config/abi/cake.json'
 import wbnbABI from 'config/abi/weth.json'
-import multicall, { multicallv2 } from 'utils/multicall'
+import multicall from 'utils/multicall'
 import { getAddress } from 'utils/addressHelpers'
-import { BIG_ZERO } from 'utils/bigNumber'
-import { getSouschefV2Contract } from 'utils/contractHelpers'
 import tokens from 'config/constants/tokens'
-import { chunk } from 'lodash'
-import sousChefV2 from '../../config/abi/sousChefV2.json'
 
 export const fetchPoolsBlockLimits = async () => {
   const poolsWithEnd = poolsConfig.filter((p) => p.sousId !== 0)
@@ -86,7 +82,7 @@ export const fetchPoolsTotalStaking = async () => {
   ]
 }
 
-export const fetchPoolStakingLimit = async (sousId: number): Promise<BigNumber> => {
+export const fetchPoolStakingLimit = async (): Promise<BigNumber> => {
   return new BigNumber("100000000000000000000");
   // try {
   //   const sousContract = getSouschefV2Contract(sousId)
@@ -131,7 +127,7 @@ export const fetchPoolsStakingLimits = async (
   //   }
   // }, {})
 
-  return validPools.reduce((accum, value, index) => {
+  return validPools.reduce((accum, value) => {
     return {
       ...accum,
       [value.sousId]:  new BigNumber("100000000000000000000"),

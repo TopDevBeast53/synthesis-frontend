@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { Text, PancakeToggle, Toggle, Flex, Modal, InjectedModalProps, ThemeSwitcher } from 'uikit'
+import { Text, PancakeToggle, Toggle, Flex, Modal, InjectedModalProps } from 'uikit'
 import {
   useAudioModeManager,
   useExpertModeManager,
@@ -34,7 +34,7 @@ const SettingsModal: React.FC<InjectedModalProps> = ({ onDismiss }) => {
   const { onChangeRecipient } = useSwapActionHandlers()
 
   const { t } = useTranslation()
-  const { theme, isDark, toggleTheme } = useTheme()
+  const { theme } = useTheme()
 
   if (showConfirmExpertModal) {
     return (

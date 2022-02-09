@@ -93,7 +93,7 @@ export default function Swap({ history }: RouteComponentProps) {
   const { isMobile } = useMatchBreakpoints()
   const [isChartExpanded /* setIsChartExpanded */] = useState(false)
   const [userChartPreference, setUserChartPreference] = useExchangeChartManager(isMobile)
-  const [isChartDisplayed, setIsChartDisplayed] = useState(userChartPreference)
+  const [isChartDisplayed] = useState(userChartPreference)
 
   useEffect(() => {
     setUserChartPreference(isChartDisplayed)
@@ -212,7 +212,7 @@ export default function Swap({ history }: RouteComponentProps) {
   }, [approval, approvalSubmitted])
 
   const maxAmountInput: CurrencyAmount | undefined = maxAmountSpend(currencyBalances[Field.INPUT])
-  const atMaxAmountInput = Boolean(maxAmountInput && parsedAmounts[Field.INPUT]?.equalTo(maxAmountInput))
+  // const atMaxAmountInput = Boolean(maxAmountInput && parsedAmounts[Field.INPUT]?.equalTo(maxAmountInput))
 
   // the callback to execute the swap
   const { callback: swapCallback, error: swapCallbackError } = useSwapCallback(trade, allowedSlippage, recipient)
@@ -393,17 +393,17 @@ export default function Swap({ history }: RouteComponentProps) {
                 <CurrencyInputHeader
                   title={t('Swap')}
                   subtitle={t('Trade tokens in an instant')}
-                  setIsChartDisplayed={setIsChartDisplayed}
-                  isChartDisplayed={isChartDisplayed}
+                  // setIsChartDisplayed={setIsChartDisplayed}
+                  // isChartDisplayed={isChartDisplayed}
                 />
                 <Wrapper id="swap-page">
                   <AutoColumn gap="md">
                     <CurrencyInputPanel
-                      label={
-                        independentField === Field.OUTPUT && !showWrap && trade ? t('From (estimated)') : t('From')
-                      }
+                      // label={
+                      //   independentField === Field.OUTPUT && !showWrap && trade ? t('From (estimated)') : t('From')
+                      // }
                       value={formattedAmounts[Field.INPUT]}
-                      showMaxButton={!atMaxAmountInput}
+                      // showMaxButton={!atMaxAmountInput}
                       currency={currencies[Field.INPUT]}
                       onUserInput={handleTypeInput}
                       onMax={handleMaxInput}
@@ -441,8 +441,8 @@ export default function Swap({ history }: RouteComponentProps) {
                     <CurrencyInputPanel
                       value={formattedAmounts[Field.OUTPUT]}
                       onUserInput={handleTypeOutput}
-                      label={independentField === Field.INPUT && !showWrap && trade ? t('To (estimated)') : t('To')}
-                      showMaxButton={false}
+                      // label={independentField === Field.INPUT && !showWrap && trade ? t('To (estimated)') : t('To')}
+                      // showMaxButton={false}
                       currency={currencies[Field.OUTPUT]}
                       onCurrencySelect={handleOutputSelect}
                       otherCurrency={currencies[Field.INPUT]}
