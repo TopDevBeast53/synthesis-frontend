@@ -20,8 +20,6 @@ function AppBody({ children }: { children: React.ReactNode }) {
 
 export default function Migrator() {
     const [externalRouter, setExternalRouter] = useState('');
-    const [tokenA, setTokenA] = useState('');
-    const [tokenB, setTokenB] = useState('');
     const [lpToken, setLpToken] = useState('');
 
     const [functionCallResult, setFunctionCallResult] = useState('');
@@ -30,20 +28,10 @@ export default function Migrator() {
     const { splitPair } = useSplitPair();
     const { migrateLiquidity } = useMigrateLiquidity();
 
-    const handleLpTokenChange = useCallback(async (addressLpToken) => {
-        try {
-            const [addressTokenA, addressTokenB] = await splitPair(addressLpToken);
-            setTokenA(addressTokenA);
-            setTokenB(addressTokenB);
-            setLpToken(addressLpToken);
-        } catch(error) {
-            console.log(error);
-        }
-    }, [splitPair]);
-
     const migrateLiquidityCall = useCallback(async () => {
         try {
             setIsButtonClicked(true);
+            const [tokenA, tokenB] = await splitPair(lpToken);
             const tx = await migrateLiquidity([tokenA, tokenB, lpToken, externalRouter]);
             setFunctionCallResult(tx);
         } catch(error) {
@@ -51,7 +39,7 @@ export default function Migrator() {
         } finally {
             setIsButtonClicked(false);
         }
-    }, [migrateLiquidity, tokenA, tokenB, lpToken, externalRouter]);
+    }, [splitPair, migrateLiquidity, lpToken, externalRouter]);
 
     return (
         <Page>
@@ -77,11 +65,11 @@ export default function Migrator() {
                     <Input 
                         placeholder="LP Token Address"
                         value={lpToken}
-                        onChange={ (evt: ChangeEvent<HTMLInputElement>) => handleLpTokenChange(evt.target.value)}
+                        onChange={ (evt: ChangeEvent<HTMLInputElement>) => setLpToken(evt.target.value)}
                         style={{ position: 'relative', zIndex: 16, paddingRight: '40px', marginBottom: '16px'}}
                     />
 
-                    <Button onClick={migrateLiquidityCall} style={{marginBottom: '16px'}}>
+                    <Button onClick={migrateLiquidityCall} disabled={isButtonClicked} style={{marginBottom: '16px'}}>
                         Migrate Liquidity
                     </Button>
 
