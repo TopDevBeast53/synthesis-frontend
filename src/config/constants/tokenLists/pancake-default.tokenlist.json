@@ -13,7 +13,7 @@
     {
       "name": "Aura",
       "symbol": "AURA",
-      "address": "0xdf2b1082ee98b48b5933378c8f58ce2f5aaff135",
+      "address": "0xdf2b1082eE98b48B5933378c8F58cE2f5AaFF135",
       "chainId": 97,
       "decimals": 18,
       "logoURI": "local://images/tokens/0xdf2b1082ee98b48b5933378c8f58ce2f5aaff135.png"
@@ -21,26 +21,26 @@
     {
       "name": "Wrapped BNB",
       "symbol": "WBNB",
-      "address": "0xae13d989dac2f0debff460ac112a837c89baa7cd",
+      "address": "0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd",
       "chainId": 97,
       "decimals": 18,
-      "logoURI": "local://images/tokens/0xae13d989dac2f0debff460ac112a837c89baa7cd.png" 
+      "logoURI": "local://images/tokens/0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd.png" 
     },
     {
       "name": "PancakeSwap Token",
       "symbol": "CAKE",
-      "address": "0xf9f93cf501bfadb6494589cb4b4c15de49e85d0e",
+      "address": "0xF9f93cF501BFaDB6494589Cb4b4C15dE49E85D0e",
       "chainId": 97,
       "decimals": 18,
-      "logoURI": "local://images/tokens/0xf9f93cf501bfadb6494589cb4b4c15de49e85d0e.png" 
+      "logoURI": "local://images/tokens/0xF9f93cF501BFaDB6494589Cb4b4C15dE49E85D0e.png" 
     },
     {
       "name": "Binance USD",
       "symbol": "BUSD",
-      "address": "0x78867bbeef44f2326bf8ddd1941a4439382ef2a7",
+      "address": "0x78867BbEeF44f2326bF8DDd1941a4439382EF2A7",
       "chainId": 97,
       "decimals": 18,
-      "logoURI": "local://images/tokens/0x78867bbeef44f2326bf8ddd1941a4439382ef2a7.png" 
+      "logoURI": "local://images/tokens/0x78867BbEeF44f2326bF8DDd1941a4439382EF2A7.png" 
     }
   ]
 }

@@ -18,6 +18,9 @@ const StyledToast = styled.div`
   transition: all 250ms ease-in;
   width: 100%;
 
+  background: rgba(39, 38, 44, 0.7);
+  backdrop-filter: blur(80px);
+
   ${({ theme }) => theme.mediaQueries.sm} {
     max-width: 400px;
   }

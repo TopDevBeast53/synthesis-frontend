@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { darkColors } from "../../theme/colors";
 import { Box, Flex } from "../Box";
-import SocialLinks from "./Components/SocialLinks";
 
 export const StyledFooter = styled(Flex)`
   background: ${darkColors.backgroundAlt};
@@ -46,10 +45,6 @@ export const StyledToolsContainer = styled(Flex)`
     padding: 0 0;
     margin-bottom: 0;
   }
-`;
-
-export const StyledSocialLinks = styled(SocialLinks)`
-  border-bottom: 1px solid ${darkColors.cardBorder};
 `;
 
 export const StyledText = styled.span`

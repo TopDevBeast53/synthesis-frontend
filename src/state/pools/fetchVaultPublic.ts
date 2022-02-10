@@ -2,7 +2,7 @@ import BigNumber from 'bignumber.js'
 import { convertSharesToCake } from 'views/Pools/helpers'
 import { multicallv2 } from 'utils/multicall'
 import auraVaultAbi from 'config/abi/auraVault.json'
-import { getCakeVaultAddress } from 'utils/addressHelpers'
+import { getAuraVaultAddress } from 'utils/addressHelpers'
 import { BIG_ZERO } from 'utils/bigNumber'
 
 export const fetchPublicVaultData = async () => {
@@ -13,7 +13,7 @@ export const fetchPublicVaultData = async () => {
       'calculateHarvestCakeRewards',
       'calculateTotalPendingCakeRewards',
     ].map((method) => ({
-      address: getCakeVaultAddress(),
+      address: getAuraVaultAddress(),
       name: method,
     }))
 
@@ -46,7 +46,7 @@ export const fetchPublicVaultData = async () => {
 export const fetchVaultFees = async () => {
   try {
     const calls = ['performanceFee', 'callFee', 'withdrawFee', 'withdrawFeePeriod'].map((method) => ({
-      address: getCakeVaultAddress(),
+      address: getAuraVaultAddress(),
       name: method,
     }))
 

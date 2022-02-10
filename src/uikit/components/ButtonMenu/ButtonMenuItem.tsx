@@ -1,5 +1,5 @@
 import React from "react";
-import styled, { useTheme } from "styled-components";
+import styled from "styled-components";
 import { PolymorphicComponent } from "../../util/polymorphic";
 import Button from "../Button/Button";
 import { BaseButtonProps, variants } from "../Button/types";
@@ -23,8 +23,6 @@ const ButtonMenuItem: PolymorphicComponent<ButtonMenuItemProps, "button"> = ({
   as,
   ...props
 }: ButtonMenuItemProps) => {
-  const theme = useTheme();
-
   if (!isActive) {
     return <InactiveButton forwardedAs={as} variant={variant} {...props} />;
   }

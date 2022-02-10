@@ -66,7 +66,6 @@ function DevTool() {
             functionArguments,
             callOptions,
         );
-        console.log(transaction);
         setContractCallResult(transaction.toString());
         } catch (error) {
             setContractCallResult(error.toString());

@@ -31,7 +31,6 @@ import {
   updateUserPredictionAcceptedRisk,
   updateUserUsernameVisibility,
   updateUserExpertModeAcknowledgementShow,
-  hidePhishingWarningBanner,
   setIsExchangeChartDisplayed,
   ChartViewMode,
   setChartViewMode,
@@ -52,19 +51,6 @@ export function useAudioModeManager(): [boolean, () => void] {
   }, [audioPlay, dispatch])
 
   return [audioPlay, toggleSetAudioMode]
-}
-
-export function usePhishingBannerManager(): [boolean, () => void] {
-  const dispatch = useDispatch<AppDispatch>()
-  const showPhishingWarningBanner = useSelector<AppState, AppState['user']['showPhishingWarningBanner']>(
-    (state) => state.user.showPhishingWarningBanner,
-  )
-
-  const hideBanner = useCallback(() => {
-    dispatch(hidePhishingWarningBanner())
-  }, [dispatch])
-
-  return [showPhishingWarningBanner, hideBanner]
 }
 
 // Get user preference for exchange price chart

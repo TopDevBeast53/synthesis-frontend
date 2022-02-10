@@ -187,8 +187,12 @@ export function useDerivedSwapInfo(): {
   const isExactIn: boolean = independentField === Field.INPUT
   const parsedAmount = tryParseAmount(typedValue, (isExactIn ? inputCurrency : outputCurrency) ?? undefined)
 
-  const bestTradeExactIn = useTradeExactIn(isExactIn ? parsedAmount : undefined, outputCurrency ?? undefined)
-  const bestTradeExactOut = useTradeExactOut(inputCurrency ?? undefined, !isExactIn ? parsedAmount : undefined)
+  const {
+    bestTrade: bestTradeExactIn, 
+  } = useTradeExactInNoThrow(isExactIn ? parsedAmount : undefined, outputCurrency ?? undefined)
+  const {
+    bestTrade: bestTradeExactOut, 
+  } = useTradeExactOutNoThrow(inputCurrency ?? undefined, !isExactIn ? parsedAmount : undefined)
 
   const v2Trade = isExactIn ? bestTradeExactIn : bestTradeExactOut
 
@@ -246,6 +250,36 @@ export function useDerivedSwapInfo(): {
     parsedAmount,
     v2Trade: v2Trade ?? undefined,
     inputError,
+  }
+}
+
+function useTradeExactInNoThrow(currencyAmountIn?: CurrencyAmount, currencyOut?: Currency): {
+  bestTrade: Trade | undefined,
+  inputError?: string,
+} {
+  try {
+    const bestTrade = useTradeExactIn(currencyAmountIn, currencyOut);
+    return {bestTrade};
+  } catch (error: any) {
+      return {
+        bestTrade: undefined,
+        inputError: 'Insufficient balance',
+      }
+  }
+}
+
+function useTradeExactOutNoThrow(currencyIn?: Currency, currencyAmountOut?: CurrencyAmount): {
+  bestTrade: Trade | undefined,
+  inputError?: string,
+} {
+  try {
+    const bestTrade = useTradeExactOut(currencyIn, currencyAmountOut);
+    return {bestTrade};
+  } catch (error: any) {
+      return {
+        bestTrade: undefined,
+        inputError: 'Insufficient balance',
+      }
   }
 }
 

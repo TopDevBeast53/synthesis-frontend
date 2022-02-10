@@ -17,7 +17,7 @@ import {
   getClaimRefundAddress,
   getTradingCompetitionAddress,
   getEasterNftAddress,
-  getCakeVaultAddress,
+  getAuraVaultAddress,
   getIfoPoolAddress,
   getPredictionsAddress,
   getChainlinkOracleAddress,
@@ -175,7 +175,7 @@ export const getEasterNftContract = (signer?: ethers.Signer | ethers.providers.P
   return getContract(easterNftAbi, getEasterNftAddress(), signer) as EasterNft
 }
 export const getCakeVaultContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
-  return getContract(cakeVaultAbi, getCakeVaultAddress(), signer) as CakeVault
+  return getContract(cakeVaultAbi, getAuraVaultAddress(), signer) as CakeVault
 }
 export const getIfoPoolContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
   return getContract(ifoPoolAbi, getIfoPoolAddress(), signer) as IfoPool

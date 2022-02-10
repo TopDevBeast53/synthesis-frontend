@@ -22,24 +22,24 @@ interface StyledCardProps extends CardProps {
 /**
  * Priority: Warning --> Success --> Active
  */
-const getBorderColor = ({ isActive, isSuccess, isWarning, borderBackground, theme }: StyledCardProps) => {
-  if (borderBackground) {
-    return borderBackground;
-  }
-  if (isWarning) {
-    return theme.colors.warning;
-  }
+// const getBorderColor = ({ isActive, isSuccess, isWarning, borderBackground, theme }: StyledCardProps) => {
+//   if (borderBackground) {
+//     return borderBackground;
+//   }
+//   if (isWarning) {
+//     return theme.colors.warning;
+//   }
 
-  if (isSuccess) {
-    return theme.colors.success;
-  }
+//   if (isSuccess) {
+//     return theme.colors.success;
+//   }
 
-  if (isActive) {
-    return `linear-gradient(180deg, ${theme.colors.primaryBright}, ${theme.colors.secondary})`;
-  }
+//   if (isActive) {
+//     return `linear-gradient(180deg, ${theme.colors.primaryBright}, ${theme.colors.secondary})`;
+//   }
 
-  return theme.colors.cardBorder;
-};
+//   return theme.colors.cardBorder;
+// };
 
 export const StyledCard = styled.div<StyledCardProps>`
   background: rgba(249, 250, 250, 0.08);

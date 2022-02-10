@@ -210,7 +210,7 @@ const VaultStakeModal: React.FC<VaultStakeModalProps> = ({
     try {
       // .toString() being called to fix a BigNumber error in prod
       // as suggested here https://github.com/ChainSafe/web3.js/issues/2077
-      const t1 = await callWithGasPrice(
+      await callWithGasPrice(
         tokenContract,
         'approve',
         ['0xE9Bf1603aa7648118a1D309BA86c84834C2d8269', convertedStakeAmount.toString()],

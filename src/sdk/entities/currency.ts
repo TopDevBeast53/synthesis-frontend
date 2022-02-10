@@ -35,5 +35,5 @@ export class Currency {
   }
 }
 
-const ETHER = Currency.ETHER
+const { ETHER } = Currency
 export { ETHER }

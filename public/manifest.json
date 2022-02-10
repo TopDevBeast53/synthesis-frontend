@@ -1,8 +1,7 @@
 {
-  "short_name": "PancakeSwap",
-  "name": "PancakeSwap",
-  "description": "Farm CAKE with Pancake LP Tokens",
-  "homepage_url": "https://pancakeswap.finance",
+  "short_name": "AuraSwap",
+  "name": "AuraSwap",
+  "description": "Farm AURA with AURA LP Tokens",
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#1FC7D4",

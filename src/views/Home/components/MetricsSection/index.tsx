@@ -6,7 +6,6 @@ import useTheme from 'hooks/useTheme'
 import { formatLocalisedCompactNumber } from 'utils/formatBalance'
 import IconCard, { IconCardData } from '../IconCard'
 import StatCardContent from './StatCardContent'
-import GradientLogo from '../GradientLogoSvg'
 
 // Values fetched from bitQuery effective 6/9/21
 const txCount = 30841921

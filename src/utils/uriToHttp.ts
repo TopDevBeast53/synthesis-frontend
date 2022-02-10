@@ -17,7 +17,6 @@ export default function uriToHttp(uri: string): string[] {
       const name = uri.match(/^ipns:(\/\/)?(.*)$/i)?.[2]
       return [`https://cloudflare-ipfs.com/ipns/${name}/`, `https://ipfs.io/ipns/${name}/`]
     case 'local':
-      console.log(`${window.location.protocol}//${window.location.hostname}:${window.location.port}/${uri.substring(8)}`);
       return [`/${uri.substring(7)}`]
     default:
       return []

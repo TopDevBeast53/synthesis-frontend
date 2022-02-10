@@ -57,7 +57,7 @@ const StyledMenuItem = styled.a<StyledMenuItemProps>`
 
   &:hover {
     background: ${({ theme }) => theme.colors.tertiary};
-    ${({ $variant }) => $variant === "default" && "border-radius: 16px;"};
+    border-radius: 12px;
   }
 `;
 

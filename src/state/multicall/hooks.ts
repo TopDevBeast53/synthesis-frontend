@@ -251,9 +251,6 @@ export function useSingleCallResult(
       : []
   }, [contract, fragment, inputs])
 
-  if (contract?.address === '0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82') {
-    console.trace()
-  }
   const result = useCallsData(calls, options)[0]
   const { currentBlock } = useBlock()
 

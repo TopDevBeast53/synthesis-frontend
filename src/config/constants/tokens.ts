@@ -13,7 +13,7 @@ const defineTokens = <T extends TokenList>(t: T) => t
 export const mainnetTokens = defineTokens({
   aura: new Token(
     TESTNET,
-    '0xdf2b1082ee98b48b5933378c8f58ce2f5aaff135',
+    '0xdf2b1082eE98b48B5933378c8F58cE2f5AaFF135',
     18,
     'AURA',
     'Aura',
@@ -1954,14 +1954,14 @@ export const mainnetTokens = defineTokens({
 export const testnetTokens = defineTokens({
   aura: new Token(
     TESTNET,
-    '0xdf2b1082ee98b48b5933378c8f58ce2f5aaff135',
+    '0xdf2b1082eE98b48B5933378c8F58cE2f5AaFF135',
     18,
     'AURA',
     'Aura',
   ),
   wbnb: new Token(
     TESTNET,
-    '0xae13d989dac2f0debff460ac112a837c89baa7cd',
+    '0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd',
     18,
     'WBNB',
     'Wrapped BNB',
@@ -1978,7 +1978,7 @@ export const testnetTokens = defineTokens({
   busd: new Token(
     TESTNET,
     // '0xeD24FC36d5Ee211Ea25A80239Fb8C4Cfd80f12Ee',
-    '0x78867bbeef44f2326bf8ddd1941a4439382ef2a7',
+    '0x78867BbEeF44f2326bF8DDd1941a4439382EF2A7',
     18,
     'BUSD',
     'Binance USD',
@@ -1986,7 +1986,7 @@ export const testnetTokens = defineTokens({
   ),
   dai: new Token(
     TESTNET,
-    '0x8a9424745056eb399fd19a0ec26a14316684e274',
+    '0x8a9424745056Eb399FD19a0EC26A14316684e274',
     18,
     'DAI',
     'Dai Stablecoin',
