@@ -2,6 +2,7 @@
   "short_name": "AuraSwap",
   "name": "AuraSwap",
   "description": "Farm AURA with AURA LP Tokens",
+  "homepage_url": "https://aura.exchange",
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#1FC7D4",

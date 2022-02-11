@@ -34,7 +34,7 @@ export const mainnetTokens = defineTokens({
     18,
     'CAKE',
     'PancakeSwap Token',
-    'https://pancakeswap.finance/',
+    'https://aura.exchange/',
   ),
   tlos: new Token(MAINNET, '0xb6C53431608E626AC81a9776ac3e999c5556717c', 18, 'TLOS', 'Telos', 'https://www.telos.net/'),
   beta: new Token(
@@ -222,7 +222,7 @@ export const mainnetTokens = defineTokens({
     18,
     'SYRUP',
     'SyrupBar Token',
-    'https://pancakeswap.finance/',
+    'https://aura.exchange/',
   ),
   pha: new Token(
     MAINNET,
@@ -1973,7 +1973,7 @@ export const testnetTokens = defineTokens({
     18,
     'CAKE',
     'PancakeSwap Token',
-    'https://pancakeswap.finance/',
+    'https://aura.exchange/',
   ),
   busd: new Token(
     TESTNET,
@@ -1998,7 +1998,7 @@ export const testnetTokens = defineTokens({
     18,
     'SYRUP',
     'SyrupBar Token',
-    'https://pancakeswap.finance/',
+    'https://aura.exchange/',
   ),
   bake: new Token(
     TESTNET,
