@@ -1,4 +1,7 @@
 /* eslint-disable no-case-declarations */
+
+import { env } from "process"
+
 /**
  * Given a URI that may be ipfs, ipns, http, or https protocol, return the fetch-able http(s) URLs for the same content
  * @param uri to convert to fetch-able http url
@@ -17,7 +20,7 @@ export default function uriToHttp(uri: string): string[] {
       const name = uri.match(/^ipns:(\/\/)?(.*)$/i)?.[2]
       return [`https://cloudflare-ipfs.com/ipns/${name}/`, `https://ipfs.io/ipns/${name}/`]
     case 'local':
-      return [`/${uri.substring(7)}`]
+      return [`${env.PUBLIC_URL}/${uri.substring(7)}`]
     default:
       return []
   }
