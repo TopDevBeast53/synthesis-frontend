@@ -1,9 +1,6 @@
 import { InputHTMLAttributes } from "react";
 import styled from "styled-components";
 import Text from "../Text/Text";
-import bunnyHeadMain from "./svg/bunnyhead-main.svg";
-import bunnyHeadMax from "./svg/bunnyhead-max.svg";
-import bunnyButt from "./svg/bunnybutt.svg";
 
 interface SliderLabelProps {
   progress: string;
@@ -21,15 +18,14 @@ const getCursorStyle = ({ disabled = false }: DisabledProp) => {
   return disabled ? "not-allowed" : "cursor";
 };
 
-const getBaseThumbStyles = ({ isMax, disabled }: StyledInputProps) => `
+const getBaseThumbStyles = ({ disabled }: StyledInputProps) => `
   -webkit-appearance: none;
-  background-image: url(${isMax ? bunnyHeadMax : bunnyHeadMain});
-  background-color: transparent;
+  background-color: white;
   box-shadow: none;
-  border: 0;
+  border-radius: 24px;
   cursor: ${getCursorStyle};
   width: 24px;
-  height: 32px;
+  height: 24px;
   filter: ${disabled ? "grayscale(100%)" : "none"};
   transform: translate(-2px, -2px);
   transition: 200ms transform;
@@ -55,18 +51,11 @@ export const SliderLabel = styled(Text)<SliderLabelProps>`
   min-width: 24px; // Slider thumb size
 `;
 
-export const BunnyButt = styled.div<DisabledProp>`
-  background: url(${bunnyButt}) no-repeat;
-  height: 32px;
-  filter: ${({ disabled }) => (disabled ? "grayscale(100%)" : "none")};
-  position: absolute;
-  width: 15px;
-`;
-
-export const BunnySlider = styled.div`
+export const SliderContainer = styled.div`
   position: absolute;
   left: 14px;
   width: calc(100% - 14px);
+  border-radius: 12px;
 `;
 
 export const StyledInput = styled.input<StyledInputProps>`
@@ -91,7 +80,7 @@ export const BarBackground = styled.div<DisabledProp>`
   background-color: ${({ theme, disabled }) => theme.colors[disabled ? "textDisabled" : "inputSecondary"]};
   height: 2px;
   position: absolute;
-  top: 18px;
+  top: 15px;
   width: 100%;
 `;
 
@@ -100,5 +89,6 @@ export const BarProgress = styled.div<DisabledProp>`
   filter: ${({ disabled }) => (disabled ? "grayscale(100%)" : "none")};
   height: 10px;
   position: absolute;
-  top: 18px;
+  top: 11px;
+  border-radius: 12px;
 `;
