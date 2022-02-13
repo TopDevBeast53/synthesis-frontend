@@ -104,16 +104,16 @@ export default {
     56: '0x0a8901b0E25DEb55A87524f0cC164E9644020EBA',
     97: '0xfC0c3F11fDA72Cb9A56F28Ec8D44C0ae4B3ABF86',
   },
-  auraMigrator: {
-    56: '',
-    97: '0x6D237B35cCa79f367Ecac7743555C3f3213fA77f',
-  },
   auraChefNFT: {
     56: '',
-    97: '0x2fFe8dA169ce2c297fDd97F375782a6C53f1EEf7',
+    97: '0x965DF98BA52287c56f1954223A35366f40C0d44a',
   },
   auraNFT: {
     56: '',
-    97: '0xb83f10ea161aF7Be1B09eF6bDc73E5827704a040',
+    97: '0x8eBa31009b1C9dc192eb4b7E15075341CB094a2D',
+  },
+  auraMigrator: {
+    56: '0x00000000000000',
+    97: '0x00000000000000',
   },
 }
