@@ -144,6 +144,7 @@ export function useToken(tokenAddress?: string): Token | undefined | null {
   const address = isAddress(tokenAddress)
 
   const tokenContract = useTokenContract(address || undefined, false)
+
   const tokenContractBytes32 = useBytes32TokenContract(address || undefined, false)
   const token: Token | undefined = address ? tokens[address] : undefined
 

@@ -37,6 +37,11 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType[] = (t) => [
     ],
   },
   {
+    label: 'Migrate',
+    href: '/migration',
+    icon: 'Earn',
+  },
+  {
     label: t('Referrals'),
     href: '/referrals',
     icon: 'Earn',

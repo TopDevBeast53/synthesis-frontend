@@ -3,10 +3,10 @@
  */
 const tokens = {
   cake: {
-    symbol: "CAKE",
+    symbol: "Aura",
     address: {
-      56: "0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82",
-      97: "0xa35062141Fa33BCA92Ce69FeD37D0E8908868AAe",
+      56: "",
+      97: "0xdf2b1082eE98b48B5933378c8F58cE2f5AaFF135",
     },
     decimals: 18,
     projectLink: "https://aura.exchange/",

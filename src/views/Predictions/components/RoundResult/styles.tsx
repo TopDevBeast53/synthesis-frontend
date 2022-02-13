@@ -119,7 +119,7 @@ const getBackgroundColor = ({
 
 const Background = styled(Box)<RoundResultBoxProps>`
   background: ${getBackgroundColor};
-  border-radius: 16px;
+  border-radius: 12px;
   padding: 2px;
 `
 

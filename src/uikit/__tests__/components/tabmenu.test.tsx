@@ -70,7 +70,7 @@ it("renders correctly", () => {
       -ms-flex-positive: 1;
       flex-grow: 1;
       padding: 8px;
-      border-radius: 16px 16px 0 0;
+      border-radius: 12px 16px 0 0;
       font-size: 16px;
       font-weight: 600;
       color: #FFFFFF;
@@ -94,7 +94,7 @@ it("renders correctly", () => {
       -ms-flex-positive: 1;
       flex-grow: 1;
       padding: 8px;
-      border-radius: 16px 16px 0 0;
+      border-radius: 12px 16px 0 0;
       font-size: 16px;
       font-weight: 600;
       color: #7A6EAA;

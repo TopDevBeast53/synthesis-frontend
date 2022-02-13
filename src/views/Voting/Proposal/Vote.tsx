@@ -22,7 +22,7 @@ interface State {
 const Choice = styled.label<{ isChecked: boolean; isDisabled: boolean }>`
   align-items: center;
   border: 1px solid ${({ theme, isChecked }) => theme.colors[isChecked ? 'success' : 'cardBorder']};
-  border-radius: 16px;
+  border-radius: 12px;
   cursor: ${({ isDisabled }) => (isDisabled ? 'not-allowed' : 'pointer')};
   display: flex;
   margin-bottom: 16px;

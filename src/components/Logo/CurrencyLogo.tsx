@@ -15,7 +15,7 @@ const StyledLogo = styled(Logo)<{ size: string }>`
 
 const getImageUrlFromToken = (token: Token) => {
   const address = token.symbol === 'BNB' ? tokens.wbnb.address : token.address
-  return `images/tokens/${address}.svg`
+  return `/images/tokens/${address}.svg`
 }
 
 export default function CurrencyLogo({
