@@ -30,17 +30,6 @@ async function fetchChunk(
   chunk: Call[],
   minBlockNumber: number,
 ): Promise<{ results: string[]; blockNumber: number }> {
-  if (chunk.length > 1) {
-    const half = Math.floor(chunk.length / 2)
-    const [c0, c1] = await Promise.all([
-      fetchChunk(multicallContract, chunk.slice(0, half), minBlockNumber),
-      fetchChunk(multicallContract, chunk.slice(half, chunk.length), minBlockNumber),
-    ])
-    return {
-      results: c0.results.concat(c1.results),
-      blockNumber: c1.blockNumber,
-    }
-  }
   console.debug('Fetching chunk', multicallContract, chunk, minBlockNumber)
   let resultsBlockNumber
   let returnData

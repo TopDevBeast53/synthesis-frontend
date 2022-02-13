@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 const SecondaryCard = styled(Text)`
   border: 2px solid ${({ theme }) => theme.colors.tertiary};
-  border-radius: 16px;
+  border-radius: 12px;
 `
 
 SecondaryCard.defaultProps = {

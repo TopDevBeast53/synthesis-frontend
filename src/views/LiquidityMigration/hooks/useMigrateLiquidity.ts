@@ -1,12 +1,18 @@
 import { useCallback, useMemo } from 'react';
 import { getProviderOrSigner } from 'utils';
 import { Contract } from '@ethersproject/contracts';
+import { ethers } from 'ethers'
+
+import type { ExternalRouterData } from 'config/constants/externalRouters';
 
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 
 import auraMigratorABI from 'config/abi/AuraMigrator.json';
+import AuraPair from 'config/abi/AuraPair.json';
+
 import { auraMigratorAddress } from '../constants';
+import { useSplitPair } from './useSplitPair';
 
 export const useMigrateLiquidity = () => {
     const overrides = useMemo(() => ({
@@ -16,11 +22,26 @@ export const useMigrateLiquidity = () => {
     const { library, account } = useActiveWeb3React();
     const { callWithGasPrice } = useCallWithGasPrice();
 
-    const handleMigrateLiquidity = useCallback(async (args) => {
-        const contract = new Contract(auraMigratorAddress, auraMigratorABI, getProviderOrSigner(library, account));
-        const tx = await callWithGasPrice(contract, 'migrateLiquidity', args, overrides);
-        return tx.toString();
-    }, [callWithGasPrice, library, account, overrides]);
+    const { splitPair } = useSplitPair();
+
+    const handleMigrateLiquidity: (externalRouter: ExternalRouterData) => Promise<ethers.providers.TransactionReceipt> = useCallback(async (externalRouter) => {
+        const [tokenA, tokenB] = await splitPair(externalRouter.pairToken.address);
+
+        const migratorContract = new Contract(auraMigratorAddress, auraMigratorABI, getProviderOrSigner(library, account));
+        const lpContract = new Contract(externalRouter.pairToken.address, AuraPair, getProviderOrSigner(library, account));
+
+        const approveTx = await callWithGasPrice(lpContract, 'approve', [auraMigratorAddress, ethers.constants.MaxUint256])
+        await approveTx.wait()
+
+        const tx = await callWithGasPrice(
+            migratorContract, 
+            'migrateLiquidity', 
+            [tokenA, tokenB, externalRouter.pairToken.address, externalRouter.routerAddress], 
+            overrides
+        );
+
+        return tx.wait();
+    }, [callWithGasPrice, library, account, overrides, splitPair]);
 
     return { migrateLiquidity: handleMigrateLiquidity };
 };

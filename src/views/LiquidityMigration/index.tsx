@@ -1,86 +1,67 @@
-import React, { useState, useCallback } from 'react';
-import { Flex, Button, Input, Card, Text, Heading} from 'uikit'
+import React, { useState, useCallback } from 'react'
+import { Flex, Button } from 'uikit'
 
-import styled from 'styled-components'
+import { AppBody } from 'components/App';   
+import { AutoColumn } from 'components/Layout/Column';
+import type { ExternalRouterData } from 'config/constants/externalRouters';
+import useToast from 'hooks/useToast'
+import { ToastDescriptionWithTx } from 'components/Toast'
+
 import { useMigrateLiquidity } from './hooks/useMigrateLiquidity';
-import { useSplitPair } from './hooks/useSplitPair';
 
+import MigrationHeaderContainer from './components/MigrationCardHeader';
+import ExternalRouterSelect from './components/ExternalRouterSelect';
 import Page from '../Page';
 
-const BodyWrapper = styled(Card)`
-    border-radius: 25px;
-    max-width: 800px;
-    width: 100%;
-    height: fit-content;
-`
-
-function AppBody({ children }: { children: React.ReactNode }) {
-    return <BodyWrapper>{children}</BodyWrapper>
-}
-
 export default function Migrator() {
-    const [externalRouter, setExternalRouter] = useState('');
-    const [lpToken, setLpToken] = useState('');
-
-    const [functionCallResult, setFunctionCallResult] = useState('');
+    const [externalRouter, setExternalRouter] = useState<ExternalRouterData | null>(null);
     const [isButtonClicked, setIsButtonClicked] = useState(false);
-
-    const { splitPair } = useSplitPair();
+    
     const { migrateLiquidity } = useMigrateLiquidity();
+    const { toastSuccess, toastError } = useToast()
 
     const migrateLiquidityCall = useCallback(async () => {
         try {
             setIsButtonClicked(true);
-            const [tokenA, tokenB] = await splitPair(lpToken);
-            const tx = await migrateLiquidity([tokenA, tokenB, lpToken, externalRouter]);
-            setFunctionCallResult(tx);
+            const receipt = await migrateLiquidity(externalRouter);
+            if (receipt?.status) {
+                toastSuccess(
+                    'Success',
+                    <ToastDescriptionWithTx txHash={receipt.transactionHash} />,
+                );
+            } else {
+                toastError(
+                    'Error',
+                    <ToastDescriptionWithTx txHash={receipt.transactionHash} />,
+                );
+            }
         } catch(error) {
-            setFunctionCallResult(error.toString());
+            toastError(
+                'Error',
+                'Something went wrong. Try again later.',
+            );
         } finally {
             setIsButtonClicked(false);
         }
-    }, [splitPair, migrateLiquidity, lpToken, externalRouter]);
+    }, [migrateLiquidity, externalRouter, toastSuccess, toastError]);
 
     return (
         <Page>
             <AppBody>
                 <Flex position="relative" padding="24px" flexDirection="column">
-                    <Heading as="h2" mb="14px">
-                        Migrate Liquidity
-                    </Heading>
-
-                    <Text fontSize="12px" color="secondary" textTransform="uppercase" bold mb="8px" ml="4px">
-                        External DEX Address
-                    </Text>
-                    <Input 
-                        placeholder="External Router Address"
-                        value={externalRouter}
-                        onChange={ (evt: React.ChangeEvent<HTMLInputElement>) => setExternalRouter(evt.target.value)}
-                        style={{ position: 'relative', zIndex: 16, paddingRight: '40px', marginBottom: '16px'}}
+                    <MigrationHeaderContainer
+                        title="Migrate Liquidity"
+                        subtitle="Migrate liquidity pool tokens from other DEXs"
                     />
-
-                    <Text fontSize="12px" color="secondary" textTransform="uppercase" bold mb="8px" ml="4px">
-                        LP Token Address
-                    </Text>
-                    <Input 
-                        placeholder="LP Token Address"
-                        value={lpToken}
-                        onChange={ (evt: React.ChangeEvent<HTMLInputElement>) => setLpToken(evt.target.value)}
-                        style={{ position: 'relative', zIndex: 16, paddingRight: '40px', marginBottom: '16px'}}
-                    />
-
-                    <Button onClick={migrateLiquidityCall} disabled={isButtonClicked} style={{marginBottom: '16px'}}>
-                        Migrate Liquidity
-                    </Button>
-
-                    <Text fontSize="12px" color="secondary" textTransform="uppercase" bold mb="8px" ml="4px">
-                        Function Call Result
-                    </Text>
-                    <Card >
-                        <Text color="textSubtle" padding="10px" style={{wordWrap: "break-word"}}>
-                            {functionCallResult}
-                        </Text>                                                                                                     
-                    </Card>
+                    <AutoColumn style={{ padding: '1rem' }} gap="md">
+                        <ExternalRouterSelect 
+                            onExternalRouterSelect={setExternalRouter} 
+                            externalRouter={externalRouter}
+                        />
+                        <Button onClick={migrateLiquidityCall} disabled={isButtonClicked} style={{marginBottom: '16px'}}>
+                            Migrate Liquidity
+                        </Button>
+                    </AutoColumn>
                 </Flex>
             </AppBody>
         </Page>

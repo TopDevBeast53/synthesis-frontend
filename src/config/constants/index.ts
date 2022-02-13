@@ -4,8 +4,7 @@ import { mainnetTokens, testnetTokens } from './tokens'
 // Pancake test router address 0x9Ac64Cc6e4415144C455BD8E4837Fea55603e5c3
 // Pancake prod router address 0x10ED43C718714eb63d5aA57B78B54704E256024E
 // Aura test net router address 0x38433227c7a606ebb9ccb0acfcd7504224659b74
-// export const ROUTER_ADDRESS = '0x38433227c7a606ebb9ccb0acfcd7504224659b74' - aura testnet
-export const ROUTER_ADDRESS = '0x7dc5ac586e26B0Ae1aF00EA26249B49b4cF33d4C'
+export const ROUTER_ADDRESS = '0x38433227c7a606ebb9ccb0acfcd7504224659b74'
 
 // a list of tokens by chain
 type ChainTokenList = {

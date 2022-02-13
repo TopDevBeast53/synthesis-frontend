@@ -1,5 +1,6 @@
 import { createAction } from '@reduxjs/toolkit'
 import { SerializedToken } from 'config/constants/types'
+import { SerialisedExternalRouterData } from 'config/constants/externalRouters';
 
 export interface SerializedPair {
   token0: SerializedToken
@@ -33,6 +34,7 @@ export const removeSerializedToken = createAction<{ chainId: number; address: st
 export const addSerializedPair = createAction<{ serializedPair: SerializedPair }>('user/addSerializedPair')
 export const removeSerializedPair =
   createAction<{ chainId: number; tokenAAddress: string; tokenBAddress: string }>('user/removeSerializedPair')
+export const addExternalRouter = createAction<{externalRouter: SerialisedExternalRouterData}>('user/addExternalRouter')
 
 export const muteAudio = createAction<void>('user/muteAudio')
 export const unmuteAudio = createAction<void>('user/unmuteAudio')

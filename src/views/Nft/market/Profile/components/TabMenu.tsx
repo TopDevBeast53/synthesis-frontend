@@ -16,7 +16,7 @@ const Tab = styled.button<{ $active: boolean }>`
     `${theme.colors.cardBorder} ${theme.colors.cardBorder} transparent ${theme.colors.cardBorder}`};
   outline: 0;
   padding: 12px 16px;
-  border-radius: 16px 16px 0 0;
+  border-radius: 12px 16px 0 0;
   font-size: 16px;
   font-weight: ${({ $active }) => ($active ? '600' : '400')};
   background-color: ${({ theme, $active }) => ($active ? theme.colors.background : 'transparent')};

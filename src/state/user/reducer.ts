@@ -1,5 +1,6 @@
 import { createReducer } from '@reduxjs/toolkit'
 import { SerializedToken } from 'config/constants/types'
+import { SerialisedExternalRouterData } from 'config/constants/externalRouters';
 import { DEFAULT_DEADLINE_FROM_NOW, INITIAL_ALLOWED_SLIPPAGE } from '../../config/constants'
 import { updateVersion } from '../global/actions'
 import {
@@ -33,6 +34,7 @@ import {
   setChartViewMode,
   ChartViewMode,
   setSubgraphHealthIndicatorDisplayed,
+  addExternalRouter,
 } from './actions'
 import { GAS_PRICE_GWEI } from './hooks/helpers'
 
@@ -65,6 +67,8 @@ export interface UserState {
       [key: string]: SerializedPair
     }
   }
+
+  externalRouters: SerialisedExternalRouterData[]
 
   timestamp: number
   audioPlay: boolean
@@ -115,6 +119,7 @@ export const initialState: UserState = {
   watchlistTokens: [],
   watchlistPools: [],
   showPhishingWarningBanner: true,
+  externalRouters: [],
 }
 
 export default createReducer(initialState, (builder) =>
@@ -183,6 +188,11 @@ export default createReducer(initialState, (builder) =>
         delete state.pairs[chainId][pairKey(tokenBAddress, tokenAAddress)]
       }
       state.timestamp = currentTimestamp()
+    })
+    .addCase(addExternalRouter, (state, { payload: {externalRouter}}) => {
+      if (!state.externalRouters.includes(externalRouter)) {
+        state.externalRouters.push(externalRouter);
+      }
     })
     .addCase(muteAudio, (state) => {
       state.audioPlay = false
