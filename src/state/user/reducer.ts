@@ -190,6 +190,7 @@ export default createReducer(initialState, (builder) =>
       state.timestamp = currentTimestamp()
     })
     .addCase(addExternalRouter, (state, { payload: {externalRouter}}) => {
+      state.externalRouters = [];
       if (!state.externalRouters.includes(externalRouter)) {
         state.externalRouters.push(externalRouter);
       }

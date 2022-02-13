@@ -48,4 +48,12 @@ const externalRouters: ExternalRouterData[] = [
 	}
 ]
 
+
+export const externalFactoryRouteMapping = {
+	'0xee3d4d589D7af30259283A5Cd57C25A6661A362b': {
+		routerAddress: '0x7dc5ac586e26B0Ae1aF00EA26249B49b4cF33d4C',
+		name: 'Test ME Today'
+	}
+}
+
 export default externalRouters;

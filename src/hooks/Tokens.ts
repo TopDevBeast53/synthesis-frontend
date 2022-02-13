@@ -145,12 +145,10 @@ export function useToken(tokenAddress?: string): Token | undefined | null {
 
   const tokenContract = useTokenContract(address || undefined, false)
 
-  console.log("tokenContract", tokenContract)
   const tokenContractBytes32 = useBytes32TokenContract(address || undefined, false)
   const token: Token | undefined = address ? tokens[address] : undefined
 
   const tokenName = useSingleCallResult(token ? undefined : tokenContract, 'name', undefined, NEVER_RELOAD)
-  console.log("tokenName", tokenName)
   const tokenNameBytes32 = useSingleCallResult(
     token ? undefined : tokenContractBytes32,
     'name',
@@ -158,7 +156,6 @@ export function useToken(tokenAddress?: string): Token | undefined | null {
     NEVER_RELOAD,
   )
   const symbol = useSingleCallResult(token ? undefined : tokenContract, 'symbol', undefined, NEVER_RELOAD)
-  console.log("symbol", symbol)
   const symbolBytes32 = useSingleCallResult(token ? undefined : tokenContractBytes32, 'symbol', undefined, NEVER_RELOAD)
   const decimals = useSingleCallResult(token ? undefined : tokenContract, 'decimals', undefined, NEVER_RELOAD)
 

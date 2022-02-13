@@ -1,6 +1,9 @@
 import React from 'react'
 import { Button, ChevronDownIcon, Text, useModal } from 'uikit'
 import styled from 'styled-components'
+import { useSelector } from 'react-redux'
+import { AppState } from 'state'
+import { Token } from 'sdk';
 
 import type { ExternalRouterData } from 'config/constants/externalRouters';
 
@@ -33,9 +36,29 @@ const ExternalRouterSelectPanel: React.FC<ExternalRouterSelectPanelProps> = ({
         />
     )
 
+    const savedExternalRouters = 
+        useSelector<AppState, AppState['user']['externalRouters']>(
+            ({ user: { externalRouters: router } }) => router)
+
+    const savedExternalRoutes = 
+        savedExternalRouters.map(router => ({
+            ...router,
+            pairToken: new Token(
+                router.pairToken.chainID,
+                router.pairToken.address,
+                18,
+                router.pairToken.symbol,
+                router.pairToken.name,
+            )
+        }))
+
     const externalRouterName = 
         externalRouters
-            .filter(externalDex => externalDex.routerAddress === externalRouter?.routerAddress)
+            .concat(savedExternalRoutes)
+            .filter(externalDex => 
+                externalDex.pairToken.address === externalRouter?.pairToken?.address &&
+                externalDex.factoryAddress === externalRouter.factoryAddress
+            )
             ?.[0]
             ?.name
     

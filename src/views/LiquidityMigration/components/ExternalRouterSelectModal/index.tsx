@@ -22,7 +22,7 @@ import Column, { AutoColumn } from 'components/Layout/Column';
 import { isAddress, getProviderOrSigner } from 'utils'
 import useDebounce from 'hooks/useDebounce'
 import { useToken } from 'hooks/Tokens'
-import externalRouters from 'config/constants/externalRouters';
+import externalRouters, { externalFactoryRouteMapping } from 'config/constants/externalRouters';
 import ImportRow from 'components/SearchModal/ImportRow'
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import { Token } from 'sdk';
@@ -65,19 +65,22 @@ const ExternalRouterSelectModal: React.FC<ExternalRouterSelectModalProps> = ({
 	const dispatch = useDispatch<AppDispatch>()
 
 	const searchToken = useToken(debouncedQuery)
-
-	console.log('debouncedQuery', debouncedQuery);
-
-	const savedExternalRoutes = 
+	
+	const savedExternalRouters = 
 		useSelector<AppState, AppState['user']['externalRouters']>(
 			({ user: { externalRouters: router } }) => router)
 
-
-	console.log("searchToken", searchToken);
-	console.log("savedExternalRoutes", savedExternalRoutes);
-
-	// const filteredExternalRouters = 
-	// 	useSortedTokensByQuery(sortedTokens, debouncedQuery);
+	const savedExternalRoutes = 
+		savedExternalRouters.map(router => ({
+			...router,
+			pairToken: new Token(
+				router.pairToken.chainID,
+				router.pairToken.address,
+				18,
+				router.pairToken.symbol,
+				router.pairToken.name,
+			)
+		}))
 
 	const handleInput = useCallback((event) => {
 		const input = event.target.value
@@ -94,19 +97,20 @@ const ExternalRouterSelectModal: React.FC<ExternalRouterSelectModalProps> = ({
 		[onDismiss, onExternalRouterSelect],
 	)
 
-	const setImportToken = (token: Token) => {
+	const setImportToken = async (token: Token) => {
 		const tokenContract = new Contract(token.address, AuraPair, getProviderOrSigner(library, account));
-		
-		const tokenFactory = callWithGasPrice(tokenContract, 'factory', []);
+		const tokenFactory = await callWithGasPrice(tokenContract, 'factory', []);
+		const dexData = externalFactoryRouteMapping[tokenFactory.toString()];
 
-		console.log("tokenFactory", tokenFactory);
 		dispatch(addExternalRouter({externalRouter: {
-			...externalRouters[0],
+			routerAddress: dexData.routerAddress,
+			factoryAddress: tokenFactory.toString(),
+			name: dexData.name,
 			pairToken: {
-				name: externalRouters[0].pairToken.name,
-				symbol: externalRouters[0].pairToken.symbol,
-				address: externalRouters[0].pairToken.address,
-				chainID: externalRouters[0].pairToken.chainId,
+				name: token.name,
+				symbol: token.symbol,
+				address: token.address,
+				chainID: token.chainId,
 			}
 		}}));
 	}
@@ -146,7 +150,7 @@ const ExternalRouterSelectModal: React.FC<ExternalRouterSelectModalProps> = ({
 							fixedListRef={fixedList}
 							onExternalRouterSelect={handleExternalRouteSelect}
 							externalRouter={externalRouter}
-							externalRouters={[]}
+							externalRouters={savedExternalRoutes.concat(externalRouters)}
 						/>
 					</Box>
 				)}
