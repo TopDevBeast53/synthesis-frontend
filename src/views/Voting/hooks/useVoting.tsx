@@ -13,7 +13,7 @@ export const useVoting = () => {
         gasLimit: 9999999
     }), []);
 
-    const { votingAddress } = getVotingAddress();
+    const votingAddress = getVotingAddress();
     const { library, account } = useActiveWeb3React();
     const { callWithGasPrice } = useCallWithGasPrice();
 
