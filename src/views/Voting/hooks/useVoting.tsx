@@ -19,7 +19,7 @@ export const useVoting = () => {
 
     const getContract = useCallback(async () => { 
         return new Contract(votingAddress, votingABI, getProviderOrSigner(library, account));
-    });
+    }, [library, account]);
 
     const getNumProposals = useCallback(async () => {
         const contract = getContract();
