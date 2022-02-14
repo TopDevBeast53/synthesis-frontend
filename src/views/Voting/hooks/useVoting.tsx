@@ -19,79 +19,77 @@ export const useVoting = () => {
 
     const getContract = useCallback(async () => { 
         return new Contract(votingAddress, votingABI, getProviderOrSigner(library, account));
-    }, [library, account]);
+    }, [votingAddress, library, account]);
 
     const getNumProposals = useCallback(async () => {
-        const contract = getContract();
+        const contract = await getContract();
         return contract.numProposals();
     }, [getContract]);
 
     const getProposal = useCallback(async (proposalId) => {
-        const contract = getContract();
+        const contract = await getContract();
         return contract.proposals(proposalId);
     }, [getContract]);
 
     const createProposal = useCallback(async (proposalName, endTimestamp) => {
-        const contract = getContract();
-        const tx = await callWithGasPrice(contract, 'createProposal', [proposalName, endTimestamp], overrides);
-    });
+        const contract = await getContract();
+        return callWithGasPrice(contract, 'createProposal', [proposalName, endTimestamp], overrides);
+    }, [getContract, callWithGasPrice, overrides]);
 
     const vote = useCallback(async (proposalId, tokenAmount, decision) => {
-        const contract = getContract();
-        const tx = await callWithGasPrice(contract, 'vote', [proposalId, tokenAmount, decision], overrides);
-    });
+        const contract = await getContract();
+        return callWithGasPrice(contract, 'vote', [proposalId, tokenAmount, decision], overrides);
+    }, [getContract, callWithGasPrice, overrides]);
 
     const getProposalResults = useCallback(async (proposalId) => {
-        const contract = getContract();
+        const contract = await getContract();
         return contract.resultProposal(proposalId);
-    });
+    }, [getContract]);
 
     const withdraw = useCallback(async (proposalId, amount) => {
-        const contract = getContract();
-        const tx = await callWithGasPrice(contract, 'withdraw', [proposalId, amount], overrides);
-    });
+        const contract = await getContract();
+        return callWithGasPrice(contract, 'withdraw', [proposalId, amount], overrides);
+    }, [getContract, callWithGasPrice, overrides]);
 
     const getDecision = useCallback(async (proposalId, voter) => {
-        const contract = getContract();
+        const contract = await getContract();
         return contract.getDecision(proposalId, voter);
-    });
+    }, [getContract]);
 
     const getVoters = useCallback(async (proposalId) => {
-        const contract = getContract();
+        const contract = await getContract();
         return contract.voters(proposalId);
-    });
+    }, [getContract]);
 
     const getNumberOfVotes = useCallback(async (voter, proposalId) => {
-        const contract = getContract();
+        const contract = await getContract();
         return contract.getNumberOfVotes(voter, proposalId);
-    });
+    }, [getContract]);
 
     const addCoreMember = useCallback(async (coreMember) => {
-        const contract = getContract();
-        const result = await callWithGasPrice(contract, 'addCoreMember', [coreMember], overrides);
-        return result;
-    });
+        const contract = await getContract();
+        return callWithGasPrice(contract, 'addCoreMember', [coreMember], overrides);
+    }, [getContract, callWithGasPrice, overrides]);
 
     const delCoreMember = useCallback(async (coreMember) => {
-        const contract = getContract();
-        const result = await callWithGasPrice(contract, 'delCoreMember', [coreMember], overrides);
-        return result;
-    });
+        const contract = await getContract();
+        return callWithGasPrice(contract, 'delCoreMember', [coreMember], overrides);
+    }, [getContract, callWithGasPrice, overrides]);
 
     const getCoreMembersLength = useCallback(async () => {
-        const contract = getContract();
+        const contract = await getContract();
         return contract.getCoremembersLength();
-    });
+    }, [getContract]);
 
     const isCoreMember = useCallback(async (coreMember) => {
-        const contract = getContract();
-        return await contract.isCoreMember(coreMember);
-    });
+        const contract = await getContract();
+        return contract.isCoreMember(coreMember);
+    }, [getContract]);
 
     const getCoreMember = useCallback(async (index) => {
-        const contract = getContract();
-        return await contract.getCoreMember(index);
-    });
+        const contract = await getContract();
+        return contract.getCoreMember(index);
+    }, [getContract]);
 
     return { 
         getNumProposals,
