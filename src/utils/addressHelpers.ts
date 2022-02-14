@@ -100,3 +100,6 @@ export const getAuraNftAddress = () => {
 export const getAuraChefNftAddress = () => {
   return getAddress(addresses.auraChefNFT)
 }
+export const getVotingAddress = () => {
+  return getAddress(addresses.voting)
+}
