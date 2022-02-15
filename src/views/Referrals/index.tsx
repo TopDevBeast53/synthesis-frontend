@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect } from 'react'
 import { useLocation } from "react-router-dom";
 import styled from 'styled-components'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
-import { Flex, Button, Card, Text, Heading } from 'uikit'
+import { Flex, Button, Card, Text } from 'uikit'
 import { Contract } from '@ethersproject/contracts'
 import ReferralRegisterABI from 'config/abi/AuraReferral.json'
 import { getProviderOrSigner } from 'utils'
@@ -87,7 +87,7 @@ export default function Referrals() {
     const location = useLocation();
     const claimRewardsCb = useClaimRewards();
     const auraToken = tokens.aura;
-    const search = location.search;
+    const { search } = location;
     useEffect(() => {
         getRef().then((value) => {
             if (value === '0x0000000000000000000000000000000000000000') {
@@ -107,7 +107,6 @@ export default function Referrals() {
                     return;
                 }
                 const currentVal = value.toString();
-                console.log(currentVal);
                 if (currentVal === '0') {
                     setPendingBalance('0');
                 } else {
