@@ -1,10 +1,10 @@
+import Column from 'components/Layout/Column'
 import React from 'react'
 import { Heading, Flex, Text, useMatchBreakpoints } from 'uikit'
 
-const StatCardContent: React.FC<{ headingText: string; bodyText: string; highlightColor: string }> = ({
+const StatCardContent: React.FC<{ headingText: string; bodyText: string; }> = ({
   headingText,
   bodyText,
-  highlightColor,
 }) => {
   const { isMobile, isTablet } = useMatchBreakpoints()
   const isSmallerScreen = isMobile || isTablet
@@ -18,18 +18,21 @@ const StatCardContent: React.FC<{ headingText: string; bodyText: string; highlig
       minWidth="232px"
       width="fit-content"
       flexDirection="column"
-      justifyContent="flex-end"
-      mt={[null, null, null, '64px']}
+      justifyContent="center"
+      alignItems="center"
+      mt={[null, null, null, null]}
     >
-      {isSmallerScreen && remainingWords.length > 13 ? (
-        <Heading scale="lg">{remainingWords}</Heading>
-      ) : (
-        <Heading scale="xl">{remainingWords}</Heading>
-      )}
-      <Heading color={highlightColor} scale="xl" mb="24px">
-        {lastWord}
-      </Heading>
-      <Text color="textSubtle">{bodyText}</Text>
+      <Column>
+        <Text color="#101411" style={{fontSize: "18px", fontWeight: '500', lineHeight: '136%', fontStyle: 'normal'}}>{bodyText}</Text>
+        {isSmallerScreen && remainingWords.length > 13 ? (
+          <Heading color="#101411" fontSize="31px" style={{fontWeight: '500', lineHeight: '24.48px'}}>{remainingWords}</Heading>
+        ) : (
+          <Heading color="#101411" fontSize="31px" style={{fontWeight: '500', lineHeight: '24.48px'}}>{remainingWords}</Heading>
+        )}
+        <Heading color="#101411" mt="7px" style={{fontSize: "31px", lineHeight: '42.16px',  fontStyle: 'normal'}}>
+          {lastWord}
+        </Heading>
+      </Column>
     </Flex>
   )
 }

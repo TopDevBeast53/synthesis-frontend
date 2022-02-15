@@ -135,13 +135,13 @@ const ExternalRouterSelectModal: React.FC<ExternalRouterSelectModalProps> = ({
 							autoComplete="off"
 							value={searchQuery}
 							onChange={handleInput}
-							onKeyDown={() => {console.log("Down");}}
+							onKeyDown={() => {console.debug("Down");}}
 						/>
 					</Row>
 				</AutoColumn>
 				{searchToken ? (
 					<Column style={{ padding: '20px 0', height: '100%' }}>
-						<ImportRow token={searchToken} showImportView={() => {console.log("Show");}} setImportToken={setImportToken} />
+						<ImportRow token={searchToken} showImportView={() => {console.debug("Show");}} setImportToken={setImportToken} />
 					</Column>
 				) : (
 					<Box margin="24px -24px">
