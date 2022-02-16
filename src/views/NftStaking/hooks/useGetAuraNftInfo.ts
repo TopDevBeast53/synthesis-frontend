@@ -1,7 +1,8 @@
 import { useCallback } from 'react'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { getProviderOrSigner } from 'utils'
-import { getBalanceAmount } from 'utils/formatBalance'
+import { ethers } from 'ethers'
+import { formatBigNumber } from 'utils/formatBalance'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { Contract } from '@ethersproject/contracts'
 import auraNFTABI from 'config/abi/AuraNFT.json'
@@ -54,7 +55,7 @@ export const useGetTokensOfOwner = (tokenIds) => {
       tokenId: token.tokenId.toString(),
       tokenOwner: token.tokenOwner.toString(),
       level: parseInt(token.level),
-      auraPoints: getBalanceAmount(token.auraPoints, 18),
+      auraPoints: parseInt(formatBigNumber(ethers.BigNumber.from(token.auraPoints.toString()))),
       isStaked: token.isStaked,
       uri: token.uri,
     }))

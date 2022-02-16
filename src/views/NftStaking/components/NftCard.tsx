@@ -9,6 +9,7 @@ interface NftCardProps {
   isStaked: boolean
   level: number
   tokenOwner: string
+  auraPoints: number
   uri?: string
   disabled?: boolean
   onhandleChangeCheckBox: (tokenId: string, isChecked: boolean) => void
@@ -49,6 +50,7 @@ const NftCard: React.FC<NftCardProps> = ({
   isStaked,
   level,
   tokenOwner,
+  auraPoints,
   uri,
   disabled,
   onhandleChangeCheckBox,
@@ -65,7 +67,7 @@ const NftCard: React.FC<NftCardProps> = ({
       <StyledImage src={bgSrc} height={125} width={375} />
       <Flex
         position="relative"
-        height="170px"
+        height="190px"
         justifyContent="center"
         alignItems="flex-end"
         py="8px"
@@ -76,6 +78,9 @@ const NftCard: React.FC<NftCardProps> = ({
         </Heading>
         <Text fontSize="12px" color="secondary" bold mb="8px" ml="4px">
           Level: {level}
+        </Text>
+        <Text fontSize="12px" color="secondary" bold mb="8px" ml="4px">
+          AuraPoints: {auraPoints}
         </Text>
         <Text fontSize="10px" color="primary" textTransform="lowercase" bold mb="8px" ml="4px">
           Owner: {tokenOwner}

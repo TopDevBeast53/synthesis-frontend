@@ -6,7 +6,9 @@ import useToast from 'hooks/useToast'
 import styled from 'styled-components'
 import { logError } from 'utils/sentry'
 import { useGetTokensOfOwner, useGetTokenIdsOfOwner } from './hooks/useGetAuraNftInfo'
-import { useStakingNft, useUnstakingNft } from './hooks/useStakingNft'
+import { useStakingNft } from './hooks/useStakingNft'
+import { useBoostNft } from './hooks/useBoostNft'
+
 import NftCard from './components/NftCard'
 import Page from '../Page'
 
@@ -27,14 +29,18 @@ export default function NftStaking() {
   const [holdTokenIds, setHoldTokenIds] = useState([])
   const [tokens, setTokens] = useState([])
   const [selectedTokenIds, setSelectedTokenIds] = useState<number[]>([])
+  const [accumulatedAP, setAccumulatedAP] = useState('')
+
   const [requestedAuraNftIDs, setRequestedAuraNftIDs] = useState(false)
   const [requestedStaking, setRequestedStaking] = useState(true)
-
+  const [requestedAccumulatedAP, setRequestedAccumulatedAP] = useState(false)
+  const [requestedBoostNft, setRequestedBoostNft] = useState(false)
+  
   const { onGetTokenIdsOfOwner } = useGetTokenIdsOfOwner()
   const { onGetTokensOfOwner } = useGetTokensOfOwner(holdTokenIds)
-  const { onStakingNft } = useStakingNft(selectedTokenIds)
-  const { onUnstakingNft } = useUnstakingNft(selectedTokenIds)
-  
+  const { stakingNft } = useStakingNft()
+  const { getAccumulatedAP, boostAuraNFT } = useBoostNft()
+
   const orderedNftById = orderBy(tokens, (token) => (token ? parseInt(token.tokenId.toString()) : 0), 'asc')
 
   const handleAuraNftIDs = useCallback(async () => {
@@ -82,13 +88,11 @@ export default function NftStaking() {
     }
     try {
       setRequestedStaking(true)
-      if (isStaking) {
-        await onStakingNft()
-        toastSuccess(t('Success'), t('Staked!'))
-      } else {
-        await onUnstakingNft()
-        toastSuccess(t('Success'), t('Unstaked!'))
-      }
+      const receipt = await stakingNft(selectedTokenIds, isStaking)
+      if (receipt.status)
+        toastSuccess(t('Success'), t(isStaking ? 'Staked!' : 'Unstaked'))
+      else
+        toastError(t('Error'), t('Maybe show transaction hash so they could go there and check the problem.'))
     } catch (e) {
       logError(e)
       toastError(t('Error'), t('Please try again.'))
@@ -113,6 +117,53 @@ export default function NftStaking() {
     }
   }, [tokens, selectedTokenIds])
 
+  const handleGetAccumulatedAP = useCallback(async () => {
+    try {
+      setRequestedAccumulatedAP(true)
+      const res = await getAccumulatedAP()
+      setAccumulatedAP(res.toString())
+    } catch (e) {
+      logError(e)
+      toastError(t('Error'), t('Please try again.'))
+    } finally {
+      setRequestedAccumulatedAP(false)
+    }
+  }, [getAccumulatedAP, toastError, t])
+
+  const handleBoostNft = useCallback(async () => {
+    if (selectedTokenIds.length === 0) {
+      toastError(t('Error'), t('Please select a token you want to boost from the above list.'))
+      return
+    }
+    if (selectedTokenIds.length > 1) {
+      toastError(t('Error'), t('Please select only one.'))
+      return
+    }
+    if (parseInt(accumulatedAP) === 0) {
+      toastError(t('Warning'), t('Nothing is accumulated AuraPoints.'))
+      return
+    }
+    try {
+      setRequestedBoostNft(true)
+      await boostAuraNFT(selectedTokenIds[0], accumulatedAP)
+      const receipt = await boostAuraNFT(selectedTokenIds[0], accumulatedAP);
+      if (receipt.status) {
+        toastSuccess(t('Success'), t('Boosted!'))
+      } else {
+        toastError(t('Error'), t('Maybe show transaction hash so they could go there and check the problem.'))
+      }
+    } catch (e) {
+      logError(e)
+      toastError(t('Error'), t('Please try again.'))
+    } finally {
+      setRequestedBoostNft(false)
+      setTokens([])
+      setAccumulatedAP('')
+      handleAuraNfTokens()
+      handleGetAccumulatedAP()
+    }
+  }, [handleAuraNfTokens, handleGetAccumulatedAP, selectedTokenIds, accumulatedAP, boostAuraNFT, toastSuccess, toastError, t])
+
   return (
     <Page>
       <AppBody>
@@ -121,7 +172,7 @@ export default function NftStaking() {
             Please Get Owned NFT IDs
           </Button>
           <Text fontSize="12px" color="secondary" textTransform="uppercase" bold mb="8px" ml="4px">
-            {holdTokenIds.map((e)=> {return (<Text display="inline" paddingRight="10px">{e.id}</Text>)})}
+            {holdTokenIds.map((e)=> {return (<Text key={e.id} display="inline" paddingRight="10px">{e.id}</Text>)})}
           </Text>
           <Button onClick={handleAuraNfTokens} disabled={requestedAuraNftIDs} style={{ marginBottom: '16px' }}>
             Show My NFTs
@@ -131,11 +182,13 @@ export default function NftStaking() {
           {orderedNftById.map((token) => {
             return (
               <NftCard
+                key={token.tokenId}
                 bgSrc="https://uyxpevlntmux.usemoralis.com:2053/server/files/KYoDoH8y6hy28lUBNtmo6WEimx85bBnNHdz2WnDj/5dc6161d4ae2a344a502dfa509c4004e_perso.png"
                 tokenId={token.tokenId}
                 isStaked={token.isStaked}
                 level={token.level}
                 tokenOwner={token.tokenOwner}
+                auraPoints={token.auraPoints}
                 onhandleChangeCheckBox={onhandleCheckbox}
               >
                 <Flex alignItems="center">
@@ -153,6 +206,17 @@ export default function NftStaking() {
           </Button>
           <Button onClick={()=>handleStaking(false)} disabled={requestedStaking} style={{ marginBottom: '16px' }}>
               Unstaking
+          </Button>
+        </Flex>
+        <Flex position="relative" padding="24px" flexDirection="column">
+          <Button onClick={handleGetAccumulatedAP} disabled={requestedAccumulatedAP} style={{ marginBottom: '10px' }}>
+            Get Accumulated AuraPoints 
+          </Button>
+          <Text fontSize="12px" color="secondary" bold mb="8px" ml="4px">
+            {accumulatedAP}
+          </Text>
+          <Button onClick={handleBoostNft} disabled={requestedBoostNft}>
+              Boost NFT
           </Button>
         </Flex>
       </AppBody>
