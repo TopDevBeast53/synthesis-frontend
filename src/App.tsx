@@ -108,6 +108,9 @@ const App: React.FC = () => {
             <Route path="/nft-staking">
               <NftStaking />
             </Route>
+            <Route path="/nft-boost">
+              <NftStaking />
+            </Route>
             <Route path="/referrals">
                 <Referrals />
             </Route>

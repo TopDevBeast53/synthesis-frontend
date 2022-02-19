@@ -1,4 +1,4 @@
-import { Card, CardBody, Flex, Heading, Image, Text, Checkbox } from 'uikit'
+import { Card, CardBody, Flex, Heading, Image, Text, Checkbox, Button } from 'uikit'
 import React, {useState } from 'react'
 import { Link } from 'react-router-dom'
 import styled, { css } from 'styled-components'
@@ -8,11 +8,13 @@ interface NftCardProps {
   tokenId: string
   isStaked: boolean
   level: number
-  tokenOwner: string
   auraPoints: number
+  remainAPToNextLevel: number
+  enableBoost: boolean
   uri?: string
   disabled?: boolean
   onhandleChangeCheckBox: (tokenId: string, isChecked: boolean) => void
+  onhandleBoost: (tokenId: string) => void
 }
 
 const StyledHotCollectionCard = styled(Card)<{ disabled?: boolean }>`
@@ -49,11 +51,13 @@ const NftCard: React.FC<NftCardProps> = ({
   tokenId,
   isStaked,
   level,
-  tokenOwner,
   auraPoints,
+  remainAPToNextLevel,
+  enableBoost,
   uri,
   disabled,
   onhandleChangeCheckBox,
+  onhandleBoost,
 }) => {
   const [isRememberChecked, setIsRememberChecked] = useState(false)
 
@@ -62,19 +66,23 @@ const NftCard: React.FC<NftCardProps> = ({
     setIsRememberChecked(!isRememberChecked)
   }
 
+  const handleBoost = () => {
+    onhandleBoost(tokenId)
+  }
+
   const renderBody = () => (
     <CardBody p="8px">
-      <StyledImage src={bgSrc} height={125} width={375} />
+      <StyledImage src={bgSrc} height={220} width={375} />
       <Flex
         position="relative"
-        height="190px"
+        height="175px"
         justifyContent="center"
         alignItems="flex-end"
         py="8px"
         flexDirection="column"
       >
-        <Heading color={disabled ? 'textDisabled' : 'body'} as="h3" mb="8px">
-          TokenId: {tokenId}
+        <Heading color="primary" as="h3" mb="8px">
+          {isStaked? 'staked' : ''}
         </Heading>
         <Text fontSize="12px" color="secondary" bold mb="8px" ml="4px">
           Level: {level}
@@ -82,11 +90,8 @@ const NftCard: React.FC<NftCardProps> = ({
         <Text fontSize="12px" color="secondary" bold mb="8px" ml="4px">
           AuraPoints: {auraPoints}
         </Text>
-        <Text fontSize="10px" color="primary" textTransform="lowercase" bold mb="8px" ml="4px">
-          Owner: {tokenOwner}
-        </Text>
-        <Text fontSize="12px" color="secondary" textTransform="uppercase" bold mb="8px" ml="4px">
-          {isStaked? 'staked' : ''}
+        <Text fontSize="12px" color="secondary" bold mb="8px" ml="4px" paddingBottom="10px">
+          remainAPToNextLevel: {remainAPToNextLevel}
         </Text>
         <Checkbox
           name="confirmed"
@@ -94,7 +99,13 @@ const NftCard: React.FC<NftCardProps> = ({
           checked={isRememberChecked}
           onChange={handleChangeCheckBox}
           scale="sm"
+          disabled={disabled}
         />
+      </Flex>
+      <Flex position="relative" padding="0px 14px" flexDirection="column">
+        <Button onClick={handleBoost} disabled={!enableBoost || disabled} style={{ marginBottom: '8px' }}>
+            Boost
+        </Button>
       </Flex>
     </CardBody>
   )

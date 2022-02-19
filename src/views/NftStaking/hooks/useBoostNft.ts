@@ -44,6 +44,7 @@ export const useBoostNft = () => {
   }, [getAuraNFTContract, callWithGasPrice])
 
   const boostAuraNFT = useCallback(async (tokenId, amount) => {
+    if (parseInt(amount) === 0) return {status: false}
     const tx = await callWithGasPrice(getAuraChefNFTContract(), 'boostAuraNFT', [tokenId, (getDecimalAmount(new BigNumber(amount))).toString()])
     return tx.wait()
   }, [getAuraChefNFTContract, callWithGasPrice])
