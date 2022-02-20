@@ -17,6 +17,7 @@ export function usePoolsWithVault() {
     const auraPool = activePools.find((pool) => pool.sousId === 0)
     const auraAutoVault = { ...auraPool, vaultKey: VaultKey.AuraVault }
     // const ifoPoolVault = { ...auraPool, vaultKey: VaultKey.IfoPool }
+    
     const auraAutoVaultWithApr = {
       ...auraAutoVault,
       apr: getAprData(auraAutoVault, auraVault.fees.performanceFeeAsDecimal).apr,

@@ -147,7 +147,7 @@ const ActionPanel: React.FC<ActionPanelProps> = ({ account, pool, userDataLoaded
   } = useVaultPoolByKey(vaultKey)
 
   const vaultPools = useVaultPools()
-  const cakeInVaults = Object.values(vaultPools).reduce((total, vault) => {
+  const auraInVaults = Object.values(vaultPools).reduce((total, vault) => {
     return total.plus(vault.totalAuraInVault)
   }, BIG_ZERO)
 
@@ -158,15 +158,15 @@ const ActionPanel: React.FC<ActionPanelProps> = ({ account, pool, userDataLoaded
     ? auraAsBigNumber.plus(stakingTokenBalance)
     : stakedBalance.plus(stakingTokenBalance)
 
-  const isManualCakePool = sousId === 0
+  const isManualAuraPool = sousId === 0
 
   const getTotalStakedBalance = () => {
     if (vaultKey) {
       return getBalanceNumber(totalAuraInVault, stakingToken.decimals)
     }
-    if (isManualCakePool) {
-      const manualCakeTotalMinusAutoVault = new BigNumber(totalStaked).minus(cakeInVaults)
-      return getBalanceNumber(manualCakeTotalMinusAutoVault, stakingToken.decimals)
+    if (isManualAuraPool) {
+      const manualAuraTotalMinusAutoVault = new BigNumber(totalStaked).minus(auraInVaults)
+      return getBalanceNumber(manualAuraTotalMinusAutoVault, stakingToken.decimals)
     }
     return getBalanceNumber(totalStaked, stakingToken.decimals)
   }

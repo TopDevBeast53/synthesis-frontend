@@ -74,14 +74,14 @@ export const fetchAuraPoolPublicDataAsync = () => async (dispatch, getState) => 
 
 
   const totalStaking = await auraContract.balanceOf(auraPoolAddress)
-  
+
   const apr = getPoolApr(
     stakingTokenPrice,
     earningTokenPrice,
     getBalanceNumber(new BigNumber(totalStaking ? totalStaking.toString() : 0), auraPool.stakingToken.decimals),
     parseFloat(auraPool.tokenPerBlock),
   )
-
+  
   dispatch(
     setPoolPublicData({
       sousId: 0,

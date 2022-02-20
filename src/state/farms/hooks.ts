@@ -74,7 +74,7 @@ export const usePollFarmsWithUserData = (includeArchive = false) => {
 
 /**
  * Fetches the "core" farm data used globally
- * 0 = AURA-BNB LP
+ * 1 = AURA-BNB LP
  * 3 = BNB-BUSD LP
  */
 export const usePollCoreFarmData = () => {
@@ -82,7 +82,7 @@ export const usePollCoreFarmData = () => {
   const fastRefresh = useFastFresh()
 
   useEffect(() => {
-    dispatch(fetchFarmsPublicDataAsync([0, 3]))
+    dispatch(fetchFarmsPublicDataAsync([1, 3]))
   }, [dispatch, fastRefresh])
 }
 
@@ -146,7 +146,7 @@ export const useLpTokenPrice = (symbol: string) => {
  * @@deprecated use the BUSD hook in /hooks
  */
 export const usePriceAuraBusd = (): BigNumber => {
-  const auraBnbFarm = useFarmFromPid(0)
+  const auraBnbFarm = useFarmFromPid(1)
 
   const auraPriceBusdAsString = auraBnbFarm.tokenPriceBusd
 
