@@ -627,6 +627,11 @@
         "type": "uint256"
       },
       {
+        "internalType": "uint256",
+        "name": "remainAPToNextLvl",
+        "type": "uint256"
+      },
+      {
         "internalType": "bool",
         "name": "isStaked",
         "type": "bool"

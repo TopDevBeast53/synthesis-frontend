@@ -47,6 +47,11 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType[] = (t) => [
     icon: 'Earn',
     items: [],
   },
+  {
+    label: t('NFT'),
+    href: '/nft-staking',
+    icon: 'Earn',
+  },
   // {
   //   label: t('Win'),
   //   href: '/prediction',

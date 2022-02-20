@@ -3,29 +3,39 @@ import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { getProviderOrSigner } from 'utils'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { Contract } from '@ethersproject/contracts'
+import { ethers } from 'ethers'
+import { formatBigNumber } from 'utils/formatBalance'
 import auraChefNFTABI from 'config/abi/AuraChefNFT.json'
-
 import { auraNFTChefAddress } from '../constants'
 
-
-export const useStakingNft = (tokenIds:number[]) => {
+export const useStakingNft = () => {
   const { library, account } = useActiveWeb3React()
   const { callWithGasPrice } = useCallWithGasPrice()
-  const handleStakingNft = useCallback(async () => {
-    const contract = new Contract(auraNFTChefAddress, auraChefNFTABI, getProviderOrSigner(library, account))
-    const tx = await callWithGasPrice(contract, 'stake', [tokenIds])
-    return tx.wait()
-  }, [callWithGasPrice, tokenIds, library, account])
-  return { onStakingNft: handleStakingNft }
-}
 
-export const useUnstakingNft = (tokenIds:number[]) => {
-  const { library, account } = useActiveWeb3React()
-  const { callWithGasPrice } = useCallWithGasPrice()
-  const handleUnstakingNft = useCallback(async () => {
-    const contract = new Contract(auraNFTChefAddress, auraChefNFTABI, getProviderOrSigner(library, account))
-    const tx = await callWithGasPrice(contract, 'unstake', [tokenIds])
+  const getAuraChefNFTContract = useCallback(() => {
+    return new Contract(auraNFTChefAddress, auraChefNFTABI, getProviderOrSigner(library, account))
+  }, [library, account])
+
+  const stakingNft = useCallback(async (tokenIds:number[], isStaking:boolean) => {
+    const tx = await callWithGasPrice(getAuraChefNFTContract(), isStaking?'stake':'unstake', [tokenIds])
     return tx.wait()
-  }, [callWithGasPrice, tokenIds, library, account])
-  return { onUnstakingNft: handleUnstakingNft }
+  }, [getAuraChefNFTContract, callWithGasPrice])
+
+  const getPendingReward = useCallback(async () => {
+    const tx:any = await callWithGasPrice(getAuraChefNFTContract(), 'pendingReward', [account])
+    if (tx.length === 2)
+      return formatBigNumber(ethers.BigNumber.from(tx[1].toString()))
+    return '0'
+  }, [getAuraChefNFTContract, callWithGasPrice, account])
+  
+  const withdrawReward = useCallback(async () => {
+    const tx = await callWithGasPrice(getAuraChefNFTContract(), 'withdrawRewardToken', [])
+    return tx.wait()
+  }, [getAuraChefNFTContract, callWithGasPrice])
+
+  return { 
+    stakingNft,
+    getPendingReward,
+    withdrawReward,
+  }
 }
