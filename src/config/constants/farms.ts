@@ -7,16 +7,67 @@ const farms: SerializedFarmConfig[] = [
   /**
    * These 3 farms (PID 0, 251, 252) should always be at the top of the file.
    */
-  {
-    pid: 0,
-    lpSymbol: 'AURA',
-    lpAddresses: {
-      97: '0x304F1b2BD22b19098388c3a945B83b3e4198EC9A',
-      56: '',
+
+    {
+      pid: 0,
+      lpSymbol: 'AURA',
+      lpAddresses: {
+        97: serializedTokens.aura.address,
+        56: '',
+      },
+      token: serializedTokens.aura,
+      quoteToken: serializedTokens.wbnb,
     },
-    token: serializedTokens.aura,
-    quoteToken: serializedTokens.wbnb,
-  },
+    {
+      pid: 1,
+      lpSymbol: 'AURA-BNB',
+      lpAddresses: {
+        97: '0x82d6e1de3747549dFe134c160A2d1D3C912D798A',
+        56: '',
+      },
+      token: serializedTokens.aura,
+      quoteToken: serializedTokens.wbnb,
+    },
+    {
+      pid: 2,
+      lpSymbol: 'AURA-DAI',
+      lpAddresses: {
+        97: '0xEcFDd0a7673ad1f83D43F5086A8c3b81Eb70521B',
+        56: '',
+      },
+      token: serializedTokens.aura,
+      quoteToken: serializedTokens.dai,
+    },
+    {
+      pid: 3,
+      lpSymbol: 'BNB-BUSD',
+      lpAddresses: {
+        97: '0xc6513870b38e7e2e2B181Fe04D91373a2cB65cAf',
+        56: '',
+      },
+      token: serializedTokens.wbnb,
+      quoteToken: serializedTokens.busd,
+    },
+    {
+      pid: 4,
+      lpSymbol: 'DAI-BUSD',
+      lpAddresses: {
+        97: '0xed3312543BC533fd5183e101f2cFfC32aAeA85fe',
+        56: '',
+      },
+      token: serializedTokens.dai,
+      quoteToken: serializedTokens.busd,
+    }
+      // {
+      //   pid: 0,
+      //   lpSymbol: 'AURA',
+      //   lpAddresses: {
+      //     97: '0x304F1b2BD22b19098388c3a945B83b3e4198EC9A',
+      //     56: '',
+      //   },
+      //   token: serializedTokens.aura,
+      //   quoteToken: serializedTokens.wbnb,
+      // },
   // {
   //   pid: 1,
   //   lpSymbol: 'AURA - CAKE',
@@ -27,56 +78,56 @@ const farms: SerializedFarmConfig[] = [
   //   token: serializedTokens.aura,
   //   quoteToken: serializedTokens.cake,
   // },
-  {
-    pid: 2,
-    lpSymbol: 'AURA-BUSD LP',
-    lpAddresses: {
-      97: '0x5696436461515d3026940248e864d424b7a8e0d6',
-      56: '',
-    },
-    token: serializedTokens.aura,
-    quoteToken: serializedTokens.busd,
-  },
-  {
-    pid: 3,
-    lpSymbol: 'BNB-BUSD LP',
-    lpAddresses: {
-      97: '0x529cce4dd9c2234be9ca724a4158b8f675b22778',
-      56: '',
-    },
-    token: serializedTokens.wbnb,
-    quoteToken: serializedTokens.busd,
-  },
-  {
-    pid: 4,
-    lpSymbol: 'AURA-CAKE LP',
-    lpAddresses: {
-      97: '0x17a8d8d27afe6fa84ecf317e0090d0e46c4db337',
-      56: '',
-    },
-    token: serializedTokens.aura,
-    quoteToken: serializedTokens.cake,
-  },
-  {
-    pid: 5,
-    lpSymbol: 'AURA-DAI LP',
-    lpAddresses: {
-      97: '0xf51c802f7a6fd798548d006a5e5b9855a48c49c1',
-      56: '',
-    },
-    token: serializedTokens.aura,
-    quoteToken: serializedTokens.dai,
-  },
-  {
-    pid: 6,
-    lpSymbol: 'DAI-BNB LP',
-    lpAddresses: {
-      97: '0xf912963eb31a980befe3dd72e0b62b0bbddd18ac',
-      56: '',
-    },
-    token: serializedTokens.dai,
-    quoteToken: serializedTokens.wbnb,
-  },
+      // {
+      //   pid: 2,
+      //   lpSymbol: 'AURA-BUSD LP',
+      //   lpAddresses: {
+      //     97: '0x5696436461515d3026940248e864d424b7a8e0d6',
+      //     56: '',
+      //   },
+      //   token: serializedTokens.aura,
+      //   quoteToken: serializedTokens.busd,
+      // },
+      // {
+      //   pid: 3,
+      //   lpSymbol: 'BNB-BUSD LP',
+      //   lpAddresses: {
+      //     97: '0x529cce4dd9c2234be9ca724a4158b8f675b22778',
+      //     56: '',
+      //   },
+      //   token: serializedTokens.wbnb,
+      //   quoteToken: serializedTokens.busd,
+      // },
+      // {
+      //   pid: 4,
+      //   lpSymbol: 'AURA-CAKE LP',
+      //   lpAddresses: {
+      //     97: '0x17a8d8d27afe6fa84ecf317e0090d0e46c4db337',
+      //     56: '',
+      //   },
+      //   token: serializedTokens.aura,
+      //   quoteToken: serializedTokens.cake,
+      // },
+      // {
+      //   pid: 5,
+      //   lpSymbol: 'AURA-DAI LP',
+      //   lpAddresses: {
+      //     97: '0xf51c802f7a6fd798548d006a5e5b9855a48c49c1',
+      //     56: '',
+      //   },
+      //   token: serializedTokens.aura,
+      //   quoteToken: serializedTokens.dai,
+      // },
+      // {
+      //   pid: 6,
+      //   lpSymbol: 'DAI-BNB LP',
+      //   lpAddresses: {
+      //     97: '0xf912963eb31a980befe3dd72e0b62b0bbddd18ac',
+      //     56: '',
+      //   },
+      //   token: serializedTokens.dai,
+      //   quoteToken: serializedTokens.wbnb,
+      // },
   
   // {
   //   pid: 0,

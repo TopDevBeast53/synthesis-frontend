@@ -1,7 +1,7 @@
 import React from 'react'
 import { Text, Flex, TooltipText, useTooltip, Skeleton, Heading } from 'uikit'
 import { useWeb3React } from '@web3-react/core'
-import { getCakeVaultEarnings } from 'views/Pools/helpers'
+import { getAuraVaultEarnings } from 'views/Pools/helpers'
 import { useTranslation } from 'contexts/Localization'
 import Balance from 'components/Balance'
 import { useVaultPoolByKey } from 'state/pools/hooks'
@@ -23,19 +23,19 @@ const AutoHarvestAction: React.FunctionComponent<AutoHarvestActionProps> = ({
   const { account } = useWeb3React()
 
   const {
-    userData: { cakeAtLastUserAction, userShares },
+    userData: { auraAtLastUserAction, userShares },
     pricePerFullShare,
     fees: { performanceFee },
   } = useVaultPoolByKey(vaultKey)
-  const { hasAutoEarnings, autoCakeToDisplay, autoUsdToDisplay } = getCakeVaultEarnings(
+  const { hasAutoEarnings, autoAuraToDisplay, autoUsdToDisplay } = getAuraVaultEarnings(
     account,
-    cakeAtLastUserAction,
+    auraAtLastUserAction,
     userShares,
     pricePerFullShare,
     earningTokenPrice,
   )
 
-  const earningTokenBalance = autoCakeToDisplay
+  const earningTokenBalance = autoAuraToDisplay
   const earningTokenDollarBalance = autoUsdToDisplay
   const hasEarnings = hasAutoEarnings
 
@@ -46,7 +46,7 @@ const AutoHarvestAction: React.FunctionComponent<AutoHarvestActionProps> = ({
 
   const actionTitle = (
     <Text fontSize="12px" bold color="secondary" as="span" textTransform="uppercase">
-      {t('Recent CAKE profit')}
+      {t('Recent AURA profit')}
     </Text>
   )
 

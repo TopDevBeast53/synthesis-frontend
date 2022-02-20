@@ -62,7 +62,7 @@ export interface DeserializedFarm extends DeserializedFarmConfig {
 }
 
 export enum VaultKey {
-  CakeVault = 'cakeVault',
+  AuraVault = 'auraVault',
   IfoPool = 'ifoPool',
 }
 
@@ -136,7 +136,7 @@ export interface VaultFees {
 export interface VaultUser {
   isLoading: boolean
   userShares: string
-  cakeAtLastUserAction: string
+  auraAtLastUserAction: string
   lastDepositedTime: string
   lastUserActionTime: string
 }
@@ -145,17 +145,17 @@ export interface IfoVaultUser extends VaultUser {
   credit: string
 }
 
-export interface CakeVault {
+export interface AuraVault {
   totalShares?: string
   pricePerFullShare?: string
-  totalCakeInVault?: string
-  estimatedCakeBountyReward?: string
-  totalPendingCakeHarvest?: string
+  totalAuraInVault?: string
+  estimatedAuraBountyReward?: string
+  totalPendingAuraHarvest?: string
   fees?: VaultFees
   userData?: VaultUser
 }
 
-export interface IfoCakeVault extends Omit<CakeVault, 'userData'> {
+export interface IfoAuraVault extends Omit<AuraVault, 'userData'> {
   userData?: IfoVaultUser
   creditStartBlock?: number
   creditEndBlock?: number
@@ -163,8 +163,8 @@ export interface IfoCakeVault extends Omit<CakeVault, 'userData'> {
 
 export interface PoolsState {
   data: SerializedPool[]
-  cakeVault: CakeVault
-  ifoPool: IfoCakeVault
+  auraVault: AuraVault
+  ifoPool: IfoAuraVault
   userDataLoaded: boolean
 }
 
@@ -507,19 +507,19 @@ interface LotteryRoundGenerics {
 
 export interface LotteryRound extends LotteryRoundGenerics {
   userTickets?: LotteryRoundUserTickets
-  priceTicketInCake: BigNumber
+  priceTicketInAura: BigNumber
   discountDivisor: BigNumber
-  amountCollectedInCake: BigNumber
-  cakePerBracket: string[]
+  amountCollectedInAura: BigNumber
+  auraPerBracket: string[]
   countWinnersPerBracket: string[]
   rewardsBreakdown: string[]
 }
 
 export interface LotteryResponse extends LotteryRoundGenerics {
-  priceTicketInCake: SerializedBigNumber
+  priceTicketInAura: SerializedBigNumber
   discountDivisor: SerializedBigNumber
-  amountCollectedInCake: SerializedBigNumber
-  cakePerBracket: SerializedBigNumber[]
+  amountCollectedInAura: SerializedBigNumber
+  auraPerBracket: SerializedBigNumber[]
   countWinnersPerBracket: SerializedBigNumber[]
   rewardsBreakdown: SerializedBigNumber[]
 }
@@ -547,7 +547,7 @@ export interface LotteryRoundGraphEntity {
 
 export interface LotteryUserGraphEntity {
   account: string
-  totalCake: string
+  totalAura: string
   totalTickets: string
   rounds: UserRound[]
 }

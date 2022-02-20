@@ -28,7 +28,7 @@ import useWithdrawalFeeTimer from 'views/Pools/hooks/useWithdrawalFeeTimer'
 import BigNumber from 'bignumber.js'
 import { getFullDisplayBalance, formatNumber, getDecimalAmount } from 'utils/formatBalance'
 import useToast from 'hooks/useToast'
-import { fetchCakeVaultUserData } from 'state/pools'
+import { fetchAuraVaultUserData } from 'state/pools'
 import { DeserializedPool, VaultKey } from 'state/types'
 import { getInterestBreakdown } from 'utils/compoundApyHelpers'
 import RoiCalculatorModal from 'components/RoiCalculatorModal'
@@ -36,7 +36,7 @@ import { ToastDescriptionWithTx } from 'components/Toast'
 import { vaultPoolConfig } from 'config/constants/pools'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { logError } from 'utils/sentry'
-import { convertCakeToShares, convertSharesToCake } from '../../helpers'
+import { convertAuraToShares, convertSharesToAura } from '../../helpers'
 import FeeSummary from './FeeSummary'
 
 interface VaultStakeModalProps {
@@ -110,7 +110,7 @@ const VaultStakeModal: React.FC<VaultStakeModalProps> = ({
     gasLimit: vaultPoolConfig[pool.vaultKey].gasLimit,
   }
 
-  const { cakeAsBigNumber } = convertSharesToCake(userShares, pricePerFullShare)
+  const { auraAsBigNumber } = convertSharesToAura(userShares, pricePerFullShare)
 
   const interestBreakdown = getInterestBreakdown({
     principalInUSD: !usdValueStaked.isNaN() ? usdValueStaked.toNumber() : 0,
@@ -149,8 +149,8 @@ const VaultStakeModal: React.FC<VaultStakeModalProps> = ({
 
   const handleWithdrawal = async (convertedStakeAmount: BigNumber) => {
     setPendingTx(true)
-    const shareStakeToWithdraw = convertCakeToShares(convertedStakeAmount, pricePerFullShare)
-    // trigger withdrawAll function if the withdrawal will leave 0.000001 CAKE or less
+    const shareStakeToWithdraw = convertAuraToShares(convertedStakeAmount, pricePerFullShare)
+    // trigger withdrawAll function if the withdrawal will leave 0.000001 AURAor less
     const triggerWithdrawAllThreshold = new BigNumber(1000000000000)
     const sharesRemaining = userShares.minus(shareStakeToWithdraw.sharesAsBigNumber)
     const isWithdrawingAll = sharesRemaining.lte(triggerWithdrawAllThreshold)
@@ -168,7 +168,7 @@ const VaultStakeModal: React.FC<VaultStakeModalProps> = ({
           )
           setPendingTx(false)
           onDismiss()
-          dispatch(fetchCakeVaultUserData({ account }))
+          dispatch(fetchAuraVaultUserData({ account }))
         }
       } catch (error) {
         logError(error)
@@ -195,7 +195,7 @@ const VaultStakeModal: React.FC<VaultStakeModalProps> = ({
           )
           setPendingTx(false)
           onDismiss()
-          dispatch(fetchCakeVaultUserData({ account }))
+          dispatch(fetchAuraVaultUserData({ account }))
         }
       } catch (error) {
         logError(error)
@@ -227,7 +227,7 @@ const VaultStakeModal: React.FC<VaultStakeModalProps> = ({
         )
         setPendingTx(false)
         onDismiss()
-        dispatch(fetchCakeVaultUserData({ account }))
+        dispatch(fetchAuraVaultUserData({ account }))
       }
     } catch (error) {
       logError(error)
@@ -255,7 +255,7 @@ const VaultStakeModal: React.FC<VaultStakeModalProps> = ({
         apr={vaultKey ? rawApr : apr}
         linkLabel={t('Get %symbol%', { symbol: stakingToken.symbol })}
         linkHref={getTokenLink}
-        stakingTokenBalance={cakeAsBigNumber.plus(stakingMax)}
+        stakingTokenBalance={auraAsBigNumber.plus(stakingMax)}
         stakingTokenSymbol={stakingToken.symbol}
         earningTokenSymbol={earningToken.symbol}
         onBack={() => setShowRoiCalculator(false)}

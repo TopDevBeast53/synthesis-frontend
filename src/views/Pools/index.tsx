@@ -14,7 +14,7 @@ import {
   useFetchPublicPoolsData,
   usePools,
   useFetchUserPools,
-  useFetchCakeVault,
+  useFetchAuraVault,
   useFetchIfoPool,
   useVaultPools,
 } from 'state/pools/hooks'
@@ -34,7 +34,7 @@ import PoolCard from './components/PoolCard'
 import CakeVaultCard from './components/CakeVaultCard'
 import PoolTabButtons from './components/PoolTabButtons'
 import PoolsTable from './components/PoolsTable/PoolsTable'
-import { getCakeVaultEarnings } from './helpers'
+import { getAuraVaultEarnings } from './helpers'
 
 const CardLayout = styled(FlexLayout)`
   justify-content: center;
@@ -97,8 +97,8 @@ const Pools: React.FC = () => {
   const [sortOption, setSortOption] = useState('hot')
   const chosenPoolsLength = useRef(0)
   const vaultPools = useVaultPools()
-  const cakeInVaults = Object.values(vaultPools).reduce((total, vault) => {
-    return total.plus(vault.totalCakeInVault)
+  const auraInVaults = Object.values(vaultPools).reduce((total, vault) => {
+    return total.plus(vault.totalAuraInVault)
   }, BIG_ZERO)
 
   const pools = usePoolsWithVault()
@@ -127,8 +127,8 @@ const Pools: React.FC = () => {
   )
   const hasStakeInFinishedPools = stakedOnlyFinishedPools.length > 0
 
-  useFetchCakeVault()
-  useFetchIfoPool(false)
+  useFetchAuraVault()
+  useFetchIfoPool(true)
   useFetchPublicPoolsData()
   useFetchUserPools(account)
 
@@ -166,9 +166,9 @@ const Pools: React.FC = () => {
               return 0
             }
             return pool.vaultKey
-              ? getCakeVaultEarnings(
+              ? getAuraVaultEarnings(
                   account,
-                  vaultPools[pool.vaultKey].userData.cakeAtLastUserAction,
+                  vaultPools[pool.vaultKey].userData.auraAtLastUserAction,
                   vaultPools[pool.vaultKey].userData.userShares,
                   vaultPools[pool.vaultKey].pricePerFullShare,
                   pool.earningTokenPrice,
@@ -183,17 +183,17 @@ const Pools: React.FC = () => {
           (pool: DeserializedPool) => {
             let totalStaked = Number.NaN
             if (pool.vaultKey) {
-              if (pool.stakingTokenPrice && vaultPools[pool.vaultKey].totalCakeInVault.isFinite()) {
+              if (pool.stakingTokenPrice && vaultPools[pool.vaultKey].totalAuraInVault.isFinite()) {
                 totalStaked =
                   +formatUnits(
-                    ethers.BigNumber.from(vaultPools[pool.vaultKey].totalCakeInVault.toString()),
+                    ethers.BigNumber.from(vaultPools[pool.vaultKey].totalAuraInVault.toString()),
                     pool.stakingToken.decimals,
                   ) * pool.stakingTokenPrice
               }
             } else if (pool.sousId === 0) {
-              if (pool.totalStaked?.isFinite() && pool.stakingTokenPrice && cakeInVaults.isFinite()) {
+              if (pool.totalStaked?.isFinite() && pool.stakingTokenPrice && auraInVaults.isFinite()) {
                 const manualCakeTotalMinusAutoVault = ethers.BigNumber.from(pool.totalStaked.toString()).sub(
-                  cakeInVaults.toString(),
+                  auraInVaults.toString(),
                 )
                 totalStaked =
                   +formatUnits(manualCakeTotalMinusAutoVault, pool.stakingToken.decimals) * pool.stakingTokenPrice

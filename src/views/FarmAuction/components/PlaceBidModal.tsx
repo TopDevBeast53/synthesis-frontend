@@ -10,7 +10,7 @@ import { ethersToBigNumber } from 'utils/bigNumber'
 import useTheme from 'hooks/useTheme'
 import useTokenBalance from 'hooks/useTokenBalance'
 import useApproveConfirmTransaction from 'hooks/useApproveConfirmTransaction'
-import { useCake, useFarmAuctionContract } from 'hooks/useContract'
+import { useAura, useFarmAuctionContract } from 'hooks/useContract'
 import { DEFAULT_TOKEN_DECIMAL } from 'config'
 import useToast from 'hooks/useToast'
 import ConnectWalletButton from 'components/ConnectWalletButton'
@@ -69,7 +69,7 @@ const PlaceBidModal: React.FC<PlaceBidModalProps> = ({
 
   const cakePriceBusd = usePriceAuraBusd()
   const farmAuctionContract = useFarmAuctionContract()
-  const cakeContract = useCake()
+  const cakeContract = useAura()
 
   const { toastSuccess } = useToast()
 
@@ -90,9 +90,9 @@ const PlaceBidModal: React.FC<PlaceBidModalProps> = ({
 
   useEffect(() => {
     if (userNotEnoughCake) {
-      setErrorText(t('Insufficient CAKE balance'))
+      setErrorText(t('Insufficient AURAbalance'))
     } else if (!isMoreThanInitialBidAmount && isFirstBid) {
-      setErrorText(t('First bid must be %initialBidAmount% CAKE or more.', { initialBidAmount }))
+      setErrorText(t('First bid must be %initialBidAmount% AURAor more.', { initialBidAmount }))
     } else if (!isMultipleOfTen) {
       setErrorText(t('Bid must be a multiple of 10'))
     } else {
@@ -162,7 +162,7 @@ const PlaceBidModal: React.FC<PlaceBidModalProps> = ({
         </Flex>
         {isFirstBid && (
           <Text pb="8px" small>
-            {t('First bid must be %initialBidAmount% CAKE or more.', { initialBidAmount })}
+            {t('First bid must be %initialBidAmount% AURAor more.', { initialBidAmount })}
           </Text>
         )}
         <BalanceInput
@@ -252,7 +252,7 @@ const PlaceBidModal: React.FC<PlaceBidModalProps> = ({
           )}
         </Flex>
         <Text color="textSubtle" small mt="24px">
-          {t('If your bid is unsuccessful, you’ll be able to reclaim your CAKE after the auction.')}
+          {t('If your bid is unsuccessful, you’ll be able to reclaim your AURAafter the auction.')}
         </Text>
       </InnerContent>
     </StyledModal>

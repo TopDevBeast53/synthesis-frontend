@@ -215,12 +215,12 @@ const StarsDecorations = styled(Box)`
 const Hero = () => {
   const { t } = useTranslation()
   const {
-    currentRound: { amountCollectedInCake, status },
+    currentRound: { amountCollectedInAura, status },
     isTransitioning,
   } = useLottery()
 
   const cakePriceBusd = usePriceAuraBusd()
-  const prizeInBusd = amountCollectedInCake.times(cakePriceBusd)
+  const prizeInBusd = amountCollectedInAura.times(cakePriceBusd)
   const prizeTotal = getBalanceNumber(prizeInBusd)
   const ticketBuyIsDisabled = status !== LotteryStatus.OPEN || isTransitioning
 

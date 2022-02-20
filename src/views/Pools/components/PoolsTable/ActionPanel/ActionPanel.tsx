@@ -26,7 +26,7 @@ import { getAddress, getVaultPoolAddress } from 'utils/addressHelpers'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { registerToken } from 'utils/wallet'
 import { getBalanceNumber, getFullDisplayBalance } from 'utils/formatBalance'
-import { convertSharesToCake, getPoolBlockInfo } from 'views/Pools/helpers'
+import { convertSharesToAura, getPoolBlockInfo } from 'views/Pools/helpers'
 import { vaultPoolConfig } from 'config/constants/pools'
 import Harvest from './Harvest'
 import Stake from './Stake'
@@ -140,33 +140,33 @@ const ActionPanel: React.FC<ActionPanelProps> = ({ account, pool, userDataLoaded
   const tokenAddress = earningToken.address || ''
 
   const {
-    totalCakeInVault,
+    totalAuraInVault,
     userData: { userShares },
     fees: { performanceFeeAsDecimal },
     pricePerFullShare,
   } = useVaultPoolByKey(vaultKey)
 
   const vaultPools = useVaultPools()
-  const cakeInVaults = Object.values(vaultPools).reduce((total, vault) => {
-    return total.plus(vault.totalCakeInVault)
+  const auraInVaults = Object.values(vaultPools).reduce((total, vault) => {
+    return total.plus(vault.totalAuraInVault)
   }, BIG_ZERO)
 
   const stakingTokenBalance = userData?.stakingTokenBalance ? new BigNumber(userData.stakingTokenBalance) : BIG_ZERO
   const stakedBalance = userData?.stakedBalance ? new BigNumber(userData.stakedBalance) : BIG_ZERO
-  const { cakeAsBigNumber } = convertSharesToCake(userShares, pricePerFullShare)
+  const { auraAsBigNumber } = convertSharesToAura(userShares, pricePerFullShare)
   const poolStakingTokenBalance = vaultKey
-    ? cakeAsBigNumber.plus(stakingTokenBalance)
+    ? auraAsBigNumber.plus(stakingTokenBalance)
     : stakedBalance.plus(stakingTokenBalance)
 
-  const isManualCakePool = sousId === 0
+  const isManualAuraPool = sousId === 0
 
   const getTotalStakedBalance = () => {
     if (vaultKey) {
-      return getBalanceNumber(totalCakeInVault, stakingToken.decimals)
+      return getBalanceNumber(totalAuraInVault, stakingToken.decimals)
     }
-    if (isManualCakePool) {
-      const manualCakeTotalMinusAutoVault = new BigNumber(totalStaked).minus(cakeInVaults)
-      return getBalanceNumber(manualCakeTotalMinusAutoVault, stakingToken.decimals)
+    if (isManualAuraPool) {
+      const manualAuraTotalMinusAutoVault = new BigNumber(totalStaked).minus(auraInVaults)
+      return getBalanceNumber(manualAuraTotalMinusAutoVault, stakingToken.decimals)
     }
     return getBalanceNumber(totalStaked, stakingToken.decimals)
   }
@@ -299,7 +299,7 @@ const ActionPanel: React.FC<ActionPanelProps> = ({ account, pool, userDataLoaded
           <Text mt="4px" mb="16px" color="textSubtle">
             {vaultKey
               ? t(vaultPoolConfig[vaultKey].description)
-              : `${t('Earn')} CAKE ${t('Stake').toLocaleLowerCase()} CAKE`}
+              : `${t('Earn')} AURA ${t('Stake').toLocaleLowerCase()} AURA`}
           </Text>
         )}
         {pool.vaultKey ? (

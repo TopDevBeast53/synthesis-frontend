@@ -73,8 +73,8 @@ const bottomLeftImage = {
   path: '/images/home/prediction-cards/',
   attributes: [
     { src: 'bottom-left', alt: 'CAKE card' },
-    { src: 'green', alt: 'Green CAKE card with up arrow' },
-    { src: 'red', alt: 'Red Cake card with down arrow' },
+    { src: 'green', alt: 'Green AURAcard with up arrow' },
+    { src: 'red', alt: 'Red AURAcard with down arrow' },
     { src: 'top-right', alt: 'CAKE card' },
   ],
 }

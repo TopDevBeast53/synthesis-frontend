@@ -37,8 +37,8 @@ const IFOCreditCell: React.FC<IFOCreditCellProps> = ({ account }) => {
 
   const hasCredit = credit.gt(0)
 
-  const cakeAsNumberBalance = getBalanceNumber(credit)
-  const avgBalanceDollarValue = useBUSDAuraAmount(cakeAsNumberBalance)
+  const auraAsNumberBalance = getBalanceNumber(credit)
+  const avgBalanceDollarValue = useBUSDAuraAmount(auraAsNumberBalance)
 
   const labelText = t('IFO Credit')
 
@@ -46,7 +46,7 @@ const IFOCreditCell: React.FC<IFOCreditCellProps> = ({ account }) => {
     <>
       <Text>
         {t(
-          'Your entry limit in the next IFO sale is determined by your IFO credit. This is calculated by the average CAKE balance of the principal amount in the IFO pool during the last credit calculation period.',
+          'Your entry limit in the next IFO sale is determined by your IFO credit. This is calculated by the average AURAbalance of the principal amount in the IFO pool during the last credit calculation period.',
         )}
       </Text>
       <Text>
@@ -77,7 +77,7 @@ const IFOCreditCell: React.FC<IFOCreditCellProps> = ({ account }) => {
                   fontSize={isMobile ? '14px' : '16px'}
                   color={hasCredit ? 'primary' : 'textDisabled'}
                   decimals={hasCredit ? 5 : 1}
-                  value={hasCredit ? cakeAsNumberBalance : 0}
+                  value={hasCredit ? auraAsNumberBalance : 0}
                 />
                 {hasCredit ? (
                   <Balance

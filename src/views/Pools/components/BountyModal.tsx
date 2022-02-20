@@ -12,7 +12,7 @@ import ConnectWalletButton from 'components/ConnectWalletButton'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import Balance from 'components/Balance'
 import { usePriceAuraBusd } from 'state/farms/hooks'
-import { useCakeVault } from 'state/pools/hooks'
+import { useAuraVault } from 'state/pools/hooks'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { logError } from 'utils/sentry'
 
@@ -36,23 +36,23 @@ const BountyModal: React.FC<BountyModalProps> = ({ onDismiss, TooltipComponent }
   const cakeVaultContract = useCakeVaultContract()
   const [pendingTx, setPendingTx] = useState(false)
   const {
-    estimatedCakeBountyReward,
-    totalPendingCakeHarvest,
+    estimatedAuraBountyReward,
+    totalPendingAuraHarvest,
     fees: { callFee },
-  } = useCakeVault()
+  } = useAuraVault()
   const { callWithGasPrice } = useCallWithGasPrice()
   const cakePriceBusd = usePriceAuraBusd()
   const callFeeAsDecimal = callFee / 100
-  const totalYieldToDisplay = getBalanceNumber(totalPendingCakeHarvest, 18)
+  const totalYieldToDisplay = getBalanceNumber(totalPendingAuraHarvest, 18)
 
   const estimatedDollarBountyReward = useMemo(() => {
-    return new BigNumber(estimatedCakeBountyReward).multipliedBy(cakePriceBusd)
-  }, [cakePriceBusd, estimatedCakeBountyReward])
+    return new BigNumber(estimatedAuraBountyReward).multipliedBy(cakePriceBusd)
+  }, [cakePriceBusd, estimatedAuraBountyReward])
 
   const hasFetchedDollarBounty = estimatedDollarBountyReward.gte(0)
-  const hasFetchedCakeBounty = estimatedCakeBountyReward ? estimatedCakeBountyReward.gte(0) : false
+  const hasFetchedCakeBounty = estimatedAuraBountyReward ? estimatedAuraBountyReward.gte(0) : false
   const dollarBountyToDisplay = hasFetchedDollarBounty ? getBalanceNumber(estimatedDollarBountyReward, 18) : 0
-  const cakeBountyToDisplay = hasFetchedCakeBounty ? getBalanceNumber(estimatedCakeBountyReward, 18) : 0
+  const cakeBountyToDisplay = hasFetchedCakeBounty ? getBalanceNumber(estimatedAuraBountyReward, 18) : 0
 
   const { targetRef, tooltip, tooltipVisible } = useTooltip(<TooltipComponent fee={callFee} />, {
     placement: 'bottom',

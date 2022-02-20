@@ -17,7 +17,7 @@ import { useWeb3React } from '@web3-react/core'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { useIfoPoolCreditBlock, useVaultPoolByKey } from 'state/pools/hooks'
 import { DeserializedPool, VaultKey } from 'state/types'
-import { convertSharesToCake } from 'views/Pools/helpers'
+import { convertSharesToAura } from 'views/Pools/helpers'
 import { FlexGap } from 'components/Layout/Flex'
 import { vaultPoolConfig } from 'config/constants/pools'
 import { getBscScanLink } from 'utils'
@@ -27,13 +27,13 @@ import CardFooter from '../PoolCard/CardFooter'
 import PoolCardHeader, { PoolCardHeaderTitle } from '../PoolCard/PoolCardHeader'
 import VaultCardActions from './VaultCardActions'
 import UnstakingFeeCountdownRow from './UnstakingFeeCountdownRow'
-import RecentCakeProfitRow from './RecentCakeProfitRow'
+import RecentAuraProfitRow from './RecentAuraProfitRow'
 
 const StyledCardBody = styled(CardBody)<{ isLoading: boolean }>`
   min-height: ${({ isLoading }) => (isLoading ? '0' : '254px')};
 `
 
-interface CakeVaultProps extends CardProps {
+interface AuraVaultProps extends CardProps {
   pool: DeserializedPool
   showStakedOnly: boolean
   defaultFooterExpanded?: boolean
@@ -51,7 +51,7 @@ export const CreditCalcBlock = () => {
             'The latest credit calculation period has ended. After the coming IFO, credits will be reset and the calculation will resume.',
           )}
         </Text>
-        <LinkExternal href="https://twitter.com/pancakeswap">
+        <LinkExternal href="https://twitter.com/panauraswap">
           {t('Follow us on Twitter to catch the latest news about the coming IFO.')}
         </LinkExternal>
       </>
@@ -59,10 +59,10 @@ export const CreditCalcBlock = () => {
       <>
         <Text>
           {t(
-            'The start block of the current calculation period. Your average IFO CAKE Pool staking balance is calculated throughout this period.',
+            'The start block of the current calculation period. Your average IFO AURAPool staking balance is calculated throughout this period.',
           )}
         </Text>
-        <LinkExternal href="https://medium.com/pancakeswap/initial-farm-offering-ifo-3-0-ifo-staking-pool-622d8bd356f1">
+        <LinkExternal href="https://medium.com/panauraswap/initial-farm-offering-ifo-3-0-ifo-staking-pool-622d8bd356f1">
           {t('Check out our Medium article for more details.')}
         </LinkExternal>
       </>
@@ -92,7 +92,7 @@ export const CreditCalcBlock = () => {
   )
 }
 
-const CakeVaultCard: React.FC<CakeVaultProps> = ({ pool, showStakedOnly, defaultFooterExpanded, ...props }) => {
+const AuraVaultCard: React.FC<AuraVaultProps> = ({ pool, showStakedOnly, defaultFooterExpanded, ...props }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const {
@@ -101,7 +101,7 @@ const CakeVaultCard: React.FC<CakeVaultProps> = ({ pool, showStakedOnly, default
     pricePerFullShare,
   } = useVaultPoolByKey(pool.vaultKey)
 
-  const { cakeAsBigNumber } = convertSharesToCake(userShares, pricePerFullShare)
+  const { auraAsBigNumber } = convertSharesToAura(userShares, pricePerFullShare)
 
   const accountHasSharesStaked = userShares && userShares.gt(0)
   const isLoading = !pool.userData || isVaultUserDataLoading
@@ -120,12 +120,12 @@ const CakeVaultCard: React.FC<CakeVaultProps> = ({ pool, showStakedOnly, default
         <TokenPairImage {...vaultPoolConfig[pool.vaultKey].tokenImage} width={64} height={64} />
       </PoolCardHeader>
       <StyledCardBody isLoading={isLoading}>
-        <AprRow pool={pool} stakedBalance={cakeAsBigNumber} performanceFee={performanceFeeAsDecimal} />
+        <AprRow pool={pool} stakedBalance={auraAsBigNumber} performanceFee={performanceFeeAsDecimal} />
         {pool.vaultKey === VaultKey.IfoPool && <CreditCalcBlock />}
         <FlexGap mt="16px" gap="24px" flexDirection={accountHasSharesStaked ? 'column-reverse' : 'column'}>
           <Box>
             <Box mt="24px">
-              <RecentCakeProfitRow vaultKey={pool.vaultKey} />
+              <RecentAuraProfitRow vaultKey={pool.vaultKey} />
             </Box>
             <Box mt="8px">
               <UnstakingFeeCountdownRow vaultKey={pool.vaultKey} />
@@ -155,4 +155,4 @@ const CakeVaultCard: React.FC<CakeVaultProps> = ({ pool, showStakedOnly, default
   )
 }
 
-export default CakeVaultCard
+export default AuraVaultCard

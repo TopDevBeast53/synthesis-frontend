@@ -5,7 +5,7 @@ import { useVaultPoolByKey } from 'state/pools/hooks'
 import { useTranslation } from 'contexts/Localization'
 import BaseCell, { CellContent } from './BaseCell'
 import Apr from '../Apr'
-import { convertSharesToCake } from '../../../helpers'
+import { convertSharesToAura } from '../../../helpers'
 
 interface AprCellProps {
   pool: DeserializedPool
@@ -21,7 +21,7 @@ const AutoAprCell: React.FC<AprCellProps> = ({ pool }) => {
     pricePerFullShare,
   } = useVaultPoolByKey(pool.vaultKey)
 
-  const { cakeAsBigNumber } = convertSharesToCake(userShares, pricePerFullShare)
+  const { auraAsBigNumber } = convertSharesToAura(userShares, pricePerFullShare)
 
   return (
     <BaseCell role="cell" flex={['1 0 50px', '1 0 50px', '2 0 100px', '2 0 100px', '1 0 120px']}>
@@ -31,7 +31,7 @@ const AutoAprCell: React.FC<AprCellProps> = ({ pool }) => {
         </Text>
         <Apr
           pool={pool}
-          stakedBalance={cakeAsBigNumber}
+          stakedBalance={auraAsBigNumber}
           performanceFee={performanceFeeAsDecimal}
           showIcon={!isMobile}
         />

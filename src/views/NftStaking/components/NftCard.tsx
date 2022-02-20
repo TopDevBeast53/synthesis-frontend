@@ -1,4 +1,5 @@
 import { Card, CardBody, Flex, Heading, Image, Text, Checkbox, Button } from 'uikit'
+
 import React, {useState } from 'react'
 import { Link } from 'react-router-dom'
 import styled, { css } from 'styled-components'

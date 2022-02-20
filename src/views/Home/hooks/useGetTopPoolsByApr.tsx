@@ -3,23 +3,24 @@ import { usePriceAuraBusd } from 'state/farms/hooks'
 import { useAppDispatch } from 'state'
 import { orderBy } from 'lodash'
 import { VaultKey, DeserializedPool } from 'state/types'
-import { fetchCakeVaultFees, fetchPoolsPublicDataAsync } from 'state/pools'
-import { useCakeVault, usePools } from 'state/pools/hooks'
+import { fetchAuraVaultFees, fetchPoolsPublicDataAsync } from 'state/pools'
+import { useAuraVault, usePools } from 'state/pools/hooks'
 import { getAprData } from 'views/Pools/helpers'
 import { FetchStatus } from 'config/constants/types'
 
 export function usePoolsWithVault() {
   const { pools: poolsWithoutAutoVault } = usePools()
-  const cakeVault = useCakeVault()
+  const auraVault = useAuraVault()
   // const ifoPool = useIfoPoolVault()
   const pools = useMemo(() => {
     const activePools = poolsWithoutAutoVault.filter((pool) => !pool.isFinished)
     const auraPool = activePools.find((pool) => pool.sousId === 0)
-    const auraAutoVault = { ...auraPool, vaultKey: VaultKey.CakeVault }
+    const auraAutoVault = { ...auraPool, vaultKey: VaultKey.AuraVault }
     // const ifoPoolVault = { ...auraPool, vaultKey: VaultKey.IfoPool }
-    const cakeAutoVaultWithApr = {
+    
+    const auraAutoVaultWithApr = {
       ...auraAutoVault,
-      apr: getAprData(auraAutoVault, cakeVault.fees.performanceFeeAsDecimal).apr,
+      apr: getAprData(auraAutoVault, auraVault.fees.performanceFeeAsDecimal).apr,
       rawApr: auraPool.apr,
     }
     // const ifoPoolWithApr = {
@@ -27,10 +28,10 @@ export function usePoolsWithVault() {
     //   apr: getAprData(ifoPoolVault, ifoPool.fees.performanceFeeAsDecimal).apr,
     //   rawApr: auraPool.apr,
     // }
-    // return [ifoPoolWithApr, cakeAutoVaultWithApr, ...poolsWithoutAutoVault]
-    return [cakeAutoVaultWithApr, ...poolsWithoutAutoVault]
-  // }, [poolsWithoutAutoVault, cakeVault.fees.performanceFeeAsDecimal, ifoPool.fees.performanceFeeAsDecimal])
-}, [poolsWithoutAutoVault, cakeVault.fees.performanceFeeAsDecimal])
+    // return [ifoPoolWithApr, auraAutoVaultWithApr, ...poolsWithoutAutoVault]
+    return [auraAutoVaultWithApr, ...poolsWithoutAutoVault]
+  // }, [poolsWithoutAutoVault, auraVault.fees.performanceFeeAsDecimal, ifoPool.fees.performanceFeeAsDecimal])
+}, [poolsWithoutAutoVault, auraVault.fees.performanceFeeAsDecimal])
 
   return pools
 }
@@ -43,14 +44,14 @@ const useGetTopPoolsByApr = (isIntersecting: boolean) => {
 
   const pools = usePoolsWithVault()
 
-  const cakePriceBusd = usePriceAuraBusd()
+  const auraPriceBusd = usePriceAuraBusd()
 
   useEffect(() => {
     const fetchPoolsPublicData = async () => {
       setFetchStatus(FetchStatus.Fetching)
 
       try {
-        await dispatch(fetchCakeVaultFees())
+        await dispatch(fetchAuraVaultFees())
         await dispatch(fetchPoolsPublicDataAsync())
         setFetchStatus(FetchStatus.Fetched)
       } catch (e) {
@@ -72,7 +73,7 @@ const useGetTopPoolsByApr = (isIntersecting: boolean) => {
     if (fetchStatus === FetchStatus.Fetched && !topPools[0]) {
       getTopPoolsByApr(pools)
     }
-  }, [setTopPools, pools, fetchStatus, cakePriceBusd, topPools])
+  }, [setTopPools, pools, fetchStatus, auraPriceBusd, topPools])
 
   return { topPools }
 }

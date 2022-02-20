@@ -13,10 +13,10 @@
     {
       "name": "Aura",
       "symbol": "AURA",
-      "address": "0xdf2b1082eE98b48B5933378c8F58cE2f5AaFF135",
+      "address": "0xC5e5A2ca4A41aF3B01289c2071E35346c7f7C89E",
       "chainId": 97,
       "decimals": 18,
-      "logoURI": "local://images/tokens/0xdf2b1082ee98b48b5933378c8f58ce2f5aaff135.png"
+      "logoURI": "local://images/tokens/0xc5e5a2ca4A41af3b01289c2071e35346c7f7c89e.png"
     },
     {
       "name": "Wrapped BNB",

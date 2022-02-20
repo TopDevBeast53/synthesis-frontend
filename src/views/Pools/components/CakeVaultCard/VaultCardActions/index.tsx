@@ -23,8 +23,8 @@ export const IfoVaultCardAvgBalance = () => {
   const { t } = useTranslation()
   const credit = useIfoPoolCredit()
 
-  const cakeAsNumberBalance = getBalanceNumber(credit)
-  const creditsDollarValue: number | undefined = useBUSDAuraAmount(cakeAsNumberBalance)
+  const auraAsNumberBalance = getBalanceNumber(credit)
+  const creditsDollarValue: number | undefined = useBUSDAuraAmount(auraAsNumberBalance)
 
   return (
     <>
@@ -40,7 +40,7 @@ export const IfoVaultCardAvgBalance = () => {
             <>
               <Text>
                 {t(
-                  'Your entry limit in the next IFO sale is determined by your IFO credit. This is calculated by the average CAKE balance of the principal amount in the IFO pool during the last credit calculation period.',
+                  'Your entry limit in the next IFO sale is determined by your IFO credit. This is calculated by the average AURAbalance of the principal amount in the IFO pool during the last credit calculation period.',
                 )}
               </Text>
               <Text>
@@ -53,7 +53,7 @@ export const IfoVaultCardAvgBalance = () => {
         />
       </FlexGap>
       <Flex flexDirection="column" pb="16px">
-        <Balance fontSize="20px" bold value={cakeAsNumberBalance} decimals={5} />
+        <Balance fontSize="20px" bold value={auraAsNumberBalance} decimals={5} />
         <Text fontSize="12px" color="textSubtle" display="flex">
           {creditsDollarValue !== undefined ? (
             <Balance

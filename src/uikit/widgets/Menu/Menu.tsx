@@ -11,7 +11,6 @@ import { useMatchBreakpoints } from "../../hooks";
 import Logo from "./components/Logo";
 import { MENU_HEIGHT, MOBILE_MENU_HEIGHT, TOP_BANNER_HEIGHT, TOP_BANNER_HEIGHT_MOBILE } from "./config";
 import { NavProps } from "./types";
-import LangSelector from "../../components/LangSelector/LangSelector";
 import { MenuContext } from "./context";
 
 const Wrapper = styled.div`
@@ -136,16 +135,6 @@ const Menu: React.FC<NavProps> = ({
               {!isMobile && <MenuItems items={links} activeItem={activeItem} activeSubItem={activeSubItem} ml="80px" />}
             </Flex>
             <Flex alignItems="center" height="100%">
-              <Box mt="4px">
-                <LangSelector
-                  currentLang={currentLang}
-                  langs={langs}
-                  setLang={setLang}
-                  buttonScale="xs"
-                  color="textSubtle"
-                  hideLanguage
-                />
-              </Box>
               {globalMenu} {userMenu}
             </Flex>
           </StyledNav>

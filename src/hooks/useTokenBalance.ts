@@ -6,7 +6,7 @@ import { ethers } from 'ethers'
 import useSWR from 'swr'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { simpleRpcProvider } from 'utils/providers'
-import { useCake, useTokenContract } from './useContract'
+import { useAura, useTokenContract } from './useContract'
 import { useSWRContract } from './useSWRContract'
 
 const useTokenBalance = (tokenAddress: string) => {
@@ -34,7 +34,7 @@ const useTokenBalance = (tokenAddress: string) => {
 }
 
 export const useTotalSupply = () => {
-  const cakeContract = useCake()
+  const cakeContract = useAura()
   const { data } = useSWRContract([cakeContract, 'totalSupply'], {
     refreshInterval: SLOW_INTERVAL,
   })

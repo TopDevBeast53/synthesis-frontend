@@ -5,23 +5,23 @@ import { useTranslation } from 'contexts/Localization'
 import { usePriceAuraBusd } from 'state/farms/hooks'
 import { useVaultPoolByKey } from 'state/pools/hooks'
 import { VaultKey } from 'state/types'
-import { getCakeVaultEarnings } from 'views/Pools/helpers'
-import RecentCakeProfitBalance from './RecentCakeProfitBalance'
+import { getAuraVaultEarnings } from 'views/Pools/helpers'
+import RecentAuraProfitBalance from './RecentAuraProfitBalance'
 
-const RecentCakeProfitCountdownRow = ({ vaultKey }: { vaultKey: VaultKey }) => {
+const RecentAuraProfitCountdownRow = ({ vaultKey }: { vaultKey: VaultKey }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const {
     pricePerFullShare,
-    userData: { cakeAtLastUserAction, userShares, lastUserActionTime },
+    userData: { auraAtLastUserAction, userShares, lastUserActionTime },
   } = useVaultPoolByKey(vaultKey)
-  const cakePriceBusd = usePriceAuraBusd()
-  const { hasAutoEarnings, autoCakeToDisplay, autoUsdToDisplay } = getCakeVaultEarnings(
+  const auraPriceBusd = usePriceAuraBusd()
+  const { hasAutoEarnings, autoAuraToDisplay, autoUsdToDisplay } = getAuraVaultEarnings(
     account,
-    cakeAtLastUserAction,
+    auraAtLastUserAction,
     userShares,
     pricePerFullShare,
-    cakePriceBusd.toNumber(),
+    auraPriceBusd.toNumber(),
   )
 
   const lastActionInMs = lastUserActionTime && parseInt(lastUserActionTime) * 1000
@@ -30,10 +30,10 @@ const RecentCakeProfitCountdownRow = ({ vaultKey }: { vaultKey: VaultKey }) => {
 
   return (
     <Flex alignItems="center" justifyContent="space-between">
-      <Text fontSize="14px">{`${t('Recent CAKE profit')}:`}</Text>
+      <Text fontSize="14px">{`${t('Recent AURA profit')}:`}</Text>
       {hasAutoEarnings && (
-        <RecentCakeProfitBalance
-          cakeToDisplay={autoCakeToDisplay}
+        <RecentAuraProfitBalance
+          auraToDisplay={autoAuraToDisplay}
           dollarValueToDisplay={autoUsdToDisplay}
           dateStringToDisplay={dateStringToDisplay}
         />
@@ -42,4 +42,4 @@ const RecentCakeProfitCountdownRow = ({ vaultKey }: { vaultKey: VaultKey }) => {
   )
 }
 
-export default RecentCakeProfitCountdownRow
+export default RecentAuraProfitCountdownRow

@@ -46,14 +46,14 @@ const MaxTokenEntry = ({ maxToken, ifo, poolId }: { maxToken: number; ifo: Ifo; 
   const tooltipContent =
     poolId === PoolIds.poolBasic
       ? t(
-          'For the basic sale, Max CAKE entry is capped by minimum between your average CAKE balance in the IFO CAKE pool, or the pool’s hard cap. To increase the max entry, Stake more CAKE into the IFO CAKE pool',
+          'For the basic sale, Max AURAentry is capped by minimum between your average AURAbalance in the IFO AURApool, or the pool’s hard cap. To increase the max entry, Stake more AURAinto the IFO AURApool',
         )
       : t(
-          'For the unlimited sale, Max CAKE entry is capped by your average CAKE balance in the IFO CAKE pool. To increase the max entry, Stake more CAKE into the IFO CAKE pool',
+          'For the unlimited sale, Max AURAentry is capped by your average AURAbalance in the IFO AURApool. To increase the max entry, Stake more AURAinto the IFO AURApool',
         )
 
   const { targetRef, tooltip, tooltipVisible } = useTooltip(tooltipContent, { placement: 'bottom-start' })
-  const label = isCurrencyCake ? t('Max. CAKE entry') : t('Max. token entry')
+  const label = isCurrencyCake ? t('Max. AURAentry') : t('Max. token entry')
   const price = useBUSDPrice(ifo.currency)
 
   const dollarValueOfToken = multiplyPriceByAmount(price, maxToken, ifo.currency.decimals)

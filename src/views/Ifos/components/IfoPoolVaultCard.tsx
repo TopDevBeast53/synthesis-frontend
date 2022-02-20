@@ -25,7 +25,7 @@ import styled from 'styled-components'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { getBalanceNumber } from 'utils/formatBalance'
 import CakeVaultCard, { CreditCalcBlock } from 'views/Pools/components/CakeVaultCard'
-import RecentCakeProfitCountdownRow from 'views/Pools/components/CakeVaultCard/RecentCakeProfitRow'
+import RecentAuraProfitCountdownRow from 'views/Pools/components/CakeVaultCard/RecentAuraProfitRow'
 import UnstakingFeeCountdownRow from 'views/Pools/components/CakeVaultCard/UnstakingFeeCountdownRow'
 import { IfoVaultCardAvgBalance } from 'views/Pools/components/CakeVaultCard/VaultCardActions'
 import AprRow from 'views/Pools/components/PoolCard/AprRow'
@@ -71,8 +71,8 @@ const IfoPoolVaultCardMobile: React.FC = () => {
   } = useIfoPoolVault()
   const [isExpanded, setIsExpanded] = useState(false)
 
-  const cakeAsNumberBalance = getBalanceNumber(credit)
-  const stakedDollarValue = useBUSDAuraAmount(cakeAsNumberBalance)
+  const auraAsNumberBalance = getBalanceNumber(credit)
+  const stakedDollarValue = useBUSDAuraAmount(auraAsNumberBalance)
 
   const { targetRef, tooltip, tooltipVisible } = useTooltip(
     t('Any funds you stake in this pool will be automagically harvested and restaked (compounded) for you.'),
@@ -102,7 +102,7 @@ const IfoPoolVaultCardMobile: React.FC = () => {
             <Text color="textSubtle" fontSize="12px">
               {t('IFO Credit')}
             </Text>
-            <Balance small bold decimals={3} value={cakeAsNumberBalance} />
+            <Balance small bold decimals={3} value={auraAsNumberBalance} />
             <Balance
               value={stakedDollarValue || 0}
               fontSize="12px"
@@ -130,7 +130,7 @@ const IfoPoolVaultCardMobile: React.FC = () => {
             <Staked pool={pool} userDataLoaded={userDataLoaded} />
             <ActionContainer>
               <Box>
-                <RecentCakeProfitCountdownRow vaultKey={VaultKey.IfoPool} />
+                <RecentAuraProfitCountdownRow vaultKey={VaultKey.IfoPool} />
               </Box>
               <Box mt="8px">
                 <UnstakingFeeCountdownRow vaultKey={VaultKey.IfoPool} />

@@ -9,16 +9,16 @@ import { getAprData } from 'views/Pools/helpers'
 import {
   fetchPoolsPublicDataAsync,
   fetchPoolsUserDataAsync,
-  fetchCakeVaultPublicData,
-  fetchCakeVaultUserData,
-  fetchCakeVaultFees,
+  fetchAuraVaultPublicData,
+  fetchAuraVaultUserData,
+  fetchAuraVaultFees,
   fetchPoolsStakingLimitsAsync,
   fetchIfoPoolFees,
   fetchIfoPoolPublicData,
   fetchIfoPoolUserAndCredit,
   initialPoolVaultState,
-  fetchCakePoolPublicDataAsync,
-  fetchCakePoolUserDataAsync,
+  fetchAuraPoolPublicDataAsync,
+  fetchAuraPoolUserDataAsync,
 } from '.'
 import { State, DeserializedPool, VaultKey } from '../types'
 import { transformPool } from './helpers'
@@ -68,62 +68,62 @@ export const usePool = (sousId: number): { pool: DeserializedPool; userDataLoade
   return { pool: transformPool(pool), userDataLoaded }
 }
 
-export const useFetchCakeVault = () => {
+export const useFetchAuraVault = () => {
   const { account } = useWeb3React()
   const fastRefresh = useFastFresh()
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    dispatch(fetchCakeVaultPublicData())
+    dispatch(fetchAuraVaultPublicData())
   }, [dispatch, fastRefresh])
 
   useEffect(() => {
-    dispatch(fetchCakeVaultUserData({ account }))
+    dispatch(fetchAuraVaultUserData({ account }))
   }, [dispatch, fastRefresh, account])
 
   useEffect(() => {
-    dispatch(fetchCakeVaultFees())
+    dispatch(fetchAuraVaultFees())
   }, [dispatch])
 }
 
-export const useFetchIfoPool = (fetchCakePool = true) => {
+export const useFetchIfoPool = (fetchAuraPool = true) => {
   const { account } = useWeb3React()
   const fastRefresh = useFastFresh()
   const dispatch = useAppDispatch()
 
   useEffect(() => {
     batch(() => {
-      if (fetchCakePool) {
-        dispatch(fetchCakePoolPublicDataAsync())
+      if (fetchAuraPool) {
+        dispatch(fetchAuraPoolPublicDataAsync())
       }
       dispatch(fetchIfoPoolPublicData())
     })
-  }, [dispatch, fastRefresh, fetchCakePool])
+  }, [dispatch, fastRefresh, fetchAuraPool])
 
   useEffect(() => {
     if (account) {
       batch(() => {
         dispatch(fetchIfoPoolUserAndCredit({ account }))
-        if (fetchCakePool) {
-          dispatch(fetchCakePoolUserDataAsync(account))
+        if (fetchAuraPool) {
+          dispatch(fetchAuraPoolUserDataAsync(account))
         }
       })
     }
-  }, [dispatch, fastRefresh, account, fetchCakePool])
+  }, [dispatch, fastRefresh, account, fetchAuraPool])
 
   useEffect(() => {
     dispatch(fetchIfoPoolFees())
   }, [dispatch])
 }
 
-export const useCakeVault = () => {
-  return useVaultPoolByKey(VaultKey.CakeVault)
+export const useAuraVault = () => {
+  return useVaultPoolByKey(VaultKey.AuraVault)
 }
 
 export const useVaultPools = () => {
   return {
-    [VaultKey.CakeVault]: useVaultPoolByKey(VaultKey.CakeVault),
-    [VaultKey.IfoPool]: useVaultPoolByKey(VaultKey.IfoPool),
+    [VaultKey.AuraVault]: useVaultPoolByKey(VaultKey.AuraVault),
+    // [VaultKey.IfoPool]: useVaultPoolByKey(VaultKey.IfoPool),
   }
 }
 
@@ -131,26 +131,26 @@ export const useVaultPoolByKey = (key: VaultKey) => {
   const {
     totalShares: totalSharesAsString,
     pricePerFullShare: pricePerFullShareAsString,
-    totalCakeInVault: totalCakeInVaultAsString,
-    estimatedCakeBountyReward: estimatedCakeBountyRewardAsString,
-    totalPendingCakeHarvest: totalPendingCakeHarvestAsString,
+    totalAuraInVault: totalAuraInVaultAsString,
+    estimatedAuraBountyReward: estimatedAuraBountyRewardAsString,
+    totalPendingAuraHarvest: totalPendingAuraHarvestAsString,
     fees: { performanceFee, callFee, withdrawalFee, withdrawalFeePeriod },
     userData: {
       isLoading,
       userShares: userSharesAsString,
-      cakeAtLastUserAction: cakeAtLastUserActionAsString,
+      auraAtLastUserAction: auraAtLastUserActionAsString,
       lastDepositedTime,
       lastUserActionTime,
     },
   } = useSelector((state: State) => (key ? state.pools[key] : initialPoolVaultState))
 
-  const estimatedCakeBountyReward = useMemo(() => {
-    return new BigNumber(estimatedCakeBountyRewardAsString)
-  }, [estimatedCakeBountyRewardAsString])
+  const estimatedAuraBountyReward = useMemo(() => {
+    return new BigNumber(estimatedAuraBountyRewardAsString)
+  }, [estimatedAuraBountyRewardAsString])
 
-  const totalPendingCakeHarvest = useMemo(() => {
-    return new BigNumber(totalPendingCakeHarvestAsString)
-  }, [totalPendingCakeHarvestAsString])
+  const totalPendingAuraHarvest = useMemo(() => {
+    return new BigNumber(totalPendingAuraHarvestAsString)
+  }, [totalPendingAuraHarvestAsString])
 
   const totalShares = useMemo(() => {
     return new BigNumber(totalSharesAsString)
@@ -160,26 +160,26 @@ export const useVaultPoolByKey = (key: VaultKey) => {
     return new BigNumber(pricePerFullShareAsString)
   }, [pricePerFullShareAsString])
 
-  const totalCakeInVault = useMemo(() => {
-    return new BigNumber(totalCakeInVaultAsString)
-  }, [totalCakeInVaultAsString])
+  const totalAuraInVault = useMemo(() => {
+    return new BigNumber(totalAuraInVaultAsString)
+  }, [totalAuraInVaultAsString])
 
   const userShares = useMemo(() => {
     return new BigNumber(userSharesAsString)
   }, [userSharesAsString])
 
-  const cakeAtLastUserAction = useMemo(() => {
-    return new BigNumber(cakeAtLastUserActionAsString)
-  }, [cakeAtLastUserActionAsString])
+  const auraAtLastUserAction = useMemo(() => {
+    return new BigNumber(auraAtLastUserActionAsString)
+  }, [auraAtLastUserActionAsString])
 
   const performanceFeeAsDecimal = performanceFee && performanceFee / 100
 
   return {
     totalShares,
     pricePerFullShare,
-    totalCakeInVault,
-    estimatedCakeBountyReward,
-    totalPendingCakeHarvest,
+    totalAuraInVault,
+    estimatedAuraBountyReward,
+    totalPendingAuraHarvest,
     fees: {
       performanceFeeAsDecimal,
       performanceFee,
@@ -190,7 +190,7 @@ export const useVaultPoolByKey = (key: VaultKey) => {
     userData: {
       isLoading,
       userShares,
-      cakeAtLastUserAction,
+      auraAtLastUserAction,
       lastDepositedTime,
       lastUserActionTime,
     },

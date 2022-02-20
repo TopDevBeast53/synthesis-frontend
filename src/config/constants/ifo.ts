@@ -3,7 +3,7 @@ import tokens from './tokens'
 import farms from './farms'
 import { Ifo } from './types'
 
-export const cakeBnbLpToken = new Token(ChainId.TESTNET, farms[0].lpAddresses[ChainId.TESTNET], 18, farms[0].lpSymbol)
+export const cakeBnbLpToken = new Token(ChainId.TESTNET, farms[1].lpAddresses[ChainId.TESTNET], 18, farms[0].lpSymbol)
 
 const ifos: Ifo[] = [
   {

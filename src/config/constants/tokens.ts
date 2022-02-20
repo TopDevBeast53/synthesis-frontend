@@ -13,7 +13,7 @@ const defineTokens = <T extends TokenList>(t: T) => t
 export const mainnetTokens = defineTokens({
   aura: new Token(
     TESTNET,
-    '0xdf2b1082eE98b48B5933378c8F58cE2f5AaFF135',
+    '0xC5e5A2ca4A41aF3B01289c2071E35346c7f7C89E',
     18,
     'AURA',
     'Aura',
@@ -237,7 +237,7 @@ export const mainnetTokens = defineTokens({
     '0xdB8D30b74bf098aF214e862C90E647bbB1fcC58c',
     18,
     'BABYCAKE',
-    'Baby Cake Token',
+    'Baby AURAToken',
     'https://babycake.app/',
   ),
   bmon: new Token(
@@ -1954,7 +1954,7 @@ export const mainnetTokens = defineTokens({
 export const testnetTokens = defineTokens({
   aura: new Token(
     TESTNET,
-    '0xdf2b1082eE98b48B5933378c8F58cE2f5AaFF135',
+    '0xC5e5A2ca4A41aF3B01289c2071E35346c7f7C89E',
     18,
     'AURA',
     'Aura',

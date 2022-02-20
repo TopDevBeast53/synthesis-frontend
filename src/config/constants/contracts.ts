@@ -1,11 +1,11 @@
 export default {
   masterChef: {
     // 97: '0x1d32c2945C8FDCBc7156c553B7cEa4325a17f4f9',
-    97: '0x3E54EdDd13b2909A4047188A1C7b2e4BAF7b656c',
+    97: '0x3c72E6b19FAC06D07ee90dd7AFe9c655E798B5Ab',
     56: '0x73feaa1eE314F8c655E354234017bE2193C9E24E',
   },
   sousChef: {
-    97: '0xd3af5fe61dbaf8f73149bfcfa9fb653ff096029a',
+    97: '0xe911B52fa2a24A84Da9D6039684046E437B8C673',
     56: '0x6ab8463a4185b80905e05a9ff80a2d6b714b9e95',
   },
   lotteryV2: {
@@ -54,7 +54,7 @@ export default {
   },
   auraVault: {
     56: '',
-    97: '0xE9Bf1603aa7648118a1D309BA86c84834C2d8269',
+    97: '0x73FAC1197BA7Eb1c3696d4C30da2e6050AE8dCB0',
   },
   ifoPool: {
     56: '0x1B2A2f6ed4A1401E8C73B4c2B6172455ce2f78E8',
