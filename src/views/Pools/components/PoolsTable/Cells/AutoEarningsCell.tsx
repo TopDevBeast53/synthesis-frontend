@@ -5,7 +5,7 @@ import { DeserializedPool } from 'state/types'
 import Balance from 'components/Balance'
 import { useVaultPoolByKey } from 'state/pools/hooks'
 import { useTranslation } from 'contexts/Localization'
-import { getCakeVaultEarnings } from 'views/Pools/helpers'
+import { getAuraVaultEarnings } from 'views/Pools/helpers'
 import BaseCell, { CellContent } from './BaseCell'
 
 interface AutoEarningsCellProps {
@@ -30,19 +30,19 @@ const AutoEarningsCell: React.FC<AutoEarningsCellProps> = ({ pool, account }) =>
   const { earningTokenPrice } = pool
 
   const {
-    userData: { isLoading: userDataLoading, cakeAtLastUserAction, userShares, lastUserActionTime },
+    userData: { isLoading: userDataLoading, auraAtLastUserAction, userShares, lastUserActionTime },
     pricePerFullShare,
   } = useVaultPoolByKey(pool.vaultKey)
-  const { hasAutoEarnings, autoCakeToDisplay, autoUsdToDisplay } = getCakeVaultEarnings(
+  const { hasAutoEarnings, autoAuraToDisplay, autoUsdToDisplay } = getAuraVaultEarnings(
     account,
-    cakeAtLastUserAction,
+    auraAtLastUserAction,
     userShares,
     pricePerFullShare,
     earningTokenPrice,
   )
 
-  const labelText = t('Recent CAKE profit')
-  const earningTokenBalance = autoCakeToDisplay
+  const labelText = t('Recent AURA profit')
+  const earningTokenBalance = autoAuraToDisplay
   const hasEarnings = hasAutoEarnings
   const earningTokenDollarBalance = autoUsdToDisplay
 
@@ -52,7 +52,7 @@ const AutoEarningsCell: React.FC<AutoEarningsCellProps> = ({ pool, account }) =>
 
   const { targetRef, tooltip, tooltipVisible } = useTooltip(
     <>
-      <Balance fontSize="16px" value={autoCakeToDisplay} decimals={3} bold unit=" CAKE" />
+      <Balance fontSize="16px" value={autoAuraToDisplay} decimals={3} bold unit=" CAKE" />
       <Balance fontSize="16px" value={autoUsdToDisplay} decimals={2} bold prefix="~$" />
       {t('Earned since your last action')}
       <Text>{dateStringToDisplay}</Text>

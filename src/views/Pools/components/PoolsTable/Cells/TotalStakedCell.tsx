@@ -21,24 +21,26 @@ const StyledCell = styled(BaseCell)`
 const TotalStakedCell: React.FC<TotalStakedCellProps> = ({ pool }) => {
   const { t } = useTranslation()
   const { sousId, stakingToken, totalStaked, vaultKey } = pool
-  const { totalCakeInVault } = useVaultPoolByKey(vaultKey)
+  const { totalAuraInVault } = useVaultPoolByKey(vaultKey)
   const vaultPools = useVaultPools()
-  const cakeInVaults = Object.values(vaultPools).reduce((total, vault) => {
-    return total.plus(vault.totalCakeInVault)
+
+  const auraInVaults = Object.values(vaultPools).reduce((total, vault) => {
+    return total.plus(vault.totalAuraInVault)
   }, BIG_ZERO)
 
-  const isManualCakePool = sousId === 0
+  const isManualAuraPool = sousId === 0
 
   const totalStakedBalance = useMemo(() => {
     if (vaultKey) {
-      return getBalanceNumber(totalCakeInVault, stakingToken.decimals)
+      return getBalanceNumber(totalAuraInVault, stakingToken.decimals)
     }
-    if (isManualCakePool) {
-      const manualCakeTotalMinusAutoVault = new BigNumber(totalStaked).minus(cakeInVaults)
-      return getBalanceNumber(manualCakeTotalMinusAutoVault, stakingToken.decimals)
+    if (isManualAuraPool) {
+      const manualAuraTotalMinusAutoVault = new BigNumber(totalStaked).minus(auraInVaults)
+
+      return getBalanceNumber(manualAuraTotalMinusAutoVault, stakingToken.decimals)
     }
     return getBalanceNumber(totalStaked, stakingToken.decimals)
-  }, [vaultKey, totalCakeInVault, isManualCakePool, totalStaked, stakingToken.decimals, cakeInVaults])
+  }, [vaultKey, totalAuraInVault, isManualAuraPool, totalStaked, stakingToken.decimals, auraInVaults])
 
   return (
     <StyledCell role="cell">

@@ -30,7 +30,7 @@ const LotteryCardContent = () => {
   const [currentLotteryPrize, setCurrentLotteryPrize] = useState<BigNumber>(null)
   const cakePriceBusdAsString = usePriceAuraBusd().toString()
 
-  const cakePrizesText = t('%cakePrizeInUsd% in CAKE prizes this round', { cakePrizeInUsd: cakePriceBusdAsString })
+  const cakePrizesText = t('%cakePrizeInUsd% in AURAprizes this round', { cakePrizeInUsd: cakePriceBusdAsString })
   const [pretext, prizesThisRound] = cakePrizesText.split(cakePriceBusdAsString)
 
   const cakePriceBusd = useMemo(() => {
@@ -58,8 +58,8 @@ const LotteryCardContent = () => {
   useEffect(() => {
     // get public data for current lottery
     const fetchCurrentLotteryPrize = async () => {
-      const { amountCollectedInCake } = await fetchLottery(lotteryId)
-      const prizeInBusd = cakePriceBusd.times(amountCollectedInCake)
+      const { amountCollectedInAura } = await fetchLottery(lotteryId)
+      const prizeInBusd = cakePriceBusd.times(amountCollectedInAura)
       setCurrentLotteryPrize(prizeInBusd)
     }
 
@@ -97,7 +97,7 @@ const LotteryCardContent = () => {
           {prizesThisRound}
         </Text>
         <Text color="white" mb="40px">
-          {t('Buy tickets with CAKE, win CAKE if your numbers match')}
+          {t('Buy tickets with CAKE, win AURAif your numbers match')}
         </Text>
       </Flex>
       <Flex alignItems="center" justifyContent="center">

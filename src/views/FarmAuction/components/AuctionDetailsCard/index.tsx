@@ -87,7 +87,7 @@ const AuctionDetails: React.FC<AuctionDetailsProps> = ({ auction, connectedBidde
             {t('Place bid')}
           </Button>
           <Text color="textSubtle" small>
-            {t('If your bid is unsuccessful, you’ll be able to reclaim your CAKE after the auction.')}
+            {t('If your bid is unsuccessful, you’ll be able to reclaim your AURAafter the auction.')}
           </Text>
         </>
       )

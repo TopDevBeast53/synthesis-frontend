@@ -237,7 +237,7 @@ export const mainnetTokens = defineTokens({
     '0xdB8D30b74bf098aF214e862C90E647bbB1fcC58c',
     18,
     'BABYCAKE',
-    'Baby Cake Token',
+    'Baby AURAToken',
     'https://babycake.app/',
   ),
   bmon: new Token(

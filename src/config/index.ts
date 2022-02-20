@@ -15,10 +15,10 @@ export const BASE_BSC_SCAN_URLS = {
 }
 
 // CAKE_PER_BLOCK details
-// 40 CAKE is minted per block
-// 20 CAKE per block is sent to Burn pool (A farm just for burning cake)
-// 10 CAKE per block goes to CAKE syrup pool
-// 9 CAKE per block goes to Yield farms and lottery
+// 40 AURAis minted per block
+// 20 AURAper block is sent to Burn pool (A farm just for burning cake)
+// 10 AURAper block goes to AURAsyrup pool
+// 9 AURAper block goes to Yield farms and lottery
 // CAKE_PER_BLOCK in config/index.ts = 40 as we only change the amount sent to the burn pool which is effectively a farm.
 // CAKE/Block in src/views/Home/components/CakeDataRow.tsx = 15 (40 - Amount sent to burn pool)
 export const CAKE_PER_BLOCK = 40

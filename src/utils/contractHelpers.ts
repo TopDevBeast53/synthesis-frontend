@@ -42,7 +42,7 @@ import bunnySpecialAbi from 'config/abi/bunnySpecial.json'
 import bep20Abi from 'config/abi/erc20.json'
 import erc721Abi from 'config/abi/erc721.json'
 import lpTokenAbi from 'config/abi/lpToken.json'
-import cakeAbi from 'config/abi/cake.json'
+import auraAbi from 'config/abi/aura.json'
 import ifoV1Abi from 'config/abi/ifoV1.json'
 import ifoV2Abi from 'config/abi/ifoV2.json'
 import pointCenterIfo from 'config/abi/pointCenterIfo.json'
@@ -55,7 +55,7 @@ import claimRefundAbi from 'config/abi/claimRefund.json'
 import tradingCompetitionAbi from 'config/abi/tradingCompetition.json'
 import tradingCompetitionV2Abi from 'config/abi/tradingCompetitionV2.json'
 import easterNftAbi from 'config/abi/easterNft.json'
-import cakeVaultAbi from 'config/abi/cakeVault.json'
+import cakeVaultAbi from 'config/abi/auraVault.json'
 import ifoPoolAbi from 'config/abi/ifoPool.json'
 import predictionsAbi from 'config/abi/predictions.json'
 import chainlinkOracleAbi from 'config/abi/chainlinkOracle.json'
@@ -82,7 +82,7 @@ import {
   IfoPool,
   Erc20,
   Erc721,
-  Cake,
+  Aura,
   BunnyFactory,
   PancakeRabbits,
   PancakeProfile,
@@ -96,7 +96,7 @@ import {
   TradingCompetition,
   TradingCompetitionV2,
   EasterNft,
-  CakeVault,
+  AuraVault,
   Multicall,
   BunnySpecialCakeVault,
   BunnySpecialPrediction,
@@ -140,8 +140,8 @@ export const getSouschefV2Contract = (id: number, signer?: ethers.Signer | ether
 export const getPointCenterIfoContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
   return getContract(pointCenterIfo, getPointCenterIfoAddress(), signer) as PointCenterIfo
 }
-export const getCakeContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
-  return getContract(cakeAbi, tokens.cake.address, signer) as Cake
+export const getAuraContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
+  return getContract(auraAbi, tokens.aura.address, signer) as Aura
 }
 export const getProfileContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
   return getContract(profileABI, getPancakeProfileAddress(), signer) as PancakeProfile
@@ -174,8 +174,8 @@ export const getTradingCompetitionContractV2 = (signer?: ethers.Signer | ethers.
 export const getEasterNftContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
   return getContract(easterNftAbi, getEasterNftAddress(), signer) as EasterNft
 }
-export const getCakeVaultContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
-  return getContract(cakeVaultAbi, getAuraVaultAddress(), signer) as CakeVault
+export const getAuraVaultContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
+  return getContract(cakeVaultAbi, getAuraVaultAddress(), signer) as AuraVault
 }
 export const getIfoPoolContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
   return getContract(ifoPoolAbi, getIfoPoolAddress(), signer) as IfoPool

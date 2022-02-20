@@ -12,7 +12,7 @@ import { getBalanceNumber } from 'utils/formatBalance'
 import { PoolCategory } from 'config/constants/types'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { useERC20 } from 'hooks/useContract'
-import { convertSharesToCake } from 'views/Pools/helpers'
+import { convertSharesToAura } from 'views/Pools/helpers'
 import { ActionContainer, ActionTitles, ActionContent } from './styles'
 import NotEnoughTokensModal from '../../PoolCard/Modals/NotEnoughTokensModal'
 import StakeModal from '../../PoolCard/Modals/StakeModal'
@@ -77,10 +77,10 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({ pool, userDataLoa
     pricePerFullShare,
   } = useVaultPoolByKey(pool.vaultKey)
 
-  const { cakeAsBigNumber, cakeAsNumberBalance } = convertSharesToCake(userShares, pricePerFullShare)
+  const { auraAsBigNumber, auraAsNumberBalance } = convertSharesToAura(userShares, pricePerFullShare)
   const hasSharesStaked = userShares && userShares.gt(0)
   const isVaultWithShares = vaultKey && hasSharesStaked
-  const stakedAutoDollarValue = getBalanceNumber(cakeAsBigNumber.multipliedBy(stakingTokenPrice), stakingToken.decimals)
+  const stakedAutoDollarValue = getBalanceNumber(auraAsBigNumber.multipliedBy(stakingTokenPrice), stakingToken.decimals)
 
   const needsApproval = vaultKey ? !isVaultApproved : !allowance.gt(0) && !isBnbPool
 
@@ -107,7 +107,7 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({ pool, userDataLoa
     />,
   )
 
-  const [onPresentVaultUnstake] = useModal(<VaultStakeModal stakingMax={cakeAsBigNumber} pool={pool} isRemovingStake />)
+  const [onPresentVaultUnstake] = useModal(<VaultStakeModal stakingMax={auraAsBigNumber} pool={pool} isRemovingStake />)
 
   const onStake = () => {
     if (vaultKey) {
@@ -198,7 +198,7 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({ pool, userDataLoa
               bold
               fontSize="20px"
               decimals={5}
-              value={vaultKey ? cakeAsNumberBalance : stakedTokenBalance}
+              value={vaultKey ? auraAsNumberBalance : stakedTokenBalance}
             />
             <Balance
               fontSize="12px"

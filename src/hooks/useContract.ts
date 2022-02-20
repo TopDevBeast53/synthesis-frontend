@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import {
   getBep20Contract,
-  getCakeContract,
+  getAuraContract,
   getBunnyFactoryContract,
   getBunnySpecialContract,
   getPancakeRabbitContract,
@@ -17,7 +17,7 @@ import {
   getTradingCompetitionContractV2,
   getEasterNftContract,
   getErc721Contract,
-  getCakeVaultContract,
+  getAuraVaultContract,
   getIfoPoolContract,
   getPredictionsContract,
   getChainlinkOracleContract,
@@ -37,7 +37,7 @@ import {
 import { getMulticallAddress } from 'utils/addressHelpers'
 import { VaultKey } from 'state/types'
 import {
-  CakeVault,
+  AuraVault,
   EnsPublicResolver,
   EnsRegistrar,
   Erc20,
@@ -89,9 +89,9 @@ export const useERC721 = (address: string) => {
   return useMemo(() => getErc721Contract(address, library.getSigner()), [address, library])
 }
 
-export const useCake = () => {
+export const useAura = () => {
   const { library } = useActiveWeb3React()
-  return useMemo(() => getCakeContract(library.getSigner()), [library])
+  return useMemo(() => getAuraContract(library.getSigner()), [library])
 }
 
 export const useBunnyFactory = () => {
@@ -162,18 +162,18 @@ export const useEasterNftContract = () => {
   return useMemo(() => getEasterNftContract(library.getSigner()), [library])
 }
 
-export const useVaultPoolContract = (vaultKey: VaultKey): CakeVault | IfoPool => {
+export const useVaultPoolContract = (vaultKey: VaultKey): AuraVault | IfoPool => {
   const { library } = useActiveWeb3React()
   return useMemo(() => {
-    return vaultKey === VaultKey.CakeVault
-      ? getCakeVaultContract(library.getSigner())
+    return vaultKey === VaultKey.AuraVault
+      ? getAuraVaultContract(library.getSigner())
       : getIfoPoolContract(library.getSigner())
   }, [library, vaultKey])
 }
 
 export const useCakeVaultContract = () => {
   const { library } = useActiveWeb3React()
-  return useMemo(() => getCakeVaultContract(library.getSigner()), [library])
+  return useMemo(() => getAuraVaultContract(library.getSigner()), [library])
 }
 
 export const useIfoPoolContract = () => {

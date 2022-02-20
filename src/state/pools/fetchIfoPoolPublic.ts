@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js'
-import { convertSharesToCake } from 'views/Pools/helpers'
+import { convertSharesToAura } from 'views/Pools/helpers'
 import { multicallv2 } from 'utils/multicall'
 import ifoPoolAbi from 'config/abi/ifoPool.json'
 import { getIfoPoolAddress } from 'utils/addressHelpers'
@@ -10,8 +10,8 @@ export const fetchPublicIfoPoolData = async () => {
     const calls = [
       'getPricePerFullShare',
       'totalShares',
-      'calculateHarvestCakeRewards',
-      'calculateTotalPendingCakeRewards',
+      'calculateHarvestAuraRewards',
+      'calculateTotalPendingAuraRewards',
       'startBlock',
       'endBlock',
     ].map((method) => ({
@@ -19,18 +19,18 @@ export const fetchPublicIfoPoolData = async () => {
       name: method,
     }))
 
-    const [[sharePrice], [shares], [estimatedCakeBountyReward], [totalPendingCakeHarvest], [startBlock], [endBlock]] =
+    const [[sharePrice], [shares], [estimatedAuraBountyReward], [totalPendingAuraHarvest], [startBlock], [endBlock]] =
       await multicallv2(ifoPoolAbi, calls)
 
     const totalSharesAsBigNumber = shares ? new BigNumber(shares.toString()) : BIG_ZERO
     const sharePriceAsBigNumber = sharePrice ? new BigNumber(sharePrice.toString()) : BIG_ZERO
-    const totalCakeInVaultEstimate = convertSharesToCake(totalSharesAsBigNumber, sharePriceAsBigNumber)
+    const totalAuraInVaultEstimate = convertSharesToAura(totalSharesAsBigNumber, sharePriceAsBigNumber)
     return {
       totalShares: totalSharesAsBigNumber.toJSON(),
       pricePerFullShare: sharePriceAsBigNumber.toJSON(),
-      totalCakeInVault: totalCakeInVaultEstimate.cakeAsBigNumber.toJSON(),
-      estimatedCakeBountyReward: new BigNumber(estimatedCakeBountyReward.toString()).toJSON(),
-      totalPendingCakeHarvest: new BigNumber(totalPendingCakeHarvest.toString()).toJSON(),
+      totalAuraInVault: totalAuraInVaultEstimate.auraAsBigNumber.toJSON(),
+      estimatedAuraBountyReward: new BigNumber(estimatedAuraBountyReward.toString()).toJSON(),
+      totalPendingAuraHarvest: new BigNumber(totalPendingAuraHarvest.toString()).toJSON(),
       creditStartBlock: startBlock.toNumber(),
       creditEndBlock: endBlock.toNumber(),
     }
@@ -38,9 +38,9 @@ export const fetchPublicIfoPoolData = async () => {
     return {
       totalShares: null,
       pricePerFullShare: null,
-      totalCakeInVault: null,
-      estimatedCakeBountyReward: null,
-      totalPendingCakeHarvest: null,
+      totalAuraInVault: null,
+      estimatedAuraBountyReward: null,
+      totalPendingAuraHarvest: null,
     }
   }
 }

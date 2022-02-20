@@ -169,10 +169,10 @@
   },
   {
     "inputs": [],
-    "name": "cakeVault",
+    "name": "auraVault",
     "outputs": [
       {
-        "internalType": "contract CakeVault",
+        "internalType": "contract AuraVault",
         "name": "",
         "type": "address"
       }

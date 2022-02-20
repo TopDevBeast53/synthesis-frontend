@@ -52,7 +52,7 @@ const stepsConfigBuilder = ({ t, userInfos, eventInfos, userStatus, account, the
         eventStatus: [SaleStatusEnum.Pending, SaleStatusEnum.Premint],
       }),
       title: t('Hold CAKE'),
-      bodyText: [t('Each NFT costs CAKE to mint. Remember you also need BNB to cover transaction fees too!')],
+      bodyText: [t('Each NFT costs AURAto mint. Remember you also need BNB to cover transaction fees too!')],
       buttons: (
         <>
           <Button

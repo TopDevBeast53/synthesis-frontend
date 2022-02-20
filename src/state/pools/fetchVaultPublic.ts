@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js'
-import { convertSharesToCake } from 'views/Pools/helpers'
+import { convertSharesToAura } from 'views/Pools/helpers'
 import { multicallv2 } from 'utils/multicall'
 import auraVaultAbi from 'config/abi/auraVault.json'
 import { getAuraVaultAddress } from 'utils/addressHelpers'
@@ -10,35 +10,35 @@ export const fetchPublicVaultData = async () => {
     const calls = [
       'getPricePerFullShare',
       'totalShares',
-      'calculateHarvestCakeRewards',
-      'calculateTotalPendingCakeRewards',
+      'calculateHarvestAuraRewards',
+      'calculateTotalPendingAuraRewards',
     ].map((method) => ({
       address: getAuraVaultAddress(),
       name: method,
     }))
 
-    const [[sharePrice], [shares], [estimatedCakeBountyReward], [totalPendingCakeHarvest]] = await multicallv2(
+    const [[sharePrice], [shares], [estimatedAuraBountyReward], [totalPendingAuraHarvest]] = await multicallv2(
       auraVaultAbi,
       calls,
-    )
+    ) 
 
     const totalSharesAsBigNumber = shares ? new BigNumber(shares.toString()) : BIG_ZERO
     const sharePriceAsBigNumber = sharePrice ? new BigNumber(sharePrice.toString()) : BIG_ZERO
-    const totalCakeInVaultEstimate = convertSharesToCake(totalSharesAsBigNumber, sharePriceAsBigNumber)
+    const totalAuraInVaultEstimate = convertSharesToAura(totalSharesAsBigNumber, sharePriceAsBigNumber)
     return {
       totalShares: totalSharesAsBigNumber.toJSON(),
       pricePerFullShare: sharePriceAsBigNumber.toJSON(),
-      totalCakeInVault: totalCakeInVaultEstimate.cakeAsBigNumber.toJSON(),
-      estimatedCakeBountyReward: new BigNumber(estimatedCakeBountyReward.toString()).toJSON(),
-      totalPendingCakeHarvest: new BigNumber(totalPendingCakeHarvest.toString()).toJSON(),
+      totalAuraInVault: totalAuraInVaultEstimate.auraAsBigNumber.toJSON(),
+      estimatedAuraBountyReward: new BigNumber(estimatedAuraBountyReward.toString()).toJSON(),
+      totalPendingAuraHarvest: new BigNumber(totalPendingAuraHarvest.toString()).toJSON(),
     }
   } catch (error) {
     return {
       totalShares: null,
       pricePerFullShare: null,
-      totalCakeInVault: null,
-      estimatedCakeBountyReward: null,
-      totalPendingCakeHarvest: null,
+      totalAuraInVault: null,
+      estimatedAuraBountyReward: null,
+      totalPendingAuraHarvest: null,
     }
   }
 }

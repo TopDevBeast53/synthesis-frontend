@@ -4,28 +4,28 @@ import { DeserializedPool } from 'state/types'
 import { getApy } from 'utils/compoundApyHelpers'
 import { getBalanceNumber, getFullDisplayBalance, getDecimalAmount } from 'utils/formatBalance'
 
-export const convertSharesToCake = (
+export const convertSharesToAura = (
   shares: BigNumber,
-  cakePerFullShare: BigNumber,
+  auraPerFullShare: BigNumber,
   decimals = 18,
   decimalsToRound = 3,
 ) => {
-  const sharePriceNumber = getBalanceNumber(cakePerFullShare, decimals)
-  const amountInCake = new BigNumber(shares.multipliedBy(sharePriceNumber))
-  const cakeAsNumberBalance = getBalanceNumber(amountInCake, decimals)
-  const cakeAsBigNumber = getDecimalAmount(new BigNumber(cakeAsNumberBalance), decimals)
-  const cakeAsDisplayBalance = getFullDisplayBalance(amountInCake, decimals, decimalsToRound)
-  return { cakeAsNumberBalance, cakeAsBigNumber, cakeAsDisplayBalance }
+  const sharePriceNumber = getBalanceNumber(auraPerFullShare, decimals)
+  const amountInAura = new BigNumber(shares.multipliedBy(sharePriceNumber))
+  const auraAsNumberBalance = getBalanceNumber(amountInAura, decimals)
+  const auraAsBigNumber = getDecimalAmount(new BigNumber(auraAsNumberBalance), decimals)
+  const auraAsDisplayBalance = getFullDisplayBalance(amountInAura, decimals, decimalsToRound)
+  return { auraAsNumberBalance, auraAsBigNumber, auraAsDisplayBalance }
 }
 
-export const convertCakeToShares = (
-  cake: BigNumber,
-  cakePerFullShare: BigNumber,
+export const convertAuraToShares = (
+  aura: BigNumber,
+  auraPerFullShare: BigNumber,
   decimals = 18,
   decimalsToRound = 3,
 ) => {
-  const sharePriceNumber = getBalanceNumber(cakePerFullShare, decimals)
-  const amountInShares = new BigNumber(cake.dividedBy(sharePriceNumber))
+  const sharePriceNumber = getBalanceNumber(auraPerFullShare, decimals)
+  const amountInShares = new BigNumber(aura.dividedBy(sharePriceNumber))
   const sharesAsNumberBalance = getBalanceNumber(amountInShares, decimals)
   const sharesAsBigNumber = getDecimalAmount(new BigNumber(sharesAsNumberBalance), decimals)
   const sharesAsDisplayBalance = getFullDisplayBalance(amountInShares, decimals, decimalsToRound)
@@ -49,22 +49,22 @@ export const getAprData = (pool: DeserializedPool, performanceFee: number) => {
   return { apr, autoCompoundFrequency }
 }
 
-export const getCakeVaultEarnings = (
+export const getAuraVaultEarnings = (
   account: string,
-  cakeAtLastUserAction: BigNumber,
+  auraAtLastUserAction: BigNumber,
   userShares: BigNumber,
   pricePerFullShare: BigNumber,
   earningTokenPrice: number,
 ) => {
   const hasAutoEarnings =
-    account && cakeAtLastUserAction && cakeAtLastUserAction.gt(0) && userShares && userShares.gt(0)
-  const { cakeAsBigNumber } = convertSharesToCake(userShares, pricePerFullShare)
-  const autoCakeProfit = cakeAsBigNumber.minus(cakeAtLastUserAction)
-  const autoCakeToDisplay = autoCakeProfit.gte(0) ? getBalanceNumber(autoCakeProfit, 18) : 0
+    account && auraAtLastUserAction && auraAtLastUserAction.gt(0) && userShares && userShares.gt(0)
+  const { auraAsBigNumber } = convertSharesToAura(userShares, pricePerFullShare)
+  const autoAuraProfit = auraAsBigNumber.minus(auraAtLastUserAction)
+  const autoAuraToDisplay = autoAuraProfit.gte(0) ? getBalanceNumber(autoAuraProfit, 18) : 0
 
-  const autoUsdProfit = autoCakeProfit.times(earningTokenPrice)
+  const autoUsdProfit = autoAuraProfit.times(earningTokenPrice)
   const autoUsdToDisplay = autoUsdProfit.gte(0) ? getBalanceNumber(autoUsdProfit, 18) : 0
-  return { hasAutoEarnings, autoCakeToDisplay, autoUsdToDisplay }
+  return { hasAutoEarnings, autoAuraToDisplay, autoUsdToDisplay }
 }
 
 export const getPoolBlockInfo = (pool: DeserializedPool, currentBlock: number) => {

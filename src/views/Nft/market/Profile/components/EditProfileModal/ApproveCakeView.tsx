@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { AutoRenewIcon, Button, Flex, InjectedModalProps, Text } from 'uikit'
 import { useTranslation } from 'contexts/Localization'
-import { useCake } from 'hooks/useContract'
+import { useAura } from 'hooks/useContract'
 import useToast from 'hooks/useToast'
 import { useProfile } from 'state/profile/hooks'
 import { getPancakeProfileAddress } from 'utils/addressHelpers'
@@ -20,7 +20,7 @@ const ApproveCakePage: React.FC<ApproveCakePageProps> = ({ goToChange, onDismiss
   const {
     costs: { numberCakeToUpdate, numberCakeToReactivate },
   } = useGetProfileCosts()
-  const cakeContract = useCake()
+  const cakeContract = useAura()
   const { toastError } = useToast()
   const cost = profile.isActive ? numberCakeToUpdate : numberCakeToReactivate
 

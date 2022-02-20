@@ -4,7 +4,7 @@ import { ethers, Contract } from 'ethers'
 import { useAppDispatch } from 'state'
 import { updateUserAllowance } from 'state/actions'
 import { useTranslation } from 'contexts/Localization'
-import { useCake, useSousChef, useVaultPoolContract } from 'hooks/useContract'
+import { useAura, useSousChef, useVaultPoolContract } from 'hooks/useContract'
 import useToast from 'hooks/useToast'
 import useLastUpdated from 'hooks/useLastUpdated'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
@@ -61,14 +61,14 @@ export const useApprovePool = (lpContract: Contract, sousId, earningTokenSymbol)
   return { handleApprove, requestedApproval }
 }
 
-// Approve CAKE auto pool
+// Approve AURAauto pool
 export const useVaultApprove = (vaultKey: VaultKey, setLastUpdated: () => void) => {
   const [requestedApproval, setRequestedApproval] = useState(false)
   const { t } = useTranslation()
   const { toastSuccess, toastError } = useToast()
   const vaultPoolContract = useVaultPoolContract(vaultKey)
   const { callWithGasPrice } = useCallWithGasPrice()
-  const cakeContract = useCake()
+  const cakeContract = useAura()
 
   const handleApprove = async () => {
     const tx = await callWithGasPrice(cakeContract, 'approve', [vaultPoolContract.address, ethers.constants.MaxUint256])
@@ -95,13 +95,13 @@ export const useVaultApprove = (vaultKey: VaultKey, setLastUpdated: () => void) 
 export const useCheckVaultApprovalStatus = (vaultKey: VaultKey) => {
   const [isVaultApproved, setIsVaultApproved] = useState(false)
   const { account } = useWeb3React()
-  const cakeContract = useCake()
+  const auraContract = useAura()
   const vaultPoolContract = useVaultPoolContract(vaultKey)
   const { lastUpdated, setLastUpdated } = useLastUpdated()
   useEffect(() => {
     const checkApprovalStatus = async () => {
       try {
-        const currentAllowance = await cakeContract.allowance(account, vaultPoolContract.address)
+        const currentAllowance = await auraContract.allowance(account, vaultPoolContract.address)
         setIsVaultApproved(currentAllowance.gt(0))
       } catch (error) {
         setIsVaultApproved(false)
@@ -109,7 +109,7 @@ export const useCheckVaultApprovalStatus = (vaultKey: VaultKey) => {
     }
 
     checkApprovalStatus()
-  }, [account, cakeContract, vaultPoolContract, lastUpdated])
+  }, [account, auraContract, vaultPoolContract, lastUpdated])
 
   return { isVaultApproved, setLastUpdated }
 }

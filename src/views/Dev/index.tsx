@@ -11,7 +11,7 @@ import { Contract } from '@ethersproject/contracts'
 import masterChefABI from 'config/abi/masterchef.json';
 import sousChefABI from 'config/abi/sousChef.json';
 import auraVaultABI from 'config/abi/auraVault.json';
-import auraABI from 'config/abi/cake.json';
+import auraABI from 'config/abi/aura.json';
 import auraRouterV1ABI from 'config/abi/AuraRouterV1.json';
 import auraFactoryABI from 'config/abi/AuraFactory.json';
 import auraPairABI from 'config/abi/AuraPair.json';
