@@ -12,8 +12,7 @@ const GlobalStyle = createGlobalStyle<{theme: AuraTheme, backgroundImageURL?: st
     font-family: 'Helvetica Neue', sans-serif;
   }
   body {
-    background-color: ${({ theme }) => theme.colors.background};
-    background-image: ${({ backgroundImageURL }) => `url('${backgroundImageURL}')`};
+    background: ${({ theme, backgroundImageURL }) => `${theme.colors.background} url('${backgroundImageURL}')`};
     background-size: 100%;
     background-repeat: no-repeat;
     
