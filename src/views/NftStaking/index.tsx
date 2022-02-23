@@ -1,7 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import filter from 'lodash/filter'
-import { Flex, Heading, Button, Card, Text, Grid, ButtonMenu, ButtonMenuItem, NotificationDot } from 'uikit'
-import Select from 'components/Select/Select'
+import { Flex, Heading, Button, Card, Text, Grid, ButtonMenu, ButtonMenuItem } from 'uikit'
 import { useTranslation } from 'contexts/Localization'
 import useToast from 'hooks/useToast'
 import styled from 'styled-components'

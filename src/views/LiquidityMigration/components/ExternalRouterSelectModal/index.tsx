@@ -12,8 +12,8 @@ import {
 } from 'uikit'
 import styled from 'styled-components'
 import { FixedSizeList } from 'react-window'
-import { useSelector, useDispatch } from 'react-redux'
-import { AppState, AppDispatch } from 'state'
+import { useDispatch } from 'react-redux'
+import { AppDispatch } from 'state'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice';
 import { addExternalRouter } from 'state/user/actions'
 import type { ExternalRouterData } from 'config/constants/externalRouters';
@@ -22,15 +22,18 @@ import Column, { AutoColumn } from 'components/Layout/Column';
 import { isAddress, getProviderOrSigner } from 'utils'
 import useDebounce from 'hooks/useDebounce'
 import { useToken } from 'hooks/Tokens'
-import externalRouters, { externalFactoryRouteMapping } from 'config/constants/externalRouters';
-import ImportRow from 'components/SearchModal/ImportRow'
+import { externalFactoryRouteMapping } from 'config/constants/externalRouters';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import { Token } from 'sdk';
 import { Contract } from '@ethersproject/contracts';
-import AuraPair from 'config/abi/AuraPair.json';
+import AuraPair from 'config/abi/AuraPair.json'; 
+import { useFilterDexByQuery } from 'components/SearchModal/filtering';
+import { useAllExternalDexesWithTokens } from 'hooks/Dexes';
+
 // import { filterTokens, useSortedTokensByQuery } from 'components/SearchModal/filtering'
 
 import ExternalRouterList from '../ExternalRouterList';
+import ImportExternalRow from './ImportExternalRow'
 
 const StyledModalContainer = styled(ModalContainer)`
     max-width: 420px;
@@ -57,7 +60,7 @@ const ExternalRouterSelectModal: React.FC<ExternalRouterSelectModalProps> = ({
 	onExternalRouterSelect,
 	externalRouter
 }) => {
-	const { library, account } = useActiveWeb3React();
+	const { library, account, chainId } = useActiveWeb3React();
 	const { callWithGasPrice } = useCallWithGasPrice();
 	const [searchQuery, setSearchQuery] = useState<string>('')
 	const debouncedQuery = useDebounce(searchQuery, 200)
@@ -66,21 +69,12 @@ const ExternalRouterSelectModal: React.FC<ExternalRouterSelectModalProps> = ({
 
 	const searchToken = useToken(debouncedQuery)
 	
-	const savedExternalRouters = 
-		useSelector<AppState, AppState['user']['externalRouters']>(
-			({ user: { externalRouters: router } }) => router)
+	const activeDexes = useAllExternalDexesWithTokens();
 
-	const savedExternalRoutes = 
-		savedExternalRouters.map(router => ({
-			...router,
-			pairToken: new Token(
-				router.pairToken.chainID,
-				router.pairToken.address,
-				18,
-				router.pairToken.symbol,
-				router.pairToken.name,
-			)
-		}))
+	const dexes = useFilterDexByQuery(
+		activeDexes, 
+		debouncedQuery
+	);
 
 	const handleInput = useCallback((event) => {
 		const input = event.target.value
@@ -97,7 +91,7 @@ const ExternalRouterSelectModal: React.FC<ExternalRouterSelectModalProps> = ({
 		[onDismiss, onExternalRouterSelect],
 	)
 
-	const setImportToken = async (token: Token) => {
+	const setImportToken = useCallback(async (token: Token) => {
 		const tokenContract = new Contract(token.address, AuraPair, getProviderOrSigner(library, account));
 		const tokenFactory = await callWithGasPrice(tokenContract, 'factory', []);
 		const dexData = externalFactoryRouteMapping[tokenFactory.toString()];
@@ -106,6 +100,7 @@ const ExternalRouterSelectModal: React.FC<ExternalRouterSelectModalProps> = ({
 			routerAddress: dexData.routerAddress,
 			factoryAddress: tokenFactory.toString(),
 			name: dexData.name,
+			chainID: chainId,
 			pairToken: {
 				name: token.name,
 				symbol: token.symbol,
@@ -113,7 +108,11 @@ const ExternalRouterSelectModal: React.FC<ExternalRouterSelectModalProps> = ({
 				chainID: token.chainId,
 			}
 		}}));
-	}
+
+		setSearchQuery('');
+	}, [
+		account, callWithGasPrice, chainId, dispatch, library, setSearchQuery
+	]);
 
 	return (
 		<StyledModalContainer minWidth="320px">
@@ -141,7 +140,7 @@ const ExternalRouterSelectModal: React.FC<ExternalRouterSelectModalProps> = ({
 				</AutoColumn>
 				{searchToken ? (
 					<Column style={{ padding: '20px 0', height: '100%' }}>
-						<ImportRow token={searchToken} showImportView={() => {console.debug("Show");}} setImportToken={setImportToken} />
+						<ImportExternalRow token={searchToken} showImportView={() => {console.debug("Show");}} setImportToken={setImportToken} />
 					</Column>
 				) : (
 					<Box margin="24px -24px">
@@ -150,7 +149,7 @@ const ExternalRouterSelectModal: React.FC<ExternalRouterSelectModalProps> = ({
 							fixedListRef={fixedList}
 							onExternalRouterSelect={handleExternalRouteSelect}
 							externalRouter={externalRouter}
-							externalRouters={savedExternalRoutes.concat(externalRouters)}
+							externalRouters={dexes}
 						/>
 					</Box>
 				)}

@@ -1,3 +1,4 @@
+import { ExternalRouterData } from 'config/constants/externalRouters'
 import { useMemo } from 'react'
 import { Token } from 'sdk'
 import { isAddress } from '../../utils'
@@ -67,4 +68,37 @@ export function useSortedTokensByQuery(tokens: Token[] | undefined, searchQuery:
 
     return [...exactMatches, ...symbolSubstrings, ...rest]
   }, [tokens, searchQuery])
+}
+
+export function useFilterDexByQuery(
+  dexes: ExternalRouterData[], 
+  searchQuery: string
+): ExternalRouterData[] {
+  return useMemo(() => {
+    const symbolMatch = searchQuery
+      .toLowerCase()
+      .split(/\s+/)
+      .filter((s) => s.length > 0)
+
+    if (symbolMatch.length > 1) {
+      return dexes
+    }
+
+    const exactMatches: ExternalRouterData[] = []
+    const symbolSubstrings: ExternalRouterData[] = []
+    const rest: ExternalRouterData[] = []
+
+    // sort tokens by exact match -> substring on symbol match -> rest
+    dexes.map((dex) => {
+      if (dex.pairToken.symbol?.toLowerCase() === symbolMatch[0]) {
+        return exactMatches.push(dex)
+      }
+      if (dex.pairToken.symbol?.toLowerCase().startsWith(searchQuery.toLowerCase().trim())) {
+        return symbolSubstrings.push(dex)
+      }
+      return rest.push(dex)
+    })
+
+    return [...exactMatches, ...symbolSubstrings, ...rest]
+  }, [dexes, searchQuery])
 }

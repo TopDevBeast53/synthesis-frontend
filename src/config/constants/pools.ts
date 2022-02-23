@@ -33,7 +33,7 @@ const pools: SerializedPoolConfig[] = [
     stakingToken: serializedTokens.aura,
     earningToken: serializedTokens.aura,
     contractAddress: {
-      97: '0x3c72E6b19FAC06D07ee90dd7AFe9c655E798B5Ab',
+      97: '0xF08c198e743883Fc0a4448Cfe5d5e537b52e6390',
       56: '',
     },
     poolCategory: PoolCategory.CORE,

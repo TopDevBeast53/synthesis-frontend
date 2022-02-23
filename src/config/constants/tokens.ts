@@ -13,7 +13,7 @@ const defineTokens = <T extends TokenList>(t: T) => t
 export const mainnetTokens = defineTokens({
   aura: new Token(
     TESTNET,
-    '0xC5e5A2ca4A41aF3B01289c2071E35346c7f7C89E',
+    '0xAfD66ae7f555bCA74A42A3cE0a1C1b4Fc65C5715',
     18,
     'AURA',
     'Aura',
@@ -1954,7 +1954,7 @@ export const mainnetTokens = defineTokens({
 export const testnetTokens = defineTokens({
   aura: new Token(
     TESTNET,
-    '0xC5e5A2ca4A41aF3B01289c2071E35346c7f7C89E',
+    '0xAfD66ae7f555bCA74A42A3cE0a1C1b4Fc65C5715',
     18,
     'AURA',
     'Aura',
