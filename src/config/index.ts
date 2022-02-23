@@ -14,6 +14,8 @@ export const BASE_BSC_SCAN_URLS = {
   [ChainId.TESTNET]: 'https://testnet.bscscan.com',
 }
 
+export const BASE_SOLANA_SCAN_URLS = 'https://explorer.solana.com/'
+
 // CAKE_PER_BLOCK details
 // 40 AURAis minted per block
 // 20 AURAper block is sent to Burn pool (A farm just for burning cake)

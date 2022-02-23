@@ -7,7 +7,7 @@ import { BigNumber } from '@ethersproject/bignumber'
 import { abi as IUniswapV2Router02ABI } from '@uniswap/v2-periphery/build/IUniswapV2Router02.json'
 import { ChainId, JSBI, Percent, Token, CurrencyAmount, Currency, ETHER } from 'sdk'
 import { ROUTER_ADDRESS } from '../config/constants'
-import { BASE_BSC_SCAN_URLS } from '../config'
+import { BASE_BSC_SCAN_URLS, BASE_SOLANA_SCAN_URLS } from '../config'
 import { TokenAddressMap } from '../state/lists/hooks'
 import { simpleRpcProvider } from './providers'
 
@@ -18,6 +18,27 @@ export function isAddress(value: any): string | false {
   } catch {
     return false
   }
+}
+
+export function getSolanaScanLink(
+  data: string | number,
+  cluster: 'mainnet' | 'testnet' | 'devnet',
+): string {
+  let append
+  switch (cluster) {
+    case 'testnet': {
+      append = "?cluster=testnet"
+      break
+    }
+    case 'devnet': {
+      append = "?cluster=devnet"
+      break
+    }
+    default: {
+      append = ""
+    }
+  }
+  return `${BASE_SOLANA_SCAN_URLS}/address/${data}${append}`
 }
 
 export function getBscScanLink(

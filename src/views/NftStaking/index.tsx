@@ -11,6 +11,7 @@ import NftCard from './components/NftCard'
 import { useStakingNft } from './hooks/useStakingNft'
 import { useBoostNft } from './hooks/useBoostNft'
 import Page from '../Page'
+import { TokenInfo } from './type'
 
 const BodyWrapper = styled(Card)`
   border-radius: 25px;
@@ -97,14 +98,13 @@ export default function NftStaking() {
         })
         setTokens(updatedTokens)
         setSelectedTokenIds([])
-        setLoading(false)
       } else {
         toastError(t('Error'), t('Maybe show transaction hash so they could go there and check the problem.'))
-        setLoading(false)
       }
     } catch (e) {
       logError(e)
       toastError(t('Error'), t('Please try again.'))
+    } finally {
       setLoading(false)
     }
   }, [stakingNft, viewStaked, tokens, selectedTokenIds, toastSuccess, toastError, t])
@@ -117,14 +117,13 @@ export default function NftStaking() {
         toastSuccess(t('Success'), t('Withdraw'))
         const res = await getPendingReward()
         setPendingReward(res.toString())
-        setLoadingPendingReward(false)
       } else {
         toastError(t('Error'), t('Maybe show transaction hash so they could go there and check the problem.'))
-        setLoadingPendingReward(false)
       }
     } catch (e) {
       logError(e)
       toastError(t('Error'), t('Please try again.'))
+    } finally {
       setLoadingPendingReward(false)
     }
   }, [getPendingReward, withdrawReward, toastSuccess, toastError, t])
@@ -134,26 +133,23 @@ export default function NftStaking() {
       setLoading(true)
       const receipt = await boostAuraNFT(tokenId, accumulatedAP)
       if (receipt.status){
-        const _upgradedToken = await getAuraNftInfoById(tokenId)
+        const _upgradedToken: TokenInfo = await getAuraNftInfoById(tokenId)
         const _accumulatedAP = await getAccumulatedAP()
         toastSuccess(t('Success'), t('Boosted!'))
-        const _tokens = tokens
-        const updatedTokens = _tokens.map((token:any)=>{
-          let _t = token
+        const updatedTokens = tokens.map((token: TokenInfo)=>{
           if (token.tokenId.toString() === tokenId.toString())
-            _t = {...token, ..._upgradedToken}
-          return _t
+            return {...token, ..._upgradedToken}
+          return token
         })
         setTokens(updatedTokens)
         setAccumulatedAP(_accumulatedAP)
-        setLoading(false)
       } else {
         toastError(t('Error'), t('Error transaction Or Insufficient accumulated AuraPoints .'))
-        setLoading(false)
       }
     } catch (e) {
       logError(e)
       toastError(t('Error'), t('Please try again.'))
+    } finally {
       setLoading(false)
     }
   }, [boostAuraNFT, getAccumulatedAP, getAuraNftInfoById, tokens, accumulatedAP, toastSuccess, toastError, t])
@@ -187,6 +183,39 @@ export default function NftStaking() {
       </ButtonMenu>
     </Wrapper>
   )
+  
+  const tokensUI = (
+    <div>
+      <Grid padding="0px 8px" gridGap="10px" gridTemplateColumns={['1fr', '1fr', 'repeat(2, 1fr)', 'repeat(3, 1fr)']} mb="24px">
+        {filterNft.map((token) => {
+          return (
+            <NftCard
+              key={token.tokenId}
+              bgSrc="https://uyxpevlntmux.usemoralis.com:2053/server/files/KYoDoH8y6hy28lUBNtmo6WEimx85bBnNHdz2WnDj/5dc6161d4ae2a344a502dfa509c4004e_perso.png"
+              tokenId={token.tokenId}
+              isStaked={token.isStaked}
+              level={token.level}
+              auraPoints={token.auraPoints}
+              enableBoost={parseInt(accumulatedAP)>0}
+              disabled={token.disabled}
+              remainAPToNextLevel={token.remainAPToNextLevel}
+              onhandleChangeCheckBox={onhandleCheckbox}
+              onhandleBoost={handleBoost}
+            >
+              <Flex alignItems="center">
+                <Text fontSize="12px" color="textSubtle">
+                  AuraToken
+                </Text>
+              </Flex>
+            </NftCard>
+          )
+        })}
+      </Grid>
+      <Button onClick={handleStaking} disabled={!enableStakingBtn} style={{ marginBottom: '10px' }}>
+        {viewStaked? "Unstaking" : "Staking"}
+      </Button>
+    </div>
+  )
 
   return (
     <Page>
@@ -209,7 +238,7 @@ export default function NftStaking() {
           <Flex justifyContent="center" padding="12px">
             {stakedOrUnstakedSwitch}
           </Flex>
-          {loading && (
+          {loading ? (
             <Flex
               position="relative"
               height="300px"
@@ -225,41 +254,8 @@ export default function NftStaking() {
                 <CircleLoader size="30px"/>
               </Flex>
             </Flex>
-          )}
-          {!loading && (
-            <Grid padding="0px 8px" gridGap="10px" gridTemplateColumns={['1fr', '1fr', 'repeat(2, 1fr)', 'repeat(3, 1fr)']} mb="24px">
-              {filterNft.map((token) => {
-                return (
-                  <NftCard
-                    key={token.tokenId}
-                    bgSrc="https://uyxpevlntmux.usemoralis.com:2053/server/files/KYoDoH8y6hy28lUBNtmo6WEimx85bBnNHdz2WnDj/5dc6161d4ae2a344a502dfa509c4004e_perso.png"
-                    tokenId={token.tokenId}
-                    isStaked={token.isStaked}
-                    level={token.level}
-                    auraPoints={token.auraPoints}
-                    enableBoost={parseInt(accumulatedAP)>0}
-                    disabled={token.disabled}
-                    remainAPToNextLevel={token.remainAPToNextLevel}
-                    onhandleChangeCheckBox={onhandleCheckbox}
-                    onhandleBoost={handleBoost}
-                  >
-                    <Flex alignItems="center">
-                      <Text fontSize="12px" color="textSubtle">
-                        AuraToken
-                      </Text>
-                    </Flex>
-                  </NftCard>
-                )
-              })}
-            </Grid>
-          )}
-          {!loading && (
-            <Button onClick={handleStaking} disabled={!enableStakingBtn} style={{ marginBottom: '10px' }}>
-                {viewStaked? "Unstaking" : "Staking"}
-            </Button>
-          )}
+          ) : (tokens.length>0?tokensUI:"No NFTs found")}
         </Flex>
-        
       </AppBody>
     </Page>
   )

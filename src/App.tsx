@@ -50,10 +50,12 @@ const AddLiquidity = lazy(() => import('./views/AddLiquidity'))
 const Liquidity = lazy(() => import('./views/Pool'))
 const PoolFinder = lazy(() => import('./views/PoolFinder'))
 const RemoveLiquidity = lazy(() => import('./views/RemoveLiquidity'))
-const DevTool = lazy(() => import('./views/Dev'));
-const Migrator = lazy(() => import('./views/LiquidityMigration'));
-const NftStaking = lazy(() => import('./views/NftStaking'));
-const Referrals = lazy(() => import('./views/Referrals'));
+const DevTool = lazy(() => import('./views/Dev'))
+const Migrator = lazy(() => import('./views/LiquidityMigration'))
+const NftStaking = lazy(() => import('./views/NftStaking'))
+const NftBridge = lazy(() => import('./views/NftBridge'))
+const Referrals = lazy(() => import('./views/Referrals'))
+
 // const Info = lazy(() => import('./views/Info'))
 // const NftMarket = lazy(() => import('./views/Nft/market'))
 // const ProfileCreation = lazy(() => import('./views/ProfileCreation'))
@@ -108,8 +110,8 @@ const App: React.FC = () => {
             <Route path="/nft-staking">
               <NftStaking />
             </Route>
-            <Route path="/nft-boost">
-              <NftStaking />
+            <Route path="/nft-bridge">
+              <NftBridge />
             </Route>
             <Route path="/referrals">
                 <Referrals />

@@ -103,3 +103,6 @@ export const getAuraChefNftAddress = () => {
 export const getVotingAddress = () => {
   return getAddress(addresses.voting)
 }
+export const getAuraNftBridgeAddress = () => {
+  return getAddress(addresses.auraNftBridge)
+}

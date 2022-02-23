@@ -106,11 +106,11 @@ export default {
   },
   auraChefNFT: {
     56: '',
-    97: '0xa658eCB873aa6d8e09426BE80A3Ace5BAeB4Bffd',
+    97: '0x6C57410c639c6A10208185853b8990d32dcF6d14',
   },
   auraNFT: {
     56: '',
-    97: '0x3e7947282fc0B6389349833550f3ad70d09E9802',
+    97: '0x8b2b085339D11DcF0FA0aaD985C30f82eb49a880',
   },
   auraMigrator: {
     56: '0x00000000000000',
@@ -119,5 +119,9 @@ export default {
   voting: {
     56: '0x00000000000000',
     97: '0xC3A5dc2D9eC0e8CC6603F81FDc0Fd7aB53E389b3',
+  },
+  auraNftBridge: {
+    56: '0x00000000000000',
+    97: '0x0611236E0335308B9BC4C893e750c089E582dB14',
   },
 }
