@@ -1,8 +1,62 @@
-import { Card, CardBody, Flex, Heading, Image, Text, Checkbox, Button } from 'uikit'
+import { Card, Flex, Image, Text, Checkbox, Button } from 'uikit'
 
-import React, {useState } from 'react'
-import { Link } from 'react-router-dom'
-import styled, { css } from 'styled-components'
+import React, { useState, useCallback } from 'react'
+import styled from 'styled-components'
+
+import NFTAuraIcon from './NFTAuraIcon'
+import { NFTCardText, NFTCardTextType } from './NFTCardText'
+
+
+const NFTCard = styled(Card)`
+  width: 422px;
+  height: 730px;
+  padding: 20px 28px 39px 28px;
+`
+
+const NFTNameText = styled(Text)`
+  font-size: 30px;
+  color: rgba(249,250,250, 1)
+  line-height: 30px;
+  weight: 400;
+`
+
+const NFTCardInfoPanel = styled(Card)`
+  background-color: rgba(16, 20, 17, 0.7);
+  border-radius: 10px;
+  padding: 20px 29px 23px 29px;
+`
+
+enum NFTInfoMarkerType {
+  level,
+  points,
+  remainNextLevel
+}
+
+const NFTInfoMarker = styled.div<{marker: NFTInfoMarkerType}>`
+  width: 14px;
+  height: 14px;
+  border-radius: 7px;
+
+  ${({marker}) => {
+    switch (marker) {
+      case NFTInfoMarkerType.level:
+        return 'background: #FF6A50';
+      case NFTInfoMarkerType.points:
+        return 'background: #ABBEFF';
+      case NFTInfoMarkerType.remainNextLevel:
+        return 'background: #ABBEFF';
+      default: 
+        return 'background: white';
+    }
+  }}
+`
+
+const NFTInfoSeparator = styled.div`
+  margin: 7px 0;
+  height: 1px;
+  opacity: 0.5;
+  background: rgba(249, 250, 250, 0.5);
+`
 
 interface NftCardProps {
   bgSrc: string
@@ -12,39 +66,14 @@ interface NftCardProps {
   auraPoints: number
   remainAPToNextLevel: number
   enableBoost: boolean
-  uri?: string
   disabled?: boolean
   onhandleChangeCheckBox: (tokenId: string, isChecked: boolean) => void
   onhandleBoost: (tokenId: string) => void
 }
 
-const StyledHotCollectionCard = styled(Card)<{ disabled?: boolean }>`
-  border-radius: 8px;
-  border-bottom-left-radius: 26px;
-  transition: opacity 200ms;
-
-  & > div {
-    border-radius: 8px;
-    border-bottom-left-radius: 26px;
-  }
-
-  ${({ theme }) => theme.mediaQueries.lg} {
-    ${({ disabled }) =>
-      disabled
-        ? ''
-        : css`
-            &:hover {
-              cursor: pointer;
-              opacity: 0.6;
-            }
-          `}
-  }
-`
-
-const StyledImage = styled(Image)`
-  img {
-    border-radius: 4px;
-  }
+const NFTImage = styled(Image)`
+  border-radius: 5px;
+  background-color: black;
 `
 
 const NftCard: React.FC<NftCardProps> = ({
@@ -55,66 +84,92 @@ const NftCard: React.FC<NftCardProps> = ({
   auraPoints,
   remainAPToNextLevel,
   enableBoost,
-  uri,
   disabled,
   onhandleChangeCheckBox,
   onhandleBoost,
 }) => {
   const [isRememberChecked, setIsRememberChecked] = useState(false)
 
-  const handleChangeCheckBox = () => {
+  const handleChangeCheckBox = useCallback(() => {
     onhandleChangeCheckBox(tokenId, !isRememberChecked)
     setIsRememberChecked(!isRememberChecked)
-  }
+  }, 
+    [onhandleChangeCheckBox, tokenId, isRememberChecked,setIsRememberChecked]
+  );
 
   const handleBoost = () => {
     onhandleBoost(tokenId)
   }
 
-  const renderBody = () => (
-    <CardBody p="8px">
-      <StyledImage src={bgSrc} height={220} width={375} />
-      <Flex
-        position="relative"
-        height="175px"
-        justifyContent="center"
-        alignItems="flex-end"
-        py="8px"
-        flexDirection="column"
+  return (
+    <NFTCard m="19px">
+      <NFTImage src={bgSrc} width={366} height={326}/>
+
+      <Flex 
+        justifyContent="space-between" 
+        alignItems="center"
+        style={{marginTop: '42px', marginBottom: '28px'}}
       >
-        <Heading color="primary" as="h3" mb="8px">
-          {isStaked? 'staked' : ''}
-        </Heading>
-        <Text fontSize="12px" color="secondary" bold mb="8px" ml="4px">
-          Level: {level}
-        </Text>
-        <Text fontSize="12px" color="secondary" bold mb="8px" ml="4px">
-          AuraPoints: {auraPoints}
-        </Text>
-        <Text fontSize="12px" color="secondary" bold mb="8px" ml="4px" paddingBottom="10px">
-          remainAPToNextLevel: {remainAPToNextLevel}
-        </Text>
-        <Checkbox
-          name="confirmed"
-          type="checkbox"
-          checked={isRememberChecked}
-          onChange={handleChangeCheckBox}
-          scale="sm"
-          disabled={disabled}
-        />
+        <NFTAuraIcon />
+        <NFTNameText>
+          Pink Rose {' '}
+          <Checkbox
+            name="confirmed"
+            type="checkbox"
+            checked={isRememberChecked}
+            onChange={handleChangeCheckBox}
+            scale="sm"
+            disabled={disabled}
+          />
+        </NFTNameText>
       </Flex>
+
+      <NFTCardInfoPanel style={{marginBottom: '25px'}}>
+        <Flex flexDirection="column">
+          <Flex justifyContent="space-between" alignItems="center">
+            <Flex alignItems="center">
+              <NFTInfoMarker marker={NFTInfoMarkerType.level} />
+              <NFTCardText type={NFTCardTextType.cardCaption} style={{marginLeft: '14px'}}>
+                Level
+              </NFTCardText>
+            </Flex>
+            <NFTCardText type={NFTCardTextType.cardValue}>
+              {level}
+            </NFTCardText>
+          </Flex>
+          <NFTInfoSeparator />
+          <Flex justifyContent="space-between" alignItems="center">
+            <Flex alignItems="center">
+              <NFTInfoMarker marker={NFTInfoMarkerType.points} />
+              <NFTCardText type={NFTCardTextType.cardCaption} style={{marginLeft: '14px'}}>
+              AuraPoints
+              </NFTCardText>
+            </Flex>
+            <NFTCardText type={NFTCardTextType.cardValue}>
+              {auraPoints}
+            </NFTCardText>
+          </Flex>
+          <NFTInfoSeparator />
+          <Flex justifyContent="space-between" alignItems="center">
+            <Flex alignItems="center">
+              <NFTInfoMarker marker={NFTInfoMarkerType.remainNextLevel} />
+              <NFTCardText type={NFTCardTextType.cardCaption} style={{marginLeft: '14px'}}>
+                Remain APTo Next Level
+              </NFTCardText>
+            </Flex>
+            <NFTCardText type={NFTCardTextType.cardValue}>
+              {remainAPToNextLevel}
+            </NFTCardText>
+          </Flex>
+        </Flex>
+      </NFTCardInfoPanel>
+
       <Flex position="relative" padding="0px 14px" flexDirection="column">
         <Button onClick={handleBoost} disabled={!enableBoost || disabled} style={{ marginBottom: '8px' }}>
             Boost
         </Button>
       </Flex>
-    </CardBody>
-  )
-
-  return (
-    <StyledHotCollectionCard disabled={disabled}>
-      {uri ? <Link to={uri}>{renderBody()}</Link> : <div style={{ cursor: 'default' }}>{renderBody()}</div>}
-    </StyledHotCollectionCard>
+    </NFTCard>
   )
 }
 

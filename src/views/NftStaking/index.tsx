@@ -1,10 +1,15 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import filter from 'lodash/filter'
-import { Flex, Heading, Button, Card, Text, Grid, ButtonMenu, ButtonMenuItem } from 'uikit'
+import { Flex, Heading, Button, Card, Text, ButtonMenu, ButtonMenuItem } from 'uikit'
 import { useTranslation } from 'contexts/Localization'
 import useToast from 'hooks/useToast'
 import styled from 'styled-components'
 import { logError } from 'utils/sentry'
+
+import { CurrencyLogo } from 'components/Logo'
+import unserializedTokens from 'config/constants/tokens'
+
+import { NFTCardText, NFTCardTextType } from './components/NFTCardText'
 import { useGetAuraNftInfo } from './hooks/useGetAuraNftInfo'
 import CircleLoader from '../../components/Loader/CircleLoader'
 import NftCard from './components/NftCard'
@@ -13,12 +18,25 @@ import { useBoostNft } from './hooks/useBoostNft'
 import Page from '../Page'
 import { TokenInfo } from './type'
 
-const BodyWrapper = styled(Card)`
-  border-radius: 25px;
-  max-width: 800px;
-  width: 100%;
-  height: fit-content;
+const PageHeading = styled(Heading)`
+  font-size: 70px;
+  weight: 400;
+  line-height: 73.5px;
+  padding-bottom: 84px;
+`;
+
+const NFTDisplayPanel = styled(Flex)`
+  position: relative;
+  flex-direction: column;
+  width: 70%;
+  max-widht: 1200px;
+`;
+
+const GeneralCard = styled(Card)`
+  padding: 14px 29px 15px 29px;
+  min-width: 288px;
 `
+
 const Wrapper = styled.div`
   display: flex;
   justify-content: center;
@@ -33,11 +51,6 @@ const Wrapper = styled.div`
     margin-left: 16px;
   }
 `
-
-function AppBody({ children }: { children: React.ReactNode }) {
-  return <BodyWrapper>{children}</BodyWrapper>
-}
-
 export default function NftStaking() {
   const { t } = useTranslation()
   const { toastError, toastSuccess } = useToast()
@@ -175,7 +188,7 @@ export default function NftStaking() {
     setEnableStakingBtn(false)
   }
 
-  const stakedOrUnstakedSwitch = (
+  const ShowStackedSwitch = () => (
     <Wrapper>
       <ButtonMenu activeIndex={viewStaked? 0 : 1} onItemClick={onhandleItemClick} scale="sm" variant="subtle">
         <ButtonMenuItem>{t('Staked')}</ButtonMenuItem>
@@ -186,7 +199,7 @@ export default function NftStaking() {
   
   const tokensUI = (
     <div>
-      <Grid padding="0px 8px" gridGap="10px" gridTemplateColumns={['1fr', '1fr', 'repeat(2, 1fr)', 'repeat(3, 1fr)']} mb="24px">
+      <Flex flexWrap="wrap" style={{margin: '-19px'}}>
         {filterNft.map((token) => {
           return (
             <NftCard
@@ -210,34 +223,53 @@ export default function NftStaking() {
             </NftCard>
           )
         })}
-      </Grid>
-      <Button onClick={handleStaking} disabled={!enableStakingBtn} style={{ marginBottom: '10px' }}>
-        {viewStaked? "Unstaking" : "Staking"}
+      </Flex>
+      <Button onClick={handleStaking} disabled={!enableStakingBtn} style={{ margin: '10px 0' }}>
+          {viewStaked ? "Unstaking" : "Staking"}
       </Button>
     </div>
   )
 
+  const auraToken = unserializedTokens.aura;
+
   return (
     <Page>
-      <AppBody>
-        <Flex position="relative" padding="24px" flexDirection="column">
-          <Heading as="h2" mb="14px">
-            My NFTs 
-          </Heading>
-          <Text fontSize="14px" paddingBottom="15px">
-            My Accumulated AuraPoints : {loadingAccumulatedAP ? "loading" : accumulatedAP}
-          </Text>
-          <Flex paddingBottom="18px">
-            <Text fontSize="14px" paddingRight="15px">
-              Pending Reward : {loadingPendingReward ? "loading" : pendingReward}
-            </Text>
-            <Button scale="sm" onClick={handleWithdraw}>
+      <PageHeading> 
+        My NFTs 
+      </PageHeading>
+
+      <NFTDisplayPanel>
+        <Flex justifyContent="space-between">
+          <Flex>
+          <GeneralCard>
+            <NFTCardText type={NFTCardTextType.generalCaption} style={{paddingBottom: '7px'}}>
+              My Accumulated Aura Points
+            </NFTCardText>
+            <Flex alignItems="center"> 
+              <CurrencyLogo currency={auraToken} size="41px"/>
+              <NFTCardText type={NFTCardTextType.generalValue} style={{paddingLeft: '18px'}}>
+                {loadingAccumulatedAP ? "loading" : accumulatedAP}
+              </NFTCardText>
+            </Flex>
+          </GeneralCard>
+          <GeneralCard style={{marginLeft: '25px'}}>
+            <NFTCardText type={NFTCardTextType.generalCaption} style={{paddingBottom: '7px'}}>
+              Pending Reward
+            </NFTCardText>
+            <Flex alignItems="center"> 
+              <NFTCardText type={NFTCardTextType.generalValue}>
+                {loadingPendingReward ? "loading" : pendingReward}
+              </NFTCardText>
+              <Button onClick={handleWithdraw} style={{marginLeft: '25px'}}>
                 Withdraw
-            </Button>
+              </Button>
+            </Flex>
+          </GeneralCard>
           </Flex>
-          <Flex justifyContent="center" padding="12px">
-            {stakedOrUnstakedSwitch}
-          </Flex>
+          <ShowStackedSwitch />
+        </Flex>
+
+        <div style={{marginTop: '62px'}}>
           {loading ? (
             <Flex
               position="relative"
@@ -254,9 +286,16 @@ export default function NftStaking() {
                 <CircleLoader size="30px"/>
               </Flex>
             </Flex>
-          ) : (tokens.length>0?tokensUI:"No NFTs found")}
-        </Flex>
-      </AppBody>
+          ) : (
+            tokens.length > 0 
+              ? tokensUI 
+              : <NFTCardText type={NFTCardTextType.generalValue}>
+                  No NFTs found
+                </NFTCardText>
+              )
+          }
+        </div>
+      </NFTDisplayPanel>
     </Page>
   )
 }

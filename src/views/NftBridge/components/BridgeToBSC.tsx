@@ -1,10 +1,6 @@
-import React, { useState, useCallback, useEffect } from 'react'
-import { Flex, Heading, Button, Card, Text, Grid, ButtonMenu, ButtonMenuItem, NotificationDot } from 'uikit'
-import Select from 'components/Select/Select'
-import { useTranslation } from 'contexts/Localization'
-import useToast from 'hooks/useToast'
-import styled from 'styled-components'
-import { logError } from 'utils/sentry'
+import React from 'react'
+import { Flex, Heading, Button } from 'uikit'
+
 
 export default function BridgeToBSC() {
   return (

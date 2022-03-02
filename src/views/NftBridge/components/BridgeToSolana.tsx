@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react'
-import { Flex, Heading, Button, Text, Grid } from 'uikit'
+import { Flex, Heading, Text, Grid } from 'uikit'
 import { useTranslation } from 'contexts/Localization'
 import useToast from 'hooks/useToast'
 import { logError } from 'utils/sentry'

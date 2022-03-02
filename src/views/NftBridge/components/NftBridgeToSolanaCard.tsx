@@ -1,7 +1,6 @@
-import { Card, CardBody, Flex, Heading, Image, Text, Checkbox, Button } from 'uikit'
+import { Card, CardBody, Flex, Image, Text, Button } from 'uikit'
 
-import React, {useState } from 'react'
-import { Link } from 'react-router-dom'
+import React from 'react'
 import styled, { css } from 'styled-components'
 
 interface NftCardProps {
