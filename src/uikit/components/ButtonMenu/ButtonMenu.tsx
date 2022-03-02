@@ -13,15 +13,10 @@ const getBackgroundColor = ({ theme, variant }: StyledButtonMenuProps) => {
   return theme.colors[variant === variants.SUBTLE ? "input" : "tertiary"];
 };
 
-const getBorderColor = ({ theme, variant }: StyledButtonMenuProps) => {
-  return theme.colors[variant === variants.SUBTLE ? "inputSecondary" : "disabled"];
-};
-
 const StyledButtonMenu = styled.div<StyledButtonMenuProps>`
   background-color: ${getBackgroundColor};
-  border-radius: 12px;
+  border-radius: 8px;
   display: ${({ fullWidth }) => (fullWidth ? "flex" : "inline-flex")};
-  border: 1px solid ${getBorderColor};
   width: ${({ fullWidth }) => (fullWidth ? "100%" : "auto")};
 
   & > button,
@@ -42,7 +37,6 @@ const StyledButtonMenu = styled.div<StyledButtonMenuProps>`
   ${({ disabled, theme, variant }) => {
     if (disabled) {
       return `
-        opacity: 0.5;
 
         & > button:disabled {
           background-color: transparent;
