@@ -16,7 +16,7 @@ const ExternalRouterSelectButton = styled(Button)`
     background-color: ${({ theme }) => theme.colors.input};
     color: ${({ theme }) => theme.colors.text};
     box-shadow: none;
-    border-radius: 12px;
+    border-radius: 4px;
     width: 100%;
 `
 
