@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Flex, Card, ButtonMenu, ButtonMenuItem } from 'uikit'
 import { useTranslation } from 'contexts/Localization'
 import styled from 'styled-components'
+import WalletAdapter from './components/WalletAdapter'
 import BridgeToBSC from './components/BridgeToBSC'
 import BridgeToSolana from './components/BridgeToSolana'
 import Page from '../Page'
@@ -56,7 +57,7 @@ export default function NftBridge() {
           <Flex justifyContent="center" padding="12px">
             {stakedOrUnstakedSwitch}
           </Flex>
-          {viewPageIndex === 0 ? (<BridgeToSolana/>) : (<BridgeToBSC/>)}
+          {viewPageIndex === 0 ? (<BridgeToSolana/>) : ( <WalletAdapter><BridgeToBSC/></WalletAdapter>)}
         </Flex>
       </AppBody>
     </Page>

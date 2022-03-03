@@ -122,6 +122,6 @@ export default {
   },
   auraNftBridge: {
     56: '0x00000000000000',
-    97: '0x0611236E0335308B9BC4C893e750c089E582dB14',
+    97: '0xf47eC284E34e0F6DF1B430E1Fbee628645F9bD50',
   },
 }

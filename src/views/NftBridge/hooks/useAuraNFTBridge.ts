@@ -56,10 +56,10 @@ export const useAuraNFTBridge = () => {
     return tx.wait()
   }, [getAuraNFTBridgeContract, callWithGasPrice])
   
-  const bridgeFromSolana = useCallback(async (externalTokenId, owner, uri) => {
-    const tx = await callWithGasPrice(getAuraNFTBridgeContract(), 'bridgeFromSolana', [externalTokenId, owner, uri])
+  const bridgeFromSolana = useCallback(async (externalTokenId, uri) => {
+    const tx = await callWithGasPrice(getAuraNFTBridgeContract(), 'bridgeFromSolana', [externalTokenId, account, uri])
     return tx.wait()
-  }, [getAuraNFTBridgeContract, callWithGasPrice])
+  }, [getAuraNFTBridgeContract, account, callWithGasPrice])
 
   const mintBridgedNFT = useCallback(async (externalTokenId) => {
     const tx = await callWithGasPrice(getAuraNFTBridgeContract(), 'mintBridgedNFT', [externalTokenId])
