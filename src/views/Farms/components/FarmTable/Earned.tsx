@@ -4,6 +4,7 @@ import { Skeleton } from 'uikit'
 
 export interface EarnedProps {
   earnings: number
+  // eslint-disable-next-line react/no-unused-prop-types
   pid: number
 }
 
