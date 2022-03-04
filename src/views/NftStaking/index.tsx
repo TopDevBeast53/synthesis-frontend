@@ -17,6 +17,7 @@ import { useStakingNft } from './hooks/useStakingNft'
 import { useBoostNft } from './hooks/useBoostNft'
 import Page from '../Page'
 import { TokenInfo } from './type'
+import NFTStartCollectPanel from './components/NFTStartCollectPanel'
 
 const PageHeading = styled(Heading)`
   font-size: 70px;
@@ -29,7 +30,7 @@ const NFTDisplayPanel = styled(Flex)`
   position: relative;
   flex-direction: column;
   width: 70%;
-  max-widht: 1200px;
+  max-width: 1200px;
 `;
 
 const GeneralCard = styled(Card)`
@@ -291,10 +292,8 @@ export default function NftStaking() {
           ) : (
             tokens.length > 0 
               ? tokensUI 
-              : <NFTCardText type={NFTCardTextType.generalValue}>
-                  No NFTs found
-                </NFTCardText>
-              )
+              : <NFTStartCollectPanel />
+            )
           }
         </div>
       </NFTDisplayPanel>
