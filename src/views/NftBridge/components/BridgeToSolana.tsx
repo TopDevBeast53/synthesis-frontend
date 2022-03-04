@@ -5,8 +5,8 @@ import useToast from 'hooks/useToast'
 import { logError } from 'utils/sentry'
 import CircleLoader from '../../../components/Loader/CircleLoader'
 import AddressInputPanel from './AddressInputPanel'
-import NftBridgeToSolanaCard from './NftBridgeToSolanaCard'
 import { useAuraNFTBridge } from '../hooks/useAuraNFTBridge'
+import NftCard from '../../NftStaking/components/NftCard'
 
 
 export default function BridgeToSolana() {
@@ -80,23 +80,38 @@ export default function BridgeToSolana() {
     setDestination(value)
   }, [])
 
-  const tokensGridUI = (
-    <Grid gridGap="10px" gridTemplateColumns={['1fr', '1fr', 'repeat(2, 1fr)', 'repeat(3, 1fr)']} mb="24px">
-      {tokens.map((token) => {
-        return (
-          <NftBridgeToSolanaCard
-            key={token.tokenId}
-            bgSrc={token.uri}
-            tokenId={token.tokenId}
-            level={token.level}
-            enableApproveBtn={!token.isApproved}
-            enableBridgeBtn={token.isApproved && destination.length === 44}
-            onhandleApprove={handleApprove}
-            onhandleBridge={handleBridge}
-          />
-        )
-      })}
-    </Grid>
+  const TokensList = () => (
+    <div>
+      <Flex flexWrap="wrap" style={{margin: '-19px'}}>
+        {tokens.map((token) => {
+          return (
+            <NftCard
+              key={token.tokenId}
+              bgSrc={token.uri}
+              tokenId={token.tokenId}
+              isStaked={token.isStaked}
+              isApproved={token.isApproved}
+              level={token.level}
+              auraPoints={token.auraPoints}
+              enableBoost={false}
+              disabled={token.disabled}
+              remainAPToNextLevel={token.remainAPToNextLevel}
+
+              enableBridgeApprove={!token.isApproved}
+              enableBridgeMutation={token.isApproved && destination.length === 44}
+              onHandleBridgeApprove={handleApprove}
+              onHandleBridgeMutation={handleBridge}
+            >
+              <Flex alignItems="center">
+                <Text fontSize="12px" color="textSubtle">
+                  AuraToken
+                </Text>
+              </Flex>
+            </NftCard>
+          )
+        })}
+      </Flex>
+    </div>
   )
 
   return (
@@ -123,7 +138,7 @@ export default function BridgeToSolana() {
         </Flex>
       )
       :
-      (tokens.length>0?tokensGridUI : "No NFTs found")}
+      (tokens.length > 0? <TokensList /> : "No NFTs found")}
     </Flex>
   )
 }

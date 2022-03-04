@@ -3,6 +3,8 @@ import { getProviderOrSigner } from 'utils'
 import { Contract } from '@ethersproject/contracts'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import { ethers } from 'ethers'
+import { formatBigNumber } from 'utils/formatBalance'
 
 import auraNFTBridgeABI from 'config/abi/auraNFTBridge.json'
 import auraNFTABI from 'config/abi/AuraNFT.json'
@@ -38,6 +40,8 @@ export const useAuraNFTBridge = () => {
         tokenOwner: token.tokenOwner.toString(),
         level: parseInt(token.level),
         isStaked: token.isStaked,
+        auraPoints: parseInt(formatBigNumber(ethers.BigNumber.from(token.auraPoints.toString()))),
+        remainAPToNextLevel: parseInt(formatBigNumber(ethers.BigNumber.from(token.remainAPToNextLvl.toString()))),
         uri: token.uri,
         isApproved: approvedAddrsInfo[i].toString() === bridgeAddr,
       })).filter((e)=>e.isStaked===false)

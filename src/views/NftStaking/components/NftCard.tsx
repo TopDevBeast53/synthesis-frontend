@@ -6,7 +6,6 @@ import styled from 'styled-components'
 import NFTAuraIcon from './NFTAuraIcon'
 import { NFTCardText, NFTCardTextType } from './NFTCardText'
 
-
 const NFTCard = styled(Card)`
   width: 422px;
   height: 730px;
@@ -62,13 +61,20 @@ interface NftCardProps {
   bgSrc: string
   tokenId: string
   isStaked: boolean
+  isApproved?: boolean
   level: number
   auraPoints: number
   remainAPToNextLevel: number
-  enableBoost: boolean
+  enableBoost?: boolean
   disabled?: boolean
-  onhandleChangeCheckBox: (tokenId: string, isChecked: boolean) => void
-  onhandleBoost: (tokenId: string) => void
+  onhandleChangeCheckBox?: (tokenId: string, isChecked: boolean) => void
+  onhandleBoost?: (tokenId: string) => void
+
+  enableBridgeApprove?: boolean
+  enableBridgeMutation?: boolean
+  onHandleBridgeApprove?: (tokenId: string) => void
+  onHandleBridgeMutation?: (tokenId: string) => void
+
 }
 
 const NFTImage = styled(Image)`
@@ -80,25 +86,46 @@ const NftCard: React.FC<NftCardProps> = ({
   bgSrc,
   tokenId,
   isStaked,
+  isApproved,
   level,
   auraPoints,
   remainAPToNextLevel,
-  enableBoost,
+  enableBoost = false,
+  enableBridgeApprove = false,
+  enableBridgeMutation = false,
   disabled,
   onhandleChangeCheckBox,
   onhandleBoost,
+  onHandleBridgeApprove,
+  onHandleBridgeMutation,
 }) => {
   const [isRememberChecked, setIsRememberChecked] = useState(false)
 
   const handleChangeCheckBox = useCallback(() => {
-    onhandleChangeCheckBox(tokenId, !isRememberChecked)
+    if (onhandleChangeCheckBox != null) {
+      onhandleChangeCheckBox(tokenId, !isRememberChecked)
+    }
     setIsRememberChecked(!isRememberChecked)
   }, 
     [onhandleChangeCheckBox, tokenId, isRememberChecked,setIsRememberChecked]
   );
 
   const handleBoost = () => {
-    onhandleBoost(tokenId)
+    if (onhandleBoost != null) {
+      onhandleBoost(tokenId)
+    }
+  }
+
+  const handleBridgeApprove = () => {
+    if (onHandleBridgeApprove != null) {
+      onHandleBridgeApprove(tokenId)
+    }
+  }
+
+  const handleBridgeMutation = () => {
+    if (onHandleBridgeMutation != null) {
+      onHandleBridgeMutation(tokenId)
+    }
   }
 
   return (
@@ -113,14 +140,17 @@ const NftCard: React.FC<NftCardProps> = ({
         <NFTAuraIcon />
         <NFTNameText>
           Pink Rose {' '}
-          <Checkbox
-            name="confirmed"
-            type="checkbox"
-            checked={isRememberChecked}
-            onChange={handleChangeCheckBox}
-            scale="sm"
-            disabled={disabled}
-          />
+          {
+            onhandleChangeCheckBox && 
+            <Checkbox
+              name="confirmed"
+              type="checkbox"
+              checked={isRememberChecked}
+              onChange={handleChangeCheckBox}
+              scale="sm"
+              disabled={disabled}
+            />
+          }
         </NFTNameText>
       </Flex>
 
@@ -165,9 +195,24 @@ const NftCard: React.FC<NftCardProps> = ({
       </NFTCardInfoPanel>
 
       <Flex position="relative" padding="0px 14px" flexDirection="column">
-        <Button onClick={handleBoost} disabled={!enableBoost || disabled} style={{ marginBottom: '8px' }}>
+        { 
+          onhandleBoost && 
+          <Button onClick={handleBoost} disabled={!enableBoost || disabled} style={{ marginBottom: '8px' }}>
             Boost
-        </Button>
+          </Button>
+        }
+        {
+          enableBridgeApprove && onHandleBridgeApprove && 
+          <Button onClick={handleBridgeApprove} disabled={!enableBridgeApprove || disabled} style={{ marginBottom: '8px' }}>
+            Approve
+          </Button>
+        }
+        {
+          onHandleBridgeMutation && 
+          <Button onClick={handleBridgeMutation} disabled={!enableBridgeMutation || disabled} style={{ marginBottom: '8px' }}>
+            Bridge to Solana
+          </Button>
+        }
       </Flex>
     </NFTCard>
   )
