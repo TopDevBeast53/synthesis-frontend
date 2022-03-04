@@ -1,11 +1,25 @@
 import React, { useState } from 'react'
-import { Flex, Card, ButtonMenu, ButtonMenuItem } from 'uikit'
+import { Flex, Card, ButtonMenu, ButtonMenuItem, Heading } from 'uikit'
 import { useTranslation } from 'contexts/Localization'
 import styled from 'styled-components'
 import WalletAdapter from './components/WalletAdapter'
 import BridgeToBSC from './components/BridgeToBSC'
 import BridgeToSolana from './components/BridgeToSolana'
 import Page from '../Page'
+
+const PageHeading = styled(Heading)`
+  font-size: 70px;
+  weight: 400;
+  line-height: 73.5px;
+  padding-bottom: 84px;
+`;
+
+const NFTDisplayPanel = styled(Flex)`
+  position: relative;
+  flex-direction: column;
+  width: 70%;
+  max-width: 1200px;
+`;
 
 const BodyWrapper = styled(Card)`
   border-radius: 25px;
@@ -52,14 +66,15 @@ export default function NftBridge() {
 
   return (
     <Page>
-      <AppBody>
-        <Flex position="relative" padding="24px" flexDirection="column">
-          <Flex justifyContent="center" padding="12px">
+      <PageHeading> 
+        NFT Bridge 
+      </PageHeading>
+      <NFTDisplayPanel>
+        <Flex flexDirection="row-reverse">
             {stakedOrUnstakedSwitch}
-          </Flex>
-          {viewPageIndex === 0 ? (<BridgeToSolana/>) : ( <WalletAdapter><BridgeToBSC/></WalletAdapter>)}
         </Flex>
-      </AppBody>
+        {viewPageIndex === 0 ? (<BridgeToSolana/>) : ( <WalletAdapter><BridgeToBSC/></WalletAdapter>)}
+      </NFTDisplayPanel>
     </Page>
   )
 }

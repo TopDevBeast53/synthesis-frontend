@@ -83,7 +83,7 @@ const App: React.FC = () => {
     <Router history={history}>
       <ResetCSS />
       <GlobalStyle backgroundImageURL={
-         ['swap', 'nft-staking'].includes(window.location.href.split('/')?.[3]) ? 
+         ['swap', 'nft-staking', 'nft-bridge'].includes(window.location.href.split('/')?.[3]) ? 
         '/images/SwapBackground.svg' : '/images/MainBackground.svg'}
         />
       <Menu>
