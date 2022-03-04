@@ -17,6 +17,7 @@ import { useStakingNft } from './hooks/useStakingNft'
 import { useBoostNft } from './hooks/useBoostNft'
 import Page from '../Page'
 import { TokenInfo } from './type'
+import NFTStartCollectPanel from './components/NFTStartCollectPanel'
 
 const PageHeading = styled(Heading)`
   font-size: 70px;
@@ -29,7 +30,7 @@ const NFTDisplayPanel = styled(Flex)`
   position: relative;
   flex-direction: column;
   width: 70%;
-  max-widht: 1200px;
+  max-width: 1200px;
 `;
 
 const GeneralCard = styled(Card)`
@@ -45,10 +46,6 @@ const Wrapper = styled.div`
   a {
     padding-left: 12px;
     padding-right: 12px;
-  }
-
-  ${({ theme }) => theme.mediaQueries.sm} {
-    margin-left: 16px;
   }
 `
 export default function NftStaking() {
@@ -224,9 +221,6 @@ export default function NftStaking() {
           )
         })}
       </Flex>
-      <Button onClick={handleStaking} disabled={!enableStakingBtn} style={{ margin: '10px 0' }}>
-          {viewStaked ? "Unstaking" : "Staking"}
-      </Button>
     </div>
   )
 
@@ -241,32 +235,41 @@ export default function NftStaking() {
       <NFTDisplayPanel>
         <Flex justifyContent="space-between">
           <Flex>
-          <GeneralCard>
-            <NFTCardText type={NFTCardTextType.generalCaption} style={{paddingBottom: '7px'}}>
-              My Accumulated Aura Points
-            </NFTCardText>
-            <Flex alignItems="center"> 
-              <CurrencyLogo currency={auraToken} size="41px"/>
-              <NFTCardText type={NFTCardTextType.generalValue} style={{paddingLeft: '18px'}}>
-                {loadingAccumulatedAP ? "loading" : accumulatedAP}
+            <GeneralCard>
+              <NFTCardText type={NFTCardTextType.generalCaption} style={{paddingBottom: '7px'}}>
+                My Accumulated Aura Points
               </NFTCardText>
-            </Flex>
-          </GeneralCard>
-          <GeneralCard style={{marginLeft: '25px'}}>
-            <NFTCardText type={NFTCardTextType.generalCaption} style={{paddingBottom: '7px'}}>
-              Pending Reward
-            </NFTCardText>
-            <Flex alignItems="center"> 
-              <NFTCardText type={NFTCardTextType.generalValue}>
-                {loadingPendingReward ? "loading" : pendingReward}
+              <Flex alignItems="center"> 
+                <CurrencyLogo currency={auraToken} size="41px"/>
+                <NFTCardText type={NFTCardTextType.generalValue} style={{paddingLeft: '18px'}}>
+                  {loadingAccumulatedAP ? "loading" : accumulatedAP}
+                </NFTCardText>
+              </Flex>
+            </GeneralCard>
+            <GeneralCard style={{marginLeft: '25px'}}>
+              <NFTCardText type={NFTCardTextType.generalCaption} style={{paddingBottom: '7px'}}>
+                Pending Reward
               </NFTCardText>
-              <Button onClick={handleWithdraw} style={{marginLeft: '25px'}}>
-                Withdraw
-              </Button>
-            </Flex>
-          </GeneralCard>
+              <Flex alignItems="center"> 
+                <NFTCardText type={NFTCardTextType.generalValue}>
+                  {loadingPendingReward ? "loading" : Number.parseFloat(pendingReward).toFixed(4)}
+                </NFTCardText>
+                <Button onClick={handleWithdraw} style={{marginLeft: '25px'}}>
+                  Withdraw
+                </Button>
+              </Flex>
+            </GeneralCard>
           </Flex>
-          <ShowStackedSwitch />
+
+          <Flex flexDirection="column" flexShrink={1}> 
+            <ShowStackedSwitch />
+            <NFTCardText type={NFTCardTextType.generalCaption} style={{marginTop: '10px'}}>
+              Selected: {selectedTokenIds.length}
+            </NFTCardText>
+            <Button onClick={handleStaking} disabled={!enableStakingBtn} style={{ margin: '10px 0' }}>
+              {viewStaked ? "Unstake" : "Stake"}
+            </Button>
+          </Flex>
         </Flex>
 
         <div style={{marginTop: '62px'}}>
@@ -289,10 +292,8 @@ export default function NftStaking() {
           ) : (
             tokens.length > 0 
               ? tokensUI 
-              : <NFTCardText type={NFTCardTextType.generalValue}>
-                  No NFTs found
-                </NFTCardText>
-              )
+              : <NFTStartCollectPanel />
+            )
           }
         </div>
       </NFTDisplayPanel>

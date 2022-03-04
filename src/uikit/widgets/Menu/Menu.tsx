@@ -87,7 +87,7 @@ const Menu: React.FC<NavProps> = ({
   const topBannerHeight = isMobile ? TOP_BANNER_HEIGHT_MOBILE : TOP_BANNER_HEIGHT;
 
   const totalTopMenuHeight = banner ? MENU_HEIGHT + topBannerHeight : MENU_HEIGHT;
-  const submenuTopMargin = totalTopMenuHeight + 91;
+  const submenuTopMargin = totalTopMenuHeight + 71;
 
   useEffect(() => {
     const handleScroll = () => {
