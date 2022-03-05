@@ -2,7 +2,7 @@ import { SNAPSHOT_HUB_API, SNAPSHOT_VOTING_API } from 'config/constants/endpoint
 import tokens from 'config/constants/tokens'
 import { Proposal, ProposalState, ProposalType, Vote } from 'state/types'
 import { simpleRpcProvider } from 'utils/providers'
-import { ADMINS, PANCAKE_SPACE, SNAPSHOT_VERSION } from './config'
+import { ADMINS, AURA_SPACE, SNAPSHOT_VERSION } from './config'
 
 export const isCoreProposal = (proposal: Proposal) => {
   return ADMINS.includes(proposal.author.toLowerCase())
@@ -37,7 +37,7 @@ export const generateMetaData = () => {
   return {
     plugins: {},
     network: 56,
-    strategies: [{ name: 'cake', params: { symbol: 'CAKE', address: tokens.cake.address, decimals: 18 } }],
+    strategies: [{ name: 'aura', params: { symbol: 'AURA', address: tokens.aura.address, decimals: 18 } }],
   }
 }
 
@@ -48,7 +48,7 @@ export const generatePayloadData = () => {
   return {
     version: SNAPSHOT_VERSION,
     timestamp: (Date.now() / 1e3).toFixed(),
-    space: PANCAKE_SPACE,
+    space: AURA_SPACE,
   }
 }
 
