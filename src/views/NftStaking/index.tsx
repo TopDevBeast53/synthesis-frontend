@@ -203,7 +203,6 @@ export default function NftStaking() {
               key={token.tokenId}
               bgSrc="https://uyxpevlntmux.usemoralis.com:2053/server/files/KYoDoH8y6hy28lUBNtmo6WEimx85bBnNHdz2WnDj/5dc6161d4ae2a344a502dfa509c4004e_perso.png"
               tokenId={token.tokenId}
-              isStaked={token.isStaked}
               level={token.level}
               auraPoints={token.auraPoints}
               enableBoost={parseInt(accumulatedAP)>0}

@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react'
-import { Flex, Heading, Text, Grid } from 'uikit'
+import { Flex, Heading, Text } from 'uikit'
 import { useTranslation } from 'contexts/Localization'
 import useToast from 'hooks/useToast'
 import { logError } from 'utils/sentry'
@@ -9,7 +9,7 @@ import { useAuraNFTBridge } from '../hooks/useAuraNFTBridge'
 import NftCard from '../../NftStaking/components/NftCard'
 
 
-export default function BridgeToSolana() {
+export default function BridgeToSolana({switcher}: {switcher: React.ReactNode}) {
   const { t } = useTranslation()
   const { toastError, toastSuccess } = useToast()
 
@@ -89,8 +89,6 @@ export default function BridgeToSolana() {
               key={token.tokenId}
               bgSrc={token.uri}
               tokenId={token.tokenId}
-              isStaked={token.isStaked}
-              isApproved={token.isApproved}
               level={token.level}
               auraPoints={token.auraPoints}
               enableBoost={false}
@@ -115,30 +113,36 @@ export default function BridgeToSolana() {
   )
 
   return (
-    <Flex position="relative" padding="24px" flexDirection="column">
-      <AddressInputPanel id="destination" value={destination} onChange={onChangeDestination} />
-      <Heading as="h2" mt="20px" mb="10px">
-        My NFTs on Binance
-      </Heading>
-      {loading ? (
-        <Flex
-          position="relative"
-          height="300px"
-          justifyContent="center"
-          py="4px"
-        >
-          <Flex justifyContent="center" style={{ paddingBottom: '8px' }}>
-            <Text fontSize="18px" bold>
-              Loading...
-            </Text>
-          </Flex>
-          <Flex justifyContent="center">
-            <CircleLoader size="30px"/>
-          </Flex>
-        </Flex>
-      )
-      :
-      (tokens.length > 0? <TokensList /> : "No NFTs found")}
-    </Flex>
+    <>
+      <Flex flexDirection="row-reverse">
+        {switcher}
+      </Flex>
+      <Flex position="relative" padding="24px" flexDirection="column">
+        <AddressInputPanel id="destination" value={destination} onChange={onChangeDestination} />
+        <Heading as="h2" mt="20px" mb="10px">
+          My NFTs on Binance
+        </Heading>
+        {
+          loading 
+          ? (
+              <Flex
+                position="relative"
+                height="300px"
+                justifyContent="center"
+                py="4px"
+              >
+                <Flex justifyContent="center" style={{ paddingBottom: '8px' }}>
+                  <Text fontSize="18px" bold>
+                    Loading...
+                  </Text>
+                </Flex>
+                <Flex justifyContent="center">
+                  <CircleLoader size="30px"/>
+                </Flex>
+              </Flex>
+            )
+          : (tokens.length > 0? <TokensList /> : "No NFTs found")}
+      </Flex>
+    </>
   )
 }

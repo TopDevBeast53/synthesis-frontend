@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
-import { Flex, Card, ButtonMenu, ButtonMenuItem, Heading } from 'uikit'
+import { Flex, ButtonMenu, ButtonMenuItem, Heading } from 'uikit'
 import { useTranslation } from 'contexts/Localization'
 import styled from 'styled-components'
-import WalletAdapter from './components/WalletAdapter'
 import BridgeToBSC from './components/BridgeToBSC'
 import BridgeToSolana from './components/BridgeToSolana'
 import Page from '../Page'
@@ -21,12 +20,6 @@ const NFTDisplayPanel = styled(Flex)`
   max-width: 1200px;
 `;
 
-const BodyWrapper = styled(Card)`
-  border-radius: 25px;
-  max-width: 800px;
-  width: 100%;
-  height: fit-content;
-`
 const Wrapper = styled.div`
   display: flex;
   justify-content: center;
@@ -41,10 +34,6 @@ const Wrapper = styled.div`
     margin-left: 16px;
   }
 `
-
-function AppBody({ children }: { children: React.ReactNode }) {
-  return <BodyWrapper>{children}</BodyWrapper>
-}
 
 export default function NftBridge() {
   const { t } = useTranslation()
@@ -70,10 +59,7 @@ export default function NftBridge() {
         NFT Bridge 
       </PageHeading>
       <NFTDisplayPanel>
-        <Flex flexDirection="row-reverse">
-            {stakedOrUnstakedSwitch}
-        </Flex>
-        {viewPageIndex === 0 ? (<BridgeToSolana/>) : ( <WalletAdapter><BridgeToBSC/></WalletAdapter>)}
+        {viewPageIndex === 0 ? (<BridgeToSolana switcher={stakedOrUnstakedSwitch}/>) : ( <BridgeToBSC switcher={stakedOrUnstakedSwitch}/>)}
       </NFTDisplayPanel>
     </Page>
   )
