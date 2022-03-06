@@ -7,22 +7,22 @@ import { getVotingPower } from '../helpers'
 
 interface State {
   verificationHash: string
-  cakeBalance: number
-  cakeVaultBalance: number
-  cakePoolBalance: number
+  auraBalance: number
+  auraVaultBalance: number
+  auraPoolBalance: number
   poolsBalance: number
-  cakeBnbLpBalance: number
+  auraBnbLpBalance: number
   ifoPoolBalance: number
   total: number
 }
 
 const initialState: State = {
   verificationHash: null,
-  cakeBalance: 0,
-  cakeVaultBalance: 0,
-  cakePoolBalance: 0,
+  auraBalance: 0,
+  auraVaultBalance: 0,
+  auraPoolBalance: 0,
   poolsBalance: 0,
-  cakeBnbLpBalance: 0,
+  auraBnbLpBalance: 0,
   ifoPoolBalance: 0,
   total: 0,
 }
@@ -41,12 +41,12 @@ const useGetVotingPower = (block?: number, isActive = true): State & { isLoading
         const eligiblePools = await getActivePools(blockNumber)
         const poolAddresses = eligiblePools.map(({ contractAddress }) => getAddress(contractAddress))
         const {
-          cakeBalance,
-          cakeBnbLpBalance,
-          cakePoolBalance,
+          auraBalance,
+          auraBnbLpBalance,
+          auraPoolBalance,
           total,
           poolsBalance,
-          cakeVaultBalance,
+          auraVaultBalance,
           verificationHash,
           IFOPoolBalance,
         } = await getVotingPower(account, poolAddresses, blockNumber)
@@ -55,11 +55,11 @@ const useGetVotingPower = (block?: number, isActive = true): State & { isLoading
           setVotingPower((prevVotingPower) => ({
             ...prevVotingPower,
             verificationHash,
-            cakeBalance: parseFloat(cakeBalance),
-            cakeBnbLpBalance: parseFloat(cakeBnbLpBalance),
-            cakePoolBalance: parseFloat(cakePoolBalance),
+            auraBalance: parseFloat(auraBalance),
+            auraBnbLpBalance: parseFloat(auraBnbLpBalance),
+            auraPoolBalance: parseFloat(auraPoolBalance),
             poolsBalance: parseFloat(poolsBalance),
-            cakeVaultBalance: parseFloat(cakeVaultBalance),
+            auraVaultBalance: parseFloat(auraVaultBalance),
             ifoPoolBalance: IFOPoolBalance ? parseFloat(IFOPoolBalance) : 0,
             total: parseFloat(total),
           }))
