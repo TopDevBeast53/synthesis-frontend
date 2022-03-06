@@ -6,8 +6,6 @@ import Column from 'components/Layout/Column'
 import Chain from 'uikit/components/Svg/Icons/Chain'
 import Pyramid from 'uikit/components/Svg/Icons/Pyramid'
 import ArrowsUp from 'uikit/components/Svg/Icons/ArrowsUp'
-import ApexIconTM from 'uikit/components/Svg/Icons/ApexIconTM'
-import AuraIconTM from 'uikit/components/Svg/Icons/AuraIconTM'
 import MetricsSection from './components/MetricsSection'
 
 const Home: React.FC = () => {
@@ -108,36 +106,6 @@ const Home: React.FC = () => {
             </Card>
           </Column>
         </Card>
-      </PageSection>
-
-      <PageSection
-        innerProps={{ style: HomeSectionContainerStyles }}
-        background='rgba(0,0,0,0)'
-        index={2}
-        hasCurvedDivider={false}
-      >
-        <Flex style={{justifyContent: "space-between"}}>
-          <Card style={{width: "40%"}}>
-            <Column style={{alignItems: "center"}}>
-              <ApexIconTM />
-              <Button width="256px"> 
-                <Text style={{color: "#101411", padding: '13px', fontSize: '18px', fontWeight: 500}}> 
-                  Enter App 
-                </Text> 
-              </Button>
-            </Column>
-          </Card>
-          <Card style={{width: "40%"}}>
-            <Column style={{alignItems: "center"}}>
-              <AuraIconTM />
-              <Button width="256px"> 
-                <Text style={{color: "#101411", padding: '13px', fontSize: '18px', fontWeight: 500}}> 
-                  Start Trading 
-                </Text> 
-              </Button>
-            </Column>
-          </Card>
-        </Flex>
       </PageSection>
     </>
   )
