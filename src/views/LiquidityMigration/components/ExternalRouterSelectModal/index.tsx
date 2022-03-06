@@ -56,7 +56,7 @@ interface ExternalRouterSelectModalProps extends InjectedModalProps {
 }
 
 const ExternalRouterSelectModal: React.FC<ExternalRouterSelectModalProps> = ({
-	onDismiss = () => null,
+	onDismiss,
 	onExternalRouterSelect,
 	externalRouter
 }) => {

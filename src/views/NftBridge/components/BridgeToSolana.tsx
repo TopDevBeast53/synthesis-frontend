@@ -1,12 +1,12 @@
 import React, { useState, useCallback, useEffect } from 'react'
-import { Flex, Heading, Text } from 'uikit'
+import { Flex, Heading, Text, useModal } from 'uikit'
 import { useTranslation } from 'contexts/Localization'
 import useToast from 'hooks/useToast'
 import { logError } from 'utils/sentry'
 import CircleLoader from '../../../components/Loader/CircleLoader'
-import AddressInputPanel from './AddressInputPanel'
 import { useAuraNFTBridge } from '../hooks/useAuraNFTBridge'
 import NftCard from '../../NftStaking/components/NftCard'
+import BridgeToSolanaModal from './BridgeToSolanaModal'
 
 
 export default function BridgeToSolana({switcher}: {switcher: React.ReactNode}) {
@@ -14,11 +14,20 @@ export default function BridgeToSolana({switcher}: {switcher: React.ReactNode}) 
   const { toastError, toastSuccess } = useToast()
 
   const [tokens, setTokens] = useState([])
-  const [destination, setDestination] = useState('')
+  const [selectedTokenID, setSelectedTokenID] = useState('')
 
   const [loading, setLoading] = useState(true)
 
-  const { getUnstakedNftsFromBSC, approveToBridgeContract, bridgeToSolana } = useAuraNFTBridge()
+  const { getUnstakedNftsFromBSC, approveToBridgeContract } = useAuraNFTBridge()
+
+  const [onPresentBridgeModal] = useModal(
+    <BridgeToSolanaModal tokenIDToBridge={selectedTokenID} />
+  );
+
+  const requestBridgeDestinationForToken = useCallback((tokenID: string) => {
+    setSelectedTokenID(tokenID);
+    onPresentBridgeModal();
+  }, [setSelectedTokenID, onPresentBridgeModal]);
 
   const handleGetTokens = useCallback(() => {
     try {
@@ -59,27 +68,6 @@ export default function BridgeToSolana({switcher}: {switcher: React.ReactNode}) 
     }
   }, [approveToBridgeContract, tokens, toastSuccess, toastError, t])
 
-  const handleBridge = useCallback(async (tokenId:string) => {
-    try {
-      setLoading(true)
-      const receipt = await bridgeToSolana(tokenId, destination)
-      if (receipt.status){
-        toastSuccess(t('Success'), t('Bridged to solana!'))
-        const _tokens = tokens.filter((e) => e.tokenId !== tokenId)
-        setTokens(_tokens)
-      }
-    } catch (e) {
-      logError(e)
-      toastError(t('Error'), t('Please try again.'))
-    } finally {
-      setLoading(false)
-    }
-  }, [bridgeToSolana, tokens, destination, toastSuccess, toastError, t])
-
-  const onChangeDestination = useCallback((value:string) => {
-    setDestination(value)
-  }, [])
-
   const TokensList = () => (
     <div>
       <Flex flexWrap="wrap" style={{margin: '-19px'}}>
@@ -96,9 +84,9 @@ export default function BridgeToSolana({switcher}: {switcher: React.ReactNode}) 
               remainAPToNextLevel={token.remainAPToNextLevel}
 
               enableBridgeApprove={!token.isApproved}
-              enableBridgeMutation={token.isApproved && destination.length === 44}
+              enableBridgeMutation={token.isApproved}
               onHandleBridgeApprove={handleApprove}
-              onHandleBridgeMutation={handleBridge}
+              onHandleBridgeMutation={requestBridgeDestinationForToken}
             >
               <Flex alignItems="center">
                 <Text fontSize="12px" color="textSubtle">
@@ -114,14 +102,13 @@ export default function BridgeToSolana({switcher}: {switcher: React.ReactNode}) 
 
   return (
     <>
-      <Flex flexDirection="row-reverse">
-        {switcher}
-      </Flex>
-      <Flex position="relative" padding="24px" flexDirection="column">
-        <AddressInputPanel id="destination" value={destination} onChange={onChangeDestination} />
+      <Flex justifyContent="space-between">
         <Heading as="h2" mt="20px" mb="10px">
           My NFTs on Binance
         </Heading>
+        {switcher}
+      </Flex>
+      <Flex position="relative" padding="24px" flexDirection="column">
         {
           loading 
           ? (

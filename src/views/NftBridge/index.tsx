@@ -59,7 +59,11 @@ export default function NftBridge() {
         NFT Bridge 
       </PageHeading>
       <NFTDisplayPanel>
-        {viewPageIndex === 0 ? (<BridgeToSolana switcher={stakedOrUnstakedSwitch}/>) : ( <BridgeToBSC switcher={stakedOrUnstakedSwitch}/>)}
+        {
+          viewPageIndex === 0 
+          ? (<BridgeToSolana switcher={stakedOrUnstakedSwitch}/>) 
+          : (<BridgeToBSC switcher={stakedOrUnstakedSwitch}/>)
+        }
       </NFTDisplayPanel>
     </Page>
   )
