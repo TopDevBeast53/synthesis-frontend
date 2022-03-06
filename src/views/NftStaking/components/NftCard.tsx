@@ -60,8 +60,6 @@ const NFTInfoSeparator = styled.div`
 interface NftCardProps {
   bgSrc: string
   tokenId: string
-  isStaked: boolean
-  isApproved?: boolean
   level: number
   auraPoints: number
   remainAPToNextLevel: number
@@ -85,8 +83,6 @@ const NFTImage = styled(Image)`
 const NftCard: React.FC<NftCardProps> = ({
   bgSrc,
   tokenId,
-  isStaked,
-  isApproved,
   level,
   auraPoints,
   remainAPToNextLevel,
