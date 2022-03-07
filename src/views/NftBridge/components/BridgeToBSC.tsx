@@ -1,5 +1,5 @@
 import React, { useState, useCallback, ChangeEvent, useMemo, CSSProperties } from 'react'
-import { WalletDisconnectButton, WalletMultiButton } from '@solana/wallet-adapter-react-ui'
+import { WalletDisconnectButton } from '@solana/wallet-adapter-react-ui'
 import { useWallet } from "@solana/wallet-adapter-react";
 import { Flex, Input, Button, Card, IconButton, CopyIcon, Text, Heading } from 'uikit'
 import styled from 'styled-components'
@@ -10,6 +10,7 @@ import { AppBody } from 'components/App';
 import WalletAdapter from './WalletAdapter'
 import { useAuraNFTBridge } from '../hooks/useAuraNFTBridge'
 import { NFTCardText, NFTCardTextType } from '../../NftStaking/components/NFTCardText'
+import NFTConnectSolanaPanel from './NFTConnectSolanaPanel';
 
 const GeneralCard = styled(Card)`
   padding: 14px 29px 15px 29px;
@@ -93,30 +94,30 @@ function BridgeToBSCInner({switcher}: {switcher: React.ReactNode}) {
   
   return (
     <>
-    <Flex justifyContent="space-between" style={{marginBottom: '62px'}}>
+    <Flex justifyContent="space-between" alignItems="center" style={{marginBottom: '62px', minHeight: '140px'}}>
       <Flex>
-        <GeneralCard style={{ minWidth: "210px"}}>
-          <NFTCardText type={NFTCardTextType.generalCaption} style={{paddingBottom: '7px'}}>
-            Solana wallet
-          </NFTCardText>
-          <Flex alignItems="center"> 
-            {
-              isSolanaWalletConnected
-              ? <> 
-                  <CopyValue value={solanaAccountAddress} style={{marginRight: '25px'}}>
-                    <NFTCardText type={NFTCardTextType.cardValue}> 
-                      {solanaAccountAddressEllipsis} 
-                    </NFTCardText> 
-                  </CopyValue>
-                  <WalletDisconnectButton /> 
-                </>
-              : <WalletMultiButton />
-            }
-          </Flex>
-        </GeneralCard>
+        {isSolanaWalletConnected && 
+          <GeneralCard style={{ minWidth: "210px"}}>
+            <NFTCardText type={NFTCardTextType.generalCaption} style={{paddingBottom: '7px'}}>
+              Solana wallet
+            </NFTCardText>
+            <Flex alignItems="center"> 
+              <CopyValue value={solanaAccountAddress} style={{marginRight: '25px'}}>
+                <NFTCardText type={NFTCardTextType.cardValue}> 
+                  {solanaAccountAddressEllipsis} 
+                </NFTCardText> 
+              </CopyValue>
+              <WalletDisconnectButton />
+            </Flex>
+          </GeneralCard>
+        }
       </Flex>
       {switcher}
     </Flex>
+    {
+      !isSolanaWalletConnected && 
+      <NFTConnectSolanaPanel />
+    }
             
     { 
       isSolanaWalletConnected && 
@@ -157,7 +158,7 @@ function BridgeToBSCInner({switcher}: {switcher: React.ReactNode}) {
               disabled={loading || externalTokenId.trim() === ""}
              >
               {
-                tokenURI.trim() === ""
+                externalTokenId.trim() === ""
                 ? "Enter Token URI"
                 : "Claim"
               }

@@ -7,7 +7,7 @@ import CircleLoader from '../../../components/Loader/CircleLoader'
 import { useAuraNFTBridge } from '../hooks/useAuraNFTBridge'
 import NftCard from '../../NftStaking/components/NftCard'
 import BridgeToSolanaModal from './BridgeToSolanaModal'
-
+import NFTStartCollectPanel from '../../NftStaking/components/NFTStartCollectPanel'
 
 export default function BridgeToSolana({switcher}: {switcher: React.ReactNode}) {
   const { t } = useTranslation()
@@ -102,7 +102,7 @@ export default function BridgeToSolana({switcher}: {switcher: React.ReactNode}) 
 
   return (
     <>
-      <Flex justifyContent="space-between">
+      <Flex justifyContent="space-between" alignItems="center" style={{minHeight: '140px'}}>
         <Heading as="h2" mt="20px" mb="10px">
           My NFTs on Binance
         </Heading>
@@ -128,7 +128,7 @@ export default function BridgeToSolana({switcher}: {switcher: React.ReactNode}) 
                 </Flex>
               </Flex>
             )
-          : (tokens.length > 0? <TokensList /> : "No NFTs found")}
+          : (tokens.length > 0 ? <TokensList /> : <NFTStartCollectPanel />)}
       </Flex>
     </>
   )
