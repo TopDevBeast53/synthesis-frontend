@@ -102,13 +102,13 @@ export default function BridgeToSolana({switcher}: {switcher: React.ReactNode}) 
 
   return (
     <>
-      <Flex justifyContent="space-between" alignItems="center" style={{minHeight: '140px'}}>
+      <Flex justifyContent="space-between" alignItems="center" style={{marginBottom: '62px', minHeight: '140px'}}>
         <Heading as="h2" mt="20px" mb="10px">
           My NFTs on Binance
         </Heading>
         {switcher}
       </Flex>
-      <Flex position="relative" padding="24px" flexDirection="column">
+      <Flex position="relative" flexDirection="column">
         {
           loading 
           ? (
