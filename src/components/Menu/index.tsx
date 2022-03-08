@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import { useLocation } from 'react-router'
 import { Menu as UikitMenu } from 'uikit'
 import { languageList } from 'config/localization/languages'
@@ -21,6 +22,7 @@ const Menu = (props) => {
 
   return (
     <UikitMenu
+      linkComponent={(link) => <Link to={link.href} {...link}/>}
       userMenu={<UserMenu />}
       globalMenu={<GlobalSettings />}
       isDark={isDark}
