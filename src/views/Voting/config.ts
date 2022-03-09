@@ -6,3 +6,4 @@ export const IPFS_GATEWAY = 'https://gateway.ipfs.io/ipfs'
 export const SNAPSHOT_VERSION = '0.1.3'
 export const AURA_SPACE = 'aurageometry.eth'
 export const VOTE_THRESHOLD = 0
+export const CHOICES_PRESET = ['In Favor', 'Against']

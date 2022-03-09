@@ -100,12 +100,12 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType[] = (t) => [
   //     },
   //   ],
   // },
-  // {
-  //   label: '',
-  //   href: '/info',
-  //   icon: 'More',
-  //   hideSubNav: true,
-  //   items: [
+  {
+     label: '',
+     href: '/info',
+     icon: 'More',
+     hideSubNav: true,
+     items: [
   //     {
   //       label: t('Info'),
   //       href: '/info',
@@ -115,10 +115,10 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType[] = (t) => [
   //       href: '/ifo',
   //       status: menuStatus.SOON,
   //     },
-  //     {
-  //       label: t('Voting'),
-  //       href: '/voting',
-  //     },
+       {
+         label: t('Voting'),
+         href: '/voting',
+       },
   //     {
   //       type: DropdownMenuItemType.DIVIDER,
   //     },
@@ -139,8 +139,8 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType[] = (t) => [
   //       href: 'https://docs.pancakeswap.finance',
   //       type: DropdownMenuItemType.EXTERNAL_LINK,
   //     },
-  //   ],
-  // },
+     ],
+   },
 ]
 
 export default config

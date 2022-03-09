@@ -1,31 +1,19 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Box, Flex, InjectedModalProps, Modal, Button, Spinner } from 'uikit'
 import { useTranslation } from 'contexts/Localization'
 import useTheme from 'hooks/useTheme'
 import useGetVotingPower from '../hooks/useGetVotingPower'
 import DetailsView from './CastVoteModal/DetailsView'
 
-interface VoteDetailsModalProps extends InjectedModalProps {
-  block: number
-}
-
-const VoteDetailsModal: React.FC<VoteDetailsModalProps> = ({ block, onDismiss }) => {
+const VoteDetailsModal: React.FC<InjectedModalProps> = ({ onDismiss }) => {
   const { t } = useTranslation()
-  const [modalIsOpen, setModalIsOpen] = useState(true)
-  const {
-    isLoading,
-    total,
-    auraBalance,
-    auraVaultBalance,
-    auraPoolBalance,
-    poolsBalance,
-    auraBnbLpBalance,
-    ifoPoolBalance,
-  } = useGetVotingPower(block, modalIsOpen)
+
+  const { auraBalance , isLoading } = useGetVotingPower()
+  const total = Number(auraBalance.toString()) / 1e18
+
   const { theme } = useTheme()
 
   const handleDismiss = () => {
-    setModalIsOpen(false)
     onDismiss()
   }
 
@@ -38,15 +26,7 @@ const VoteDetailsModal: React.FC<VoteDetailsModalProps> = ({ block, onDismiss })
           </Flex>
         ) : (
           <>
-            <DetailsView
-              total={total}
-              auraBalance={auraBalance}
-              auraVaultBalance={auraVaultBalance}
-              auraPoolBalance={auraPoolBalance}
-              poolsBalance={poolsBalance}
-              ifoPoolBalance={ifoPoolBalance}
-              auraBnbLpBalance={auraBnbLpBalance}
-            />
+            <DetailsView total={total} />
             <Button variant="secondary" onClick={onDismiss} width="100%" mt="16px">
               {t('Close')}
             </Button>

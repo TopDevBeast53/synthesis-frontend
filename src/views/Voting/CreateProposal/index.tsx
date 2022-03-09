@@ -17,7 +17,6 @@ import {
 import { useHistory } from 'react-router'
 import { Link } from 'react-router-dom'
 import { useWeb3React } from '@web3-react/core'
-import times from 'lodash/times'
 import isEmpty from 'lodash/isEmpty'
 import { useInitialBlock } from 'state/block/hooks'
 import { SnapshotCommand } from 'state/types'
@@ -35,10 +34,9 @@ import { PageMeta } from 'components/Layout/Page'
 import { sendSnapshotData, Message, generateMetaData, generatePayloadData } from '../helpers'
 import Layout from '../components/Layout'
 import { FormErrors, Label, SecondaryLabel } from './styles'
-import Choices, { Choice, makeChoice, MINIMUM_CHOICES } from './Choices'
 import { combineDateAndTime, getFormErrors } from './helpers'
 import { FormState } from './types'
-import { ADMINS, VOTE_THRESHOLD } from '../config'
+import { ADMINS, CHOICES_PRESET } from '../config'
 import VoteDetailsModal from '../components/VoteDetailsModal'
 
 const EasyMde = lazy(() => import('components/EasyMde'))
@@ -47,9 +45,6 @@ const CreateProposal = () => {
   const [state, setState] = useState<FormState>({
     name: '',
     body: '',
-    choices: times(MINIMUM_CHOICES).map(makeChoice),
-    startDate: null,
-    startTime: null,
     endDate: null,
     endTime: null,
     snapshot: 0,
@@ -62,8 +57,8 @@ const CreateProposal = () => {
   const { push } = useHistory()
   const { library, connector } = useWeb3Provider()
   const { toastSuccess, toastError } = useToast()
-  const [onPresentVoteDetailsModal] = useModal(<VoteDetailsModal block={state.snapshot} />)
-  const { name, body, choices, startDate, startTime, endDate, endTime, snapshot } = state
+  const [onPresentVoteDetailsModal] = useModal(<VoteDetailsModal />)
+  const { name, body, endDate, endTime, snapshot } = state
   const formErrors = getFormErrors(state, t)
 
   const handleSubmit = async (evt: FormEvent<HTMLFormElement>) => {
@@ -78,13 +73,9 @@ const CreateProposal = () => {
           name,
           body,
           snapshot,
-          start: combineDateAndTime(startDate, startTime),
+          start: combineDateAndTime(new Date(), new Date()),
           end: combineDateAndTime(endDate, endTime),
-          choices: choices
-            .filter((choice) => choice.value)
-            .map((choice) => {
-              return choice.value
-            }),
+          choices: CHOICES_PRESET,
           metadata: generateMetaData(),
           type: 'single-choice',
         },
@@ -112,7 +103,7 @@ const CreateProposal = () => {
     }
   }
 
-  const updateValue = (key: string, value: string | Choice[] | Date) => {
+  const updateValue = (key: string, value: string | Date) => {
     setState((prevState) => ({
       ...prevState,
       [key]: value,
@@ -132,10 +123,6 @@ const CreateProposal = () => {
 
   const handleEasyMdeChange = (value: string) => {
     updateValue('body', value)
-  }
-
-  const handleChoiceChange = (newChoices: Choice[]) => {
-    updateValue('choices', newChoices)
   }
 
   const handleDateChange = (key: string) => (value: Date) => {
@@ -207,8 +194,6 @@ const CreateProposal = () => {
                 </Card>
               </Box>
             )}
-            <Choices choices={choices} onChange={handleChoiceChange} />
-            {formErrors.choices && fieldsState.choices && <FormErrors errors={formErrors.choices} />}
           </Box>
           <Box>
             <Card>
@@ -218,26 +203,6 @@ const CreateProposal = () => {
                 </Heading>
               </CardHeader>
               <CardBody>
-                <Box mb="24px">
-                  <SecondaryLabel>{t('Start Date')}</SecondaryLabel>
-                  <DatePicker
-                    name="startDate"
-                    onChange={handleDateChange('startDate')}
-                    selected={startDate}
-                    placeholderText="YYYY/MM/DD"
-                  />
-                  {formErrors.startDate && fieldsState.startDate && <FormErrors errors={formErrors.startDate} />}
-                </Box>
-                <Box mb="24px">
-                  <SecondaryLabel>{t('Start Time')}</SecondaryLabel>
-                  <TimePicker
-                    name="startTime"
-                    onChange={handleDateChange('startTime')}
-                    selected={startTime}
-                    placeholderText="00:00"
-                  />
-                  {formErrors.startTime && fieldsState.startTime && <FormErrors errors={formErrors.startTime} />}
-                </Box>
                 <Box mb="24px">
                   <SecondaryLabel>{t('End Date')}</SecondaryLabel>
                   <DatePicker
@@ -284,9 +249,6 @@ const CreateProposal = () => {
                     >
                       {t('Publish')}
                     </Button>
-                    <Text color="failure" as="p" mb="4px">
-                      {t('You need at least %count% voting power to publish a proposal.', { count: VOTE_THRESHOLD })}{' '}
-                    </Text>
                     <Button scale="sm" type="button" variant="text" onClick={onPresentVoteDetailsModal} p={0}>
                       {t('Check voting power')}
                     </Button>

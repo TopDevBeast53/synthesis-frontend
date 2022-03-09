@@ -67,4 +67,12 @@ export const useGetCakeBalance = () => {
   return { balance: ethers.BigNumber.from(balance.toString()), fetchStatus }
 }
 
+export const useGetAuraBalance = () => {
+  const { balance, fetchStatus } = useTokenBalance(tokens.aura.address)
+
+  // TODO: Remove ethers conversion once useTokenBalance is converted to ethers.BigNumber
+  return { balance: ethers.BigNumber.from(balance.toString()), fetchStatus }
+}
+
+
 export default useTokenBalance
