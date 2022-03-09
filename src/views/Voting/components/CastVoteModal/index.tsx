@@ -13,26 +13,17 @@ import DetailsView from './DetailsView'
 import { generatePayloadData, Message, sendSnapshotData } from '../../helpers'
 import useGetVotingPower from '../../hooks/useGetVotingPower'
 
-const CastVoteModal: React.FC<CastVoteModalProps> = ({ onSuccess, proposalId, vote, block, onDismiss }) => {
+const CastVoteModal: React.FC<CastVoteModalProps> = ({ onSuccess, proposalId, vote, onDismiss }) => {
   const [view, setView] = useState<ConfirmVoteView>(ConfirmVoteView.MAIN)
-  const [modalIsOpen, setModalIsOpen] = useState(true)
   const [isPending, setIsPending] = useState(false)
   const { account } = useWeb3React()
   const { t } = useTranslation()
   const { toastError } = useToast()
   const { library, connector } = useWeb3Provider()
   const { theme } = useTheme()
-  const {
-    isLoading,
-    total,
-    auraBalance,
-    auraVaultBalance,
-    auraPoolBalance,
-    poolsBalance,
-    auraBnbLpBalance,
-    ifoPoolBalance,
-    verificationHash,
-  } = useGetVotingPower(block, modalIsOpen)
+
+  const { auraBalance, isLoading } = useGetVotingPower()
+  const total = Number(auraBalance.toString()) / 1e18
 
   const isStartView = view === ConfirmVoteView.MAIN
   const handleBack = isStartView ? null : () => setView(ConfirmVoteView.MAIN)
@@ -44,7 +35,6 @@ const CastVoteModal: React.FC<CastVoteModalProps> = ({ onSuccess, proposalId, vo
   }
 
   const handleDismiss = () => {
-    setModalIsOpen(false)
     onDismiss()
   }
 
@@ -59,7 +49,6 @@ const CastVoteModal: React.FC<CastVoteModalProps> = ({ onSuccess, proposalId, vo
           choice: vote.value,
           metadata: {
             votingPower: total.toString(),
-            verificationHash,
           },
         },
       })
@@ -102,15 +91,7 @@ const CastVoteModal: React.FC<CastVoteModalProps> = ({ onSuccess, proposalId, vo
           />
         )}
         {view === ConfirmVoteView.DETAILS && (
-          <DetailsView
-            total={total}
-            auraBalance={auraBalance}
-            ifoPoolBalance={ifoPoolBalance}
-            auraVaultBalance={auraVaultBalance}
-            auraPoolBalance={auraPoolBalance}
-            poolsBalance={poolsBalance}
-            auraBnbLpBalance={auraBnbLpBalance}
-          />
+          <DetailsView total={total} />
         )}
       </Box>
     </Modal>
