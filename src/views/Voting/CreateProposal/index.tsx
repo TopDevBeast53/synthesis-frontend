@@ -2,7 +2,6 @@ import React, { ChangeEvent, FormEvent, lazy, useEffect, useState, useMemo } fro
 import {
   AutoRenewIcon,
   Box,
-  Breadcrumbs,
   Button,
   Card,
   CardBody,
@@ -12,6 +11,7 @@ import {
   Input,
   LinkExternal,
   Text,
+  ArrowBackIcon,
   useModal,
 } from 'uikit'
 import { useHistory } from 'react-router'
@@ -150,12 +150,10 @@ const CreateProposal = () => {
   return (
     <Container py="40px">
       <PageMeta />
-      <Box mb="48px">
-        <Breadcrumbs>
-          <Link to="/">{t('Home')}</Link>
-          <Link to="/voting">{t('Voting')}</Link>
-          <Text>{t('Make a Proposal')}</Text>
-        </Breadcrumbs>
+      <Box mb="40px">
+        <Button as={Link} to="/voting" variant="text" startIcon={<ArrowBackIcon color="primary" width="24px" />} px="0">
+          {t('Back to Vote Overview')}
+        </Button>
       </Box>
       <form onSubmit={handleSubmit}>
         <Layout>

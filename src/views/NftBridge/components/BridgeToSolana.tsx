@@ -15,17 +15,19 @@ export default function BridgeToSolana({switcher}: {switcher: React.ReactNode}) 
 
   const [tokens, setTokens] = useState([])
   const [selectedTokenID, setSelectedTokenID] = useState('')
+  const [selectedExternalTokenID, setSelectedExternalTokenID] = useState('')
 
   const [loading, setLoading] = useState(true)
 
   const { getUnstakedNftsFromBSC, approveToBridgeContract } = useAuraNFTBridge()
 
   const [onPresentBridgeModal] = useModal(
-    <BridgeToSolanaModal tokenIDToBridge={selectedTokenID} />
+    <BridgeToSolanaModal tokenIDToBridge={selectedTokenID} externalTokenIDToBridge={selectedExternalTokenID} />
   );
 
-  const requestBridgeDestinationForToken = useCallback((tokenID: string) => {
+  const requestBridgeDestinationForToken = useCallback((tokenID: string, externalTokenId: string) => {
     setSelectedTokenID(tokenID);
+    setSelectedExternalTokenID(externalTokenId);
     onPresentBridgeModal();
   }, [setSelectedTokenID, onPresentBridgeModal]);
 
@@ -75,25 +77,40 @@ export default function BridgeToSolana({switcher}: {switcher: React.ReactNode}) 
           return (
             <NftCard
               key={token.tokenId}
-              bgSrc={token.uri}
               tokenId={token.tokenId}
-              level={token.level}
-              auraPoints={token.auraPoints}
-              enableBoost={false}
+              infos={[
+                {
+                  caption: "Level",
+                  value: token.level,
+                },
+                {
+                  caption: "AuraPoints",
+                  value: token.auraPoints,
+                },
+                {
+                  caption: "Remain APTo Next Level",
+                  value: token.remainAPToNextLevel,
+                }
+              ]}
+              actions={[
+                {
+                  id: "bridge_approve",
+                  caption: "Approve",
+                  displayed: !token.isApproved,
+                  action: handleApprove,
+                  params: [token.tokenId],
+                },
+                {
+                  id: "bridge",
+                  caption: "Bridge to Solana",
+                  displayed: token.isApproved,
+                  action: requestBridgeDestinationForToken,
+                  params: [token.tokenId, token.externalTokenId]
+                }
+              ]}
+              bgSrc={token.uri}
               disabled={token.disabled}
-              remainAPToNextLevel={token.remainAPToNextLevel}
-
-              enableBridgeApprove={!token.isApproved}
-              enableBridgeMutation={token.isApproved}
-              onHandleBridgeApprove={handleApprove}
-              onHandleBridgeMutation={requestBridgeDestinationForToken}
-            >
-              <Flex alignItems="center">
-                <Text fontSize="12px" color="textSubtle">
-                  AuraToken
-                </Text>
-              </Flex>
-            </NftCard>
+            />
           )
         })}
       </Flex>

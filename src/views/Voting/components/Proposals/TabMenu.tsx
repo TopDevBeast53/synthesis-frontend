@@ -1,7 +1,6 @@
-import React from 'react'
+import React, { ChangeEvent } from 'react'
 import styled from 'styled-components'
-import { TabMenu as UIKitTabMenu, Tab, Flex, VerifiedIcon, CommunityIcon } from 'uikit'
-import { useTranslation } from 'contexts/Localization'
+import { Flex, Radio, Text, VerifiedIcon, CommunityIcon } from 'uikit'
 import { ProposalType } from 'state/types'
 
 interface TabMenuProps {
@@ -9,59 +8,51 @@ interface TabMenuProps {
   onTypeChange: (proposalType: ProposalType) => void
 }
 
-const StyledTabMenu = styled.div`
-  background-color: ${({ theme }) => theme.colors.input};
-  padding-top: 16px;
+const StyledFilters = styled(Flex).attrs({ alignItems: 'center' })`
+  padding: 16px 8px;
 `
 
-const getIndexFromType = (proposalType: ProposalType) => {
-  switch (proposalType) {
-    case ProposalType.COMMUNITY:
-      return 1
-    case ProposalType.ALL:
-      return 2
-    case ProposalType.CORE:
-    default:
-      return 0
-  }
-}
+const FilterLabel = styled.label`
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  margin-right: 16px;
+`
 
-const getTypeFromIndex = (index: number) => {
-  switch (index) {
-    case 1:
-      return ProposalType.COMMUNITY
-    case 2:
-      return ProposalType.ALL
-    default:
-      return ProposalType.CORE
-  }
-}
+const LabelFlex = styled(Flex)`
+  align-items: center;
+`
+
+const options = [
+  { value: ProposalType.CORE, label: <LabelFlex> <VerifiedIcon color="currentColor" mr="4px" /> Core </LabelFlex> },
+  { value: ProposalType.COMMUNITY, label: <LabelFlex> <CommunityIcon color="currentColor" mr="4px" /> Community </LabelFlex>},
+  { value: ProposalType.ALL, label: <LabelFlex> All </LabelFlex> },
+]
 
 const TabMenu: React.FC<TabMenuProps> = ({ proposalType, onTypeChange }) => {
-  const { t } = useTranslation()
-  const handleItemClick = (index: number) => {
-    onTypeChange(getTypeFromIndex(index))
-  }
-
   return (
-    <StyledTabMenu>
-      <UIKitTabMenu activeIndex={getIndexFromType(proposalType)} onItemClick={handleItemClick}>
-        <Tab>
-          <Flex alignItems="center">
-            <VerifiedIcon color="currentColor" mr="4px" />
-            {t('Core')}
-          </Flex>
-        </Tab>
-        <Tab>
-          {' '}
-          <Flex alignItems="center">
-            <CommunityIcon color="currentColor" mr="4px" />
-            {t('Community')}
-          </Flex>
-        </Tab>
-        <Tab>All</Tab>
-      </UIKitTabMenu>
-    </StyledTabMenu>
+    <StyledFilters>
+      {options.map(({ value, label }) => {
+        const handleChange = (evt: ChangeEvent<HTMLInputElement>) => {
+          const { value: radioValue } = evt.currentTarget
+          onTypeChange(radioValue as ProposalType)
+        }
+
+        return (
+          <FilterLabel key={value}>
+            <LabelFlex>
+              <Radio
+                scale="sm"
+                value={value}
+                checked={proposalType === value}
+                onChange={handleChange}
+              />
+              <Text ml="8px">{label}</Text>
+            </LabelFlex>
+          </FilterLabel>
+        )
+      })}
+    </StyledFilters>
   )
 }
 

@@ -27,13 +27,16 @@ export const useAuraNFTBridge = () => {
     const bridgeAddr = getAuraNFTBridgeContract().address
     let tx:any
     try {
+      console.debug('what', account)
       tx = await callWithGasPrice(getAuraNFTContract(), 'getTokenIdsOfOwner', [account])
     } catch(e) {
       return []
     }
     const tokenIds = (tx.toString()).split(',').map((v)=>({id: v}))
+    console.debug("what is", tokenIds)
     if (tokenIds.length > 0) {
       const resTokensInfo = await Promise.all(tokenIds.map((e:any)=>callWithGasPrice(getAuraNFTContract(), 'getToken', [e.id])))
+      const externalTokenIdsInfo = await Promise.all(tokenIds.map((e:any)=>callWithGasPrice(getAuraNFTContract(), 'getExternalTokenID', [e.id])))
       const approvedAddrsInfo = await Promise.all(tokenIds.map((e:any)=>callWithGasPrice(getAuraNFTContract(), 'getApproved', [e.id])))
       const tokens = resTokensInfo.map((token:any, i)=> ({
         tokenId: token.tokenId.toString(),
@@ -43,6 +46,7 @@ export const useAuraNFTBridge = () => {
         auraPoints: parseInt(formatBigNumber(ethers.BigNumber.from(token.auraPoints.toString()))),
         remainAPToNextLevel: parseInt(formatBigNumber(ethers.BigNumber.from(token.remainAPToNextLvl.toString()))),
         uri: token.uri,
+        externalTokenId: externalTokenIdsInfo[i],
         isApproved: approvedAddrsInfo[i].toString() === bridgeAddr,
       })).filter((e)=>e.isStaked===false)
       return tokens
@@ -60,8 +64,8 @@ export const useAuraNFTBridge = () => {
     return tx.wait()
   }, [getAuraNFTBridgeContract, callWithGasPrice])
   
-  const bridgeFromSolana = useCallback(async (externalTokenId, uri) => {
-    const tx = await callWithGasPrice(getAuraNFTBridgeContract(), 'bridgeFromSolana', [externalTokenId, account, uri])
+  const bridgeToBSC = useCallback(async (externalTokenId, uri) => {
+    const tx = await callWithGasPrice(getAuraNFTBridgeContract(), 'bridgeToBSC', [externalTokenId, account, uri])
     return tx.wait()
   }, [getAuraNFTBridgeContract, account, callWithGasPrice])
 
@@ -70,11 +74,23 @@ export const useAuraNFTBridge = () => {
     return tx.wait()
   }, [getAuraNFTBridgeContract, callWithGasPrice])
   
+  const getMinted = useCallback(async (externalTokenId) => {
+    const tx = await callWithGasPrice(getAuraNFTBridgeContract(), 'getMinted', [externalTokenId])
+    return tx
+  }, [getAuraNFTBridgeContract, callWithGasPrice])
+
+  const isBridged = useCallback(async (externalTokenId) => {
+    const tx = await callWithGasPrice(getAuraNFTBridgeContract(), 'isBridged', [externalTokenId])
+    return tx
+  }, [getAuraNFTBridgeContract, callWithGasPrice])
+
   return {
     getUnstakedNftsFromBSC,
     bridgeToSolana,
-    bridgeFromSolana,
+    bridgeToBSC,
     mintBridgedNFT,
     approveToBridgeContract,
+    getMinted,
+    isBridged
   }
 }

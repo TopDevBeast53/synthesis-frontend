@@ -7,12 +7,10 @@ import { ProposalState } from 'state/types'
 interface FiltersProps {
   filterState: ProposalState
   onFilterChange: (filterState: ProposalState) => void
-  isLoading: boolean
 }
 
 const StyledFilters = styled(Flex).attrs({ alignItems: 'center' })`
-  border-bottom: 1px solid ${({ theme }) => theme.colors.cardBorder};
-  padding: 16px 24px;
+  padding: 16px 8px;
 `
 
 const FilterLabel = styled.label`
@@ -23,12 +21,12 @@ const FilterLabel = styled.label`
 `
 
 const options = [
-  { value: ProposalState.ACTIVE, label: 'Vote Now' },
+  { value: ProposalState.ACTIVE, label: 'Active' },
   { value: ProposalState.PENDING, label: 'Soon' },
   { value: ProposalState.CLOSED, label: 'Closed' },
 ]
 
-const Filters: React.FC<FiltersProps> = ({ filterState, onFilterChange, isLoading }) => {
+const Filters: React.FC<FiltersProps> = ({ filterState, onFilterChange }) => {
   const { t } = useTranslation()
 
   return (
@@ -46,7 +44,6 @@ const Filters: React.FC<FiltersProps> = ({ filterState, onFilterChange, isLoadin
               value={value}
               checked={filterState === value}
               onChange={handleChange}
-              disabled={isLoading}
             />
             <Text ml="8px">{t(label)}</Text>
           </FilterLabel>

@@ -104,13 +104,17 @@ export default {
     56: '0x0a8901b0E25DEb55A87524f0cC164E9644020EBA',
     97: '0xfC0c3F11fDA72Cb9A56F28Ec8D44C0ae4B3ABF86',
   },
-  auraChefNFT: {
-    56: '',
-    97: '0x6C57410c639c6A10208185853b8990d32dcF6d14',
-  },
   auraNFT: {
     56: '',
-    97: '0x8b2b085339D11DcF0FA0aaD985C30f82eb49a880',
+    97: '0x94DF97954ec548bd2Db1c9357982445A7245363d',
+  },
+  auraNFTChef: {
+    56: '',
+    97: '0x6cc6f1F6eD0d2A13635034Cf2A0E2934449d2C38',
+  },
+  auraNFTBridge: {
+    56: '',
+    97: '0x4F807c0f58e88A2fEee50bC9dd80db0923e46002',
   },
   auraMigrator: {
     56: '0x00000000000000',
@@ -119,9 +123,5 @@ export default {
   voting: {
     56: '0x00000000000000',
     97: '0xC3A5dc2D9eC0e8CC6603F81FDc0Fd7aB53E389b3',
-  },
-  auraNftBridge: {
-    56: '0x00000000000000',
-    97: '0xf47eC284E34e0F6DF1B430E1Fbee628645F9bD50',
   },
 }

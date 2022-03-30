@@ -17,7 +17,7 @@ const NFTDisplayPanel = styled(Flex)`
   position: relative;
   flex-direction: column;
   width: 70%;
-  max-width: 1200px;
+  max-width: 1342px;
 `;
 
 const Wrapper = styled.div`

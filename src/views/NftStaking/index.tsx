@@ -201,22 +201,34 @@ export default function NftStaking() {
           return (
             <NftCard
               key={token.tokenId}
-              bgSrc="https://uyxpevlntmux.usemoralis.com:2053/server/files/KYoDoH8y6hy28lUBNtmo6WEimx85bBnNHdz2WnDj/5dc6161d4ae2a344a502dfa509c4004e_perso.png"
               tokenId={token.tokenId}
-              level={token.level}
-              auraPoints={token.auraPoints}
-              enableBoost={parseInt(accumulatedAP)>0}
+              infos={[
+                {
+                  caption: "Level",
+                  value: token.level,
+                },
+                {
+                  caption: "AuraPoints",
+                  value: token.auraPoints,
+                },
+                {
+                  caption: "Remain APTo Next Level",
+                  value: token.remainAPToNextLevel,
+                }
+              ]}
+              actions={[
+                {
+                  id: "boost",
+                  caption: "Boost",
+                  displayed: parseInt(accumulatedAP) > 0,
+                  action: handleBoost,
+                  params: [token.tokenId]
+                }
+              ]}
+              bgSrc={token.uri}
               disabled={token.disabled}
-              remainAPToNextLevel={token.remainAPToNextLevel}
               onhandleChangeCheckBox={onhandleCheckbox}
-              onhandleBoost={handleBoost}
-            >
-              <Flex alignItems="center">
-                <Text fontSize="12px" color="textSubtle">
-                  AuraToken
-                </Text>
-              </Flex>
-            </NftCard>
+            />
           )
         })}
       </Flex>

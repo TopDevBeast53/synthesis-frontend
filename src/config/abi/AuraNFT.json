@@ -643,6 +643,11 @@
       },
       {
         "internalType": "string",
+        "name": "externalTokenID",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
         "name": "uri",
         "type": "string"
       }
@@ -809,6 +814,11 @@
       {
         "internalType": "string",
         "name": "externalTokenID",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "uri",
         "type": "string"
       }
     ],
