@@ -10,8 +10,8 @@ export const fetchPublicVaultData = async () => {
     const calls = [
       'getPricePerFullShare',
       'totalShares',
-      'calculateHarvestAuraRewards',
-      'calculateTotalPendingAuraRewards',
+      'calculateHarvestHelixRewards',
+      'calculateTotalPendingHelixRewards',
     ].map((method) => ({
       address: getAuraVaultAddress(),
       name: method,

@@ -61,7 +61,7 @@ export const fetchFarmUserEarnings = async (account: string, farmsToFetch: Seria
   const calls = farmsToFetch.map((farm) => {
     return {
       address: masterChefAddress,
-      name: 'pendingAuraToken',
+      name: 'pendingHelixToken',
       params: [farm.pid, account],
     }
   })

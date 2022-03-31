@@ -23,13 +23,13 @@ const AutoHarvestAction: React.FunctionComponent<AutoHarvestActionProps> = ({
   const { account } = useWeb3React()
 
   const {
-    userData: { auraAtLastUserAction, userShares },
+    userData: { helixAtLastUserAction, userShares },
     pricePerFullShare,
     fees: { performanceFee },
   } = useVaultPoolByKey(vaultKey)
   const { hasAutoEarnings, autoAuraToDisplay, autoUsdToDisplay } = getAuraVaultEarnings(
     account,
-    auraAtLastUserAction,
+    helixAtLastUserAction,
     userShares,
     pricePerFullShare,
     earningTokenPrice,

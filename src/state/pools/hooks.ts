@@ -138,7 +138,7 @@ export const useVaultPoolByKey = (key: VaultKey) => {
     userData: {
       isLoading,
       userShares: userSharesAsString,
-      auraAtLastUserAction: auraAtLastUserActionAsString,
+      helixAtLastUserAction: helixAtLastUserActionAsString,
       lastDepositedTime,
       lastUserActionTime,
     },
@@ -168,9 +168,9 @@ export const useVaultPoolByKey = (key: VaultKey) => {
     return new BigNumber(userSharesAsString)
   }, [userSharesAsString])
 
-  const auraAtLastUserAction = useMemo(() => {
-    return new BigNumber(auraAtLastUserActionAsString)
-  }, [auraAtLastUserActionAsString])
+  const helixAtLastUserAction = useMemo(() => {
+    return new BigNumber(helixAtLastUserActionAsString)
+  }, [helixAtLastUserActionAsString])
 
   const performanceFeeAsDecimal = performanceFee && performanceFee / 100
 
@@ -190,7 +190,7 @@ export const useVaultPoolByKey = (key: VaultKey) => {
     userData: {
       isLoading,
       userShares,
-      auraAtLastUserAction,
+      helixAtLastUserAction,
       lastDepositedTime,
       lastUserActionTime,
     },

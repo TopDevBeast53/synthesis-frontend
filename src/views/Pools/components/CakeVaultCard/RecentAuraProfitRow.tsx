@@ -13,12 +13,12 @@ const RecentAuraProfitCountdownRow = ({ vaultKey }: { vaultKey: VaultKey }) => {
   const { account } = useWeb3React()
   const {
     pricePerFullShare,
-    userData: { auraAtLastUserAction, userShares, lastUserActionTime },
+    userData: { helixAtLastUserAction, userShares, lastUserActionTime },
   } = useVaultPoolByKey(vaultKey)
   const auraPriceBusd = usePriceAuraBusd()
   const { hasAutoEarnings, autoAuraToDisplay, autoUsdToDisplay } = getAuraVaultEarnings(
     account,
-    auraAtLastUserAction,
+    helixAtLastUserAction,
     userShares,
     pricePerFullShare,
     auraPriceBusd.toNumber(),

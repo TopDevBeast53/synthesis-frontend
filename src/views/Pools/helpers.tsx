@@ -51,15 +51,15 @@ export const getAprData = (pool: DeserializedPool, performanceFee: number) => {
 
 export const getAuraVaultEarnings = (
   account: string,
-  auraAtLastUserAction: BigNumber,
+  helixAtLastUserAction: BigNumber,
   userShares: BigNumber,
   pricePerFullShare: BigNumber,
   earningTokenPrice: number,
 ) => {
   const hasAutoEarnings =
-    account && auraAtLastUserAction && auraAtLastUserAction.gt(0) && userShares && userShares.gt(0)
+    account && helixAtLastUserAction && helixAtLastUserAction.gt(0) && userShares && userShares.gt(0)
   const { auraAsBigNumber } = convertSharesToAura(userShares, pricePerFullShare)
-  const autoAuraProfit = auraAsBigNumber.minus(auraAtLastUserAction)
+  const autoAuraProfit = auraAsBigNumber.minus(helixAtLastUserAction)
   const autoAuraToDisplay = autoAuraProfit.gte(0) ? getBalanceNumber(autoAuraProfit, 18) : 0
 
   const autoUsdProfit = autoAuraProfit.times(earningTokenPrice)

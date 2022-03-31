@@ -6,7 +6,7 @@ const tokens = {
     symbol: "Aura",
     address: {
       56: "",
-      97: "0xAfD66ae7f555bCA74A42A3cE0a1C1b4Fc65C5715",
+      97: "0x373d65f5437B98DC3050Fa73fd47cC745a395891",
     },
     decimals: 18,
     projectLink: "https://aura.exchange/",

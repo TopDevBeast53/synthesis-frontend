@@ -1,20 +1,7 @@
 export default {
-  masterChef: {
-    // 97: '0x1d32c2945C8FDCBc7156c553B7cEa4325a17f4f9',
-    97: '0xF08c198e743883Fc0a4448Cfe5d5e537b52e6390',
-    56: '0x73feaa1eE314F8c655E354234017bE2193C9E24E',
-  },
-  sousChef: {
-    97: '0xe911B52fa2a24A84Da9D6039684046E437B8C673',
-    56: '0x6ab8463a4185b80905e05a9ff80a2d6b714b9e95',
-  },
   lotteryV2: {
     97: '0x5790c3534F30437641541a0FA04C992799602998',
     56: '0x5aF6D33DE2ccEC94efb1bDF8f92Bd58085432d2c',
-  },
-  multiCall: {
-    56: '0xfF6FD90A470Aaa0c1B8A54681746b07AcdFedc9B',
-    97: '0x8F3273Fb89B075b1645095ABaC6ed17B2d4Bc576',
   },
   pancakeProfile: {
     56: '0xDf4dBf6536201370F95e06A0F8a7a70fE40E388a',
@@ -51,10 +38,6 @@ export default {
   easterNft: {
     56: '0x23c41D28A239dDCAABd1bb1deF8d057189510066',
     97: '0x24ec6962dbe874F6B67B5C50857565667fA0854F',
-  },
-  auraVault: {
-    56: '',
-    97: '0x2E2dE2AF0BAA79500901472E21C36970ca33534b',
   },
   ifoPool: {
     56: '0x1B2A2f6ed4A1401E8C73B4c2B6172455ce2f78E8',
@@ -103,6 +86,22 @@ export default {
   pancakeSquad: {
     56: '0x0a8901b0E25DEb55A87524f0cC164E9644020EBA',
     97: '0xfC0c3F11fDA72Cb9A56F28Ec8D44C0ae4B3ABF86',
+  },
+  multiCall: {
+    56: '',
+    97: '0x0cc0d1C3CECFD88eDA86bb2aA5b8D422960e62Db',
+  },
+  masterChef: {
+    56: '',
+    97: '0xb6BCd3139C4A3d75c34960854E102e801DB4e932',
+  },
+  sousChef: {
+    56: '',
+    97: '0xe911B52fa2a24A84Da9D6039684046E437B8C673',
+  },
+  auraVault: { // AutoPool
+    56: '',
+    97: '0xC28F43D3C967bD42eff53cCecCeaCF09f09a6C64',
   },
   auraNFT: {
     56: '',

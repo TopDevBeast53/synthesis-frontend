@@ -17,7 +17,7 @@ const fetchIfoPoolUser = async (account: string) => {
       userShares: new BigNumber(userContractResponse.shares.toString()).toJSON(),
       lastDepositedTime: userContractResponse.lastDepositedTime.toString(),
       lastUserActionTime: userContractResponse.lastUserActionTime.toString(),
-      auraAtLastUserAction: new BigNumber(userContractResponse.auraAtLastUserAction.toString()).toJSON(),
+      helixAtLastUserAction: new BigNumber(userContractResponse.helixAtLastUserAction.toString()).toJSON(),
       credit: new BigNumber(creditResponse.avgBalance.toString()).toJSON(),
     }
   } catch (error) {
@@ -26,7 +26,7 @@ const fetchIfoPoolUser = async (account: string) => {
       userShares: null,
       lastDepositedTime: null,
       lastUserActionTime: null,
-      auraAtLastUserAction: null,
+      helixAtLastUserAction: null,
       credit: null,
     }
   }

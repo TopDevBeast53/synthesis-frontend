@@ -168,7 +168,7 @@ const Pools: React.FC = () => {
             return pool.vaultKey
               ? getAuraVaultEarnings(
                   account,
-                  vaultPools[pool.vaultKey].userData.auraAtLastUserAction,
+                  vaultPools[pool.vaultKey].userData.helixAtLastUserAction,
                   vaultPools[pool.vaultKey].userData.userShares,
                   vaultPools[pool.vaultKey].pricePerFullShare,
                   pool.earningTokenPrice,

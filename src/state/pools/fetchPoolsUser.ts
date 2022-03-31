@@ -88,7 +88,7 @@ export const fetchUserPendingRewards = async (account) => {
   )
 
   // Aura / Aura pool
-  const pendingReward = await masterChefContract.pendingAuraToken('0', account)
+  const pendingReward = await masterChefContract.pendingHelixToken('0', account)
 
   return { ...pendingRewards, 0: new BigNumber(pendingReward.toString()).toJSON() }
 }

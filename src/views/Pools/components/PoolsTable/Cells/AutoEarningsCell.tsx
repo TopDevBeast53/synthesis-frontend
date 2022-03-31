@@ -30,12 +30,12 @@ const AutoEarningsCell: React.FC<AutoEarningsCellProps> = ({ pool, account }) =>
   const { earningTokenPrice } = pool
 
   const {
-    userData: { isLoading: userDataLoading, auraAtLastUserAction, userShares, lastUserActionTime },
+    userData: { isLoading: userDataLoading, helixAtLastUserAction, userShares, lastUserActionTime },
     pricePerFullShare,
   } = useVaultPoolByKey(pool.vaultKey)
   const { hasAutoEarnings, autoAuraToDisplay, autoUsdToDisplay } = getAuraVaultEarnings(
     account,
-    auraAtLastUserAction,
+    helixAtLastUserAction,
     userShares,
     pricePerFullShare,
     earningTokenPrice,

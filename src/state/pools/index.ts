@@ -45,7 +45,7 @@ export const initialPoolVaultState = Object.freeze({
   userData: {
     isLoading: true,
     userShares: null,
-    auraAtLastUserAction: null,
+    helixAtLastUserAction: null,
     lastDepositedTime: null,
     lastUserActionTime: null,
     credit: null,
@@ -99,7 +99,7 @@ export const fetchAuraPoolUserDataAsync = (account: string) => async (dispatch) 
   const allowance = await auraContract.allowance(account, auraPoolAddress)
   const stakingTokenBalance = await auraContract.balanceOf(account)
   const masterChefContract = getMasterchefContract()
-  const pendingReward = await masterChefContract.pendingAuraToken('0', account)
+  const pendingReward = await masterChefContract.pendingHelixToken('0', account)
   const { amount: masterPoolAmount } = await masterChefContract.userInfo('0', account)
 
   dispatch(
