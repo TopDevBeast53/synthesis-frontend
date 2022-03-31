@@ -25,6 +25,10 @@ const getFarmBaseTokenPrice = (
     return hasTokenPriceVsQuote ? new BigNumber(farm.tokenPriceVsQuote) : BIG_ZERO
   }
 
+  if (farm.quoteToken.symbol === tokens.usdt.symbol) {
+    return hasTokenPriceVsQuote ? new BigNumber(farm.tokenPriceVsQuote) : BIG_ZERO
+  }
+
   if (farm.quoteToken.symbol === tokens.wbnb.symbol) {
     return hasTokenPriceVsQuote ? bnbPriceBusd.times(farm.tokenPriceVsQuote) : BIG_ZERO
   }
@@ -63,6 +67,10 @@ const getFarmQuoteTokenPrice = (
   bnbPriceBusd: BigNumber,
 ): BigNumber => {
   if (farm.quoteToken.symbol === 'BUSD') {
+    return BIG_ONE
+  }
+
+  if (farm.quoteToken.symbol === 'USDT') {
     return BIG_ONE
   }
 
