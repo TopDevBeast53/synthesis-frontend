@@ -1984,6 +1984,14 @@ export const testnetTokens = defineTokens({
     'Binance USD',
     'https://www.paxos.com/busd/',
   ),
+  usdt: new Token(
+    TESTNET,
+    '0x337610d27c682E347C9cD60BD4b3b107C9d34dDd',
+    18,
+    'USDT',
+    'Tether USD',
+    'https://tether.to/',
+  ),
   dai: new Token(
     TESTNET,
     '0x8a9424745056Eb399FD19a0EC26A14316684e274',
