@@ -20,7 +20,7 @@ const farms: SerializedFarmConfig[] = [
     },
     {
       pid: 1,
-      lpSymbol: 'AURA-BNB',
+      lpSymbol: 'HELIX-BNB',
       lpAddresses: {
         97: '0xf2E8F8697539394089CBF666425924a26B8A88da',
         56: '',
@@ -28,36 +28,38 @@ const farms: SerializedFarmConfig[] = [
       token: serializedTokens.aura,
       quoteToken: serializedTokens.wbnb,
     },
-      // {
-      //   pid: 2,
-      //   lpSymbol: 'AURA-DAI',
-      //   lpAddresses: {
-      //     97: '0xEcFDd0a7673ad1f83D43F5086A8c3b81Eb70521B',
-      //     56: '',
-      //   },
-      //   token: serializedTokens.aura,
-      //   quoteToken: serializedTokens.dai,
-      // },
-      // {
-      //   pid: 3,
-      //   lpSymbol: 'BNB-BUSD',
-      //   lpAddresses: {
-      //     97: '0xc6513870b38e7e2e2B181Fe04D91373a2cB65cAf',
-      //     56: '',
-      //   },
-      //   token: serializedTokens.wbnb,
-      //   quoteToken: serializedTokens.busd,
-      // },
-      // {
-      //   pid: 4,
-      //   lpSymbol: 'DAI-BUSD',
-      //   lpAddresses: {
-      //     97: '0xed3312543BC533fd5183e101f2cFfC32aAeA85fe',
-      //     56: '',
-      //   },
-      //   token: serializedTokens.dai,
-      //   quoteToken: serializedTokens.busd,
-      // }
+    {
+      pid: 2,
+      lpSymbol: 'HELIX-USDT',
+      lpAddresses: {
+        97: '0x1cc66Fc2196b619625e72970555F73e7ddE31eaC',
+        56: '',
+      },
+      token: serializedTokens.aura,
+      quoteToken: serializedTokens.usdt,
+    },
+    {
+      pid: 3,
+      lpSymbol: 'BNB-BUSD',
+      lpAddresses: {
+        97: '0xad9cFF1Cf4440B5e47812AFA76292bA69b2f5f16',
+        56: '',
+      },
+      token: serializedTokens.wbnb,
+      quoteToken: serializedTokens.busd,
+    },
+    {
+      pid: 4,
+      lpSymbol: 'HELIX-BUSD',
+      lpAddresses: {
+        97: '0x204f1FbFe8cA19BEe4dbf11f70c618E974bC0CF0',
+        56: '',
+      },
+      token: serializedTokens.aura,
+      quoteToken: serializedTokens.busd,
+    },
+    
+    
       // {
       //   pid: 0,
       //   lpSymbol: 'AURA',
