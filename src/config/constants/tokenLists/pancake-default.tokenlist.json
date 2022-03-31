@@ -41,6 +41,14 @@
       "chainId": 97,
       "decimals": 18,
       "logoURI": "local://images/tokens/0x78867bbeef44f2326bf8ddd1941a4439382ef2a7.png" 
+    },
+    {
+      "name": "USDT",
+      "symbol": "USDT",
+      "address": "0x337610d27c682E347C9cD60BD4b3b107C9d34dDd",
+      "chainId": 97,
+      "decimals": 18,
+      "logoURI": "local://images/tokens/0x337610d27c682E347C9cD60BD4b3b107C9d34dDd.png" 
     }
   ]
 }
