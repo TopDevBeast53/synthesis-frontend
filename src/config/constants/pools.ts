@@ -8,7 +8,7 @@ export const vaultPoolConfig = {
   [VaultKey.AuraVault]: {
     name: 'Auto AURA',
     description: 'Automatic restaking',
-    autoCompoundFrequency: 5000,
+    autoCompoundFrequency: 1,
     gasLimit: 380000,
     tokenImage: {
       primarySrc: `/images/tokens/${tokens.cake.address}.svg`,
@@ -33,7 +33,7 @@ const pools: SerializedPoolConfig[] = [
     stakingToken: serializedTokens.aura,
     earningToken: serializedTokens.aura,
     contractAddress: {
-      97: '0x35A3Fd0870B3dC69aB3C413B0761745944173AD2',
+      97: '0xb6BCd3139C4A3d75c34960854E102e801DB4e932',
       56: '',
     },
     poolCategory: PoolCategory.CORE,
