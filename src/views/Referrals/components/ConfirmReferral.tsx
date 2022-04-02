@@ -69,15 +69,15 @@ export default function ConfirmReferral(props: Props) {
             </Flex>
             <Flex justifyContent="center">
                 <Text fontSize="22px" color="secondary" mb="8px" ml="4px">
-                    By accepting this referral request, you will receive <b>10%</b>
-                    {' '}of all referral rewards {displayAddress} would make. 
+                    By accepting this referral request, {displayAddress} will be rewarded <b>10%</b>
+                    {' '} when you swap/trade.
                 </Text>
                 <Flex alignItems="center" style={{marginLeft: '2px'}}>
                     <QuestionHelper text={
                             <Text fontSize="18px" color="secondary" mb="8px" ml="4px">
                                 Whenever you are exchanging tokens or receiving staking rewards,
                                 Aura Treasury will give 5% of that amount to {displayAddress}.
-                                For example, if you have claimed 200 AURA rewards from staking, Aura Treausry
+                                For example, if you have claimed 200 AURA rewards from staking, Aura Treasury
                                 will mint 10 AURA to {displayAddress} and 1 AURA will go to you, making your
                                 profits equal to 201 AURA.
                             </Text>

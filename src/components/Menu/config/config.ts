@@ -37,11 +37,6 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType[] = (t) => [
     ],
   },
   {
-    label: 'Migrate',
-    href: '/migration',
-    icon: 'Earn',
-  },
-  {
     label: t('Referrals'),
     href: '/referrals',
     icon: 'Earn',
@@ -61,6 +56,10 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType[] = (t) => [
         href: '/nft-bridge',
       }
     ]
+  },
+  {
+    label: t('Voting'),
+    href: '/voting',
   },
   // {
   //   label: t('Win'),
@@ -115,10 +114,11 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType[] = (t) => [
   //       href: '/ifo',
   //       status: menuStatus.SOON,
   //     },
-       {
-         label: t('Voting'),
-         href: '/voting',
-       },
+          {
+            label: 'Migrate',
+            href: '/migration',
+            icon: 'Earn',
+          },
   //     {
   //       type: DropdownMenuItemType.DIVIDER,
   //     },
