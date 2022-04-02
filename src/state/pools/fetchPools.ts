@@ -127,10 +127,12 @@ export const fetchPoolsStakingLimits = async (
   //   }
   // }, {})
 
-  return validPools.reduce((accum, value) => {
-    return {
-      ...accum,
-      [value.sousId]:  new BigNumber("100000000000000000000"),
-    }
-  }, {})
+  // return validPools.reduce((accum, value) => {
+  //   return {
+  //     ...accum,
+  //     [value.sousId]:  new BigNumber("100000000000000000000"),
+  //   }
+  // }, {})
+
+  return {};
 }
