@@ -12,11 +12,12 @@ import { Token, TOKEN_PROGRAM_ID, ASSOCIATED_TOKEN_PROGRAM_ID, AccountLayout } f
 import { Metadata } from '@metaplex-foundation/mpl-token-metadata'
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base'
 import { Program, Provider, web3, BN } from '@project-serum/anchor'
-// TODO: It can be read from solana network
 import idl from '../../../config/abi-solana/solana_anchor.json'
+import CONSTANT from '../../../config/constants/solana_contract';
 
-// TODO: Should be read from env
-const programID = new PublicKey('A7nCafiWF1mDUHYJxfXGaBX3vJm7XvzkUtgSe9R1kK9D')
+const programID = new PublicKey(CONSTANT.programID.dev)
+
+// TODO: Should be read from config or wallet adapter
 const network = WalletAdapterNetwork.Devnet
 const endpoint = () => clusterApiUrl(network)
 const opts = {
@@ -65,8 +66,9 @@ export async function getTokensByOwner(owner) {
 export async function initializeStateAccount(wallet) {
   const provider = new Provider(connection, wallet, Provider.defaultOptions())
   const program = new Program(idl, programID, provider)
+  console.debug('????', programID.toString())
   const capacity = 100
-  const [statePDA, stateBump] = await PublicKey.findProgramAddress([Buffer.from('test7')], programID)
+  const [statePDA, stateBump] = await PublicKey.findProgramAddress([Buffer.from('helix_state')], programID)
   const tx = await program.transaction.initialize(new BN(stateBump), new BN(capacity), {
     accounts: {
       admin: wallet.publicKey,
@@ -225,7 +227,7 @@ export async function approveNFT(wallet, minter, account) {
   const mint = new PublicKey(minter)
   const provider = new Provider(connection, wallet, Provider.defaultOptions())
   const program = new Program(idl, programID, provider)
-  const [statePDA, stateBump] = await PublicKey.findProgramAddress([Buffer.from('test7')], programID)
+  const [statePDA, stateBump] = await PublicKey.findProgramAddress([Buffer.from(CONSTANT.buffer.dev)], programID)
   const senderATA = await getOrCreateAssociatedTokenAccount(
     wallet.publicKey,
     mint,
@@ -300,7 +302,7 @@ export async function tokensToEnrichedNFTs(wallet) {
   let tokens = await getTokensByOwner(wallet.publicKey)
   const tokensOwnedByProgram = await getTokensByOwner(programID)
 
-  const [statePDA, stateBump] = await PublicKey.findProgramAddress([Buffer.from('test7')], programID)
+  const [statePDA, stateBump] = await PublicKey.findProgramAddress([Buffer.from(CONSTANT.buffer.dev)], programID)
   const stateAccount = await connection.getAccountInfo(statePDA)
   const deserializedData = deserializeAccountInfo(stateAccount.data)
   const filteredData = deserializedData.filter((d) => d.user.toString() === wallet.publicKey.toString())
