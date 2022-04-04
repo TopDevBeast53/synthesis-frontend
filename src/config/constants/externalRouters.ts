@@ -46,7 +46,7 @@ const externalRouters: ExternalRouterData[] = [
 		pairToken: 
 			new Token(
 				TESTNET,
-				'0xd239560c0d8Ae7EB66c5f691F32a7D7857cEDc58',
+				'0x6a645fb92202d79f3da91b560F6e9981A4f1a9FE',
 				18,
 				'TT2',
 				'tt2',
