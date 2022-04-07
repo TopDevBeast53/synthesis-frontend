@@ -11,7 +11,7 @@ const WalletAdapter = ({ children }: { children?: React.ReactNode }) => {
 
 // export function WalletAdapter({ children }: { children?: React.ReactNode }) {
   // TODO: This should be read from env
-  const network = WalletAdapterNetwork.Devnet
+  const network = WalletAdapterNetwork.Testnet
 
   // You can also provide a custom RPC endpoint
   const endpoint = useMemo(() => clusterApiUrl(network), [network])

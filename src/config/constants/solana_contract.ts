@@ -1,10 +1,7 @@
 export default {
     programID: {
         main: '',
-        dev: '95dbcdqFNtVLVYNK2i7oXcuZgY7ruMmCRRySqcSMAXbR'
+        dev: 'GfVqcCmjjSPbBLM8THJEsUq5Jz7fbftsgQofzCvWtQGu',
+        test: 'FuBxmm2UnSFozHjwPAJRi7meii4HeQ4tcy3gCCdTKmXK'
     },
-    buffer: {
-        main: '',
-        dev: 'helix_state'
-    }
 }

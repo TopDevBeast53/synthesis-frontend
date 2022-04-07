@@ -14,6 +14,7 @@ import { WalletAdapterNetwork } from '@solana/wallet-adapter-base'
 import { Program, Provider, web3, BN } from '@project-serum/anchor'
 import idl from '../../../config/abi-solana/solana_anchor.json'
 import CONSTANT from '../../../config/constants/solana_contract';
+import { BRIDGE_BACKEND } from '../../../config/constants/endpoints'
 
 const programID = new PublicKey(CONSTANT.programID.dev)
 
@@ -60,33 +61,6 @@ export async function getTokensByOwner(owner) {
       address: new PublicKey(to.pubkey),
       mint: new PublicKey(to.account.data.parsed.info.mint),
     }))
-}
-
-// will be used only once by admin for initializing the state account
-export async function initializeStateAccount(wallet) {
-  const provider = new Provider(connection, wallet, Provider.defaultOptions())
-  const program = new Program(idl, programID, provider)
-  console.debug('????', programID.toString())
-  const capacity = 100
-  const [statePDA, stateBump] = await PublicKey.findProgramAddress([Buffer.from('helix_state')], programID)
-  const tx = await program.transaction.initialize(new BN(stateBump), new BN(capacity), {
-    accounts: {
-      admin: wallet.publicKey,
-      stateAccount: statePDA,
-      systemProgram: web3.SystemProgram.programId,
-    },
-    signers: [],
-  })
-
-  tx.feePayer = wallet.publicKey
-  tx.recentBlockhash = (await connection.getRecentBlockhash()).blockhash
-  const signedTx = await wallet.signTransaction(tx)
-  try {
-    const txId = await connection.sendRawTransaction(signedTx.serialize())
-    await connection.confirmTransaction(txId)
-  } catch {
-    console.error('transaction error!')
-  }
 }
 
 // TODO: move to util
@@ -227,7 +201,6 @@ export async function approveNFT(wallet, minter, account) {
   const mint = new PublicKey(minter)
   const provider = new Provider(connection, wallet, Provider.defaultOptions())
   const program = new Program(idl, programID, provider)
-  const [statePDA, stateBump] = await PublicKey.findProgramAddress([Buffer.from(CONSTANT.buffer.dev)], programID)
   const senderATA = await getOrCreateAssociatedTokenAccount(
     wallet.publicKey,
     mint,
@@ -239,7 +212,6 @@ export async function approveNFT(wallet, minter, account) {
   const uint8array = new TextEncoder().encode(account)
   const tx = program.transaction.transferIn(uint8array, {
     accounts: {
-      stateAccount: statePDA,
       from: senderATA.address,
       to: receiverATA.address,
       mint,
@@ -272,44 +244,28 @@ async function getMetadataByMint(mint, metadataPDA, metadataOnchain) {
     metadataExternal,
   }
 }
-// TODO: move to util
-function deserializeAccountInfo(buffer) {
-  if (!buffer) {
-    console.error('empty account data!')
-    return []
-  }
 
-  const len = buffer.length
-  // eslint-disable-next-line prefer-const
+const fetchStates = async () => {
+  // Send GET request to 'states/all' endpoint
   let result = []
-  // 10 means the start index of data, 96 means 3 Pubkeys
-  for (let i = 15; i < len; i += 104) {
-    if (buffer[i] === 0) {
-      break
-    }
-
-    result.push({
-      bsc: new TextDecoder().decode(buffer.slice(i, i + 40)),
-      user: new PublicKey(buffer.slice(i + 40, i + 72)),
-      token: new PublicKey(buffer.slice(i + 72, i + 104)),
-    })
-  }
-
+  try {
+    const response = await axios.get(BRIDGE_BACKEND);
+    result = response.data;
+  } catch(err) {
+    console.error(`There was an error retrieving: ${err}`)
+  } 
   return result
 }
 
 export async function tokensToEnrichedNFTs(wallet) {
   let tokens = await getTokensByOwner(wallet.publicKey)
   const tokensOwnedByProgram = await getTokensByOwner(programID)
-
-  const [statePDA, stateBump] = await PublicKey.findProgramAddress([Buffer.from(CONSTANT.buffer.dev)], programID)
-  const stateAccount = await connection.getAccountInfo(statePDA)
-  const deserializedData = deserializeAccountInfo(stateAccount.data)
-  const filteredData = deserializedData.filter((d) => d.user.toString() === wallet.publicKey.toString())
+  const stateData = await fetchStates();
+  const filteredData = stateData.filter((d) => d.owner.toString() === wallet.publicKey.toString())
   let tokensOwnedByUser = tokensOwnedByProgram.filter((t) => {
     // eslint-disable-next-line no-restricted-syntax
     for (const d of filteredData) {
-      if (t.mint.toString() === d.token.toString()) {
+      if (t.mint.toString() === d.mint.toString()) {
         return true
       }
     }

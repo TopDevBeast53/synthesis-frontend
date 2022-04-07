@@ -27,13 +27,11 @@ export const useAuraNFTBridge = () => {
     const bridgeAddr = getAuraNFTBridgeContract().address
     let tx:any
     try {
-      console.debug('what', account)
       tx = await callWithGasPrice(getAuraNFTContract(), 'getTokenIdsOfOwner', [account])
     } catch(e) {
       return []
     }
     const tokenIds = (tx.toString()).split(',').map((v)=>({id: v}))
-    console.debug("what is", tokenIds)
     if (tokenIds.length > 0) {
       const resTokensInfo = await Promise.all(tokenIds.map((e:any)=>callWithGasPrice(getAuraNFTContract(), 'getToken', [e.id])))
       const externalTokenIdsInfo = await Promise.all(tokenIds.map((e:any)=>callWithGasPrice(getAuraNFTContract(), 'getExternalTokenID', [e.id])))

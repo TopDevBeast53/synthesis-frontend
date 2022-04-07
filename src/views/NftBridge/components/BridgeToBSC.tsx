@@ -15,7 +15,6 @@ import NFTConnectSolanaPanel from './NFTConnectSolanaPanel';
 import 
 { 
   tokensToEnrichedNFTs, 
-  initializeStateAccount,
   approveNFT 
 } from '../helper/utils';
 import CircleLoader from '../../../components/Loader/CircleLoader'
@@ -101,7 +100,6 @@ function BridgeToBSCInner({switcher}: {switcher: React.ReactNode}) {
         return;
       }
       setLoading(true)
-      console.debug('what', mint)
       const res = await approveNFT(wallet, mint, account.slice(2));
       if (res) {
         toastSuccess(t('Success'), t('Bridged From Solana!'))
@@ -152,9 +150,9 @@ function BridgeToBSCInner({switcher}: {switcher: React.ReactNode}) {
     console.debug('finished!')
   }
 
-  const handleInitialize = async() => {
-    await initializeStateAccount(wallet);
-  }
+  // const handleInitialize = async() => {
+  //   await initializeStateAccount(wallet);
+  // }
 
   const TokensList = () => (
     <div>
