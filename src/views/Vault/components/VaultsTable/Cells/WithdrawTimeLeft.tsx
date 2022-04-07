@@ -1,0 +1,65 @@
+import React, { useMemo } from 'react'
+import { Flex, Skeleton, Text, useMatchBreakpoints } from 'uikit'
+import styled from 'styled-components'
+import { useTranslation } from 'contexts/Localization'
+import BigNumber from 'bignumber.js'
+import Balance from 'components/Balance'
+import { DeserializedPool } from 'state/types'
+import { useVaultPoolByKey, useVaultPools } from 'state/pools/hooks'
+import { getBalanceNumber } from 'utils/formatBalance'
+import { BIG_ZERO } from 'utils/bigNumber'
+import BaseCell, { CellContent } from './BaseCell'
+
+interface TotalStakedCellProps {
+  pool: DeserializedPool
+}
+
+const StyledCell = styled(BaseCell)`
+  flex: 2 0 100px;
+`
+
+const WithdrawTimeLeft: React.FC<TotalStakedCellProps> = ({ pool }) => {
+  const { t } = useTranslation()
+  const { isMobile } = useMatchBreakpoints()
+  const { sousId, stakingToken, totalStaked, vaultKey } = pool
+  const { totalAuraInVault } = useVaultPoolByKey(vaultKey)
+  const vaultPools = useVaultPools()
+
+  const auraInVaults = Object.values(vaultPools).reduce((total, vault) => {
+    return total.plus(vault.totalAuraInVault)
+  }, BIG_ZERO)
+
+  const isManualAuraPool = sousId === 0
+
+  const withdrawTimeLeft = useMemo(() => {
+    if (vaultKey) {
+      return getBalanceNumber(totalAuraInVault, stakingToken.decimals)
+    }
+    if (isManualAuraPool) {
+      const manualAuraTotalMinusAutoVault = new BigNumber(totalStaked).minus(auraInVaults)
+
+      return getBalanceNumber(manualAuraTotalMinusAutoVault, stakingToken.decimals)
+    }
+    return getBalanceNumber(totalStaked, stakingToken.decimals)
+  }, [vaultKey, totalAuraInVault, isManualAuraPool, totalStaked, stakingToken.decimals, auraInVaults])
+
+  const balanceFontSize = isMobile ? "14px" : "16px";
+  return (
+    <StyledCell role="cell">
+      <CellContent>
+        <Text fontSize="12px" color="textSubtle" textAlign="left">
+          {t('Withdraw Time Left')}
+        </Text>
+        {totalStaked && totalStaked.gte(0) ? (
+          <Flex height="20px" alignItems="center" mt={2} >
+            <Balance fontSize={balanceFontSize} value={withdrawTimeLeft} decimals={0} unit={`  days`} />
+          </Flex>
+        ) : (
+          <Skeleton width="80px" height="16px" />
+        )}
+      </CellContent>
+    </StyledCell>
+  )
+}
+
+export default WithdrawTimeLeft

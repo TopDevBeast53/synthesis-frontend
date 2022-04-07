@@ -123,4 +123,8 @@ export default {
     56: '0x00000000000000',
     97: '0xC3A5dc2D9eC0e8CC6603F81FDc0Fd7aB53E389b3',
   },
+  vault: {
+    56: '',
+    97: '0x4592Bc7C6f98611b4EB01A1e931574DbbE6F345e',
+  },
 }

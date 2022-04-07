@@ -106,3 +106,6 @@ export const getVotingAddress = () => {
 export const getAuraNftBridgeAddress = () => {
   return getAddress(addresses.auraNFTBridge)
 }
+export const getHelixVaultAddress = () => {
+  return getAddress(addresses.vault)
+}
