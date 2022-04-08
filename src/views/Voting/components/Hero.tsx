@@ -24,7 +24,7 @@ const Hero = () => {
               {t('Voting')}
             </Heading>
             <Heading as="h3" scale="lg" mb="16px">
-              {t('Have your say in the future of the Aura Geometry Ecosystem')}
+              {t('Have your say in the future of the Helix Geometry Ecosystem')}
             </Heading>
             <Button
               startIcon={<ProposalIcon color="currentColor" width="24px" />}
