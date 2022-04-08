@@ -2,8 +2,8 @@
   {
     "inputs": [
       {
-        "internalType": "contract IAuraNFT",
-        "name": "_auraNFT",
+        "internalType": "contract IHelixNFT",
+        "name": "_helixNFT",
         "type": "address"
       },
       {
@@ -44,7 +44,7 @@
         "type": "uint256"
       }
     ],
-    "name": "BoostAuraNFT",
+    "name": "BoostHelixNFT",
     "type": "event"
   },
   {
@@ -184,7 +184,7 @@
         "type": "uint256"
       }
     ],
-    "name": "boostAuraNFT",
+    "name": "boostHelixNFT",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -246,7 +246,7 @@
         "type": "address"
       }
     ],
-    "name": "getUserAuraPointAmount",
+    "name": "getUserHelixPointAmount",
     "outputs": [
       {
         "internalType": "uint256",
@@ -425,7 +425,7 @@
   },
   {
     "inputs": [],
-    "name": "totalAuraPoints",
+    "name": "totalHelixPoints",
     "outputs": [
       {
         "internalType": "uint256",
@@ -481,7 +481,7 @@
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "auraPointAmount",
+        "name": "helixPointAmount",
         "type": "uint256"
       }
     ],

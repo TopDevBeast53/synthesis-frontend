@@ -8,11 +8,11 @@
   },
   "tags": {},
   "logoURI": "https://pancakeswap.finance/logo.png",
-  "keywords": ["aura", "default"],
+  "keywords": ["helix", "default"],
   "tokens": [
     {
       "name": "Aura",
-      "symbol": "AURA",
+      "symbol": "HELIX",
       "address": "0x373d65f5437B98DC3050Fa73fd47cC745a395891",
       "chainId": 97,
       "decimals": 18,
