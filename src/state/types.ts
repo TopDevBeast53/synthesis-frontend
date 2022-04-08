@@ -62,7 +62,7 @@ export interface DeserializedFarm extends DeserializedFarmConfig {
 }
 
 export enum VaultKey {
-  AuraVault = 'auraVault',
+  HelixAutoPool = 'helixAutoPool',
   IfoPool = 'ifoPool',
 }
 
@@ -145,7 +145,7 @@ export interface IfoVaultUser extends VaultUser {
   credit: string
 }
 
-export interface AuraVault {
+export interface HelixAutoPool {
   totalShares?: string
   pricePerFullShare?: string
   totalAuraInVault?: string
@@ -155,7 +155,7 @@ export interface AuraVault {
   userData?: VaultUser
 }
 
-export interface IfoAuraVault extends Omit<AuraVault, 'userData'> {
+export interface IfoAuraVault extends Omit<HelixAutoPool, 'userData'> {
   userData?: IfoVaultUser
   creditStartBlock?: number
   creditEndBlock?: number
@@ -163,7 +163,7 @@ export interface IfoAuraVault extends Omit<AuraVault, 'userData'> {
 
 export interface PoolsState {
   data: SerializedPool[]
-  auraVault: AuraVault
+  helixAutoPool: HelixAutoPool
   ifoPool: IfoAuraVault
   userDataLoaded: boolean
 }

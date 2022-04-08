@@ -53,7 +53,7 @@ export const getVaultPoolAddress = (vaultKey: VaultKey) => {
 }
 
 export const getAuraVaultAddress = () => {
-  return getAddress(addresses.auraVault)
+  return getAddress(addresses.helixAutoPool)
 }
 export const getIfoPoolAddress = () => {
   return getAddress(addresses.ifoPool)

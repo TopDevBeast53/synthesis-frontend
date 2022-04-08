@@ -99,7 +99,7 @@ export default {
     56: '',
     97: '0xe911B52fa2a24A84Da9D6039684046E437B8C673',
   },
-  auraVault: { // AutoPool
+  helixAutoPool: { // AutoPool
     56: '',
     97: '0xC28F43D3C967bD42eff53cCecCeaCF09f09a6C64',
   },

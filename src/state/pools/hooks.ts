@@ -117,12 +117,12 @@ export const useFetchIfoPool = (fetchAuraPool = true) => {
 }
 
 export const useAuraVault = () => {
-  return useVaultPoolByKey(VaultKey.AuraVault)
+  return useVaultPoolByKey(VaultKey.HelixAutoPool)
 }
 
 export const useVaultPools = () => {
   return {
-    [VaultKey.AuraVault]: useVaultPoolByKey(VaultKey.AuraVault),
+    [VaultKey.HelixAutoPool]: useVaultPoolByKey(VaultKey.HelixAutoPool),
     // [VaultKey.IfoPool]: useVaultPoolByKey(VaultKey.IfoPool),
   }
 }

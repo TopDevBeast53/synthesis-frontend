@@ -22,7 +22,6 @@ import {
   getPredictionsAddress,
   getChainlinkOracleAddress,
   getMulticallAddress,
-  getBunnySpecialCakeVaultAddress,
   getBunnySpecialPredictionAddress,
   getBunnySpecialLotteryAddress,
   getFarmAuctionAddress,
@@ -42,7 +41,7 @@ import bunnySpecialAbi from 'config/abi/bunnySpecial.json'
 import bep20Abi from 'config/abi/erc20.json'
 import erc721Abi from 'config/abi/erc721.json'
 import lpTokenAbi from 'config/abi/lpToken.json'
-import auraAbi from 'config/abi/aura.json'
+import helixAbi from 'config/abi/Helix.json'
 import ifoV1Abi from 'config/abi/ifoV1.json'
 import ifoV2Abi from 'config/abi/ifoV2.json'
 import pointCenterIfo from 'config/abi/pointCenterIfo.json'
@@ -55,12 +54,11 @@ import claimRefundAbi from 'config/abi/claimRefund.json'
 import tradingCompetitionAbi from 'config/abi/tradingCompetition.json'
 import tradingCompetitionV2Abi from 'config/abi/tradingCompetitionV2.json'
 import easterNftAbi from 'config/abi/easterNft.json'
-import auraVaultAbi from 'config/abi/auraVault.json'
+import helixAutoPoolAbi from 'config/abi/HelixAutoPool.json'
 import ifoPoolAbi from 'config/abi/ifoPool.json'
 import predictionsAbi from 'config/abi/predictions.json'
 import chainlinkOracleAbi from 'config/abi/chainlinkOracle.json'
 import MultiCallAbi from 'config/abi/Multicall.json'
-import bunnySpecialCakeVaultAbi from 'config/abi/bunnySpecialCakeVault.json'
 import bunnySpecialPredictionAbi from 'config/abi/bunnySpecialPrediction.json'
 import bunnySpecialLotteryAbi from 'config/abi/bunnySpecialLottery.json'
 import bunnySpecialXmasAbi from 'config/abi/bunnySpecialXmas.json'
@@ -82,7 +80,7 @@ import {
   IfoPool,
   Erc20,
   Erc721,
-  Aura,
+  Helix,
   BunnyFactory,
   PancakeRabbits,
   PancakeProfile,
@@ -96,9 +94,8 @@ import {
   TradingCompetition,
   TradingCompetitionV2,
   EasterNft,
-  AuraVault,
+  HelixAutoPool,
   Multicall,
-  BunnySpecialCakeVault,
   BunnySpecialPrediction,
   BunnySpecialLottery,
   NftMarket,
@@ -141,7 +138,7 @@ export const getPointCenterIfoContract = (signer?: ethers.Signer | ethers.provid
   return getContract(pointCenterIfo, getPointCenterIfoAddress(), signer) as PointCenterIfo
 }
 export const getAuraContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
-  return getContract(auraAbi, tokens.aura.address, signer) as Aura
+  return getContract(helixAbi, tokens.aura.address, signer) as Helix
 }
 export const getProfileContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
   return getContract(profileABI, getPancakeProfileAddress(), signer) as PancakeProfile
@@ -175,7 +172,7 @@ export const getEasterNftContract = (signer?: ethers.Signer | ethers.providers.P
   return getContract(easterNftAbi, getEasterNftAddress(), signer) as EasterNft
 }
 export const getAuraVaultContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
-  return getContract(auraVaultAbi, getAuraVaultAddress(), signer) as AuraVault
+  return getContract(helixAutoPoolAbi, getAuraVaultAddress(), signer) as HelixAutoPool
 }
 export const getIfoPoolContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
   return getContract(ifoPoolAbi, getIfoPoolAddress(), signer) as IfoPool
@@ -190,9 +187,6 @@ export const getChainlinkOracleContract = (signer?: ethers.Signer | ethers.provi
 }
 export const getMulticallContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
   return getContract(MultiCallAbi, getMulticallAddress(), signer) as Multicall
-}
-export const getBunnySpecialCakeVaultContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
-  return getContract(bunnySpecialCakeVaultAbi, getBunnySpecialCakeVaultAddress(), signer) as BunnySpecialCakeVault
 }
 export const getBunnySpecialPredictionContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
   return getContract(bunnySpecialPredictionAbi, getBunnySpecialPredictionAddress(), signer) as BunnySpecialPrediction

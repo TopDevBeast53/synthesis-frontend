@@ -5,7 +5,7 @@ import { SerializedPoolConfig, PoolCategory } from './types'
 const serializedTokens = serializeTokens()
 
 export const vaultPoolConfig = {
-  [VaultKey.AuraVault]: {
+  [VaultKey.HelixAutoPool]: {
     name: 'Auto AURA',
     description: 'Automatic restaking',
     autoCompoundFrequency: 1,

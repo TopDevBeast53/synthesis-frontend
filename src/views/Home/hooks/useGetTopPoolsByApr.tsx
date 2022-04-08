@@ -10,17 +10,17 @@ import { FetchStatus } from 'config/constants/types'
 
 export function usePoolsWithVault() {
   const { pools: poolsWithoutAutoVault } = usePools()
-  const auraVault = useAuraVault()
+  const helixAutoPool = useAuraVault()
   // const ifoPool = useIfoPoolVault()
   const pools = useMemo(() => {
     const activePools = poolsWithoutAutoVault.filter((pool) => !pool.isFinished)
     const auraPool = activePools.find((pool) => pool.sousId === 0)
-    const auraAutoVault = { ...auraPool, vaultKey: VaultKey.AuraVault }
+    const auraAutoVault = { ...auraPool, vaultKey: VaultKey.HelixAutoPool }
     // const ifoPoolVault = { ...auraPool, vaultKey: VaultKey.IfoPool }
     
     const auraAutoVaultWithApr = {
       ...auraAutoVault,
-      apr: getAprData(auraAutoVault, auraVault.fees.performanceFeeAsDecimal).apr,
+      apr: getAprData(auraAutoVault, helixAutoPool.fees.performanceFeeAsDecimal).apr,
       rawApr: auraPool.apr,
     }
     // const ifoPoolWithApr = {
@@ -30,8 +30,8 @@ export function usePoolsWithVault() {
     // }
     // return [ifoPoolWithApr, auraAutoVaultWithApr, ...poolsWithoutAutoVault]
     return [auraAutoVaultWithApr, ...poolsWithoutAutoVault]
-  // }, [poolsWithoutAutoVault, auraVault.fees.performanceFeeAsDecimal, ifoPool.fees.performanceFeeAsDecimal])
-}, [poolsWithoutAutoVault, auraVault.fees.performanceFeeAsDecimal])
+  // }, [poolsWithoutAutoVault, helixAutoPool.fees.performanceFeeAsDecimal, ifoPool.fees.performanceFeeAsDecimal])
+}, [poolsWithoutAutoVault, helixAutoPool.fees.performanceFeeAsDecimal])
 
   return pools
 }

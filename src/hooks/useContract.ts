@@ -23,7 +23,6 @@ import {
   getChainlinkOracleContract,
   getSouschefV2Contract,
   getLotteryV2Contract,
-  getBunnySpecialCakeVaultContract,
   getBunnySpecialPredictionContract,
   getFarmAuctionContract,
   getBunnySpecialLotteryContract,
@@ -37,7 +36,7 @@ import {
 import { getMulticallAddress } from 'utils/addressHelpers'
 import { VaultKey } from 'state/types'
 import {
-  AuraVault,
+  HelixAutoPool,
   EnsPublicResolver,
   EnsRegistrar,
   Erc20,
@@ -162,10 +161,10 @@ export const useEasterNftContract = () => {
   return useMemo(() => getEasterNftContract(library.getSigner()), [library])
 }
 
-export const useVaultPoolContract = (vaultKey: VaultKey): AuraVault | IfoPool => {
+export const useVaultPoolContract = (vaultKey: VaultKey): HelixAutoPool | IfoPool => {
   const { library } = useActiveWeb3React()
   return useMemo(() => {
-    return vaultKey === VaultKey.AuraVault
+    return vaultKey === VaultKey.HelixAutoPool
       ? getAuraVaultContract(library.getSigner())
       : getIfoPoolContract(library.getSigner())
   }, [library, vaultKey])
@@ -189,11 +188,6 @@ export const usePredictionsContract = () => {
 export const useChainlinkOracleContract = () => {
   const { library } = useActiveWeb3React()
   return useMemo(() => getChainlinkOracleContract(library.getSigner()), [library])
-}
-
-export const useSpecialBunnyCakeVaultContract = () => {
-  const { library } = useActiveWeb3React()
-  return useMemo(() => getBunnySpecialCakeVaultContract(library.getSigner()), [library])
 }
 
 export const useSpecialBunnyPredictionContract = () => {

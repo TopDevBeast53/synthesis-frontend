@@ -163,7 +163,6 @@ function BridgeToBSCInner({switcher}: {switcher: React.ReactNode}) {
               key={token.address.toString()}
               tokenId={token.mint.toString()}
               name={token.metadataExternal?.name}
-              mint={token.mint.toString()}
               infos={[
                 {
                   caption: "Token ID",

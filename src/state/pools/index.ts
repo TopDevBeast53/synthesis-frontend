@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js'
 import poolsConfig from 'config/constants/pools'
 import {
   AppThunk,
-  AuraVault,
+  HelixAutoPool,
   IfoAuraVault,
   IfoVaultUser,
   PoolsState,
@@ -56,7 +56,7 @@ export const initialPoolVaultState = Object.freeze({
 const initialState: PoolsState = {
   data: [...poolsConfig],
   userDataLoaded: false,
-  auraVault: initialPoolVaultState,
+  helixAutoPool: initialPoolVaultState,
   ifoPool: initialPoolVaultState,
 }
 
@@ -228,18 +228,18 @@ export const updateUserPendingReward =
     dispatch(updatePoolsUserData({ sousId, field: 'pendingReward', value: pendingRewards[sousId] }))
   }
 
-export const fetchAuraVaultPublicData = createAsyncThunk<AuraVault>('auraVault/fetchPublicData', async () => {
+export const fetchAuraVaultPublicData = createAsyncThunk<HelixAutoPool>('helixAutoPool/fetchPublicData', async () => {
   const publicVaultInfo = await fetchPublicVaultData()
   return publicVaultInfo
 })
 
-export const fetchAuraVaultFees = createAsyncThunk<VaultFees>('auraVault/fetchFees', async () => {
+export const fetchAuraVaultFees = createAsyncThunk<VaultFees>('helixAutoPool/fetchFees', async () => {
   const vaultFees = await fetchVaultFees()
   return vaultFees
 })
 
 export const fetchAuraVaultUserData = createAsyncThunk<VaultUser, { account: string }>(
-  'auraVault/fetchUser',
+  'helixAutoPool/fetchUser',
   async ({ account }) => {
     const userData = await fetchVaultUser(account)
     return userData
@@ -307,19 +307,19 @@ export const PoolsSlice = createSlice({
   },
   extraReducers: (builder) => {
     // Vault public data that updates frequently
-    builder.addCase(fetchAuraVaultPublicData.fulfilled, (state, action: PayloadAction<AuraVault>) => {
-      state.auraVault = { ...state.auraVault, ...action.payload }
+    builder.addCase(fetchAuraVaultPublicData.fulfilled, (state, action: PayloadAction<HelixAutoPool>) => {
+      state.helixAutoPool = { ...state.helixAutoPool, ...action.payload }
     })
     // Vault fees
     builder.addCase(fetchAuraVaultFees.fulfilled, (state, action: PayloadAction<VaultFees>) => {
       const fees = action.payload
-      state.auraVault = { ...state.auraVault, fees }
+      state.helixAutoPool = { ...state.helixAutoPool, fees }
     })
     // Vault user data
     builder.addCase(fetchAuraVaultUserData.fulfilled, (state, action: PayloadAction<VaultUser>) => {
       const userData = action.payload
       userData.isLoading = false
-      state.auraVault = { ...state.auraVault, userData }
+      state.helixAutoPool = { ...state.helixAutoPool, userData }
     })
     // Vault public data that updates frequently
     builder.addCase(fetchIfoPoolPublicData.fulfilled, (state, action) => {

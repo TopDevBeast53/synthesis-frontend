@@ -72,7 +72,6 @@ interface NFTAction {
 
 interface NftCardProps {
   name?: string | undefined,
-  mint?: string | undefined,
   infos: NFTInfo[],
   actions: NFTAction[],
   bgSrc: string
@@ -90,7 +89,6 @@ const NFTImage = styled(Image)`
 const NftCard: React.FC<NftCardProps> = ({
   name,
   infos,
-  mint,
   actions,
   bgSrc,
   tokenId,

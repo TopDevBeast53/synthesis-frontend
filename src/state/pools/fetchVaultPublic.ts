@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js'
 import { convertSharesToAura } from 'views/Pools/helpers'
 import { multicallv2 } from 'utils/multicall'
-import auraVaultAbi from 'config/abi/auraVault.json'
+import helixAutoPoolAbi from 'config/abi/HelixAutoPool.json'
 import { getAuraVaultAddress } from 'utils/addressHelpers'
 import { BIG_ZERO } from 'utils/bigNumber'
 
@@ -18,7 +18,7 @@ export const fetchPublicVaultData = async () => {
     }))
 
     const [[sharePrice], [shares], [estimatedAuraBountyReward], [totalPendingAuraHarvest]] = await multicallv2(
-      auraVaultAbi,
+      helixAutoPoolAbi,
       calls,
     ) 
 
@@ -50,7 +50,7 @@ export const fetchVaultFees = async () => {
       name: method,
     }))
 
-    const [[performanceFee], [callFee], [withdrawalFee], [withdrawalFeePeriod]] = await multicallv2(auraVaultAbi, calls)
+    const [[performanceFee], [callFee], [withdrawalFee], [withdrawalFeePeriod]] = await multicallv2(helixAutoPoolAbi, calls)
 
     return {
       performanceFee: performanceFee.toNumber(),
