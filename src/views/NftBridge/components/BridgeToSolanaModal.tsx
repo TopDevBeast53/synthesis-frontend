@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import useToast from 'hooks/useToast'
 import { logError } from 'utils/sentry'
 import AddressInputPanel from './AddressInputPanel'
-import { useAuraNFTBridge } from '../hooks/useAuraNFTBridge'
+import { useNFTBridge } from '../hooks/useNFTBridge'
 
 const StyledModalBody = styled(ModalBody)`
     padding: 24px;
@@ -24,7 +24,7 @@ interface BridgeToSolanaModalProps extends InjectedModalProps {
 const BridgeToSolanaModal: React.FC<BridgeToSolanaModalProps> = ({ tokenIDToBridge, externalTokenIDToBridge, onDismiss }) => {
     const [destination, setDestination] = useState('')
     const { toastError, toastSuccess } = useToast()
-    const { bridgeToSolana } = useAuraNFTBridge()
+    const { bridgeToSolana } = useNFTBridge()
 
     const onChangeDestination = useCallback((value:string) => {
         setDestination(value)

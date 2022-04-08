@@ -5,7 +5,7 @@ import { DeserializedPool } from 'state/types'
 import Balance from 'components/Balance'
 import { useVaultPoolByKey } from 'state/pools/hooks'
 import { useTranslation } from 'contexts/Localization'
-import { getAuraVaultEarnings } from 'views/Pools/helpers'
+import { getVaultEarnings } from 'views/Pools/helpers'
 import BaseCell, { CellContent } from './BaseCell'
 
 interface AutoEarningsCellProps {
@@ -33,7 +33,7 @@ const AutoEarningsCell: React.FC<AutoEarningsCellProps> = ({ pool, account }) =>
     userData: { isLoading: userDataLoading, helixAtLastUserAction, userShares, lastUserActionTime },
     pricePerFullShare,
   } = useVaultPoolByKey(pool.vaultKey)
-  const { hasAutoEarnings, autoAuraToDisplay, autoUsdToDisplay } = getAuraVaultEarnings(
+  const { hasAutoEarnings, autoAuraToDisplay, autoUsdToDisplay } = getVaultEarnings(
     account,
     helixAtLastUserAction,
     userShares,

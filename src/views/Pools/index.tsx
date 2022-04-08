@@ -34,7 +34,7 @@ import PoolCard from './components/PoolCard'
 import CakeVaultCard from './components/CakeVaultCard'
 import PoolTabButtons from './components/PoolTabButtons'
 import PoolsTable from './components/PoolsTable/PoolsTable'
-import { getAuraVaultEarnings } from './helpers'
+import { getVaultEarnings } from './helpers'
 
 const CardLayout = styled(FlexLayout)`
   justify-content: center;
@@ -166,7 +166,7 @@ const Pools: React.FC = () => {
               return 0
             }
             return pool.vaultKey
-              ? getAuraVaultEarnings(
+              ? getVaultEarnings(
                   account,
                   vaultPools[pool.vaultKey].userData.helixAtLastUserAction,
                   vaultPools[pool.vaultKey].userData.userShares,

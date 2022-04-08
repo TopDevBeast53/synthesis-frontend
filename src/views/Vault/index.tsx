@@ -24,7 +24,7 @@ import { latinise } from 'utils/latinise'
 import { usePoolsWithVault } from 'views/Home/hooks/useGetTopPoolsByApr'
 import AddRowModal from './components/AddRowModal'
 import VaultsTable from './components/VaultsTable/VaultsTable'
-import { getAuraVaultEarnings } from './helpers'
+import { getHelixVaultEarnings } from './helpers'
 
 
 
@@ -123,7 +123,7 @@ const Vault: React.FC = () => {
               return 0
             }
             return pool.vaultKey
-              ? getAuraVaultEarnings(
+              ? getHelixVaultEarnings(
                   account,
                   vaultPools[pool.vaultKey].userData.helixAtLastUserAction,
                   vaultPools[pool.vaultKey].userData.userShares,

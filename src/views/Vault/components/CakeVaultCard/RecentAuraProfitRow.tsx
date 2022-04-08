@@ -5,7 +5,7 @@ import { useTranslation } from 'contexts/Localization'
 import { usePriceAuraBusd } from 'state/farms/hooks'
 import { useVaultPoolByKey } from 'state/pools/hooks'
 import { VaultKey } from 'state/types'
-import { getAuraVaultEarnings } from 'views/Pools/helpers'
+import { getVaultEarnings } from 'views/Pools/helpers'
 import RecentAuraProfitBalance from './RecentAuraProfitBalance'
 
 const RecentAuraProfitCountdownRow = ({ vaultKey }: { vaultKey: VaultKey }) => {
@@ -16,7 +16,7 @@ const RecentAuraProfitCountdownRow = ({ vaultKey }: { vaultKey: VaultKey }) => {
     userData: { helixAtLastUserAction, userShares, lastUserActionTime },
   } = useVaultPoolByKey(vaultKey)
   const auraPriceBusd = usePriceAuraBusd()
-  const { hasAutoEarnings, autoAuraToDisplay, autoUsdToDisplay } = getAuraVaultEarnings(
+  const { hasAutoEarnings, autoAuraToDisplay, autoUsdToDisplay } = getVaultEarnings(
     account,
     helixAtLastUserAction,
     userShares,

@@ -11,7 +11,7 @@ import auraNFTABI from 'config/abi/AuraNFT.json'
 import { auraNFTBridgeAddress } from '../constants'
 import { auraNFTAddress } from '../../NftStaking/constants'
 
-export const useAuraNFTBridge = () => {
+export const useNFTBridge = () => {
   const { library, account } = useActiveWeb3React()
   const { callWithGasPrice } = useCallWithGasPrice()
 

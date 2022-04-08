@@ -8,7 +8,7 @@ import type { ExternalRouterData } from 'config/constants/externalRouters';
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 
-import auraMigratorABI from 'config/abi/AuraMigrator.json';
+import helixMigratorABI from 'config/abi/HelixMigrator.json';
 import AuraPair from 'config/abi/AuraPair.json';
 
 import { auraMigratorAddress } from '../constants';
@@ -27,7 +27,7 @@ export const useMigrateLiquidity = () => {
     const handleMigrateLiquidity: (externalRouter: ExternalRouterData) => Promise<ethers.providers.TransactionReceipt> = useCallback(async (externalRouter) => {
         const [tokenA, tokenB] = await splitPair(externalRouter.pairToken.address);
 
-        const migratorContract = new Contract(auraMigratorAddress, auraMigratorABI, getProviderOrSigner(library, account));
+        const migratorContract = new Contract(auraMigratorAddress, helixMigratorABI, getProviderOrSigner(library, account));
         const lpContract = new Contract(externalRouter.pairToken.address, AuraPair, getProviderOrSigner(library, account));
 
         const approveTx = await callWithGasPrice(lpContract, 'approve', [auraMigratorAddress, ethers.constants.MaxUint256])

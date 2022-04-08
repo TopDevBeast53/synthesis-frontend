@@ -4,7 +4,7 @@ import { useTranslation } from 'contexts/Localization'
 import useToast from 'hooks/useToast'
 import { logError } from 'utils/sentry'
 import CircleLoader from '../../../components/Loader/CircleLoader'
-import { useAuraNFTBridge } from '../hooks/useAuraNFTBridge'
+import { useNFTBridge } from '../hooks/useNFTBridge'
 import NftCard from '../../NftStaking/components/NftCard'
 import BridgeToSolanaModal from './BridgeToSolanaModal'
 import NFTStartCollectPanel from '../../NftStaking/components/NFTStartCollectPanel'
@@ -19,7 +19,7 @@ export default function BridgeToSolana({switcher}: {switcher: React.ReactNode}) 
 
   const [loading, setLoading] = useState(true)
 
-  const { getUnstakedNftsFromBSC, approveToBridgeContract } = useAuraNFTBridge()
+  const { getUnstakedNftsFromBSC, approveToBridgeContract } = useNFTBridge()
 
   const [onPresentBridgeModal] = useModal(
     <BridgeToSolanaModal tokenIDToBridge={selectedTokenID} externalTokenIDToBridge={selectedExternalTokenID} />

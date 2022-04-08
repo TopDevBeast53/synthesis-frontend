@@ -49,7 +49,7 @@ export const getAprData = (pool: DeserializedPool, performanceFee: number) => {
   return { apr, autoCompoundFrequency }
 }
 
-export const getAuraVaultEarnings = (
+export const getHelixVaultEarnings = (
   account: string,
   helixAtLastUserAction: BigNumber,
   userShares: BigNumber,
