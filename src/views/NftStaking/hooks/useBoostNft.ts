@@ -7,8 +7,8 @@ import { formatBigNumber, getDecimalAmount } from 'utils/formatBalance'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
-import auraNFTABI from 'config/abi/AuraNFT.json'
-import auraChefNFTABI from 'config/abi/AuraChefNFT.json'
+import helixNFTABI from 'config/abi/HelixNFT.json'
+import helixChefNFTABI from 'config/abi/HelixChefNFT.json'
 import { auraNFTAddress, auraNFTChefAddress } from '../constants'
 
 export const useBoostNft = () => {
@@ -16,11 +16,11 @@ export const useBoostNft = () => {
   const { callWithGasPrice } = useCallWithGasPrice()
 
   const getAuraNFTContract = useCallback(() => {
-    return new Contract(auraNFTAddress, auraNFTABI, getProviderOrSigner(library, account))
+    return new Contract(auraNFTAddress, helixNFTABI, getProviderOrSigner(library, account))
   }, [library, account])
 
   const getAuraChefNFTContract = useCallback(() => {
-    return new Contract(auraNFTChefAddress, auraChefNFTABI, getProviderOrSigner(library, account))
+    return new Contract(auraNFTChefAddress, helixChefNFTABI, getProviderOrSigner(library, account))
   }, [library, account])
 
   const getAccumulatedAP = useCallback(async () => {

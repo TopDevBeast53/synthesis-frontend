@@ -6,8 +6,8 @@ import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { ethers } from 'ethers'
 import { formatBigNumber } from 'utils/formatBalance'
 
-import auraNFTBridgeABI from 'config/abi/auraNFTBridge.json'
-import auraNFTABI from 'config/abi/AuraNFT.json'
+import helixNFTBridgeABI from 'config/abi/HelixNFTBridge.json'
+import helixNFTABI from 'config/abi/HelixNFT.json'
 import { auraNFTBridgeAddress } from '../constants'
 import { auraNFTAddress } from '../../NftStaking/constants'
 
@@ -16,11 +16,11 @@ export const useNFTBridge = () => {
   const { callWithGasPrice } = useCallWithGasPrice()
 
   const getAuraNFTBridgeContract = useCallback(() => {
-    return new Contract(auraNFTBridgeAddress, auraNFTBridgeABI, getProviderOrSigner(library, account))
+    return new Contract(auraNFTBridgeAddress, helixNFTBridgeABI, getProviderOrSigner(library, account))
   }, [library, account])
 
   const getAuraNFTContract = useCallback(() => {
-    return new Contract(auraNFTAddress, auraNFTABI, getProviderOrSigner(library, account))
+    return new Contract(auraNFTAddress, helixNFTABI, getProviderOrSigner(library, account))
   }, [library, account])
 
   const getUnstakedNftsFromBSC = useCallback(async () => {

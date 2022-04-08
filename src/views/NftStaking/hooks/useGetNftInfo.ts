@@ -6,16 +6,16 @@ import { formatBigNumber } from 'utils/formatBalance'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
-import auraNFTABI from 'config/abi/AuraNFT.json'
+import helixNFTABI from 'config/abi/HelixNFT.json'
 import { auraNFTAddress } from '../constants'
 import { TokenInfo } from '../type'
 
-export const useGetAuraNftInfo = () => {
+export const useGetNftInfo = () => {
   const { library, account } = useActiveWeb3React()
   const { callWithGasPrice } = useCallWithGasPrice()
 
   const getAuraNFTContract = useCallback(() => {
-    return new Contract(auraNFTAddress, auraNFTABI, getProviderOrSigner(library, account))
+    return new Contract(auraNFTAddress, helixNFTABI, getProviderOrSigner(library, account))
   }, [library, account])
 
   const getLastTokenId = useCallback(async () => {

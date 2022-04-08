@@ -1,6 +1,6 @@
 import React from "react";
 import styled, { keyframes } from "styled-components";
-import AuraIcon from "./AuraIcon";
+import HelixIcon from "./HelixIcon";
 import { SpinnerProps } from "./types";
 
 const rotate = keyframes`
@@ -16,7 +16,7 @@ const Container = styled.div`
   position: relative;
 `;
 
-const RotatingAuraIcon = styled(AuraIcon)`
+const RotatingHelixIcon = styled(HelixIcon)`
   position: absolute;
   top: 0;
   left: 0;
@@ -27,7 +27,7 @@ const RotatingAuraIcon = styled(AuraIcon)`
 const Spinner: React.FC<SpinnerProps> = ({ size = 128 }) => {
   return (
     <Container>
-      <RotatingAuraIcon width={`${size * 0.5}px`} />
+      <RotatingHelixIcon width={`${size * 0.5}px`} />
     </Container>
   );
 };

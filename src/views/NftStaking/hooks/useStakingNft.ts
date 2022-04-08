@@ -5,7 +5,7 @@ import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { Contract } from '@ethersproject/contracts'
 import { ethers } from 'ethers'
 import { formatBigNumber } from 'utils/formatBalance'
-import auraChefNFTABI from 'config/abi/AuraChefNFT.json'
+import helixChefNFTABI from 'config/abi/HelixChefNFT.json'
 import { auraNFTChefAddress } from '../constants'
 
 export const useStakingNft = () => {
@@ -13,7 +13,7 @@ export const useStakingNft = () => {
   const { callWithGasPrice } = useCallWithGasPrice()
 
   const getAuraChefNFTContract = useCallback(() => {
-    return new Contract(auraNFTChefAddress, auraChefNFTABI, getProviderOrSigner(library, account))
+    return new Contract(auraNFTChefAddress, helixChefNFTABI, getProviderOrSigner(library, account))
   }, [library, account])
 
   const stakingNft = useCallback(async (tokenIds:number[], isStaking:boolean) => {

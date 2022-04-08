@@ -26,7 +26,7 @@ import { externalFactoryRouteMapping } from 'config/constants/externalRouters';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 import { Token } from 'sdk';
 import { Contract } from '@ethersproject/contracts';
-import AuraPair from 'config/abi/AuraPair.json'; 
+import helixPair from 'config/abi/HelixPair.json'; 
 import { useFilterDexByQuery } from 'components/SearchModal/filtering';
 import { useAllExternalDexesWithTokens } from 'hooks/Dexes';
 
@@ -92,7 +92,7 @@ const ExternalRouterSelectModal: React.FC<ExternalRouterSelectModalProps> = ({
 	)
 
 	const setImportToken = useCallback(async (token: Token) => {
-		const tokenContract = new Contract(token.address, AuraPair, getProviderOrSigner(library, account));
+		const tokenContract = new Contract(token.address, helixPair, getProviderOrSigner(library, account));
 		const tokenFactory = await callWithGasPrice(tokenContract, 'factory', []);
 		const dexData = externalFactoryRouteMapping[tokenFactory.toString()];
 

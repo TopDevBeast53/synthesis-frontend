@@ -10,7 +10,7 @@ import { CurrencyLogo } from 'components/Logo'
 import unserializedTokens from 'config/constants/tokens'
 
 import { NFTCardText, NFTCardTextType } from './components/NFTCardText'
-import { useGetAuraNftInfo } from './hooks/useGetAuraNftInfo'
+import { useGetNftInfo } from './hooks/useGetNftInfo'
 import CircleLoader from '../../components/Loader/CircleLoader'
 import NftCard from './components/NftCard'
 import { useStakingNft } from './hooks/useStakingNft'
@@ -62,7 +62,7 @@ export default function NftStaking() {
   const [loadingPendingReward, setLoadingPendingReward] = useState(true)
   const [enableStakingBtn, setEnableStakingBtn] = useState(false)
 
-  const { getTokens, getAuraNftInfoById } = useGetAuraNftInfo()
+  const { getTokens, getAuraNftInfoById } = useGetNftInfo()
   const { stakingNft, getPendingReward, withdrawReward } = useStakingNft()
   const { getAccumulatedAP, boostAuraNFT } = useBoostNft()
 

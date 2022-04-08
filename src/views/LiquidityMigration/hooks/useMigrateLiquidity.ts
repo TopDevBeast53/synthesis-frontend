@@ -9,7 +9,7 @@ import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice';
 import useActiveWeb3React from 'hooks/useActiveWeb3React';
 
 import helixMigratorABI from 'config/abi/HelixMigrator.json';
-import AuraPair from 'config/abi/AuraPair.json';
+import helixPair from 'config/abi/HelixPair.json';
 
 import { auraMigratorAddress } from '../constants';
 import { useSplitPair } from './useSplitPair';
@@ -28,7 +28,7 @@ export const useMigrateLiquidity = () => {
         const [tokenA, tokenB] = await splitPair(externalRouter.pairToken.address);
 
         const migratorContract = new Contract(auraMigratorAddress, helixMigratorABI, getProviderOrSigner(library, account));
-        const lpContract = new Contract(externalRouter.pairToken.address, AuraPair, getProviderOrSigner(library, account));
+        const lpContract = new Contract(externalRouter.pairToken.address, helixPair, getProviderOrSigner(library, account));
 
         const approveTx = await callWithGasPrice(lpContract, 'approve', [auraMigratorAddress, ethers.constants.MaxUint256])
         await approveTx.wait()

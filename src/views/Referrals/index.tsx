@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { Flex, Button, Card, Text } from 'uikit'
 import { Contract } from '@ethersproject/contracts'
-import ReferralRegisterABI from 'config/abi/AuraReferral.json'
+import ReferralRegisterABI from 'config/abi/HelixReferral.json'
 import { getProviderOrSigner } from 'utils'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import tokens from 'config/constants/tokens';

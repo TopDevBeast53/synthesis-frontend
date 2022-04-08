@@ -25,7 +25,7 @@ import styled from 'styled-components'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { getBalanceNumber } from 'utils/formatBalance'
 import CakeVaultCard, { CreditCalcBlock } from 'views/Pools/components/CakeVaultCard'
-import RecentAuraProfitCountdownRow from 'views/Pools/components/CakeVaultCard/RecentAuraProfitRow'
+import RecentHelixProfitCountdownRow from 'views/Pools/components/CakeVaultCard/RecentHelixProfitRow'
 import UnstakingFeeCountdownRow from 'views/Pools/components/CakeVaultCard/UnstakingFeeCountdownRow'
 import { IfoVaultCardAvgBalance } from 'views/Pools/components/CakeVaultCard/VaultCardActions'
 import AprRow from 'views/Pools/components/PoolCard/AprRow'
@@ -130,7 +130,7 @@ const IfoPoolVaultCardMobile: React.FC = () => {
             <Staked pool={pool} userDataLoaded={userDataLoaded} />
             <ActionContainer>
               <Box>
-                <RecentAuraProfitCountdownRow vaultKey={VaultKey.IfoPool} />
+                <RecentHelixProfitCountdownRow vaultKey={VaultKey.IfoPool} />
               </Box>
               <Box mt="8px">
                 <UnstakingFeeCountdownRow vaultKey={VaultKey.IfoPool} />

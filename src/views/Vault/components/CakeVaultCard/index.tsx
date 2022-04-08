@@ -27,7 +27,7 @@ import CardFooter from '../VaultCard/CardFooter'
 import PoolCardHeader, { VaultCardHeaderTitle } from '../VaultCard/PoolCardHeader'
 import VaultCardActions from './VaultCardActions'
 import UnstakingFeeCountdownRow from './UnstakingFeeCountdownRow'
-import RecentAuraProfitRow from './RecentAuraProfitRow'
+import RecentHelixProfitRow from './RecentHelixProfitRow'
 
 const StyledCardBody = styled(CardBody)<{ isLoading: boolean }>`
   min-height: ${({ isLoading }) => (isLoading ? '0' : '254px')};
@@ -125,7 +125,7 @@ const AuraVaultCard: React.FC<AuraVaultProps> = ({ pool, showStakedOnly, default
         <FlexGap mt="16px" gap="24px" flexDirection={accountHasSharesStaked ? 'column-reverse' : 'column'}>
           <Box>
             <Box mt="24px">
-              <RecentAuraProfitRow vaultKey={pool.vaultKey} />
+              <RecentHelixProfitRow vaultKey={pool.vaultKey} />
             </Box>
             <Box mt="8px">
               <UnstakingFeeCountdownRow vaultKey={pool.vaultKey} />

@@ -6,9 +6,9 @@ import { usePriceAuraBusd } from 'state/farms/hooks'
 import { useVaultPoolByKey } from 'state/pools/hooks'
 import { VaultKey } from 'state/types'
 import { getVaultEarnings } from 'views/Pools/helpers'
-import RecentAuraProfitBalance from './RecentAuraProfitBalance'
+import RecentHelixProfitBalance from './RecentHelixProfitBalance'
 
-const RecentAuraProfitCountdownRow = ({ vaultKey }: { vaultKey: VaultKey }) => {
+const RecentHelixProfitCountdownRow = ({ vaultKey }: { vaultKey: VaultKey }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const {
@@ -32,7 +32,7 @@ const RecentAuraProfitCountdownRow = ({ vaultKey }: { vaultKey: VaultKey }) => {
     <Flex alignItems="center" justifyContent="space-between">
       <Text fontSize="14px">{`${t('Recent AURA profit')}:`}</Text>
       {hasAutoEarnings && (
-        <RecentAuraProfitBalance
+        <RecentHelixProfitBalance
           auraToDisplay={autoAuraToDisplay}
           dollarValueToDisplay={autoUsdToDisplay}
           dateStringToDisplay={dateStringToDisplay}
@@ -42,4 +42,4 @@ const RecentAuraProfitCountdownRow = ({ vaultKey }: { vaultKey: VaultKey }) => {
   )
 }
 
-export default RecentAuraProfitCountdownRow
+export default RecentHelixProfitCountdownRow
