@@ -99,23 +99,23 @@ export default {
     56: '',
     97: '0xe911B52fa2a24A84Da9D6039684046E437B8C673',
   },
-  auraVault: { // AutoPool
+  helixAutoPool: { // AutoPool
     56: '',
     97: '0xC28F43D3C967bD42eff53cCecCeaCF09f09a6C64',
   },
-  auraNFT: {
+  helixNFT: {
     56: '',
-    97: '0x94DF97954ec548bd2Db1c9357982445A7245363d',
+    97: '0x39bB1d97cac44a837049eE109483886C27A3800C',
   },
-  auraNFTChef: {
+  helixNFTChef: {
     56: '',
-    97: '0x6cc6f1F6eD0d2A13635034Cf2A0E2934449d2C38',
+    97: '0xe4c1ace1fC31c9bBD1BC13e6c13E8aaB5bE050b6',
   },
-  auraNFTBridge: {
+  helixNFTBridge: {
     56: '',
-    97: '0x4F807c0f58e88A2fEee50bC9dd80db0923e46002',
+    97: '0xa5df536596434205A3084270A312b32eC47a902d',
   },
-  auraMigrator: {
+  helixMigrator: {
     56: '',
     97: '0x6D237B35cCa79f367Ecac7743555C3f3213fA77f',
   },
@@ -123,7 +123,7 @@ export default {
     56: '0x00000000000000',
     97: '0xC3A5dc2D9eC0e8CC6603F81FDc0Fd7aB53E389b3',
   },
-  vault: {
+  helixVault: {
     56: '',
     97: '0x4592Bc7C6f98611b4EB01A1e931574DbbE6F345e',
   },

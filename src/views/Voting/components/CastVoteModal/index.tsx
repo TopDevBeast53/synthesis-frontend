@@ -22,8 +22,8 @@ const CastVoteModal: React.FC<CastVoteModalProps> = ({ onSuccess, proposalId, vo
   const { library, connector } = useWeb3Provider()
   const { theme } = useTheme()
 
-  const { auraBalance, isLoading } = useGetVotingPower()
-  const total = Number(auraBalance.toString()) / 1e18
+  const { helixBalance, isLoading } = useGetVotingPower()
+  const total = Number(helixBalance.toString()) / 1e18
 
   const isStartView = view === ConfirmVoteView.MAIN
   const handleBack = isStartView ? null : () => setView(ConfirmVoteView.MAIN)

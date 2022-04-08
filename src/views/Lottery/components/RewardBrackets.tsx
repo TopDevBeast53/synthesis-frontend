@@ -47,11 +47,11 @@ const RewardBrackets: React.FC<RewardMatchesProps> = ({ lotteryNodeData, isHisto
 
   useEffect(() => {
     if (lotteryNodeData) {
-      const { treasuryFee, amountCollectedInAura, rewardsBreakdown, countWinnersPerBracket } = lotteryNodeData
+      const { treasuryFee, amountCollectedInHelix, rewardsBreakdown, countWinnersPerBracket } = lotteryNodeData
 
       const feeAsPercentage = new BigNumber(treasuryFee).div(100)
-      const cakeToBurn = feeAsPercentage.div(100).times(new BigNumber(amountCollectedInAura))
-      const amountLessTreasuryFee = new BigNumber(amountCollectedInAura).minus(cakeToBurn)
+      const cakeToBurn = feeAsPercentage.div(100).times(new BigNumber(amountCollectedInHelix))
+      const amountLessTreasuryFee = new BigNumber(amountCollectedInHelix).minus(cakeToBurn)
       setState({
         isLoading: false,
         cakeToBurn,

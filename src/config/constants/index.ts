@@ -3,7 +3,7 @@ import { mainnetTokens, testnetTokens } from './tokens'
 
 // Pancake test router address 0x9Ac64Cc6e4415144C455BD8E4837Fea55603e5c3
 // Pancake prod router address 0x10ED43C718714eb63d5aA57B78B54704E256024E
-// Aura test net router address 0x9DbA93422D0ce20A755d07258E3bDF6D20d56193
+// Helix test net router address 0x9DbA93422D0ce20A755d07258E3bDF6D20d56193
 
 export const ROUTER_ADDRESS = '0xb18C4afD256899aB1E60f752ac92b4D930f5292c';
 
@@ -24,7 +24,7 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
     mainnetTokens.eth,
     mainnetTokens.usdc,
   ],
-  [ChainId.TESTNET]: [testnetTokens.wbnb, testnetTokens.aura, testnetTokens.busd],
+  [ChainId.TESTNET]: [testnetTokens.wbnb, testnetTokens.helix, testnetTokens.busd],
 }
 
 /**

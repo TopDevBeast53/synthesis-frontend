@@ -3,7 +3,7 @@
     "inputs": [
       {
         "internalType": "contract IBEP20",
-        "name": "_aura",
+        "name": "_helix",
         "type": "address"
       },
       {
@@ -134,7 +134,7 @@
   },
   {
     "inputs": [],
-    "name": "auraToken",
+    "name": "helixToken",
     "outputs": [
       {
         "internalType": "contract IBEP20",
@@ -294,7 +294,7 @@
       },
       {
         "internalType": "uint256",
-        "name": "accAuraPerShare",
+        "name": "accHelixPerShare",
         "type": "uint256"
       }
     ],

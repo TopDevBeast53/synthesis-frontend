@@ -52,7 +52,6 @@ const AddLiquidity = lazy(() => import('./views/AddLiquidity'))
 const Liquidity = lazy(() => import('./views/Pool'))
 const PoolFinder = lazy(() => import('./views/PoolFinder'))
 const RemoveLiquidity = lazy(() => import('./views/RemoveLiquidity'))
-const DevTool = lazy(() => import('./views/Dev'))
 const Migrator = lazy(() => import('./views/LiquidityMigration'))
 const NftStaking = lazy(() => import('./views/NftStaking'))
 const NftBridge = lazy(() => import('./views/NftBridge'))
@@ -105,9 +104,6 @@ const App: React.FC = () => {
             </Route>
             <Route path="/vault">
               <Vault />
-            </Route>
-            <Route path="/dev">
-              <DevTool />
             </Route>
             <Route path="/migration">
               <Migrator />

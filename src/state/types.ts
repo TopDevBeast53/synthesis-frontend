@@ -62,7 +62,7 @@ export interface DeserializedFarm extends DeserializedFarmConfig {
 }
 
 export enum VaultKey {
-  AuraVault = 'auraVault',
+  HelixAutoPool = 'helixAutoPool',
   IfoPool = 'ifoPool',
 }
 
@@ -145,17 +145,17 @@ export interface IfoVaultUser extends VaultUser {
   credit: string
 }
 
-export interface AuraVault {
+export interface HelixAutoPool {
   totalShares?: string
   pricePerFullShare?: string
-  totalAuraInVault?: string
-  estimatedAuraBountyReward?: string
-  totalPendingAuraHarvest?: string
+  totalHelixInVault?: string
+  estimatedHelixBountyReward?: string
+  totalPendingHelixHarvest?: string
   fees?: VaultFees
   userData?: VaultUser
 }
 
-export interface IfoAuraVault extends Omit<AuraVault, 'userData'> {
+export interface IfoHelixVault extends Omit<HelixAutoPool, 'userData'> {
   userData?: IfoVaultUser
   creditStartBlock?: number
   creditEndBlock?: number
@@ -163,8 +163,8 @@ export interface IfoAuraVault extends Omit<AuraVault, 'userData'> {
 
 export interface PoolsState {
   data: SerializedPool[]
-  auraVault: AuraVault
-  ifoPool: IfoAuraVault
+  helixAutoPool: HelixAutoPool
+  ifoPool: IfoHelixVault
   userDataLoaded: boolean
 }
 
@@ -507,19 +507,19 @@ interface LotteryRoundGenerics {
 
 export interface LotteryRound extends LotteryRoundGenerics {
   userTickets?: LotteryRoundUserTickets
-  priceTicketInAura: BigNumber
+  priceTicketInHelix: BigNumber
   discountDivisor: BigNumber
-  amountCollectedInAura: BigNumber
-  auraPerBracket: string[]
+  amountCollectedInHelix: BigNumber
+  helixPerBracket: string[]
   countWinnersPerBracket: string[]
   rewardsBreakdown: string[]
 }
 
 export interface LotteryResponse extends LotteryRoundGenerics {
-  priceTicketInAura: SerializedBigNumber
+  priceTicketInHelix: SerializedBigNumber
   discountDivisor: SerializedBigNumber
-  amountCollectedInAura: SerializedBigNumber
-  auraPerBracket: SerializedBigNumber[]
+  amountCollectedInHelix: SerializedBigNumber
+  helixPerBracket: SerializedBigNumber[]
   countWinnersPerBracket: SerializedBigNumber[]
   rewardsBreakdown: SerializedBigNumber[]
 }
@@ -547,7 +547,7 @@ export interface LotteryRoundGraphEntity {
 
 export interface LotteryUserGraphEntity {
   account: string
-  totalAura: string
+  totalHelix: string
   totalTickets: string
   rounds: UserRound[]
 }

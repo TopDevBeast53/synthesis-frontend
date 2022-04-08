@@ -52,12 +52,12 @@ const stepsConfigBuilder = ({ t, userInfos, eventInfos, userStatus, account, the
         eventStatus: [SaleStatusEnum.Pending, SaleStatusEnum.Premint],
       }),
       title: t('Hold CAKE'),
-      bodyText: [t('Each NFT costs AURAto mint. Remember you also need BNB to cover transaction fees too!')],
+      bodyText: [t('Each NFT costs HELIXto mint. Remember you also need BNB to cover transaction fees too!')],
       buttons: (
         <>
           <Button
             as="a"
-            href="https://aura.exchange/swap?outputCurrency=0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82"
+            href="https://helix.exchange/swap?outputCurrency=0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82"
             target="_blank"
             width="100%"
           >

@@ -9,16 +9,16 @@ import { getAprData } from 'views/Pools/helpers'
 import {
   fetchPoolsPublicDataAsync,
   fetchPoolsUserDataAsync,
-  fetchAuraVaultPublicData,
-  fetchAuraVaultUserData,
-  fetchAuraVaultFees,
+  fetchHelixVaultPublicData,
+  fetchHelixVaultUserData,
+  fetchHelixVaultFees,
   fetchPoolsStakingLimitsAsync,
   fetchIfoPoolFees,
   fetchIfoPoolPublicData,
   fetchIfoPoolUserAndCredit,
   initialPoolVaultState,
-  fetchAuraPoolPublicDataAsync,
-  fetchAuraPoolUserDataAsync,
+  fetchHelixPoolPublicDataAsync,
+  fetchHelixPoolUserDataAsync,
 } from '.'
 import { State, DeserializedPool, VaultKey } from '../types'
 import { transformPool } from './helpers'
@@ -68,61 +68,61 @@ export const usePool = (sousId: number): { pool: DeserializedPool; userDataLoade
   return { pool: transformPool(pool), userDataLoaded }
 }
 
-export const useFetchAuraVault = () => {
+export const useFetchHelixVault = () => {
   const { account } = useWeb3React()
   const fastRefresh = useFastFresh()
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    dispatch(fetchAuraVaultPublicData())
+    dispatch(fetchHelixVaultPublicData())
   }, [dispatch, fastRefresh])
 
   useEffect(() => {
-    dispatch(fetchAuraVaultUserData({ account }))
+    dispatch(fetchHelixVaultUserData({ account }))
   }, [dispatch, fastRefresh, account])
 
   useEffect(() => {
-    dispatch(fetchAuraVaultFees())
+    dispatch(fetchHelixVaultFees())
   }, [dispatch])
 }
 
-export const useFetchIfoPool = (fetchAuraPool = true) => {
+export const useFetchIfoPool = (fetchHelixPool = true) => {
   const { account } = useWeb3React()
   const fastRefresh = useFastFresh()
   const dispatch = useAppDispatch()
 
   useEffect(() => {
     batch(() => {
-      if (fetchAuraPool) {
-        dispatch(fetchAuraPoolPublicDataAsync())
+      if (fetchHelixPool) {
+        dispatch(fetchHelixPoolPublicDataAsync())
       }
       dispatch(fetchIfoPoolPublicData())
     })
-  }, [dispatch, fastRefresh, fetchAuraPool])
+  }, [dispatch, fastRefresh, fetchHelixPool])
 
   useEffect(() => {
     if (account) {
       batch(() => {
         dispatch(fetchIfoPoolUserAndCredit({ account }))
-        if (fetchAuraPool) {
-          dispatch(fetchAuraPoolUserDataAsync(account))
+        if (fetchHelixPool) {
+          dispatch(fetchHelixPoolUserDataAsync(account))
         }
       })
     }
-  }, [dispatch, fastRefresh, account, fetchAuraPool])
+  }, [dispatch, fastRefresh, account, fetchHelixPool])
 
   useEffect(() => {
     dispatch(fetchIfoPoolFees())
   }, [dispatch])
 }
 
-export const useAuraVault = () => {
-  return useVaultPoolByKey(VaultKey.AuraVault)
+export const useHelixVault = () => {
+  return useVaultPoolByKey(VaultKey.HelixAutoPool)
 }
 
 export const useVaultPools = () => {
   return {
-    [VaultKey.AuraVault]: useVaultPoolByKey(VaultKey.AuraVault),
+    [VaultKey.HelixAutoPool]: useVaultPoolByKey(VaultKey.HelixAutoPool),
     // [VaultKey.IfoPool]: useVaultPoolByKey(VaultKey.IfoPool),
   }
 }
@@ -131,9 +131,9 @@ export const useVaultPoolByKey = (key: VaultKey) => {
   const {
     totalShares: totalSharesAsString,
     pricePerFullShare: pricePerFullShareAsString,
-    totalAuraInVault: totalAuraInVaultAsString,
-    estimatedAuraBountyReward: estimatedAuraBountyRewardAsString,
-    totalPendingAuraHarvest: totalPendingAuraHarvestAsString,
+    totalHelixInVault: totalHelixInVaultAsString,
+    estimatedHelixBountyReward: estimatedHelixBountyRewardAsString,
+    totalPendingHelixHarvest: totalPendingHelixHarvestAsString,
     fees: { performanceFee, callFee, withdrawalFee, withdrawalFeePeriod },
     userData: {
       isLoading,
@@ -144,13 +144,13 @@ export const useVaultPoolByKey = (key: VaultKey) => {
     },
   } = useSelector((state: State) => (key ? state.pools[key] : initialPoolVaultState))
 
-  const estimatedAuraBountyReward = useMemo(() => {
-    return new BigNumber(estimatedAuraBountyRewardAsString)
-  }, [estimatedAuraBountyRewardAsString])
+  const estimatedHelixBountyReward = useMemo(() => {
+    return new BigNumber(estimatedHelixBountyRewardAsString)
+  }, [estimatedHelixBountyRewardAsString])
 
-  const totalPendingAuraHarvest = useMemo(() => {
-    return new BigNumber(totalPendingAuraHarvestAsString)
-  }, [totalPendingAuraHarvestAsString])
+  const totalPendingHelixHarvest = useMemo(() => {
+    return new BigNumber(totalPendingHelixHarvestAsString)
+  }, [totalPendingHelixHarvestAsString])
 
   const totalShares = useMemo(() => {
     return new BigNumber(totalSharesAsString)
@@ -160,9 +160,9 @@ export const useVaultPoolByKey = (key: VaultKey) => {
     return new BigNumber(pricePerFullShareAsString)
   }, [pricePerFullShareAsString])
 
-  const totalAuraInVault = useMemo(() => {
-    return new BigNumber(totalAuraInVaultAsString)
-  }, [totalAuraInVaultAsString])
+  const totalHelixInVault = useMemo(() => {
+    return new BigNumber(totalHelixInVaultAsString)
+  }, [totalHelixInVaultAsString])
 
   const userShares = useMemo(() => {
     return new BigNumber(userSharesAsString)
@@ -177,9 +177,9 @@ export const useVaultPoolByKey = (key: VaultKey) => {
   return {
     totalShares,
     pricePerFullShare,
-    totalAuraInVault,
-    estimatedAuraBountyReward,
-    totalPendingAuraHarvest,
+    totalHelixInVault,
+    estimatedHelixBountyReward,
+    totalPendingHelixHarvest,
     fees: {
       performanceFeeAsDecimal,
       performanceFee,

@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js'
-import { BLOCKS_PER_YEAR, AURA_PER_YEAR } from 'config'
+import { BLOCKS_PER_YEAR, HELIX_PER_YEAR } from 'config'
 import lpAprs from 'config/constants/lpAprs.json'
 
 /**
@@ -7,7 +7,7 @@ import lpAprs from 'config/constants/lpAprs.json'
  * @param stakingTokenPrice Token price in the same quote currency
  * @param rewardTokenPrice Token price in the same quote currency
  * @param totalStaked Total amount of stakingToken in the pool
- * @param tokenPerBlock Amount of new aura allocated to the pool for each new block
+ * @param tokenPerBlock Amount of new helix allocated to the pool for each new block
  * @returns Null if the APR is NaN or infinite.
  */
 export const getPoolApr = (
@@ -25,25 +25,25 @@ export const getPoolApr = (
 /**
  * Get farm APR value in %
  * @param poolWeight allocationPoint / totalAllocationPoint
- * @param auraPriceUsd Aura price in USD
+ * @param helixPriceUsd Helix price in USD
  * @param poolLiquidityUsd Total pool liquidity in USD
  * @param farmAddress Farm Address
  * @returns Farm Apr
  */
 export const getFarmApr = (
   poolWeight: BigNumber,
-  auraPriceUsd: BigNumber,
+  helixPriceUsd: BigNumber,
   poolLiquidityUsd: BigNumber,
   farmAddress: string,
-): { auraRewardsApr: number; lpRewardsApr: number } => {
-  const yearlyAuraRewardAllocation = poolWeight ? poolWeight.times(AURA_PER_YEAR) : new BigNumber(NaN)
-  const auraRewardsApr = yearlyAuraRewardAllocation.times(auraPriceUsd).div(poolLiquidityUsd).times(100)
-  let auraRewardsAprAsNumber = null
-  if (!auraRewardsApr.isNaN() && auraRewardsApr.isFinite()) {
-    auraRewardsAprAsNumber = auraRewardsApr.toNumber()
+): { helixRewardsApr: number; lpRewardsApr: number } => {
+  const yearlyHelixRewardAllocation = poolWeight ? poolWeight.times(HELIX_PER_YEAR) : new BigNumber(NaN)
+  const helixRewardsApr = yearlyHelixRewardAllocation.times(helixPriceUsd).div(poolLiquidityUsd).times(100)
+  let helixRewardsAprAsNumber = null
+  if (!helixRewardsApr.isNaN() && helixRewardsApr.isFinite()) {
+    helixRewardsAprAsNumber = helixRewardsApr.toNumber()
   }
   const lpRewardsApr = lpAprs[farmAddress?.toLocaleLowerCase()] ?? 0
-  return { auraRewardsApr: auraRewardsAprAsNumber, lpRewardsApr }
+  return { helixRewardsApr: helixRewardsAprAsNumber, lpRewardsApr }
 }
 
 export default null

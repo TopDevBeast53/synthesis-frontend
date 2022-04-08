@@ -38,14 +38,14 @@ const PoolRow: React.FC<PoolRowProps> = ({ pool, account, userDataLoaded }) => {
     setExpanded((prev) => !prev)
   }
 
-  const isAuraPool = pool.sousId === 0
+  const isHelixPool = pool.sousId === 0
 
   return (
     <>
       <StyledRow role="row" onClick={toggleExpanded}>
         <NameCell pool={pool} />
         {pool.vaultKey ? (
-          ((isXLargerScreen && pool.vaultKey === VaultKey.IfoPool) || pool.vaultKey === VaultKey.AuraVault) && (
+          ((isXLargerScreen && pool.vaultKey === VaultKey.IfoPool) || pool.vaultKey === VaultKey.HelixAutoPool) && (
             <AutoEarningsCell pool={pool} account={account} />
           )
         ) : (
@@ -53,13 +53,13 @@ const PoolRow: React.FC<PoolRowProps> = ({ pool, account, userDataLoaded }) => {
         )}
         {pool.vaultKey === VaultKey.IfoPool ? (
           <IFOCreditCell account={account} />
-        ) : isXLargerScreen && isAuraPool ? (
+        ) : isXLargerScreen && isHelixPool ? (
           <StakedCell pool={pool} account={account} userDataLoaded={userDataLoaded} />
         ) : null}
-        {isLargerScreen && !isAuraPool && <TotalStakedCell pool={pool} />}
+        {isLargerScreen && !isHelixPool && <TotalStakedCell pool={pool} />}
         {pool.vaultKey ? <AutoAprCell pool={pool} /> : <AprCell pool={pool} />}
-        {isLargerScreen && isAuraPool && <TotalStakedCell pool={pool} />}
-        {isDesktop && !isAuraPool && <EndsInCell pool={pool} />}
+        {isLargerScreen && isHelixPool && <TotalStakedCell pool={pool} />}
+        {isDesktop && !isHelixPool && <EndsInCell pool={pool} />}
         <ExpandActionCell expanded={expanded} isFullLayout={isTablet || isDesktop} />
       </StyledRow>
       {shouldRenderActionPanel && (

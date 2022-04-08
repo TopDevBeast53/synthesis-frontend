@@ -226,7 +226,7 @@ const HowToPlay: React.FC = () => {
     {
       label: t('Step %number%', { number: 1 }),
       title: t('Buy Tickets'),
-      subtitle: t('Prices are set when the round starts, equal to 5 USD in AURAper ticket.'),
+      subtitle: t('Prices are set when the round starts, equal to 5 USD in HELIXper ticket.'),
     },
     {
       label: t('Step %number%', { number: 2 }),
@@ -308,7 +308,7 @@ const HowToPlay: React.FC = () => {
           <BulletList>
             <li>
               <Text display="inline" color="textSubtle">
-                {t('100% of the AURApaid by people buying tickets that round goes back into the prize pools.')}
+                {t('100% of the HELIXpaid by people buying tickets that round goes back into the prize pools.')}
               </Text>
             </li>
           </BulletList>
@@ -319,7 +319,7 @@ const HowToPlay: React.FC = () => {
             <li>
               <Text display="inline" color="textSubtle">
                 {t(
-                  'After every round, if nobody wins in one of the prize brackets, the unclaimed AURAfor that bracket rolls over into the next round and are redistributed among the prize pools.',
+                  'After every round, if nobody wins in one of the prize brackets, the unclaimed HELIXfor that bracket rolls over into the next round and are redistributed among the prize pools.',
                 )}
               </Text>
             </li>
@@ -331,7 +331,7 @@ const HowToPlay: React.FC = () => {
             <li>
               <Text display="inline" color="textSubtle">
                 {t(
-                  'An average total of 35,000 AURAfrom the treasury is added to lottery rounds over the course of a week. This AURAis of course also included in rollovers! Read more in our guide to ',
+                  'An average total of 35,000 HELIXfrom the treasury is added to lottery rounds over the course of a week. This HELIXis of course also included in rollovers! Read more in our guide to ',
                 )}
                 <InlineLink href="https://docs.pancakeswap.finance/tokenomics/cake/cake-tokenomics">
                   {t('CAKE Tokenomics')}

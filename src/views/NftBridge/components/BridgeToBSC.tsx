@@ -9,7 +9,7 @@ import { logError } from 'utils/sentry'
 import useActiveWeb3React from '../../../hooks/useActiveWeb3React'
 import NftCard from '../../NftStaking/components/NftCard'
 import WalletAdapter from './WalletAdapter'
-import { useAuraNFTBridge } from '../hooks/useAuraNFTBridge'
+import { useNFTBridge } from '../hooks/useNFTBridge'
 import { NFTCardText, NFTCardTextType } from '../../NftStaking/components/NFTCardText'
 import NFTConnectSolanaPanel from './NFTConnectSolanaPanel';
 import 
@@ -75,7 +75,7 @@ function BridgeToBSCInner({switcher}: {switcher: React.ReactNode}) {
 
   // end of solana part
 
-  const { bridgeToBSC, mintBridgedNFT, getMinted, isBridged } = useAuraNFTBridge()
+  const { bridgeToBSC, mintBridgedNFT, getMinted, isBridged } = useNFTBridge()
 
   const updateTokensInfo = useCallback((tokens) => {
     return Promise.all(
@@ -163,7 +163,6 @@ function BridgeToBSCInner({switcher}: {switcher: React.ReactNode}) {
               key={token.address.toString()}
               tokenId={token.mint.toString()}
               name={token.metadataExternal?.name}
-              mint={token.mint.toString()}
               infos={[
                 {
                   caption: "Token ID",

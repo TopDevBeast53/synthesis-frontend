@@ -121,7 +121,7 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "priceTicketInAura",
+        "name": "priceTicketInHelix",
         "type": "uint256"
       },
       {
@@ -760,7 +760,7 @@
           },
           {
             "internalType": "uint256",
-            "name": "priceTicketInAura",
+            "name": "priceTicketInHelix",
             "type": "uint256"
           },
           {
@@ -800,7 +800,7 @@
           },
           {
             "internalType": "uint256",
-            "name": "amountCollectedInAura",
+            "name": "amountCollectedInHelix",
             "type": "uint256"
           },
           {

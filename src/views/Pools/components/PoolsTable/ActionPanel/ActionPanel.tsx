@@ -26,7 +26,7 @@ import { getAddress, getVaultPoolAddress } from 'utils/addressHelpers'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { registerToken } from 'utils/wallet'
 import { getBalanceNumber, getFullDisplayBalance } from 'utils/formatBalance'
-import { convertSharesToAura, getPoolBlockInfo } from 'views/Pools/helpers'
+import { convertSharesToHelix, getPoolBlockInfo } from 'views/Pools/helpers'
 import { vaultPoolConfig } from 'config/constants/pools'
 import Harvest from './Harvest'
 import Stake from './Stake'
@@ -140,33 +140,33 @@ const ActionPanel: React.FC<ActionPanelProps> = ({ account, pool, userDataLoaded
   const tokenAddress = earningToken.address || ''
 
   const {
-    totalAuraInVault,
+    totalHelixInVault,
     userData: { userShares },
     fees: { performanceFeeAsDecimal },
     pricePerFullShare,
   } = useVaultPoolByKey(vaultKey)
 
   const vaultPools = useVaultPools()
-  const auraInVaults = Object.values(vaultPools).reduce((total, vault) => {
-    return total.plus(vault.totalAuraInVault)
+  const helixInVaults = Object.values(vaultPools).reduce((total, vault) => {
+    return total.plus(vault.totalHelixInVault)
   }, BIG_ZERO)
 
   const stakingTokenBalance = userData?.stakingTokenBalance ? new BigNumber(userData.stakingTokenBalance) : BIG_ZERO
   const stakedBalance = userData?.stakedBalance ? new BigNumber(userData.stakedBalance) : BIG_ZERO
-  const { auraAsBigNumber } = convertSharesToAura(userShares, pricePerFullShare)
+  const { helixAsBigNumber } = convertSharesToHelix(userShares, pricePerFullShare)
   const poolStakingTokenBalance = vaultKey
-    ? auraAsBigNumber.plus(stakingTokenBalance)
+    ? helixAsBigNumber.plus(stakingTokenBalance)
     : stakedBalance.plus(stakingTokenBalance)
 
-  const isManualAuraPool = sousId === 0
+  const isManualHelixPool = sousId === 0
 
   const getTotalStakedBalance = () => {
     if (vaultKey) {
-      return getBalanceNumber(totalAuraInVault, stakingToken.decimals)
+      return getBalanceNumber(totalHelixInVault, stakingToken.decimals)
     }
-    if (isManualAuraPool) {
-      const manualAuraTotalMinusAutoVault = new BigNumber(totalStaked).minus(auraInVaults)
-      return getBalanceNumber(manualAuraTotalMinusAutoVault, stakingToken.decimals)
+    if (isManualHelixPool) {
+      const manualHelixTotalMinusAutoVault = new BigNumber(totalStaked).minus(helixInVaults)
+      return getBalanceNumber(manualHelixTotalMinusAutoVault, stakingToken.decimals)
     }
     return getBalanceNumber(totalStaked, stakingToken.decimals)
   }
@@ -299,7 +299,7 @@ const ActionPanel: React.FC<ActionPanelProps> = ({ account, pool, userDataLoaded
           <Text mt="4px" mb="16px" color="textSubtle">
             {vaultKey
               ? t(vaultPoolConfig[vaultKey].description)
-              : `${t('Earn')} AURA ${t('Stake').toLocaleLowerCase()} AURA`}
+              : `${t('Earn')} HELIX ${t('Stake').toLocaleLowerCase()} HELIX`}
           </Text>
         )}
         {pool.vaultKey ? (

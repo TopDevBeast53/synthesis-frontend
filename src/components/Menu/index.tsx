@@ -13,7 +13,7 @@ import { getActiveMenuItem, getActiveSubMenuItem } from './utils'
 
 const Menu = (props) => {
   const { isDark, toggleTheme } = useTheme()
-  // const cakePriceUsd = usePriceAuraBusd()
+  // const cakePriceUsd = usePriceHelixBusd()
   const { currentLanguage, setLanguage, t } = useTranslation()
   const { pathname } = useLocation()
 
@@ -37,7 +37,7 @@ const Menu = (props) => {
       footerLings={{}}
       activeItem={activeMenuItem?.href}
       activeSubItem={activeSubMenuItem?.href}
-      buyCakeLabel={t('Buy Aura')}
+      buyCakeLabel={t('Buy Helix')}
       {...props}
     />
   )

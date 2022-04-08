@@ -1,7 +1,7 @@
 import React from 'react'
 import { Text, Flex, TooltipText, useTooltip, Skeleton, Heading } from 'uikit'
 import { useWeb3React } from '@web3-react/core'
-import { getAuraVaultEarnings } from 'views/Pools/helpers'
+import { getVaultEarnings } from 'views/Pools/helpers'
 import { useTranslation } from 'contexts/Localization'
 import Balance from 'components/Balance'
 import { useVaultPoolByKey } from 'state/pools/hooks'
@@ -27,7 +27,7 @@ const AutoHarvestAction: React.FunctionComponent<AutoHarvestActionProps> = ({
     pricePerFullShare,
     fees: { performanceFee },
   } = useVaultPoolByKey(vaultKey)
-  const { hasAutoEarnings, autoAuraToDisplay, autoUsdToDisplay } = getAuraVaultEarnings(
+  const { hasAutoEarnings, autoHelixToDisplay, autoUsdToDisplay } = getVaultEarnings(
     account,
     helixAtLastUserAction,
     userShares,
@@ -35,7 +35,7 @@ const AutoHarvestAction: React.FunctionComponent<AutoHarvestActionProps> = ({
     earningTokenPrice,
   )
 
-  const earningTokenBalance = autoAuraToDisplay
+  const earningTokenBalance = autoHelixToDisplay
   const earningTokenDollarBalance = autoUsdToDisplay
   const hasEarnings = hasAutoEarnings
 
@@ -46,7 +46,7 @@ const AutoHarvestAction: React.FunctionComponent<AutoHarvestActionProps> = ({
 
   const actionTitle = (
     <Text fontSize="12px" bold color="secondary" as="span" textTransform="uppercase">
-      {t('Recent AURA profit')}
+      {t('Recent HELIX profit')}
     </Text>
   )
 

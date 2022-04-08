@@ -4,7 +4,7 @@ import { Card, CardBody, Heading, Text } from 'uikit'
 import { useWeb3React } from '@web3-react/core'
 import { useTranslation } from 'contexts/Localization'
 import useApproveConfirmTransaction from 'hooks/useApproveConfirmTransaction'
-import { useAura, useBunnyFactory } from 'hooks/useContract'
+import { useHelix, useBunnyFactory } from 'hooks/useContract'
 import { useGetCakeBalance } from 'hooks/useTokenBalance'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import ApproveConfirmButtons from 'components/ApproveConfirmButtons'
@@ -34,7 +34,7 @@ const Mint: React.FC = () => {
   const dispatch = useAppDispatch()
 
   const { account } = useWeb3React()
-  const cakeContract = useAura()
+  const cakeContract = useHelix()
   const bunnyFactoryContract = useBunnyFactory()
   const { t } = useTranslation()
   const { balance: cakeBalance, fetchStatus } = useGetCakeBalance()
@@ -127,7 +127,7 @@ const Mint: React.FC = () => {
           })}
           {!hasMinimumCakeRequired && (
             <Text color="failure" mb="16px">
-              {t('A minimum of %num% AURAis required', { num: formatUnits(MINT_COST) })}
+              {t('A minimum of %num% HELIXis required', { num: formatUnits(MINT_COST) })}
             </Text>
           )}
           <ApproveConfirmButtons

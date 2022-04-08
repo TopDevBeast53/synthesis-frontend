@@ -1,10 +1,10 @@
-import { useGetAuraBalance } from 'hooks/useTokenBalance'
+import { useGetHelixBalance } from 'hooks/useTokenBalance'
 
 const useGetVotingPower = () => {
-  const { balance, fetchStatus } = useGetAuraBalance() 
-  const auraBalance = balance
+  const { balance, fetchStatus } = useGetHelixBalance() 
+  const helixBalance = balance
   const isLoading = fetchStatus === "FETCHING"
-  return { auraBalance, isLoading }
+  return { helixBalance, isLoading }
 }
 
 export default useGetVotingPower

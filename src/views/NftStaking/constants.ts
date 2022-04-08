@@ -1,5 +1,5 @@
 
-import { getAuraNftAddress, getAuraChefNftAddress } from 'utils/addressHelpers'
+import { getHelixNftAddress, getHelixChefNftAddress } from 'utils/addressHelpers'
 
-export const auraNFTAddress = getAuraNftAddress()
-export const auraNFTChefAddress = getAuraChefNftAddress()
+export const helixNFTAddress = getHelixNftAddress()
+export const helixNFTChefAddress = getHelixChefNftAddress()

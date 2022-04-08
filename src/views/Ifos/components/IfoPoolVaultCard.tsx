@@ -17,7 +17,7 @@ import { TokenPairImage } from 'components/TokenImage'
 import tokens from 'config/constants/tokens'
 import { useTranslation } from 'contexts/Localization'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import { useBUSDAuraAmount } from 'hooks/useBUSDPrice'
+import { useBUSDHelixAmount } from 'hooks/useBUSDPrice'
 import React, { useState } from 'react'
 import { useIfoPoolCredit, useIfoPoolVault, useIfoWithApr } from 'state/pools/hooks'
 import { VaultKey } from 'state/types'
@@ -25,7 +25,7 @@ import styled from 'styled-components'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { getBalanceNumber } from 'utils/formatBalance'
 import CakeVaultCard, { CreditCalcBlock } from 'views/Pools/components/CakeVaultCard'
-import RecentAuraProfitCountdownRow from 'views/Pools/components/CakeVaultCard/RecentAuraProfitRow'
+import RecentHelixProfitCountdownRow from 'views/Pools/components/CakeVaultCard/RecentHelixProfitRow'
 import UnstakingFeeCountdownRow from 'views/Pools/components/CakeVaultCard/UnstakingFeeCountdownRow'
 import { IfoVaultCardAvgBalance } from 'views/Pools/components/CakeVaultCard/VaultCardActions'
 import AprRow from 'views/Pools/components/PoolCard/AprRow'
@@ -71,8 +71,8 @@ const IfoPoolVaultCardMobile: React.FC = () => {
   } = useIfoPoolVault()
   const [isExpanded, setIsExpanded] = useState(false)
 
-  const auraAsNumberBalance = getBalanceNumber(credit)
-  const stakedDollarValue = useBUSDAuraAmount(auraAsNumberBalance)
+  const helixAsNumberBalance = getBalanceNumber(credit)
+  const stakedDollarValue = useBUSDHelixAmount(helixAsNumberBalance)
 
   const { targetRef, tooltip, tooltipVisible } = useTooltip(
     t('Any funds you stake in this pool will be automagically harvested and restaked (compounded) for you.'),
@@ -102,7 +102,7 @@ const IfoPoolVaultCardMobile: React.FC = () => {
             <Text color="textSubtle" fontSize="12px">
               {t('IFO Credit')}
             </Text>
-            <Balance small bold decimals={3} value={auraAsNumberBalance} />
+            <Balance small bold decimals={3} value={helixAsNumberBalance} />
             <Balance
               value={stakedDollarValue || 0}
               fontSize="12px"
@@ -130,7 +130,7 @@ const IfoPoolVaultCardMobile: React.FC = () => {
             <Staked pool={pool} userDataLoaded={userDataLoaded} />
             <ActionContainer>
               <Box>
-                <RecentAuraProfitCountdownRow vaultKey={VaultKey.IfoPool} />
+                <RecentHelixProfitCountdownRow vaultKey={VaultKey.IfoPool} />
               </Box>
               <Box mt="8px">
                 <UnstakingFeeCountdownRow vaultKey={VaultKey.IfoPool} />

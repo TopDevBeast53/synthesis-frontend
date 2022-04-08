@@ -10,13 +10,13 @@ import { ethersToBigNumber } from 'utils/bigNumber'
 import useTheme from 'hooks/useTheme'
 import useTokenBalance from 'hooks/useTokenBalance'
 import useApproveConfirmTransaction from 'hooks/useApproveConfirmTransaction'
-import { useAura, useFarmAuctionContract } from 'hooks/useContract'
+import { useHelix, useFarmAuctionContract } from 'hooks/useContract'
 import { DEFAULT_TOKEN_DECIMAL } from 'config'
 import useToast from 'hooks/useToast'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import ApproveConfirmButtons, { ButtonArrangement } from 'components/ApproveConfirmButtons'
 import { ConnectedBidder, FetchStatus } from 'config/constants/types'
-import { usePriceAuraBusd } from 'state/farms/hooks'
+import { usePriceHelixBusd } from 'state/farms/hooks'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import tokens from 'config/constants/tokens'
@@ -67,9 +67,9 @@ const PlaceBidModal: React.FC<PlaceBidModalProps> = ({
   const { balance: userCake, fetchStatus } = useTokenBalance(tokens.cake.address)
   const userCakeBalance = getBalanceAmount(userCake)
 
-  const cakePriceBusd = usePriceAuraBusd()
+  const cakePriceBusd = usePriceHelixBusd()
   const farmAuctionContract = useFarmAuctionContract()
-  const cakeContract = useAura()
+  const cakeContract = useHelix()
 
   const { toastSuccess } = useToast()
 
@@ -90,9 +90,9 @@ const PlaceBidModal: React.FC<PlaceBidModalProps> = ({
 
   useEffect(() => {
     if (userNotEnoughCake) {
-      setErrorText(t('Insufficient AURAbalance'))
+      setErrorText(t('Insufficient HELIXbalance'))
     } else if (!isMoreThanInitialBidAmount && isFirstBid) {
-      setErrorText(t('First bid must be %initialBidAmount% AURAor more.', { initialBidAmount }))
+      setErrorText(t('First bid must be %initialBidAmount% HELIXor more.', { initialBidAmount }))
     } else if (!isMultipleOfTen) {
       setErrorText(t('Bid must be a multiple of 10'))
     } else {
@@ -162,7 +162,7 @@ const PlaceBidModal: React.FC<PlaceBidModalProps> = ({
         </Flex>
         {isFirstBid && (
           <Text pb="8px" small>
-            {t('First bid must be %initialBidAmount% AURAor more.', { initialBidAmount })}
+            {t('First bid must be %initialBidAmount% HELIXor more.', { initialBidAmount })}
           </Text>
         )}
         <BalanceInput
@@ -252,7 +252,7 @@ const PlaceBidModal: React.FC<PlaceBidModalProps> = ({
           )}
         </Flex>
         <Text color="textSubtle" small mt="24px">
-          {t('If your bid is unsuccessful, you’ll be able to reclaim your AURAafter the auction.')}
+          {t('If your bid is unsuccessful, you’ll be able to reclaim your HELIXafter the auction.')}
         </Text>
       </InnerContent>
     </StyledModal>

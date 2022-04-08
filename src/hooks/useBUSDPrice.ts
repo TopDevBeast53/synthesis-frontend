@@ -70,9 +70,9 @@ export default function useBUSDPrice(currency?: Currency): Price | undefined {
   }, [chainId, currency, ethPair, ethPairState, busdEthPair, busdEthPairState, busdPair, busdPairState, wrapped])
 }
 
-export const useAuraBusdPrice = (): Price | undefined => {
-  const auraBusdPrice = useBUSDPrice(tokens.aura)
-  return auraBusdPrice
+export const useHelixBusdPrice = (): Price | undefined => {
+  const helixBusdPrice = useBUSDPrice(tokens.helix)
+  return helixBusdPrice
 }
 
 export const useBUSDCurrencyAmount = (currency: Currency, amount: number): number | undefined => {
@@ -85,10 +85,10 @@ export const useBUSDCurrencyAmount = (currency: Currency, amount: number): numbe
   return undefined
 }
 
-export const useBUSDAuraAmount = (amount: number): number | undefined => {
-  const auraBusdPrice = useAuraBusdPrice()
-  if (auraBusdPrice) {
-    return multiplyPriceByAmount(auraBusdPrice, amount)
+export const useBUSDHelixAmount = (amount: number): number | undefined => {
+  const helixBusdPrice = useHelixBusdPrice()
+  if (helixBusdPrice) {
+    return multiplyPriceByAmount(helixBusdPrice, amount)
   }
   return undefined
 }

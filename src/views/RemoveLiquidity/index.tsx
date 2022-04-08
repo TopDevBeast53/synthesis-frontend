@@ -113,7 +113,7 @@ export default function RemoveLiquidity({
       { name: 'verifyingContract', type: 'address' },
     ]
     const domain = {
-      name: 'Aura LPs',
+      name: 'Helix LPs',
       version: '1',
       chainId,
       verifyingContract: pair.liquidityToken.address,

@@ -33,10 +33,10 @@ const config = (t: ContextApi['t']) => {
       title: t('What are the fees?'),
       description: [
         t(
-          '100% of all platform fees taken by PancakeSwap from sales are used to buy back and BURN AURAtokens in our weekly AURAburns.',
+          '100% of all platform fees taken by PancakeSwap from sales are used to buy back and BURN HELIXtokens in our weekly HELIXburns.',
         ),
         t(
-          'Platform fees: 2% is subtracted from NFT sales on the market. Subject to change.Collection fees: Additional fees may be taken by collection creators, once those collections are live. These will not contribute to the AURAburns.',
+          'Platform fees: 2% is subtracted from NFT sales on the market. Subject to change.Collection fees: Additional fees may be taken by collection creators, once those collections are live. These will not contribute to the HELIXburns.',
         ),
       ],
     },

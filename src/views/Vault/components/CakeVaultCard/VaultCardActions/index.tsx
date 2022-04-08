@@ -9,7 +9,7 @@ import { BIG_ZERO } from 'utils/bigNumber'
 import { useIfoPoolCredit } from 'state/pools/hooks'
 import QuestionHelper from 'components/QuestionHelper'
 import { FlexGap } from 'components/Layout/Flex'
-import { useBUSDAuraAmount } from 'hooks/useBUSDPrice'
+import { useBUSDHelixAmount } from 'hooks/useBUSDPrice'
 import { getBalanceNumber } from 'utils/formatBalance'
 import VaultApprovalAction from './VaultApprovalAction'
 import VaultStakeActions from './VaultStakeActions'
@@ -23,8 +23,8 @@ export const IfoVaultCardAvgBalance = () => {
   const { t } = useTranslation()
   const credit = useIfoPoolCredit()
 
-  const auraAsNumberBalance = getBalanceNumber(credit)
-  const creditsDollarValue: number | undefined = useBUSDAuraAmount(auraAsNumberBalance)
+  const helixAsNumberBalance = getBalanceNumber(credit)
+  const creditsDollarValue: number | undefined = useBUSDHelixAmount(helixAsNumberBalance)
 
   return (
     <>
@@ -40,7 +40,7 @@ export const IfoVaultCardAvgBalance = () => {
             <>
               <Text>
                 {t(
-                  'Your entry limit in the next IFO sale is determined by your IFO credit. This is calculated by the average AURAbalance of the principal amount in the IFO pool during the last credit calculation period.',
+                  'Your entry limit in the next IFO sale is determined by your IFO credit. This is calculated by the average HELIXbalance of the principal amount in the IFO pool during the last credit calculation period.',
                 )}
               </Text>
               <Text>
@@ -53,7 +53,7 @@ export const IfoVaultCardAvgBalance = () => {
         />
       </FlexGap>
       <Flex flexDirection="column" pb="16px">
-        <Balance fontSize="20px" bold value={auraAsNumberBalance} decimals={5} />
+        <Balance fontSize="20px" bold value={helixAsNumberBalance} decimals={5} />
         <Text fontSize="12px" color="textSubtle" display="flex">
           {creditsDollarValue !== undefined ? (
             <Balance

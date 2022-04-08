@@ -14,7 +14,7 @@ export const useHelixVault = () => {
   const { library, account } = useActiveWeb3React()
   const { callWithGasPrice } = useCallWithGasPrice()
 
-  const getHelixVaultContract = useCallback(() => {
+  const getHelixAutoPoolContract = useCallback(() => {
     return new Contract(helixVaultAddress, helixVault, getProviderOrSigner(library, account))
   }, [library, account])
 
@@ -22,32 +22,25 @@ export const useHelixVault = () => {
     // withdraw(uint amount, uint id)
     // pendingReward(uint id)  return uint
     // claimReward(uint id)
-  const getAccumulatedAP = useCallback(async () => {
-    const tx = await callWithGasPrice(getHelixVaultContract(), 'getAccumulatedAP', [account])
-    return formatBigNumber(ethers.BigNumber.from(tx.toString()))
-  }, [getHelixVaultContract, callWithGasPrice, account])
-
+  
   const getLevel = useCallback(async (tokenId) => {
-    const tx = await callWithGasPrice(getHelixVaultContract(), 'getLevel', [tokenId])
+    const tx = await callWithGasPrice(getHelixAutoPoolContract(), 'getLevel', [tokenId])
     return tx.toString()
-  }, [getHelixVaultContract, callWithGasPrice])
+  }, [getHelixAutoPoolContract, callWithGasPrice])
 
-  const getAuraPoints = useCallback(async (tokenId) => {
-    const tx = await callWithGasPrice(getHelixVaultContract(), 'getAuraPoints', [tokenId])
+  const getHelixPoints = useCallback(async (tokenId) => {
+    const tx = await callWithGasPrice(getHelixAutoPoolContract(), 'getHelixPoints', [tokenId])
     return tx.toString()
-  }, [getHelixVaultContract, callWithGasPrice])
+  }, [getHelixAutoPoolContract, callWithGasPrice])
 
-  const getRemainAPToNextLevel = useCallback(async (tokenId) => {
-    const tx = await callWithGasPrice(getHelixVaultContract(), 'remainAPToNextLevel', [tokenId])
+  const getremainHPToNextLevel = useCallback(async (tokenId) => {
+    const tx = await callWithGasPrice(getHelixAutoPoolContract(), 'remainHPToNextLevel', [tokenId])
     return tx.toString()
-  }, [getHelixVaultContract, callWithGasPrice])
+  }, [getHelixAutoPoolContract, callWithGasPrice])
 
-  
-  
   return {
-    getAccumulatedAP,
     getLevel,
-    getAuraPoints,
-    getRemainAPToNextLevel,    
+    getHelixPoints,
+    getremainHPToNextLevel,    
   }
 }

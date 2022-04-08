@@ -1,3 +1,3 @@
-import { getAuraMigratorAddress } from 'utils/addressHelpers';
+import { getHelixMigratorAddress } from 'utils/addressHelpers';
 
-export const auraMigratorAddress = getAuraMigratorAddress();
+export const helixMigratorAddress = getHelixMigratorAddress();

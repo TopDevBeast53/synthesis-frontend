@@ -2,13 +2,38 @@
   {
     "inputs": [
       {
-        "internalType": "contract AuraNFT",
-        "name": "_auraNFT",
+        "internalType": "contract HelixNFT",
+        "name": "_helixNFT",
         "type": "address"
       }
     ],
     "stateMutability": "nonpayable",
     "type": "constructor"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "externalTokenID",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "externalRecipientAddr",
+        "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "timestamp",
+        "type": "uint256"
+      }
+    ],
+    "name": "BridgeToSolana",
+    "type": "event"
   },
   {
     "anonymous": false,
@@ -67,7 +92,13 @@
       }
     ],
     "name": "bridgeToBSC",
-    "outputs": [],
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
@@ -80,7 +111,7 @@
       },
       {
         "internalType": "string",
-        "name": "externalOwnerAddress",
+        "name": "externalRecipientAddr",
         "type": "string"
       }
     ],
@@ -106,85 +137,6 @@
       }
     ],
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "index",
-        "type": "uint256"
-      }
-    ],
-    "name": "getBridgeToSolanaEvent",
-    "outputs": [
-      {
-        "components": [
-          {
-            "internalType": "string",
-            "name": "externalTokenID",
-            "type": "string"
-          },
-          {
-            "internalType": "string",
-            "name": "externalOwnerID",
-            "type": "string"
-          },
-          {
-            "internalType": "uint256",
-            "name": "timestamp",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct AuraNFTBridge.BridgeToSolana",
-        "name": "",
-        "type": "tuple"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "getBridgeToSolanaEvents",
-    "outputs": [
-      {
-        "components": [
-          {
-            "internalType": "string",
-            "name": "externalTokenID",
-            "type": "string"
-          },
-          {
-            "internalType": "string",
-            "name": "externalOwnerID",
-            "type": "string"
-          },
-          {
-            "internalType": "uint256",
-            "name": "timestamp",
-            "type": "uint256"
-          }
-        ],
-        "internalType": "struct AuraNFTBridge.BridgeToSolana[]",
-        "name": "",
-        "type": "tuple[]"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "getBridgeToSolanaEventsSize",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
     "type": "function"
   },
   {

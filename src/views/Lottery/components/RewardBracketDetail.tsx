@@ -2,7 +2,7 @@ import React from 'react'
 import BigNumber from 'bignumber.js'
 import { Flex, Skeleton, Text } from 'uikit'
 import { useTranslation } from 'contexts/Localization'
-import { usePriceAuraBusd } from 'state/farms/hooks'
+import { usePriceHelixBusd } from 'state/farms/hooks'
 import Balance from 'components/Balance'
 import { getBalanceNumber, getFullDisplayBalance } from 'utils/formatBalance'
 
@@ -24,7 +24,7 @@ const RewardBracketDetail: React.FC<RewardBracketDetailProps> = ({
   isLoading,
 }) => {
   const { t } = useTranslation()
-  const cakePriceBusd = usePriceAuraBusd()
+  const cakePriceBusd = usePriceHelixBusd()
 
   const getRewardText = () => {
     const numberMatch = rewardBracket + 1
@@ -69,7 +69,7 @@ const RewardBracketDetail: React.FC<RewardBracketDetailProps> = ({
           <>
             {numberWinners !== '0' && (
               <Text fontSize="12px" color="textSubtle">
-                {getFullDisplayBalance(cakeAmount.div(parseInt(numberWinners, 10)), 18, 2)} AURA{t('each')}
+                {getFullDisplayBalance(cakeAmount.div(parseInt(numberWinners, 10)), 18, 2)} HELIX{t('each')}
               </Text>
             )}
             <Text fontSize="12px" color="textSubtle">

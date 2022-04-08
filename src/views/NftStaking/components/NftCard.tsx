@@ -3,7 +3,7 @@ import { Card, Flex, Image, Text, Checkbox, Button } from 'uikit'
 import React, { useState, useCallback } from 'react'
 import styled from 'styled-components'
 
-import NFTAuraIcon from './NFTAuraIcon'
+import NFTIcon from './NFTIcon'
 import { NFTCardText, NFTCardTextType } from './NFTCardText'
 
 const NFTCard = styled(Card)`
@@ -72,7 +72,6 @@ interface NFTAction {
 
 interface NftCardProps {
   name?: string | undefined,
-  mint?: string | undefined,
   infos: NFTInfo[],
   actions: NFTAction[],
   bgSrc: string
@@ -90,7 +89,6 @@ const NFTImage = styled(Image)`
 const NftCard: React.FC<NftCardProps> = ({
   name,
   infos,
-  mint,
   actions,
   bgSrc,
   tokenId,
@@ -117,7 +115,7 @@ const NftCard: React.FC<NftCardProps> = ({
         alignItems="center"
         style={{marginTop: '42px', marginBottom: '28px'}}
       >
-        <NFTAuraIcon />
+        <NFTIcon />
         <NFTNameText>
           {name ?? "Pink Rose"} {' '}
           {

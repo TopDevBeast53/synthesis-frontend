@@ -3,7 +3,7 @@ import styled, { keyframes } from 'styled-components'
 import { Box, Flex, Heading, Skeleton } from 'uikit'
 import { LotteryStatus } from 'config/constants/types'
 import { useTranslation } from 'contexts/Localization'
-import { usePriceAuraBusd } from 'state/farms/hooks'
+import { usePriceHelixBusd } from 'state/farms/hooks'
 import { useLottery } from 'state/lottery/hooks'
 import { getBalanceNumber } from 'utils/formatBalance'
 import Balance from 'components/Balance'
@@ -215,12 +215,12 @@ const StarsDecorations = styled(Box)`
 const Hero = () => {
   const { t } = useTranslation()
   const {
-    currentRound: { amountCollectedInAura, status },
+    currentRound: { amountCollectedInHelix, status },
     isTransitioning,
   } = useLottery()
 
-  const cakePriceBusd = usePriceAuraBusd()
-  const prizeInBusd = amountCollectedInAura.times(cakePriceBusd)
+  const cakePriceBusd = usePriceHelixBusd()
+  const prizeInBusd = amountCollectedInHelix.times(cakePriceBusd)
   const prizeTotal = getBalanceNumber(prizeInBusd)
   const ticketBuyIsDisabled = status !== LotteryStatus.OPEN || isTransitioning
 

@@ -149,7 +149,7 @@ export const userMenulinks: DropdownMenuItems[] = [
   },
   {
     type: DropdownMenuItemType.EXTERNAL_LINK,
-    href: "https://aura.exchange",
+    href: "https://helix.exchange",
     label: "Link",
   },
   {

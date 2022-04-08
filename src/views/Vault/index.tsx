@@ -12,7 +12,7 @@ import partition from 'lodash/partition'
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import {
-  useFetchAuraVault,
+  useFetchHelixVault,
   useFetchIfoPool, useFetchPublicPoolsData, useFetchUserPools, usePools, useVaultPools
 } from 'state/pools/hooks'
 import { DeserializedPool } from 'state/types'
@@ -24,7 +24,7 @@ import { latinise } from 'utils/latinise'
 import { usePoolsWithVault } from 'views/Home/hooks/useGetTopPoolsByApr'
 import AddRowModal from './components/AddRowModal'
 import VaultsTable from './components/VaultsTable/VaultsTable'
-import { getAuraVaultEarnings } from './helpers'
+import { getHelixVaultEarnings } from './helpers'
 
 
 
@@ -61,8 +61,8 @@ const Vault: React.FC = () => {
   const [sortOption] = useState('hot')
   const chosenPoolsLength = useRef(0)
   const vaultPools = useVaultPools()
-  const auraInVaults = Object.values(vaultPools).reduce((total, vault) => {
-    return total.plus(vault.totalAuraInVault)
+  const helixInVaults = Object.values(vaultPools).reduce((total, vault) => {
+    return total.plus(vault.totalHelixInVault)
   }, BIG_ZERO)
 
   const pools = usePoolsWithVault()
@@ -91,7 +91,7 @@ const Vault: React.FC = () => {
   )
   
 
-  useFetchAuraVault()
+  useFetchHelixVault()
   useFetchIfoPool(true)
   useFetchPublicPoolsData()
   useFetchUserPools(account)
@@ -123,7 +123,7 @@ const Vault: React.FC = () => {
               return 0
             }
             return pool.vaultKey
-              ? getAuraVaultEarnings(
+              ? getHelixVaultEarnings(
                   account,
                   vaultPools[pool.vaultKey].userData.helixAtLastUserAction,
                   vaultPools[pool.vaultKey].userData.userShares,
@@ -140,17 +140,17 @@ const Vault: React.FC = () => {
           (pool: DeserializedPool) => {
             let totalStaked = Number.NaN
             if (pool.vaultKey) {
-              if (pool.stakingTokenPrice && vaultPools[pool.vaultKey].totalAuraInVault.isFinite()) {
+              if (pool.stakingTokenPrice && vaultPools[pool.vaultKey].totalHelixInVault.isFinite()) {
                 totalStaked =
                   +formatUnits(
-                    ethers.BigNumber.from(vaultPools[pool.vaultKey].totalAuraInVault.toString()),
+                    ethers.BigNumber.from(vaultPools[pool.vaultKey].totalHelixInVault.toString()),
                     pool.stakingToken.decimals,
                   ) * pool.stakingTokenPrice
               }
             } else if (pool.sousId === 0) {
-              if (pool.totalStaked?.isFinite() && pool.stakingTokenPrice && auraInVaults.isFinite()) {
+              if (pool.totalStaked?.isFinite() && pool.stakingTokenPrice && helixInVaults.isFinite()) {
                 const manualCakeTotalMinusAutoVault = ethers.BigNumber.from(pool.totalStaked.toString()).sub(
-                  auraInVaults.toString(),
+                  helixInVaults.toString(),
                 )
                 totalStaked =
                   +formatUnits(manualCakeTotalMinusAutoVault, pool.stakingToken.decimals) * pool.stakingTokenPrice

@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js'
 import { Flex, Skeleton, Heading, Box, Text } from 'uikit'
 import { useTranslation } from 'contexts/Localization'
 import { LotteryRound, LotteryRoundGraphEntity } from 'state/types'
-import { usePriceAuraBusd } from 'state/farms/hooks'
+import { usePriceHelixBusd } from 'state/farms/hooks'
 import { useGetLotteryGraphDataById } from 'state/lottery/hooks'
 import { getGraphLotteries } from 'state/lottery/getLotteriesData'
 import { formatNumber, getBalanceNumber } from 'utils/formatBalance'
@@ -28,7 +28,7 @@ const PreviousRoundCardFooter: React.FC<{ lotteryNodeData: LotteryRound; lottery
   const { t } = useTranslation()
   const [fetchedLotteryGraphData, setFetchedLotteryGraphData] = useState<LotteryRoundGraphEntity>()
   const lotteryGraphDataFromState = useGetLotteryGraphDataById(lotteryId)
-  const cakePriceBusd = usePriceAuraBusd()
+  const cakePriceBusd = usePriceHelixBusd()
 
   useEffect(() => {
     const getGraphData = async () => {
@@ -42,8 +42,8 @@ const PreviousRoundCardFooter: React.FC<{ lotteryNodeData: LotteryRound; lottery
 
   let prizeInBusd = new BigNumber(NaN)
   if (lotteryNodeData) {
-    const { amountCollectedInAura } = lotteryNodeData
-    prizeInBusd = amountCollectedInAura.times(cakePriceBusd)
+    const { amountCollectedInHelix } = lotteryNodeData
+    prizeInBusd = amountCollectedInHelix.times(cakePriceBusd)
   }
 
   const getTotalUsers = (): string => {
@@ -75,7 +75,7 @@ const PreviousRoundCardFooter: React.FC<{ lotteryNodeData: LotteryRound; lottery
             fontSize="14px"
             color="textSubtle"
             unit=" CAKE"
-            value={getBalanceNumber(lotteryNodeData?.amountCollectedInAura)}
+            value={getBalanceNumber(lotteryNodeData?.amountCollectedInHelix)}
             decimals={0}
           />
         )}

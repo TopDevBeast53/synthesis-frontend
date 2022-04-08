@@ -21,7 +21,7 @@ const applyNodeDataToLotteriesGraphResponse = (
         startTime: nodeRound.startTime,
         status: nodeRound.status,
         id: nodeRound.lotteryId.toString(),
-        ticketPrice: nodeRound.priceTicketInAura,
+        ticketPrice: nodeRound.priceTicketInHelix,
         totalTickets: '',
         totalUsers: '',
         winningTickets: '',

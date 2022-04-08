@@ -6,7 +6,7 @@ import { ethers } from 'ethers'
 import useSWR from 'swr'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { simpleRpcProvider } from 'utils/providers'
-import { useAura, useTokenContract } from './useContract'
+import { useHelix, useTokenContract } from './useContract'
 import { useSWRContract } from './useSWRContract'
 
 const useTokenBalance = (tokenAddress: string) => {
@@ -34,7 +34,7 @@ const useTokenBalance = (tokenAddress: string) => {
 }
 
 export const useTotalSupply = () => {
-  const cakeContract = useAura()
+  const cakeContract = useHelix()
   const { data } = useSWRContract([cakeContract, 'totalSupply'], {
     refreshInterval: SLOW_INTERVAL,
   })
@@ -67,8 +67,8 @@ export const useGetCakeBalance = () => {
   return { balance: ethers.BigNumber.from(balance.toString()), fetchStatus }
 }
 
-export const useGetAuraBalance = () => {
-  const { balance, fetchStatus } = useTokenBalance(tokens.aura.address)
+export const useGetHelixBalance = () => {
+  const { balance, fetchStatus } = useTokenBalance(tokens.helix.address)
 
   // TODO: Remove ethers conversion once useTokenBalance is converted to ethers.BigNumber
   return { balance: ethers.BigNumber.from(balance.toString()), fetchStatus }

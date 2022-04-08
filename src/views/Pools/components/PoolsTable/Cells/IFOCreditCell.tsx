@@ -1,7 +1,7 @@
 import { Box, Flex, HelpIcon, Skeleton, Text, useMatchBreakpoints, useTooltip } from 'uikit'
 import Balance from 'components/Balance'
 import { useTranslation } from 'contexts/Localization'
-import { useBUSDAuraAmount } from 'hooks/useBUSDPrice'
+import { useBUSDHelixAmount } from 'hooks/useBUSDPrice'
 import React from 'react'
 import { VaultKey } from 'state/types'
 import { useIfoPoolCredit, useVaultPoolByKey } from 'state/pools/hooks'
@@ -37,8 +37,8 @@ const IFOCreditCell: React.FC<IFOCreditCellProps> = ({ account }) => {
 
   const hasCredit = credit.gt(0)
 
-  const auraAsNumberBalance = getBalanceNumber(credit)
-  const avgBalanceDollarValue = useBUSDAuraAmount(auraAsNumberBalance)
+  const helixAsNumberBalance = getBalanceNumber(credit)
+  const avgBalanceDollarValue = useBUSDHelixAmount(helixAsNumberBalance)
 
   const labelText = t('IFO Credit')
 
@@ -46,7 +46,7 @@ const IFOCreditCell: React.FC<IFOCreditCellProps> = ({ account }) => {
     <>
       <Text>
         {t(
-          'Your entry limit in the next IFO sale is determined by your IFO credit. This is calculated by the average AURAbalance of the principal amount in the IFO pool during the last credit calculation period.',
+          'Your entry limit in the next IFO sale is determined by your IFO credit. This is calculated by the average HELIXbalance of the principal amount in the IFO pool during the last credit calculation period.',
         )}
       </Text>
       <Text>
@@ -77,7 +77,7 @@ const IFOCreditCell: React.FC<IFOCreditCellProps> = ({ account }) => {
                   fontSize={isMobile ? '14px' : '16px'}
                   color={hasCredit ? 'primary' : 'textDisabled'}
                   decimals={hasCredit ? 5 : 1}
-                  value={hasCredit ? auraAsNumberBalance : 0}
+                  value={hasCredit ? helixAsNumberBalance : 0}
                 />
                 {hasCredit ? (
                   <Balance

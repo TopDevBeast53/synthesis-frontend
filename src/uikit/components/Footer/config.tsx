@@ -7,7 +7,7 @@ export const footerLinks: FooterLinkType[] = [
     items: [
       {
         label: "Github",
-        href: "https://github.com/aura",
+        href: "https://github.com/helix",
       },
     ],
   },
@@ -22,7 +22,7 @@ export const socials = [
   {
     label: "Github",
     icon: "Github",
-    href: "https://github.com/aura/",
+    href: "https://github.com/helix/",
   },
   {
     label: "Discord",

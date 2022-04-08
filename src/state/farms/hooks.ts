@@ -74,7 +74,7 @@ export const usePollFarmsWithUserData = (includeArchive = false) => {
 
 /**
  * Fetches the "core" farm data used globally
- * 1 = AURA-BNB LP
+ * 1 = HELIX-BNB LP
  * 3 = BNB-BUSD LP
  */
 export const usePollCoreFarmData = () => {
@@ -145,14 +145,14 @@ export const useLpTokenPrice = (symbol: string) => {
 /**
  * @@deprecated use the BUSD hook in /hooks
  */
-export const usePriceAuraBusd = (): BigNumber => {
-  const auraBnbFarm = useFarmFromPid(1)
+export const usePriceHelixBusd = (): BigNumber => {
+  const helixBnbFarm = useFarmFromPid(1)
 
-  const auraPriceBusdAsString = auraBnbFarm.tokenPriceBusd
+  const helixPriceBusdAsString = helixBnbFarm.tokenPriceBusd
 
-  const auraPriceBusd = useMemo(() => {
-    return new BigNumber(auraPriceBusdAsString)
-  }, [auraPriceBusdAsString])
+  const helixPriceBusd = useMemo(() => {
+    return new BigNumber(helixPriceBusdAsString)
+  }, [helixPriceBusdAsString])
 
-  return auraPriceBusd
+  return helixPriceBusd
 }

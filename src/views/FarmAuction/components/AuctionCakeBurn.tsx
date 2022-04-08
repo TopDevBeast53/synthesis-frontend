@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Text, Flex, Skeleton, Image } from 'uikit'
 import { useFarmAuctionContract } from 'hooks/useContract'
 import { useTranslation } from 'contexts/Localization'
-import { usePriceAuraBusd } from 'state/farms/hooks'
+import { usePriceHelixBusd } from 'state/farms/hooks'
 import { getBalanceNumber } from 'utils/formatBalance'
 import { ethersToBigNumber } from 'utils/bigNumber'
 import Balance from 'components/Balance'
@@ -20,7 +20,7 @@ const AuctionCakeBurn: React.FC = () => {
   const [burnedCakeAmount, setBurnedCakeAmount] = useState(0)
   const { t } = useTranslation()
   const farmAuctionContract = useFarmAuctionContract()
-  const cakePriceBusd = usePriceAuraBusd()
+  const cakePriceBusd = usePriceHelixBusd()
 
   const burnedAmountAsUSD = cakePriceBusd.times(burnedCakeAmount)
 

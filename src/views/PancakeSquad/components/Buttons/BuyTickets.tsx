@@ -5,7 +5,7 @@ import { ContextApi } from 'contexts/Localization/types'
 import { ethers, BigNumber } from 'ethers'
 import useApproveConfirmTransaction from 'hooks/useApproveConfirmTransaction'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
-import { useAura, useNftSaleContract } from 'hooks/useContract'
+import { useHelix, useNftSaleContract } from 'hooks/useContract'
 import useToast from 'hooks/useToast'
 import { DefaultTheme } from 'styled-components'
 import { ethersToBigNumber } from 'utils/bigNumber'
@@ -55,7 +55,7 @@ const BuyTicketsButtons: React.FC<BuyTicketsProps> = ({
   const { callWithGasPrice } = useCallWithGasPrice()
   const nftSaleContract = useNftSaleContract()
   const { toastSuccess } = useToast()
-  const cakeContract = useAura()
+  const cakeContract = useHelix()
   const { isUserEnabled, setIsUserEnabled } = useContext(PancakeSquadContext)
 
   const canBuySaleTicket =
@@ -120,7 +120,7 @@ const BuyTicketsButtons: React.FC<BuyTicketsProps> = ({
       isLoading={isApproving}
       headerBackground={theme.colors.gradients.cardHeader}
       txHash={txHashEnablingResult}
-      loadingText={t('Please enable AURAspending in your wallet')}
+      loadingText={t('Please enable HELIXspending in your wallet')}
       loadingButtonLabel={t('Enabling...')}
       successButtonLabel={t('Close')}
       onConfirmClose={onConfirmClose}

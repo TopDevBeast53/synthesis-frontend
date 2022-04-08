@@ -5,7 +5,7 @@ import { useTranslation } from 'contexts/Localization'
 import { LotteryTicket, LotteryTicketClaimData } from 'config/constants/types'
 import { getBalanceAmount } from 'utils/formatBalance'
 import { callWithEstimateGas } from 'utils/calls'
-import { usePriceAuraBusd } from 'state/farms/hooks'
+import { usePriceHelixBusd } from 'state/farms/hooks'
 import { useLottery } from 'state/lottery/hooks'
 import { fetchUserLotteries } from 'state/lottery'
 import { useGasPrice } from 'state/user/hooks'
@@ -37,7 +37,7 @@ const ClaimInnerContainer: React.FC<ClaimInnerProps> = ({ onSuccess, roundsToCla
   const lotteryContract = useLotteryV2Contract()
   const activeClaimData = roundsToClaim[activeClaimIndex]
 
-  const cakePriceBusd = usePriceAuraBusd()
+  const cakePriceBusd = usePriceHelixBusd()
   const cakeReward = activeClaimData.cakeTotal
   const dollarReward = cakeReward.times(cakePriceBusd)
   const rewardAsBalance = getBalanceAmount(cakeReward).toNumber()
@@ -95,7 +95,7 @@ const ClaimInnerContainer: React.FC<ClaimInnerProps> = ({ onSuccess, roundsToCla
         toastSuccess(
           t('Prizes Collected!'),
           <ToastDescriptionWithTx txHash={receipt.transactionHash}>
-            {t('Your AURAprizes for round %lotteryId% have been sent to your wallet', { lotteryId })}
+            {t('Your HELIXprizes for round %lotteryId% have been sent to your wallet', { lotteryId })}
           </ToastDescriptionWithTx>,
         )
         setPendingTx(false)
@@ -162,7 +162,7 @@ const ClaimInnerContainer: React.FC<ClaimInnerProps> = ({ onSuccess, roundsToCla
       setPendingTx(false)
       toastSuccess(
         t('Prizes Collected!'),
-        t('Your AURAprizes for round %lotteryId% have been sent to your wallet', { lotteryId }),
+        t('Your HELIXprizes for round %lotteryId% have been sent to your wallet', { lotteryId }),
       )
       handleProgressToNextClaim()
     }

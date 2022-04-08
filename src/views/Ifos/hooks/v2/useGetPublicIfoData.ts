@@ -5,7 +5,7 @@ import ifoV2Abi from 'config/abi/ifoV2.json'
 import tokens from 'config/constants/tokens'
 import { Ifo, IfoStatus } from 'config/constants/types'
 import { ethers } from 'ethers'
-import { useLpTokenPrice, usePriceAuraBusd } from 'state/farms/hooks'
+import { useLpTokenPrice, usePriceHelixBusd } from 'state/farms/hooks'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { multicallv2 } from 'utils/multicall'
 import { PublicIfoData } from '../../types'
@@ -29,7 +29,7 @@ const formatPool = (pool) => ({
  */
 const useGetPublicIfoData = (ifo: Ifo): PublicIfoData => {
   const { address, releaseBlockNumber } = ifo
-  const cakePriceUsd = usePriceAuraBusd()
+  const cakePriceUsd = usePriceHelixBusd()
   const lpTokenPriceInUsd = useLpTokenPrice(ifo.currency.symbol)
   const currencyPriceInUSD = ifo.currency === tokens.cake ? cakePriceUsd : lpTokenPriceInUsd
 
