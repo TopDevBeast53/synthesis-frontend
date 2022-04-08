@@ -117,9 +117,9 @@ export default function BridgeToSolana({switcher}: {switcher: React.ReactNode}) 
 
   return (
     <>
-      <Flex justifyContent="space-between" alignItems="center" style={{marginBottom: '62px', minHeight: '140px'}}>
+      <Flex justifyContent="space-between" alignItems="center" style={{marginBottom: '32px', minHeight: '60px'}}>
         <Heading as="h2" mt="20px" mb="10px">
-          My NFTs on Binance
+          My Geobots on Binance
         </Heading>
         {switcher}
       </Flex>

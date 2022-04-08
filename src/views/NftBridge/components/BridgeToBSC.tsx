@@ -226,7 +226,7 @@ function BridgeToBSCInner({switcher}: {switcher: React.ReactNode}) {
   
   return (
     <>
-      <Flex justifyContent="space-between" alignItems="center" style={{marginBottom: '62px', minHeight: '140px'}}>
+      <Flex justifyContent="space-between" alignItems="center" style={{marginBottom: '32px', minHeight: '60px'}}>
         <Flex>
           {wallet.connected && 
             <GeneralCard style={{ minWidth: "210px"}}>

@@ -8,7 +8,7 @@ import { logError } from 'utils/sentry'
 
 import { CurrencyLogo } from 'components/Logo'
 import unserializedTokens from 'config/constants/tokens'
-
+import PageHeader from 'components/PageHeader'
 import { NFTCardText, NFTCardTextType } from './components/NFTCardText'
 import { useGetNftInfo } from './hooks/useGetNftInfo'
 import CircleLoader from '../../components/Loader/CircleLoader'
@@ -19,18 +19,14 @@ import Page from '../Page'
 import { TokenInfo } from './type'
 import NFTStartCollectPanel from './components/NFTStartCollectPanel'
 
-const PageHeading = styled(Heading)`
-  font-size: 70px;
-  weight: 400;
-  line-height: 73.5px;
-  padding-bottom: 84px;
-`;
-
 const NFTDisplayPanel = styled(Flex)`
   position: relative;
   flex-direction: column;
-  width: 70%;
+  width: 100%;
   max-width: 1200px;
+  padding-left: 24px;
+  padding-right: 24px;
+  margin-bottom: 32px;
 `;
 
 const GeneralCard = styled(Card)`
@@ -238,76 +234,79 @@ export default function NftStaking() {
   const helixToken = unserializedTokens.helix;
 
   return (
-    <Page>
-      <PageHeading> 
-        My NFTs 
-      </PageHeading>
-
-      <NFTDisplayPanel>
-        <Flex justifyContent="space-between">
-          <Flex>
-            <GeneralCard>
-              <NFTCardText type={NFTCardTextType.generalCaption} style={{paddingBottom: '7px'}}>
-                My Accumulated Helix Points
-              </NFTCardText>
-              <Flex alignItems="center"> 
-                <CurrencyLogo currency={helixToken} size="41px"/>
-                <NFTCardText type={NFTCardTextType.generalValue} style={{paddingLeft: '18px'}}>
-                  {loadingAccumulatedAP ? "loading" : accumulatedAP}
+    <>
+      <PageHeader background='transparent'>
+        <Heading as="h1" scale="xxl" color="secondary">
+          {t('My Geobots')}
+        </Heading>
+      </PageHeader>
+      <Page>
+        <NFTDisplayPanel>
+          <Flex justifyContent="space-between">
+            <Flex>
+              <GeneralCard>
+                <NFTCardText type={NFTCardTextType.generalCaption} style={{paddingBottom: '7px'}}>
+                  My Accumulated Helix Points
                 </NFTCardText>
-              </Flex>
-            </GeneralCard>
-            <GeneralCard style={{marginLeft: '25px'}}>
-              <NFTCardText type={NFTCardTextType.generalCaption} style={{paddingBottom: '7px'}}>
-                Pending Reward
-              </NFTCardText>
-              <Flex alignItems="center"> 
-                <NFTCardText type={NFTCardTextType.generalValue}>
-                  {loadingPendingReward ? "loading" : Number.parseFloat(pendingReward).toFixed(4)}
+                <Flex alignItems="center"> 
+                  <CurrencyLogo currency={helixToken} size="41px"/>
+                  <NFTCardText type={NFTCardTextType.generalValue} style={{paddingLeft: '18px'}}>
+                    {loadingAccumulatedAP ? "loading" : Number.parseFloat(accumulatedAP).toFixed(3)}
+                  </NFTCardText>
+                </Flex>
+              </GeneralCard>
+              <GeneralCard style={{marginLeft: '25px'}}>
+                <NFTCardText type={NFTCardTextType.generalCaption} style={{paddingBottom: '7px'}}>
+                  Pending Reward
                 </NFTCardText>
-                <Button onClick={handleWithdraw} style={{marginLeft: '25px'}}>
-                  Withdraw
-                </Button>
-              </Flex>
-            </GeneralCard>
-          </Flex>
-
-          <Flex flexDirection="column" flexShrink={1}> 
-            <ShowStackedSwitch />
-            <NFTCardText type={NFTCardTextType.generalCaption} style={{marginTop: '10px'}}>
-              Selected: {selectedTokenIds.length}
-            </NFTCardText>
-            <Button onClick={handleStaking} disabled={!enableStakingBtn} style={{ margin: '10px 0' }}>
-              {viewStaked ? "Unstake" : "Stake"}
-            </Button>
-          </Flex>
-        </Flex>
-
-        <div style={{marginTop: '62px'}}>
-          {loading ? (
-            <Flex
-              position="relative"
-              height="300px"
-              justifyContent="center"
-              py="8px"
-            >
-              <Flex justifyContent="center" style={{ paddingBottom: '8px' }}>
-                <Text fontSize="18px" bold>
-                  Loading...
-                </Text>
-              </Flex>
-              <Flex justifyContent="center">
-                <CircleLoader size="30px"/>
-              </Flex>
+                <Flex alignItems="center"> 
+                  <NFTCardText type={NFTCardTextType.generalValue}>
+                    {loadingPendingReward ? "loading" : Number.parseFloat(pendingReward).toFixed(3)}
+                  </NFTCardText>
+                  <Button onClick={handleWithdraw} style={{marginLeft: '25px'}}>
+                    Withdraw
+                  </Button>
+                </Flex>
+              </GeneralCard>
             </Flex>
-          ) : (
-            tokens.length > 0 
-              ? tokensUI 
-              : <NFTStartCollectPanel />
-            )
-          }
-        </div>
-      </NFTDisplayPanel>
-    </Page>
+
+            <Flex flexDirection="column" flexShrink={1}> 
+              <ShowStackedSwitch />
+              <NFTCardText type={NFTCardTextType.generalCaption} style={{marginTop: '10px'}}>
+                Selected: {selectedTokenIds.length}
+              </NFTCardText>
+              <Button onClick={handleStaking} disabled={!enableStakingBtn} style={{ margin: '10px 0' }}>
+                {viewStaked ? "Unstake" : "Stake"}
+              </Button>
+            </Flex>
+          </Flex>
+
+          <div style={{marginTop: '62px'}}>
+            {loading ? (
+              <Flex
+                position="relative"
+                height="300px"
+                justifyContent="center"
+                py="8px"
+              >
+                <Flex justifyContent="center" style={{ paddingBottom: '8px' }}>
+                  <Text fontSize="18px" bold>
+                    Loading...
+                  </Text>
+                </Flex>
+                <Flex justifyContent="center">
+                  <CircleLoader size="30px"/>
+                </Flex>
+              </Flex>
+            ) : (
+              tokens.length > 0 
+                ? tokensUI 
+                : <NFTStartCollectPanel />
+              )
+            }
+          </div>
+        </NFTDisplayPanel>
+      </Page>
+    </>
   )
 }
