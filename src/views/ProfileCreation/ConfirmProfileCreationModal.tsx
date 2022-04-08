@@ -4,7 +4,7 @@ import { ethers } from 'ethers'
 import { formatUnits } from '@ethersproject/units'
 import { useAppDispatch } from 'state'
 import { useTranslation } from 'contexts/Localization'
-import { useAura, useProfile } from 'hooks/useContract'
+import { useHelix, useProfile } from 'hooks/useContract'
 import useApproveConfirmTransaction from 'hooks/useApproveConfirmTransaction'
 import { fetchProfile } from 'state/profile'
 import useToast from 'hooks/useToast'
@@ -36,7 +36,7 @@ const ConfirmProfileCreationModal: React.FC<Props> = ({
   const profileContract = useProfile()
   const dispatch = useAppDispatch()
   const { toastSuccess } = useToast()
-  const cakeContract = useAura()
+  const cakeContract = useHelix()
   const { callWithGasPrice } = useCallWithGasPrice()
 
   const { isApproving, isApproved, isConfirmed, isConfirming, handleApprove, handleConfirm } =

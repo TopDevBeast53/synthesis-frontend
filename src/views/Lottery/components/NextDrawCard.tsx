@@ -17,7 +17,7 @@ import {
 import { useWeb3React } from '@web3-react/core'
 import { LotteryStatus } from 'config/constants/types'
 import { useTranslation } from 'contexts/Localization'
-import { usePriceAuraBusd } from 'state/farms/hooks'
+import { usePriceHelixBusd } from 'state/farms/hooks'
 import { useLottery } from 'state/lottery/hooks'
 import { getBalanceNumber } from 'utils/formatBalance'
 import Balance from 'components/Balance'
@@ -60,14 +60,14 @@ const NextDrawCard = () => {
   } = useTranslation()
   const { account } = useWeb3React()
   const { currentLotteryId, isTransitioning, currentRound } = useLottery()
-  const { endTime, amountCollectedInAura, userTickets, status } = currentRound
+  const { endTime, amountCollectedInHelix, userTickets, status } = currentRound
 
   const [onPresentViewTicketsModal] = useModal(<ViewTicketsModal roundId={currentLotteryId} roundStatus={status} />)
   const [isExpanded, setIsExpanded] = useState(false)
   const ticketBuyIsDisabled = status !== LotteryStatus.OPEN || isTransitioning
 
-  const cakePriceBusd = usePriceAuraBusd()
-  const prizeInBusd = amountCollectedInAura.times(cakePriceBusd)
+  const cakePriceBusd = usePriceHelixBusd()
+  const prizeInBusd = amountCollectedInHelix.times(cakePriceBusd)
   const endTimeMs = parseInt(endTime, 10) * 1000
   const endDate = new Date(endTimeMs)
   const isLotteryOpen = status === LotteryStatus.OPEN
@@ -105,7 +105,7 @@ const NextDrawCard = () => {
             color="textSubtle"
             textAlign={['center', null, null, 'left']}
             unit=" CAKE"
-            value={getBalanceNumber(amountCollectedInAura)}
+            value={getBalanceNumber(amountCollectedInHelix)}
             decimals={0}
           />
         )}

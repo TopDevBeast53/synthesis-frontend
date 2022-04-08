@@ -3,12 +3,12 @@ import { Flex, Text, IconButton, AddIcon, MinusIcon, useModal, Skeleton, Box } f
 import BigNumber from 'bignumber.js'
 import { getBalanceNumber } from 'utils/formatBalance'
 import { DeserializedPool, VaultKey } from 'state/types'
-import { usePriceAuraBusd } from 'state/farms/hooks'
+import { usePriceHelixBusd } from 'state/farms/hooks'
 import { useVaultPoolByKey } from 'state/pools/hooks'
 import Balance from 'components/Balance'
 import { useTranslation } from 'contexts/Localization'
 import NotEnoughTokensModal from '../../VaultCard/Modals/NotEnoughTokensModal'
-import { convertSharesToAura } from '../../../helpers'
+import { convertSharesToHelix } from '../../../helpers'
 import VaultStakeModal from '../VaultStakeModal'
 
 interface HasStakeActionProps {
@@ -24,10 +24,10 @@ const HasSharesActions: React.FC<HasStakeActionProps> = ({ pool, stakingTokenBal
     pricePerFullShare,
   } = useVaultPoolByKey(pool.vaultKey)
   const { stakingToken } = pool
-  const { auraAsBigNumber, auraAsNumberBalance } = convertSharesToAura(userShares, pricePerFullShare)
-  const cakePriceBusd = usePriceAuraBusd()
+  const { helixAsBigNumber, helixAsNumberBalance } = convertSharesToHelix(userShares, pricePerFullShare)
+  const cakePriceBusd = usePriceHelixBusd()
   const stakedDollarValue = cakePriceBusd.gt(0)
-    ? getBalanceNumber(auraAsBigNumber.multipliedBy(cakePriceBusd), stakingToken.decimals)
+    ? getBalanceNumber(helixAsBigNumber.multipliedBy(cakePriceBusd), stakingToken.decimals)
     : 0
   const { t } = useTranslation()
 
@@ -35,7 +35,7 @@ const HasSharesActions: React.FC<HasStakeActionProps> = ({ pool, stakingTokenBal
   const [onPresentStake] = useModal(
     <VaultStakeModal stakingMax={stakingTokenBalance} performanceFee={performanceFee} pool={pool} />,
   )
-  const [onPresentUnstake] = useModal(<VaultStakeModal stakingMax={auraAsBigNumber} pool={pool} isRemovingStake />)
+  const [onPresentUnstake] = useModal(<VaultStakeModal stakingMax={helixAsBigNumber} pool={pool} isRemovingStake />)
 
   const totalSharesPercentage =
     userShares &&
@@ -46,7 +46,7 @@ const HasSharesActions: React.FC<HasStakeActionProps> = ({ pool, stakingTokenBal
   return (
     <Flex justifyContent="space-between" alignItems="center">
       <Flex flexDirection="column">
-        <Balance fontSize="20px" bold value={auraAsNumberBalance} decimals={5} />
+        <Balance fontSize="20px" bold value={helixAsNumberBalance} decimals={5} />
         <Text as={Flex} fontSize="12px" color="textSubtle" flexWrap="wrap">
           {cakePriceBusd.gt(0) ? (
             <Balance value={stakedDollarValue} fontSize="12px" color="textSubtle" decimals={2} prefix="~" unit=" USD" />

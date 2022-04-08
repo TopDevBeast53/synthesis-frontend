@@ -24,7 +24,7 @@ interface FarmCardActionsProps {
   apr?: number
   displayApr?: string
   addLiquidityUrl?: string
-  auraPrice?: BigNumber
+  helixPrice?: BigNumber
   lpLabel?: string
 }
 
@@ -44,7 +44,7 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({
   apr,
   displayApr,
   addLiquidityUrl,
-  auraPrice,
+  helixPrice,
   lpLabel,
 }) => {
   const { t } = useTranslation()
@@ -88,7 +88,7 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({
       apr={apr}
       displayApr={displayApr}
       addLiquidityUrl={addLiquidityUrl}
-      auraPrice={auraPrice}
+      helixPrice={helixPrice}
     />,
   )
   const [onPresentWithdraw] = useModal(

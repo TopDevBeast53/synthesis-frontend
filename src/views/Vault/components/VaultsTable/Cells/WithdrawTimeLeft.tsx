@@ -22,26 +22,26 @@ const WithdrawTimeLeft: React.FC<TotalStakedCellProps> = ({ pool }) => {
   const { t } = useTranslation()
   const { isMobile } = useMatchBreakpoints()
   const { sousId, stakingToken, totalStaked, vaultKey } = pool
-  const { totalAuraInVault } = useVaultPoolByKey(vaultKey)
+  const { totalHelixInVault } = useVaultPoolByKey(vaultKey)
   const vaultPools = useVaultPools()
 
-  const auraInVaults = Object.values(vaultPools).reduce((total, vault) => {
-    return total.plus(vault.totalAuraInVault)
+  const helixInVaults = Object.values(vaultPools).reduce((total, vault) => {
+    return total.plus(vault.totalHelixInVault)
   }, BIG_ZERO)
 
-  const isManualAuraPool = sousId === 0
+  const isManualHelixPool = sousId === 0
 
   const withdrawTimeLeft = useMemo(() => {
     if (vaultKey) {
-      return getBalanceNumber(totalAuraInVault, stakingToken.decimals)
+      return getBalanceNumber(totalHelixInVault, stakingToken.decimals)
     }
-    if (isManualAuraPool) {
-      const manualAuraTotalMinusAutoVault = new BigNumber(totalStaked).minus(auraInVaults)
+    if (isManualHelixPool) {
+      const manualHelixTotalMinusAutoVault = new BigNumber(totalStaked).minus(helixInVaults)
 
-      return getBalanceNumber(manualAuraTotalMinusAutoVault, stakingToken.decimals)
+      return getBalanceNumber(manualHelixTotalMinusAutoVault, stakingToken.decimals)
     }
     return getBalanceNumber(totalStaked, stakingToken.decimals)
-  }, [vaultKey, totalAuraInVault, isManualAuraPool, totalStaked, stakingToken.decimals, auraInVaults])
+  }, [vaultKey, totalHelixInVault, isManualHelixPool, totalStaked, stakingToken.decimals, helixInVaults])
 
   const balanceFontSize = isMobile ? "14px" : "16px";
   return (

@@ -15,19 +15,17 @@ export default function BridgeToSolana({switcher}: {switcher: React.ReactNode}) 
 
   const [tokens, setTokens] = useState([])
   const [selectedTokenID, setSelectedTokenID] = useState('')
-  const [selectedExternalTokenID, setSelectedExternalTokenID] = useState('')
 
   const [loading, setLoading] = useState(true)
 
   const { getUnstakedNftsFromBSC, approveToBridgeContract } = useNFTBridge()
 
   const [onPresentBridgeModal] = useModal(
-    <BridgeToSolanaModal tokenIDToBridge={selectedTokenID} externalTokenIDToBridge={selectedExternalTokenID} />
+    <BridgeToSolanaModal tokenIDToBridge={selectedTokenID} />
   );
 
-  const requestBridgeDestinationForToken = useCallback((tokenID: string, externalTokenId: string) => {
+  const requestBridgeDestinationForToken = useCallback((tokenID: string) => {
     setSelectedTokenID(tokenID);
-    setSelectedExternalTokenID(externalTokenId);
     onPresentBridgeModal();
   }, [setSelectedTokenID, onPresentBridgeModal]);
 
@@ -84,12 +82,12 @@ export default function BridgeToSolana({switcher}: {switcher: React.ReactNode}) 
                   value: token.level,
                 },
                 {
-                  caption: "AuraPoints",
-                  value: token.auraPoints,
+                  caption: "HelixPoints",
+                  value: token.helixPoints,
                 },
                 {
                   caption: "Remain APTo Next Level",
-                  value: token.remainAPToNextLevel,
+                  value: token.remainHPToNextLevel,
                 }
               ]}
               actions={[
@@ -105,7 +103,7 @@ export default function BridgeToSolana({switcher}: {switcher: React.ReactNode}) 
                   caption: "Bridge to Solana",
                   displayed: token.isApproved,
                   action: requestBridgeDestinationForToken,
-                  params: [token.tokenId, token.externalTokenId]
+                  params: [token.tokenId]
                 }
               ]}
               bgSrc={token.uri}

@@ -38,7 +38,7 @@ const NameCell: React.FC<NameCellProps> = ({ pool }) => {
 
   const stakedBalance = userData?.stakedBalance ? new BigNumber(userData.stakedBalance) : BIG_ZERO
   const isStaked = stakedBalance.gt(0)
-  const isManualAuraPool = sousId === 0
+  const isManualHelixPool = sousId === 0
 
   const showStakedTag = vaultKey ? hasVaultShares : isStaked
 
@@ -49,9 +49,9 @@ const NameCell: React.FC<NameCellProps> = ({ pool }) => {
   if (vaultKey) {
     title = t(vaultPoolConfig[vaultKey].name)
     subtitle = t(vaultPoolConfig[vaultKey].description)
-  } else if (isManualAuraPool) {
-    title = t('Manual AURA')
-    subtitle = `${t('Earn')} AURA ${t('Stake').toLocaleLowerCase()} AURA`
+  } else if (isManualHelixPool) {
+    title = t('Manual HELIX')
+    subtitle = `${t('Earn')} HELIX ${t('Stake').toLocaleLowerCase()} HELIX`
   }
 
   return (

@@ -20,7 +20,7 @@ import { useTranslation } from 'contexts/Localization'
 import { useWeb3React } from '@web3-react/core'
 import { useAppDispatch } from 'state'
 import { BIG_TEN } from 'utils/bigNumber'
-import { usePriceAuraBusd } from 'state/farms/hooks'
+import { usePriceHelixBusd } from 'state/farms/hooks'
 import { useIfoPoolCreditBlock, useVaultPoolByKey } from 'state/pools/hooks'
 import { useVaultPoolContract, useTokenContract } from 'hooks/useContract'
 import useTheme from 'hooks/useTheme'
@@ -28,7 +28,7 @@ import useWithdrawalFeeTimer from 'views/Pools/hooks/useWithdrawalFeeTimer'
 import BigNumber from 'bignumber.js'
 import { getFullDisplayBalance, formatNumber, getDecimalAmount } from 'utils/formatBalance'
 import useToast from 'hooks/useToast'
-import { fetchAuraVaultUserData } from 'state/pools'
+import { fetchHelixVaultUserData } from 'state/pools'
 import { DeserializedPool, VaultKey } from 'state/types'
 import { getInterestBreakdown } from 'utils/compoundApyHelpers'
 import RoiCalculatorModal from 'components/RoiCalculatorModal'
@@ -36,7 +36,7 @@ import { ToastDescriptionWithTx } from 'components/Toast'
 import { vaultPoolConfig } from 'config/constants/pools'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { logError } from 'utils/sentry'
-import { convertAuraToShares, convertSharesToAura } from '../../helpers'
+import { convertHelixToShares, convertSharesToHelix } from '../../helpers'
 import FeeSummary from './FeeSummary'
 
 interface VaultStakeModalProps {
@@ -102,15 +102,15 @@ const VaultStakeModal: React.FC<VaultStakeModalProps> = ({
   const [percent, setPercent] = useState(0)
   const [showRoiCalculator, setShowRoiCalculator] = useState(false)
   const { hasUnstakingFee } = useWithdrawalFeeTimer(parseInt(lastDepositedTime, 10), userShares)
-  const auraPriceBusd = usePriceAuraBusd()
-  const usdValueStaked = new BigNumber(stakeAmount).times(auraPriceBusd)
-  const formattedUsdValueStaked = auraPriceBusd.gt(0) && stakeAmount ? formatNumber(usdValueStaked.toNumber()) : ''
+  const helixPriceBusd = usePriceHelixBusd()
+  const usdValueStaked = new BigNumber(stakeAmount).times(helixPriceBusd)
+  const formattedUsdValueStaked = helixPriceBusd.gt(0) && stakeAmount ? formatNumber(usdValueStaked.toNumber()) : ''
 
   const callOptions = {
     gasLimit: vaultPoolConfig[pool.vaultKey].gasLimit,
   }
 
-  const { auraAsBigNumber } = convertSharesToAura(userShares, pricePerFullShare)
+  const { helixAsBigNumber } = convertSharesToHelix(userShares, pricePerFullShare)
 
   const interestBreakdown = getInterestBreakdown({
     principalInUSD: !usdValueStaked.isNaN() ? usdValueStaked.toNumber() : 0,
@@ -149,8 +149,8 @@ const VaultStakeModal: React.FC<VaultStakeModalProps> = ({
 
   const handleWithdrawal = async (convertedStakeAmount: BigNumber) => {
     setPendingTx(true)
-    const shareStakeToWithdraw = convertAuraToShares(convertedStakeAmount, pricePerFullShare)
-    // trigger withdrawAll function if the withdrawal will leave 0.000001 AURAor less
+    const shareStakeToWithdraw = convertHelixToShares(convertedStakeAmount, pricePerFullShare)
+    // trigger withdrawAll function if the withdrawal will leave 0.000001 HELIXor less
     const triggerWithdrawAllThreshold = new BigNumber(1000000000000)
     const sharesRemaining = userShares.minus(shareStakeToWithdraw.sharesAsBigNumber)
     const isWithdrawingAll = sharesRemaining.lte(triggerWithdrawAllThreshold)
@@ -168,7 +168,7 @@ const VaultStakeModal: React.FC<VaultStakeModalProps> = ({
           )
           setPendingTx(false)
           onDismiss()
-          dispatch(fetchAuraVaultUserData({ account }))
+          dispatch(fetchHelixVaultUserData({ account }))
         }
       } catch (error) {
         logError(error)
@@ -195,7 +195,7 @@ const VaultStakeModal: React.FC<VaultStakeModalProps> = ({
           )
           setPendingTx(false)
           onDismiss()
-          dispatch(fetchAuraVaultUserData({ account }))
+          dispatch(fetchHelixVaultUserData({ account }))
         }
       } catch (error) {
         logError(error)
@@ -227,7 +227,7 @@ const VaultStakeModal: React.FC<VaultStakeModalProps> = ({
         )
         setPendingTx(false)
         onDismiss()
-        dispatch(fetchAuraVaultUserData({ account }))
+        dispatch(fetchHelixVaultUserData({ account }))
       }
     } catch (error) {
       logError(error)
@@ -255,7 +255,7 @@ const VaultStakeModal: React.FC<VaultStakeModalProps> = ({
         apr={vaultKey ? rawApr : apr}
         linkLabel={t('Get %symbol%', { symbol: stakingToken.symbol })}
         linkHref={getTokenLink}
-        stakingTokenBalance={auraAsBigNumber.plus(stakingMax)}
+        stakingTokenBalance={helixAsBigNumber.plus(stakingMax)}
         stakingTokenSymbol={stakingToken.symbol}
         earningTokenSymbol={earningToken.symbol}
         onBack={() => setShowRoiCalculator(false)}
@@ -284,7 +284,7 @@ const VaultStakeModal: React.FC<VaultStakeModalProps> = ({
       <BalanceInput
         value={stakeAmount}
         onUserInput={handleStakeInputChange}
-        currencyValue={auraPriceBusd.gt(0) && `~${formattedUsdValueStaked || 0} USD`}
+        currencyValue={helixPriceBusd.gt(0) && `~${formattedUsdValueStaked || 0} USD`}
         decimals={stakingToken.decimals}
       />
       <Text mt="8px" ml="auto" color="textSubtle" fontSize="12px" mb="8px">

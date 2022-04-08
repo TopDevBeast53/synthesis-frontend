@@ -37,7 +37,7 @@ import VaultStakeModal from 'views/Pools/components/CakeVaultCard/VaultStakeModa
 import { BIG_ZERO } from 'utils/bigNumber'
 import BigNumber from 'bignumber.js'
 import { useIfoPoolVault, useIfoPoolCredit, useIfoWithApr } from 'state/pools/hooks'
-import { useBUSDAuraAmount } from 'hooks/useBUSDPrice'
+import { useBUSDHelixAmount } from 'hooks/useBUSDPrice'
 
 interface Props {
   ifo: Ifo
@@ -89,7 +89,7 @@ const Step1 = ({ hasProfile }: { hasProfile: boolean }) => {
     {},
   )
 
-  const creditDollarValue = useBUSDAuraAmount(getBalanceNumber(credit))
+  const creditDollarValue = useBUSDHelixAmount(getBalanceNumber(credit))
 
   const stakingTokenBalance = pool?.userData?.stakingTokenBalance
     ? new BigNumber(pool.userData.stakingTokenBalance)
@@ -107,12 +107,12 @@ const Step1 = ({ hasProfile }: { hasProfile: boolean }) => {
     <CardBody>
       {tooltipVisible && tooltip}
       <Heading as="h4" color="secondary" mb="16px">
-        {t('Stake AURAin IFO pool')}
+        {t('Stake HELIXin IFO pool')}
       </Heading>
       <Box>
         <Text color="textSubtle" small>
           {t(
-            'The maximum amount of AURAuser can commit to all the sales combined, is equal to the average AURAbalance in the IFO AURApool prior to the IFO. Stake more AURAto increase the maximum AURAyou can commit to the sale. Missed this IFO? You can keep staking in the IFO AURAPool to join the next IFO sale.',
+            'The maximum amount of HELIXuser can commit to all the sales combined, is equal to the average HELIXbalance in the IFO HELIXpool prior to the IFO. Stake more HELIXto increase the maximum HELIXyou can commit to the sale. Missed this IFO? You can keep staking in the IFO HELIXPool to join the next IFO sale.',
           )}
         </Text>
         <TooltipText as="span" fontWeight={700} ref={targetRef} color="textSubtle" small>
@@ -126,7 +126,7 @@ const Step1 = ({ hasProfile }: { hasProfile: boolean }) => {
               <PancakeRoundIcon style={{ alignSelf: 'flex-start' }} width={32} height={32} />
               <Box ml="16px">
                 <Text bold fontSize="12px" textTransform="uppercase" color="secondary">
-                  {t('Your max AURAentry')}
+                  {t('Your max HELIXentry')}
                 </Text>
                 <Balance fontSize="20px" bold decimals={5} value={getBalanceNumber(credit)} />
                 <Text fontSize="12px" color="textSubtle">
@@ -161,7 +161,7 @@ const Step2 = ({ hasProfile, isLive, isCommitted }: { hasProfile: boolean; isLiv
         {t('Commit CAKE')}
       </Heading>
       <Text color="textSubtle" small>
-        {t('When the IFO sales are live, you can “commit” your AURAto buy the tokens being sold.')} <br />
+        {t('When the IFO sales are live, you can “commit” your HELIXto buy the tokens being sold.')} <br />
         {t('We recommend committing to the Basic Sale first, but you can do both if you like.')}
       </Text>
       {hasProfile && isLive && !isCommitted && (
@@ -247,7 +247,7 @@ const IfoSteps: React.FC<Props> = ({ ifo, walletIfoData, isLive }) => {
             </Heading>
             <Text color="textSubtle" small>
               {t(
-                'After the IFO sales finish, you can claim any IFO tokens that you bought, and any unspent AURAtokens will be returned to your wallet.',
+                'After the IFO sales finish, you can claim any IFO tokens that you bought, and any unspent HELIXtokens will be returned to your wallet.',
               )}
             </Text>
           </CardBody>

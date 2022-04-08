@@ -127,7 +127,7 @@ const IfoCardTokens: React.FC<IfoCardTokensProps> = ({
   const { t } = useTranslation()
   const { targetRef, tooltip, tooltipVisible } = useTooltip(
     t(
-      'Sorry, you didn’t contribute enough AURAto meet the minimum threshold. You didn’t buy anything in this sale, but you can still reclaim your CAKE.',
+      'Sorry, you didn’t contribute enough HELIXto meet the minimum threshold. You didn’t buy anything in this sale, but you can still reclaim your CAKE.',
     ),
     { placement: 'bottom' },
   )
@@ -187,7 +187,7 @@ const IfoCardTokens: React.FC<IfoCardTokensProps> = ({
         <Message my="24px" p="8px" variant="danger">
           <Box>
             <MessageText display="inline">
-              {t('You don’t have any average AURAbalance available to commit in the IFO AURApool.')}
+              {t('You don’t have any average HELIXbalance available to commit in the IFO HELIXpool.')}
             </MessageText>{' '}
             <MessageTextLink display="inline" fontWeight={700} href="#ifo-how-to" color="failure">
               {t('How does it work?')} »
@@ -253,13 +253,13 @@ const IfoCardTokens: React.FC<IfoCardTokensProps> = ({
           <BunnyPlaceholderIcon width={80} mb="16px" />
           <Text fontWeight={600}>{t('You didn’t participate in this sale!')}</Text>
           <Text textAlign="center" fontSize="14px">
-            {t('To participate in the next IFO, stake some AURAin the IFO AURApool!')}
+            {t('To participate in the next IFO, stake some HELIXin the IFO HELIXpool!')}
           </Text>
           <MessageTextLink href="#ifo-how-to" textAlign="center">
             {t('How does it work?')} »
           </MessageTextLink>
           <Button mt="24px" onClick={onPresentStake}>
-            {t('Stake AURAin IFO pool')}
+            {t('Stake HELIXin IFO pool')}
           </Button>
         </Flex>
       ) : (

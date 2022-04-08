@@ -18,7 +18,7 @@ const VaultCard: React.FC<{ pool: DeserializedPool; account: string }> = ({ pool
   const stakedBalance = userData?.stakedBalance ? new BigNumber(userData.stakedBalance) : BIG_ZERO
   const accountHasStakedBalance = stakedBalance.gt(0)
 
-  const isCakePool = earningToken.symbol === 'AURA' && stakingToken.symbol === 'AURA'
+  const isCakePool = earningToken.symbol === 'HELIX' && stakingToken.symbol === 'HELIX'
 
   return (
     <StyledCard
@@ -28,7 +28,7 @@ const VaultCard: React.FC<{ pool: DeserializedPool; account: string }> = ({ pool
       <PoolCardHeader isStaking={accountHasStakedBalance} isFinished={isFinished && sousId !== 0}>
         <VaultCardHeaderTitle
           title={isCakePool ? t('Manual') : t('Earn %asset% ', { asset: earningToken.symbol })}
-          subTitle={isCakePool ? t('Earn AURA, stake AURA') : t('Stake %symbol%', { symbol: stakingToken.symbol })}
+          subTitle={isCakePool ? t('Earn HELIX, stake HELIX') : t('Stake %symbol%', { symbol: stakingToken.symbol })}
         />
         <TokenPairImage primaryToken={earningToken} secondaryToken={stakingToken} width={64} height={64} />
       </PoolCardHeader>

@@ -34,7 +34,7 @@ interface DepositModalProps {
   apr?: number
   displayApr?: string
   addLiquidityUrl?: string
-  auraPrice?: BigNumber
+  helixPrice?: BigNumber
 }
 
 const DepositModal: React.FC<DepositModalProps> = ({
@@ -49,7 +49,7 @@ const DepositModal: React.FC<DepositModalProps> = ({
   lpLabel,
   apr,
   addLiquidityUrl,
-  auraPrice,
+  helixPrice,
 }) => {
   const [val, setVal] = useState('')
   const { toastSuccess, toastError } = useToast()
@@ -68,10 +68,10 @@ const DepositModal: React.FC<DepositModalProps> = ({
   const interestBreakdown = getInterestBreakdown({
     principalInUSD: !lpTokensToStake.isNaN() ? usdToStake.toNumber() : 0,
     apr,
-    earningTokenPrice: auraPrice.toNumber(),
+    earningTokenPrice: helixPrice.toNumber(),
   })
 
-  const annualRoi = auraPrice.times(interestBreakdown[3])
+  const annualRoi = helixPrice.times(interestBreakdown[3])
   const formattedAnnualRoi = formatNumber(
     annualRoi.toNumber(),
     annualRoi.gt(10000) ? 0 : 2,
@@ -98,7 +98,7 @@ const DepositModal: React.FC<DepositModalProps> = ({
         stakingTokenBalance={stakedBalance.plus(max)}
         stakingTokenSymbol={tokenName}
         stakingTokenPrice={lpPrice.toNumber()}
-        earningTokenPrice={auraPrice.toNumber()}
+        earningTokenPrice={helixPrice.toNumber()}
         apr={apr}
         multiplier={multiplier}
         displayApr={displayApr}

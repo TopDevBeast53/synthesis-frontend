@@ -11,12 +11,12 @@ interface TokenList {
 const defineTokens = <T extends TokenList>(t: T) => t
 
 export const mainnetTokens = defineTokens({
-  aura: new Token(
+  helix: new Token(
     TESTNET,
     '0x373d65f5437B98DC3050Fa73fd47cC745a395891',
     18,
-    'AURA',
-    'Aura',
+    'HELIX',
+    'Helix',
   ),
   wbnb: new Token(
     MAINNET,
@@ -34,7 +34,7 @@ export const mainnetTokens = defineTokens({
     18,
     'CAKE',
     'PancakeSwap Token',
-    'https://aura.exchange/',
+    'https://helix.exchange/',
   ),
   tlos: new Token(MAINNET, '0xb6C53431608E626AC81a9776ac3e999c5556717c', 18, 'TLOS', 'Telos', 'https://www.telos.net/'),
   beta: new Token(
@@ -222,7 +222,7 @@ export const mainnetTokens = defineTokens({
     18,
     'SYRUP',
     'SyrupBar Token',
-    'https://aura.exchange/',
+    'https://helix.exchange/',
   ),
   pha: new Token(
     MAINNET,
@@ -237,7 +237,7 @@ export const mainnetTokens = defineTokens({
     '0xdB8D30b74bf098aF214e862C90E647bbB1fcC58c',
     18,
     'BABYCAKE',
-    'Baby AURAToken',
+    'Baby HELIXToken',
     'https://babycake.app/',
   ),
   bmon: new Token(
@@ -1952,12 +1952,12 @@ export const mainnetTokens = defineTokens({
 } as const)
 
 export const testnetTokens = defineTokens({
-  aura: new Token(
+  helix: new Token(
     TESTNET,
     '0x373d65f5437B98DC3050Fa73fd47cC745a395891',
     18,
-    'AURA',
-    'Aura',
+    'HELIX',
+    'Helix',
   ),
   wbnb: new Token(
     TESTNET,
@@ -1973,7 +1973,7 @@ export const testnetTokens = defineTokens({
     18,
     'CAKE',
     'PancakeSwap Token',
-    'https://aura.exchange/',
+    'https://helix.exchange/',
   ),
   busd: new Token(
     TESTNET,
@@ -2006,7 +2006,7 @@ export const testnetTokens = defineTokens({
     18,
     'SYRUP',
     'SyrupBar Token',
-    'https://aura.exchange/',
+    'https://helix.exchange/',
   ),
   bake: new Token(
     TESTNET,

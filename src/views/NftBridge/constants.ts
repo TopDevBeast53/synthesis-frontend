@@ -1,4 +1,4 @@
 
-import { getAuraNftBridgeAddress } from 'utils/addressHelpers'
+import { getHelixNftBridgeAddress } from 'utils/addressHelpers'
 
-export const auraNFTBridgeAddress = getAuraNftBridgeAddress()
+export const helixNFTBridgeAddress = getHelixNftBridgeAddress()

@@ -8,7 +8,7 @@ import { getProviderOrSigner } from 'utils'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { Contract } from '@ethersproject/contracts'
 import ReferralRegisterABI from 'config/abi/HelixReferral.json'
-import { AuraReferralRegisterAddress } from '../constants'
+import { HelixReferralRegisterAddress } from '../constants'
 import QuestionHelper from '../../../components/QuestionHelper'
 import useToast from '../../../hooks/useToast'
 import CircleLoader from '../../../components/Loader/CircleLoader'
@@ -18,7 +18,7 @@ export const useRegisterReferral = (referrerAddress: string) => {
   const { library, account } = useActiveWeb3React()
   const { callWithGasPrice } = useCallWithGasPrice()
   const addRefCb = useCallback(async () => {
-    const contract = new Contract(AuraReferralRegisterAddress, ReferralRegisterABI, getProviderOrSigner(library, account))
+    const contract = new Contract(HelixReferralRegisterAddress, ReferralRegisterABI, getProviderOrSigner(library, account))
     const tx = await callWithGasPrice(contract, 'addRef', [referrerAddress])
     return tx.wait()
   }, [callWithGasPrice, referrerAddress, library, account])
@@ -76,10 +76,10 @@ export default function ConfirmReferral(props: Props) {
                     <QuestionHelper text={
                             <Text fontSize="18px" color="secondary" mb="8px" ml="4px">
                                 Whenever you are exchanging tokens or receiving staking rewards,
-                                Aura Treasury will give 5% of that amount to {displayAddress}.
-                                For example, if you have claimed 200 AURA rewards from staking, Aura Treasury
-                                will mint 10 AURA to {displayAddress} and 1 AURA will go to you, making your
-                                profits equal to 201 AURA.
+                                Helix Treasury will give 5% of that amount to {displayAddress}.
+                                For example, if you have claimed 200 HELIX rewards from staking, Helix Treasury
+                                will mint 10 HELIX to {displayAddress} and 1 HELIX will go to you, making your
+                                profits equal to 201 HELIX.
                             </Text>
                     } mr="4px" placement="top-end" />
                 </Flex>

@@ -30,7 +30,7 @@ const AddRowModal: React.FC<ModalProps> = ({
   const { t } = useTranslation()
   const { theme } = useTheme()
   const tokenDecimals = 18
-  const tokenSymbol = "Aura"
+  const tokenSymbol = "Helix"
   const [stakeAmount, setStakeAmount] = useState('')
   const [hasReachedStakeLimit] = useState(false)
   const [percent, setPercent] = useState(0)
@@ -105,7 +105,7 @@ const AddRowModal: React.FC<ModalProps> = ({
         <Text bold>{t('Amount')}:</Text>
         <Flex alignItems="center" minWidth="70px">          
           <Text ml="4px" bold>
-            {t('Aura')}
+            {t('Helix')}
           </Text>
         </Flex>
       </Flex>

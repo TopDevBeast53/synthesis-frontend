@@ -17,20 +17,20 @@ const processViewLotterySuccessResponse = (response, lotteryId: string): Lottery
     status,
     startTime,
     endTime,
-    priceTicketInAura,
+    priceTicketInHelix,
     discountDivisor,
     treasuryFee,
     firstTicketId,
     lastTicketId,
-    amountCollectedInAura,
+    amountCollectedInHelix,
     finalNumber,
-    auraPerBracket,
+    helixPerBracket,
     countWinnersPerBracket,
     rewardsBreakdown,
   } = response
 
   const statusKey = Object.keys(LotteryStatus)[status]
-  const serializedAuraPerBracket = auraPerBracket.map((auraInBracket) => ethersToSerializedBigNumber(auraInBracket))
+  const serializedHelixPerBracket = helixPerBracket.map((helixInBracket) => ethersToSerializedBigNumber(helixInBracket))
   const serializedCountWinnersPerBracket = countWinnersPerBracket.map((winnersInBracket) =>
     ethersToSerializedBigNumber(winnersInBracket),
   )
@@ -42,14 +42,14 @@ const processViewLotterySuccessResponse = (response, lotteryId: string): Lottery
     status: LotteryStatus[statusKey],
     startTime: startTime?.toString(),
     endTime: endTime?.toString(),
-    priceTicketInAura: ethersToSerializedBigNumber(priceTicketInAura),
+    priceTicketInHelix: ethersToSerializedBigNumber(priceTicketInHelix),
     discountDivisor: discountDivisor?.toString(),
     treasuryFee: treasuryFee?.toString(),
     firstTicketId: firstTicketId?.toString(),
     lastTicketId: lastTicketId?.toString(),
-    amountCollectedInAura: ethersToSerializedBigNumber(amountCollectedInAura),
+    amountCollectedInHelix: ethersToSerializedBigNumber(amountCollectedInHelix),
     finalNumber,
-    auraPerBracket: serializedAuraPerBracket,
+    helixPerBracket: serializedHelixPerBracket,
     countWinnersPerBracket: serializedCountWinnersPerBracket,
     rewardsBreakdown: serializedRewardsBreakdown,
   }
@@ -62,14 +62,14 @@ const processViewLotteryErrorResponse = (lotteryId: string): LotteryResponse => 
     status: LotteryStatus.PENDING,
     startTime: '',
     endTime: '',
-    priceTicketInAura: '',
+    priceTicketInHelix: '',
     discountDivisor: '',
     treasuryFee: '',
     firstTicketId: '',
     lastTicketId: '',
-    amountCollectedInAura: '',
+    amountCollectedInHelix: '',
     finalNumber: null,
-    auraPerBracket: [],
+    helixPerBracket: [],
     countWinnersPerBracket: [],
     rewardsBreakdown: [],
   }
@@ -138,22 +138,22 @@ export const useProcessLotteryResponse = (
   lotteryData: LotteryResponse & { userTickets?: LotteryRoundUserTickets },
 ): LotteryRound => {
   const {
-    priceTicketInAura: priceTicketInAuraAsString,
+    priceTicketInHelix: priceTicketInHelixAsString,
     discountDivisor: discountDivisorAsString,
-    amountCollectedInAura: amountCollectedInAuraAsString,
+    amountCollectedInHelix: amountCollectedInHelixAsString,
   } = lotteryData
 
   const discountDivisor = useMemo(() => {
     return new BigNumber(discountDivisorAsString)
   }, [discountDivisorAsString])
 
-  const priceTicketInAura = useMemo(() => {
-    return new BigNumber(priceTicketInAuraAsString)
-  }, [priceTicketInAuraAsString])
+  const priceTicketInHelix = useMemo(() => {
+    return new BigNumber(priceTicketInHelixAsString)
+  }, [priceTicketInHelixAsString])
 
-  const amountCollectedInAura = useMemo(() => {
-    return new BigNumber(amountCollectedInAuraAsString)
-  }, [amountCollectedInAuraAsString])
+  const amountCollectedInHelix = useMemo(() => {
+    return new BigNumber(amountCollectedInHelixAsString)
+  }, [amountCollectedInHelixAsString])
 
   return {
     isLoading: lotteryData.isLoading,
@@ -162,14 +162,14 @@ export const useProcessLotteryResponse = (
     status: lotteryData.status,
     startTime: lotteryData.startTime,
     endTime: lotteryData.endTime,
-    priceTicketInAura,
+    priceTicketInHelix,
     discountDivisor,
     treasuryFee: lotteryData.treasuryFee,
     firstTicketId: lotteryData.firstTicketId,
     lastTicketId: lotteryData.lastTicketId,
-    amountCollectedInAura,
+    amountCollectedInHelix,
     finalNumber: lotteryData.finalNumber,
-    auraPerBracket: lotteryData.auraPerBracket,
+    helixPerBracket: lotteryData.helixPerBracket,
     countWinnersPerBracket: lotteryData.countWinnersPerBracket,
     rewardsBreakdown: lotteryData.rewardsBreakdown,
   }

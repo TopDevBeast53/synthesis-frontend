@@ -8,41 +8,41 @@ import { formatBigNumber } from 'utils/formatBalance'
 
 import helixNFTBridgeABI from 'config/abi/HelixNFTBridge.json'
 import helixNFTABI from 'config/abi/HelixNFT.json'
-import { auraNFTBridgeAddress } from '../constants'
-import { auraNFTAddress } from '../../NftStaking/constants'
+import { helixNFTBridgeAddress } from '../constants'
+import { helixNFTAddress } from '../../NftStaking/constants'
 
 export const useNFTBridge = () => {
   const { library, account } = useActiveWeb3React()
   const { callWithGasPrice } = useCallWithGasPrice()
 
-  const getAuraNFTBridgeContract = useCallback(() => {
-    return new Contract(auraNFTBridgeAddress, helixNFTBridgeABI, getProviderOrSigner(library, account))
+  const getHelixNFTBridgeContract = useCallback(() => {
+    return new Contract(helixNFTBridgeAddress, helixNFTBridgeABI, getProviderOrSigner(library, account))
   }, [library, account])
 
-  const getAuraNFTContract = useCallback(() => {
-    return new Contract(auraNFTAddress, helixNFTABI, getProviderOrSigner(library, account))
+  const getHelixNFTContract = useCallback(() => {
+    return new Contract(helixNFTAddress, helixNFTABI, getProviderOrSigner(library, account))
   }, [library, account])
 
   const getUnstakedNftsFromBSC = useCallback(async () => {
-    const bridgeAddr = getAuraNFTBridgeContract().address
+    const bridgeAddr = getHelixNFTBridgeContract().address
     let tx:any
     try {
-      tx = await callWithGasPrice(getAuraNFTContract(), 'getTokenIdsOfOwner', [account])
+      tx = await callWithGasPrice(getHelixNFTContract(), 'getTokenIdsOfOwner', [account])
     } catch(e) {
       return []
     }
     const tokenIds = (tx.toString()).split(',').map((v)=>({id: v}))
     if (tokenIds.length > 0) {
-      const resTokensInfo = await Promise.all(tokenIds.map((e:any)=>callWithGasPrice(getAuraNFTContract(), 'getToken', [e.id])))
-      const externalTokenIdsInfo = await Promise.all(tokenIds.map((e:any)=>callWithGasPrice(getAuraNFTContract(), 'getExternalTokenID', [e.id])))
-      const approvedAddrsInfo = await Promise.all(tokenIds.map((e:any)=>callWithGasPrice(getAuraNFTContract(), 'getApproved', [e.id])))
+      const resTokensInfo = await Promise.all(tokenIds.map((e:any)=>callWithGasPrice(getHelixNFTContract(), 'getToken', [e.id])))
+      const externalTokenIdsInfo = await Promise.all(tokenIds.map((e:any)=>callWithGasPrice(getHelixNFTContract(), 'getExternalTokenID', [e.id])))
+      const approvedAddrsInfo = await Promise.all(tokenIds.map((e:any)=>callWithGasPrice(getHelixNFTContract(), 'getApproved', [e.id])))
       const tokens = resTokensInfo.map((token:any, i)=> ({
         tokenId: token.tokenId.toString(),
         tokenOwner: token.tokenOwner.toString(),
         level: parseInt(token.level),
         isStaked: token.isStaked,
-        auraPoints: parseInt(formatBigNumber(ethers.BigNumber.from(token.auraPoints.toString()))),
-        remainAPToNextLevel: parseInt(formatBigNumber(ethers.BigNumber.from(token.remainAPToNextLvl.toString()))),
+        helixPoints: parseInt(formatBigNumber(ethers.BigNumber.from(token.helixPoints.toString()))),
+        remainHPToNextLevel: parseInt(formatBigNumber(ethers.BigNumber.from(token.remainHPToNextLvl.toString()))),
         uri: token.uri,
         externalTokenId: externalTokenIdsInfo[i],
         isApproved: approvedAddrsInfo[i].toString() === bridgeAddr,
@@ -50,37 +50,37 @@ export const useNFTBridge = () => {
       return tokens
     }
     return []
-  }, [getAuraNFTBridgeContract, getAuraNFTContract, callWithGasPrice, account])
+  }, [getHelixNFTBridgeContract, getHelixNFTContract, callWithGasPrice, account])
   
   const approveToBridgeContract = useCallback(async (tokenId) => {
-    const tx = await callWithGasPrice(getAuraNFTContract(), 'approve', [getAuraNFTBridgeContract().address, tokenId])
+    const tx = await callWithGasPrice(getHelixNFTContract(), 'approve', [getHelixNFTBridgeContract().address, tokenId])
     return tx.wait()
-  }, [getAuraNFTContract, getAuraNFTBridgeContract, callWithGasPrice])
+  }, [getHelixNFTContract, getHelixNFTBridgeContract, callWithGasPrice])
   
   const bridgeToSolana = useCallback(async (tokenId:string, externalOwnerAddr:string) => {
-    const tx = await callWithGasPrice(getAuraNFTBridgeContract(), 'bridgeToSolana', [tokenId, externalOwnerAddr])
+    const tx = await callWithGasPrice(getHelixNFTBridgeContract(), 'bridgeToSolana', [tokenId, externalOwnerAddr])
     return tx.wait()
-  }, [getAuraNFTBridgeContract, callWithGasPrice])
+  }, [getHelixNFTBridgeContract, callWithGasPrice])
   
   const bridgeToBSC = useCallback(async (externalTokenId, uri) => {
-    const tx = await callWithGasPrice(getAuraNFTBridgeContract(), 'bridgeToBSC', [externalTokenId, account, uri])
+    const tx = await callWithGasPrice(getHelixNFTBridgeContract(), 'bridgeToBSC', [externalTokenId, account, uri])
     return tx.wait()
-  }, [getAuraNFTBridgeContract, account, callWithGasPrice])
+  }, [getHelixNFTBridgeContract, account, callWithGasPrice])
 
   const mintBridgedNFT = useCallback(async (externalTokenId) => {
-    const tx = await callWithGasPrice(getAuraNFTBridgeContract(), 'mintBridgedNFT', [externalTokenId])
+    const tx = await callWithGasPrice(getHelixNFTBridgeContract(), 'mintBridgedNFT', [externalTokenId])
     return tx.wait()
-  }, [getAuraNFTBridgeContract, callWithGasPrice])
+  }, [getHelixNFTBridgeContract, callWithGasPrice])
   
   const getMinted = useCallback(async (externalTokenId) => {
-    const tx = await callWithGasPrice(getAuraNFTBridgeContract(), 'getMinted', [externalTokenId])
+    const tx = await callWithGasPrice(getHelixNFTBridgeContract(), 'getMinted', [externalTokenId])
     return tx
-  }, [getAuraNFTBridgeContract, callWithGasPrice])
+  }, [getHelixNFTBridgeContract, callWithGasPrice])
 
   const isBridged = useCallback(async (externalTokenId) => {
-    const tx = await callWithGasPrice(getAuraNFTBridgeContract(), 'isBridged', [externalTokenId])
+    const tx = await callWithGasPrice(getHelixNFTBridgeContract(), 'isBridged', [externalTokenId])
     return tx
-  }, [getAuraNFTBridgeContract, callWithGasPrice])
+  }, [getHelixNFTBridgeContract, callWithGasPrice])
 
   return {
     getUnstakedNftsFromBSC,

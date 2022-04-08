@@ -1,5 +1,5 @@
 {
-  "name": "Aura Default List",
+  "name": "Helix Default List",
   "timestamp": "2021-05-06T00:00:00Z",
   "version": {
     "major": 3,
@@ -11,7 +11,7 @@
   "keywords": ["helix", "default"],
   "tokens": [
     {
-      "name": "Aura",
+      "name": "Helix",
       "symbol": "HELIX",
       "address": "0x373d65f5437B98DC3050Fa73fd47cC745a395891",
       "chainId": 97,

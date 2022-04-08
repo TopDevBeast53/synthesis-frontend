@@ -9,7 +9,7 @@ import { getProviderOrSigner } from 'utils'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import tokens from 'config/constants/tokens';
 import CurrencyLogo from 'components/Logo/CurrencyLogo';
-import { AuraReferralRegisterAddress } from './constants'
+import { HelixReferralRegisterAddress } from './constants'
 import ConfirmReferral from './components/ConfirmReferral';
 import Page from '../Page';
 import useToast from '../../hooks/useToast'
@@ -19,7 +19,7 @@ import CopyAddress from '../../components/Menu/UserMenu/CopyAddress';
 const useGetRef = (account: string | null) => {
     const { library } = useActiveWeb3React()
     return useCallback(async () => {
-        const contract = new Contract(AuraReferralRegisterAddress, ReferralRegisterABI, getProviderOrSigner(library, account))
+        const contract = new Contract(HelixReferralRegisterAddress, ReferralRegisterABI, getProviderOrSigner(library, account))
         if (!account) return null;
         const result = await contract.ref(account);
         return result;
@@ -29,7 +29,7 @@ const useGetRef = (account: string | null) => {
 const useGetBalance = (account: string | null) => {
     const { library } = useActiveWeb3React()
     return useCallback(async () => {
-        const contract = new Contract(AuraReferralRegisterAddress, ReferralRegisterABI, getProviderOrSigner(library, account))
+        const contract = new Contract(HelixReferralRegisterAddress, ReferralRegisterABI, getProviderOrSigner(library, account))
         if (!account) return null;
         const result = await contract.balance(account);
         return result;
@@ -55,7 +55,7 @@ const useClaimRewards = () => {
     const { library, account } = useActiveWeb3React()
     const { callWithGasPrice } = useCallWithGasPrice()
     const addRefCb = useCallback(async () => {
-      const contract = new Contract(AuraReferralRegisterAddress, ReferralRegisterABI, getProviderOrSigner(library, account))
+      const contract = new Contract(HelixReferralRegisterAddress, ReferralRegisterABI, getProviderOrSigner(library, account))
       const tx = await callWithGasPrice(contract, 'withdraw', [])
       const result = await tx.wait()
       return result
@@ -86,7 +86,7 @@ export default function Referrals() {
     const [reloadBalance, setReloadBalance] = useState(true);
     const location = useLocation();
     const claimRewardsCb = useClaimRewards();
-    const auraToken = tokens.aura;
+    const helixToken = tokens.helix;
     const { search } = location;
     useEffect(() => {
         getRef().then((value) => {
@@ -151,7 +151,7 @@ export default function Referrals() {
                             Your Referral Rewards
                         </Text>
                         <Flex style={{paddingTop: '4px'}} alignItems="center">
-                            <CurrencyLogo size="48px" currency={auraToken} style={{marginRight: '8px'}}/>
+                            <CurrencyLogo size="48px" currency={helixToken} style={{marginRight: '8px'}}/>
                             {isBalanceLoading && <CircleLoader size="30px" style={{marginLeft: '12px', marginRight: '12px'}}/>}
                             {!isBalanceLoading && <Text bold fontSize="24px" style={{marginLeft: '12px', marginRight: '14px'}}>{pendingBalance}</Text>}
                             <Button onClick={async () => {

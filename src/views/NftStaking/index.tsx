@@ -62,9 +62,9 @@ export default function NftStaking() {
   const [loadingPendingReward, setLoadingPendingReward] = useState(true)
   const [enableStakingBtn, setEnableStakingBtn] = useState(false)
 
-  const { getTokens, getAuraNftInfoById } = useGetNftInfo()
+  const { getTokens, getHelixNftInfoById } = useGetNftInfo()
   const { stakingNft, getPendingReward, withdrawReward } = useStakingNft()
-  const { getAccumulatedAP, boostAuraNFT } = useBoostNft()
+  const { getAccumulatedHP, boostHelixNFT } = useBoostNft()
 
   const filterNft = filter(tokens, (token:any) => (token.isStaked === viewStaked))
   
@@ -76,7 +76,7 @@ export default function NftStaking() {
     })
     
     setLoadingAccumulatedAP(true)
-    getAccumulatedAP().then((res) => {
+    getAccumulatedHP().then((res) => {
       setAccumulatedAP(res.toString())
       setLoadingAccumulatedAP(false)
     })
@@ -86,7 +86,7 @@ export default function NftStaking() {
       setPendingReward(res.toString())
       setLoadingPendingReward(false)
     })
-  }, [getTokens, getAccumulatedAP, getPendingReward])
+  }, [getTokens, getAccumulatedHP, getPendingReward])
   
   useEffect(() => {
     handleGetTokens();
@@ -141,10 +141,10 @@ export default function NftStaking() {
   const handleBoost = useCallback(async (tokenId) => {
     try {
       setLoading(true)
-      const receipt = await boostAuraNFT(tokenId, accumulatedAP)
+      const receipt = await boostHelixNFT(tokenId, accumulatedAP)
       if (receipt.status){
-        const _upgradedToken: TokenInfo = await getAuraNftInfoById(tokenId)
-        const _accumulatedAP = await getAccumulatedAP()
+        const _upgradedToken: TokenInfo = await getHelixNftInfoById(tokenId)
+        const _accumulatedHP = await getAccumulatedHP()
         toastSuccess(t('Success'), t('Boosted!'))
         const updatedTokens = tokens.map((token: TokenInfo)=>{
           if (token.tokenId.toString() === tokenId.toString())
@@ -152,9 +152,9 @@ export default function NftStaking() {
           return token
         })
         setTokens(updatedTokens)
-        setAccumulatedAP(_accumulatedAP)
+        setAccumulatedAP(_accumulatedHP)
       } else {
-        toastError(t('Error'), t('Error transaction Or Insufficient accumulated AuraPoints .'))
+        toastError(t('Error'), t('Error transaction Or Insufficient accumulated HelixPoints .'))
       }
     } catch (e) {
       logError(e)
@@ -162,7 +162,7 @@ export default function NftStaking() {
     } finally {
       setLoading(false)
     }
-  }, [boostAuraNFT, getAccumulatedAP, getAuraNftInfoById, tokens, accumulatedAP, toastSuccess, toastError, t])
+  }, [boostHelixNFT, getAccumulatedHP, getHelixNftInfoById, tokens, accumulatedAP, toastSuccess, toastError, t])
   
   const onhandleCheckbox = useCallback(
     (tokenId, isChecked) => {
@@ -208,12 +208,12 @@ export default function NftStaking() {
                   value: token.level,
                 },
                 {
-                  caption: "AuraPoints",
-                  value: token.auraPoints,
+                  caption: "HelixPoints",
+                  value: token.helixPoints,
                 },
                 {
                   caption: "Remain APTo Next Level",
-                  value: token.remainAPToNextLevel,
+                  value: token.remainHPToNextLevel,
                 }
               ]}
               actions={[
@@ -235,7 +235,7 @@ export default function NftStaking() {
     </div>
   )
 
-  const auraToken = unserializedTokens.aura;
+  const helixToken = unserializedTokens.helix;
 
   return (
     <Page>
@@ -248,10 +248,10 @@ export default function NftStaking() {
           <Flex>
             <GeneralCard>
               <NFTCardText type={NFTCardTextType.generalCaption} style={{paddingBottom: '7px'}}>
-                My Accumulated Aura Points
+                My Accumulated Helix Points
               </NFTCardText>
               <Flex alignItems="center"> 
-                <CurrencyLogo currency={auraToken} size="41px"/>
+                <CurrencyLogo currency={helixToken} size="41px"/>
                 <NFTCardText type={NFTCardTextType.generalValue} style={{paddingLeft: '18px'}}>
                   {loadingAccumulatedAP ? "loading" : accumulatedAP}
                 </NFTCardText>

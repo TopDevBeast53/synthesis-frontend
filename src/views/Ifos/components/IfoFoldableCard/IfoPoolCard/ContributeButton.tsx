@@ -34,7 +34,7 @@ const ContributeButton: React.FC<Props> = ({ poolId, ifo, publicIfoData, walletI
     toastSuccess(
       t('Success!'),
       <ToastDescriptionWithTx txHash={txHash}>
-        {t('You have contributed %amount% AURAto this IFO!', {
+        {t('You have contributed %amount% HELIXto this IFO!', {
           amount: getBalanceNumber(amount),
         })}
       </ToastDescriptionWithTx>,

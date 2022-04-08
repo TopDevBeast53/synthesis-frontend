@@ -27,7 +27,7 @@ const AutoHarvestAction: React.FunctionComponent<AutoHarvestActionProps> = ({
     pricePerFullShare,
     fees: { performanceFee },
   } = useVaultPoolByKey(vaultKey)
-  const { hasAutoEarnings, autoAuraToDisplay, autoUsdToDisplay } = getVaultEarnings(
+  const { hasAutoEarnings, autoHelixToDisplay, autoUsdToDisplay } = getVaultEarnings(
     account,
     helixAtLastUserAction,
     userShares,
@@ -35,7 +35,7 @@ const AutoHarvestAction: React.FunctionComponent<AutoHarvestActionProps> = ({
     earningTokenPrice,
   )
 
-  const earningTokenBalance = autoAuraToDisplay
+  const earningTokenBalance = autoHelixToDisplay
   const earningTokenDollarBalance = autoUsdToDisplay
   const hasEarnings = hasAutoEarnings
 
@@ -46,7 +46,7 @@ const AutoHarvestAction: React.FunctionComponent<AutoHarvestActionProps> = ({
 
   const actionTitle = (
     <Text fontSize="12px" bold color="secondary" as="span" textTransform="uppercase">
-      {t('Recent AURA profit')}
+      {t('Recent HELIX profit')}
     </Text>
   )
 

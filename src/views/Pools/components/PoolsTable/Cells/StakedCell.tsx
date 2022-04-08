@@ -8,7 +8,7 @@ import { DeserializedPool } from 'state/types'
 import styled from 'styled-components'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { getBalanceNumber } from 'utils/formatBalance'
-import { convertSharesToAura } from 'views/Pools/helpers'
+import { convertSharesToHelix } from 'views/Pools/helpers'
 import BaseCell, { CellContent } from './BaseCell'
 
 interface StakedCellProps {
@@ -32,11 +32,11 @@ const StakedCell: React.FC<StakedCellProps> = ({ pool, account, userDataLoaded }
   } = useVaultPoolByKey(pool.vaultKey)
   const hasSharesStaked = userShares && userShares.gt(0)
   const isVaultWithShares = pool.vaultKey && hasSharesStaked
-  const { auraAsBigNumber, auraAsNumberBalance } = convertSharesToAura(userShares, pricePerFullShare)
+  const { helixAsBigNumber, helixAsNumberBalance } = convertSharesToHelix(userShares, pricePerFullShare)
 
   // pool
   const { stakingTokenPrice, stakingToken, userData } = pool
-  const stakedAutoDollarValue = getBalanceNumber(auraAsBigNumber.multipliedBy(stakingTokenPrice), stakingToken.decimals)
+  const stakedAutoDollarValue = getBalanceNumber(helixAsBigNumber.multipliedBy(stakingTokenPrice), stakingToken.decimals)
   const stakedBalance = userData?.stakedBalance ? new BigNumber(userData.stakedBalance) : BIG_ZERO
   const stakedTokenBalance = getBalanceNumber(stakedBalance, stakingToken.decimals)
   const stakedTokenDollarBalance = getBalanceNumber(
@@ -69,7 +69,7 @@ const StakedCell: React.FC<StakedCellProps> = ({ pool, account, userDataLoaded }
                   color={hasStaked ? 'primary' : 'textDisabled'}
                   decimals={hasStaked ? 5 : 1}
                   value={
-                    pool.vaultKey ? (Number.isNaN(auraAsNumberBalance) ? 0 : auraAsNumberBalance) : stakedTokenBalance
+                    pool.vaultKey ? (Number.isNaN(helixAsNumberBalance) ? 0 : helixAsNumberBalance) : stakedTokenBalance
                   }
                 />
                 {hasStaked ? (

@@ -40,11 +40,11 @@ interface FarmCardProps {
   farm: FarmWithStakedValue
   displayApr: string
   removed: boolean
-  auraPrice?: BigNumber
+  helixPrice?: BigNumber
   account?: string
 }
 
-const FarmCard: React.FC<FarmCardProps> = ({ farm, displayApr, removed, auraPrice, account }) => {
+const FarmCard: React.FC<FarmCardProps> = ({ farm, displayApr, removed, helixPrice, account }) => {
   const { t } = useTranslation()
 
   const [showExpandableSection, setShowExpandableSection] = useState(false)
@@ -87,7 +87,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, displayApr, removed, auraPric
                   multiplier={farm.multiplier}
                   lpLabel={lpLabel}
                   addLiquidityUrl={addLiquidityUrl}
-                  auraPrice={auraPrice}
+                  helixPrice={helixPrice}
                   apr={farm.apr}
                   displayApr={displayApr}
                 />
@@ -105,7 +105,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, displayApr, removed, auraPric
           farm={farm}
           lpLabel={lpLabel}
           account={account}
-          auraPrice={auraPrice}
+          helixPrice={helixPrice}
           addLiquidityUrl={addLiquidityUrl}
         />
       </FarmCardInnerContainer>

@@ -2,14 +2,14 @@
  * @see https://github.com/pancakeswap/pancake-frontend/blob/develop/src/config/constants/tokens.ts
  */
 const tokens = {
-  aura: {
-    symbol: "Aura",
+  helix: {
+    symbol: "Helix",
     address: {
       56: "",
       97: "0x373d65f5437B98DC3050Fa73fd47cC745a395891",
     },
     decimals: 18,
-    projectLink: "https://aura.exchange/",
+    projectLink: "https://helix.exchange/",
   },
   txl: {
     symbol: "TXL",
@@ -441,7 +441,7 @@ const tokens = {
       97: "0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd",
     },
     decimals: 18,
-    projectLink: "https://aura.exchange/",
+    projectLink: "https://helix.exchange/",
   },
   blink: {
     symbol: "BLINK",
@@ -585,7 +585,7 @@ const tokens = {
       97: "0xfE1e507CeB712BDe086f3579d2c03248b2dB77f9",
     },
     decimals: 18,
-    projectLink: "https://aura.exchange/",
+    projectLink: "https://helix.exchange/",
   },
   bifi: {
     symbol: "BIFI",

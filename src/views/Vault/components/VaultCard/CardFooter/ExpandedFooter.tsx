@@ -56,13 +56,13 @@ const ExpandedFooter: React.FC<ExpandedFooterProps> = ({ pool, account }) => {
   } = pool
 
   const {
-    totalAuraInVault,
+    totalHelixInVault,
     fees: { performanceFee },
   } = useVaultPoolByKey(vaultKey)
 
   const vaultPools = useVaultPools()
   const cakeInVaults = Object.values(vaultPools).reduce((total, vault) => {
-    return total.plus(vault.totalAuraInVault)
+    return total.plus(vault.totalHelixInVault)
   }, BIG_ZERO)
 
   const tokenAddress = earningToken.address || ''
@@ -81,7 +81,7 @@ const ExpandedFooter: React.FC<ExpandedFooterProps> = ({ pool, account }) => {
 
   const getTotalStakedBalance = () => {
     if (vaultKey) {
-      return getBalanceNumber(totalAuraInVault, stakingToken.decimals)
+      return getBalanceNumber(totalHelixInVault, stakingToken.decimals)
     }
     if (isManualCakePool) {
       const manualCakeTotalMinusAutoVault = new BigNumber(totalStaked).minus(cakeInVaults)

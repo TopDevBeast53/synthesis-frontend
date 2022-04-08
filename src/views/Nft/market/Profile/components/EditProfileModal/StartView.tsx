@@ -4,7 +4,7 @@ import { useWeb3React } from '@web3-react/core'
 import { Button, Flex, Text, InjectedModalProps } from 'uikit'
 import { formatBigNumber } from 'utils/formatBalance'
 import { getPancakeProfileAddress } from 'utils/addressHelpers'
-import { useAura } from 'hooks/useContract'
+import { useHelix } from 'hooks/useContract'
 import { useGetCakeBalance } from 'hooks/useTokenBalance'
 import { useTranslation } from 'contexts/Localization'
 import useGetProfileCosts from 'views/Nft/market/Profile/hooks/useGetProfileCosts'
@@ -43,7 +43,7 @@ const AvatarWrapper = styled.div`
 const StartPage: React.FC<StartPageProps> = ({ goToApprove, goToChange, goToRemove, onDismiss }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
-  const cakeContract = useAura()
+  const cakeContract = useHelix()
   const { profile } = useProfile()
   const { balance: cakeBalance, fetchStatus } = useGetCakeBalance()
   const {
@@ -55,7 +55,7 @@ const StartPage: React.FC<StartPageProps> = ({ goToApprove, goToChange, goToRemo
   const hasMinimumCakeRequired = fetchStatus === FetchStatus.Fetched && cakeBalance.gte(minimumCakeRequired)
 
   /**
-   * Check if the wallet has the required AURAallowance to change their profile pic or reactivate
+   * Check if the wallet has the required HELIXallowance to change their profile pic or reactivate
    * If they don't, we send them to the approval screen first
    */
   useEffect(() => {
@@ -82,7 +82,7 @@ const StartPage: React.FC<StartPageProps> = ({ goToApprove, goToChange, goToRemo
         <Text as="p" color="failure">
           {!isProfileCostsLoading &&
             !hasMinimumCakeRequired &&
-            t('%minimum% AURArequired to change profile pic', { minimum: formatBigNumber(minimumCakeRequired) })}
+            t('%minimum% HELIXrequired to change profile pic', { minimum: formatBigNumber(minimumCakeRequired) })}
         </Text>
       </Flex>
       {profile.isActive ? (

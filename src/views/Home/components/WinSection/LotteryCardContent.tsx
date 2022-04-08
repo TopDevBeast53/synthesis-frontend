@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import { useTranslation } from 'contexts/Localization'
 import { useSlowFresh } from 'hooks/useRefresh'
 import useIntersectionObserver from 'hooks/useIntersectionObserver'
-import { usePriceAuraBusd } from 'state/farms/hooks'
+import { usePriceHelixBusd } from 'state/farms/hooks'
 import Balance from 'components/Balance'
 import styled from 'styled-components'
 import { fetchCurrentLotteryIdAndMaxBuy, fetchLottery } from 'state/lottery/helpers'
@@ -28,9 +28,9 @@ const LotteryCardContent = () => {
   const slowRefresh = useSlowFresh()
   const [lotteryId, setLotteryId] = useState<string>(null)
   const [currentLotteryPrize, setCurrentLotteryPrize] = useState<BigNumber>(null)
-  const cakePriceBusdAsString = usePriceAuraBusd().toString()
+  const cakePriceBusdAsString = usePriceHelixBusd().toString()
 
-  const cakePrizesText = t('%cakePrizeInUsd% in AURAprizes this round', { cakePrizeInUsd: cakePriceBusdAsString })
+  const cakePrizesText = t('%cakePrizeInUsd% in HELIXprizes this round', { cakePrizeInUsd: cakePriceBusdAsString })
   const [pretext, prizesThisRound] = cakePrizesText.split(cakePriceBusdAsString)
 
   const cakePriceBusd = useMemo(() => {
@@ -58,8 +58,8 @@ const LotteryCardContent = () => {
   useEffect(() => {
     // get public data for current lottery
     const fetchCurrentLotteryPrize = async () => {
-      const { amountCollectedInAura } = await fetchLottery(lotteryId)
-      const prizeInBusd = cakePriceBusd.times(amountCollectedInAura)
+      const { amountCollectedInHelix } = await fetchLottery(lotteryId)
+      const prizeInBusd = cakePriceBusd.times(amountCollectedInHelix)
       setCurrentLotteryPrize(prizeInBusd)
     }
 
@@ -97,7 +97,7 @@ const LotteryCardContent = () => {
           {prizesThisRound}
         </Text>
         <Text color="white" mb="40px">
-          {t('Buy tickets with CAKE, win AURAif your numbers match')}
+          {t('Buy tickets with CAKE, win HELIXif your numbers match')}
         </Text>
       </Flex>
       <Flex alignItems="center" justifyContent="center">

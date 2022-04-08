@@ -7,7 +7,7 @@ import useToast from 'hooks/useToast'
 import React, { useState } from 'react'
 import { useAppDispatch } from 'state'
 import { fetchFarmUserDataAsync } from 'state/farms'
-import { usePriceAuraBusd } from 'state/farms/hooks'
+import { usePriceHelixBusd } from 'state/farms/hooks'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { getBalanceAmount } from 'utils/formatBalance'
 import { logError } from 'utils/sentry'
@@ -24,11 +24,11 @@ const HarvestAction: React.FC<FarmCardActionsProps> = ({ earnings, pid }) => {
   const { t } = useTranslation()
   const [pendingTx, setPendingTx] = useState(false)
   const { onReward } = useHarvestFarm(pid)
-  const auraPrice = usePriceAuraBusd()
+  const helixPrice = usePriceHelixBusd()
   const dispatch = useAppDispatch()
   const rawEarningsBalance = account ? getBalanceAmount(earnings) : BIG_ZERO
   const displayBalance = rawEarningsBalance.toFixed(3, BigNumber.ROUND_DOWN)
-  const earningsBusd = rawEarningsBalance ? rawEarningsBalance.multipliedBy(auraPrice).toNumber() : 0
+  const earningsBusd = rawEarningsBalance ? rawEarningsBalance.multipliedBy(helixPrice).toNumber() : 0
 
   return (
     <Flex mb="8px" justifyContent="space-between" alignItems="center">
@@ -46,7 +46,7 @@ const HarvestAction: React.FC<FarmCardActionsProps> = ({ earnings, pid }) => {
             await onReward()
             toastSuccess(
               `${t('Harvested')}!`,
-              t('Your %symbol% earnings have been sent to your wallet!', { symbol: 'AURA' }),
+              t('Your %symbol% earnings have been sent to your wallet!', { symbol: 'HELIX' }),
             )
           } catch (e) {
             toastError(

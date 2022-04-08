@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js'
-import { convertSharesToAura } from 'views/Pools/helpers'
+import { convertSharesToHelix } from 'views/Pools/helpers'
 import { multicallv2 } from 'utils/multicall'
 import ifoPoolAbi from 'config/abi/ifoPool.json'
 import { getIfoPoolAddress } from 'utils/addressHelpers'
@@ -19,18 +19,18 @@ export const fetchPublicIfoPoolData = async () => {
       name: method,
     }))
 
-    const [[sharePrice], [shares], [estimatedAuraBountyReward], [totalPendingAuraHarvest], [startBlock], [endBlock]] =
+    const [[sharePrice], [shares], [estimatedHelixBountyReward], [totalPendingHelixHarvest], [startBlock], [endBlock]] =
       await multicallv2(ifoPoolAbi, calls)
 
     const totalSharesAsBigNumber = shares ? new BigNumber(shares.toString()) : BIG_ZERO
     const sharePriceAsBigNumber = sharePrice ? new BigNumber(sharePrice.toString()) : BIG_ZERO
-    const totalAuraInVaultEstimate = convertSharesToAura(totalSharesAsBigNumber, sharePriceAsBigNumber)
+    const totalHelixInVaultEstimate = convertSharesToHelix(totalSharesAsBigNumber, sharePriceAsBigNumber)
     return {
       totalShares: totalSharesAsBigNumber.toJSON(),
       pricePerFullShare: sharePriceAsBigNumber.toJSON(),
-      totalAuraInVault: totalAuraInVaultEstimate.auraAsBigNumber.toJSON(),
-      estimatedAuraBountyReward: new BigNumber(estimatedAuraBountyReward.toString()).toJSON(),
-      totalPendingAuraHarvest: new BigNumber(totalPendingAuraHarvest.toString()).toJSON(),
+      totalHelixInVault: totalHelixInVaultEstimate.helixAsBigNumber.toJSON(),
+      estimatedHelixBountyReward: new BigNumber(estimatedHelixBountyReward.toString()).toJSON(),
+      totalPendingHelixHarvest: new BigNumber(totalPendingHelixHarvest.toString()).toJSON(),
       creditStartBlock: startBlock.toNumber(),
       creditEndBlock: endBlock.toNumber(),
     }
@@ -38,9 +38,9 @@ export const fetchPublicIfoPoolData = async () => {
     return {
       totalShares: null,
       pricePerFullShare: null,
-      totalAuraInVault: null,
-      estimatedAuraBountyReward: null,
-      totalPendingAuraHarvest: null,
+      totalHelixInVault: null,
+      estimatedHelixBountyReward: null,
+      totalPendingHelixHarvest: null,
     }
   }
 }

@@ -14,7 +14,7 @@ import {
   useFetchPublicPoolsData,
   usePools,
   useFetchUserPools,
-  useFetchAuraVault,
+  useFetchHelixVault,
   useFetchIfoPool,
   useVaultPools,
 } from 'state/pools/hooks'
@@ -97,8 +97,8 @@ const Pools: React.FC = () => {
   const [sortOption, setSortOption] = useState('hot')
   const chosenPoolsLength = useRef(0)
   const vaultPools = useVaultPools()
-  const auraInVaults = Object.values(vaultPools).reduce((total, vault) => {
-    return total.plus(vault.totalAuraInVault)
+  const helixInVaults = Object.values(vaultPools).reduce((total, vault) => {
+    return total.plus(vault.totalHelixInVault)
   }, BIG_ZERO)
 
   const pools = usePoolsWithVault()
@@ -127,7 +127,7 @@ const Pools: React.FC = () => {
   )
   const hasStakeInFinishedPools = stakedOnlyFinishedPools.length > 0
 
-  useFetchAuraVault()
+  useFetchHelixVault()
   useFetchIfoPool(true)
   useFetchPublicPoolsData()
   useFetchUserPools(account)
@@ -183,17 +183,17 @@ const Pools: React.FC = () => {
           (pool: DeserializedPool) => {
             let totalStaked = Number.NaN
             if (pool.vaultKey) {
-              if (pool.stakingTokenPrice && vaultPools[pool.vaultKey].totalAuraInVault.isFinite()) {
+              if (pool.stakingTokenPrice && vaultPools[pool.vaultKey].totalHelixInVault.isFinite()) {
                 totalStaked =
                   +formatUnits(
-                    ethers.BigNumber.from(vaultPools[pool.vaultKey].totalAuraInVault.toString()),
+                    ethers.BigNumber.from(vaultPools[pool.vaultKey].totalHelixInVault.toString()),
                     pool.stakingToken.decimals,
                   ) * pool.stakingTokenPrice
               }
             } else if (pool.sousId === 0) {
-              if (pool.totalStaked?.isFinite() && pool.stakingTokenPrice && auraInVaults.isFinite()) {
+              if (pool.totalStaked?.isFinite() && pool.stakingTokenPrice && helixInVaults.isFinite()) {
                 const manualCakeTotalMinusAutoVault = ethers.BigNumber.from(pool.totalStaked.toString()).sub(
-                  auraInVaults.toString(),
+                  helixInVaults.toString(),
                 )
                 totalStaked =
                   +formatUnits(manualCakeTotalMinusAutoVault, pool.stakingToken.decimals) * pool.stakingTokenPrice
@@ -249,7 +249,7 @@ const Pools: React.FC = () => {
         <Flex justifyContent="space-between" flexDirection={['column', null, null, 'row']}>
           <Flex flex="1" flexDirection="column" mr={['8px', 0]}>
             <Heading as="h1" scale="xxl" color="secondary" mb="24px">
-              {t('Aura Pools')}
+              {t('Helix Pools')}
             </Heading>
             <Heading scale="md" color="text">
               {t('Just stake some tokens to earn.')}

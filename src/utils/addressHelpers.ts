@@ -52,7 +52,7 @@ export const getVaultPoolAddress = (vaultKey: VaultKey) => {
   return getAddress(addresses[vaultKey])
 }
 
-export const getAuraVaultAddress = () => {
+export const getHelixAutoPoolAddress = () => {
   return getAddress(addresses.helixAutoPool)
 }
 export const getIfoPoolAddress = () => {
@@ -91,21 +91,21 @@ export const getNftSaleAddress = () => {
 export const getPancakeSquadAddress = () => {
   return getAddress(addresses.pancakeSquad)
 }
-export const getAuraMigratorAddress = () => {
-    return getAddress(addresses.auraMigrator);
+export const getHelixMigratorAddress = () => {
+    return getAddress(addresses.helixMigrator);
 }
-export const getAuraNftAddress = () => {
-  return getAddress(addresses.auraNFT)
+export const getHelixNftAddress = () => {
+  return getAddress(addresses.helixNFT)
 }
-export const getAuraChefNftAddress = () => {
-  return getAddress(addresses.auraNFTChef)
+export const getHelixChefNftAddress = () => {
+  return getAddress(addresses.helixNFTChef)
 }
 export const getVotingAddress = () => {
   return getAddress(addresses.voting)
 }
-export const getAuraNftBridgeAddress = () => {
-  return getAddress(addresses.auraNFTBridge)
+export const getHelixNftBridgeAddress = () => {
+  return getAddress(addresses.helixNFTBridge)
 }
 export const getHelixVaultAddress = () => {
-  return getAddress(addresses.vault)
+  return getAddress(addresses.helixVault)
 }

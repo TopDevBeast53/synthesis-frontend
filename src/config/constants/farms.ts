@@ -10,12 +10,12 @@ const farms: SerializedFarmConfig[] = [
 
     {
       pid: 0,
-      lpSymbol: 'AURA',
+      lpSymbol: 'HELIX',
       lpAddresses: {
-        97: serializedTokens.aura.address,
+        97: serializedTokens.helix.address,
         56: '',
       },
-      token: serializedTokens.aura,
+      token: serializedTokens.helix,
       quoteToken: serializedTokens.wbnb,
     },
     {
@@ -25,7 +25,7 @@ const farms: SerializedFarmConfig[] = [
         97: '0xf2E8F8697539394089CBF666425924a26B8A88da',
         56: '',
       },
-      token: serializedTokens.aura,
+      token: serializedTokens.helix,
       quoteToken: serializedTokens.wbnb,
     },
     {
@@ -35,7 +35,7 @@ const farms: SerializedFarmConfig[] = [
         97: '0x1cc66Fc2196b619625e72970555F73e7ddE31eaC',
         56: '',
       },
-      token: serializedTokens.aura,
+      token: serializedTokens.helix,
       quoteToken: serializedTokens.usdt,
     },
     {
@@ -55,39 +55,39 @@ const farms: SerializedFarmConfig[] = [
         97: '0x204f1FbFe8cA19BEe4dbf11f70c618E974bC0CF0',
         56: '',
       },
-      token: serializedTokens.aura,
+      token: serializedTokens.helix,
       quoteToken: serializedTokens.busd,
     },
     
     
       // {
       //   pid: 0,
-      //   lpSymbol: 'AURA',
+      //   lpSymbol: 'HELIX',
       //   lpAddresses: {
       //     97: '0x304F1b2BD22b19098388c3a945B83b3e4198EC9A',
       //     56: '',
       //   },
-      //   token: serializedTokens.aura,
+      //   token: serializedTokens.helix,
       //   quoteToken: serializedTokens.wbnb,
       // },
   // {
   //   pid: 1,
-  //   lpSymbol: 'AURA - CAKE',
+  //   lpSymbol: 'HELIX - CAKE',
   //   lpAddresses: {
   //     97: '0x304f1b2bd22b19098388c3a945b83b3e4198ec9a',
   //     56: '',
   //   },
-  //   token: serializedTokens.aura,
+  //   token: serializedTokens.helix,
   //   quoteToken: serializedTokens.cake,
   // },
       // {
       //   pid: 2,
-      //   lpSymbol: 'AURA-BUSD LP',
+      //   lpSymbol: 'HELIX-BUSD LP',
       //   lpAddresses: {
       //     97: '0x5696436461515d3026940248e864d424b7a8e0d6',
       //     56: '',
       //   },
-      //   token: serializedTokens.aura,
+      //   token: serializedTokens.helix,
       //   quoteToken: serializedTokens.busd,
       // },
       // {
@@ -102,22 +102,22 @@ const farms: SerializedFarmConfig[] = [
       // },
       // {
       //   pid: 4,
-      //   lpSymbol: 'AURA-CAKE LP',
+      //   lpSymbol: 'HELIX-CAKE LP',
       //   lpAddresses: {
       //     97: '0x17a8d8d27afe6fa84ecf317e0090d0e46c4db337',
       //     56: '',
       //   },
-      //   token: serializedTokens.aura,
+      //   token: serializedTokens.helix,
       //   quoteToken: serializedTokens.cake,
       // },
       // {
       //   pid: 5,
-      //   lpSymbol: 'AURA-DAI LP',
+      //   lpSymbol: 'HELIX-DAI LP',
       //   lpAddresses: {
       //     97: '0xf51c802f7a6fd798548d006a5e5b9855a48c49c1',
       //     56: '',
       //   },
-      //   token: serializedTokens.aura,
+      //   token: serializedTokens.helix,
       //   quoteToken: serializedTokens.dai,
       // },
       // {

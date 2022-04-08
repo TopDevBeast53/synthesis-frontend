@@ -4,7 +4,7 @@ import poolsConfig from 'config/constants/pools'
 import {
   AppThunk,
   HelixAutoPool,
-  IfoAuraVault,
+  IfoHelixVault,
   IfoVaultUser,
   PoolsState,
   SerializedPool,
@@ -14,7 +14,7 @@ import {
 import { getAddress } from 'utils/addressHelpers'
 import { getPoolApr } from 'utils/apr'
 import { BIG_ZERO } from 'utils/bigNumber'
-import { getAuraContract, getMasterchefContract } from 'utils/contractHelpers'
+import { getHelixContract, getMasterchefContract } from 'utils/contractHelpers'
 import { getBalanceNumber } from 'utils/formatBalance'
 import { simpleRpcProvider } from 'utils/providers'
 import { fetchIfoPoolFeesData, fetchPublicIfoPoolData } from './fetchIfoPoolPublic'
@@ -33,9 +33,9 @@ import { getTokenPricesFromFarm } from './helpers'
 export const initialPoolVaultState = Object.freeze({
   totalShares: null,
   pricePerFullShare: null,
-  totalAuraInVault: null,
-  estimatedAuraBountyReward: null,
-  totalPendingAuraHarvest: null,
+  totalHelixInVault: null,
+  estimatedHelixBountyReward: null,
+  totalPendingHelixHarvest: null,
   fees: {
     performanceFee: null,
     callFee: null,
@@ -61,25 +61,25 @@ const initialState: PoolsState = {
 }
 
 // Thunks
-const auraPool = poolsConfig.find((pool) => pool.sousId === 0)
-const auraPoolAddress = getAddress(auraPool.contractAddress)
-const auraContract = getAuraContract()
+const helixPool = poolsConfig.find((pool) => pool.sousId === 0)
+const helixPoolAddress = getAddress(helixPool.contractAddress)
+const helixContract = getHelixContract()
 
-export const fetchAuraPoolPublicDataAsync = () => async (dispatch, getState) => {
+export const fetchHelixPoolPublicDataAsync = () => async (dispatch, getState) => {
   const prices = getTokenPricesFromFarm(getState().farms.data)
-  const stakingTokenAddress = auraPool.stakingToken.address ? auraPool.stakingToken.address.toLowerCase() : null
+  const stakingTokenAddress = helixPool.stakingToken.address ? helixPool.stakingToken.address.toLowerCase() : null
   const stakingTokenPrice = stakingTokenAddress ? prices[stakingTokenAddress] : 0
-  const earningTokenAddress = auraPool.earningToken.address ? auraPool.earningToken.address.toLowerCase() : null
+  const earningTokenAddress = helixPool.earningToken.address ? helixPool.earningToken.address.toLowerCase() : null
   const earningTokenPrice = earningTokenAddress ? prices[earningTokenAddress] : 0
 
 
-  const totalStaking = await auraContract.balanceOf(auraPoolAddress)
+  const totalStaking = await helixContract.balanceOf(helixPoolAddress)
 
   const apr = getPoolApr(
     stakingTokenPrice,
     earningTokenPrice,
-    getBalanceNumber(new BigNumber(totalStaking ? totalStaking.toString() : 0), auraPool.stakingToken.decimals),
-    parseFloat(auraPool.tokenPerBlock),
+    getBalanceNumber(new BigNumber(totalStaking ? totalStaking.toString() : 0), helixPool.stakingToken.decimals),
+    parseFloat(helixPool.tokenPerBlock),
   )
   
   dispatch(
@@ -95,9 +95,9 @@ export const fetchAuraPoolPublicDataAsync = () => async (dispatch, getState) => 
   )
 }
 
-export const fetchAuraPoolUserDataAsync = (account: string) => async (dispatch) => {
-  const allowance = await auraContract.allowance(account, auraPoolAddress)
-  const stakingTokenBalance = await auraContract.balanceOf(account)
+export const fetchHelixPoolUserDataAsync = (account: string) => async (dispatch) => {
+  const allowance = await helixContract.allowance(account, helixPoolAddress)
+  const stakingTokenBalance = await helixContract.balanceOf(account)
   const masterChefContract = getMasterchefContract()
   const pendingReward = await masterChefContract.pendingHelixToken('0', account)
   const { amount: masterPoolAmount } = await masterChefContract.userInfo('0', account)
@@ -228,17 +228,17 @@ export const updateUserPendingReward =
     dispatch(updatePoolsUserData({ sousId, field: 'pendingReward', value: pendingRewards[sousId] }))
   }
 
-export const fetchAuraVaultPublicData = createAsyncThunk<HelixAutoPool>('helixAutoPool/fetchPublicData', async () => {
+export const fetchHelixVaultPublicData = createAsyncThunk<HelixAutoPool>('helixAutoPool/fetchPublicData', async () => {
   const publicVaultInfo = await fetchPublicVaultData()
   return publicVaultInfo
 })
 
-export const fetchAuraVaultFees = createAsyncThunk<VaultFees>('helixAutoPool/fetchFees', async () => {
+export const fetchHelixVaultFees = createAsyncThunk<VaultFees>('helixAutoPool/fetchFees', async () => {
   const vaultFees = await fetchVaultFees()
   return vaultFees
 })
 
-export const fetchAuraVaultUserData = createAsyncThunk<VaultUser, { account: string }>(
+export const fetchHelixVaultUserData = createAsyncThunk<VaultUser, { account: string }>(
   'helixAutoPool/fetchUser',
   async ({ account }) => {
     const userData = await fetchVaultUser(account)
@@ -246,7 +246,7 @@ export const fetchAuraVaultUserData = createAsyncThunk<VaultUser, { account: str
   },
 )
 
-export const fetchIfoPoolPublicData = createAsyncThunk<IfoAuraVault>('ifoPool/fetchPublicData', async () => {
+export const fetchIfoPoolPublicData = createAsyncThunk<IfoHelixVault>('ifoPool/fetchPublicData', async () => {
   const publicVaultInfo = await fetchPublicIfoPoolData()
   return publicVaultInfo
 })
@@ -307,16 +307,16 @@ export const PoolsSlice = createSlice({
   },
   extraReducers: (builder) => {
     // Vault public data that updates frequently
-    builder.addCase(fetchAuraVaultPublicData.fulfilled, (state, action: PayloadAction<HelixAutoPool>) => {
+    builder.addCase(fetchHelixVaultPublicData.fulfilled, (state, action: PayloadAction<HelixAutoPool>) => {
       state.helixAutoPool = { ...state.helixAutoPool, ...action.payload }
     })
     // Vault fees
-    builder.addCase(fetchAuraVaultFees.fulfilled, (state, action: PayloadAction<VaultFees>) => {
+    builder.addCase(fetchHelixVaultFees.fulfilled, (state, action: PayloadAction<VaultFees>) => {
       const fees = action.payload
       state.helixAutoPool = { ...state.helixAutoPool, fees }
     })
     // Vault user data
-    builder.addCase(fetchAuraVaultUserData.fulfilled, (state, action: PayloadAction<VaultUser>) => {
+    builder.addCase(fetchHelixVaultUserData.fulfilled, (state, action: PayloadAction<VaultUser>) => {
       const userData = action.payload
       userData.isLoading = false
       state.helixAutoPool = { ...state.helixAutoPool, userData }

@@ -26,11 +26,11 @@ interface FarmCardActionsProps {
   farm: FarmWithStakedValue
   account?: string
   addLiquidityUrl?: string
-  auraPrice?: BigNumber
+  helixPrice?: BigNumber
   lpLabel?: string
 }
 
-const CardActions: React.FC<FarmCardActionsProps> = ({ farm, account, addLiquidityUrl, auraPrice, lpLabel }) => {
+const CardActions: React.FC<FarmCardActionsProps> = ({ farm, account, addLiquidityUrl, helixPrice, lpLabel }) => {
   const { t } = useTranslation()
   const { toastError } = useToast()
   const [requestedApproval, setRequestedApproval] = useState(false)
@@ -66,7 +66,7 @@ const CardActions: React.FC<FarmCardActionsProps> = ({ farm, account, addLiquidi
         pid={pid}
         apr={farm.apr}
         lpLabel={lpLabel}
-        auraPrice={auraPrice}
+        helixPrice={helixPrice}
         addLiquidityUrl={addLiquidityUrl}
       />
     ) : (

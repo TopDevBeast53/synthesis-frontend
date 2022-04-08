@@ -170,7 +170,7 @@ const campaigns: Campaign[] = [
     id: '513010001',
     type: 'participation',
     title: 'Syrup Soaker',
-    description: 'Took a dip in the early days of the Auto AURA Pool',
+    description: 'Took a dip in the early days of the Auto HELIX Pool',
     badge: 'syrup-soaker.svg',
   },
   {

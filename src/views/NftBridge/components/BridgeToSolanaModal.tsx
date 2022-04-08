@@ -17,11 +17,10 @@ const StyledModalBody = styled(ModalBody)`
 `
 
 interface BridgeToSolanaModalProps extends InjectedModalProps {
-   tokenIDToBridge: string,
-   externalTokenIDToBridge: string
+   tokenIDToBridge: string
 }
 
-const BridgeToSolanaModal: React.FC<BridgeToSolanaModalProps> = ({ tokenIDToBridge, externalTokenIDToBridge, onDismiss }) => {
+const BridgeToSolanaModal: React.FC<BridgeToSolanaModalProps> = ({ tokenIDToBridge, onDismiss }) => {
     const [destination, setDestination] = useState('')
     const { toastError, toastSuccess } = useToast()
     const { bridgeToSolana } = useNFTBridge()

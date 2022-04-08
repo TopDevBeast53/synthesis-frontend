@@ -34,7 +34,7 @@ const useGetProfileCosts = () => {
         })
         setIsLoading(false)
       } catch (error) {
-        toastError(t('Error'), t('Could not retrieve AURAcosts for profile'))
+        toastError(t('Error'), t('Could not retrieve HELIXcosts for profile'))
       }
     }
 

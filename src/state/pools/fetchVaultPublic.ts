@@ -1,8 +1,8 @@
 import BigNumber from 'bignumber.js'
-import { convertSharesToAura } from 'views/Pools/helpers'
+import { convertSharesToHelix } from 'views/Pools/helpers'
 import { multicallv2 } from 'utils/multicall'
 import helixAutoPoolAbi from 'config/abi/HelixAutoPool.json'
-import { getAuraVaultAddress } from 'utils/addressHelpers'
+import { getHelixAutoPoolAddress } from 'utils/addressHelpers'
 import { BIG_ZERO } from 'utils/bigNumber'
 
 export const fetchPublicVaultData = async () => {
@@ -13,32 +13,32 @@ export const fetchPublicVaultData = async () => {
       'calculateHarvestHelixRewards',
       'calculateTotalPendingHelixRewards',
     ].map((method) => ({
-      address: getAuraVaultAddress(),
+      address: getHelixAutoPoolAddress(),
       name: method,
     }))
 
-    const [[sharePrice], [shares], [estimatedAuraBountyReward], [totalPendingAuraHarvest]] = await multicallv2(
+    const [[sharePrice], [shares], [estimatedHelixBountyReward], [totalPendingHelixHarvest]] = await multicallv2(
       helixAutoPoolAbi,
       calls,
     ) 
 
     const totalSharesAsBigNumber = shares ? new BigNumber(shares.toString()) : BIG_ZERO
     const sharePriceAsBigNumber = sharePrice ? new BigNumber(sharePrice.toString()) : BIG_ZERO
-    const totalAuraInVaultEstimate = convertSharesToAura(totalSharesAsBigNumber, sharePriceAsBigNumber)
+    const totalHelixInVaultEstimate = convertSharesToHelix(totalSharesAsBigNumber, sharePriceAsBigNumber)
     return {
       totalShares: totalSharesAsBigNumber.toJSON(),
       pricePerFullShare: sharePriceAsBigNumber.toJSON(),
-      totalAuraInVault: totalAuraInVaultEstimate.auraAsBigNumber.toJSON(),
-      estimatedAuraBountyReward: new BigNumber(estimatedAuraBountyReward.toString()).toJSON(),
-      totalPendingAuraHarvest: new BigNumber(totalPendingAuraHarvest.toString()).toJSON(),
+      totalHelixInVault: totalHelixInVaultEstimate.helixAsBigNumber.toJSON(),
+      estimatedHelixBountyReward: new BigNumber(estimatedHelixBountyReward.toString()).toJSON(),
+      totalPendingHelixHarvest: new BigNumber(totalPendingHelixHarvest.toString()).toJSON(),
     }
   } catch (error) {
     return {
       totalShares: null,
       pricePerFullShare: null,
-      totalAuraInVault: null,
-      estimatedAuraBountyReward: null,
-      totalPendingAuraHarvest: null,
+      totalHelixInVault: null,
+      estimatedHelixBountyReward: null,
+      totalPendingHelixHarvest: null,
     }
   }
 }
@@ -46,7 +46,7 @@ export const fetchPublicVaultData = async () => {
 export const fetchVaultFees = async () => {
   try {
     const calls = ['performanceFee', 'callFee', 'withdrawFee', 'withdrawFeePeriod'].map((method) => ({
-      address: getAuraVaultAddress(),
+      address: getHelixAutoPoolAddress(),
       name: method,
     }))
 

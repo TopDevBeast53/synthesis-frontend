@@ -2,7 +2,7 @@ import { ContextApi } from 'contexts/Localization/types'
 import { PageMeta } from './types'
 
 export const DEFAULT_META: PageMeta = {
-  title: 'Aura',
+  title: 'Helix',
   description:
     'TODO',
 }
@@ -32,110 +32,110 @@ export const getCustomMeta = (path: string, t: ContextApi['t']): PageMeta => {
   switch (basePath) {
     case '/':
       return {
-        title: `${t('Home')} | ${t('Aura')}`,
+        title: `${t('Home')} | ${t('Helix')}`,
       }
     case '/swap':
       return {
-        title: `${t('Exchange')} | ${t('Aura')}`,
+        title: `${t('Exchange')} | ${t('Helix')}`,
       }
     case '/add':
       return {
-        title: `${t('Add Liquidity')} | ${t('Aura')}`,
+        title: `${t('Add Liquidity')} | ${t('Helix')}`,
       }
     case '/remove':
       return {
-        title: `${t('Remove Liquidity')} | ${t('Aura')}`,
+        title: `${t('Remove Liquidity')} | ${t('Helix')}`,
       }
     case '/liquidity':
       return {
-        title: `${t('Liquidity')} | ${t('Aura')}`,
+        title: `${t('Liquidity')} | ${t('Helix')}`,
       }
     case '/find':
       return {
-        title: `${t('Import Pool')} | ${t('Aura')}`,
+        title: `${t('Import Pool')} | ${t('Helix')}`,
       }
     case '/competition':
       return {
-        title: `${t('Trading Battle')} | ${t('Aura')}`,
+        title: `${t('Trading Battle')} | ${t('Helix')}`,
       }
     case '/prediction':
       return {
-        title: `${t('Prediction')} | ${t('Aura')}`,
+        title: `${t('Prediction')} | ${t('Helix')}`,
       }
     case '/prediction/leaderboard':
       return {
-        title: `${t('Leaderboard')} | ${t('Aura')}`,
+        title: `${t('Leaderboard')} | ${t('Helix')}`,
       }
     case '/farms':
       return {
-        title: `${t('Farms')} | ${t('Aura')}`,
+        title: `${t('Farms')} | ${t('Helix')}`,
       }
     case '/farms/auction':
       return {
-        title: `${t('Farm Auctions')} | ${t('Aura')}`,
+        title: `${t('Farm Auctions')} | ${t('Helix')}`,
       }
     case '/pools':
       return {
-        title: `${t('Pools')} | ${t('Aura')}`,
+        title: `${t('Pools')} | ${t('Helix')}`,
       }
     case '/lottery':
       return {
-        title: `${t('Lottery')} | ${t('Aura')}`,
+        title: `${t('Lottery')} | ${t('Helix')}`,
       }
     case '/ifo':
       return {
-        title: `${t('Initial Farm Offering')} | ${t('Aura')}`,
+        title: `${t('Initial Farm Offering')} | ${t('Helix')}`,
       }
     case '/teams':
       return {
-        title: `${t('Leaderboard')} | ${t('Aura')}`,
+        title: `${t('Leaderboard')} | ${t('Helix')}`,
       }
     case '/voting':
       return {
-        title: `${t('Voting')} | ${t('Aura')}`,
+        title: `${t('Voting')} | ${t('Helix')}`,
       }
     case '/voting/proposal':
       return {
-        title: `${t('Proposals')} | ${t('Aura')}`,
+        title: `${t('Proposals')} | ${t('Helix')}`,
       }
     case '/voting/proposal/create':
       return {
-        title: `${t('Make a Proposal')} | ${t('Aura')}`,
+        title: `${t('Make a Proposal')} | ${t('Helix')}`,
       }
     case '/info':
       return {
-        title: `${t('Overview')} | ${t('Aura Info & Analytics')}`,
-        description: 'View statistics for Aura exchanges.',
+        title: `${t('Overview')} | ${t('Helix Info & Analytics')}`,
+        description: 'View statistics for Helix exchanges.',
       }
     case '/info/pools':
       return {
-        title: `${t('Pools')} | ${t('Aura Info & Analytics')}`,
+        title: `${t('Pools')} | ${t('Helix Info & Analytics')}`,
         description: 'View statistics for Pancakeswap exchanges.',
       }
     case '/info/tokens':
       return {
-        title: `${t('Tokens')} | ${t('Aura Info & Analytics')}`,
-        description: 'View statistics for Aura exchanges.',
+        title: `${t('Tokens')} | ${t('Helix Info & Analytics')}`,
+        description: 'View statistics for Helix exchanges.',
       }
     case '/nfts':
       return {
-        title: `${t('Overview')} | ${t('Aura')}`,
+        title: `${t('Overview')} | ${t('Helix')}`,
       }
     case '/nfts/collections':
       return {
-        title: `${t('Collections')} | ${t('Aura')}`,
+        title: `${t('Collections')} | ${t('Helix')}`,
       }
     case '/nfts/activity':
       return {
-        title: `${t('Activity')} | ${t('Aura')}`,
+        title: `${t('Activity')} | ${t('Helix')}`,
       }
     case '/nfts/profile':
       return {
-        title: `${t('Profile')} | ${t('Aura')}`,
+        title: `${t('Profile')} | ${t('Helix')}`,
       }
     case '/pancake-squad':
       return {
-        title: `${t('Pancake Squad')} | ${t('Aura')}`,
+        title: `${t('Pancake Squad')} | ${t('Helix')}`,
       }
     default:
       return null

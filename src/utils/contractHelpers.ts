@@ -17,7 +17,7 @@ import {
   getClaimRefundAddress,
   getTradingCompetitionAddress,
   getEasterNftAddress,
-  getAuraVaultAddress,
+  getHelixAutoPoolAddress,
   getIfoPoolAddress,
   getPredictionsAddress,
   getChainlinkOracleAddress,
@@ -137,8 +137,8 @@ export const getSouschefV2Contract = (id: number, signer?: ethers.Signer | ether
 export const getPointCenterIfoContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
   return getContract(pointCenterIfo, getPointCenterIfoAddress(), signer) as PointCenterIfo
 }
-export const getAuraContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
-  return getContract(helixAbi, tokens.aura.address, signer) as Helix
+export const getHelixContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
+  return getContract(helixAbi, tokens.helix.address, signer) as Helix
 }
 export const getProfileContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
   return getContract(profileABI, getPancakeProfileAddress(), signer) as PancakeProfile
@@ -171,8 +171,8 @@ export const getTradingCompetitionContractV2 = (signer?: ethers.Signer | ethers.
 export const getEasterNftContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
   return getContract(easterNftAbi, getEasterNftAddress(), signer) as EasterNft
 }
-export const getAuraVaultContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
-  return getContract(helixAutoPoolAbi, getAuraVaultAddress(), signer) as HelixAutoPool
+export const getHelixAutoPoolContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
+  return getContract(helixAutoPoolAbi, getHelixAutoPoolAddress(), signer) as HelixAutoPool
 }
 export const getIfoPoolContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
   return getContract(ifoPoolAbi, getIfoPoolAddress(), signer) as IfoPool

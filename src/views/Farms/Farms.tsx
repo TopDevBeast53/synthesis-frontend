@@ -7,7 +7,7 @@ import { ChainId } from 'sdk'
 import styled from 'styled-components'
 import FlexLayout from 'components/Layout/Flex'
 import Page from 'components/Layout/Page'
-import { useFarms, usePollFarmsWithUserData, usePriceAuraBusd } from 'state/farms/hooks'
+import { useFarms, usePollFarmsWithUserData, usePriceHelixBusd } from 'state/farms/hooks'
 import useIntersectionObserver from 'hooks/useIntersectionObserver'
 import { DeserializedFarm } from 'state/types'
 import { useTranslation } from 'contexts/Localization'
@@ -98,12 +98,12 @@ const ViewControls = styled.div`
 
 const NUMBER_OF_FARMS_VISIBLE = 12
 
-const getDisplayApr = (auraRewardsApr?: number, lpRewardsApr?: number) => {
-  if (auraRewardsApr && lpRewardsApr) {
-    return (auraRewardsApr + lpRewardsApr).toLocaleString('en-US', { maximumFractionDigits: 2 })
+const getDisplayApr = (helixRewardsApr?: number, lpRewardsApr?: number) => {
+  if (helixRewardsApr && lpRewardsApr) {
+    return (helixRewardsApr + lpRewardsApr).toLocaleString('en-US', { maximumFractionDigits: 2 })
   }
-  if (auraRewardsApr) {
-    return auraRewardsApr.toLocaleString('en-US', { maximumFractionDigits: 2 })
+  if (helixRewardsApr) {
+    return helixRewardsApr.toLocaleString('en-US', { maximumFractionDigits: 2 })
   }
   return null
 }
@@ -113,7 +113,7 @@ const Farms: React.FC = () => {
   const { pathname } = useLocation()
   const { t } = useTranslation()
   const { data: farmsLP, userDataLoaded } = useFarms()
-  const auraPrice = usePriceAuraBusd()
+  const helixPrice = usePriceHelixBusd()
   const [query, setQuery] = useState('')
   const [viewMode, setViewMode] = useUserFarmsViewMode()
   const { account } = useWeb3React()
@@ -156,11 +156,11 @@ const Farms: React.FC = () => {
           return farm
         }
         const totalLiquidity = new BigNumber(farm.lpTotalInQuoteToken).times(farm.quoteTokenPriceBusd)
-        const { auraRewardsApr, lpRewardsApr } = isActive
-          ? getFarmApr(new BigNumber(farm.poolWeight), auraPrice, totalLiquidity, farm.lpAddresses[ChainId.TESTNET])
-          : { auraRewardsApr: 0, lpRewardsApr: 0 }
+        const { helixRewardsApr, lpRewardsApr } = isActive
+          ? getFarmApr(new BigNumber(farm.poolWeight), helixPrice, totalLiquidity, farm.lpAddresses[ChainId.TESTNET])
+          : { helixRewardsApr: 0, lpRewardsApr: 0 }
 
-        return { ...farm, apr: auraRewardsApr, lpRewardsApr, liquidity: totalLiquidity }
+        return { ...farm, apr: helixRewardsApr, lpRewardsApr, liquidity: totalLiquidity }
       })
 
       if (query) {
@@ -171,7 +171,7 @@ const Farms: React.FC = () => {
       }
       return farmsToDisplayWithAPR
     },
-    [auraPrice, query, isActive],
+    [helixPrice, query, isActive],
   )
 
   const handleChangeQuery = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -261,7 +261,7 @@ const Farms: React.FC = () => {
         lpSymbol: farm.lpSymbol,
         tokenAddress,
         quoteTokenAddress,
-        auraPrice,
+        helixPrice,
         originalValue: farm.apr,
       },
       farm: {
@@ -324,7 +324,7 @@ const Farms: React.FC = () => {
               key={farm.pid}
               farm={farm}
               displayApr={getDisplayApr(farm.apr, farm.lpRewardsApr)}
-              auraPrice={auraPrice}
+              helixPrice={helixPrice}
               account={account}
               removed={false}
             />
@@ -336,7 +336,7 @@ const Farms: React.FC = () => {
               key={farm.pid}
               farm={farm}
               displayApr={getDisplayApr(farm.apr, farm.lpRewardsApr)}
-              auraPrice={auraPrice}
+              helixPrice={helixPrice}
               account={account}
               removed
             />
@@ -348,7 +348,7 @@ const Farms: React.FC = () => {
               key={farm.pid}
               farm={farm}
               displayApr={getDisplayApr(farm.apr, farm.lpRewardsApr)}
-              auraPrice={auraPrice}
+              helixPrice={helixPrice}
               account={account}
               removed
             />

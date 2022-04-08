@@ -9,52 +9,52 @@ import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 import helixNFTABI from 'config/abi/HelixNFT.json'
 import helixChefNFTABI from 'config/abi/HelixChefNFT.json'
-import { auraNFTAddress, auraNFTChefAddress } from '../constants'
+import { helixNFTAddress, helixNFTChefAddress } from '../constants'
 
 export const useBoostNft = () => {
   const { library, account } = useActiveWeb3React()
   const { callWithGasPrice } = useCallWithGasPrice()
 
-  const getAuraNFTContract = useCallback(() => {
-    return new Contract(auraNFTAddress, helixNFTABI, getProviderOrSigner(library, account))
+  const getHelixNFTContract = useCallback(() => {
+    return new Contract(helixNFTAddress, helixNFTABI, getProviderOrSigner(library, account))
   }, [library, account])
 
-  const getAuraChefNFTContract = useCallback(() => {
-    return new Contract(auraNFTChefAddress, helixChefNFTABI, getProviderOrSigner(library, account))
+  const getHelixChefNFTContract = useCallback(() => {
+    return new Contract(helixNFTChefAddress, helixChefNFTABI, getProviderOrSigner(library, account))
   }, [library, account])
 
-  const getAccumulatedAP = useCallback(async () => {
-    const tx = await callWithGasPrice(getAuraNFTContract(), 'getAccumulatedAP', [account])
+  const getAccumulatedHP = useCallback(async () => {
+    const tx = await callWithGasPrice(getHelixNFTContract(), 'getAccumulatedHP', [account])
     return formatBigNumber(ethers.BigNumber.from(tx.toString()))
-  }, [getAuraNFTContract, callWithGasPrice, account])
+  }, [getHelixNFTContract, callWithGasPrice, account])
 
   const getLevel = useCallback(async (tokenId) => {
-    const tx = await callWithGasPrice(getAuraNFTContract(), 'getLevel', [tokenId])
+    const tx = await callWithGasPrice(getHelixNFTContract(), 'getLevel', [tokenId])
     return tx.toString()
-  }, [getAuraNFTContract, callWithGasPrice])
+  }, [getHelixNFTContract, callWithGasPrice])
 
-  const getAuraPoints = useCallback(async (tokenId) => {
-    const tx = await callWithGasPrice(getAuraNFTContract(), 'getAuraPoints', [tokenId])
+  const getHelixPoints = useCallback(async (tokenId) => {
+    const tx = await callWithGasPrice(getHelixNFTContract(), 'getHelixPoints', [tokenId])
     return tx.toString()
-  }, [getAuraNFTContract, callWithGasPrice])
+  }, [getHelixNFTContract, callWithGasPrice])
 
-  const getRemainAPToNextLevel = useCallback(async (tokenId) => {
-    const tx = await callWithGasPrice(getAuraNFTContract(), 'remainAPToNextLevel', [tokenId])
+  const getremainHPToNextLevel = useCallback(async (tokenId) => {
+    const tx = await callWithGasPrice(getHelixNFTContract(), 'remainHPToNextLevel', [tokenId])
     return tx.toString()
-  }, [getAuraNFTContract, callWithGasPrice])
+  }, [getHelixNFTContract, callWithGasPrice])
 
-  const boostAuraNFT = useCallback(async (tokenId, amount) => {
+  const boostHelixNFT = useCallback(async (tokenId, amount) => {
     if (parseInt(amount) === 0) return {status: false}
-    const tx = await callWithGasPrice(getAuraChefNFTContract(), 'boostAuraNFT', [tokenId, (getDecimalAmount(new BigNumber(amount))).toString()])
+    const tx = await callWithGasPrice(getHelixChefNFTContract(), 'boostHelixNFT', [tokenId, (getDecimalAmount(new BigNumber(amount))).toString()])
     return tx.wait()
-  }, [getAuraChefNFTContract, callWithGasPrice])
+  }, [getHelixChefNFTContract, callWithGasPrice])
   
   
   return {
-    getAccumulatedAP,
+    getAccumulatedHP,
     getLevel,
-    getAuraPoints,
-    getRemainAPToNextLevel,
-    boostAuraNFT,
+    getHelixPoints,
+    getremainHPToNextLevel,
+    boostHelixNFT,
   }
 }

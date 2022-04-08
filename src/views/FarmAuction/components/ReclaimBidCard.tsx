@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { Text, Heading, Card, CardHeader, CardBody, Flex } from 'uikit'
 import { useTranslation } from 'contexts/Localization'
 import useApproveConfirmTransaction from 'hooks/useApproveConfirmTransaction'
-import { useAura, useFarmAuctionContract } from 'hooks/useContract'
+import { useHelix, useFarmAuctionContract } from 'hooks/useContract'
 import { ethersToBigNumber } from 'utils/bigNumber'
 import { useWeb3React } from '@web3-react/core'
 import ConnectWalletButton from 'components/ConnectWalletButton'
@@ -27,7 +27,7 @@ const ReclaimBidCard: React.FC = () => {
 
   const [reclaimableAuction, checkForNextReclaimableAuction] = useReclaimAuctionBid()
 
-  const cakeContract = useAura()
+  const cakeContract = useHelix()
   const farmAuctionContract = useFarmAuctionContract()
 
   const { toastSuccess } = useToast()
@@ -76,7 +76,7 @@ const ReclaimBidCard: React.FC = () => {
           {t('Your bid in Auction #%auctionId% was unsuccessful.', { auctionId: reclaimableAuction.id })}
         </Text>
         <Text bold mb="16px">
-          {t('Reclaim your AURAnow.')}
+          {t('Reclaim your HELIXnow.')}
         </Text>
         <Flex justifyContent="space-between" mb="8px">
           <Text color="textSubtle">{t('Your total bid')}</Text>

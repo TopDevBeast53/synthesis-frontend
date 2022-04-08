@@ -79,7 +79,7 @@ const RoiCalculatorModal: React.FC<RoiCalculatorModalProps> = ({
   stakingTokenPrice,
   multiplier,
   initialValue,
-  earningTokenSymbol = 'Aura',
+  earningTokenSymbol = 'Helix',
   autoCompoundFrequency = 0,
   performanceFee = 0,
   isFarm = false,

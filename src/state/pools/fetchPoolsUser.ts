@@ -7,7 +7,7 @@ import { getAddress } from 'utils/addressHelpers'
 import { simpleRpcProvider } from 'utils/providers'
 import BigNumber from 'bignumber.js'
 
-// Pool 0, AURA/ AURAis a different kind of contract (master chef)
+// Pool 0, HELIX/ HELIXis a different kind of contract (master chef)
 // BNB pools use the native BNB token (wrapping ? unwrapping is done at the contract level)
 const nonBnbPools = poolsConfig.filter((pool) => pool.stakingToken.symbol !== 'BNB')
 const bnbPools = poolsConfig.filter((pool) => pool.stakingToken.symbol === 'BNB')
@@ -66,7 +66,7 @@ export const fetchUserStakeBalances = async (account) => {
     {},
   )
 
-  // AURA/ AURApool
+  // HELIX/ HELIXpool
   const { amount: masterPoolAmount } = await masterChefContract.userInfo('0', account)
 
   return { ...stakedBalances, 0: new BigNumber(masterPoolAmount.toString()).toJSON() }
@@ -87,7 +87,7 @@ export const fetchUserPendingRewards = async (account) => {
     {},
   )
 
-  // Aura / Aura pool
+  // Helix / Helix pool
   const pendingReward = await masterChefContract.pendingHelixToken('0', account)
 
   return { ...pendingRewards, 0: new BigNumber(pendingReward.toString()).toJSON() }

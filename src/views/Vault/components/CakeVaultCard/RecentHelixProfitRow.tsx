@@ -2,7 +2,7 @@ import React from 'react'
 import { Flex, Text } from 'uikit'
 import { useWeb3React } from '@web3-react/core'
 import { useTranslation } from 'contexts/Localization'
-import { usePriceAuraBusd } from 'state/farms/hooks'
+import { usePriceHelixBusd } from 'state/farms/hooks'
 import { useVaultPoolByKey } from 'state/pools/hooks'
 import { VaultKey } from 'state/types'
 import { getVaultEarnings } from 'views/Pools/helpers'
@@ -15,13 +15,13 @@ const RecentHelixProfitCountdownRow = ({ vaultKey }: { vaultKey: VaultKey }) => 
     pricePerFullShare,
     userData: { helixAtLastUserAction, userShares, lastUserActionTime },
   } = useVaultPoolByKey(vaultKey)
-  const auraPriceBusd = usePriceAuraBusd()
-  const { hasAutoEarnings, autoAuraToDisplay, autoUsdToDisplay } = getVaultEarnings(
+  const helixPriceBusd = usePriceHelixBusd()
+  const { hasAutoEarnings, autoHelixToDisplay, autoUsdToDisplay } = getVaultEarnings(
     account,
     helixAtLastUserAction,
     userShares,
     pricePerFullShare,
-    auraPriceBusd.toNumber(),
+    helixPriceBusd.toNumber(),
   )
 
   const lastActionInMs = lastUserActionTime && parseInt(lastUserActionTime) * 1000
@@ -30,10 +30,10 @@ const RecentHelixProfitCountdownRow = ({ vaultKey }: { vaultKey: VaultKey }) => 
 
   return (
     <Flex alignItems="center" justifyContent="space-between">
-      <Text fontSize="14px">{`${t('Recent AURA profit')}:`}</Text>
+      <Text fontSize="14px">{`${t('Recent HELIX profit')}:`}</Text>
       {hasAutoEarnings && (
         <RecentHelixProfitBalance
-          auraToDisplay={autoAuraToDisplay}
+          helixToDisplay={autoHelixToDisplay}
           dollarValueToDisplay={autoUsdToDisplay}
           dateStringToDisplay={dateStringToDisplay}
         />

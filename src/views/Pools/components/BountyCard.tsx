@@ -16,8 +16,8 @@ import {
 } from 'uikit'
 import { useTranslation } from 'contexts/Localization'
 import { getBalanceNumber } from 'utils/formatBalance'
-import { usePriceAuraBusd } from 'state/farms/hooks'
-import { useAuraVault } from 'state/pools/hooks'
+import { usePriceHelixBusd } from 'state/farms/hooks'
+import { useHelixVault } from 'state/pools/hooks'
 import Balance from 'components/Balance'
 import BountyModal from './BountyModal'
 
@@ -32,30 +32,30 @@ const StyledCard = styled(Card)`
 const BountyCard = () => {
   const { t } = useTranslation()
   const {
-    estimatedAuraBountyReward,
+    estimatedHelixBountyReward,
     fees: { callFee },
-  } = useAuraVault()
-  const cakePriceBusd = usePriceAuraBusd()
+  } = useHelixVault()
+  const cakePriceBusd = usePriceHelixBusd()
 
   const estimatedDollarBountyReward = useMemo(() => {
-    return new BigNumber(estimatedAuraBountyReward).multipliedBy(cakePriceBusd)
-  }, [cakePriceBusd, estimatedAuraBountyReward])
+    return new BigNumber(estimatedHelixBountyReward).multipliedBy(cakePriceBusd)
+  }, [cakePriceBusd, estimatedHelixBountyReward])
 
   const hasFetchedDollarBounty = estimatedDollarBountyReward.gte(0)
-  const hasFetchedCakeBounty = estimatedAuraBountyReward ? estimatedAuraBountyReward.gte(0) : false
+  const hasFetchedCakeBounty = estimatedHelixBountyReward ? estimatedHelixBountyReward.gte(0) : false
   const dollarBountyToDisplay = hasFetchedDollarBounty ? getBalanceNumber(estimatedDollarBountyReward, 18) : 0
-  const cakeBountyToDisplay = hasFetchedCakeBounty ? getBalanceNumber(estimatedAuraBountyReward, 18) : 0
+  const cakeBountyToDisplay = hasFetchedCakeBounty ? getBalanceNumber(estimatedHelixBountyReward, 18) : 0
 
   const TooltipComponent = ({ fee }: { fee: number }) => (
     <>
       <Text mb="16px">{t('This bounty is given as a reward for providing a service to other users.')}</Text>
       <Text mb="16px">
         {t(
-          'Whenever you successfully claim the bounty, you’re also helping out by activating the Auto AURA Pool’s compounding function for everyone.',
+          'Whenever you successfully claim the bounty, you’re also helping out by activating the Auto HELIX Pool’s compounding function for everyone.',
         )}
       </Text>
       <Text style={{ fontWeight: 'bold' }}>
-        {t('Auto-Compound Bounty: %fee%% of all Auto AURA pool users pending yield', { fee: fee / 100 })}
+        {t('Auto-Compound Bounty: %fee%% of all Auto HELIX pool users pending yield', { fee: fee / 100 })}
       </Text>
     </>
   )
@@ -75,7 +75,7 @@ const BountyCard = () => {
           <Flex flexDirection="column">
             <Flex alignItems="center" mb="12px">
               <Text fontSize="16px" bold color="textSubtle" mr="4px">
-                {t('Auto AURA Bounty')}
+                {t('Auto HELIX Bounty')}
               </Text>
               <Box ref={targetRef}>
                 <HelpIcon color="textSubtle" />

@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
-import { useAuraBusdPrice } from 'hooks/useBUSDPrice'
+import { useHelixBusdPrice } from 'hooks/useBUSDPrice'
 
 const useGetDocumentTitlePrice = () => {
-  const cakePriceBusd = useAuraBusdPrice()
+  const cakePriceBusd = useHelixBusdPrice()
   useEffect(() => {
     const cakePriceBusdString = cakePriceBusd ? cakePriceBusd.toFixed(2) : ''
     document.title = `Pancake Swap - ${cakePriceBusdString}`

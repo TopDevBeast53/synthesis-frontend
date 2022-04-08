@@ -20,14 +20,14 @@ import tokens from 'config/constants/tokens'
 import { getFullDisplayBalance } from 'utils/formatBalance'
 import { BIG_ZERO, ethersToBigNumber } from 'utils/bigNumber'
 import { useAppDispatch } from 'state'
-import { usePriceAuraBusd } from 'state/farms/hooks'
+import { usePriceHelixBusd } from 'state/farms/hooks'
 import { useLottery } from 'state/lottery/hooks'
 import { fetchUserTicketsAndLotteries } from 'state/lottery'
 import useTheme from 'hooks/useTheme'
 import useTokenBalance from 'hooks/useTokenBalance'
 import { FetchStatus } from 'config/constants/types'
 import useApproveConfirmTransaction from 'hooks/useApproveConfirmTransaction'
-import { useAura, useLotteryV2Contract } from 'hooks/useContract'
+import { useHelix, useLotteryV2Contract } from 'hooks/useContract'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import useToast from 'hooks/useToast'
 import ConnectWalletButton from 'components/ConnectWalletButton'
@@ -66,7 +66,7 @@ const BuyTicketsModal: React.FC<BuyTicketsModalProps> = ({ onDismiss }) => {
     maxNumberTicketsPerBuyOrClaim,
     currentLotteryId,
     currentRound: {
-      priceTicketInAura,
+      priceTicketInHelix,
       discountDivisor,
       userTickets: { tickets: userCurrentTickets },
     },
@@ -81,14 +81,14 @@ const BuyTicketsModal: React.FC<BuyTicketsModalProps> = ({ onDismiss }) => {
   const [maxTicketPurchaseExceeded, setMaxTicketPurchaseExceeded] = useState(false)
   const [userNotEnoughCake, setUserNotEnoughCake] = useState(false)
   const lotteryContract = useLotteryV2Contract()
-  const cakeContract = useAura()
+  const cakeContract = useHelix()
   const { toastSuccess } = useToast()
   const { balance: userCake, fetchStatus } = useTokenBalance(tokens.cake.address)
   // balance from useTokenBalance causes rerenders in effects as a new BigNumber is instantiated on each render, hence memoising it using the stringified value below.
   const stringifiedUserCake = userCake.toJSON()
   const memoisedUserCake = useMemo(() => new BigNumber(stringifiedUserCake), [stringifiedUserCake])
 
-  const cakePriceBusd = usePriceAuraBusd()
+  const cakePriceBusd = usePriceHelixBusd()
   const dispatch = useAppDispatch()
   const hasFetchedBalance = fetchStatus === FetchStatus.Fetched
   const userCakeDisplayBalance = getFullDisplayBalance(userCake, 18, 3)
@@ -119,25 +119,25 @@ const BuyTicketsModal: React.FC<BuyTicketsModalProps> = ({ onDismiss }) => {
 
   const getTicketCostAfterDiscount = useCallback(
     (numberTickets: BigNumber) => {
-      const totalAfterDiscount = priceTicketInAura
+      const totalAfterDiscount = priceTicketInHelix
         .times(numberTickets)
         .times(discountDivisor.plus(1).minus(numberTickets))
         .div(discountDivisor)
       return totalAfterDiscount
     },
-    [discountDivisor, priceTicketInAura],
+    [discountDivisor, priceTicketInHelix],
   )
 
   const getMaxTicketBuyWithDiscount = useCallback(
     (numberTickets: BigNumber) => {
       const costAfterDiscount = getTicketCostAfterDiscount(numberTickets)
-      const costBeforeDiscount = priceTicketInAura.times(numberTickets)
+      const costBeforeDiscount = priceTicketInHelix.times(numberTickets)
       const discountAmount = costBeforeDiscount.minus(costAfterDiscount)
-      const ticketsBoughtWithDiscount = discountAmount.div(priceTicketInAura)
+      const ticketsBoughtWithDiscount = discountAmount.div(priceTicketInHelix)
       const overallTicketBuy = numberTickets.plus(ticketsBoughtWithDiscount)
       return { overallTicketBuy, ticketsBoughtWithDiscount }
     },
-    [getTicketCostAfterDiscount, priceTicketInAura],
+    [getTicketCostAfterDiscount, priceTicketInHelix],
   )
 
   const validateInput = useCallback(
@@ -159,11 +159,11 @@ const BuyTicketsModal: React.FC<BuyTicketsModalProps> = ({ onDismiss }) => {
 
   useEffect(() => {
     const getMaxPossiblePurchase = () => {
-      const maxBalancePurchase = memoisedUserCake.div(priceTicketInAura)
+      const maxBalancePurchase = memoisedUserCake.div(priceTicketInHelix)
       const limitedMaxPurchase = limitNumberByMaxTicketsPerBuy(maxBalancePurchase)
       let maxPurchase
 
-      // If the users' max AURAbalance purchase is less than the contract limit - factor the discount logic into the max number of tickets they can purchase
+      // If the users' max HELIXbalance purchase is less than the contract limit - factor the discount logic into the max number of tickets they can purchase
       if (limitedMaxPurchase.lt(maxNumberTicketsPerBuyOrClaim)) {
         // Get max tickets purchasable with the users' balance, as well as using the discount to buy tickets
         const { overallTicketBuy: maxPlusDiscountTickets } = getMaxTicketBuyWithDiscount(limitedMaxPurchase)
@@ -189,7 +189,7 @@ const BuyTicketsModal: React.FC<BuyTicketsModalProps> = ({ onDismiss }) => {
     getMaxPossiblePurchase()
   }, [
     maxNumberTicketsPerBuyOrClaim,
-    priceTicketInAura,
+    priceTicketInHelix,
     memoisedUserCake,
     limitNumberByMaxTicketsPerBuy,
     getTicketCostAfterDiscount,
@@ -200,12 +200,12 @@ const BuyTicketsModal: React.FC<BuyTicketsModalProps> = ({ onDismiss }) => {
   useEffect(() => {
     const numberOfTicketsToBuy = new BigNumber(ticketsToBuy)
     const costAfterDiscount = getTicketCostAfterDiscount(numberOfTicketsToBuy)
-    const costBeforeDiscount = priceTicketInAura.times(numberOfTicketsToBuy)
+    const costBeforeDiscount = priceTicketInHelix.times(numberOfTicketsToBuy)
     const discountBeingApplied = costBeforeDiscount.minus(costAfterDiscount)
     setTicketCostBeforeDiscount(costBeforeDiscount.gt(0) ? getFullDisplayBalance(costBeforeDiscount) : '0')
     setTotalCost(costAfterDiscount.gt(0) ? getFullDisplayBalance(costAfterDiscount) : '0')
     setDiscountValue(discountBeingApplied.gt(0) ? getFullDisplayBalance(discountBeingApplied, 18, 5) : '0')
-  }, [ticketsToBuy, priceTicketInAura, discountDivisor, getTicketCostAfterDiscount])
+  }, [ticketsToBuy, priceTicketInHelix, discountDivisor, getTicketCostAfterDiscount])
 
   const getNumTicketsByPercentage = (percentage: number): number => {
     const percentageOfMaxTickets = maxPossibleTicketPurchase.gt(0)
@@ -271,7 +271,7 @@ const BuyTicketsModal: React.FC<BuyTicketsModalProps> = ({ onDismiss }) => {
     })
 
   const getErrorMessage = () => {
-    if (userNotEnoughCake) return t('Insufficient AURAbalance')
+    if (userNotEnoughCake) return t('Insufficient HELIXbalance')
     return t('The maximum number of tickets you can buy in one transaction is %maxTickets%', {
       maxTickets: maxNumberTicketsPerBuyOrClaim.toString(),
     })
@@ -327,7 +327,7 @@ const BuyTicketsModal: React.FC<BuyTicketsModalProps> = ({ onDismiss }) => {
         onUserInput={handleInputChange}
         currencyValue={
           cakePriceBusd.gt(0) &&
-          `~${ticketsToBuy ? getFullDisplayBalance(priceTicketInAura.times(new BigNumber(ticketsToBuy))) : '0.00'} CAKE`
+          `~${ticketsToBuy ? getFullDisplayBalance(priceTicketInHelix.times(new BigNumber(ticketsToBuy))) : '0.00'} CAKE`
         }
       />
       <Flex alignItems="center" justifyContent="flex-end" mt="4px" mb="12px">
@@ -340,7 +340,7 @@ const BuyTicketsModal: React.FC<BuyTicketsModalProps> = ({ onDismiss }) => {
           {account && (
             <Flex justifyContent="flex-end">
               <Text fontSize="12px" color="textSubtle" mr="4px">
-                AURA{t('Balance')}:
+                HELIX{t('Balance')}:
               </Text>
               {hasFetchedBalance ? (
                 <Text fontSize="12px" color="textSubtle">
@@ -386,7 +386,7 @@ const BuyTicketsModal: React.FC<BuyTicketsModalProps> = ({ onDismiss }) => {
             {t('Cost')} (CAKE)
           </Text>
           <Text color="textSubtle" fontSize="14px">
-            {priceTicketInAura && getFullDisplayBalance(priceTicketInAura.times(ticketsToBuy || 0))} CAKE
+            {priceTicketInHelix && getFullDisplayBalance(priceTicketInHelix.times(ticketsToBuy || 0))} CAKE
           </Text>
         </Flex>
         <Flex mb="8px" justifyContent="space-between">

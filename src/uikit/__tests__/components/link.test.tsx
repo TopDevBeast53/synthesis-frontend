@@ -3,7 +3,7 @@ import { renderWithTheme } from "../../testHelpers";
 import { Link, LinkExternal } from "../../components/Link";
 
 it("renders link correctly", () => {
-  const { asFragment } = renderWithTheme(<Link href="https://aura.exchange">Link</Link>);
+  const { asFragment } = renderWithTheme(<Link href="https://helix.exchange">Link</Link>);
   expect(asFragment()).toMatchInlineSnapshot(`
     <DocumentFragment>
       .c0 {
@@ -35,7 +35,7 @@ it("renders link correctly", () => {
     <a
         class="c0 c1"
         color="primary"
-        href="https://aura.exchange"
+        href="https://helix.exchange"
       >
         Link
       </a>
@@ -44,7 +44,7 @@ it("renders link correctly", () => {
 });
 
 it("renders link external link correctly", () => {
-  const { asFragment } = renderWithTheme(<LinkExternal href="https://aura.exchange">Link</LinkExternal>);
+  const { asFragment } = renderWithTheme(<LinkExternal href="https://helix.exchange">Link</LinkExternal>);
   expect(asFragment()).toMatchInlineSnapshot(`
     <DocumentFragment>
       .c0 {
@@ -87,7 +87,7 @@ it("renders link external link correctly", () => {
     <a
         class="c0 c1"
         color="primary"
-        href="https://aura.exchange"
+        href="https://helix.exchange"
         rel="noreferrer noopener"
         target="_blank"
       >

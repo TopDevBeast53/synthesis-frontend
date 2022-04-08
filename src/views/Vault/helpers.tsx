@@ -4,28 +4,28 @@ import { DeserializedPool } from 'state/types'
 import { getApy } from 'utils/compoundApyHelpers'
 import { getBalanceNumber, getFullDisplayBalance, getDecimalAmount } from 'utils/formatBalance'
 
-export const convertSharesToAura = (
+export const convertSharesToHelix = (
   shares: BigNumber,
-  auraPerFullShare: BigNumber,
+  helixPerFullShare: BigNumber,
   decimals = 18,
   decimalsToRound = 3,
 ) => {
-  const sharePriceNumber = getBalanceNumber(auraPerFullShare, decimals)
-  const amountInAura = new BigNumber(shares.multipliedBy(sharePriceNumber))
-  const auraAsNumberBalance = getBalanceNumber(amountInAura, decimals)
-  const auraAsBigNumber = getDecimalAmount(new BigNumber(auraAsNumberBalance), decimals)
-  const auraAsDisplayBalance = getFullDisplayBalance(amountInAura, decimals, decimalsToRound)
-  return { auraAsNumberBalance, auraAsBigNumber, auraAsDisplayBalance }
+  const sharePriceNumber = getBalanceNumber(helixPerFullShare, decimals)
+  const amountInHelix = new BigNumber(shares.multipliedBy(sharePriceNumber))
+  const helixAsNumberBalance = getBalanceNumber(amountInHelix, decimals)
+  const helixAsBigNumber = getDecimalAmount(new BigNumber(helixAsNumberBalance), decimals)
+  const helixAsDisplayBalance = getFullDisplayBalance(amountInHelix, decimals, decimalsToRound)
+  return { helixAsNumberBalance, helixAsBigNumber, helixAsDisplayBalance }
 }
 
-export const convertAuraToShares = (
-  aura: BigNumber,
-  auraPerFullShare: BigNumber,
+export const convertHelixToShares = (
+  helix: BigNumber,
+  helixPerFullShare: BigNumber,
   decimals = 18,
   decimalsToRound = 3,
 ) => {
-  const sharePriceNumber = getBalanceNumber(auraPerFullShare, decimals)
-  const amountInShares = new BigNumber(aura.dividedBy(sharePriceNumber))
+  const sharePriceNumber = getBalanceNumber(helixPerFullShare, decimals)
+  const amountInShares = new BigNumber(helix.dividedBy(sharePriceNumber))
   const sharesAsNumberBalance = getBalanceNumber(amountInShares, decimals)
   const sharesAsBigNumber = getDecimalAmount(new BigNumber(sharesAsNumberBalance), decimals)
   const sharesAsDisplayBalance = getFullDisplayBalance(amountInShares, decimals, decimalsToRound)
@@ -58,13 +58,13 @@ export const getHelixVaultEarnings = (
 ) => {
   const hasAutoEarnings =
     account && helixAtLastUserAction && helixAtLastUserAction.gt(0) && userShares && userShares.gt(0)
-  const { auraAsBigNumber } = convertSharesToAura(userShares, pricePerFullShare)
-  const autoAuraProfit = auraAsBigNumber.minus(helixAtLastUserAction)
-  const autoAuraToDisplay = autoAuraProfit.gte(0) ? getBalanceNumber(autoAuraProfit, 18) : 0
+  const { helixAsBigNumber } = convertSharesToHelix(userShares, pricePerFullShare)
+  const autoHelixProfit = helixAsBigNumber.minus(helixAtLastUserAction)
+  const autoHelixToDisplay = autoHelixProfit.gte(0) ? getBalanceNumber(autoHelixProfit, 18) : 0
 
-  const autoUsdProfit = autoAuraProfit.times(earningTokenPrice)
+  const autoUsdProfit = autoHelixProfit.times(earningTokenPrice)
   const autoUsdToDisplay = autoUsdProfit.gte(0) ? getBalanceNumber(autoUsdProfit, 18) : 0
-  return { hasAutoEarnings, autoAuraToDisplay, autoUsdToDisplay }
+  return { hasAutoEarnings, autoHelixToDisplay, autoUsdToDisplay }
 }
 
 export const getPoolBlockInfo = (pool: DeserializedPool, currentBlock: number) => {

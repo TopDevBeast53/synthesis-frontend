@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import {
   getBep20Contract,
-  getAuraContract,
+  getHelixContract,
   getBunnyFactoryContract,
   getBunnySpecialContract,
   getPancakeRabbitContract,
@@ -17,7 +17,7 @@ import {
   getTradingCompetitionContractV2,
   getEasterNftContract,
   getErc721Contract,
-  getAuraVaultContract,
+  getHelixAutoPoolContract,
   getIfoPoolContract,
   getPredictionsContract,
   getChainlinkOracleContract,
@@ -88,9 +88,9 @@ export const useERC721 = (address: string) => {
   return useMemo(() => getErc721Contract(address, library.getSigner()), [address, library])
 }
 
-export const useAura = () => {
+export const useHelix = () => {
   const { library } = useActiveWeb3React()
-  return useMemo(() => getAuraContract(library.getSigner()), [library])
+  return useMemo(() => getHelixContract(library.getSigner()), [library])
 }
 
 export const useBunnyFactory = () => {
@@ -165,14 +165,14 @@ export const useVaultPoolContract = (vaultKey: VaultKey): HelixAutoPool | IfoPoo
   const { library } = useActiveWeb3React()
   return useMemo(() => {
     return vaultKey === VaultKey.HelixAutoPool
-      ? getAuraVaultContract(library.getSigner())
+      ? getHelixAutoPoolContract(library.getSigner())
       : getIfoPoolContract(library.getSigner())
   }, [library, vaultKey])
 }
 
 export const useCakeVaultContract = () => {
   const { library } = useActiveWeb3React()
-  return useMemo(() => getAuraVaultContract(library.getSigner()), [library])
+  return useMemo(() => getHelixAutoPoolContract(library.getSigner()), [library])
 }
 
 export const useIfoPoolContract = () => {

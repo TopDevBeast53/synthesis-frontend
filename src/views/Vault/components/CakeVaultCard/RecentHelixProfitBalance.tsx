@@ -4,13 +4,13 @@ import { useTranslation } from 'contexts/Localization'
 import Balance from 'components/Balance'
 
 interface RecentHelixProfitBalanceProps {
-  auraToDisplay: number
+  helixToDisplay: number
   dollarValueToDisplay: number
   dateStringToDisplay: string
 }
 
 const RecentHelixProfitBalance: React.FC<RecentHelixProfitBalanceProps> = ({
-  auraToDisplay,
+  helixToDisplay,
   dollarValueToDisplay,
   dateStringToDisplay,
 }) => {
@@ -18,7 +18,7 @@ const RecentHelixProfitBalance: React.FC<RecentHelixProfitBalanceProps> = ({
 
   const { targetRef, tooltip, tooltipVisible } = useTooltip(
     <>
-      <Balance fontSize="16px" value={auraToDisplay} decimals={3} bold unit=" CAKE" />
+      <Balance fontSize="16px" value={helixToDisplay} decimals={3} bold unit=" CAKE" />
       <Balance fontSize="16px" value={dollarValueToDisplay} decimals={2} bold prefix="~$" />
       {t('Earned since your last action')}
       <Text>{dateStringToDisplay}</Text>
@@ -32,7 +32,7 @@ const RecentHelixProfitBalance: React.FC<RecentHelixProfitBalanceProps> = ({
     <>
       {tooltipVisible && tooltip}
       <TooltipText ref={targetRef} small>
-        <Balance fontSize="14px" value={auraToDisplay} />
+        <Balance fontSize="14px" value={helixToDisplay} />
       </TooltipText>
     </>
   )

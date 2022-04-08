@@ -6,7 +6,7 @@ const serializedTokens = serializeTokens()
 
 export const vaultPoolConfig = {
   [VaultKey.HelixAutoPool]: {
-    name: 'Auto AURA',
+    name: 'Auto HELIX',
     description: 'Automatic restaking',
     autoCompoundFrequency: 1,
     gasLimit: 380000,
@@ -17,7 +17,7 @@ export const vaultPoolConfig = {
   },
   [VaultKey.IfoPool]: {
     name: 'IFO CAKE',
-    description: 'Stake AURAto participate in IFOs',
+    description: 'Stake HELIXto participate in IFOs',
     autoCompoundFrequency: 1,
     gasLimit: 500000,
     tokenImage: {
@@ -30,8 +30,8 @@ export const vaultPoolConfig = {
 const pools: SerializedPoolConfig[] = [
   {
     sousId: 0,
-    stakingToken: serializedTokens.aura,
-    earningToken: serializedTokens.aura,
+    stakingToken: serializedTokens.helix,
+    earningToken: serializedTokens.helix,
     contractAddress: {
       97: '0xb6BCd3139C4A3d75c34960854E102e801DB4e932',
       56: '',
@@ -44,7 +44,7 @@ const pools: SerializedPoolConfig[] = [
   },
   // {
   //   sousId: 1,
-  //   stakingToken: serializedTokens.aura,
+  //   stakingToken: serializedTokens.helix,
   //   earningToken: serializedTokens.cake,
   //   contractAddress: {
   //     97: '0x201dD4858453434A52599437e27407F61bD03804',
@@ -58,7 +58,7 @@ const pools: SerializedPoolConfig[] = [
   // },
   // {
   //   sousId: 2,
-  //   stakingToken: serializedTokens.aura,
+  //   stakingToken: serializedTokens.helix,
   //   earningToken: serializedTokens.dai,
   //   contractAddress: {
   //     97: '0x614C566fc7bc533cE0e53883E1F6AeB0e685187c',
@@ -72,7 +72,7 @@ const pools: SerializedPoolConfig[] = [
   // }
   // {
   //   sousId: 254,
-  //   stakingToken: serializedTokens.aura,
+  //   stakingToken: serializedTokens.helix,
   //   earningToken: serializedTokens.bcoin,
   //   contractAddress: {
   //     97: '',

@@ -7,7 +7,7 @@ import useToast from 'hooks/useToast'
 import React, { useState } from 'react'
 import { useAppDispatch } from 'state'
 import { fetchFarmUserDataAsync } from 'state/farms'
-import { usePriceAuraBusd } from 'state/farms/hooks'
+import { usePriceHelixBusd } from 'state/farms/hooks'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { getBalanceAmount } from 'utils/formatBalance'
 import { logError } from 'utils/sentry'
@@ -22,7 +22,7 @@ interface HarvestActionProps extends FarmWithStakedValue {
 const HarvestAction: React.FunctionComponent<HarvestActionProps> = ({ pid, userData, userDataReady }) => {
   const { toastSuccess, toastError } = useToast()
   const earningsBigNumber = new BigNumber(userData.earnings)
-  const cakePrice = usePriceAuraBusd()
+  const cakePrice = usePriceHelixBusd()
   let earnings = BIG_ZERO
   let earningsBusd = 0
   let displayBalance = userDataReady ? earnings.toLocaleString() : <Skeleton width={60} />
@@ -44,7 +44,7 @@ const HarvestAction: React.FunctionComponent<HarvestActionProps> = ({ pid, userD
     <ActionContainer>
       <ActionTitles>
         <Text bold textTransform="uppercase" color="secondary" fontSize="12px" pr="4px">
-          Aura
+          Helix
         </Text>
         <Text bold textTransform="uppercase" color="textSubtle" fontSize="12px">
           {t('Earned')}
