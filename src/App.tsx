@@ -84,7 +84,7 @@ const App: React.FC = () => {
     <Router history={history}>
       <ResetCSS />
       <GlobalStyle backgroundImageURL={
-         ['swap', 'nft-staking', 'nft-bridge'].includes(window.location.href.split('/')?.[3]) ? 
+         ['swap', 'geobot-staking', 'geobot-bridge'].includes(window.location.href.split('/')?.[3]) ? 
         '/images/SwapBackground.svg' : '/images/MainBackground.svg'}
         />
       <Menu>
@@ -108,10 +108,10 @@ const App: React.FC = () => {
             <Route path="/migration">
               <Migrator />
             </Route>
-            <Route path="/nft-staking">
+            <Route path="/geobot-staking">
               <NftStaking />
             </Route>
-            <Route path="/nft-bridge">
+            <Route path="/geobot-bridge">
               <NftBridge />
             </Route>
             <Route path="/referrals">

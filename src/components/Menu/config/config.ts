@@ -48,16 +48,16 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType[] = (t) => [
   },
   {
     label: t('NFT'),
-    href: '/nft-staking',
+    href: '/geobot-staking',
     icon: 'Earn',
     items: [
       {
-        label: 'My NFTs',
-        href: '/nft-staking',
+        label: 'My Geobots',
+        href: '/geobot-staking',
       },
       {
-        label: 'NFT Bridge',
-        href: '/nft-bridge',
+        label: 'Geobot bridge',
+        href: '/geobot-bridge',
       }
     ]
   },

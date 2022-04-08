@@ -2,22 +2,19 @@ import React, { useState } from 'react'
 import { Flex, ButtonMenu, ButtonMenuItem, Heading } from 'uikit'
 import { useTranslation } from 'contexts/Localization'
 import styled from 'styled-components'
+import PageHeader from 'components/PageHeader'
 import BridgeToBSC from './components/BridgeToBSC'
 import BridgeToSolana from './components/BridgeToSolana'
 import Page from '../Page'
 
-const PageHeading = styled(Heading)`
-  font-size: 70px;
-  weight: 400;
-  line-height: 73.5px;
-  padding-bottom: 84px;
-`;
-
 const NFTDisplayPanel = styled(Flex)`
   position: relative;
   flex-direction: column;
-  width: 70%;
-  max-width: 1342px;
+  width: 100%;
+  max-width: 1200px;
+  padding-left: 24px;
+  padding-right: 24px;
+  margin-bottom: 32px;
 `;
 
 const Wrapper = styled.div`
@@ -54,17 +51,21 @@ export default function NftBridge() {
   )
 
   return (
-    <Page>
-      <PageHeading> 
-        NFT Bridge 
-      </PageHeading>
-      <NFTDisplayPanel>
-        {
-          viewPageIndex === 0 
-          ? (<BridgeToSolana switcher={stakedOrUnstakedSwitch}/>) 
-          : (<BridgeToBSC switcher={stakedOrUnstakedSwitch}/>)
-        }
-      </NFTDisplayPanel>
-    </Page>
+    <>
+      <PageHeader background='transparent'>
+        <Heading as="h1" scale="xxl" color="secondary">
+          {t('Geobot Bridge')}
+        </Heading>
+      </PageHeader>
+      <Page>
+        <NFTDisplayPanel>
+          {
+            viewPageIndex === 0 
+            ? (<BridgeToSolana switcher={stakedOrUnstakedSwitch}/>) 
+            : (<BridgeToBSC switcher={stakedOrUnstakedSwitch}/>)
+          }
+        </NFTDisplayPanel>
+      </Page>
+    </>
   )
 }
