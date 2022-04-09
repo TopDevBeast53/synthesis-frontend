@@ -102,7 +102,7 @@ function BridgeToBSCInner({switcher}: {switcher: React.ReactNode}) {
       setLoading(true)
       const res = await approveNFT(wallet, mint, account.slice(2));
       if (res) {
-        toastSuccess(t('Success'), t('Bridged From Solana!'))
+        toastSuccess(t('Success'), t('Success! Please click BridgeToBSC button!'))
       }
       await getTokensInfo();
       setLoading(false);
@@ -119,7 +119,7 @@ function BridgeToBSCInner({switcher}: {switcher: React.ReactNode}) {
       setLoading(true)
       const receipt = await bridgeToBSC(tokenID, uri)
       if (receipt.status) {
-        toastSuccess(t('Success'), t('Bridged to bsc!'))
+        toastSuccess(t('Success'), t('Success! Please check in MyGeoBots!'))
       }
       await getTokensInfo();
     } catch (e) {

@@ -18,4 +18,4 @@ export const BLOCKS_CLIENT = 'https://api.thegraph.com/subgraphs/name/pancakeswa
 export const GRAPH_API_NFTMARKET = process.env.REACT_APP_GRAPH_API_NFT_MARKET
 export const GRAPH_HEALTH = 'https://api.thegraph.com/index-node/graphql'
 
-export const BRIDGE_BACKEND = 'http://192.64.83.201:5432/states/all'
+export const BRIDGE_BACKEND = 'https://192.64.83.201:5432/states/all'

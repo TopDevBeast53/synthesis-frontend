@@ -274,7 +274,7 @@ export async function tokensToEnrichedNFTs(wallet) {
   tokens = tokens.map((t) => ({ ...t, approved: false }))
   tokensOwnedByUser = tokensOwnedByUser.map((t) => ({ ...t, approved: true }))
   return Promise.all(
-    [...tokens, ...tokensOwnedByUser].map(async (t) => ({
+    [...tokensOwnedByUser, ...tokens].map(async (t) => ({
       mint: t.mint,
       address: t.address,
       isApproved: t.approved,
