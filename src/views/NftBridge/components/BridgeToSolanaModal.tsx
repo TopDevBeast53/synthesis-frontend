@@ -39,7 +39,8 @@ const BridgeToSolanaModal: React.FC<BridgeToSolanaModalProps> = ({ tokenIDToBrid
           logError(e)
           toastError('Error', 'Please try again.')
         }
-      }, [bridgeToSolana, tokenIDToBridge, destination, toastSuccess, toastError])
+        onDismiss()
+      }, [bridgeToSolana, tokenIDToBridge, destination, toastSuccess, toastError, onDismiss])
 
 
     return (

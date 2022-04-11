@@ -2,6 +2,7 @@ import React, { useState, useCallback, useMemo, CSSProperties, useEffect } from 
 import { WalletDisconnectButton } from '@solana/wallet-adapter-react-ui'
 import { useWallet } from "@solana/wallet-adapter-react";
 import { Flex, Card, IconButton, CopyIcon, Text } from 'uikit'
+import filter from 'lodash/filter'
 import styled from 'styled-components'
 import { useTranslation } from 'contexts/Localization'
 import useToast from 'hooks/useToast'
@@ -90,7 +91,8 @@ function BridgeToBSCInner({switcher}: {switcher: React.ReactNode}) {
   const getTokensInfo = useCallback(async() => {
     const tokens = await tokensToEnrichedNFTs(wallet);
     const updatedTokens = await updateTokensInfo(tokens);
-    setNFTs(updatedTokens);
+    const filteredNFTs = filter(updatedTokens, token => !token.bridged)
+    setNFTs(filteredNFTs);
   }, [updateTokensInfo, wallet])
 
   const handleApprove = useCallback(async (mint: string) => {
@@ -102,7 +104,7 @@ function BridgeToBSCInner({switcher}: {switcher: React.ReactNode}) {
       setLoading(true)
       const res = await approveNFT(wallet, mint, account.slice(2));
       if (res) {
-        toastSuccess(t('Success'), t('Success! Please click BridgeToBSC button!'))
+          toastSuccess(t('Success'), t('Please click BridgeToBSC button!'))
       }
       await getTokensInfo();
       setLoading(false);
@@ -119,7 +121,12 @@ function BridgeToBSCInner({switcher}: {switcher: React.ReactNode}) {
       setLoading(true)
       const receipt = await bridgeToBSC(tokenID, uri)
       if (receipt.status) {
-        toastSuccess(t('Success'), t('Success! Please check in MyGeoBots!'))
+        const mintFlag = await getMinted(tokenID);
+        if(Number(mintFlag) > 0) {
+          toastSuccess(t('Success'), t('Please check in MyGeoBots!'))
+        } else {
+          toastSuccess(t('Success'), t('Please click Claim button!'))
+        }
       }
       await getTokensInfo();
     } catch (e) {
@@ -128,14 +135,14 @@ function BridgeToBSCInner({switcher}: {switcher: React.ReactNode}) {
     } finally {
       setLoading(false)
     }
-  }, [getTokensInfo, bridgeToBSC, toastSuccess, toastError, t])
+  }, [getTokensInfo, bridgeToBSC, toastSuccess, toastError, t, getMinted])
 
   const handleClaim = useCallback(async (tokenID: string) => {
     try {
       setLoading(true)
       const receipt = await mintBridgedNFT(tokenID)
       if (receipt.status) {
-        toastSuccess(t('Success'), t('Claim!'))
+        toastSuccess(t('Success'), t('Please check in MyGeoBots!'))
       }
       await getTokensInfo();
     } catch (e) {
@@ -158,6 +165,7 @@ function BridgeToBSCInner({switcher}: {switcher: React.ReactNode}) {
     <div>
       <Flex flexWrap="wrap" style={{margin: '-19px'}}>
         {nfts.map((token) => {
+          // eslint-disable-next-line consistent-return
           return (
             <NftCard
               key={token.address.toString()}
@@ -196,7 +204,7 @@ function BridgeToBSCInner({switcher}: {switcher: React.ReactNode}) {
                 {
                   id: "bridge_to_bsc",
                   caption: "Bridge To BSC",
-                  displayed: token.isApproved && !token.isBridged,
+                  displayed: token.isApproved && !token.isBridged && token.isMinted,
                   action: handleBridge,
                   params: [token.mint.toString(), getImage(token.metadataExternal)]
                 },

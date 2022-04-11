@@ -108,7 +108,7 @@ const NftCard: React.FC<NftCardProps> = ({
 
   return (
     <NFTCard m="19px">
-      <NFTImage src={bgSrc} width={366} height={326}/>
+      <NFTImage src={bgSrc} width={366} height={313}/>
 
       <Flex 
         justifyContent="space-between" 
