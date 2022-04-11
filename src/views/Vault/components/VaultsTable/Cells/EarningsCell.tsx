@@ -1,20 +1,17 @@
 import React from 'react'
-import styled from 'styled-components'
-import { Skeleton, Text, Flex, Box, useModal, useMatchBreakpoints } from 'uikit'
-import { DeserializedPool } from 'state/types'
-import BigNumber from 'bignumber.js'
-import { PoolCategory } from 'config/constants/types'
-import { BIG_ZERO } from 'utils/bigNumber'
-import { formatNumber, getBalanceNumber, getFullDisplayBalance } from 'utils/formatBalance'
 import Balance from 'components/Balance'
 import { useTranslation } from 'contexts/Localization'
+import tokens from 'config/constants/tokens'
+import { usePriceHelixBusd } from 'state/farms/hooks'
+import styled from 'styled-components'
+import { Box, Flex, Skeleton, Text, useMatchBreakpoints } from 'uikit'
+import { getBalanceNumber } from 'utils/formatBalance'
 import BaseCell, { CellContent } from './BaseCell'
-import CollectModal from '../../VaultCard/Modals/CollectModal'
+
 
 interface EarningsCellProps {
-  pool: DeserializedPool
-  account: string
-  userDataLoaded: boolean
+  isLoading,
+  earnings
 }
 
 const StyledCell = styled(BaseCell)`
@@ -26,51 +23,29 @@ const StyledCell = styled(BaseCell)`
   }
 `
 
-const EarningsCell: React.FC<EarningsCellProps> = ({ pool, account, userDataLoaded }) => {
+const EarningsCell: React.FC<EarningsCellProps> = ({ isLoading, earnings}) => {
   const { t } = useTranslation()
   const { isMobile } = useMatchBreakpoints()
-  const { sousId, earningToken, poolCategory, userData, earningTokenPrice } = pool
-  const isManualCakePool = sousId === 0
-
-  const earnings = userData?.pendingReward ? new BigNumber(userData.pendingReward) : BIG_ZERO
-  const earningTokenBalance = getBalanceNumber(earnings, earningToken.decimals)
-  const earningTokenDollarBalance = getBalanceNumber(earnings.multipliedBy(earningTokenPrice), earningToken.decimals)
-  const hasEarnings = account && earnings.gt(0)
-  const fullBalance = getFullDisplayBalance(earnings, earningToken.decimals)
-  const formattedBalance = formatNumber(earningTokenBalance, 3, 3)
-  const isBnbPool = poolCategory === PoolCategory.BINANCE
-
-  const labelText = t('%asset% Earned', { asset: earningToken.symbol })
-
-  const [onPresentCollect] = useModal(
-    <CollectModal
-      formattedBalance={formattedBalance}
-      fullBalance={fullBalance}
-      earningToken={earningToken}
-      earningsDollarValue={earningTokenDollarBalance}
-      sousId={sousId}
-      isBnbPool={isBnbPool}
-      isCompoundPool={isManualCakePool}
-    />,
-  )
-
-  const handleEarningsClick = (event: React.MouseEvent<HTMLElement>) => {
-    event.stopPropagation()
-    onPresentCollect()
-  }
-
-  return (
+  
+  const cakePrice = usePriceHelixBusd()    
+  const {decimals, symbol} = tokens.helix
+  
+  const earningTokenBalance = getBalanceNumber(earnings, decimals)
+  const earningTokenDollarBalance = getBalanceNumber(earnings.multipliedBy(cakePrice), decimals)  
+  const hasEarnings = !isLoading && earnings.gt(0)  
+  const labelText = t('%asset% Earned', { asset: symbol })
+   
+    return (
     <StyledCell role="cell">
       <CellContent>
         <Text fontSize="12px" color="textSubtle" textAlign="left">
           {labelText}
         </Text>
-        {!userDataLoaded && account ? (
+        {isLoading ? (
           <Skeleton width="80px" height="16px" />
         ) : (
-          <>
-            <Flex>
-              <Box mr="8px" height="32px" onClick={hasEarnings ? handleEarningsClick : undefined}>
+          <Flex>
+              <Box mr="8px" height="32px">
                 <Balance
                   mt="4px"
                   bold={!isMobile}
@@ -81,7 +56,7 @@ const EarningsCell: React.FC<EarningsCellProps> = ({ pool, account, userDataLoad
                 />
                 {hasEarnings ? (
                   <>
-                    {earningTokenPrice > 0 && (
+                    {cakePrice.gt(0) && (
                       <Balance
                         display="inline"
                         fontSize="12px"
@@ -100,8 +75,8 @@ const EarningsCell: React.FC<EarningsCellProps> = ({ pool, account, userDataLoad
                 )}
               </Box>
             </Flex>
-          </>
         )}
+
       </CellContent>
     </StyledCell>
   )

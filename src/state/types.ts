@@ -154,7 +154,12 @@ export interface HelixAutoPool {
   fees?: VaultFees
   userData?: VaultUser
 }
-
+export interface Deposit{
+  id:number
+  amount: BigNumber, // staked Amount
+  withdrawTimeStamp: number
+  withdrawn: boolean
+}
 export interface IfoHelixVault extends Omit<HelixAutoPool, 'userData'> {
   userData?: IfoVaultUser
   creditStartBlock?: number

@@ -12,7 +12,7 @@ export const ActionContainer = styled.div<{ isAutoVault?: boolean }>`
     margin-left: 12px;
     margin-right: 12px;
     margin-bottom: 0;
-    height: ${({ isAutoVault }) => (isAutoVault ? '130px' : 'auto')};
+    height: 'auto'};
   }
 }
 

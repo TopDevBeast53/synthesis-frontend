@@ -125,6 +125,6 @@ export default {
   },
   helixVault: {
     56: '',
-    97: '0x4592Bc7C6f98611b4EB01A1e931574DbbE6F345e',
+    97: '0xF6589517fec79547C6d5bD494c20b23B33D19028',
   },
 }

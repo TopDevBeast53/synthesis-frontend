@@ -1,57 +1,60 @@
-import React from 'react'
-import { Button, Text, useModal, Flex, Skeleton, Heading } from 'uikit'
-import BigNumber from 'bignumber.js'
 import { useWeb3React } from '@web3-react/core'
-import { PoolCategory } from 'config/constants/types'
-import { formatNumber, getBalanceNumber, getFullDisplayBalance } from 'utils/formatBalance'
-import { useTranslation } from 'contexts/Localization'
 import Balance from 'components/Balance'
-import { BIG_ZERO } from 'utils/bigNumber'
-import { DeserializedPool } from 'state/types'
+import tokens from 'config/constants/tokens'
+import { useTranslation } from 'contexts/Localization'
+import useToast from 'hooks/useToast'
+import React from 'react'
+import { usePriceHelixBusd } from 'state/farms/hooks'
+import { Button, Flex, Heading, Skeleton, Text } from 'uikit'
+import { getBalanceNumber } from 'utils/formatBalance'
+import { logError } from 'utils/sentry'
+import { useHelixLockVault } from '../../../hooks/useHelixLockVault'
+import { ActionContainer, ActionContent, ActionTitles } from './styles'
 
-import { ActionContainer, ActionTitles, ActionContent } from './styles'
-import CollectModal from '../../VaultCard/Modals/CollectModal'
-
-interface HarvestActionProps extends DeserializedPool {
-  userDataLoaded: boolean
+interface HarvestActionProps {  
+  earnings
+  isLoading
+  deposit
+  updateEarnings?
 }
 
-const HarvestAction: React.FunctionComponent<HarvestActionProps> = ({
-  sousId,
-  poolCategory,
-  earningToken,
-  userData,
-  userDataLoaded,
-  earningTokenPrice,
+const HarvestAction: React.FunctionComponent<HarvestActionProps> = ({  
+  isLoading,
+  earnings,
+  deposit,
+  updateEarnings
 }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
-
-  const earnings = userData?.pendingReward ? new BigNumber(userData.pendingReward) : BIG_ZERO
-  const earningTokenBalance = getBalanceNumber(earnings, earningToken.decimals)
-  const earningTokenDollarBalance = getBalanceNumber(earnings.multipliedBy(earningTokenPrice), earningToken.decimals)
-  const hasEarnings = earnings.gt(0)
-  const fullBalance = getFullDisplayBalance(earnings, earningToken.decimals)
-  const formattedBalance = formatNumber(earningTokenBalance, 3, 3)
-  const isCompoundPool = sousId === 0
-  const isBnbPool = poolCategory === PoolCategory.BINANCE
-
-  const [onPresentCollect] = useModal(
-    <CollectModal
-      formattedBalance={formattedBalance}
-      fullBalance={fullBalance}
-      earningToken={earningToken}
-      earningsDollarValue={earningTokenDollarBalance}
-      sousId={sousId}
-      isBnbPool={isBnbPool}
-      isCompoundPool={isCompoundPool}
-    />,
-  )
+  const { claimReward } = useHelixLockVault()
+  const { toastError, toastSuccess } = useToast()
+  
+  const cakePrice = usePriceHelixBusd()    
+  const {decimals, symbol} = tokens.helix
+  
+  const hasEarnings = !isLoading && earnings.gt(0)
+  const earningTokenBalance = getBalanceNumber(earnings, decimals)
+  const earningTokenDollarBalance = getBalanceNumber(earnings.multipliedBy(cakePrice), decimals)
+  
+  const onPresentCollect = async () => {
+    try {
+      const receipt = await claimReward(deposit?.id)
+      if (receipt.status){          
+        toastSuccess(t('Success'), t('Collected'))
+        updateEarnings(0)
+      } else {
+        toastError(t('Error'), t('Maybe show transaction hash so they could go there and check the problem.'))
+      }
+    } catch (e) {
+      logError(e)
+      toastError(t('Error'), t('Please try again.'))
+    }    
+  }
 
   const actionTitle = (
     <>
       <Text fontSize="12px" bold color="secondary" as="span" textTransform="uppercase">
-        {earningToken.symbol}{' '}
+        {symbol}{' '}
       </Text>
       <Text fontSize="12px" bold color="textSubtle" as="span" textTransform="uppercase">
         {t('Earned')}
@@ -65,13 +68,13 @@ const HarvestAction: React.FunctionComponent<HarvestActionProps> = ({
         <ActionTitles>{actionTitle}</ActionTitles>
         <ActionContent>
           <Heading>0</Heading>
-          <Button disabled>{isCompoundPool ? t('Collect') : t('Harvest')}</Button>
+          <Button disabled>{t('Collect')}</Button>
         </ActionContent>
       </ActionContainer>
     )
   }
 
-  if (!userDataLoaded) {
+  if (isLoading) {
     return (
       <ActionContainer>
         <ActionTitles>{actionTitle}</ActionTitles>
@@ -91,7 +94,7 @@ const HarvestAction: React.FunctionComponent<HarvestActionProps> = ({
             {hasEarnings ? (
               <>
                 <Balance lineHeight="1" bold fontSize="20px" decimals={5} value={earningTokenBalance} />
-                {earningTokenPrice > 0 && (
+                {cakePrice.gt(0) && (
                   <Balance
                     display="inline"
                     fontSize="12px"
@@ -114,7 +117,7 @@ const HarvestAction: React.FunctionComponent<HarvestActionProps> = ({
           </>
         </Flex>
         <Button disabled={!hasEarnings} onClick={onPresentCollect}>
-          {isCompoundPool ? t('Collect') : t('Harvest')}
+          {t('Collect')}
         </Button>
       </ActionContent>
     </ActionContainer>

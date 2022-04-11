@@ -31,6 +31,7 @@ import {
   getPancakeSquadAddress,
   getTradingCompetitionAddressV2,
   getBunnySpecialXmasAddress,
+  getHelixVaultAddress,
 } from 'utils/addressHelpers'
 
 // ABI
@@ -68,6 +69,7 @@ import nftMarketAbi from 'config/abi/nftMarket.json'
 import nftSaleAbi from 'config/abi/nftSale.json'
 import pancakeSquadAbi from 'config/abi/pancakeSquad.json'
 import erc721CollectionAbi from 'config/abi/erc721collection.json'
+import helixVaultAbi from 'config/abi/HelixVault.json'
 
 // Types
 import {
@@ -103,6 +105,7 @@ import {
   PancakeSquad,
   Erc721collection,
   PointCenterIfo,
+  HelixVault,
 } from 'config/abi/types'
 
 const getContract = (abi: any, address: string, signer?: ethers.Signer | ethers.providers.Provider) => {
@@ -214,4 +217,7 @@ export const getPancakeSquadContract = (signer?: ethers.Signer | ethers.provider
 }
 export const getErc721CollectionContract = (signer?: ethers.Signer | ethers.providers.Provider, address?: string) => {
   return getContract(erc721CollectionAbi, address, signer) as Erc721collection
+}
+export const getHelixVaultContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
+  return getContract(helixVaultAbi, getHelixVaultAddress(), signer) as HelixVault
 }

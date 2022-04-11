@@ -1,7 +1,6 @@
 import React from 'react'
-import { DeserializedPool } from 'state/types'
 import styled, { css, keyframes } from 'styled-components'
-import Harvest from './Harvest'
+import Harvest from './Collect'
 import Stake from './Stake'
 
 
@@ -56,32 +55,24 @@ const ActionContainer = styled.div`
     flex-basis: 0;
   }
 `
-
-type MediaBreakpoints = {
-  isXs: boolean
-  isSm: boolean
-  isMd: boolean
-  isLg: boolean
-  isXl: boolean
-  isXxl: boolean
-}
-
-interface ActionPanelProps {
-  account: string
-  pool: DeserializedPool
-  userDataLoaded: boolean
-  expanded: boolean
-  breakpoints: MediaBreakpoints
+interface ActionPanelProps {  
+  expanded: boolean  
+  earnings
+  isLoading
+  deposit
+  stakedBalance
+  updateEarnings?
+  updateStake?
 }
 
 
-const ActionPanel: React.FC<ActionPanelProps> = ({ pool, userDataLoaded, expanded }) => {
-  
+const ActionPanel: React.FC<ActionPanelProps> = ({ expanded, earnings, isLoading, 
+  deposit,stakedBalance,updateEarnings,updateStake }) => {  
   return (
     <StyledActionPanel expanded={expanded}>      
       <ActionContainer>
-        <Harvest {...pool} userDataLoaded={userDataLoaded} />
-        <Stake pool={pool} userDataLoaded={userDataLoaded} />
+        <Harvest isLoading={isLoading} earnings={earnings} deposit={deposit} updateEarnings={updateEarnings}/>
+        <Stake isLoading={isLoading} deposit={deposit} stakedBalance={stakedBalance} updateStake={updateStake} />
       </ActionContainer>
     </StyledActionPanel>
   )

@@ -1,32 +1,25 @@
 import { useWeb3React } from '@web3-react/core'
-import BigNumber from 'bignumber.js'
 import Page from 'components/Layout/Page'
 import Loading from 'components/Loading'
 import PageHeader from 'components/PageHeader'
+import tokens from 'config/constants/tokens'
+import { FetchStatus } from 'config/constants/types'
 import { useTranslation } from 'contexts/Localization'
 import { ethers } from 'ethers'
-import { formatUnits } from 'ethers/lib/utils'
-import useIntersectionObserver from 'hooks/useIntersectionObserver'
-import orderBy from 'lodash/orderBy'
-import partition from 'lodash/partition'
-import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { useLocation } from 'react-router-dom'
-import {
-  useFetchHelixVault,
-  useFetchIfoPool, useFetchPublicPoolsData, useFetchUserPools, usePools, useVaultPools
-} from 'state/pools/hooks'
-import { DeserializedPool } from 'state/types'
-import { useUserPoolStakedOnly } from 'state/user/hooks'
+import { useHelix } from 'hooks/useContract'
+import useTokenBalance from 'hooks/useTokenBalance'
+import React, { useCallback, useEffect, useState } from 'react'
+import { usePriceHelixBusd } from 'state/farms/hooks'
+import { Deposit } from 'state/types'
 import styled from 'styled-components'
-import { Button, Flex, Heading, Text, useModal } from 'uikit'
+import { Button, Flex, Heading, useModal } from 'uikit'
 import { BIG_ZERO } from 'utils/bigNumber'
-import { latinise } from 'utils/latinise'
-import { usePoolsWithVault } from 'views/Home/hooks/useGetTopPoolsByApr'
+import { getBalanceNumber } from 'utils/formatBalance'
+import { logError } from 'utils/sentry'
 import AddRowModal from './components/AddRowModal'
 import VaultsTable from './components/VaultsTable/VaultsTable'
-import { getHelixVaultEarnings } from './helpers'
-
-
+import { helixVaultAddress } from './constants'
+import { useHelixLockVault } from './hooks/useHelixLockVault'
 
 const TableControls = styled.div`
   display: flex;
@@ -36,159 +29,92 @@ const TableControls = styled.div`
 
   justify-content: space-between;
   flex-direction: column;
-  margin-bottom: 32px;
+  margin-bottom: 16px;
 
   ${({ theme }) => theme.mediaQueries.sm} {
     flex-direction: row;
     flex-wrap: wrap;
-    padding: 16px 0px;
+    padding: 16px 0px;    
     margin-bottom: 0;
+    padding-top: 0px;
   }
-`
-
-
-const NUMBER_OF_POOLS_VISIBLE = 12
+  `
+enum HelixEnabledState {
+  UNKNOWN,
+  ENABLED,
+  DISABLED
+}
 
 const Vault: React.FC = () => {
-  const location = useLocation()
   const { t } = useTranslation()
-  const { account } = useWeb3React()
-  const { userDataLoaded } = usePools()
-  const [stakedOnly] = useUserPoolStakedOnly()  
-  const [numberOfPoolsVisible, setNumberOfPoolsVisible] = useState(NUMBER_OF_POOLS_VISIBLE)
-  const { observerRef, isIntersecting } = useIntersectionObserver()
-  const [searchQuery] = useState('')
-  const [sortOption] = useState('hot')
-  const chosenPoolsLength = useRef(0)
-  const vaultPools = useVaultPools()
-  const helixInVaults = Object.values(vaultPools).reduce((total, vault) => {
-    return total.plus(vault.totalHelixInVault)
-  }, BIG_ZERO)
+  const { account } = useWeb3React()  
+  const helixContract = useHelix()
+  const [helixEnabled, setHelixEnabled] = useState(HelixEnabledState.UNKNOWN)
+  const [deposits, setDeposits] = useState([])  
+  const [totalStake, setTotalStake] = useState(0) 
+  const [refresh, setRefresh] = useState(0)
 
-  const pools = usePoolsWithVault()
+  const {decimals} = tokens.helix  
+  const cakePrice = usePriceHelixBusd()
 
-  // TODO aren't arrays in dep array checked just by reference, i.e. it will rerender every time reference changes?
-  const [finishedPools, openPools] = useMemo(() => partition(pools, (pool) => pool.isFinished), [pools])
-  const stakedOnlyFinishedPools = useMemo(
-    () =>
-      finishedPools.filter((pool) => {
-        if (pool.vaultKey) {
-          return vaultPools[pool.vaultKey].userData.userShares && vaultPools[pool.vaultKey].userData.userShares.gt(0)
-        }
-        return pool.userData && new BigNumber(pool.userData.stakedBalance).isGreaterThan(0)
-      }),
-    [finishedPools, vaultPools],
-  )
-  const stakedOnlyOpenPools = useMemo(
-    () =>
-      openPools.filter((pool) => {
-        if (pool.vaultKey) {
-          return vaultPools[pool.vaultKey].userData.userShares && vaultPools[pool.vaultKey].userData.userShares.gt(0)
-        }
-        return pool.userData && new BigNumber(pool.userData.stakedBalance).isGreaterThan(0)
-      }),
-    [openPools, vaultPools],
-  )
+  const { balance: helixBalance, fetchStatus:balanceFetchStatus} = useTokenBalance(tokens.helix.address)  
+  const stakingTokenBalance = balanceFetchStatus===FetchStatus.Fetched? helixBalance : BIG_ZERO  
+  
+  useEffect(()=>{
+      if(!account) return;   
+      helixContract.balanceOf(helixVaultAddress).then((value:any)=>{
+        setTotalStake(getBalanceNumber(value.toString(), decimals))
+      }).catch(err=>{
+        logError(err)
+      })
+      helixContract.allowance(account, helixVaultAddress).then((value)=>{
+        if(value.gt(0))
+          setHelixEnabled(HelixEnabledState.ENABLED)
+        else
+          setHelixEnabled(HelixEnabledState.DISABLED)
+      }).catch(err=>{
+        logError(err)
+      })    
+  }, [helixContract, account, setHelixEnabled, decimals])
   
 
-  useFetchHelixVault()
-  useFetchIfoPool(true)
-  useFetchPublicPoolsData()
-  useFetchUserPools(account)
-
-  useEffect(() => {
-    if (isIntersecting) {
-      setNumberOfPoolsVisible((poolsCurrentlyVisible) => {
-        if (poolsCurrentlyVisible <= chosenPoolsLength.current) {
-          return poolsCurrentlyVisible + NUMBER_OF_POOLS_VISIBLE
-        }
-        return poolsCurrentlyVisible
-      })
+  const {getDepositIds, getDepositFromId} = useHelixLockVault();
+  
+  useEffect(()=>{    
+    if(helixEnabled && account){      
+      load()
     }
-  }, [isIntersecting])
+    async function load(){
+      
+      const idList = await getDepositIds();      
+      const promiseList = idList.map((id)=>{return getDepositFromId(id)})
+      let results = await Promise.all(promiseList);
+      results = results.reduce((prev, item:Deposit)=>{
+        if(item.withdrawn === false)
+          prev.push(item)
+        return prev
+      },[])
+      setDeposits(results)
+    }    
+  },[getDepositIds, account, getDepositFromId, helixEnabled, refresh])  
 
-  const showFinishedPools = location.pathname.includes('history')
-
-
-  const sortPools = (poolsToSort: DeserializedPool[]) => {
-    switch (sortOption) {
-      case 'apr':
-        // Ternary is needed to prevent pools without APR (like MIX) getting top spot
-        return orderBy(poolsToSort, (pool: DeserializedPool) => (pool.apr ? pool.apr : 0), 'desc')
-      case 'earned':
-        return orderBy(
-          poolsToSort,
-          (pool: DeserializedPool) => {
-            if (!pool.userData || !pool.earningTokenPrice) {
-              return 0
-            }
-            return pool.vaultKey
-              ? getHelixVaultEarnings(
-                  account,
-                  vaultPools[pool.vaultKey].userData.helixAtLastUserAction,
-                  vaultPools[pool.vaultKey].userData.userShares,
-                  vaultPools[pool.vaultKey].pricePerFullShare,
-                  pool.earningTokenPrice,
-                ).autoUsdToDisplay
-              : pool.userData.pendingReward.times(pool.earningTokenPrice).toNumber()
-          },
-          'desc',
-        )
-      case 'totalStaked':
-        return orderBy(
-          poolsToSort,
-          (pool: DeserializedPool) => {
-            let totalStaked = Number.NaN
-            if (pool.vaultKey) {
-              if (pool.stakingTokenPrice && vaultPools[pool.vaultKey].totalHelixInVault.isFinite()) {
-                totalStaked =
-                  +formatUnits(
-                    ethers.BigNumber.from(vaultPools[pool.vaultKey].totalHelixInVault.toString()),
-                    pool.stakingToken.decimals,
-                  ) * pool.stakingTokenPrice
-              }
-            } else if (pool.sousId === 0) {
-              if (pool.totalStaked?.isFinite() && pool.stakingTokenPrice && helixInVaults.isFinite()) {
-                const manualCakeTotalMinusAutoVault = ethers.BigNumber.from(pool.totalStaked.toString()).sub(
-                  helixInVaults.toString(),
-                )
-                totalStaked =
-                  +formatUnits(manualCakeTotalMinusAutoVault, pool.stakingToken.decimals) * pool.stakingTokenPrice
-              }
-            } else if (pool.totalStaked?.isFinite() && pool.stakingTokenPrice) {
-              totalStaked =
-                +formatUnits(ethers.BigNumber.from(pool.totalStaked.toString()), pool.stakingToken.decimals) *
-                pool.stakingTokenPrice
-            }
-            return Number.isFinite(totalStaked) ? totalStaked : 0
-          },
-          'desc',
-        )
-      default:
-        return poolsToSort
-    }
+  // TODO aren't arrays in dep array checked just by reference, i.e. it will rerender every time reference changes? 
+    
+  const handleAfterAdded=()=>{
+    setTimeout(()=>{
+      setRefresh(refresh + 1)    
+    }, 5000)
+    
   }
-
-  let chosenPools
-  if (showFinishedPools) {
-    chosenPools = stakedOnly ? stakedOnlyFinishedPools : finishedPools
-  } else {
-    chosenPools = stakedOnly ? stakedOnlyOpenPools : openPools
-  }
-
-  if (searchQuery) {
-    const lowercaseQuery = latinise(searchQuery.toLowerCase())
-    chosenPools = chosenPools.filter((pool) =>
-      latinise(pool.earningToken.symbol.toLowerCase()).includes(lowercaseQuery),
-    )
-  }
-
-  chosenPools = sortPools(chosenPools).slice(0, numberOfPoolsVisible)
-  chosenPoolsLength.current = chosenPools.length
-
-  const stakingTokenBalance = pools[0]? new BigNumber(pools[0].userData.stakingTokenBalance) : BIG_ZERO
-  const stakingTokenPrice = pools[0]? pools[0].stakingTokenPrice: 0
-  const [handleAdd] = useModal(<AddRowModal stakingTokenBalance={stakingTokenBalance} stakingTokenPrice= {stakingTokenPrice} />)
+  const [handleAdd] = useModal(<AddRowModal stakingTokenBalance={stakingTokenBalance} stakingTokenPrice= {getBalanceNumber(cakePrice, decimals )} onAdd={handleAfterAdded}/>)
+  const handleEnable = useCallback( async ()=>{
+    try{
+      await helixContract.approve(helixVaultAddress, ethers.constants.MaxUint256);  
+      setHelixEnabled(HelixEnabledState.ENABLED);
+    }catch(e){      
+      logError(e)
+    }    
+  },[helixContract])
   const buttonScale ="md";
   return (
     <>
@@ -199,29 +125,30 @@ const Vault: React.FC = () => {
               {t('Helix Vaults')}
             </Heading>
             <Heading scale="md" color="text">
-              {t('Total staked 0')}
+              {t('Total staked ')} {totalStake.toFixed(3)}
             </Heading>
           </Flex>
         </Flex>
       </PageHeader>
       <Page>
         <TableControls>
-          <Flex justifyContent="end" width={1}>
-            <Button onClick={handleAdd} key={buttonScale} variant="secondary" scale={buttonScale} mr="8px"> Add </Button>
+          <Flex justifyContent="start" width={1}>
+            {
+              helixEnabled===HelixEnabledState.ENABLED &&
+               <Button onClick={handleAdd} key={buttonScale} variant="secondary" scale={buttonScale} mr="8px"> Add </Button>              
+            }
+            {
+              helixEnabled === HelixEnabledState.DISABLED &&
+              <Button onClick={handleEnable} key={buttonScale} variant="secondary" scale={buttonScale} mr="8px"> Enable </Button>
+            }
           </Flex>
-        </TableControls>
-        {showFinishedPools && (
-          <Text fontSize="20px" color="failure" pb="32px">
-            {t('These pools are no longer distributing rewards. Please unstake your tokens.')}
-          </Text>
-        )}
-        {account && !userDataLoaded && stakedOnly && (
+        </TableControls>        
+        {deposits.length === 0 && (
           <Flex justifyContent="center" mb="4px">
             <Loading />
           </Flex>
-        )}
-        <VaultsTable pools={chosenPools} account={account} userDataLoaded={userDataLoaded} />
-        <div ref={observerRef} />
+        )}        
+        <VaultsTable deposits={deposits} />
       </Page>
     </>
   )
