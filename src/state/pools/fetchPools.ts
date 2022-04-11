@@ -97,9 +97,9 @@ export const fetchPoolStakingLimit = async (): Promise<BigNumber> => {
   // }
 }
 
-export const fetchPoolsStakingLimits = async (
-  poolsWithStakingLimit: number[],
-): Promise<{ [key: string]: BigNumber }> => {
+// export const fetchPoolsStakingLimits = async (
+//   poolsWithStakingLimit: number[],
+// ): Promise<{ [key: string]: BigNumber }> => {
   // const validPools = poolsConfig
   //   .filter((p) => p.stakingToken.symbol !== 'BNB' && !p.isFinished)
   //   .filter((p) => !poolsWithStakingLimit.includes(p.sousId))
@@ -134,5 +134,5 @@ export const fetchPoolsStakingLimits = async (
   //   }
   // }, {})
 
-  return {};
-}
+//   return {};
+// }
