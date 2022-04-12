@@ -1,8 +1,9 @@
+import React, { useMemo } from 'react'
+import moment from 'moment'
 import Balance from 'components/Balance'
 import tokens from 'config/constants/tokens'
 import { useTranslation } from 'contexts/Localization'
 import useTokenBalance from 'hooks/useTokenBalance'
-import React from 'react'
 import { usePriceHelixBusd } from 'state/farms/hooks'
 import styled from 'styled-components'
 import { AddIcon, Flex, IconButton, MinusIcon, Skeleton, Text, useModal } from 'uikit'
@@ -35,6 +36,12 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({ isLoading, deposi
     decimals,
   )
   
+  const canWithdraw = useMemo(() => {
+    const withdrawDate = moment.unix(deposit?.withdrawTimeStamp) 
+    const today = moment()    
+    return withdrawDate.isSameOrBefore(today)
+  }, [deposit])
+
   const [onPresentStake] = useModal(
     <StakeModal
       totalBalance={helixBalance}
@@ -74,7 +81,6 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({ isLoading, deposi
   }
 
   // Wallet connected, user data loaded and approved
-  
   return (
     <ActionContainer >
       <ActionTitles>
@@ -104,9 +110,9 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({ isLoading, deposi
             prefix="~"
           />
         </Flex>
-        <IconButtonWrapper>            
-          <IconButton variant="secondary" onClick={onPresentUnstake} mr="6px">
-            <MinusIcon color="primary" width="14px" />
+        <IconButtonWrapper>
+          <IconButton variant="secondary" onClick={onPresentUnstake} mr="6px" disabled={!canWithdraw}>
+            <MinusIcon color={canWithdraw? "primary" : "textDisabled"} width="14px" />
           </IconButton>
           <IconButton variant="secondary" onClick={onPresentStake}>
             <AddIcon color="primary" width="24px" height="24px" />

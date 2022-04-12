@@ -16,10 +16,14 @@ const StyledCell = styled(BaseCell)`
 const WithdrawTimeLeft: React.FC<TotalStakedCellProps> = ({deposit }) => {
   const { t } = useTranslation()
   const { isMobile } = useMatchBreakpoints()
-  const withdrawTimeLeft = useMemo(() => {
+  const {withdrawTimeLeft, isPast} = useMemo(() => {
     const withdrawDate = moment.unix(deposit?.withdrawTimeStamp) 
     const today = moment()    
-    return moment.duration(withdrawDate.diff(today))
+    const retData = { 
+      withdrawTimeLeft: moment.duration(withdrawDate.diff(today)) , 
+      isPast: withdrawDate.isSameOrBefore(today)
+    }
+    return retData
   }, [deposit])
 
   const balanceFontSize = isMobile ? "14px" : "16px";
@@ -31,9 +35,9 @@ const WithdrawTimeLeft: React.FC<TotalStakedCellProps> = ({deposit }) => {
         </Text>
         {deposit ? (
           <Flex height="20px" alignItems="center" mt={2} >
-            <Text fontSize={balanceFontSize}>
-              {withdrawTimeLeft.humanize()}
-            </Text>            
+            <Text fontSize={balanceFontSize} color={isPast ? "primary" : "secondary"}>
+              {isPast ? "Withdraw is available" :  withdrawTimeLeft.humanize()}
+            </Text>
           </Flex>
         ) : (
           <Skeleton width="80px" height="16px" />

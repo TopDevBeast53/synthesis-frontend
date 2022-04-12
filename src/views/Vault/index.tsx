@@ -8,11 +8,12 @@ import { useTranslation } from 'contexts/Localization'
 import { ethers } from 'ethers'
 import { useHelix } from 'hooks/useContract'
 import useTokenBalance from 'hooks/useTokenBalance'
+import { useFastFresh } from 'hooks/useRefresh'
 import React, { useCallback, useEffect, useState } from 'react'
 import { usePriceHelixBusd } from 'state/farms/hooks'
 import { Deposit } from 'state/types'
 import styled from 'styled-components'
-import { Button, Flex, Heading, useModal } from 'uikit'
+import { Button, Flex, Heading, useModal, Text } from 'uikit'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { getBalanceNumber } from 'utils/formatBalance'
 import { logError } from 'utils/sentry'
@@ -50,18 +51,22 @@ const Vault: React.FC = () => {
   const { account } = useWeb3React()  
   const helixContract = useHelix()
   const [helixEnabled, setHelixEnabled] = useState(HelixEnabledState.UNKNOWN)
+  const [isLoading, setLoading] = useState(true)
   const [deposits, setDeposits] = useState([])  
   const [totalStake, setTotalStake] = useState(0) 
   const [refresh, setRefresh] = useState(0)
 
+  const fastRefresh = useFastFresh()
   const {decimals} = tokens.helix  
   const cakePrice = usePriceHelixBusd()
+  
 
   const { balance: helixBalance, fetchStatus:balanceFetchStatus} = useTokenBalance(tokens.helix.address)  
   const stakingTokenBalance = balanceFetchStatus===FetchStatus.Fetched? helixBalance : BIG_ZERO  
   
   useEffect(()=>{
       if(!account) return;   
+      setLoading(true)
       helixContract.balanceOf(helixVaultAddress).then((value:any)=>{
         setTotalStake(getBalanceNumber(value.toString(), decimals))
       }).catch(err=>{
@@ -82,7 +87,7 @@ const Vault: React.FC = () => {
   
   useEffect(()=>{    
     if(helixEnabled && account){      
-      load()
+      load()      
     }
     async function load(){
       
@@ -95,8 +100,9 @@ const Vault: React.FC = () => {
         return prev
       },[])
       setDeposits(results)
+      setLoading(false)
     }    
-  },[getDepositIds, account, getDepositFromId, helixEnabled, refresh])  
+  },[getDepositIds, account, getDepositFromId, helixEnabled, refresh, fastRefresh])  
 
   // TODO aren't arrays in dep array checked just by reference, i.e. it will rerender every time reference changes? 
     
@@ -143,12 +149,18 @@ const Vault: React.FC = () => {
             }
           </Flex>
         </TableControls>        
-        {deposits.length === 0 && (
+        {(isLoading) && (
           <Flex justifyContent="center" mb="4px">
             <Loading />
           </Flex>
-        )}        
-        <VaultsTable deposits={deposits} />
+        )}
+        {deposits?.length === 0  && !isLoading ?
+          <Text fontSize="20px" color="failure" pb="32px">
+            {t('No data')}
+          </Text>
+          :
+          <VaultsTable deposits={deposits} />
+        }        
       </Page>
     </>
   )

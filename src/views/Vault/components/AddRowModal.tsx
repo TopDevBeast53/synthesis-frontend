@@ -21,9 +21,6 @@ import { getFullDisplayBalance, formatNumber, getDecimalAmount } from 'utils/for
 import PercentageButton from './VaultCard/Modals/PercentageButton'
 import { useHelixLockVault } from '../hooks/useHelixLockVault'
 
-
-
-
 interface ModalProps {  
   stakingTokenBalance: BigNumber
   stakingTokenPrice: number

@@ -1,11 +1,11 @@
+import React, {useState} from 'react'
 import { useWeb3React } from '@web3-react/core'
 import Balance from 'components/Balance'
 import tokens from 'config/constants/tokens'
 import { useTranslation } from 'contexts/Localization'
 import useToast from 'hooks/useToast'
-import React from 'react'
 import { usePriceHelixBusd } from 'state/farms/hooks'
-import { Button, Flex, Heading, Skeleton, Text } from 'uikit'
+import { Button, Flex, Heading, Skeleton, Text, AutoRenewIcon } from 'uikit'
 import { getBalanceNumber } from 'utils/formatBalance'
 import { logError } from 'utils/sentry'
 import { useHelixLockVault } from '../../../hooks/useHelixLockVault'
@@ -28,6 +28,7 @@ const HarvestAction: React.FunctionComponent<HarvestActionProps> = ({
   const { account } = useWeb3React()
   const { claimReward } = useHelixLockVault()
   const { toastError, toastSuccess } = useToast()
+  const [pendingTx, setPendingTx] = useState(false)
   
   const cakePrice = usePriceHelixBusd()    
   const {decimals, symbol} = tokens.helix
@@ -37,6 +38,7 @@ const HarvestAction: React.FunctionComponent<HarvestActionProps> = ({
   const earningTokenDollarBalance = getBalanceNumber(earnings.multipliedBy(cakePrice), decimals)
   
   const onPresentCollect = async () => {
+    setPendingTx(true)
     try {
       const receipt = await claimReward(deposit?.id)
       if (receipt.status){          
@@ -49,6 +51,7 @@ const HarvestAction: React.FunctionComponent<HarvestActionProps> = ({
       logError(e)
       toastError(t('Error'), t('Please try again.'))
     }    
+    setPendingTx(false)
   }
 
   const actionTitle = (
@@ -116,7 +119,10 @@ const HarvestAction: React.FunctionComponent<HarvestActionProps> = ({
             )}
           </>
         </Flex>
-        <Button disabled={!hasEarnings} onClick={onPresentCollect}>
+        <Button disabled={!hasEarnings} 
+                isLoading={pendingTx}
+                endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
+                onClick={onPresentCollect}>
           {t('Collect')}
         </Button>
       </ActionContent>
