@@ -207,7 +207,7 @@ function BridgeToBSCInner({switcher}: {switcher: React.ReactNode}) {
                 {
                   id: "bridge_to_bsc",
                   caption: "Bridge To BSC",
-                  displayed: token.isApproved && !token.isBridged && token.isMinted,
+                  displayed: token.isApproved && !token.isBridged,
                   action: handleBridge,
                   params: [token.mint.toString(), getImage(token.metadataExternal)]
                 },
