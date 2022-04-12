@@ -83,6 +83,8 @@ function BridgeToBSCInner({switcher}: {switcher: React.ReactNode}) {
       tokens.map(async (tk) => {
         const bridgeFlag = await isBridged(tk.mint.toString());
         const mintFlag = await getMinted(tk.mint.toString());
+    console.debug('????', mintFlag)
+
         return {...tk, isBridged: bridgeFlag, isMinted: Number(mintFlag) > 0}
       })
     )
@@ -91,7 +93,8 @@ function BridgeToBSCInner({switcher}: {switcher: React.ReactNode}) {
   const getTokensInfo = useCallback(async() => {
     const tokens = await tokensToEnrichedNFTs(wallet);
     const updatedTokens = await updateTokensInfo(tokens);
-    const filteredNFTs = filter(updatedTokens, token => !token.bridged)
+    console.debug('????', updatedTokens)
+    const filteredNFTs = filter(updatedTokens, token => (!token.isMinted || !token.isBridged))
     setNFTs(filteredNFTs);
   }, [updateTokensInfo, wallet])
 
@@ -211,16 +214,9 @@ function BridgeToBSCInner({switcher}: {switcher: React.ReactNode}) {
                 {
                   id: "bridge",
                   caption: "Claim",
-                  displayed: token.isApproved && !token.isMinted,
+                  displayed: token.isApproved && token.isBridged && !token.isMinted,
                   action: handleClaim,
                   params: [token.mint.toString()]
-                },
-                {
-                  id: "bridge",
-                  caption: "Already Bridged!",
-                  displayed: token.isBridged,
-                  action: handleEmpty,
-                  params: []
                 },
               ]}
               bgSrc={token.metadataExternal ? token.metadataExternal.image: "https://arweave.net/vkk1RRYm9UsH7hIE92nBMcfYJBqBUwcYKh5zj__AjyA"}
