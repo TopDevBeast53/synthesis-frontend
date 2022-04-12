@@ -1,12 +1,11 @@
 import React, { useState, useCallback, useEffect } from 'react'
-import { Flex, Heading, Text, useModal } from 'uikit'
+import { Flex, Heading, Text } from 'uikit'
 import { useTranslation } from 'contexts/Localization'
 import useToast from 'hooks/useToast'
 import { logError } from 'utils/sentry'
 import CircleLoader from '../../../components/Loader/CircleLoader'
 import { useNFTBridge } from '../hooks/useNFTBridge'
 import NftCard from '../../NftStaking/components/NftCard'
-import BridgeToSolanaModal from './BridgeToSolanaModal'
 import NFTStartCollectPanel from '../../NftStaking/components/NFTStartCollectPanel'
 
 export default function BridgeToSolana({switcher}: {switcher: React.ReactNode}) {
@@ -20,15 +19,7 @@ export default function BridgeToSolana({switcher}: {switcher: React.ReactNode}) 
 
   const { getUnstakedNftsFromBSC, approveToBridgeContract } = useNFTBridge()
 
-  const [onPresentBridgeModal] = useModal(
-    <BridgeToSolanaModal tokenIDToBridge={selectedTokenID} />
-  );
-
-  const requestBridgeDestinationForToken = useCallback((tokenID: string) => {
-    setSelectedTokenID(tokenID);
-    onPresentBridgeModal();
-  }, [setSelectedTokenID, onPresentBridgeModal]);
-
+  
   const handleGetTokens = useCallback(() => {
     try {
       setLoading(true)
@@ -52,7 +43,7 @@ export default function BridgeToSolana({switcher}: {switcher: React.ReactNode}) 
       setLoading(true)
       const receipt = await approveToBridgeContract(tokenId)
       if (receipt.status) {
-        toastSuccess(t('Success'), t('Approved!'))
+        toastSuccess(t('Success'), t('Approved! Please click Brige To Solana button!'))
         const updatedTokens = tokens.map((token:any)=>{
           if (token.tokenId.toString() === tokenId.toString())
             return {...token, ...{isApproved: true}}
@@ -98,16 +89,17 @@ export default function BridgeToSolana({switcher}: {switcher: React.ReactNode}) 
                   action: handleApprove,
                   params: [token.tokenId],
                 },
-                {
-                  id: "bridge",
-                  caption: "Bridge to Solana",
-                  displayed: token.isApproved,
-                  action: requestBridgeDestinationForToken,
-                  params: [token.tokenId]
-                }
+                // {
+                //   id: "bridge",
+                //   caption: "Bridge to Solana",
+                //   displayed: token.isApproved,
+                //   action: requestBridgeDestinationForToken,
+                //   params: [token.tokenId]
+                // }
               ]}
               bgSrc={token.uri}
               disabled={token.disabled}
+              showBridgeToSolanaModal={token.isApproved}
             />
           )
         })}

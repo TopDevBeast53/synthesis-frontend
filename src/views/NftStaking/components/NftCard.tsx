@@ -1,10 +1,11 @@
-import { Card, Flex, Image, Text, Checkbox, Button } from 'uikit'
+import { Card, Flex, Image, Text, Checkbox, Button, useModal } from 'uikit'
 
 import React, { useState, useCallback } from 'react'
 import styled from 'styled-components'
-
+import { useTranslation } from 'contexts/Localization'
 import NFTIcon from './NFTIcon'
 import { NFTCardText, NFTCardTextType } from './NFTCardText'
+import BridgeToSolanaModal from '../../NftBridge/components/BridgeToSolanaModal'
 
 const NFTCard = styled(Card)`
   width: 422px;
@@ -78,6 +79,7 @@ interface NftCardProps {
   tokenId: string
   disabled?: boolean
   onhandleChangeCheckBox?: (tokenId: string, isChecked: boolean) => void
+  showBridgeToSolanaModal?: boolean
 }
 
 const NFTImage = styled(Image)`
@@ -94,7 +96,10 @@ const NftCard: React.FC<NftCardProps> = ({
   tokenId,
   disabled,
   onhandleChangeCheckBox,
+  showBridgeToSolanaModal,
 }) => {
+  const { t } = useTranslation()
+
   const [isRememberChecked, setIsRememberChecked] = useState(false)
 
   const handleChangeCheckBox = useCallback(() => {
@@ -106,6 +111,10 @@ const NftCard: React.FC<NftCardProps> = ({
     [onhandleChangeCheckBox, tokenId, isRememberChecked,setIsRememberChecked]
   );
 
+  const [onPresentBridgeModal] = useModal(
+    <BridgeToSolanaModal tokenIDToBridge={tokenId} />
+  );
+  
   return (
     <NFTCard m="19px">
       <NFTImage src={bgSrc} width={366} height={313}/>
@@ -162,6 +171,12 @@ const NftCard: React.FC<NftCardProps> = ({
               {caption}
             </Button>  
           ))
+        }
+        {
+          showBridgeToSolanaModal &&
+          <Button onClick={onPresentBridgeModal} style={{ marginBottom: '8px' }}>
+            {t('Bridge To Solana')}
+          </Button>
         }
       </Flex>
     </NFTCard>

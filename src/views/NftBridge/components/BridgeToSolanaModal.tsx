@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react'
-import { InjectedModalProps, ModalContainer, ModalHeader, ModalBody, ModalTitle, ModalCloseButton, Heading, Button } from 'uikit'
+import { InjectedModalProps, ModalContainer, ModalHeader, ModalBody, ModalTitle, ModalCloseButton, Heading, Button, AutoRenewIcon } from 'uikit'
 import styled from 'styled-components'
 import useToast from 'hooks/useToast'
 import { logError } from 'utils/sentry'
@@ -24,12 +24,14 @@ const BridgeToSolanaModal: React.FC<BridgeToSolanaModalProps> = ({ tokenIDToBrid
     const [destination, setDestination] = useState('')
     const { toastError, toastSuccess } = useToast()
     const { bridgeToSolana } = useNFTBridge()
+    const [loading, setLoading] = useState(false)
 
     const onChangeDestination = useCallback((value:string) => {
         setDestination(value)
     }, [setDestination])
 
     const handleBridge = useCallback(async () => {
+        setLoading(true)
         try {
           const receipt = await bridgeToSolana(tokenIDToBridge, destination)
           if (receipt.status){
@@ -39,6 +41,7 @@ const BridgeToSolanaModal: React.FC<BridgeToSolanaModalProps> = ({ tokenIDToBrid
           logError(e)
           toastError('Error', 'Please try again.')
         }
+        setLoading(false)
         onDismiss()
       }, [bridgeToSolana, tokenIDToBridge, destination, toastSuccess, toastError, onDismiss])
 
@@ -57,6 +60,8 @@ const BridgeToSolanaModal: React.FC<BridgeToSolanaModalProps> = ({ tokenIDToBrid
                 <AddressInputPanel value={destination} onChange={onChangeDestination} />
                 <Button 
                     onClick={handleBridge} 
+                    isLoading={loading}
+                    endIcon={loading ? <AutoRenewIcon spin color="currentColor" /> : null}
                     disabled={destination.length !== 44} 
                     style={{marginTop: '16px'}}
                 >
