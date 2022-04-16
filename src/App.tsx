@@ -54,9 +54,10 @@ const PoolFinder = lazy(() => import('./views/PoolFinder'))
 const RemoveLiquidity = lazy(() => import('./views/RemoveLiquidity'))
 const Migrator = lazy(() => import('./views/LiquidityMigration'))
 const NftStaking = lazy(() => import('./views/NftStaking'))
-const NftBridge = lazy(() => import('./views/NftBridge'))
+const NftYieldBoosting = lazy(() => import('./views/NftYieldBoosting'))
+const SwapLiquidity = lazy(() => import('./views/SwapLiquidity'))
+const SwapYield = lazy(() => import('./views/SwapYield'))
 const Referrals = lazy(() => import('./views/Referrals'))
-
 // const Info = lazy(() => import('./views/Info'))
 // const NftMarket = lazy(() => import('./views/Nft/market'))
 // const ProfileCreation = lazy(() => import('./views/ProfileCreation'))
@@ -84,7 +85,7 @@ const App: React.FC = () => {
     <Router history={history}>
       <ResetCSS />
       <GlobalStyle backgroundImageURL={
-         ['swap', 'geobot-staking', 'geobot-bridge'].includes(window.location.href.split('/')?.[3]) ? 
+         ['swap', 'geobot-staking'].includes(window.location.href.split('/')?.[3]) ? 
         '/images/SwapBackground.svg' : '/images/MainBackground.svg'}
         />
       <Menu>
@@ -111,11 +112,17 @@ const App: React.FC = () => {
             <Route path="/geobot-staking">
               <NftStaking />
             </Route>
-            <Route path="/geobot-bridge">
-              <NftBridge />
+            <Route path="/geobot-yield-boosting">
+              <NftYieldBoosting />
             </Route>
             <Route path="/referrals">
-                <Referrals />
+              <Referrals />
+            </Route>
+            <Route path="/yield-swap-lps">
+              <SwapLiquidity />
+            </Route>
+            <Route path="/yield-swap-yield">
+              <SwapYield />
             </Route>
             {/* 
             <Route path="/lottery">

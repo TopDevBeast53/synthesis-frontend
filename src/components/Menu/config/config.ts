@@ -1,4 +1,5 @@
 import { MenuItemsType } from 'uikit'
+import { DropdownMenuItemType } from 'uikit/components/DropdownMenu/types'
 import { ContextApi } from 'contexts/Localization/types'
 // import { nftsBaseUrl } from 'views/Nft/market/constants'
 
@@ -41,6 +42,21 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType[] = (t) => [
     ],
   },
   {
+    label: t('Yield Swaps'),
+    href: '/yield-swap-lps',
+    icon: 'Earn',
+    items: [
+      {
+        label: t('Swap LPs'),
+        href: '/yield-swap-lps',
+      },
+      {
+        label: t('Swap Yield'),
+        href: '/yield-swap-yield',
+      },
+    ],
+  },
+  {
     label: t('Referrals'),
     href: '/referrals',
     icon: 'Earn',
@@ -52,13 +68,22 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType[] = (t) => [
     icon: 'Earn',
     items: [
       {
-        label: 'My Geobots',
+        label: 'Geobot Staking',
         href: '/geobot-staking',
       },
       {
+        label: 'Yield Boosting',
+        href: '/geobot-yield-boosting',
+      },
+      {
+        type: DropdownMenuItemType.DIVIDER,
+      },
+      {
         label: 'Geobot bridge',
-        href: '/geobot-bridge',
-      }
+        href: 'https://nexus.helix.finance',
+        target:"_blank",
+        type: DropdownMenuItemType.EXTERNAL_LINK,
+      },
     ]
   },
   {
