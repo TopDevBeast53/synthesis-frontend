@@ -14,7 +14,7 @@ const SubMenuItems: React.FC<SubMenuItemsProps> = ({ items = [], activeItem, isM
       $isMobileOnly={isMobileOnly}
       style={{backgroundColor: "rgba(0, 0, 0, 0.0)"}}
     >
-      {items.map(
+      {items.filter((e)=>(Object.prototype.hasOwnProperty.call(e, "type") === false)).map(
         ({ label, href, iconName, itemProps }) =>
           label && (
             <Box key={label} mr="20px">
