@@ -127,4 +127,8 @@ export default {
     56: '',
     97: '0xA2FD45B609f462F09c0Cfc2A2c0b9c491FE3383C',
   },
+  yieldSwap: {
+    56: '',
+    97: '0xb953F3096371364acB88B34eD89E269DA625a96A'
+  }
 }
