@@ -1,34 +1,54 @@
-import React from 'react'
-import { Flex, Heading } from 'uikit'
-import { useTranslation } from 'contexts/Localization'
-import styled from 'styled-components'
-
 import PageHeader from 'components/PageHeader'
-import Page from '../Page'
+import { useTranslation } from 'contexts/Localization'
+import React, { useState } from 'react'
+import styled from 'styled-components'
+import { ButtonMenu, ButtonMenuItem, Heading } from 'uikit'
+import YieldCParty from "./YieldCParty"
+import YieldParty from "./YieldParty"
 
-const NFTDisplayPanel = styled(Flex)`
-  position: relative;
-  flex-direction: column;
-  width: 100%;
-  max-width: 1200px;
-  padding-left: 24px;
-  padding-right: 24px;
-  margin-bottom: 32px;
-`;
+
+const Wrapper = styled.div`
+  display: inline-block;      
+  a {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  ${({ theme }) => theme.mediaQueries.sm} {
+    margin-left: 16px;
+  }
+`
 
 export default function SwapYield() {
-  const { t } = useTranslation()
-
+  const { t } = useTranslation()  
+  const [menuIndex,setMenuIndex] = useState(0)
+  const handleButtonMenuClick = (newIndex) => {    
+    setMenuIndex(newIndex)
+  }
   return (
     <>
-      <PageHeader background='transparent'>
-        <Heading as="h1" scale="xxl" color="secondary">
-          {t('Swap Yield')}
+      <PageHeader background='transparent'>        
+        <Heading as="h1" scale="xxl" color="secondary" style={{display:"inline-block", verticalAlign:"middle"}}>
+          {t('Swap Yield')}  
         </Heading>
+        <Wrapper>
+          <ButtonMenu activeIndex={menuIndex} scale="sm" variant="subtle" onItemClick={handleButtonMenuClick}>
+              <ButtonMenuItem>
+                    {t('Party')}
+                </ButtonMenuItem>
+                <ButtonMenuItem >
+                    {t('Counter Party')}
+                </ButtonMenuItem>
+            </ButtonMenu>
+        </Wrapper>
+        
       </PageHeader>
-      <Page>
-        <NFTDisplayPanel />
-      </Page>
+      <>
+        {
+          (menuIndex === 0) ?  <YieldParty/> : menuIndex === 1 && <YieldCParty/>
+        }      
+      </>
+        
     </>
   )
 }
