@@ -25,6 +25,7 @@ const Wrapper = styled.div`
 
 const YieldCParty = ()=>{
     const { t } = useTranslation()
+
     const [menuIndex, setMenuIndex] = useState(SwapState.All)
     const [filteredSwaps, setFilteredSwaps]=useState(filter(CPartySwapData, {state: menuIndex}))
 

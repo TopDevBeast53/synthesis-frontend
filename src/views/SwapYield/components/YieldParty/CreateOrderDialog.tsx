@@ -143,9 +143,8 @@ const AddRowModal = (props)=>{
   const { theme } = useTheme()
   const { t } = useTranslation()
   const {onDismiss} = props
-  const yieldSwapContract = useHelixYieldSwap()
 
-  console.debug('????', yieldSwapContract)
+  const yieldSwapContract = useHelixYieldSwap()
 
   const [uAmount, setUAmount]=useState(0.0)
   const [yAmount, setYAmount]=useState(0.0)
@@ -205,7 +204,7 @@ const AddRowModal = (props)=>{
           onUserInput={handleYAmountChange}
       />
       <Button
-        isLoading={pendingTx}
+        isLoading={pendingTx}    
         endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}       
         onClick={handleConfirm} 
         mt="24px"
