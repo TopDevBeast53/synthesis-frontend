@@ -33,6 +33,7 @@ import {
   getErc721CollectionContract,
   getBunnySpecialXmasContract,
   getHelixVaultContract,
+  getHelixYieldSwapContract
 } from 'utils/contractHelpers'
 import { getMulticallAddress } from 'utils/addressHelpers'
 import { VaultKey } from 'state/types'
@@ -97,6 +98,11 @@ export const useHelix = () => {
 export const useHelixVault = () => {
   const { library } = useActiveWeb3React()
   return useMemo(() => getHelixVaultContract(library.getSigner()), [library])
+}
+
+export const useHelixYieldSwap = () => {
+  const { library } = useActiveWeb3React()
+  return useMemo(() => getHelixYieldSwapContract(library.getSigner()), [library])
 }
 
 export const useBunnyFactory = () => {

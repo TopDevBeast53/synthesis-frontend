@@ -34,10 +34,10 @@ export default function SwapYield() {
         <Wrapper>
           <ButtonMenu activeIndex={menuIndex} scale="sm" variant="subtle" onItemClick={handleButtonMenuClick}>
               <ButtonMenuItem>
-                    {t('Party')}
+                    {t('Seller')}
                 </ButtonMenuItem>
                 <ButtonMenuItem >
-                    {t('Counter Party')}
+                    {t('Buyer')}
                 </ButtonMenuItem>
             </ButtonMenu>
         </Wrapper>

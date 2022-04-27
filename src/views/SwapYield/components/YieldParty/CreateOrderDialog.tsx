@@ -12,6 +12,7 @@ import {
     Flex, Modal, Slider, Text
 } from 'uikit'
 import { formatNumber, getDecimalAmount, getFullDisplayBalance } from 'utils/formatBalance'
+import { useHelixYieldSwap } from 'hooks/useContract'
 import PercentageButton from './PercentageButton'
 // const AddRowModal = ({
 //   availableBalance,
@@ -138,7 +139,84 @@ import PercentageButton from './PercentageButton'
 //     </Modal>
 //   )
 // }
-const AddRowModal = ()=>{
-  return null
+const AddRowModal = (props)=>{
+  const { theme } = useTheme()
+  const { t } = useTranslation()
+  const {onDismiss} = props
+  const yieldSwapContract = useHelixYieldSwap()
+
+  console.debug('????', yieldSwapContract)
+
+  const [uAmount, setUAmount]=useState(0.0)
+  const [yAmount, setYAmount]=useState(0.0)
+  const [duration, setDuration]=useState()
+  const [durationIndex, setDurationIndex]=useState(0)
+  const [pendingTx, setPendingTx] = useState(false)
+  const handleUAmountChange = (input) => {
+    setUAmount(input)
+  }
+  const handleYAmountChange = (input) => {
+    setYAmount(input)
+  }
+  const handleOptionChange = (option) => {
+    setDurationIndex(option.value)
+  }
+  const handleConfirm = () => {
+    setPendingTx(true);
+    setPendingTx(false);
+    onDismiss()
+  }
+  const durationOptions=[{
+      label:"1 day",
+      value:"1"
+    },
+    {
+      label:"2 day",
+      value:"2"
+    },
+    {
+      label:"3 day",
+      value:"3"
+    }    
+  ]
+
+  return (
+    <Modal
+      title={t('Add Item') }
+      headerBackground={theme.colors.gradients.cardHeader}    
+      onDismiss={onDismiss}
+    > 
+      <Text bold>{t('Duration')}:</Text>
+      {
+        durationOptions.length !==0 &&
+          <Select
+          options={durationOptions}
+          onOptionChange={handleOptionChange}
+        />
+      }
+      <Text bold>{t('U Amount')}:</Text>      
+      <BalanceInput 
+            value={uAmount}
+            onUserInput={handleUAmountChange}
+      />
+      <Text bold>{t('Y Amount')}:</Text>
+      <BalanceInput 
+          value={uAmount}
+          onUserInput={handleYAmountChange}
+      />
+      <Button
+        isLoading={pendingTx}
+        endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}       
+        onClick={handleConfirm} 
+        mt="24px"
+      >
+        {pendingTx ? t('Confirming') : t('Confirm')}
+      </Button>
+      <Button variant="text" onClick={onDismiss} pb="0px">
+        {t('Close Window')}
+      </Button>
+    </Modal>
+  )
 }
 export default AddRowModal
+

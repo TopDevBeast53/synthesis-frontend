@@ -1,9 +1,10 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 import Balance from 'components/Balance'
 import styled from 'styled-components'
-import { Text } from 'uikit'
+import { Text, ChevronDownIcon, useDelayedUnmount } from 'uikit'
 import moment from 'moment'
 import BaseCell, { CellContent } from './BaseCell'
+import CandidateTable from './CandidateTable'
 
 const StyledRow = styled.div`
   background-color: transparent;
@@ -18,9 +19,14 @@ const StyledCell = styled(BaseCell)`
     flex: 1 0 120px;
   }
 `
-
-const YieldPartyRow=({data})=>{
+const ArrowIcon = styled(ChevronDownIcon)<{ toggled: boolean }>`
+  transform: ${({ toggled }) => (toggled ? 'rotate(180deg)' : 'rotate(0)')};
+  height: 24px;
+`
+const YieldPartyRow=({data, onClick})=>{
     const {uamount, yamount, dueTimeStamp} = data
+    const [expanded, setExpanded] = useState(false)
+    const shouldRenderDetail = useDelayedUnmount(expanded, 300)
     const {duration, isPast} = useMemo(()=>{
         const dueDate = moment.unix(dueTimeStamp) 
         const today = moment()    
@@ -30,9 +36,13 @@ const YieldPartyRow=({data})=>{
         }
         return retData        
     },[dueTimeStamp])
-    
+    const handleOnRowClick = () => {
+        setExpanded(!expanded)
+        if(onClick) onClick()
+    }
     return (
-        <StyledRow>
+        <>
+        <StyledRow onClick={handleOnRowClick}>
             <StyledCell>
                 <CellContent>
                     <Text>
@@ -69,7 +79,18 @@ const YieldPartyRow=({data})=>{
                     </Text>                    
                 </CellContent>       
             </StyledCell>
+            <StyledCell>
+                <ArrowIcon color="primary" toggled={expanded} />
+            </StyledCell>
         </StyledRow>
+        
+            {shouldRenderDetail && (
+                <div style={{padding:"10px 10px"}}>
+                    <CandidateTable/>
+                </div>
+            )}        
+        
+        </>
     )
 }
 

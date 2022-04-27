@@ -32,6 +32,7 @@ import {
   getTradingCompetitionAddressV2,
   getBunnySpecialXmasAddress,
   getHelixVaultAddress,
+  getYieldSwapAddress
 } from 'utils/addressHelpers'
 
 // ABI
@@ -70,6 +71,7 @@ import nftSaleAbi from 'config/abi/nftSale.json'
 import pancakeSquadAbi from 'config/abi/pancakeSquad.json'
 import erc721CollectionAbi from 'config/abi/erc721collection.json'
 import helixVaultAbi from 'config/abi/HelixVault.json'
+import yieldSwapAbi from 'config/abi/YieldSwap.json'
 
 // Types
 import {
@@ -106,6 +108,7 @@ import {
   Erc721collection,
   PointCenterIfo,
   HelixVault,
+  YieldSwap
 } from 'config/abi/types'
 
 const getContract = (abi: any, address: string, signer?: ethers.Signer | ethers.providers.Provider) => {
@@ -220,4 +223,7 @@ export const getErc721CollectionContract = (signer?: ethers.Signer | ethers.prov
 }
 export const getHelixVaultContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
   return getContract(helixVaultAbi, getHelixVaultAddress(), signer) as HelixVault
+}
+export const getHelixYieldSwapContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
+  return getContract(yieldSwapAbi, getYieldSwapAddress(), signer) as YieldSwap
 }

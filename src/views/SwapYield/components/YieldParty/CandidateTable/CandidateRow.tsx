@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import Balance from 'components/Balance'
 import styled from 'styled-components'
-import { Text, Button } from 'uikit'
+import { Text } from 'uikit'
 import moment from 'moment'
-import BaseCell, { CellContent } from './BaseCell'
+import BaseCell, { CellContent } from '../BaseCell'
 
 const StyledRow = styled.div`
   background-color: transparent;
@@ -19,15 +19,33 @@ const StyledCell = styled(BaseCell)`
   }
 `
 
-const YieldCPartyRow=({data})=>{
-    const {yamount, damount, leftTime, state} = data
-    const dueDate = moment.unix(leftTime)
-    const today = moment()    
-    const duration = moment.duration(dueDate.diff(today))
-
-    moment.duration(dueDate.diff(today))
+const CandidateRow=({data, onClick})=>{
+    const {uamount, yamount, dueTimeStamp} = data
+    const {duration, isPast} = useMemo(()=>{
+        const dueDate = moment.unix(dueTimeStamp) 
+        const today = moment()    
+        const retData = { 
+            duration: moment.duration(dueDate.diff(today)) , 
+            isPast: dueDate.isSameOrBefore(today)
+        }
+        return retData        
+    },[dueTimeStamp])
+    
     return (
-        <StyledRow>
+        <StyledRow onClick={onClick}>
+            <StyledCell>
+                <CellContent>
+                    <Text>
+                        C Addr
+                    </Text>
+                    <Balance
+                        mt="4px"                
+                        color='primary'                        
+                        value={uamount}
+                        fontSize="14px"
+                    />
+                </CellContent>
+            </StyledCell>
             <StyledCell>
                 <CellContent>
                     <Text>
@@ -44,43 +62,15 @@ const YieldCPartyRow=({data})=>{
             <StyledCell>
                 <CellContent>
                     <Text>
-                        DAmount
+                        Duration
                     </Text>
-                    <Balance
-                        mt="4px"                
-                        color='primary'                        
-                        value={damount}
-                        fontSize="14px"
-                    />
-                </CellContent>
-            </StyledCell>
-            <StyledCell>
-                <CellContent>
-                    <Text>
-                        Left Time
-                    </Text>
-                    <Text mt="4px" color='primary'>
+                    <Text color="primary" mt="4px">
                         {duration.humanize()}
-                    </Text>
-                </CellContent>
-            </StyledCell>
-            <StyledCell>
-                <CellContent>
-                    {
-                        state === 0 && (
-                            <Button variant="secondary" scale="md" mr="8px"> Send Offer </Button>
-                        )
-                    }
-
-                    {
-                        state === 3 && (
-                            <Button variant="secondary" scale="md" mr="8px"> Collect </Button>
-                        )
-                    }
-                </CellContent>
+                    </Text>                    
+                </CellContent>       
             </StyledCell>
         </StyledRow>
     )
 }
 
-export default YieldCPartyRow;
+export default CandidateRow;

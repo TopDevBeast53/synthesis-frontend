@@ -35,7 +35,7 @@ const ScrollButtonContainer = styled.div`
   padding-bottom: 5px;
 `
 
-const YieldCPartyTable= ({ deposits }) => {
+const YieldCPartyTable= ({ swaps }) => {
   const { t } = useTranslation()
   const tableWrapperEl = useRef<HTMLDivElement>(null)
   const scrollToTop = (): void => {
@@ -48,8 +48,8 @@ const YieldCPartyTable= ({ deposits }) => {
     <StyledTableBorder>
       <StyledTable id="pools-table" role="table" ref={tableWrapperEl}>        
         {
-          deposits.map((deposit)=>(
-            <YieldCPartyRow key={deposit.id} deposit={deposit} />
+          swaps.map((deposit)=>(
+            <YieldCPartyRow key={deposit.id} data={deposit} />
           ))
         }
         <ScrollButtonContainer>
