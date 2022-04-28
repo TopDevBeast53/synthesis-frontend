@@ -36,6 +36,7 @@ const ScrollButtonContainer = styled.div`
 `
 
 const YieldCPartyTable= ({ swaps }) => {
+  console.debug(swaps)
   const { t } = useTranslation()
   const tableWrapperEl = useRef<HTMLDivElement>(null)
 
@@ -49,8 +50,9 @@ const YieldCPartyTable= ({ swaps }) => {
     <StyledTableBorder>
       <StyledTable id="pools-table" role="table" ref={tableWrapperEl}>        
         {
-          swaps.map((deposit)=>(
-            <YieldCPartyRow key={deposit.id} data={deposit} />
+          swaps.map((data, idx)=>(
+            // eslint-disable-next-line react/no-array-index-key
+            <YieldCPartyRow key={idx} data={data} />
           ))
         }
         <ScrollButtonContainer>

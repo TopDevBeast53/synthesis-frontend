@@ -3,6 +3,7 @@ import Balance from 'components/Balance'
 import styled from 'styled-components'
 import { Text, Button, useModal } from 'uikit'
 import { useHelixYieldSwap } from 'hooks/useContract'
+import tokens from 'config/constants/tokens'
 import moment from 'moment'
 import BaseCell, { CellContent } from './BaseCell'
 import DiscussOrder from './DiscussOrder'
@@ -79,6 +80,11 @@ const YieldCPartyRow=({data})=>{
                 {
                     state === SwapState.All && (
                         <Button variant="secondary" scale="md" mr="8px" onClick={showModal}> Send Offer </Button>
+                    )
+                }
+                {
+                    state === SwapState.Applied && (
+                        <Button variant="secondary" scale="md" mr="8px" onClick={showModal}> Make Bid </Button>
                     )
                 }
 

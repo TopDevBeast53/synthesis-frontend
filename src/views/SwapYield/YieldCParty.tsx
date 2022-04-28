@@ -34,7 +34,7 @@ const YieldCParty = ()=>{
     const [menuIndex, setMenuIndex] = useState(SwapState.All)
     const [swaps, setSwaps] = useState([])
     const [hasBidOnSwap, setHasBidOnSwap] = useState([])
-    const [filteredSwaps, setFilteredSwaps]=useState(filter(CPartySwapData, {state: menuIndex}))
+    const [filteredSwaps, setFilteredSwaps]=useState(filter(CPartySwapData, {isOpen: true}))
     const [loading, setLoading] = useState(false)
 
     const handleButtonMenuClick = (newIndex) => {
