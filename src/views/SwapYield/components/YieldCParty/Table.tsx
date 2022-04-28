@@ -1,12 +1,8 @@
 import React, { useRef } from 'react'
 import styled from 'styled-components'
 import { useTranslation } from 'contexts/Localization'
-import { Button, ChevronUpIcon, useModal } from 'uikit'
+import { Button, ChevronUpIcon } from 'uikit'
 import YieldCPartyRow from './Row'
-
-interface PoolsTableProps {  
-  deposits    
-}
 
 const StyledTable = styled.div`
   border-radius: ${({ theme }) => theme.radii.card};

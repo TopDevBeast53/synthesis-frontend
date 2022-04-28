@@ -1,101 +1,60 @@
-
-import Select from 'components/Select/Select';
-import React, {useState} from "react";
-import styled, { useTheme } from 'styled-components';
+import React, { useState } from 'react'
+import { useTheme } from 'styled-components'
 import {
-    BalanceInput, Button, Heading, ModalBody, ModalCloseButton,
-    ModalContainer, ModalHeader, ModalTitle, Text
-} from "uikit";
+  BalanceInput,
+  Button,
+  Heading,
+  ModalBody,
+  ModalCloseButton,
+  ModalContainer,
+  ModalHeader,
+  ModalTitle,
+  Text,
+} from 'uikit'
 import { useHelixYieldSwap } from 'hooks/useContract'
-import getThemeValue from "uikit/util/getThemeValue";
+import getThemeValue from 'uikit/util/getThemeValue'
 
-const ReceivedOffer = styled.div`
-  background-color: #7f8289;  
-  border-radius: 1em;
-  border: solid 1px #dde0e9;
-  float:left;  
-  padding 0.3em 1em;
-`
-const SentOffer = styled.div`
-background-color: #7f8289;
-border-radius: 1em;
-border: solid 1px #dde0e9;
-float:right;
-margin-right:1em;
-padding 0.3em 1em;
-`
-const OfferWrap = styled.div`
-margin-bottom: 1em;
-`
-const Content = styled.div`
-display: flex;
-border-bottom: 1px solid white;
-flex-direction: column;
-max-height: 50vh;
-overflow:auto
-`
 const DiscussOrder: React.FC<any> = (props) => {
-  const theme = useTheme(); 
-   
-  const bodyPadding = "24px"
-  const headerBackground = "transparent"
-  const minWidth = "320px"
-  const yieldSwapContract = useHelixYieldSwap();
-  const {opponentAddress, onDismiss} = props
+  const theme = useTheme()
 
-  const [yAmount, setYAmount]=useState(0.0)
-  const [durationIndex, setDurationIndex]=useState(0)
-  
+  const bodyPadding = '24px'
+  const headerBackground = 'transparent'
+  const minWidth = '320px'
+  const yieldSwapContract = useHelixYieldSwap()
+  const { opponentAddress, onDismiss } = props
+
+  const [yAmount, setYAmount] = useState(0.0)
+
   const handleYAmountChange = (input) => {
     setYAmount(input)
   }
-  const handleOptionChange = (option) => {
-    setDurationIndex(option.value)
-  }
 
-  const handleAsk =  async () => {
+  const handleAsk = async () => {
     const res = await yieldSwapContract.makeBid(0, yAmount)
     console.debug(res)
   }
-  const durationOptions=[{
-      label:"1 day",
-      value:"1"
-    },
-    {
-      label:"2 day",
-      value:"2"
-    },
-    {
-      label:"3 day",
-      value:"3"
-    }    
-  ]
 
   return (
-    <ModalContainer minWidth={minWidth} {...props} >
+    <ModalContainer minWidth={minWidth} {...props}>
       <ModalHeader background={getThemeValue(`colors.${headerBackground}`, headerBackground)(theme)}>
-        <ModalTitle>          
-          <Heading>A</Heading>         
-          
+        <ModalTitle>
+          <Heading>A</Heading>
         </ModalTitle>
-        <ModalCloseButton onDismiss={onDismiss}/>
+        <ModalCloseButton onDismiss={onDismiss} />
       </ModalHeader>
-      <ModalBody p={bodyPadding}>         
-          <div style={{marginTop:"1em"}}>
-              
-                <div style={{display:"flex", marginBottom:"1em", alignItems:"center"}}>
-                    <Text style={{marginRight:"1em"}} >Y Amount</Text>
-                    <BalanceInput 
-                            value={yAmount}
-                            onUserInput={handleYAmountChange}
-                        />
-                </div>                
-              <Button width="100%" onClick={handleAsk}>Send</Button>            
-              
+      <ModalBody p={bodyPadding}>
+        <div style={{ marginTop: '1em' }}>
+          <div style={{ display: 'flex', marginBottom: '1em', alignItems: 'center' }}>
+            <Text style={{ marginRight: '1em' }}>Y Amount</Text>
+            <BalanceInput value={yAmount} onUserInput={handleYAmountChange} />
           </div>
+          <Button width="100%" onClick={handleAsk}>
+            Send
+          </Button>
+        </div>
       </ModalBody>
     </ModalContainer>
-  );
-};
+  )
+}
 
-export default DiscussOrder;
+export default DiscussOrder
