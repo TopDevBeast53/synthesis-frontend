@@ -111,5 +111,5 @@ export const getHelixVaultAddress = () => {
 }
 
 export const getYieldSwapAddress = () => {
-  return getAddress(addresses.yieldSwap)
+  return getAddress(addresses.helixYieldSwap)
 }

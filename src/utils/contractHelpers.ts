@@ -71,7 +71,7 @@ import nftSaleAbi from 'config/abi/nftSale.json'
 import pancakeSquadAbi from 'config/abi/pancakeSquad.json'
 import erc721CollectionAbi from 'config/abi/erc721collection.json'
 import helixVaultAbi from 'config/abi/HelixVault.json'
-import yieldSwapAbi from 'config/abi/YieldSwap.json'
+import yieldSwapAbi from 'config/abi/HelixYieldSwap.json'
 
 // Types
 import {
@@ -108,7 +108,7 @@ import {
   Erc721collection,
   PointCenterIfo,
   HelixVault,
-  YieldSwap
+  HelixYieldSwap
 } from 'config/abi/types'
 
 const getContract = (abi: any, address: string, signer?: ethers.Signer | ethers.providers.Provider) => {
@@ -225,5 +225,5 @@ export const getHelixVaultContract = (signer?: ethers.Signer | ethers.providers.
   return getContract(helixVaultAbi, getHelixVaultAddress(), signer) as HelixVault
 }
 export const getHelixYieldSwapContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
-  return getContract(yieldSwapAbi, getYieldSwapAddress(), signer) as YieldSwap
+  return getContract(yieldSwapAbi, getYieldSwapAddress(), signer) as HelixYieldSwap
 }
