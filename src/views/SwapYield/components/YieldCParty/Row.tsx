@@ -23,8 +23,8 @@ const StyledCell = styled(BaseCell)`
 `
 
 const YieldCPartyRow=({data})=>{
-    const {yamount, damount, leftTime, state} = data
-    const dueDate = moment.unix(leftTime)
+    const {amount, ask, lockUntilTimestamp, state} = data
+    const dueDate = moment.unix(lockUntilTimestamp)
     const today = moment()    
     const duration = moment.duration(dueDate.diff(today))
     const yieldSwapContract = useHelixYieldSwap();
@@ -46,7 +46,7 @@ const YieldCPartyRow=({data})=>{
                     <Balance
                         mt="4px"                
                         color='primary'                        
-                        value={yamount}
+                        value={amount}
                         fontSize="14px"
                     />
                 </CellContent>
@@ -59,7 +59,7 @@ const YieldCPartyRow=({data})=>{
                     <Balance
                         mt="4px"                
                         color='primary'                        
-                        value={damount}
+                        value={ask}
                         fontSize="14px"
                     />
                 </CellContent>

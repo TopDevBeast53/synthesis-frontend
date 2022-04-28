@@ -6,6 +6,7 @@ import {
     BalanceInput, Button, Heading, ModalBody, ModalCloseButton,
     ModalContainer, ModalHeader, ModalTitle, Text
 } from "uikit";
+import { useHelixYieldSwap } from 'hooks/useContract'
 import getThemeValue from "uikit/util/getThemeValue";
 
 const ReceivedOffer = styled.div`
@@ -39,6 +40,7 @@ const DiscussOrder: React.FC<any> = (props) => {
   const bodyPadding = "24px"
   const headerBackground = "transparent"
   const minWidth = "320px"
+  const yieldSwapContract = useHelixYieldSwap();
   const {opponentAddress, onDismiss} = props
 
   const [yAmount, setYAmount]=useState(0.0)
@@ -49,6 +51,11 @@ const DiscussOrder: React.FC<any> = (props) => {
   }
   const handleOptionChange = (option) => {
     setDurationIndex(option.value)
+  }
+
+  const handleAsk =  async () => {
+    const res = await yieldSwapContract.makeBid(0, yAmount)
+    console.debug(res)
   }
   const durationOptions=[{
       label:"1 day",
@@ -83,7 +90,7 @@ const DiscussOrder: React.FC<any> = (props) => {
                             onUserInput={handleYAmountChange}
                         />
                 </div>                
-              <Button width="100%">Send</Button>            
+              <Button width="100%" onClick={handleAsk}>Send</Button>            
               
           </div>
       </ModalBody>
@@ -92,18 +99,3 @@ const DiscussOrder: React.FC<any> = (props) => {
 };
 
 export default DiscussOrder;
-
-// const DiscussOrder = () => {
-//     return (
-//         <div style={{ padding: "32px", width: "500px" }}>
-//             <Card>
-//                 <CardHeader>
-//                     <Heading size="xl">Card Header</Heading>
-//                 </CardHeader>
-//                 <CardBody>Body</CardBody>
-//                 <CardFooter>Footer</CardFooter>
-//             </Card>
-//         </div>
-//     )
-// }
-// export default DiscussOrder
