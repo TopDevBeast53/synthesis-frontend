@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { useTranslation } from 'contexts/Localization'
 import { ButtonMenu, ButtonMenuItem } from 'uikit'
 import { filter } from 'lodash'
+import { useHelixYieldSwap } from 'hooks/useContract'
 import Page from 'components/Layout/Page'
 import YieldCPartyTable from './components/YieldCParty/Table'
 import { SwapState } from './types'
@@ -25,14 +26,34 @@ const Wrapper = styled.div`
 
 const YieldCParty = ()=>{
     const { t } = useTranslation()
+    const yieldSwapContract = useHelixYieldSwap();
 
     const [menuIndex, setMenuIndex] = useState(SwapState.All)
+    const [swaps, setSwaps] = useState([])
     const [filteredSwaps, setFilteredSwaps]=useState(filter(CPartySwapData, {state: menuIndex}))
 
     const handleButtonMenuClick = (newIndex) => {
         setFilteredSwaps(filter(CPartySwapData, {state: newIndex}))
         setMenuIndex(newIndex)
     }
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const ids = await yieldSwapContract.getSwapId()
+            const swapIds = Array.from(Array(ids.toNumber()).keys())
+            
+            Promise.all(swapIds.map((i) => yieldSwapContract.swaps(i)))
+            .then(res => {
+                setSwaps(res)
+            })
+            .catch(err => {
+                console.error(err)
+            })
+        }
+
+        fetchData();
+    })
+
     return (
         <Page>
             <Wrapper>
@@ -44,13 +65,10 @@ const YieldCParty = ()=>{
                         {t('Applied Orders')}
                     </ButtonMenuItem>
                     <ButtonMenuItem >
-                        {t('Processing')}
+                        {t('Pending')}
                     </ButtonMenuItem>
                     <ButtonMenuItem >
-                        {t('Finished')}
-                    </ButtonMenuItem>
-                    <ButtonMenuItem >
-                        {t('Earned')}
+                        {t('Withdrawn')}
                     </ButtonMenuItem>
                 </ButtonMenu>
             </Wrapper>

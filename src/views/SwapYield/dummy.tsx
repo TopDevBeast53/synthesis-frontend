@@ -52,7 +52,7 @@ export const CPartySwapData = [
         yamount: 20,
         damount: 30,
         leftTime: 1649789236, // timestamp
-        state:SwapState.Processing
+        state:SwapState.Pending
     },
     {
         id:3,
@@ -66,7 +66,7 @@ export const CPartySwapData = [
         yamount: 20,
         damount: 30,
         leftTime: 1649789236, // timestamp
-        state:SwapState.Earned
+        state:SwapState.Pending
     }
 ]
 

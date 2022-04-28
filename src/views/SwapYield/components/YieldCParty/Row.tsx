@@ -1,9 +1,12 @@
 import React from 'react'
 import Balance from 'components/Balance'
 import styled from 'styled-components'
-import { Text, Button } from 'uikit'
+import { Text, Button, useModal } from 'uikit'
+import { useHelixYieldSwap } from 'hooks/useContract'
 import moment from 'moment'
 import BaseCell, { CellContent } from './BaseCell'
+import DiscussOrder from './DiscussOrder'
+import { SwapState } from '../../types'
 
 const StyledRow = styled.div`
   background-color: transparent;
@@ -24,6 +27,13 @@ const YieldCPartyRow=({data})=>{
     const dueDate = moment.unix(leftTime)
     const today = moment()    
     const duration = moment.duration(dueDate.diff(today))
+    const yieldSwapContract = useHelixYieldSwap();
+
+    const [showModal] = useModal(<DiscussOrder/>,false)
+
+    const handleWithdraw = () => {
+        yieldSwapContract.withdraw(0)
+    }
 
     moment.duration(dueDate.diff(today))
     return (
@@ -66,17 +76,17 @@ const YieldCPartyRow=({data})=>{
             </StyledCell>
             <StyledCell>
                 <CellContent>
-                    {
-                        state === 0 && (
-                            <Button variant="secondary" scale="md" mr="8px"> Send Offer </Button>
-                        )
-                    }
+                {
+                    state === SwapState.All && (
+                        <Button variant="secondary" scale="md" mr="8px" onClick={showModal}> Send Offer </Button>
+                    )
+                }
 
-                    {
-                        state === 3 && (
-                            <Button variant="secondary" scale="md" mr="8px"> Collect </Button>
-                        )
-                    }
+                {
+                    state === SwapState.Pending && (
+                        <Button variant="secondary" scale="md" mr="8px" onClick={handleWithdraw}> Collect </Button>
+                    )
+                }
                 </CellContent>
             </StyledCell>
         </StyledRow>

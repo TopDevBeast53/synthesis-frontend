@@ -1,7 +1,7 @@
 import React, { useRef } from 'react'
 import styled from 'styled-components'
 import { useTranslation } from 'contexts/Localization'
-import { Button, ChevronUpIcon } from 'uikit'
+import { Button, ChevronUpIcon, useModal } from 'uikit'
 import YieldCPartyRow from './Row'
 
 interface PoolsTableProps {  
@@ -38,6 +38,7 @@ const ScrollButtonContainer = styled.div`
 const YieldCPartyTable= ({ swaps }) => {
   const { t } = useTranslation()
   const tableWrapperEl = useRef<HTMLDivElement>(null)
+
   const scrollToTop = (): void => {
     tableWrapperEl.current.scrollIntoView({
       behavior: 'smooth',
