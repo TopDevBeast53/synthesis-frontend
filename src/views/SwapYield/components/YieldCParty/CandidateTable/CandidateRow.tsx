@@ -1,8 +1,8 @@
 import Balance from 'components/Balance';
 import { useWeb3React } from '@web3-react/core'
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
-import { AutoRenewIcon, Button, Skeleton, Text, useModal } from 'uikit';
+import { Button, Skeleton, Text, useModal } from 'uikit';
 import { YieldCPartyContext } from 'views/SwapYield/context';
 import BaseCell, { CellContent } from '../BaseCell';
 import DiscussOrder from '../DiscussOrder';
@@ -28,7 +28,6 @@ const getEllipsis = (account) => {
 const CandidateRow=({bid, exToken, approved})=>{
     const { account } = useWeb3React()  
     const {tableRefresh, setTableRefresh} = useContext(YieldCPartyContext)
-    const [pendingTx, setPendingTx] = useState(false)
     
     const onSendAsk = () =>{
         setTableRefresh(tableRefresh + 1)
@@ -53,7 +52,7 @@ const CandidateRow=({bid, exToken, approved})=>{
         </StyledRow>)
     }
     return (
-        <StyledRow onClick={showModal}>
+        <StyledRow>
             <StyledCell>
                 <CellContent>
                     <Text>
@@ -69,7 +68,7 @@ const CandidateRow=({bid, exToken, approved})=>{
                     <Balance
                         mt="4px"                
                         color='primary'                        
-                        value={bid.amount}
+                        value={bid.amount.toNumber()}
                         fontSize="14px"
                     />
                 </CellContent>
@@ -79,8 +78,6 @@ const CandidateRow=({bid, exToken, approved})=>{
                     {
                         account === bid.bidder && (
                             <Button 
-                                isLoading={pendingTx}    
-                                endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}  
                                 width="100px" 
                                 style={{zIndex:20}} 
                                 onClick={showModal}> Update </Button>
