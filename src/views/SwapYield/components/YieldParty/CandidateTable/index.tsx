@@ -1,7 +1,4 @@
-import { useTranslation } from 'contexts/Localization'
-import { useHelixYieldSwap } from 'hooks/useContract'
-import useTheme from 'hooks/useTheme'
-import React, { useRef, useState } from 'react'
+import React, { useRef } from 'react'
 import styled from 'styled-components'
 import CandidateRow from './CandidateRow'
 
@@ -33,22 +30,9 @@ const ScrollButtonContainer = styled.div`
 `
 
 
-const CandidateTable = (props) => {
-    const { theme } = useTheme()
-    const { t } = useTranslation()
-    const YieldSwapContract = useHelixYieldSwap()
-    const {onDismiss, swap} = props
-    const [selectedRow, setSelectedRow] = useState()
+const CandidateTable = (props) => {    
+    const {swap} = props    
     const tableWrapperEl = useRef<HTMLDivElement>(null)
-    const scrollToTop = (): void => {
-      tableWrapperEl.current.scrollIntoView({
-        behavior: 'smooth',
-      })
-    }   
-    
-    const handleRowClick = (bidData) =>{
-        setSelectedRow(bidData)
-    }
     if(swap.bidIds.length === 0) return null
 
     return (
