@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import Balance from 'components/Balance'
 import styled from 'styled-components'
 import { Text, Button, useModal } from 'uikit'
@@ -23,13 +23,13 @@ const StyledCell = styled(BaseCell)`
 `
 
 const YieldCPartyRow=({data, state})=>{
-    const {amount, ask, lockUntilTimestamp} = data
+    const {amount, ask, lockUntilTimestamp, id, exToken} = data
     const dueDate = moment.unix(lockUntilTimestamp)
     const today = moment()    
     const duration = moment.duration(dueDate.diff(today))
     const yieldSwapContract = useHelixYieldSwap();
 
-    const [showModal] = useModal(<DiscussOrder/>,false)
+    const [showModal] = useModal(<DiscussOrder swapId={id} exToken={exToken}/>,false)
 
     const handleWithdraw = () => {
         yieldSwapContract.withdraw(0)

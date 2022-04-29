@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useWeb3React } from '@web3-react/core'
 import styled from 'styled-components'
 import { useTranslation } from 'contexts/Localization'
@@ -34,10 +34,9 @@ const YieldCParty = ()=>{
     const [menuIndex, setMenuIndex] = useState(SwapState.All)
     const [swaps, setSwaps] = useState([])
     const [hasBidOnSwap, setHasBidOnSwap] = useState([])
-    const [filteredSwaps, setFilteredSwaps]=useState(filter(CPartySwapData, {isOpen: true}))
+    const [filteredSwaps, setFilteredSwaps]=useState([])
     const [loading, setLoading] = useState(false)
-
-    const handleButtonMenuClick = (newIndex) => {
+    const filterSwap = (newIndex) => {
         if(newIndex === SwapState.Pending) {
             setFilteredSwaps(filter(swaps, {isOpen: false, isWithdrawn: false}))
         }
@@ -45,26 +44,41 @@ const YieldCParty = ()=>{
             setFilteredSwaps(filter(swaps, {isWithdrawn: true}))
         }
 
-        if(newIndex === SwapState.All || newIndex === SwapState.Applied) {
-            setFilteredSwaps(filter(swaps, {isOpen: true}))
+        if(newIndex === SwapState.All) {
+            
+            const filtered = swaps.filter((s, i) => s.isOpen && !hasBidOnSwap[i])
+            setFilteredSwaps(filtered)
+        }
+
+        if(newIndex === SwapState.Applied) {
+            const filtered = swaps.filter((s, i) => s.isOpen && hasBidOnSwap[i])
+            setFilteredSwaps(filtered)
         }
         setMenuIndex(newIndex)
+    }
+
+    const handleButtonMenuClick = (newIndex) => {
+        filterSwap(newIndex)
     }
 
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true)
-            const ids = await yieldSwapContract.getSwapId()
-            const swapIds = Array.from(Array(ids.toNumber()).keys())
-
+            const fetchedSwaps = await yieldSwapContract.getAllSwaps()
+            const swapIds = Array.from(Array(fetchedSwaps.length).keys())
             const fetchedSwapIds = await Promise.all(swapIds.map((i) => yieldSwapContract.hasBidOnSwap(account, i)))
-            const fetchedSwaps = await Promise.all(swapIds.map((i) => yieldSwapContract.swaps(i)))
             setHasBidOnSwap(fetchedSwapIds)
-            setSwaps(fetchedSwaps)
+            const fetchedSwapsWithIds = fetchedSwaps.map((s, i) => {
+                return {...s, id: i}
+            })
+            console.debug('????', fetchedSwaps)
+            setSwaps(fetchedSwapsWithIds)
+            filterSwap(menuIndex)
             setLoading(false)
         }
         fetchData();
-    }, [account, yieldSwapContract])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [account])
 
     return (
         <>
@@ -89,6 +103,7 @@ const YieldCParty = ()=>{
                   ) : (
                     <Page>
                       <Wrapper>
+                          {/* TODO: Should be read from constants */}
                           <ButtonMenu activeIndex={menuIndex} scale="sm" variant="subtle" onItemClick={handleButtonMenuClick}>
                               <ButtonMenuItem>
                                   {t('Orders')}

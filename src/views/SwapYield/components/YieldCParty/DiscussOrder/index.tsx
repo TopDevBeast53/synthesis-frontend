@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import BigNumber from 'bignumber.js'
 import { useTheme } from 'styled-components'
 import {
   BalanceInput,
@@ -11,17 +12,27 @@ import {
   ModalTitle,
   Text,
 } from 'uikit'
-import { useHelixYieldSwap } from 'hooks/useContract'
+import { useWeb3React } from '@web3-react/core'
+import { useTranslation } from 'contexts/Localization'
+import useToast from 'hooks/useToast'
+import { useHelixYieldSwap, useERC20 } from 'hooks/useContract'
 import getThemeValue from 'uikit/util/getThemeValue'
+import { getDecimalAmount } from 'utils/formatBalance'
 
 const DiscussOrder: React.FC<any> = (props) => {
   const theme = useTheme()
+  const { t } = useTranslation()
+  const { account } = useWeb3React();
 
+  const { toastSuccess, toastError } = useToast()  
   const bodyPadding = '24px'
   const headerBackground = 'transparent'
   const minWidth = '320px'
   const yieldSwapContract = useHelixYieldSwap()
-  const { opponentAddress, onDismiss } = props
+  const { swapId, exToken, onDismiss } = props
+  const exContract = useERC20(exToken)
+  const [pendingTx, setPendingTx] = useState(false)
+  const [isAllowed, setAllowed] = useState(1)
 
   const [yAmount, setYAmount] = useState(0.0)
 
@@ -29,9 +40,54 @@ const DiscussOrder: React.FC<any> = (props) => {
     setYAmount(input)
   }
 
+  console.debug(account)
+
+  async function doValidation(){      
+      
+    try{
+      const allowedValue =  await exContract.allowance(account, yieldSwapContract.address)
+      if(allowedValue.lte(0))  {
+        toastError('Error', "You didn't allow the LPToken to use")
+        setAllowed(0)
+        setPendingTx(false);        
+        return false          
+      }
+
+    }catch(err){
+      toastError('Error', err.toString())
+      setAllowed(0)
+      setPendingTx(false);        
+      return false
+    }
+    return true
+  }
+
   const handleAsk = async () => {
-    const res = await yieldSwapContract.makeBid(0, yAmount)
-    console.debug(res)
+    console.debug('here', swapId)
+    if (isAllowed === 0){
+      const decimals = await exContract.decimals()
+      const decimalUAmount = getDecimalAmount(new BigNumber(yAmount), decimals)
+      exContract.approve(yieldSwapContract.address, decimalUAmount.toString()).then(res=>{
+        setAllowed(yAmount)
+        setPendingTx(false)
+      }).catch(err=>{
+        toastError('Error', err.toString())
+        setPendingTx(false)
+      })
+      return 
+    }
+    if(!await doValidation()) return 
+    try {
+      const res = await yieldSwapContract.makeBid(swapId, yAmount)
+      setPendingTx(false);      
+      toastSuccess(
+          `${t('Congratulations')}!`,
+          t('You Make Bid !!! '),
+      )
+    } catch(err) {
+      setPendingTx(false); 
+      toastError('Error', err.toString())
+    }
   }
 
   return (
@@ -49,7 +105,7 @@ const DiscussOrder: React.FC<any> = (props) => {
             <BalanceInput value={yAmount} onUserInput={handleYAmountChange} />
           </div>
           <Button width="100%" onClick={handleAsk}>
-            Send
+          {pendingTx ? isAllowed===0 ? "Approving" :t('Confirming') : isAllowed===0 ? "Approve" : t('Confirm')}
           </Button>
         </div>
       </ModalBody>
