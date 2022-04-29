@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import Balance from 'components/Balance'
 import styled from 'styled-components'
-import { Text, Button, useModal, ChevronDownIcon, useDelayedUnmount } from 'uikit'
+import { AutoRenewIcon, Text, Button, useModal, ChevronDownIcon, useDelayedUnmount } from 'uikit'
 import useToast from 'hooks/useToast'
 import { useTranslation } from 'contexts/Localization'
 import { useHelixYieldSwap } from 'hooks/useContract'
@@ -130,23 +130,25 @@ const YieldCPartyRow=({data, state})=>{
                     }
                     {
                         state === SwapState.Applied && (
-                            <Button variant="secondary" scale="md" mr="8px" onClick={handleAcceptAsk}> Accept Ask </Button>
+                            <Button 
+                                variant="secondary" scale="md" mr="8px" 
+                                isLoading={pendingTx}    
+                                endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
+                                onClick={handleAcceptAsk}> Accept Ask </Button>
                         )
                     }
 
                     {
                         state === SwapState.Pending && (
-                            <Button variant="secondary" scale="md" mr="8px" onClick={handleWithdraw}> Collect </Button>
+                            <Button 
+                                variant="secondary" scale="md" mr="8px" 
+                                isLoading={pendingTx}    
+                                endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
+                                onClick={handleWithdraw}> Collect </Button>
                         )
                     }
                     </CellContent>
                 </StyledCell>
-                {/* <StyledCell style={{zIndex:10, flex:3}}>
-                    <Button 
-                        isLoading={pendingTx}    
-                        endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
-                        color="primary"  scale="sm" width="100px"> Close </Button>
-                </StyledCell> */}
                 <StyledCell>
                     <ArrowIcon color="primary" toggled={expanded} onClick={handleExpand}/>
                 </StyledCell>
