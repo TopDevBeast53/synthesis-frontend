@@ -68,6 +68,7 @@ const DiscussOrder: React.FC<any> = (props) => {
       exContract.approve(yieldSwapContract.address, decimalUAmount.toString()).then(res=>{
         setAllowed(yAmount)
         setPendingTx(false)
+        console.debug('approved!', res)
       }).catch(err=>{
         toastError('Error', err.toString())
         setPendingTx(false)
