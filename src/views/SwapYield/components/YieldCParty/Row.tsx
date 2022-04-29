@@ -45,7 +45,7 @@ const YieldCPartyRow=({data, state})=>{
 
     const [showModal] = useModal(<DiscussOrder swapId={id} exToken={exToken} approved={approved}/>,false)
 
-    const handleOnRowClick = () => {
+    const handleExpand = () => {
         setExpanded(!expanded)
     }
 
@@ -84,7 +84,7 @@ const YieldCPartyRow=({data, state})=>{
     moment.duration(dueDate.diff(today))
     return (
         <>
-            <StyledRow onClick={handleOnRowClick}>
+            <StyledRow>
                 <StyledCell>
                     <CellContent>
                         <Text>
@@ -148,7 +148,7 @@ const YieldCPartyRow=({data, state})=>{
                         color="primary"  scale="sm" width="100px"> Close </Button>
                 </StyledCell> */}
                 <StyledCell>
-                    <ArrowIcon color="primary" toggled={expanded} />
+                    <ArrowIcon color="primary" toggled={expanded} onClick={handleExpand}/>
                 </StyledCell>
             </StyledRow>
 
