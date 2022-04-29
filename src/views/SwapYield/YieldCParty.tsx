@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useWeb3React } from '@web3-react/core'
 import styled from 'styled-components'
 import { useTranslation } from 'contexts/Localization'
@@ -8,9 +8,8 @@ import { useHelixYieldSwap } from 'hooks/useContract'
 import Page from 'components/Layout/Page'
 import YieldCPartyTable from './components/YieldCParty/Table'
 import { SwapState } from './types'
-import { CPartySwapData } from './dummy'
 import CircleLoader from '../../components/Loader/CircleLoader'
-import { yieldSwapAddress } from './constants'
+import { YieldCPartyContext } from './context' 
 
 const Wrapper = styled.div`
   display: flex;    
@@ -38,6 +37,8 @@ const YieldCParty = ()=>{
     const [hasBidOnSwap, setHasBidOnSwap] = useState([])
     const [filteredSwaps, setFilteredSwaps]=useState([])
     const [loading, setLoading] = useState(false)
+    const [refresh, setTableRefresh] = useState(0)
+
     const filterSwap = (newIndex) => {
         if(newIndex === SwapState.Pending) {
             const filtered = swaps.filter((s, i) => !s.isOpen && !s.isWithdrawn && hasBidOnSwap[i])
@@ -68,6 +69,8 @@ const YieldCParty = ()=>{
     }
 
     useEffect(() => {
+        if(refresh < 0) return
+
         const fetchData = async () => {
             setLoading(true)
             const bidsLength = await yieldSwapContract.getBidId();
@@ -89,7 +92,7 @@ const YieldCParty = ()=>{
         }
         fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [account])
+    }, [account, refresh])
 
     return (
         <>
@@ -130,7 +133,9 @@ const YieldCParty = ()=>{
                               </ButtonMenuItem>
                           </ButtonMenu>
                       </Wrapper>
-                      <YieldCPartyTable swaps={filteredSwaps} state={menuIndex}/>
+                      <YieldCPartyContext.Provider value={{tableRefresh:refresh,  setTableRefresh}}>
+                        <YieldCPartyTable swaps={filteredSwaps} state={menuIndex}/>
+                        </YieldCPartyContext.Provider>
                      </Page>
                   )
             }

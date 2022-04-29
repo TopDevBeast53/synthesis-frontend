@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import Balance from 'components/Balance'
 import styled from 'styled-components'
-import { Text, Button, useModal } from 'uikit'
+import { Text, Button, useModal, ChevronDownIcon, AutoRenewIcon, useDelayedUnmount } from 'uikit'
 import useToast from 'hooks/useToast'
 import { useTranslation } from 'contexts/Localization'
 import { useHelixYieldSwap } from 'hooks/useContract'
@@ -9,6 +9,7 @@ import moment from 'moment'
 import BaseCell, { CellContent } from './BaseCell'
 import DiscussOrder from './DiscussOrder'
 import { SwapState } from '../../types'
+import CandidateTable from './CandidateTable'
 
 const StyledRow = styled.div`
   background-color: transparent;
@@ -24,6 +25,11 @@ const StyledCell = styled(BaseCell)`
   }
 `
 
+const ArrowIcon = styled(ChevronDownIcon)<{ toggled: boolean }>`
+  transform: ${({ toggled }) => (toggled ? 'rotate(180deg)' : 'rotate(0)')};
+  height: 24px;
+`
+
 const YieldCPartyRow=({data, state})=>{
     const { t } = useTranslation()
     const {amount, ask, lockUntilTimestamp, id, exToken, approved} = data
@@ -31,10 +37,17 @@ const YieldCPartyRow=({data, state})=>{
     const today = moment()    
     const duration = moment.duration(dueDate.diff(today))
     const yieldSwapContract = useHelixYieldSwap();
+    
     const { toastSuccess, toastError } = useToast()
     const [pendingTx, setPendingTx] = useState(false)
+    const [expanded, setExpanded] = useState(false)
+    const shouldRenderDetail = useDelayedUnmount(expanded, 300)    
 
     const [showModal] = useModal(<DiscussOrder swapId={id} exToken={exToken} approved={approved}/>,false)
+
+    const handleOnRowClick = () => {
+        setExpanded(!expanded)
+    }
 
     const handleWithdraw = async () => {
         setPendingTx(true)
@@ -47,71 +60,88 @@ const YieldCPartyRow=({data, state})=>{
             )
             
         } catch(err) {
-            toastError('Error', err.data.message.toString())
+            toastError('Error', err.toString())
             setPendingTx(false);        
         }
     }
 
     moment.duration(dueDate.diff(today))
     return (
-        <StyledRow>
-            <StyledCell>
-                <CellContent>
-                    <Text>
-                        YAmount
-                    </Text>
-                    <Balance
-                        mt="4px"                
-                        color='primary'                        
-                        value={amount.toNumber()}
-                        fontSize="14px"
-                    />
-                </CellContent>
-            </StyledCell>
-            <StyledCell>
-                <CellContent>
-                    <Text>
-                        DAmount
-                    </Text>
-                    <Balance
-                        mt="4px"                
-                        color='primary'                        
-                        value={ask.toNumber()}
-                        fontSize="14px"
-                    />
-                </CellContent>
-            </StyledCell>
-            <StyledCell>
-                <CellContent>
-                    <Text>
-                        Left Time
-                    </Text>
-                    <Text mt="4px" color='primary'>
-                        {duration.humanize()}
-                    </Text>
-                </CellContent>
-            </StyledCell>
-            <StyledCell>
-                <CellContent>
-                {
-                    state === SwapState.All && (
-                        <Button variant="secondary" scale="md" mr="8px" onClick={showModal}> Send Offer </Button>
-                    )
-                }
-                {
-                    state === SwapState.Applied && (
-                        <Button variant="secondary" scale="md" mr="8px" onClick={showModal}> Make Bid </Button>
-                    )
-                }
+        <>
+            <StyledRow onClick={handleOnRowClick}>
+                <StyledCell>
+                    <CellContent>
+                        <Text>
+                            YAmount
+                        </Text>
+                        <Balance
+                            mt="4px"                
+                            color='primary'                        
+                            value={amount.toNumber()}
+                            fontSize="14px"
+                        />
+                    </CellContent>
+                </StyledCell>
+                <StyledCell>
+                    <CellContent>
+                        <Text>
+                            DAmount
+                        </Text>
+                        <Balance
+                            mt="4px"                
+                            color='primary'                        
+                            value={ask.toNumber()}
+                            fontSize="14px"
+                        />
+                    </CellContent>
+                </StyledCell>
+                <StyledCell>
+                    <CellContent>
+                        <Text>
+                            Left Time
+                        </Text>
+                        <Text mt="4px" color='primary'>
+                            {duration.humanize()}
+                        </Text>
+                    </CellContent>
+                </StyledCell>
+                <StyledCell>
+                    <CellContent>
+                    {
+                        state === SwapState.All && (
+                            <Button variant="secondary" scale="md" mr="8px" onClick={showModal}> Send Offer </Button>
+                        )
+                    }
+                    {
+                        state === SwapState.Applied && (
+                            <Button variant="secondary" scale="md" mr="8px" onClick={showModal}> Make Bid </Button>
+                        )
+                    }
 
-                {
-                    state === SwapState.Pending && (
-                        <Button variant="secondary" scale="md" mr="8px" onClick={handleWithdraw}> Collect </Button>
-                    )
-                }
-                </CellContent>
-            </StyledCell>
-        </StyledRow>
+                    {
+                        state === SwapState.Pending && (
+                            <Button variant="secondary" scale="md" mr="8px" onClick={handleWithdraw}> Collect </Button>
+                        )
+                    }
+                    </CellContent>
+                </StyledCell>
+                <StyledCell style={{zIndex:10, flex:3}}>
+                    <Button 
+                        isLoading={pendingTx}    
+                        endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
+                        color="primary"  scale="sm" width="100px"> Close </Button>
+                </StyledCell>
+                <StyledCell>
+                    <ArrowIcon color="primary" toggled={expanded} />
+                </StyledCell>
+            </StyledRow>
+
+            {shouldRenderDetail && (
+                <div style={{padding:"10px 10px", minHeight:"5em"}}>
+                    <CandidateTable swap={[]}/>
+                </div>
+            )}   
+        </>
     )
 }
 
