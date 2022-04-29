@@ -46,21 +46,18 @@ const YieldCPartyRow=({data, state})=>{
     const onSendAsk = () =>{
         setTableRefresh(tableRefresh + 1)
     }
-    
+
     const [showModal] = useModal(<DiscussOrder swapId={id} exToken={exToken} approved={approved} onSend={onSendAsk}/>,false)
 
     const handleExpand = () => {
         setExpanded(!expanded)
     }
 
-    
-
     const handleAcceptAsk = async () => {
         setPendingTx(true)
         try {
             await yieldSwapContract.acceptAsk(id)
             setPendingTx(false);     
-            onSendAsk() 
             toastSuccess(
                 `${t('Congratulations')}!`,
                 t('You Added Item !!! '),
@@ -77,7 +74,6 @@ const YieldCPartyRow=({data, state})=>{
         try {
             await yieldSwapContract.withdraw(id)
             setPendingTx(false);      
-            onSendAsk() 
             toastSuccess(
                 `${t('Congratulations')}!`,
                 t('You Added Item !!! '),
