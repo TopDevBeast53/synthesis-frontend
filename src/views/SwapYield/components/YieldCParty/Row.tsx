@@ -2,6 +2,8 @@ import React, {useState} from 'react'
 import Balance from 'components/Balance'
 import styled from 'styled-components'
 import { Text, Button, useModal } from 'uikit'
+import useToast from 'hooks/useToast'
+import { useTranslation } from 'contexts/Localization'
 import { useHelixYieldSwap } from 'hooks/useContract'
 import moment from 'moment'
 import BaseCell, { CellContent } from './BaseCell'
@@ -23,16 +25,31 @@ const StyledCell = styled(BaseCell)`
 `
 
 const YieldCPartyRow=({data, state})=>{
+    const { t } = useTranslation()
     const {amount, ask, lockUntilTimestamp, id, exToken} = data
     const dueDate = moment.unix(lockUntilTimestamp)
     const today = moment()    
     const duration = moment.duration(dueDate.diff(today))
     const yieldSwapContract = useHelixYieldSwap();
+    const { toastSuccess, toastError } = useToast()
+    const [pendingTx, setPendingTx] = useState(false)
 
     const [showModal] = useModal(<DiscussOrder swapId={id} exToken={exToken}/>,false)
 
-    const handleWithdraw = () => {
-        yieldSwapContract.withdraw(0)
+    const handleWithdraw = async () => {
+        setPendingTx(true)
+        try {
+            const res = await yieldSwapContract.withdraw(id)
+            setPendingTx(false);      
+            toastSuccess(
+                `${t('Congratulations')}!`,
+                t('You Added Item !!! '),
+            )
+            
+        } catch(err) {
+            toastError('Error', err.data.message.toString())
+            setPendingTx(false);        
+        }
     }
 
     moment.duration(dueDate.diff(today))
