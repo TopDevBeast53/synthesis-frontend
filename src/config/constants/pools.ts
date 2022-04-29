@@ -33,7 +33,7 @@ const pools: SerializedPoolConfig[] = [
     stakingToken: serializedTokens.helix,
     earningToken: serializedTokens.helix,
     contractAddress: {
-      97: '0xb6BCd3139C4A3d75c34960854E102e801DB4e932',
+      97: '0xa380bD46C4Ee53f606Ca7F6665875c11C7fDF18E',
       56: '',
     },
     poolCategory: PoolCategory.CORE,

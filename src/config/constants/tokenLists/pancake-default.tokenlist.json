@@ -13,10 +13,10 @@
     {
       "name": "Helix",
       "symbol": "HELIX",
-      "address": "0x373d65f5437B98DC3050Fa73fd47cC745a395891",
+      "address": "0xC232Ce0b83b3B320CdA3ec78c57A0D101A4Ac5cD",
       "chainId": 97,
       "decimals": 18,
-      "logoURI": "local://images/tokens/0x373d65f5437B98DC3050Fa73fd47cC745a395891.png"
+      "logoURI": "local://images/tokens/0xC232Ce0b83b3B320CdA3ec78c57A0D101A4Ac5cD.png"
     },
     {
       "name": "Wrapped BNB",

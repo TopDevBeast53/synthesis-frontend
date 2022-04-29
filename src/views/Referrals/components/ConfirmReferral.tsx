@@ -8,11 +8,12 @@ import { getProviderOrSigner } from 'utils'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { Contract } from '@ethersproject/contracts'
 import ReferralRegisterABI from 'config/abi/HelixReferral.json'
-import { HelixReferralRegisterAddress } from '../constants'
+import { getReferralRegisterAddress } from 'utils/addressHelpers'
 import QuestionHelper from '../../../components/QuestionHelper'
 import useToast from '../../../hooks/useToast'
 import CircleLoader from '../../../components/Loader/CircleLoader'
 
+const HelixReferralRegisterAddress = getReferralRegisterAddress()
 
 export const useRegisterReferral = (referrerAddress: string) => {
   const { library, account } = useActiveWeb3React()

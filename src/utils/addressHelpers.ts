@@ -109,7 +109,9 @@ export const getHelixNftBridgeAddress = () => {
 export const getHelixVaultAddress = () => {
   return getAddress(addresses.helixVault)
 }
-
 export const getYieldSwapAddress = () => {
   return getAddress(addresses.yieldSwap)
+}
+export const getReferralRegisterAddress = () => {
+  return getAddress(addresses.referralRegister)
 }

@@ -6,7 +6,7 @@ const tokens = {
     symbol: "Helix",
     address: {
       56: "",
-      97: "0x373d65f5437B98DC3050Fa73fd47cC745a395891",
+      97: "0xC232Ce0b83b3B320CdA3ec78c57A0D101A4Ac5cD",
     },
     decimals: 18,
     projectLink: "https://helix.exchange/",

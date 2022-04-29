@@ -22,7 +22,7 @@ const farms: SerializedFarmConfig[] = [
       pid: 1,
       lpSymbol: 'HELIX-BNB',
       lpAddresses: {
-        97: '0xf2E8F8697539394089CBF666425924a26B8A88da',
+        97: '0x33eA8E14b4B24E99016113BE3Ff092e6628B520e',
         56: '',
       },
       token: serializedTokens.helix,
@@ -32,7 +32,7 @@ const farms: SerializedFarmConfig[] = [
       pid: 2,
       lpSymbol: 'HELIX-USDT',
       lpAddresses: {
-        97: '0x1cc66Fc2196b619625e72970555F73e7ddE31eaC',
+        97: '0xD02D1e50690db3B0256F4bB0E02f40eAAFA6429b',
         56: '',
       },
       token: serializedTokens.helix,
@@ -42,7 +42,7 @@ const farms: SerializedFarmConfig[] = [
       pid: 3,
       lpSymbol: 'BNB-BUSD',
       lpAddresses: {
-        97: '0xad9cFF1Cf4440B5e47812AFA76292bA69b2f5f16',
+        97: '0x0137F587119bE0D0F1efDbf87dBe409C670Ad9AD',
         56: '',
       },
       token: serializedTokens.wbnb,
@@ -52,7 +52,7 @@ const farms: SerializedFarmConfig[] = [
       pid: 4,
       lpSymbol: 'HELIX-BUSD',
       lpAddresses: {
-        97: '0x204f1FbFe8cA19BEe4dbf11f70c618E974bC0CF0',
+        97: '0xC5Ed153B78E4f4237e113e13f4F86AeE4945679f',
         56: '',
       },
       token: serializedTokens.helix,
