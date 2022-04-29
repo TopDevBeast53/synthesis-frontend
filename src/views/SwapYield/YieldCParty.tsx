@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { useWeb3React } from '@web3-react/core'
 import styled from 'styled-components'
 import { useTranslation } from 'contexts/Localization'
@@ -35,37 +35,21 @@ const YieldCParty = ()=>{
     const [swaps, setSwaps] = useState([])
     const [bids, setBids] = useState([])
     const [hasBidOnSwap, setHasBidOnSwap] = useState([])
-    const [filteredSwaps, setFilteredSwaps]=useState([])
     const [loading, setLoading] = useState(false)
     const [refresh, setTableRefresh] = useState(0)
 
-    const filterSwap = (newIndex) => {
-        if(newIndex === SwapState.Pending) {
-            const filtered = swaps.filter((s, i) => !s.isOpen && !s.isWithdrawn && hasBidOnSwap[i])
-            setFilteredSwaps(filtered)
-        }
-        if(newIndex === SwapState.Finished) {
-            setFilteredSwaps(filter(swaps, {isWithdrawn: true}))
-        }
+    const filteredSwaps = useMemo(()=>{        
 
-        if(newIndex === SwapState.All) {
-            const filtered = swaps.filter((s, i) => s.isOpen && !hasBidOnSwap[i])
-            setFilteredSwaps(filtered)
-        }
-
-        if(newIndex === SwapState.Applied) {
-            const filtered = swaps
-                            .filter((s, i) => s.isOpen && hasBidOnSwap[i])
-                            .map((s) => {
-                                return {...s, approved: true}
-                            })
-            setFilteredSwaps(filtered)
-        }
-        setMenuIndex(newIndex)
-    }
+        if(menuIndex === SwapState.Pending) return swaps.filter((s, i) => !s.isOpen && !s.isWithdrawn && hasBidOnSwap[i])                    
+        if(menuIndex === SwapState.Finished) return filter(swaps, {isWithdrawn: true})
+        if(menuIndex === SwapState.All) return swaps.filter((s, i) => s.isOpen && !hasBidOnSwap[i])         
+        if(menuIndex === SwapState.Applied) return swaps.filter((s, i) => s.isOpen && hasBidOnSwap[i])            
+        return []
+        
+    }, [menuIndex, hasBidOnSwap, swaps])
 
     const handleButtonMenuClick = (newIndex) => {
-        filterSwap(newIndex)
+        setMenuIndex(newIndex)
     }
 
     useEffect(() => {
@@ -89,9 +73,7 @@ const YieldCParty = ()=>{
             const fetchedSwapsWithIds = fetchedSwaps.map((s, i) => {
                 return {...s, id: i}
             })
-            console.debug('???', filteredBids, fetchedSwaps)
             setSwaps(fetchedSwapsWithIds)
-            filterSwap(menuIndex)
             setLoading(false)
         }
         fetchData();
