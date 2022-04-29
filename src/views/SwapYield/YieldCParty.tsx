@@ -38,14 +38,14 @@ const YieldCParty = ()=>{
     const [loading, setLoading] = useState(false)
     const filterSwap = (newIndex) => {
         if(newIndex === SwapState.Pending) {
-            setFilteredSwaps(filter(swaps, {isOpen: false, isWithdrawn: false}))
+            const filtered = swaps.filter((s, i) => !s.isOpen && !s.isWithdrawn && hasBidOnSwap[i])
+            setFilteredSwaps(filtered)
         }
         if(newIndex === SwapState.Finished) {
             setFilteredSwaps(filter(swaps, {isWithdrawn: true}))
         }
 
         if(newIndex === SwapState.All) {
-            
             const filtered = swaps.filter((s, i) => s.isOpen && !hasBidOnSwap[i])
             setFilteredSwaps(filtered)
         }
