@@ -29,7 +29,7 @@ const DiscussOrder: React.FC<any> = (props) => {
   const headerBackground = 'transparent'
   const minWidth = '320px'
   const yieldSwapContract = useHelixYieldSwap()
-  const { swapId, exToken, approved, onDismiss } = props
+  const { swapId, exToken, approved, onDismiss, bid } = props
   const exContract = useERC20(exToken)
   const [pendingTx, setPendingTx] = useState(false)
   const [isAllowed, setAllowed] = useState(1)
@@ -39,8 +39,6 @@ const DiscussOrder: React.FC<any> = (props) => {
   const handleYAmountChange = (input) => {
     setYAmount(input)
   }
-
-  console.debug(account)
 
   async function doValidation(){      
       
@@ -78,7 +76,11 @@ const DiscussOrder: React.FC<any> = (props) => {
     }
     if(!await doValidation()) return 
     try {
-      const res = await yieldSwapContract.makeBid(swapId, yAmount)
+      if(bid){
+        await yieldSwapContract.setBid(bid.id, yAmount)
+      } else {
+        await yieldSwapContract.makeBid(swapId, yAmount)
+      }
       setPendingTx(false);      
       toastSuccess(
           `${t('Congratulations')}!`,

@@ -1,4 +1,5 @@
 import Balance from 'components/Balance';
+import { useWeb3React } from '@web3-react/core'
 import { useHelixYieldSwap } from 'hooks/useContract';
 import useToast from 'hooks/useToast';
 import React, { useContext, useEffect, useState } from 'react';
@@ -26,28 +27,16 @@ const StyledCell = styled(BaseCell)`
 const getEllipsis = (account) => {
     return account ? `${account.substring(0, 5)}...${account.substring(account.length - 5)}` : null;
 }
-const CandidateRow=({bid})=>{
-    const YieldSwapContract = useHelixYieldSwap()
-    const { toastSuccess, toastError } = useToast()
-    const [bidData, setBidData] = useState<any>()
+const CandidateRow=({bid, exToken, approved})=>{
+    const { account } = useWeb3React()  
     const {tableRefresh, setTableRefresh} = useContext(YieldCPartyContext)
     const [pendingTx, setPendingTx] = useState(false)
-    const handleAcceptClick = (e) => {        
-        // e.stopPropagation();
-        // setPendingTx(true)
-        // YieldSwapContract.acceptBid(bidId).then(async (tx)=>{
-        //     await tx.wait()
-        //     toastSuccess("Success", "You Accepted the Bid")
-        //     setPendingTx(false)
-        // }).catch(err=>{
-        //     toastError("Error", err.toString())
-        //     setPendingTx(false)
-        // })        
-    }
+    
     const onSendAsk = () =>{
         setTableRefresh(tableRefresh + 1)
     }
-    const [showModal] = useModal(<DiscussOrder bidData={bidData} onSend={onSendAsk}/>,false)
+
+    const [showModal] = useModal(<DiscussOrder bid={bid}  onSend={onSendAsk} exToken={exToken} approved={approved}/>,false)
     if (!bid){
         return (<StyledRow >
             <StyledCell>
@@ -87,16 +76,20 @@ const CandidateRow=({bid})=>{
                     />
                 </CellContent>
             </StyledCell>
-            {/* <StyledCell>
+            <StyledCell>
                 <CellContent>
-                    <Button 
-                        isLoading={pendingTx}    
-                        endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}  
-                        width="100px" 
-                        style={{zIndex:20}} 
-                        onClick={handleAcceptClick}> Accept </Button>
+                    {
+                        account === bid.bidder && (
+                            <Button 
+                                isLoading={pendingTx}    
+                                endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}  
+                                width="100px" 
+                                style={{zIndex:20}} 
+                                onClick={showModal}> Update </Button>
+                        )
+                    }
                 </CellContent>       
-            </StyledCell> */}
+            </StyledCell>
         </StyledRow>
     )
 }

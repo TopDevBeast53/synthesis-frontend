@@ -49,6 +49,22 @@ const YieldCPartyRow=({data, state})=>{
         setExpanded(!expanded)
     }
 
+    const handleAcceptAsk = async () => {
+        setPendingTx(true)
+        try {
+            const res = await yieldSwapContract.acceptAsk(id)
+            setPendingTx(false);      
+            toastSuccess(
+                `${t('Congratulations')}!`,
+                t('You Added Item !!! '),
+            )
+            
+        } catch(err) {
+            toastError('Error', err.toString())
+            setPendingTx(false);        
+        }
+    }
+
     const handleWithdraw = async () => {
         setPendingTx(true)
         try {
@@ -114,7 +130,7 @@ const YieldCPartyRow=({data, state})=>{
                     }
                     {
                         state === SwapState.Applied && (
-                            <Button variant="secondary" scale="md" mr="8px" onClick={showModal}> Accept Ask </Button>
+                            <Button variant="secondary" scale="md" mr="8px" onClick={handleAcceptAsk}> Accept Ask </Button>
                         )
                     }
 
@@ -138,7 +154,7 @@ const YieldCPartyRow=({data, state})=>{
 
             {shouldRenderDetail && (
                 <div style={{padding:"10px 10px", minHeight:"5em"}}>
-                    <CandidateTable bids={bids}/>
+                    <CandidateTable bids={bids} exToken={exToken} approved={approved}/>
                 </div>
             )}   
         </>

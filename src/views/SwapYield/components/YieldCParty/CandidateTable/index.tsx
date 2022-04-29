@@ -36,7 +36,7 @@ const ScrollButtonContainer = styled.div`
 const CandidateTable = (props) => {
     const { theme } = useTheme()
     const { t } = useTranslation()
-    const {onDismiss, bids} = props
+    const {onDismiss, bids, exToken, approved} = props
     const [selectedRow, setSelectedRow] = useState()
     const tableWrapperEl = useRef<HTMLDivElement>(null)
    
@@ -47,7 +47,7 @@ const CandidateTable = (props) => {
         <StyledTable id="pools-table" role="table" ref={tableWrapperEl}>        
           {
             bids.map((bid)=>(
-              <CandidateRow key={bid.id} bid={bid}/>
+              <CandidateRow key={bid.id} bid={bid} exToken={exToken} approved={approved}/>
             ))
           }
         </StyledTable>
