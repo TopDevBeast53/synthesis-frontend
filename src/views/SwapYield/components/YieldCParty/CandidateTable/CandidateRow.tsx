@@ -26,37 +26,29 @@ const StyledCell = styled(BaseCell)`
 const getEllipsis = (account) => {
     return account ? `${account.substring(0, 5)}...${account.substring(account.length - 5)}` : null;
 }
-const CandidateRow=({bidId})=>{
+const CandidateRow=({bid})=>{
     const YieldSwapContract = useHelixYieldSwap()
     const { toastSuccess, toastError } = useToast()
     const [bidData, setBidData] = useState<any>()
     const {tableRefresh, setTableRefresh} = useContext(YieldCPartyContext)
     const [pendingTx, setPendingTx] = useState(false)
     const handleAcceptClick = (e) => {        
-        e.stopPropagation();
-        setPendingTx(true)
-        YieldSwapContract.acceptBid(bidId).then(async (tx)=>{
-            await tx.wait()
-            toastSuccess("Success", "You Accepted the Bid")
-            setPendingTx(false)
-        }).catch(err=>{
-            toastError("Error", err.toString())
-            setPendingTx(false)
-        })        
+        // e.stopPropagation();
+        // setPendingTx(true)
+        // YieldSwapContract.acceptBid(bidId).then(async (tx)=>{
+        //     await tx.wait()
+        //     toastSuccess("Success", "You Accepted the Bid")
+        //     setPendingTx(false)
+        // }).catch(err=>{
+        //     toastError("Error", err.toString())
+        //     setPendingTx(false)
+        // })        
     }
     const onSendAsk = () =>{
         setTableRefresh(tableRefresh + 1)
     }
     const [showModal] = useModal(<DiscussOrder bidData={bidData} onSend={onSendAsk}/>,false)
-    useEffect(()=>{
-        setBidData({bidder:"0x59201fb8cb2D61118B280c8542127331DD141654", amount:20 })
-        YieldSwapContract.getBid(bidId).then(res=>{
-            setBidData(res)
-        }).catch(err=>{
-            console.log(err, " on getting bid data")
-        })
-    }, [YieldSwapContract, bidId])
-    if (!bidData){
+    if (!bid){
         return (<StyledRow >
             <StyledCell>
                 <CellContent>
@@ -66,7 +58,7 @@ const CandidateRow=({bidId})=>{
             <StyledCell>
                 <CellContent>
                     <Text>
-                        YAmount
+                        DAmount
                     </Text>
                     <Skeleton mt="4px"/>
                 </CellContent>
@@ -78,24 +70,24 @@ const CandidateRow=({bidId})=>{
             <StyledCell>
                 <CellContent>
                     <Text>
-                        {getEllipsis(bidData?.bidder)}
+                        {getEllipsis(bid.bidder)}
                     </Text>                    
                 </CellContent>
             </StyledCell>
             <StyledCell>
                 <CellContent>
                     <Text>
-                        YAmount
+                        DAmount
                     </Text>
                     <Balance
                         mt="4px"                
                         color='primary'                        
-                        value={bidData?.amount}
+                        value={bid.amount}
                         fontSize="14px"
                     />
                 </CellContent>
             </StyledCell>
-            <StyledCell>
+            {/* <StyledCell>
                 <CellContent>
                     <Button 
                         isLoading={pendingTx}    
@@ -104,7 +96,7 @@ const CandidateRow=({bidId})=>{
                         style={{zIndex:20}} 
                         onClick={handleAcceptClick}> Accept </Button>
                 </CellContent>       
-            </StyledCell>
+            </StyledCell> */}
         </StyledRow>
     )
 }

@@ -36,36 +36,20 @@ const ScrollButtonContainer = styled.div`
 const CandidateTable = (props) => {
     const { theme } = useTheme()
     const { t } = useTranslation()
-    const YieldSwapContract = useHelixYieldSwap()
-    const {onDismiss, swap} = props
+    const {onDismiss, bids} = props
     const [selectedRow, setSelectedRow] = useState()
     const tableWrapperEl = useRef<HTMLDivElement>(null)
-    const scrollToTop = (): void => {
-      tableWrapperEl.current.scrollIntoView({
-        behavior: 'smooth',
-      })
-    }   
-    
-    const handleRowClick = (bidData) =>{
-        setSelectedRow(bidData)
-    }
-    if(swap.bidIds.length === 0) return null
+   
+    if(bids.length === 0) return null
 
     return (
       <StyledTableBorder>
         <StyledTable id="pools-table" role="table" ref={tableWrapperEl}>        
           {
-            swap.bidIds.map((bidId)=>(
-              <CandidateRow key={bidId} bidId={bidId}/>
+            bids.map((bid)=>(
+              <CandidateRow key={bid.id} bid={bid}/>
             ))
           }
-
-          {/* <ScrollButtonContainer>
-            <Button variant="text" onClick={scrollToTop}>
-              {t('To Top')}
-              <ChevronUpIcon color="primary" />
-            </Button>
-          </ScrollButtonContainer> */}
         </StyledTable>
       </StyledTableBorder>
     )

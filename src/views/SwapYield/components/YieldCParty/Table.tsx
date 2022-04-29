@@ -13,9 +13,6 @@ const StyledTable = styled.div`
   }
 `
 
-
-// background-color: ${({ theme }) => theme.colors.cardBorder};
-
 const StyledTableBorder = styled.div`
   border-radius: ${({ theme }) => theme.radii.card};
   background: rgba(249, 250, 250, 0.08);
@@ -31,10 +28,13 @@ const ScrollButtonContainer = styled.div`
   padding-bottom: 5px;
 `
 
-const YieldCPartyTable= ({ swaps, state }) => {
-  console.debug('?????', swaps)
+const YieldCPartyTable= ({ swaps, state, bids }) => {
   const { t } = useTranslation()
   const tableWrapperEl = useRef<HTMLDivElement>(null)
+  const rowData = swaps.map(s => {
+    const filteredBids = s.bidIds.map(i => bids[i.toNumber()])
+    return {...s, bids: filteredBids}
+  })
 
   const scrollToTop = (): void => {
     tableWrapperEl.current.scrollIntoView({
@@ -46,7 +46,7 @@ const YieldCPartyTable= ({ swaps, state }) => {
     <StyledTableBorder>
       <StyledTable id="pools-table" role="table" ref={tableWrapperEl}>        
         {
-          swaps.map((data)=>(
+          rowData.map((data)=>(
             <YieldCPartyRow key={data.id} data={data} state={state}/>
           ))
         }

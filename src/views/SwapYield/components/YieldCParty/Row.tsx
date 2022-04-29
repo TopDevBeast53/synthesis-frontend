@@ -32,7 +32,7 @@ const ArrowIcon = styled(ChevronDownIcon)<{ toggled: boolean }>`
 
 const YieldCPartyRow=({data, state})=>{
     const { t } = useTranslation()
-    const {amount, ask, lockUntilTimestamp, id, exToken, approved} = data
+    const {amount, ask, lockUntilTimestamp, id, exToken, approved, bids} = data
     const dueDate = moment.unix(lockUntilTimestamp)
     const today = moment()    
     const duration = moment.duration(dueDate.diff(today))
@@ -105,16 +105,16 @@ const YieldCPartyRow=({data, state})=>{
                         </Text>
                     </CellContent>
                 </StyledCell>
-                <StyledCell>
+                <StyledCell style={{zIndex:10, flex:3}}>
                     <CellContent>
                     {
                         state === SwapState.All && (
-                            <Button variant="secondary" scale="md" mr="8px" onClick={showModal}> Send Offer </Button>
+                            <Button variant="secondary" scale="md" mr="8px" onClick={showModal}> Bid </Button>
                         )
                     }
                     {
                         state === SwapState.Applied && (
-                            <Button variant="secondary" scale="md" mr="8px" onClick={showModal}> Make Bid </Button>
+                            <Button variant="secondary" scale="md" mr="8px" onClick={showModal}> Accept Ask </Button>
                         )
                     }
 
@@ -125,12 +125,12 @@ const YieldCPartyRow=({data, state})=>{
                     }
                     </CellContent>
                 </StyledCell>
-                <StyledCell style={{zIndex:10, flex:3}}>
+                {/* <StyledCell style={{zIndex:10, flex:3}}>
                     <Button 
                         isLoading={pendingTx}    
                         endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
                         color="primary"  scale="sm" width="100px"> Close </Button>
-                </StyledCell>
+                </StyledCell> */}
                 <StyledCell>
                     <ArrowIcon color="primary" toggled={expanded} />
                 </StyledCell>
@@ -138,7 +138,7 @@ const YieldCPartyRow=({data, state})=>{
 
             {shouldRenderDetail && (
                 <div style={{padding:"10px 10px", minHeight:"5em"}}>
-                    <CandidateTable swap={[]}/>
+                    <CandidateTable bids={bids}/>
                 </div>
             )}   
         </>

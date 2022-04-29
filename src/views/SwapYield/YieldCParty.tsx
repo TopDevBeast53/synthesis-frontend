@@ -73,19 +73,23 @@ const YieldCParty = ()=>{
 
         const fetchData = async () => {
             setLoading(true)
+
+            // TODO: Should be update
             const bidsLength = await yieldSwapContract.getBidId();
             const fetchedSwaps = await yieldSwapContract.getAllSwaps()
             const swapIds = Array.from(Array(fetchedSwaps.length).keys())
-            const bidIds = Array.from(Array(bidsLength.toNumber()).keys())
+            const bidIds = Array.from(Array(bidsLength.toNumber() + 1).keys())
             const fetchedSwapIds = await Promise.all(swapIds.map((i) => yieldSwapContract.hasBidOnSwap(account, i)))
             const fetchedBids = await Promise.all(bidIds.map((b) => yieldSwapContract.bids(b)))
-
-            setBids(fetchedBids)
+            const filteredBids = fetchedBids.map((b, i) => {
+                return {...b, id: i}
+            })
+            setBids(filteredBids)
             setHasBidOnSwap(fetchedSwapIds)
             const fetchedSwapsWithIds = fetchedSwaps.map((s, i) => {
                 return {...s, id: i}
             })
-            console.debug('???? bids',bidsLength, fetchedBids)
+            console.debug('???', filteredBids, fetchedSwaps)
             setSwaps(fetchedSwapsWithIds)
             filterSwap(menuIndex)
             setLoading(false)
@@ -134,7 +138,7 @@ const YieldCParty = ()=>{
                           </ButtonMenu>
                       </Wrapper>
                       <YieldCPartyContext.Provider value={{tableRefresh:refresh,  setTableRefresh}}>
-                        <YieldCPartyTable swaps={filteredSwaps} state={menuIndex}/>
+                        <YieldCPartyTable swaps={filteredSwaps} state={menuIndex} bids={bids}/>
                         </YieldCPartyContext.Provider>
                      </Page>
                   )

@@ -83,7 +83,6 @@ function BridgeToBSCInner({switcher}: {switcher: React.ReactNode}) {
       tokens.map(async (tk) => {
         const bridgeFlag = await isBridged(tk.mint.toString());
         const mintFlag = await getMinted(tk.mint.toString());
-    console.debug('????', mintFlag)
 
         return {...tk, isBridged: bridgeFlag, isMinted: Number(mintFlag) > 0}
       })
@@ -93,7 +92,6 @@ function BridgeToBSCInner({switcher}: {switcher: React.ReactNode}) {
   const getTokensInfo = useCallback(async() => {
     const tokens = await tokensToEnrichedNFTs(wallet);
     const updatedTokens = await updateTokensInfo(tokens);
-    console.debug('????', updatedTokens)
     const filteredNFTs = filter(updatedTokens, token => (!token.isMinted || !token.isBridged))
     setNFTs(filteredNFTs);
   }, [updateTokensInfo, wallet])
