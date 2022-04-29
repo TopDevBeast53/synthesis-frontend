@@ -1,218 +1,174 @@
+import { useWeb3React } from '@web3-react/core'
 import BigNumber from 'bignumber.js'
 import Select from 'components/Select/Select'
-import tokens from 'config/constants/tokens'
 import { useTranslation } from 'contexts/Localization'
+import { useAllTokens } from 'hooks/Tokens'
+import { useERC20, useHelixYieldSwap } from 'hooks/useContract'
 import useTheme from 'hooks/useTheme'
 import useToast from 'hooks/useToast'
 import React, { useState } from 'react'
-import { usePriceHelixBusd } from 'state/farms/hooks'
+import { Token } from 'sdk'
+import { useFarms } from 'state/farms/hooks'
+import { DeserializedFarm } from 'state/types'
+import styled from 'styled-components'
 import {
-    AutoRenewIcon,
-    BalanceInput, Button,
-    Flex, Modal, Slider, Text
+  AutoRenewIcon, BalanceInput, Button, Input, Modal, Text
 } from 'uikit'
-import { formatNumber, getDecimalAmount, getFullDisplayBalance } from 'utils/formatBalance'
-import { useHelixYieldSwap } from 'hooks/useContract'
-import PercentageButton from './PercentageButton'
-// const AddRowModal = ({
-//   availableBalance,
-//   onDismiss
-// }) => {
-//   const { t } = useTranslation()
-//   const { theme } = useTheme()
-//   const tokenDecimals = tokens.helix.decimals
-//   const tokenSymbol = tokens.helix.symbol
-//   const [pendingTx, setPendingTx] = useState(false)
-//   const cakePrice = usePriceHelixBusd()
-//   const [selectedAmount, setSelectedAmount] = useState('')
-//   const [hasReachedStakeLimit] = useState(false)
-//   const [percent, setPercent] = useState(0)
-//   const usdValueOfSelectedAmount = new BigNumber(selectedAmount).times(cakePrice)  
-//   const formattedUsdValueOfSelectedAmount = !usdValueStaked.isNaN() && formatNumber(usdValueOfSelectedAmount.toNumber())  
-//   const fullDecimalselectedAmount = getDecimalAmount(new BigNumber(selectedAmount), tokenDecimals)
-//   const userNotEnoughToken = availableBalance.lt(fullDecimalselectedAmount)  
-//   const { toastSuccess, toastError } = useToast()  
-//   const [durationOptions, setDurationOptions] = useState([])
-//   const [durationIndex, setDurationIndex]=useState(0)  
-     
-//   const handleStakeInputChange = (input: string) => {
-//     if (input) {
-//       const convertedInput = getDecimalAmount(new BigNumber(input), tokenDecimals)
-//       const percentage = Math.floor(convertedInput.dividedBy(availableBalance).multipliedBy(100).toNumber())
-//       setPercent(Math.min(percentage, 100))
-//     } else {
-//       setPercent(0)
-//     }
-//     setSelectedAmount(input)
-//   }
+import { getAddress } from 'utils/addressHelpers'
+import { getDecimalAmount } from 'utils/formatBalance'
 
-//   const handleChangePercent = (sliderPercent: number) => {
-//     if (sliderPercent > 0) {
-//       const percentageOfStakingMax = availableBalance.dividedBy(100).multipliedBy(sliderPercent)
-//       const amountToStake = getFullDisplayBalance(percentageOfStakingMax, tokenDecimals, tokenDecimals)
-//       setSelectedAmount(amountToStake)
-//     } else {
-//       setSelectedAmount('')
-//     }
-//     setPercent(sliderPercent)
-//   }
-//   const handleOptionChange = (option) => {
-//     setDurationIndex(option.value)    
-//   }
-//   return (
-//     <Modal
-//       title={t('Add Item') }
-//       onDismiss={onDismiss}
-//       headerBackground={theme.colors.gradients.cardHeader}
-    
-//     >     
-//     <Text> {t('Period')} / {t('days')} </Text>
-//     {
-//       durationOptions.length !==0 &&
-//         <Select
-//         options={durationOptions}
-//         onOptionChange={handleOptionChange}
-//       />
-//     }
-    
-//     <Flex alignItems="center" justifyContent="space-between" mb="8px" mt={4}>
-//         <Text bold>{t('Amount')}:</Text>
-//         <Flex alignItems="center" minWidth="70px">          
-//           <Text ml="4px" bold>
-//             {t('Helix')}
-//           </Text>
-//         </Flex>
-//       </Flex>
-//       <BalanceInput
-//         value={selectedAmount}
-//         onUserInput={handleStakeInputChange}
-//         currencyValue={cakePrice.gt(0) && `~${formattedUsdValueStaked || 0} USD`}
-//         isWarning={hasReachedStakeLimit || userNotEnoughToken}
-//         decimals={tokenDecimals}
-//       />
-//       {hasReachedStakeLimit && (
-//         <Text color="failure" fontSize="12px" style={{ textAlign: 'right' }} mt="4px">
-//           {t('Maximum total stake: %amount% %token%', {
-//             amount: getFullDisplayBalance(new BigNumber(availableBalance), tokenDecimals, 0),
-//             token: tokenSymbol,
-//           })}
-//         </Text>
-//       )}
-//       {userNotEnoughToken && (
-//         <Text color="failure" fontSize="12px" style={{ textAlign: 'right' }} mt="4px">
-//           {t('Insufficient %symbol% balance', {
-//             symbol: tokenSymbol,
-//           })}
-//         </Text>
-//       )}
-//       <Text ml="auto" color="textSubtle" fontSize="12px" mb="8px">
-//         {t('Balance: %balance%', {
-//           balance: getFullDisplayBalance(availableBalance, tokenDecimals),
-//         })}
-//       </Text>
-//       <Slider
-//         min={0}
-//         max={100}
-//         value={percent}
-//         onValueChanged={handleChangePercent}
-//         name="stake"
-//         valueLabel={`${percent}%`}
-//         step={1}
-//       />
-//       <Flex alignItems="center" justifyContent="space-between" mt="8px">
-//         <PercentageButton onClick={() => handleChangePercent(25)}>25%</PercentageButton>
-//         <PercentageButton onClick={() => handleChangePercent(50)}>50%</PercentageButton>
-//         <PercentageButton onClick={() => handleChangePercent(75)}>75%</PercentageButton>
-//         <PercentageButton onClick={() => handleChangePercent(100)}>{t('Max')}</PercentageButton>
-//       </Flex>
 
-//       <Button
-//         isLoading={pendingTx}
-//         endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}        
-//         mt="24px"
-//       >
-//         {pendingTx ? t('Confirming') : t('Confirm')}
-//       </Button>
-//       <Button variant="text" onClick={onDismiss} pb="0px">
-//         {t('Close Window')}
-//       </Button>
-//     </Modal>
-//   )
-// }
+const StyledInput = styled(Input)`        
+        ::-webkit-inner-spin-button{
+            -webkit-appearance: auto; 
+            margin: 0; 
+        }
+        ::-webkit-outer-spin-button{
+            -webkit-appearance: auto; 
+            margin: 0; 
+        }   
+    `    
+
 const AddRowModal = (props)=>{
   const { theme } = useTheme()
   const { t } = useTranslation()
+  const { toastSuccess, toastError } = useToast()
+  const {account} = useWeb3React()
   const {onDismiss} = props
 
-  const yieldSwapContract = useHelixYieldSwap()
-
-  const [uAmount, setUAmount]=useState(0.0)
-  const [yAmount, setYAmount]=useState(0.0)
-  const [duration, setDuration]=useState()
-  const [durationIndex, setDurationIndex]=useState(0)
+  const [uAmount, setUAmount]=useState(5)
+  const [yAmount, setYAmount]=useState(20)
+  const [duration, setDuration]=useState(1)  
   const [pendingTx, setPendingTx] = useState(false)
+  const YieldSwapContract = useHelixYieldSwap()  
+  const allTokens = useAllTokens() // All Stable Token
+  const { data: farmsLP } = useFarms()
+  
+  const LPOptions = farmsLP.filter(lp=>lp.pid!==0).map(lp=>(    
+  {
+    "label": lp.lpSymbol,
+    "value": lp      
+  }
+  ))
+  const TokenOptions = Object.keys(allTokens).map((key)=>{
+    return {
+      "label": allTokens[key].symbol,
+      "value": allTokens[key]
+    }
+  })
+  const [selectedLP, setSelectedLP]  = useState<DeserializedFarm>(farmsLP[0])
+  const [selectedToken, setSelectedToken] = useState<Token>(TokenOptions[0].value)
+  const [isAllowed, setAllowed] = useState(1)
+  
   const handleUAmountChange = (input) => {
     setUAmount(input)
   }
   const handleYAmountChange = (input) => {
     setYAmount(input)
+  }  
+  const handleLPChange = (option) => {
+    setSelectedLP(option.value)
   }
-  const handleOptionChange = (option) => {
-    setDurationIndex(option.value)
+  const handleTokenChange = (option) => { setSelectedToken(option.value)}
+  const handleDurationChange = (input) => {    
+    setDuration(input.target.value)
   }
-  const handleConfirm = () => {
-    setPendingTx(true);
-    setPendingTx(false);
-    onDismiss()
-  }
-  const durationOptions=[{
-      label:"1 day",
-      value:"1"
-    },
-    {
-      label:"2 day",
-      value:"2"
-    },
-    {
-      label:"3 day",
-      value:"3"
-    }    
-  ]
+  const lpAddress = getAddress(selectedLP.lpAddresses)
+  const lpContract = useERC20(lpAddress)
 
+  const handleConfirm = async () => {
+    if(!selectedToken || ! selectedLP) return 
+    setPendingTx(true);   
+    async function DoValidation(){      
+      
+      try{
+        const allowedValue =  await lpContract.allowance(account, YieldSwapContract.address)
+        if(allowedValue.lte(0))  {
+          toastError('Error', "You didn't allow the LPToken to use")
+          setAllowed(0)
+          setPendingTx(false);        
+          return false          
+        }
+
+      }catch(err){
+        toastError('Error', err.toString())
+        setAllowed(0)
+        setPendingTx(false);        
+        return false
+      }
+      return true
+    }
+    if (isAllowed === 0){
+      const decimals = await lpContract.decimals()
+      const decimalUAmount = getDecimalAmount(new BigNumber(uAmount), decimals)
+      lpContract.approve(YieldSwapContract.address, decimalUAmount.toString()).then( async (tx)=>{        
+        await tx.wait()
+        toastSuccess(
+          `${t('Congratulations')}!`,
+            t('You Apporved  !!! '),
+        )
+        setAllowed(uAmount)
+        setPendingTx(false)
+      }).catch(err=>{
+        toastError('Error', err.toString())
+        setPendingTx(false)
+      })
+      return 
+    }
+    if(!await DoValidation()) return 
+
+    YieldSwapContract.openSwap(selectedToken.address, selectedLP.pid, uAmount, yAmount, 3600 * 24* duration).then(async (tx)=>{
+      await tx.wait()
+      setPendingTx(false);
+      toastSuccess(
+          `${t('Congratulations')}!`,
+          t('You Added Item !!! '),
+      )
+
+    }).catch(err=>{
+      setPendingTx(false); 
+      toastError('Error', err.toString())
+
+    })
+  }
+
+  
   return (
     <Modal
       title={t('Add Item') }
       headerBackground={theme.colors.gradients.cardHeader}    
       onDismiss={onDismiss}
     > 
-      <Text bold>{t('Duration')}:</Text>
-      {
-        durationOptions.length !==0 &&
-          <Select
-          options={durationOptions}
-          onOptionChange={handleOptionChange}
-        />
-      }
-      <Text bold>{t('U Amount')}:</Text>      
+      
+      <Text bold>{t('LP Token')}:</Text>           
+      <Select options={LPOptions} onOptionChange={handleLPChange} style={{zIndex:"30"}}/>
+      
+      <Text bold>{t('LP Token Amount')}:</Text>
       <BalanceInput 
             value={uAmount}
             onUserInput={handleUAmountChange}
       />
+      <Text bold>{t('Token')}:</Text>                 
+      <Select options={TokenOptions} onOptionChange={handleTokenChange}/>
+      
       <Text bold>{t('Y Amount')}:</Text>
       <BalanceInput 
-          value={uAmount}
+          value={yAmount}
           onUserInput={handleYAmountChange}
       />
+      <Text bold>{t('Duration (days)')}:</Text>
+      <StyledInput type="number" max={365} min={1} value={duration}  onChange={handleDurationChange}/>
+      
       <Button
         isLoading={pendingTx}    
-        endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}       
+        endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
         onClick={handleConfirm} 
         mt="24px"
       >
-        {pendingTx ? t('Confirming') : t('Confirm')}
+        {pendingTx ? isAllowed===0 ? "Approving" :t('Confirming') : isAllowed===0 ? "Approve" : t('Confirm')}
       </Button>
       <Button variant="text" onClick={onDismiss} pb="0px">
-        {t('Close Window')}
+        Close Window
       </Button>
     </Modal>
   )

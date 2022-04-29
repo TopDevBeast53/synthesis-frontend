@@ -1,8 +1,6 @@
-import React, { useState, useMemo } from 'react'
-import { Input } from 'uikit'
+import React from 'react'
 import styled from 'styled-components'
-import debounce from 'lodash/debounce'
-import { useTranslation } from 'contexts/Localization'
+import { Input } from 'uikit'
 
 const NumberInputWithArrow = (props)=>{ 
     
@@ -16,6 +14,6 @@ const NumberInputWithArrow = (props)=>{
             margin: 0; 
         }   
     `    
-    return (<StyledInput type="number" {...props} />)
+    return <StyledInput type="number" {...props} />
 }
 export default NumberInputWithArrow

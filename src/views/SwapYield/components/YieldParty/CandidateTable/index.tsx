@@ -1,17 +1,14 @@
-import React, { useRef, useState } from 'react'
 import { useTranslation } from 'contexts/Localization'
+import { useHelixYieldSwap } from 'hooks/useContract'
 import useTheme from 'hooks/useTheme'
+import React, { useRef, useState } from 'react'
 import styled from 'styled-components'
-import { Button, ChevronUpIcon, useModal } from 'uikit'
-import { CandidateData } from 'views/SwapYield/dummy'
 import CandidateRow from './CandidateRow'
-import DiscussOrder from '../DiscussOrder'
 
 
 const StyledTable = styled.div`
   border-radius: ${({ theme }) => theme.radii.card};
-  scroll-margin-top: 64px;
-
+  scroll-margin-top: 64px;  
   > div:not(:last-child) {
     border-bottom: 2px solid ${({ theme }) => theme.colors.disabled};
   }
@@ -39,26 +36,30 @@ const ScrollButtonContainer = styled.div`
 const CandidateTable = (props) => {
     const { theme } = useTheme()
     const { t } = useTranslation()
-    const {onDismiss} = props
+    const YieldSwapContract = useHelixYieldSwap()
+    const {onDismiss, swap} = props
+    const [selectedRow, setSelectedRow] = useState()
     const tableWrapperEl = useRef<HTMLDivElement>(null)
     const scrollToTop = (): void => {
       tableWrapperEl.current.scrollIntoView({
         behavior: 'smooth',
       })
+    }   
+    
+    const handleRowClick = (bidData) =>{
+        setSelectedRow(bidData)
     }
-    const data =CandidateData
-    const [showModal] = useModal(<DiscussOrder/>,false)
-    const handleRowClick = () =>{
-        alert("candidate row select")
-    }
+    if(swap.bidIds.length === 0) return null
+
     return (
       <StyledTableBorder>
         <StyledTable id="pools-table" role="table" ref={tableWrapperEl}>        
           {
-            data.map((item)=>(
-              <CandidateRow key={item.id} data={item} onClick={showModal}/>
+            swap.bidIds.map((bidId)=>(
+              <CandidateRow key={bidId} bidId={bidId}/>
             ))
           }
+
           {/* <ScrollButtonContainer>
             <Button variant="text" onClick={scrollToTop}>
               {t('To Top')}
