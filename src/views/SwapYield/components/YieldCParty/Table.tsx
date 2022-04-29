@@ -31,7 +31,7 @@ const ScrollButtonContainer = styled.div`
   padding-bottom: 5px;
 `
 
-const YieldCPartyTable= ({ swaps }) => {
+const YieldCPartyTable= ({ swaps, state }) => {
   console.debug(swaps)
   const { t } = useTranslation()
   const tableWrapperEl = useRef<HTMLDivElement>(null)
@@ -48,7 +48,7 @@ const YieldCPartyTable= ({ swaps }) => {
         {
           swaps.map((data, idx)=>(
             // eslint-disable-next-line react/no-array-index-key
-            <YieldCPartyRow key={idx} data={data} />
+            <YieldCPartyRow key={idx} data={data} state={state}/>
           ))
         }
         <ScrollButtonContainer>

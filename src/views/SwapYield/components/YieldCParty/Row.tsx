@@ -22,8 +22,8 @@ const StyledCell = styled(BaseCell)`
   }
 `
 
-const YieldCPartyRow=({data})=>{
-    const {amount, ask, lockUntilTimestamp, state} = data
+const YieldCPartyRow=({data, state})=>{
+    const {amount, ask, lockUntilTimestamp} = data
     const dueDate = moment.unix(lockUntilTimestamp)
     const today = moment()    
     const duration = moment.duration(dueDate.diff(today))

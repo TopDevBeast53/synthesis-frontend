@@ -104,7 +104,7 @@ const YieldCParty = ()=>{
                               </ButtonMenuItem>
                           </ButtonMenu>
                       </Wrapper>
-                      <YieldCPartyTable swaps={filteredSwaps}/>
+                      <YieldCPartyTable swaps={filteredSwaps} state={menuIndex}/>
                      </Page>
                   )
             }
