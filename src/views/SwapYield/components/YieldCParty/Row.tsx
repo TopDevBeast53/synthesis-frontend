@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import Balance from 'components/Balance'
 import styled from 'styled-components'
-import { Text, Button, useModal, ChevronDownIcon, AutoRenewIcon, useDelayedUnmount } from 'uikit'
+import { Text, Button, useModal, ChevronDownIcon, useDelayedUnmount } from 'uikit'
 import useToast from 'hooks/useToast'
 import { useTranslation } from 'contexts/Localization'
 import { useHelixYieldSwap } from 'hooks/useContract'
@@ -52,7 +52,7 @@ const YieldCPartyRow=({data, state})=>{
     const handleAcceptAsk = async () => {
         setPendingTx(true)
         try {
-            const res = await yieldSwapContract.acceptAsk(id)
+            await yieldSwapContract.acceptAsk(id)
             setPendingTx(false);      
             toastSuccess(
                 `${t('Congratulations')}!`,
@@ -68,7 +68,7 @@ const YieldCPartyRow=({data, state})=>{
     const handleWithdraw = async () => {
         setPendingTx(true)
         try {
-            const res = await yieldSwapContract.withdraw(id)
+            await yieldSwapContract.withdraw(id)
             setPendingTx(false);      
             toastSuccess(
                 `${t('Congratulations')}!`,

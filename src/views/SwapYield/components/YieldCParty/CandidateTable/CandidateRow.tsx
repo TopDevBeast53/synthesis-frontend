@@ -1,8 +1,6 @@
 import Balance from 'components/Balance';
 import { useWeb3React } from '@web3-react/core'
-import { useHelixYieldSwap } from 'hooks/useContract';
-import useToast from 'hooks/useToast';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 import { AutoRenewIcon, Button, Skeleton, Text, useModal } from 'uikit';
 import { YieldCPartyContext } from 'views/SwapYield/context';

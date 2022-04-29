@@ -45,10 +45,10 @@ const YieldPartyTable= (props) => {
     <StyledTableBorder>
       <StyledTable id="pools-table" role="table" ref={tableWrapperEl}>        
         {
-          data.map((item)=>(
-            <YieldPartyRow key={item.id} data={item} onClick={onRowSelect}/>
+          data.map((swapId)=>(
+            <YieldPartyRow key={swapId} data={swapId} onClick={onRowSelect}/>
           ))
-        }
+        }        
         <ScrollButtonContainer>
           <Button variant="text" onClick={scrollToTop}>
             {t('To Top')}

@@ -1,77 +1,54 @@
 
-import Select from 'components/Select/Select';
-import React, {useState} from "react";
-import styled, { useTheme } from 'styled-components';
+import { useHelixYieldSwap } from 'hooks/useContract';
+import useToast from 'hooks/useToast';
+import React, { useState } from "react";
+import { useTheme } from 'styled-components';
 import {
-    BalanceInput, Button, Heading, ModalBody, ModalCloseButton,
-    ModalContainer, ModalHeader, ModalTitle, Text
+  AutoRenewIcon, BalanceInput, Button, Heading, ModalBody, ModalCloseButton,
+  ModalContainer, ModalHeader, ModalTitle, Text
 } from "uikit";
 import getThemeValue from "uikit/util/getThemeValue";
 
-const ReceivedOffer = styled.div`
-  background-color: #7f8289;  
-  border-radius: 1em;
-  border: solid 1px #dde0e9;
-  float:left;  
-  padding 0.3em 1em;
-`
-const SentOffer = styled.div`
-background-color: #7f8289;
-border-radius: 1em;
-border: solid 1px #dde0e9;
-float:right;
-margin-right:1em;
-padding 0.3em 1em;
-`
-const OfferWrap = styled.div`
-margin-bottom: 1em;
-`
-const Content = styled.div`
-display: flex;
-border-bottom: 1px solid white;
-flex-direction: column;
-max-height: 50vh;
-overflow:auto
-`
+
+const getEllipsis = (account) => {
+  return account ? `${account.substring(0, 5)}...${account.substring(account.length - 5)}` : null;
+}
+
 const DiscussOrder: React.FC<any> = (props) => {
   const theme = useTheme(); 
-   
+  const YieldSwapContract = useHelixYieldSwap()
+  const { toastSuccess, toastError } = useToast()
+  const [pendingTx, setPendingTx] = useState(false)
+  
   const bodyPadding = "24px"
   const headerBackground = "transparent"
   const minWidth = "320px"
-  const {opponentAddress, onDismiss} = props
+  const {bidData, onSend, onDismiss} = props
 
-  const [yAmount, setYAmount]=useState(0.0)
-  const [durationIndex, setDurationIndex]=useState(0)
+  const [yAmount, setYAmount]=useState(bidData?.amount)
   
   const handleYAmountChange = (input) => {
     setYAmount(input)
   }
-  const handleOptionChange = (option) => {
-    setDurationIndex(option.value)
+  const handleSendClick =() =>{
+    setPendingTx(true)       
+    YieldSwapContract.setAsk(bidData.swapId, yAmount).then(async (tx)=>{
+      await tx.wait()
+      toastSuccess('Congratulations!', 'You Updated Amount !!! ')            
+      if (onSend) onSend()
+      setPendingTx(false)
+    }).catch(err=>{
+      toastError('Error', err.toString())
+      setPendingTx(false)
+    })
   }
-  const durationOptions=[{
-      label:"1 day",
-      value:"1"
-    },
-    {
-      label:"2 day",
-      value:"2"
-    },
-    {
-      label:"3 day",
-      value:"3"
-    }    
-  ]
 
   return (
     <ModalContainer minWidth={minWidth} {...props} >
       <ModalHeader background={getThemeValue(`colors.${headerBackground}`, headerBackground)(theme)}>
         <ModalTitle>          
-          <Heading>A</Heading>         
-          
-        </ModalTitle>
-        <Button> Accept </Button>
+          <Heading>{getEllipsis(bidData?.bidder)}</Heading>         
+        </ModalTitle>        
         <ModalCloseButton onDismiss={onDismiss}/>
       </ModalHeader>
       <ModalBody p={bodyPadding}>         
@@ -80,11 +57,17 @@ const DiscussOrder: React.FC<any> = (props) => {
                 <div style={{display:"flex", marginBottom:"1em", alignItems:"center"}}>
                     <Text style={{marginRight:"1em"}} >Y Amount</Text>
                     <BalanceInput 
-                            value={yAmount}
+                            value={yAmount}                            
                             onUserInput={handleYAmountChange}
                         />
-                </div>                
-              <Button width="100%">Send</Button>            
+                </div>        
+                <Button
+                  isLoading={pendingTx}    
+                  endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}       
+                  onClick={handleSendClick}         
+                  width="100%"
+                > Send </Button>        
+              
               
           </div>
       </ModalBody>
