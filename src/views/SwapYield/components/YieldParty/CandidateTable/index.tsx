@@ -19,10 +19,16 @@ const StyledTableBorder = styled.div`
   background-size: 400% 400%;
 `
 
-const CandidateTable = (props) => {
-    const {onDismiss, swap} = props
+const ScrollButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  padding-top: 5px;
+  padding-bottom: 5px;
+`
+
+const CandidateTable = (props) => {    
+    const {swap} = props    
     const tableWrapperEl = useRef<HTMLDivElement>(null)
-   
     if(swap.bidIds.length === 0) return null
 
     return (

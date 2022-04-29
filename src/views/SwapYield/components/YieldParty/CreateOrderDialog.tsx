@@ -6,7 +6,7 @@ import { useAllTokens } from 'hooks/Tokens'
 import { useERC20, useHelixYieldSwap } from 'hooks/useContract'
 import useTheme from 'hooks/useTheme'
 import useToast from 'hooks/useToast'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Token } from 'sdk'
 import { useFarms } from 'state/farms/hooks'
 import { DeserializedFarm } from 'state/types'
@@ -59,6 +59,8 @@ const AddRowModal = (props)=>{
   const [selectedLP, setSelectedLP]  = useState<DeserializedFarm>(farmsLP[0])
   const [selectedToken, setSelectedToken] = useState<Token>(TokenOptions[0].value)
   const [isAllowed, setAllowed] = useState(1)
+  const [minDuration, setMinDuration] = useState(0)
+  const [maxDuration, setMaxDuration] = useState(0)
   
   const handleUAmountChange = (input) => {
     setUAmount(input)
@@ -79,17 +81,21 @@ const AddRowModal = (props)=>{
   const handleConfirm = async () => {
     if(!selectedToken || ! selectedLP) return 
     setPendingTx(true);   
-    async function DoValidation(){      
-      
+    async function DoValidation(){
+      console.log(duration, maxDuration, minDuration)
+      if (duration > maxDuration || duration < minDuration){
+        toastError('Error', `Duration should be in range between ${minDuration} and ${maxDuration}`)
+        return false
+      }
+        
       try{
         const allowedValue =  await lpContract.allowance(account, YieldSwapContract.address)
         if(allowedValue.lte(0))  {
           toastError('Error', "You didn't allow the LPToken to use")
           setAllowed(0)
           setPendingTx(false);        
-          return false          
+          return false
         }
-
       }catch(err){
         toastError('Error', err.toString())
         setAllowed(0)
@@ -132,6 +138,13 @@ const AddRowModal = (props)=>{
     })
   }
 
+  useEffect(()=>{
+    Promise.all([YieldSwapContract.MIN_LOCK_DURATION(), YieldSwapContract.MAX_LOCK_DURATION()]).then((values) => {      
+      setMinDuration(values[0].toNumber()/24/3600)
+      setMaxDuration(values[1].toNumber()/24/3600)
+    })
+  }, [YieldSwapContract])
+
   
   return (
     <Modal
@@ -157,7 +170,7 @@ const AddRowModal = (props)=>{
           onUserInput={handleYAmountChange}
       />
       <Text bold>{t('Duration (days)')}:</Text>
-      <StyledInput type="number" max={365} min={1} value={duration}  onChange={handleDurationChange}/>
+      <StyledInput type="number" max={maxDuration} min={minDuration} value={duration}  onChange={handleDurationChange}/>
       
       <Button
         isLoading={pendingTx}    
