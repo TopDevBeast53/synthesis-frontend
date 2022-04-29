@@ -93,7 +93,7 @@ export default {
   },
   masterChef: {
     56: '',
-    97: '0xb6BCd3139C4A3d75c34960854E102e801DB4e932',
+    97: '0xa380bD46C4Ee53f606Ca7F6665875c11C7fDF18E',
   },
   sousChef: {
     56: '',
@@ -101,23 +101,27 @@ export default {
   },
   helixAutoPool: { // AutoPool
     56: '',
-    97: '0xC28F43D3C967bD42eff53cCecCeaCF09f09a6C64',
+    97: '0xd6E3c01e086aB435ee9F54137CB801537496A2B3',
   },
   helixNFT: {
     56: '',
-    97: '0x39bB1d97cac44a837049eE109483886C27A3800C',
+    97: '0xD6451dD738b95859522A86A6Ba3f72D6a46F69Aa',
   },
   helixNFTChef: {
     56: '',
-    97: '0xe4c1ace1fC31c9bBD1BC13e6c13E8aaB5bE050b6',
+    97: '0xe8Eba547C61a430B899AD0ce9c5E21802d325800',
   },
   helixNFTBridge: {
     56: '',
-    97: '0xa5df536596434205A3084270A312b32eC47a902d',
+    97: '0xCd92EF89212F40c3F72895e0cD8E2D2e1CfBDd50',
   },
   helixMigrator: {
     56: '',
-    97: '0x6D237B35cCa79f367Ecac7743555C3f3213fA77f',
+    97: '0x6038466a15FF62C22Cba83E9194EA2d9c8Ffc9Bd',
+  },
+  referralRegister: {
+    56: '',
+    97: '0xaF488De3648948666B459E8c9b77bE6CDbA2b693',
   },
   voting: {
     56: '0x00000000000000',
@@ -125,10 +129,10 @@ export default {
   },
   helixVault: {
     56: '',
-    97: '0xA2FD45B609f462F09c0Cfc2A2c0b9c491FE3383C',
+    97: '0xE5590210A3d266b79A648C8b50D327d7B6D66ab2',
   },
   helixYieldSwap: {
     56: '',
-    97: '0xb953F3096371364acB88B34eD89E269DA625a96A'
+    97: '0x69eFaB73aA66F6648dea984A4e51a801035a042f'
   }
 }

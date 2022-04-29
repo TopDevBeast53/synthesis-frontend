@@ -19,7 +19,7 @@ export enum Rounding {
   ROUND_UP,
 }
 
-export const FACTORY_ADDRESS = '0x8C6163E3894Dc031206838fc6b716681dcd0Ced2'
+export const FACTORY_ADDRESS = '0x06Ae31316132A752C19cEfb9BC41E7226670d7E7'
 
 export const INIT_CODE_HASH = '0xe0ce7bfb962a25cbac92cbc4b48f91427e2de2f8795b94d1943deb6ec507d0f0'
 

@@ -9,12 +9,14 @@ import { getProviderOrSigner } from 'utils'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import tokens from 'config/constants/tokens';
 import CurrencyLogo from 'components/Logo/CurrencyLogo';
-import { HelixReferralRegisterAddress } from './constants'
+import { getReferralRegisterAddress } from 'utils/addressHelpers'
 import ConfirmReferral from './components/ConfirmReferral';
 import Page from '../Page';
 import useToast from '../../hooks/useToast'
 import CircleLoader from '../../components/Loader/CircleLoader'
 import CopyAddress from '../../components/Menu/UserMenu/CopyAddress';
+
+const HelixReferralRegisterAddress = getReferralRegisterAddress()
 
 const useGetRef = (account: string | null) => {
     const { library } = useActiveWeb3React()
