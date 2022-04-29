@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useContext } from 'react'
 import Balance from 'components/Balance'
 import styled from 'styled-components'
 import { AutoRenewIcon, Text, Button, useModal, ChevronDownIcon, useDelayedUnmount } from 'uikit'
@@ -6,6 +6,7 @@ import useToast from 'hooks/useToast'
 import { useTranslation } from 'contexts/Localization'
 import { useHelixYieldSwap } from 'hooks/useContract'
 import moment from 'moment'
+import { YieldPartyContext } from 'views/SwapYield/context';
 import BaseCell, { CellContent } from './BaseCell'
 import DiscussOrder from './DiscussOrder'
 import { SwapState } from '../../types'
@@ -40,18 +41,26 @@ const YieldCPartyRow=({data, state})=>{
     const [pendingTx, setPendingTx] = useState(false)
     const [expanded, setExpanded] = useState(false)
     const shouldRenderDetail = useDelayedUnmount(expanded, 300)    
-
-    const [showModal] = useModal(<DiscussOrder swapId={id} exToken={exToken} approved={approved}/>,false)
+    const {tableRefresh, setTableRefresh} = useContext(YieldPartyContext)
+    
+    const onSendAsk = () =>{
+        setTableRefresh(tableRefresh + 1)
+    }
+    
+    const [showModal] = useModal(<DiscussOrder swapId={id} exToken={exToken} approved={approved} onSend={onSendAsk}/>,false)
 
     const handleExpand = () => {
         setExpanded(!expanded)
     }
 
+    
+
     const handleAcceptAsk = async () => {
         setPendingTx(true)
         try {
             await yieldSwapContract.acceptAsk(id)
-            setPendingTx(false);      
+            setPendingTx(false);     
+            onSendAsk() 
             toastSuccess(
                 `${t('Congratulations')}!`,
                 t('You Added Item !!! '),
@@ -68,6 +77,7 @@ const YieldCPartyRow=({data, state})=>{
         try {
             await yieldSwapContract.withdraw(id)
             setPendingTx(false);      
+            onSendAsk() 
             toastSuccess(
                 `${t('Congratulations')}!`,
                 t('You Added Item !!! '),

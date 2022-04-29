@@ -39,15 +39,14 @@ const YieldCParty = ()=>{
     const [loading, setLoading] = useState(false)
     const [refresh, setTableRefresh] = useState(0)
 
-    const filteredSwaps = useMemo(()=>{        
+    const filteredSwaps = () => {        
 
         if(menuIndex === SwapState.Pending) return swaps.filter((s, i) => !s.isOpen && !s.isWithdrawn && hasBidOnSwap[i])                    
         if(menuIndex === SwapState.Finished) return filter(swaps, {isWithdrawn: true})
         if(menuIndex === SwapState.All) return swaps.filter((s, i) => s.isOpen && !hasBidOnSwap[i])         
         if(menuIndex === SwapState.Applied) return swaps.filter((s, i) => s.isOpen && hasBidOnSwap[i])            
         return []
-        
-    }, [menuIndex, hasBidOnSwap, swaps])
+    }
 
     const handleButtonMenuClick = (newIndex) => {
         setMenuIndex(newIndex)
@@ -121,7 +120,7 @@ const YieldCParty = ()=>{
                           </ButtonMenu>
                       </Wrapper>
                       <YieldCPartyContext.Provider value={{tableRefresh:refresh,  setTableRefresh}}>
-                        <YieldCPartyTable swaps={filteredSwaps} state={menuIndex} bids={bids}/>
+                        <YieldCPartyTable swaps={filteredSwaps()} state={menuIndex} bids={bids}/>
                         </YieldCPartyContext.Provider>
                      </Page>
                   )
