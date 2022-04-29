@@ -32,6 +32,7 @@ const ScrollButtonContainer = styled.div`
 `
 
 const YieldCPartyTable= ({ swaps, state }) => {
+  console.debug('?????', swaps)
   const { t } = useTranslation()
   const tableWrapperEl = useRef<HTMLDivElement>(null)
 

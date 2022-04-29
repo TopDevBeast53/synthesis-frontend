@@ -10,6 +10,7 @@ import YieldCPartyTable from './components/YieldCParty/Table'
 import { SwapState } from './types'
 import { CPartySwapData } from './dummy'
 import CircleLoader from '../../components/Loader/CircleLoader'
+import { yieldSwapAddress } from './constants'
 
 const Wrapper = styled.div`
   display: flex;    
@@ -33,6 +34,7 @@ const YieldCParty = ()=>{
 
     const [menuIndex, setMenuIndex] = useState(SwapState.All)
     const [swaps, setSwaps] = useState([])
+    const [bids, setBids] = useState([])
     const [hasBidOnSwap, setHasBidOnSwap] = useState([])
     const [filteredSwaps, setFilteredSwaps]=useState([])
     const [loading, setLoading] = useState(false)
@@ -51,7 +53,11 @@ const YieldCParty = ()=>{
         }
 
         if(newIndex === SwapState.Applied) {
-            const filtered = swaps.filter((s, i) => s.isOpen && hasBidOnSwap[i])
+            const filtered = swaps
+                            .filter((s, i) => s.isOpen && hasBidOnSwap[i])
+                            .map((s) => {
+                                return {...s, approved: true}
+                            })
             setFilteredSwaps(filtered)
         }
         setMenuIndex(newIndex)
@@ -64,14 +70,19 @@ const YieldCParty = ()=>{
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true)
+            const bidsLength = await yieldSwapContract.getBidId();
             const fetchedSwaps = await yieldSwapContract.getAllSwaps()
             const swapIds = Array.from(Array(fetchedSwaps.length).keys())
+            const bidIds = Array.from(Array(bidsLength.toNumber()).keys())
             const fetchedSwapIds = await Promise.all(swapIds.map((i) => yieldSwapContract.hasBidOnSwap(account, i)))
+            const fetchedBids = await Promise.all(bidIds.map((b) => yieldSwapContract.bids(b)))
+
+            setBids(fetchedBids)
             setHasBidOnSwap(fetchedSwapIds)
             const fetchedSwapsWithIds = fetchedSwaps.map((s, i) => {
                 return {...s, id: i}
             })
-            console.debug('????', fetchedSwaps)
+            console.debug('???? bids',bidsLength, fetchedBids)
             setSwaps(fetchedSwapsWithIds)
             filterSwap(menuIndex)
             setLoading(false)

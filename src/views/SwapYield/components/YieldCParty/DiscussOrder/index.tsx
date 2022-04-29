@@ -29,7 +29,7 @@ const DiscussOrder: React.FC<any> = (props) => {
   const headerBackground = 'transparent'
   const minWidth = '320px'
   const yieldSwapContract = useHelixYieldSwap()
-  const { swapId, exToken, onDismiss } = props
+  const { swapId, exToken, approved, onDismiss } = props
   const exContract = useERC20(exToken)
   const [pendingTx, setPendingTx] = useState(false)
   const [isAllowed, setAllowed] = useState(1)
@@ -63,7 +63,7 @@ const DiscussOrder: React.FC<any> = (props) => {
   }
 
   const handleAsk = async () => {
-    console.debug('here', swapId)
+    console.debug('here', approved)
     if (isAllowed === 0){
       const decimals = await exContract.decimals()
       const decimalUAmount = getDecimalAmount(new BigNumber(yAmount), decimals)

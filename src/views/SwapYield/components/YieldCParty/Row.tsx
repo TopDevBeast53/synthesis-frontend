@@ -26,7 +26,7 @@ const StyledCell = styled(BaseCell)`
 
 const YieldCPartyRow=({data, state})=>{
     const { t } = useTranslation()
-    const {amount, ask, lockUntilTimestamp, id, exToken} = data
+    const {amount, ask, lockUntilTimestamp, id, exToken, approved} = data
     const dueDate = moment.unix(lockUntilTimestamp)
     const today = moment()    
     const duration = moment.duration(dueDate.diff(today))
@@ -34,7 +34,7 @@ const YieldCPartyRow=({data, state})=>{
     const { toastSuccess, toastError } = useToast()
     const [pendingTx, setPendingTx] = useState(false)
 
-    const [showModal] = useModal(<DiscussOrder swapId={id} exToken={exToken}/>,false)
+    const [showModal] = useModal(<DiscussOrder swapId={id} exToken={exToken} approved={approved}/>,false)
 
     const handleWithdraw = async () => {
         setPendingTx(true)
