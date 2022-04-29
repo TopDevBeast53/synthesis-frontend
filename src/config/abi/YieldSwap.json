@@ -301,6 +301,30 @@
   {
     "inputs": [
       {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "bidderSwapIds",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
@@ -367,86 +391,6 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "getAllSwaps",
-    "outputs": [
-      {
-        "components": [
-          {
-            "internalType": "contract IERC20",
-            "name": "lpToken",
-            "type": "address"
-          },
-          {
-            "internalType": "contract IERC20",
-            "name": "exToken",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256[]",
-            "name": "bidIds",
-            "type": "uint256[]"
-          },
-          {
-            "internalType": "address",
-            "name": "seller",
-            "type": "address"
-          },
-          {
-            "internalType": "address",
-            "name": "buyer",
-            "type": "address"
-          },
-          {
-            "internalType": "uint256",
-            "name": "poolId",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amount",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "cost",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "ask",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "lockUntilTimestamp",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "lockDuration",
-            "type": "uint256"
-          },
-          {
-            "internalType": "bool",
-            "name": "isOpen",
-            "type": "bool"
-          },
-          {
-            "internalType": "bool",
-            "name": "isWithdrawn",
-            "type": "bool"
-          }
-        ],
-        "internalType": "struct YieldSwap.Swap[]",
-        "name": "",
-        "type": "tuple[]"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [
       {
         "internalType": "uint256",
@@ -508,6 +452,25 @@
       {
         "internalType": "uint256[]",
         "name": "",
+        "type": "uint256[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_address",
+        "type": "address"
+      }
+    ],
+    "name": "getBidderSwapIds",
+    "outputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "_bidderSwapIds",
         "type": "uint256[]"
       }
     ],
@@ -627,6 +590,86 @@
         "internalType": "uint256[]",
         "name": "",
         "type": "uint256[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getSwaps",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "contract IERC20",
+            "name": "lpToken",
+            "type": "address"
+          },
+          {
+            "internalType": "contract IERC20",
+            "name": "exToken",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "bidIds",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "address",
+            "name": "seller",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "buyer",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "poolId",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "amount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "cost",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "ask",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "lockUntilTimestamp",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "lockDuration",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "isOpen",
+            "type": "bool"
+          },
+          {
+            "internalType": "bool",
+            "name": "isWithdrawn",
+            "type": "bool"
+          }
+        ],
+        "internalType": "struct YieldSwap.Swap[]",
+        "name": "",
+        "type": "tuple[]"
       }
     ],
     "stateMutability": "view",

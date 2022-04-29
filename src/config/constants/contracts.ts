@@ -133,6 +133,6 @@ export default {
   },
   yieldSwap: {
     56: '',
-    97: '0x69eFaB73aA66F6648dea984A4e51a801035a042f'
+    97: '0xC90b598f4D9b3Ad031658554d214F9Fa1E735453'
   }
 }
