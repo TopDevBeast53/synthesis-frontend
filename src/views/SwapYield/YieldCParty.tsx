@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import { useWeb3React } from '@web3-react/core'
+import { multicallv2 } from 'utils/multicall'
 import styled from 'styled-components'
 import { useTranslation } from 'contexts/Localization'
 import { Flex, Text, ButtonMenu, ButtonMenuItem } from 'uikit'
@@ -59,10 +60,10 @@ const YieldCParty = ()=>{
             setLoading(true)
 
             // TODO: Should be update
-            const bidsLength = await yieldSwapContract.getBidId();
+            const bidsLastIndex = await yieldSwapContract.getBidId();
             const fetchedSwaps = await yieldSwapContract.getAllSwaps()
             const swapIds = Array.from(Array(fetchedSwaps.length).keys())
-            const bidIds = Array.from(Array(bidsLength.toNumber() + 1).keys())
+            const bidIds = Array.from(Array(bidsLastIndex.toNumber() + 1).keys())
             const fetchedSwapIds = await Promise.all(swapIds.map((i) => yieldSwapContract.hasBidOnSwap(account, i)))
             const fetchedBids = await Promise.all(bidIds.map((b) => yieldSwapContract.bids(b)))
             const filteredBids = fetchedBids.map((b, i) => {

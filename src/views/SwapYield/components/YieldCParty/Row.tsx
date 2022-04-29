@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, { useState, useMemo } from 'react'
 import Balance from 'components/Balance'
 import styled from 'styled-components'
 import { AutoRenewIcon, Text, Button, useModal, ChevronDownIcon, useDelayedUnmount } from 'uikit'
@@ -32,10 +32,8 @@ const ArrowIcon = styled(ChevronDownIcon)<{ toggled: boolean }>`
 
 const YieldCPartyRow=({data, state})=>{
     const { t } = useTranslation()
-    const {amount, ask, lockUntilTimestamp, id, exToken, approved, bids} = data
-    const dueDate = moment.unix(lockUntilTimestamp)
-    const today = moment()    
-    const duration = moment.duration(dueDate.diff(today))
+    const {amount, ask, id, exToken, lockDuration, approved, bids} = data
+    const duration = moment.duration(lockDuration.toNumber(), "s")
     const yieldSwapContract = useHelixYieldSwap();
     
     const { toastSuccess, toastError } = useToast()
@@ -81,7 +79,6 @@ const YieldCPartyRow=({data, state})=>{
         }
     }
 
-    moment.duration(dueDate.diff(today))
     return (
         <>
             <StyledRow>
