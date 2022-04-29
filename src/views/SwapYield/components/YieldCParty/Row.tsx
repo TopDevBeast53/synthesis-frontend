@@ -46,7 +46,7 @@ const YieldCPartyRow=({data})=>{
                     <Balance
                         mt="4px"                
                         color='primary'                        
-                        value={amount}
+                        value={amount.toNumber()}
                         fontSize="14px"
                     />
                 </CellContent>
@@ -59,7 +59,7 @@ const YieldCPartyRow=({data})=>{
                     <Balance
                         mt="4px"                
                         color='primary'                        
-                        value={ask}
+                        value={ask.toNumber()}
                         fontSize="14px"
                     />
                 </CellContent>
