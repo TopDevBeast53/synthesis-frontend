@@ -2,15 +2,17 @@ import { useWeb3React } from '@web3-react/core'
 import Page from 'components/Layout/Page'
 import { useTranslation } from 'contexts/Localization'
 import { useHelixYieldSwap } from 'hooks/useContract'
+import { useFastFresh } from 'hooks/useRefresh'
 import useToast from 'hooks/useToast'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Button, ButtonMenu, ButtonMenuItem, useModal } from 'uikit'
-import { useFastFresh } from 'hooks/useRefresh'
-import AddRowModal from './components/YieldParty/Modals/CreateOrderDialog'
-import YieldPartyTable from './components/YieldParty/Table'
-import { YieldPartyContext } from './context'
-import { OrderState } from './types'
+import { SwapLiquidityContext } from '../context'
+import CreateOrderDialog from './Modals/CreateOrderDialog'
+import SellTable from './SellTable'
+import { OrderState } from '../types'
+
+
 
 const Wrapper = styled.div`
   display: flex;    
@@ -28,42 +30,41 @@ const Wrapper = styled.div`
   }
 `
 
-const YieldParty = ()=>{
+const Sell = ()=>{
     const { t } = useTranslation()
     const { toastError } = useToast()
     const YieldSwapContract = useHelixYieldSwap()  
     const {account} = useWeb3React()
-    const [menuIndex, setMenuIndex] = useState(0)
-    // const [filterOrderState, setFilterOrderState]=useState(OrderState.Active)    
+    const [menuIndex, setMenuIndex] = useState(0)    
     const [swapIds, setSwapIds] = useState([])
-    const [refresh,setTableRefresh] = useState(0)
-    const [orderState, setOrderState] = useState(OrderState.Active)
+       
     const fastRefresh = useFastFresh()
+    const {tableRefresh, setFilterState} = useContext(SwapLiquidityContext)
 
-    const context ={
-        tableRefresh:refresh,  
-        setTableRefresh, 
-        filterState:orderState        
-    }
+    
 
     const handleButtonMenuClick = (newIndex) => {
         // setFilterOrderState(newIndex)
-        if(newIndex === 0) setOrderState(OrderState.Active)
-        if(newIndex === 1) setOrderState(OrderState.Completed)
+        if(newIndex === 0) setFilterState(OrderState.Active)
+        if(newIndex === 1) setFilterState(OrderState.Completed)
         setMenuIndex(newIndex)
         
     }
-    const [handleAdd] = useModal(<AddRowModal />)
+    const [handleAdd] = useModal(<CreateOrderDialog />)
     useEffect(()=>{
-        if(refresh < 0) return
+        console.log("============= refersh ==============")
+        if(tableRefresh < 0) return
         if(!account) return
         YieldSwapContract.getSwapIds(account).then(async (ids)=>{
             setSwapIds(ids)
+            console.log("==========  swapids  ==========", ids)
         }).catch(err=>{
             console.log(err)            
             // toastError('Error', err.toString())
         })
-    }, [YieldSwapContract, account, toastError, refresh, fastRefresh ])
+    }, [YieldSwapContract, account, toastError, tableRefresh, fastRefresh ])
+
+    
     return (        
         <Page>            
             <Wrapper>
@@ -76,13 +77,11 @@ const YieldParty = ()=>{
                     </ButtonMenuItem>
                 </ButtonMenu>
                 <Button variant="secondary" scale="md" mr="1em" onClick={handleAdd}> Add </Button>
-            </Wrapper>
-            <YieldPartyContext.Provider value={context}>
-                <YieldPartyTable data={swapIds}/>
-            </YieldPartyContext.Provider>
+            </Wrapper>            
+            <SellTable data={swapIds}/>            
             
         </Page>
     )
 }
 
-export default YieldParty
+export default Sell
