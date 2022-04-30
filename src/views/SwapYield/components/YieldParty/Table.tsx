@@ -33,7 +33,7 @@ const ScrollButtonContainer = styled.div`
 
 const YieldPartyTable= (props) => {
   const { t } = useTranslation()
-  const { data, onRowSelect } = props
+  const { data } = props
   const tableWrapperEl = useRef<HTMLDivElement>(null)
   const scrollToTop = (): void => {
     tableWrapperEl.current.scrollIntoView({
@@ -46,7 +46,7 @@ const YieldPartyTable= (props) => {
       <StyledTable id="pools-table" role="table" ref={tableWrapperEl}>        
         {
           data.map((swapId)=>(
-            <YieldPartyRow key={swapId} data={swapId} onClick={onRowSelect}/>
+            <YieldPartyRow key={swapId} data={swapId}/>
           ))
         }        
         <ScrollButtonContainer>

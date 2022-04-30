@@ -5,8 +5,8 @@ import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { AutoRenewIcon, Button, Skeleton, Text, useModal } from 'uikit';
 import { YieldPartyContext } from 'views/SwapYield/context';
-import BaseCell, { CellContent } from '../BaseCell';
-import DiscussOrder from '../DiscussOrder';
+import BaseCell, { CellContent } from '../../Cells/BaseCell';
+import DiscussOrder from '../Modals/DiscussOrder';
 
 const StyledRow = styled.div`
   background-color: transparent;

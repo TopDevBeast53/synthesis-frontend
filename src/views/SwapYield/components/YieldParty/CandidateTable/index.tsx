@@ -22,6 +22,7 @@ const StyledTableBorder = styled.div`
 const CandidateTable = (props) => {    
     const {swap} = props    
     const tableWrapperEl = useRef<HTMLDivElement>(null)
+    if(!swap) return null
     if(swap.bidIds.length === 0) return (<h3 style={{textAlign:"center", color:"white"}}>No bids</h3>)
 
     return (

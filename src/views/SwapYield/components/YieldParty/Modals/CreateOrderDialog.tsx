@@ -37,8 +37,8 @@ const AddRowModal = (props)=>{
   const {account} = useWeb3React()
   const {onDismiss} = props
 
-  const [uAmount, setUAmount]=useState(5)
-  const [yAmount, setYAmount]=useState(20)
+  const [uAmount, setUAmount]=useState(0)
+  const [yAmount, setYAmount]=useState(0)
   const [duration, setDuration]=useState(1)  
   const [pendingTx, setPendingTx] = useState(false)
   const YieldSwapContract = useHelixYieldSwap()  
@@ -134,6 +134,7 @@ const AddRowModal = (props)=>{
           `${t('Congratulations')}!`,
           t('You Added Item !!! '),
       )
+      if(onDismiss) onDismiss()
 
     }).catch(err=>{
       setPendingTx(false); 
@@ -183,7 +184,7 @@ const AddRowModal = (props)=>{
       <Text bold>{t('Token')}:</Text>                 
       <Select options={TokenOptions} onOptionChange={handleTokenChange}/>
       
-      <Text bold>{t('Y Amount')}:</Text>
+      <Text bold>{t('Token Amount')}:</Text>
       <BalanceInput 
           value={yAmount}
           onUserInput={handleYAmountChange}
