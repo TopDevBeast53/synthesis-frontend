@@ -16,6 +16,7 @@ const StyledTable = styled.div`
 const StyledRow = styled.div`
   background-color: transparent;
   display: flex;
+  justify-content: center;
   cursor: pointer;
 `
 const StyledCell = styled(BaseCell)`
@@ -42,7 +43,12 @@ const ScrollButtonContainer = styled.div`
   padding-bottom: 5px;
 `
 
-const YieldCPartyTable= ({ swaps, state, bids }) => {
+const StyledCol = styled.div`
+  padding-top: 10px;
+  padding-bottom: 5px;
+  font-style: italic;
+` 
+const YieldCPartyTable= ({ swaps, state, bids, loading }) => {
   const { t } = useTranslation()
   const tableWrapperEl = useRef<HTMLDivElement>(null)
   const rowData = swaps.map(s => {
@@ -60,7 +66,7 @@ const YieldCPartyTable= ({ swaps, state, bids }) => {
     <StyledTableBorder>
       <StyledTable id="pools-table" role="table" ref={tableWrapperEl}>
         {
-          !rowData.length && (
+          loading && (
             <>
                 <StyledRow >
                   <StyledCell>
@@ -90,6 +96,17 @@ const YieldCPartyTable= ({ swaps, state, bids }) => {
                     
                 </StyledRow>
             </>        
+          )
+        }
+        {
+          !loading && rowData.length === 0 && (
+            <StyledRow>
+              <StyledCol>
+                <Text>
+                  No Data
+                </Text>
+              </StyledCol>
+            </StyledRow>
           )
         }
         {

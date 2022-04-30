@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useMemo } from 'react'
 import Balance from 'components/Balance'
 import styled from 'styled-components'
 import { AutoRenewIcon, Text, Button, useModal, ChevronDownIcon, useDelayedUnmount } from 'uikit'
@@ -33,8 +33,8 @@ const ArrowIcon = styled(ChevronDownIcon)<{ toggled: boolean }>`
 
 const YieldCPartyRow=({data, state})=>{
     const { t } = useTranslation()
-    const {amount, ask, id, exToken, lockDuration, approved, bids} = data
-    const duration = moment.duration(lockDuration.toNumber(), "s")
+    const {amount, ask, id, exToken, lockDuration, lockUntilTimestamp, approved, bids} = data
+    
     const yieldSwapContract = useHelixYieldSwap();
     
     const { toastSuccess, toastError } = useToast()
@@ -42,7 +42,20 @@ const YieldCPartyRow=({data, state})=>{
     const [expanded, setExpanded] = useState(false)
     const shouldRenderDetail = useDelayedUnmount(expanded, 300)    
     const {tableRefresh, setTableRefresh} = useContext(YieldPartyContext)
-    
+
+    const timeInfo = useMemo(() => {
+        let time;
+        const withdrawDate = moment.unix(lockUntilTimestamp) 
+        const today = moment() 
+        if (state === SwapState.All || state === SwapState.Applied ) {
+            time = moment.duration(lockDuration.toNumber(), "s").humanize()
+        } else {
+            time = moment.duration(withdrawDate.diff(today)).humanize()
+        }   
+        
+        return time
+      }, [lockDuration, lockUntilTimestamp, state])
+
     const onSendAsk = () =>{
         setTableRefresh(tableRefresh + 1)
     }
@@ -120,7 +133,7 @@ const YieldCPartyRow=({data, state})=>{
                             Left Time
                         </Text>
                         <Text mt="4px" color='primary'>
-                            {duration.humanize()}
+                            {timeInfo}
                         </Text>
                     </CellContent>
                 </StyledCell>

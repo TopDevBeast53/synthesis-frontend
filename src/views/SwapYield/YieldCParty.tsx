@@ -35,6 +35,7 @@ const YieldCParty = ()=>{
     const [bids, setBids] = useState([])
     const [hasBidOnSwap, setHasBidOnSwap] = useState([])
     const [refresh, setTableRefresh] = useState(0)
+    const [loading, setLoading] = useState(false)
 
     const filteredSwaps = () => {        
 
@@ -51,7 +52,7 @@ const YieldCParty = ()=>{
 
     useEffect(() => {
         if(refresh < 0) return
-
+        setLoading(true)
         const fetchData = async () => {
             try {
                 // TODO: Should be update
@@ -64,6 +65,7 @@ const YieldCParty = ()=>{
                     return {...b, id: i}
                 })
                 setBids(filteredBids)
+                console.debug('are you here?', filteredBids, refresh)
     
                 setHasBidOnSwap(fetchedSwapIds)
                 const fetchedSwapsWithIds = fetchedSwaps.map((s, i) => {
@@ -74,6 +76,7 @@ const YieldCParty = ()=>{
             } catch(err) {
                 console.error(err)
             }
+            setLoading(false)
         }
         fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -101,7 +104,7 @@ const YieldCParty = ()=>{
                         </ButtonMenu>
                     </Wrapper>
                     <YieldCPartyContext.Provider value={{tableRefresh:refresh,  setTableRefresh}}>
-                    <YieldCPartyTable swaps={filteredSwaps()} state={menuIndex} bids={bids}/>
+                    <YieldCPartyTable swaps={filteredSwaps()} state={menuIndex} bids={bids} loading={loading}/>
                     </YieldCPartyContext.Provider>
                     </Page>
             }
