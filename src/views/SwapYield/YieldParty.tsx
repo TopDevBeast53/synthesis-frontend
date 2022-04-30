@@ -48,7 +48,8 @@ const YieldParty = ()=>{
         YieldSwapContract.getSwapIds(account).then(async (ids)=>{
             setSwapIds(ids)
         }).catch(err=>{
-            toastError('Error', err.toString())
+            console.log(err)            
+            // toastError('Error', err.toString())
         })
     }, [YieldSwapContract, account, toastError, refresh, fastRefresh ])
 

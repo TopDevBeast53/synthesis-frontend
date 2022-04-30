@@ -94,8 +94,7 @@ const AddRowModal = (props)=>{
   const lpContracts = useERC20s(lpAddressList)
 
 
-  const handleConfirm = async () => {
-
+  const handleConfirm = async () => {    
     if(!selectedToken || ! selectedLPOption) return 
     const selectedLP = selectedLPOption.value
     const selectedLPContract:Erc20 = selectedLPOption.contract
@@ -154,8 +153,9 @@ const AddRowModal = (props)=>{
         tempLPOptions[i].contract = lpContracts[i]
       }      
       setLPOptions(tempLPOptions)
+      if(!selectedLPOption) setSelectedLPOption(tempLPOptions[0])
     })
-  }, [YieldSwapContract.address, account, lpContracts, tempLPOptions])
+  }, [YieldSwapContract.address, account, lpContracts, tempLPOptions, selectedLPOption])
 
   useEffect(()=>{
     Promise.all([YieldSwapContract.MIN_LOCK_DURATION(), YieldSwapContract.MAX_LOCK_DURATION()]).then((values) => {      

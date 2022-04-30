@@ -27,20 +27,23 @@ export default function SwapYield() {
   }
   return (
     <>
-      <PageHeader background='transparent'>        
-        <Heading as="h1" scale="xxl" color="secondary" style={{display:"inline-block", verticalAlign:"middle"}}>
-          {t('Swap Yield')}  
-        </Heading>
-        <Wrapper>
-          <ButtonMenu activeIndex={menuIndex} scale="sm" variant="subtle" onItemClick={handleButtonMenuClick}>
-              <ButtonMenuItem>
-                    {t('Seller')}
-                </ButtonMenuItem>
-                <ButtonMenuItem >
-                    {t('Buyer')}
-                </ButtonMenuItem>
-            </ButtonMenu>
-        </Wrapper>
+      <PageHeader background='transparent'> 
+        <div style={{display:"flex", justifyContent:"space-between", alignItems:"center"}}>
+          <Heading as="h1" scale="xxl" color="secondary" style={{display:"inline-block", verticalAlign:"middle"}}>
+            {t('Swap Yield')}  
+          </Heading>
+          <Wrapper>
+            <ButtonMenu activeIndex={menuIndex} scale="sm" variant="subtle" onItemClick={handleButtonMenuClick}>
+                <ButtonMenuItem>
+                      {t('Sell')}
+                  </ButtonMenuItem>
+                  <ButtonMenuItem >
+                      {t('Buy')}
+                  </ButtonMenuItem>
+              </ButtonMenu>
+          </Wrapper>
+
+        </div>
         
       </PageHeader>
       <>

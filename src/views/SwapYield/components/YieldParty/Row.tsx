@@ -1,12 +1,16 @@
 import Balance from 'components/Balance'
+import { useAllTokens } from 'hooks/Tokens'
 import { useHelixYieldSwap } from 'hooks/useContract'
 import useToast from 'hooks/useToast'
 import moment from 'moment'
 import React, { useEffect, useMemo, useState } from 'react'
+import { useFarms } from 'state/farms/hooks'
 import styled from 'styled-components'
 import { AutoRenewIcon, Button, ChevronDownIcon, Skeleton, Text, useDelayedUnmount } from 'uikit'
+import { getAddress } from 'utils/addressHelpers'
 import BaseCell, { CellContent } from './BaseCell'
 import CandidateTable from './CandidateTable'
+import ToolTipCell from './ToolTipCell'
 
 const StyledRow = styled.div`
   background-color: transparent;
@@ -30,12 +34,16 @@ const ArrowIcon = styled(ChevronDownIcon)<{ toggled: boolean }>`
 const YieldPartyRow=({data: swapId, onClick})=>{
     const YieldSwapContract = useHelixYieldSwap()
     const { toastSuccess, toastError } = useToast()
+    const tokens = useAllTokens()
+    const {data:farms} = useFarms()
     const [swapData, setSwapData] = useState<any>()    
     const [expanded, setExpanded] = useState(false)
     const [pendingTx, setPendingTx] = useState(false)
     const shouldRenderDetail = useDelayedUnmount(expanded, 300)    
+    const lpToken = farms.find((item)=>(getAddress(item.lpAddresses) === swapData?.lpToken))
+    const exToken = tokens[swapData?.exToken]    
     
-    const {duration } = useMemo(()=>{        
+    const {duration } = useMemo(()=>{
         // const dueDate = moment.unix(swapData?.lockDuration.toNumber()) 
         // const today = moment()    
         const retData = { 
@@ -110,25 +118,12 @@ const YieldPartyRow=({data: swapId, onClick})=>{
                 <StyledCell>
                     <CellContent>
                         <Text>
-                            UAmount
+                            {lpToken?.lpSymbol}
                         </Text>
                         <Balance
                             mt="4px"                
                             color='primary'                        
                             value={swapData.amount.toNumber()}
-                            fontSize="14px"
-                        />
-                    </CellContent>
-                </StyledCell>
-                <StyledCell>
-                    <CellContent>
-                        <Text>
-                            YAmount
-                        </Text>
-                        <Balance
-                            mt="4px"                
-                            color='primary'                        
-                            value={swapData.ask.toNumber()}
                             fontSize="14px"
                         />
                     </CellContent>
@@ -142,6 +137,22 @@ const YieldPartyRow=({data: swapId, onClick})=>{
                             {duration.humanize()}
                         </Text>                    
                     </CellContent>       
+                </StyledCell>
+                <StyledCell>
+                    <CellContent>
+                        <Text>
+                            {exToken?.symbol}
+                        </Text>
+                        <Balance
+                            mt="4px"                
+                            color='primary'                        
+                            value={swapData.ask.toNumber()}
+                            fontSize="14px"
+                        />
+                    </CellContent>
+                </StyledCell>
+                <StyledCell>
+                    <ToolTipCell/>
                 </StyledCell>
                 <StyledCell style={{zIndex:10, flex:3}}>
                     <Button 
