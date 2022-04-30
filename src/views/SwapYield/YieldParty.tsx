@@ -6,6 +6,7 @@ import useToast from 'hooks/useToast'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Button, ButtonMenu, ButtonMenuItem, useModal } from 'uikit'
+import { useFastFresh } from 'hooks/useRefresh'
 import AddRowModal from './components/YieldParty/CreateOrderDialog'
 import YieldPartyTable from './components/YieldParty/Table'
 import { YieldPartyContext } from './context'
@@ -35,6 +36,7 @@ const YieldParty = ()=>{
     // const [filterOrderState, setFilterOrderState]=useState(OrderState.Active)    
     const [swapIds, setSwapIds] = useState([])
     const [refresh,setTableRefresh] = useState(0)
+    const fastRefresh = useFastFresh()
     const handleButtonMenuClick = (newIndex) => {
         // setFilterOrderState(newIndex)
         setMenuIndex(newIndex)
@@ -48,7 +50,7 @@ const YieldParty = ()=>{
         }).catch(err=>{
             toastError('Error', err.toString())
         })
-    }, [YieldSwapContract, account, toastError, refresh ])
+    }, [YieldSwapContract, account, toastError, refresh, fastRefresh ])
 
     return (        
         <Page>            
