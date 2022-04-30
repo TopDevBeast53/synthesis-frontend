@@ -59,16 +59,17 @@ const YieldCParty = ()=>{
             setLoading(true)
 
             // TODO: Should be update
-            const bidsLastIndex = await yieldSwapContract.getBidId();
-            const fetchedSwaps = await yieldSwapContract.getAllSwaps()
-            const swapIds = Array.from(Array(fetchedSwaps.length).keys())
-            const bidIds = Array.from(Array(bidsLastIndex.toNumber() + 1).keys())
-            const fetchedSwapIds = await Promise.all(swapIds.map((i) => yieldSwapContract.hasBidOnSwap(account, i)))
-            const fetchedBids = await Promise.all(bidIds.map((b) => yieldSwapContract.bids(b)))
-            const filteredBids = fetchedBids.map((b, i) => {
-                return {...b, id: i}
-            })
-            setBids(filteredBids)
+            const bidsLastIndex = await yieldSwapContract.getBidId()
+            if(!bidsLastIndex.isZero()) {
+                const bidIds = Array.from(Array(bidsLastIndex.toNumber() + 1).keys())
+                const fetchedBids = await Promise.all(bidIds.map((b) => yieldSwapContract.bids(b)))
+                const filteredBids = fetchedBids.map((b, i) => {
+                    return {...b, id: i}
+                })
+                setBids(filteredBids)
+            }
+            const fetchedSwaps = await yieldSwapContract.getSwaps()
+            const fetchedSwapIds = await yieldSwapContract.getBidderSwapIds(account)
             setHasBidOnSwap(fetchedSwapIds)
             const fetchedSwapsWithIds = fetchedSwaps.map((s, i) => {
                 return {...s, id: i}
@@ -83,47 +84,28 @@ const YieldCParty = ()=>{
     return (
         <>
             {
-                loading 
-                ? (
-                    <Flex
-                      position="relative"
-                      height="300px"
-                      justifyContent="center"
-                      py="4px"
-                    >
-                      <Flex justifyContent="center" style={{ paddingBottom: '8px' }}>
-                        <Text fontSize="18px" bold>
-                          Loading...
-                        </Text>
-                      </Flex>
-                      <Flex justifyContent="center">
-                        <CircleLoader size="30px"/>
-                      </Flex>
-                    </Flex>
-                  ) : (
-                    <Page>
-                      <Wrapper>
-                          {/* TODO: Should be read from constants */}
-                          <ButtonMenu activeIndex={menuIndex} scale="sm" variant="subtle" onItemClick={handleButtonMenuClick}>
-                              <ButtonMenuItem>
-                                  {t('Orders')}
-                              </ButtonMenuItem>
-                              <ButtonMenuItem >
-                                  {t('Applied Orders')}
-                              </ButtonMenuItem>
-                              <ButtonMenuItem >
-                                  {t('Pending')}
-                              </ButtonMenuItem>
-                              <ButtonMenuItem >
-                                  {t('Withdrawn')}
-                              </ButtonMenuItem>
-                          </ButtonMenu>
-                      </Wrapper>
-                      <YieldCPartyContext.Provider value={{tableRefresh:refresh,  setTableRefresh}}>
-                        <YieldCPartyTable swaps={filteredSwaps()} state={menuIndex} bids={bids}/>
-                        </YieldCPartyContext.Provider>
-                     </Page>
-                  )
+                <Page>
+                    <Wrapper>
+                        {/* TODO: Should be read from constants */}
+                        <ButtonMenu activeIndex={menuIndex} scale="sm" variant="subtle" onItemClick={handleButtonMenuClick}>
+                            <ButtonMenuItem>
+                                {t('Orders')}
+                            </ButtonMenuItem>
+                            <ButtonMenuItem >
+                                {t('Applied Orders')}
+                            </ButtonMenuItem>
+                            <ButtonMenuItem >
+                                {t('Pending')}
+                            </ButtonMenuItem>
+                            <ButtonMenuItem >
+                                {t('Withdrawn')}
+                            </ButtonMenuItem>
+                        </ButtonMenu>
+                    </Wrapper>
+                    <YieldCPartyContext.Provider value={{tableRefresh:refresh,  setTableRefresh}}>
+                    <YieldCPartyTable swaps={filteredSwaps()} state={menuIndex} bids={bids}/>
+                    </YieldCPartyContext.Provider>
+                    </Page>
             }
         </>
     )

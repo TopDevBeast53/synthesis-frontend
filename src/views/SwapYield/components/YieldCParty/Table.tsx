@@ -1,7 +1,8 @@
 import React, { useRef } from 'react'
 import styled from 'styled-components'
 import { useTranslation } from 'contexts/Localization'
-import { Button, ChevronUpIcon } from 'uikit'
+import { Button, ChevronUpIcon, Text, Skeleton } from 'uikit'
+import BaseCell, { CellContent } from './BaseCell'
 import YieldCPartyRow from './Row'
 
 const StyledTable = styled.div`
@@ -10,6 +11,19 @@ const StyledTable = styled.div`
 
   > div:not(:last-child) {
     border-bottom: 2px solid ${({ theme }) => theme.colors.disabled};
+  }
+`
+const StyledRow = styled.div`
+  background-color: transparent;
+  display: flex;
+  cursor: pointer;
+`
+const StyledCell = styled(BaseCell)`
+  flex: 4.5;
+  padding-left:32px;
+  
+  ${({ theme }) => theme.mediaQueries.sm} {
+    flex: 1 0 120px;
   }
 `
 
@@ -44,7 +58,40 @@ const YieldCPartyTable= ({ swaps, state, bids }) => {
   
   return (
     <StyledTableBorder>
-      <StyledTable id="pools-table" role="table" ref={tableWrapperEl}>        
+      <StyledTable id="pools-table" role="table" ref={tableWrapperEl}>
+        {
+          !rowData.length && (
+            <>
+                <StyledRow >
+                  <StyledCell>
+                      <CellContent>
+                          <Text>
+                              UAmount
+                          </Text>
+                          <Skeleton mt="4px"/>
+                      </CellContent>
+                  </StyledCell>
+                  <StyledCell>
+                      <CellContent>
+                          <Text>
+                              YAmount
+                          </Text>
+                          <Skeleton mt="4px"/>
+                      </CellContent>
+                  </StyledCell>
+                  <StyledCell>
+                      <CellContent>
+                          <Text>
+                              Duration
+                          </Text>
+                          <Skeleton mt="4px"/>
+                      </CellContent>       
+                  </StyledCell>
+                    
+                </StyledRow>
+            </>        
+          )
+        }
         {
           rowData.map((data)=>(
             <YieldCPartyRow key={data.id} data={data} state={state}/>
