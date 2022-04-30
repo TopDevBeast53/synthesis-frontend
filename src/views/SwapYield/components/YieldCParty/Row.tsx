@@ -49,7 +49,7 @@ const YieldCPartyRow=({data, state})=>{
         const today = moment() 
         if (state === SwapState.All || state === SwapState.Applied ) {
             time = moment.duration(lockDuration.toNumber(), "s").humanize()
-        } else {
+        } else if (state === SwapState.Pending) {
             time = moment.duration(withdrawDate.diff(today)).humanize()
         }   
         
@@ -127,16 +127,20 @@ const YieldCPartyRow=({data, state})=>{
                         />
                     </CellContent>
                 </StyledCell>
-                <StyledCell>
-                    <CellContent>
-                        <Text>
-                            Left Time
-                        </Text>
-                        <Text mt="4px" color='primary'>
-                            {timeInfo}
-                        </Text>
-                    </CellContent>
-                </StyledCell>
+                {
+                    state !== SwapState.Finished && (
+                        <StyledCell>
+                            <CellContent>
+                                <Text>
+                                    Left Time
+                                </Text>
+                                <Text mt="4px" color='primary'>
+                                    {timeInfo}
+                                </Text>
+                            </CellContent>
+                        </StyledCell>
+                    )
+                }
                 <StyledCell style={{zIndex:10, flex:3}}>
                     <CellContent>
                     {
@@ -165,9 +169,13 @@ const YieldCPartyRow=({data, state})=>{
                     }
                     </CellContent>
                 </StyledCell>
-                <StyledCell>
-                    <ArrowIcon color="primary" toggled={expanded} onClick={handleExpand}/>
-                </StyledCell>
+                {
+                    state === SwapState.All && state === SwapState.Applied && (
+                        <StyledCell>
+                            <ArrowIcon color="primary" toggled={expanded} onClick={handleExpand}/>
+                        </StyledCell>
+                    )
+                }
             </StyledRow>
 
             {shouldRenderDetail && (
