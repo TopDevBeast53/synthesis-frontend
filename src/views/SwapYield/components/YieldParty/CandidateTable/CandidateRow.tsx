@@ -52,8 +52,6 @@ const CandidateRow=({bidId})=>{
         setBidData({bidder:"0x59201fb8cb2D61118B280c8542127331DD141654", amount:20 })
         YieldSwapContract.getBid(bidId).then(res=>{
             setBidData(res)
-        }).catch(err=>{
-            console.error(err, " on getting bid data")
         })
     }, [YieldSwapContract, bidId])
     if (!bidData){

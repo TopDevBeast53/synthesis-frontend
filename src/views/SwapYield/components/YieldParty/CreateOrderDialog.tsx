@@ -1,20 +1,21 @@
 import { useWeb3React } from '@web3-react/core'
 import BigNumber from 'bignumber.js'
 import Select from 'components/Select/Select'
+import { Erc20 } from 'config/abi/types'
 import { useTranslation } from 'contexts/Localization'
 import { useAllTokens } from 'hooks/Tokens'
-import { useERC20, useHelixYieldSwap } from 'hooks/useContract'
+import { useERC20s, useHelixYieldSwap } from 'hooks/useContract'
 import useTheme from 'hooks/useTheme'
 import useToast from 'hooks/useToast'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { Token } from 'sdk'
-import { useFarms } from 'state/farms/hooks'
-import { DeserializedFarm } from 'state/types'
+import { useMemoFarms } from 'state/farms/hooks'
 import styled from 'styled-components'
 import {
   AutoRenewIcon, BalanceInput, Button, Input, Modal, Text
 } from 'uikit'
 import { getAddress } from 'utils/addressHelpers'
+import { BIG_ZERO } from 'utils/bigNumber'
 import { getDecimalAmount } from 'utils/formatBalance'
 
 
@@ -41,26 +42,23 @@ const AddRowModal = (props)=>{
   const [duration, setDuration]=useState(1)  
   const [pendingTx, setPendingTx] = useState(false)
   const YieldSwapContract = useHelixYieldSwap()  
-  const allTokens = useAllTokens() // All Stable Token
-  const { data: farmsLP } = useFarms()
+  const allTokens = useAllTokens() // All Stable Token  
+  const { data: farmsLP } = useMemoFarms()
   
-  const LPOptions = farmsLP.filter(lp=>lp.pid!==0).map(lp=>(    
-  {
-    "label": lp.lpSymbol,
-    "value": lp      
-  }
-  ))
+  const [LPOptions, setLPOptions] = useState<any>()
+ 
   const TokenOptions = Object.keys(allTokens).map((key)=>{
     return {
       "label": allTokens[key].symbol,
       "value": allTokens[key]
     }
   })
-  const [selectedLP, setSelectedLP]  = useState<DeserializedFarm>(farmsLP[0])
+  const [selectedLPOption, setSelectedLPOption] = useState<any>()
+  
   const [selectedToken, setSelectedToken] = useState<Token>(TokenOptions[0].value)
-  const [isAllowed, setAllowed] = useState(1)
   const [minDuration, setMinDuration] = useState(0)
   const [maxDuration, setMaxDuration] = useState(0)
+  
   
   const handleUAmountChange = (input) => {
     setUAmount(input)
@@ -69,51 +67,58 @@ const AddRowModal = (props)=>{
     setYAmount(input)
   }  
   const handleLPChange = (option) => {
-    setSelectedLP(option.value)
+    setSelectedLPOption(option)    
   }
   const handleTokenChange = (option) => { setSelectedToken(option.value)}
   const handleDurationChange = (input) => {    
     setDuration(input.target.value)
   }
-  const lpAddress = getAddress(selectedLP.lpAddresses)
-  const lpContract = useERC20(lpAddress)
+  
+  const [tempLPOptions, lpAddressList] = useMemo(()=>{
+    const lpOptions= farmsLP.filter(lp=>lp.pid!==0).map(lp=>    
+      (
+        {
+          label: lp.lpSymbol,
+          value: lp,
+          allowance:BIG_ZERO,
+          contract:undefined
+        }
+      )
+    )
+    const addressList =  lpOptions.map((option)=>{
+      return getAddress(option.value.lpAddresses)
+    })
+    return [lpOptions, addressList]
+  },[farmsLP])
+  
+  const lpContracts = useERC20s(lpAddressList)
+
 
   const handleConfirm = async () => {
-    if(!selectedToken || ! selectedLP) return 
+
+    if(!selectedToken || ! selectedLPOption) return 
+    const selectedLP = selectedLPOption.value
+    const selectedLPContract:Erc20 = selectedLPOption.contract
+    const selectedLPAllowance = selectedLPOption.allowance
     setPendingTx(true);   
     async function DoValidation(){
-      console.log(duration, maxDuration, minDuration)
       if (duration > maxDuration || duration < minDuration){
         toastError('Error', `Duration should be in range between ${minDuration} and ${maxDuration}`)
         return false
-      }
-        
-      try{
-        const allowedValue =  await lpContract.allowance(account, YieldSwapContract.address)
-        if(allowedValue.lte(0))  {
-          toastError('Error', "You didn't allow the LPToken to use")
-          setAllowed(0)
-          setPendingTx(false);        
-          return false
-        }
-      }catch(err){
-        toastError('Error', err.toString())
-        setAllowed(0)
-        setPendingTx(false);        
-        return false
-      }
+      }        
       return true
     }
-    if (isAllowed === 0){
-      const decimals = await lpContract.decimals()
+    if (selectedLPAllowance.lte(BIG_ZERO)){
+      const decimals = await selectedLPContract.decimals()
       const decimalUAmount = getDecimalAmount(new BigNumber(uAmount), decimals)
-      lpContract.approve(YieldSwapContract.address, decimalUAmount.toString()).then( async (tx)=>{        
+      selectedLPContract.approve(YieldSwapContract.address, decimalUAmount.toString()).then( async (tx)=>{        
         await tx.wait()
         toastSuccess(
           `${t('Congratulations')}!`,
             t('You Apporved  !!! '),
-        )
-        setAllowed(uAmount)
+        )        
+        selectedLPOption.allowance=decimalUAmount
+        setSelectedLPOption({...selectedLPOption})
         setPendingTx(false)
       }).catch(err=>{
         toastError('Error', err.toString())
@@ -139,13 +144,27 @@ const AddRowModal = (props)=>{
   }
 
   useEffect(()=>{
+    const allowanceContracts = lpContracts.map((lpContract)=>{
+      return lpContract.allowance(account, YieldSwapContract.address)
+    })
+    Promise.all(allowanceContracts).then((allowances) => {      
+      
+      for(let i =0; i< tempLPOptions.length; i ++){
+        tempLPOptions[i].allowance = new BigNumber(allowances[i].toString())
+        tempLPOptions[i].contract = lpContracts[i]
+      }      
+      setLPOptions(tempLPOptions)
+    })
+  }, [YieldSwapContract.address, account, lpContracts, tempLPOptions])
+
+  useEffect(()=>{
     Promise.all([YieldSwapContract.MIN_LOCK_DURATION(), YieldSwapContract.MAX_LOCK_DURATION()]).then((values) => {      
       setMinDuration(values[0].toNumber()/24/3600)
       setMaxDuration(values[1].toNumber()/24/3600)
     })
-  }, [YieldSwapContract])
+  }, [YieldSwapContract, account])
 
-  
+  if (!LPOptions) return null
   return (
     <Modal
       title={t('Add Item') }
@@ -178,7 +197,7 @@ const AddRowModal = (props)=>{
         onClick={handleConfirm} 
         mt="24px"
       >
-        {pendingTx ? isAllowed===0 ? "Approving" :t('Confirming') : isAllowed===0 ? "Approve" : t('Confirm')}
+        {pendingTx ? selectedLPOption?.allowance.lte(0) ? "Approving" :t('Confirming') : selectedLPOption?.allowance.lte(0)? "Approve" : t('Confirm')}
       </Button>
       <Button variant="text" onClick={onDismiss} pb="0px">
         Close Window

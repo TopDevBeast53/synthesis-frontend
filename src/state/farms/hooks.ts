@@ -97,6 +97,21 @@ export const useFarms = (): DeserializedFarmsState => {
   }
 }
 
+export const useMemoFarms = ():DeserializedFarmsState => {
+  const farms = useSelector((state: State) => state.farms)
+  
+  return useMemo( ()=> {
+    const deserializedFarmsData = farms.data.map(deserializeFarm)
+    const { loadArchivedFarmsData, userDataLoaded } = farms
+    return {
+            loadArchivedFarmsData,
+            userDataLoaded,
+            data: deserializedFarmsData,
+    }
+  }, [farms])
+}
+
+
 export const useFarmFromPid = (pid: number): DeserializedFarm => {
   const farm = useSelector((state: State) => state.farms.data.find((f) => f.pid === pid))
   return deserializeFarm(farm)
