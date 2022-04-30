@@ -73,7 +73,7 @@ const YieldCPartyRow=({data, state})=>{
             setPendingTx(false);     
             toastSuccess(
                 `${t('Congratulations')}!`,
-                t('You Added Item !!! '),
+                t('Bid Success!!! '),
             )
             
         } catch(err) {
@@ -89,7 +89,7 @@ const YieldCPartyRow=({data, state})=>{
             setPendingTx(false);      
             toastSuccess(
                 `${t('Congratulations')}!`,
-                t('You Added Item !!! '),
+                t('Withdraw Success!!! '),
             )
             
         } catch(err) {
