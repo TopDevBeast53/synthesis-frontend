@@ -131,8 +131,8 @@ export default {
     56: '',
     97: '0xE5590210A3d266b79A648C8b50D327d7B6D66ab2',
   },
-  yieldSwap: {
+  helixYieldSwap: {
     56: '',
-    97: '0xC90b598f4D9b3Ad031658554d214F9Fa1E735453'
+    97: '0xBac68F8dA956196Af4C2C4c6cea1aA8619bC822C'
   }
 }

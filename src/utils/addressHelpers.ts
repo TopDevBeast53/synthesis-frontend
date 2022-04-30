@@ -110,7 +110,7 @@ export const getHelixVaultAddress = () => {
   return getAddress(addresses.helixVault)
 }
 export const getYieldSwapAddress = () => {
-  return getAddress(addresses.yieldSwap)
+  return getAddress(addresses.helixYieldSwap)
 }
 export const getReferralRegisterAddress = () => {
   return getAddress(addresses.referralRegister)

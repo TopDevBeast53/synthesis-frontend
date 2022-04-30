@@ -19,24 +19,17 @@ const StyledTableBorder = styled.div`
   background-size: 400% 400%;
 `
 
-const ScrollButtonContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  padding-top: 5px;
-  padding-bottom: 5px;
-`
-
-const CandidateTable = (props) => {    
-    const {swap} = props    
+const CandidateTable = (props) => {
+    const {bids, exToken, approved} = props
     const tableWrapperEl = useRef<HTMLDivElement>(null)
-    if(swap.bidIds.length === 0) return null
+    if(bids.length === 0) return null
 
     return (
       <StyledTableBorder>
         <StyledTable id="pools-table" role="table" ref={tableWrapperEl}>        
           {
-            swap.bidIds.map((bidId)=>(
-              <CandidateRow key={bidId} bidId={bidId}/>
+            bids.map((bid)=>(
+              <CandidateRow key={bid.id} bid={bid} exToken={exToken} approved={approved}/>
             ))
           }
         </StyledTable>

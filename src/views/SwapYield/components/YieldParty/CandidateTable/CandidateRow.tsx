@@ -53,7 +53,7 @@ const CandidateRow=({bidId})=>{
         YieldSwapContract.getBid(bidId).then(res=>{
             setBidData(res)
         }).catch(err=>{
-            console.log(err, " on getting bid data")
+            console.error(err, " on getting bid data")
         })
     }, [YieldSwapContract, bidId])
     if (!bidData){

@@ -3,10 +3,7 @@ import { getProviderOrSigner } from 'utils'
 import { Contract } from '@ethersproject/contracts'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import { ethers } from 'ethers'
-import { formatBigNumber } from 'utils/formatBalance'
-
-import yieldSwapABI from 'config/abi/YieldSwap.json'
+import yieldSwapABI from 'config/abi/HelixYieldSwap.json'
 import { yieldSwapAddress } from '../constants'
 
 
