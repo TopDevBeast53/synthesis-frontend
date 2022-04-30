@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import { useWeb3React } from '@web3-react/core'
+import { useFastFresh } from 'hooks/useRefresh'
 import styled from 'styled-components'
 import { useTranslation } from 'contexts/Localization'
 import { ButtonMenu, ButtonMenuItem } from 'uikit'
-import { filter } from 'lodash'
+import { filter, includes } from 'lodash'
 import { useHelixYieldSwap } from 'hooks/useContract'
 import Page from 'components/Layout/Page'
 import YieldCPartyTable from './components/YieldCParty/Table'
@@ -15,6 +16,7 @@ const Wrapper = styled.div`
   align-items: center;
   justify-content:space-between;
   width:100%;
+  margin-bottom: 15px;
   a {
       padding-left: 12px;
       padding-right: 12px;
@@ -36,15 +38,16 @@ const YieldCParty = ()=>{
     const [hasBidOnSwap, setHasBidOnSwap] = useState([])
     const [refresh, setTableRefresh] = useState(0)
     const [loading, setLoading] = useState(false)
+    const fastRefresh = useFastFresh()
 
-    const filteredSwaps = () => {        
+    const filteredSwaps = useMemo(() => {        
 
-        if(menuIndex === SwapState.Pending) return swaps.filter((s, i) => !s.isOpen && !s.isWithdrawn && hasBidOnSwap[i])                    
-        if(menuIndex === SwapState.Finished) return filter(swaps, {isWithdrawn: true})
-        if(menuIndex === SwapState.All) return swaps.filter((s, i) => s.isOpen && !hasBidOnSwap[i])         
-        if(menuIndex === SwapState.Applied) return swaps.filter((s, i) => s.isOpen && hasBidOnSwap[i])            
+        if(menuIndex === SwapState.Pending) return swaps.filter((s, i) => !s.isOpen && !s.isWithdrawn && includes(hasBidOnSwap, i))                    
+        if(menuIndex === SwapState.Finished) return filter(swaps, {isWithdrawn: true, buyer: account})
+        if(menuIndex === SwapState.All) return swaps.filter((s, i) => s.isOpen && !includes(hasBidOnSwap, i) && s.seller !== account)         
+        if(menuIndex === SwapState.Applied) return swaps.filter((s, i) => s.isOpen && includes(hasBidOnSwap, i))            
         return []
-    }
+    }, [menuIndex, swaps, hasBidOnSwap, account])
 
     const handleButtonMenuClick = (newIndex) => {
         setMenuIndex(newIndex)
@@ -56,23 +59,27 @@ const YieldCParty = ()=>{
         const fetchData = async () => {
             try {
                 // TODO: Should be update
+
+                // fetch swaps
                 const fetchedSwaps = await yieldSwapContract.getSwaps()
-                const fetchedSwapIds = await yieldSwapContract.getBidderSwapIds(account)
-    
+                const fetchedSwapsWithIds = fetchedSwaps.map((s, i) => {
+                    return {...s, id: i}
+                })
+                setSwaps(fetchedSwapsWithIds)
+
+                // fetch bid Ids
+                const fetchBidderSwapIds = await yieldSwapContract.getBidderSwapIds(account)
+                const normalNumberBidIds = fetchBidderSwapIds.map(b => b.toNumber())
+                setHasBidOnSwap(normalNumberBidIds)
+                
+                // fetch bid contents
                 const bidIds = fetchedSwaps.reduce((prev, cur) => prev.concat(cur.bidIds), [])
                 const fetchedBids = await Promise.all(bidIds.map((b) => yieldSwapContract.bids(b)))
                 const filteredBids = fetchedBids.map((b, i) => {
                     return {...b, id: i}
                 })
                 setBids(filteredBids)
-                console.debug('are you here?', filteredBids, refresh)
-    
-                setHasBidOnSwap(fetchedSwapIds)
-                const fetchedSwapsWithIds = fetchedSwaps.map((s, i) => {
-                    return {...s, id: i}
-                })
-                setSwaps(fetchedSwapsWithIds)
-
+                
             } catch(err) {
                 console.error(err)
             }
@@ -80,7 +87,7 @@ const YieldCParty = ()=>{
         }
         fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [account, refresh])
+    }, [account, refresh, menuIndex])
 
     return (
         <>
@@ -104,7 +111,7 @@ const YieldCParty = ()=>{
                         </ButtonMenu>
                     </Wrapper>
                     <YieldCPartyContext.Provider value={{tableRefresh:refresh,  setTableRefresh}}>
-                    <YieldCPartyTable swaps={filteredSwaps()} state={menuIndex} bids={bids} loading={loading}/>
+                    <YieldCPartyTable swaps={filteredSwaps} state={menuIndex} bids={bids} loading={loading}/>
                     </YieldCPartyContext.Provider>
                     </Page>
             }

@@ -1,8 +1,8 @@
 import React, { useRef } from 'react'
 import styled from 'styled-components'
 import { useTranslation } from 'contexts/Localization'
-import { Button, ChevronUpIcon, Text, Skeleton } from 'uikit'
-import BaseCell, { CellContent } from './BaseCell'
+import { Button, ChevronUpIcon, Text } from 'uikit'
+import BaseCell from './BaseCell'
 import YieldCPartyRow from './Row'
 
 const StyledTable = styled.div`
@@ -18,14 +18,6 @@ const StyledRow = styled.div`
   display: flex;
   justify-content: center;
   cursor: pointer;
-`
-const StyledCell = styled(BaseCell)`
-  flex: 4.5;
-  padding-left:32px;
-  
-  ${({ theme }) => theme.mediaQueries.sm} {
-    flex: 1 0 120px;
-  }
 `
 
 const StyledTableBorder = styled.div`
@@ -66,39 +58,6 @@ const YieldCPartyTable= ({ swaps, state, bids, loading }) => {
     <StyledTableBorder>
       <StyledTable id="pools-table" role="table" ref={tableWrapperEl}>
         {
-          loading && (
-            <>
-                <StyledRow >
-                  <StyledCell>
-                      <CellContent>
-                          <Text>
-                              UAmount
-                          </Text>
-                          <Skeleton mt="4px"/>
-                      </CellContent>
-                  </StyledCell>
-                  <StyledCell>
-                      <CellContent>
-                          <Text>
-                              YAmount
-                          </Text>
-                          <Skeleton mt="4px"/>
-                      </CellContent>
-                  </StyledCell>
-                  <StyledCell>
-                      <CellContent>
-                          <Text>
-                              Duration
-                          </Text>
-                          <Skeleton mt="4px"/>
-                      </CellContent>       
-                  </StyledCell>
-                    
-                </StyledRow>
-            </>        
-          )
-        }
-        {
           !loading && rowData.length === 0 && (
             <StyledRow>
               <StyledCol>
@@ -111,7 +70,7 @@ const YieldCPartyTable= ({ swaps, state, bids, loading }) => {
         }
         {
           rowData.map((data)=>(
-            <YieldCPartyRow key={data.id} data={data} state={state}/>
+            <YieldCPartyRow key={data.id} data={data} state={state} loading={loading}/>
           ))
         }
         <ScrollButtonContainer>

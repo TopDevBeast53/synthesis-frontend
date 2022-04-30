@@ -1,12 +1,15 @@
 import React, { useState, useContext, useMemo } from 'react'
 import Balance from 'components/Balance'
 import styled from 'styled-components'
-import { AutoRenewIcon, Text, Button, useModal, ChevronDownIcon, useDelayedUnmount } from 'uikit'
+import { useAllTokens } from 'hooks/Tokens'
+import { useFarms } from 'state/farms/hooks'
+import { getAddress } from 'utils/addressHelpers'
+import { AutoRenewIcon, Text, Button, useModal, ChevronDownIcon, useDelayedUnmount, Skeleton } from 'uikit'
 import useToast from 'hooks/useToast'
 import { useTranslation } from 'contexts/Localization'
 import { useHelixYieldSwap } from 'hooks/useContract'
 import moment from 'moment'
-import { YieldPartyContext } from 'views/SwapYield/context';
+import { YieldCPartyContext } from 'views/SwapYield/context';
 import BaseCell, { CellContent } from './BaseCell'
 import DiscussOrder from './DiscussOrder'
 import { SwapState } from '../../types'
@@ -31,29 +34,41 @@ const ArrowIcon = styled(ChevronDownIcon)<{ toggled: boolean }>`
   height: 24px;
 `
 
-const YieldCPartyRow=({data, state})=>{
+const YieldCPartyRow=({data, state, loading})=>{
     const { t } = useTranslation()
-    const {amount, ask, id, exToken, lockDuration, lockUntilTimestamp, approved, bids} = data
+    const {amount, ask, id, exToken, lpToken, lockDuration, lockUntilTimestamp, approved, bids} = data
     
     const yieldSwapContract = useHelixYieldSwap();
-    
+    const tokens = useAllTokens()
+    const {data:farms} = useFarms()
     const { toastSuccess, toastError } = useToast()
     const [pendingTx, setPendingTx] = useState(false)
     const [expanded, setExpanded] = useState(false)
     const shouldRenderDetail = useDelayedUnmount(expanded, 300)    
-    const {tableRefresh, setTableRefresh} = useContext(YieldPartyContext)
-
-    const timeInfo = useMemo(() => {
-        let time;
+    const {tableRefresh, setTableRefresh} = useContext(YieldCPartyContext)
+    const lpTokenInfo = farms.find((item)=>(getAddress(item.lpAddresses) === lpToken))
+    const exTokenInfo = tokens[exToken]  
+    
+    const {timeInfo, isPast} = useMemo(() => {
         const withdrawDate = moment.unix(lockUntilTimestamp) 
         const today = moment() 
         if (state === SwapState.All || state === SwapState.Applied ) {
-            time = moment.duration(lockDuration.toNumber(), "s").humanize()
+            return {
+                timeInfo: moment.duration(lockDuration.toNumber(), "s").humanize(),
+                isPast: today.isBefore(withdrawDate)
+            }
+        // eslint-disable-next-line no-else-return
         } else if (state === SwapState.Pending) {
-            time = moment.duration(withdrawDate.diff(today)).humanize()
+            return {
+                timeInfo: moment.duration(today.diff(withdrawDate)).humanize(),
+                isPast: today.isBefore(withdrawDate)
+            }
         }   
-        
-        return time
+
+        return {
+            timeInfo: '',
+            isPast: false
+        }
       }, [lockDuration, lockUntilTimestamp, state])
 
     const onSendAsk = () =>{
@@ -69,7 +84,9 @@ const YieldCPartyRow=({data, state})=>{
     const handleAcceptAsk = async () => {
         setPendingTx(true)
         try {
-            await yieldSwapContract.acceptAsk(id)
+            const tx = await yieldSwapContract.acceptAsk(id)
+            await tx.wait()        
+            onSendAsk()    
             setPendingTx(false);     
             toastSuccess(
                 `${t('Congratulations')}!`,
@@ -77,7 +94,7 @@ const YieldCPartyRow=({data, state})=>{
             )
             
         } catch(err) {
-            toastError('Error', err.toString())
+            toastError('Error', 'Update bid failed!')
             setPendingTx(false);        
         }
     }
@@ -85,17 +102,52 @@ const YieldCPartyRow=({data, state})=>{
     const handleWithdraw = async () => {
         setPendingTx(true)
         try {
-            await yieldSwapContract.withdraw(id)
-            setPendingTx(false);      
+            const tx = await yieldSwapContract.withdraw(id)
+            await tx.wait()
+            setPendingTx(false);   
+            onSendAsk()    
             toastSuccess(
                 `${t('Congratulations')}!`,
                 t('Withdraw Success!!! '),
             )
             
         } catch(err) {
-            toastError('Error', err.toString())
+            toastError('Error', 'Withdraw locked!')
             setPendingTx(false);        
         }
+    }
+
+    if(loading)
+    {
+        return (
+            <StyledRow >
+                  <StyledCell>
+                      <CellContent>
+                          <Text>
+                              UAmount
+                          </Text>
+                          <Skeleton mt="4px"/>
+                      </CellContent>
+                  </StyledCell>
+                  <StyledCell>
+                      <CellContent>
+                          <Text>
+                              YAmount
+                          </Text>
+                          <Skeleton mt="4px"/>
+                      </CellContent>
+                  </StyledCell>
+                  <StyledCell>
+                      <CellContent>
+                          <Text>
+                              Duration
+                          </Text>
+                          <Skeleton mt="4px"/>
+                      </CellContent>       
+                  </StyledCell>
+                    
+                </StyledRow>
+        )
     }
 
     return (
@@ -104,25 +156,12 @@ const YieldCPartyRow=({data, state})=>{
                 <StyledCell>
                     <CellContent>
                         <Text>
-                            YAmount
+                            {lpTokenInfo.lpSymbol}
                         </Text>
                         <Balance
                             mt="4px"                
                             color='primary'                        
                             value={amount.toNumber()}
-                            fontSize="14px"
-                        />
-                    </CellContent>
-                </StyledCell>
-                <StyledCell>
-                    <CellContent>
-                        <Text>
-                            DAmount
-                        </Text>
-                        <Balance
-                            mt="4px"                
-                            color='primary'                        
-                            value={ask.toNumber()}
                             fontSize="14px"
                         />
                     </CellContent>
@@ -135,12 +174,25 @@ const YieldCPartyRow=({data, state})=>{
                                     Left Time
                                 </Text>
                                 <Text mt="4px" color='primary'>
-                                    {timeInfo}
+                                    { (!isPast && state === SwapState.Pending) ? 'Now available!' : timeInfo}
                                 </Text>
                             </CellContent>
                         </StyledCell>
                     )
                 }
+                <StyledCell>
+                    <CellContent>
+                        <Text>
+                            {exTokenInfo.symbol}
+                        </Text>
+                        <Balance
+                            mt="4px"                
+                            color='primary'                        
+                            value={ask.toNumber()}
+                            fontSize="14px"
+                        />
+                    </CellContent>
+                </StyledCell>
                 <StyledCell style={{zIndex:10, flex:3}}>
                     <CellContent>
                     {
@@ -159,7 +211,7 @@ const YieldCPartyRow=({data, state})=>{
                     }
 
                     {
-                        state === SwapState.Pending && (
+                        state === SwapState.Pending && !isPast && (
                             <Button 
                                 variant="secondary" scale="md" mr="8px" 
                                 isLoading={pendingTx}    
@@ -170,7 +222,7 @@ const YieldCPartyRow=({data, state})=>{
                     </CellContent>
                 </StyledCell>
                 {
-                    state === SwapState.All && state === SwapState.Applied && (
+                    (state === SwapState.All || state === SwapState.Applied) && (
                         <StyledCell>
                             <ArrowIcon color="primary" toggled={expanded} onClick={handleExpand}/>
                         </StyledCell>

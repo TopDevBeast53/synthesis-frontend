@@ -11,6 +11,7 @@ import {
   ModalHeader,
   ModalTitle,
   Text,
+  AutoRenewIcon
 } from 'uikit'
 import { useWeb3React } from '@web3-react/core'
 import { useTranslation } from 'contexts/Localization'
@@ -80,12 +81,15 @@ const DiscussOrder: React.FC<any> = (props) => {
     if(!await doValidation()) return 
     try {
       if(bid){
-        await yieldSwapContract.setBid(bid.id, yAmount)
+        const tx = await yieldSwapContract.setBid(bid.id, yAmount)
+        await tx.wait()
       } else {
-        await yieldSwapContract.makeBid(swapId, yAmount)
+        const tx = await yieldSwapContract.makeBid(swapId, yAmount)
+        await tx.wait()
       }
       if (onSend) onSend()
-      setPendingTx(false);      
+      setPendingTx(false);   
+      onDismiss()   
       toastSuccess(
           `${t('Congratulations')}!`,
           t('You Make Bid !!! '),
@@ -110,7 +114,9 @@ const DiscussOrder: React.FC<any> = (props) => {
             <Text style={{ marginRight: '1em' }}>Y Amount</Text>
             <BalanceInput value={yAmount} onUserInput={handleYAmountChange} />
           </div>
-          <Button width="100%" onClick={handleAsk}>
+          <Button isLoading={pendingTx}    
+            endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
+            mt="24px" width="100%" onClick={handleAsk}>
           {pendingTx ? isAllowed===0 ? "Approving" :t('Confirming') : isAllowed===0 ? "Approve" : t('Confirm')}
           </Button>
         </div>
