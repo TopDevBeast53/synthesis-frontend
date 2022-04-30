@@ -22,7 +22,6 @@ const StyledTableBorder = styled.div`
 const CandidateTable = (props) => {
     const {bids, exToken, approved} = props
     const tableWrapperEl = useRef<HTMLDivElement>(null)
-   
     if(bids.length === 0) return null
 
     return (

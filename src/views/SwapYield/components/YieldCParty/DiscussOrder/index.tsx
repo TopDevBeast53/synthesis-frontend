@@ -62,6 +62,8 @@ const DiscussOrder: React.FC<any> = (props) => {
 
   const handleAsk = async () => {
     console.debug('here', approved)
+    setPendingTx(true)
+
     if (isAllowed === 0){
       const decimals = await exContract.decimals()
       const decimalUAmount = getDecimalAmount(new BigNumber(yAmount), decimals)

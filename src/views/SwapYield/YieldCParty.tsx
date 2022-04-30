@@ -1,15 +1,13 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import { useWeb3React } from '@web3-react/core'
-import { multicallv2 } from 'utils/multicall'
 import styled from 'styled-components'
 import { useTranslation } from 'contexts/Localization'
-import { Flex, Text, ButtonMenu, ButtonMenuItem } from 'uikit'
+import { ButtonMenu, ButtonMenuItem } from 'uikit'
 import { filter } from 'lodash'
 import { useHelixYieldSwap } from 'hooks/useContract'
 import Page from 'components/Layout/Page'
 import YieldCPartyTable from './components/YieldCParty/Table'
 import { SwapState } from './types'
-import CircleLoader from '../../components/Loader/CircleLoader'
 import { YieldCPartyContext } from './context' 
 
 const Wrapper = styled.div`
@@ -36,7 +34,6 @@ const YieldCParty = ()=>{
     const [swaps, setSwaps] = useState([])
     const [bids, setBids] = useState([])
     const [hasBidOnSwap, setHasBidOnSwap] = useState([])
-    const [loading, setLoading] = useState(false)
     const [refresh, setTableRefresh] = useState(0)
 
     const filteredSwaps = () => {        
@@ -56,26 +53,27 @@ const YieldCParty = ()=>{
         if(refresh < 0) return
 
         const fetchData = async () => {
-            setLoading(true)
-
-            // TODO: Should be update
-            const bidsLastIndex = await yieldSwapContract.getBidId()
-            if(!bidsLastIndex.isZero()) {
-                const bidIds = Array.from(Array(bidsLastIndex.toNumber() + 1).keys())
+            try {
+                // TODO: Should be update
+                const fetchedSwaps = await yieldSwapContract.getSwaps()
+                const fetchedSwapIds = await yieldSwapContract.getBidderSwapIds(account)
+    
+                const bidIds = fetchedSwaps.reduce((prev, cur) => prev.concat(cur.bidIds), [])
                 const fetchedBids = await Promise.all(bidIds.map((b) => yieldSwapContract.bids(b)))
                 const filteredBids = fetchedBids.map((b, i) => {
                     return {...b, id: i}
                 })
                 setBids(filteredBids)
+    
+                setHasBidOnSwap(fetchedSwapIds)
+                const fetchedSwapsWithIds = fetchedSwaps.map((s, i) => {
+                    return {...s, id: i}
+                })
+                setSwaps(fetchedSwapsWithIds)
+
+            } catch(err) {
+                console.error(err)
             }
-            const fetchedSwaps = await yieldSwapContract.getSwaps()
-            const fetchedSwapIds = await yieldSwapContract.getBidderSwapIds(account)
-            setHasBidOnSwap(fetchedSwapIds)
-            const fetchedSwapsWithIds = fetchedSwaps.map((s, i) => {
-                return {...s, id: i}
-            })
-            setSwaps(fetchedSwapsWithIds)
-            setLoading(false)
         }
         fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
