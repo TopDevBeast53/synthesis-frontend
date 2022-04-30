@@ -2,5 +2,19 @@
   "trailingComma": "all",
   "semi": false,
   "singleQuote": true,
-  "printWidth": 120
+  "printWidth": 120,
+  "overrides": [
+    {
+      "files": "**/*.{tsx}",
+      "options": {
+        "tabWidth": 2
+      }
+    },
+    {
+      "files": "**/*.{js,jsx,ts}",
+      "options": {
+        "tabWidth": 4
+      }
+    }
+  ]
 }
