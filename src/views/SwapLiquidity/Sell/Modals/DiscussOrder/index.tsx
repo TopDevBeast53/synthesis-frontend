@@ -2,12 +2,14 @@
 import { useHelixLpSwap } from 'hooks/useContract';
 import useToast from 'hooks/useToast';
 import React, { useState } from "react";
+import { useFarms } from 'state/farms/hooks';
 import { useTheme } from 'styled-components';
 import {
   AutoRenewIcon, BalanceInput, Button, Heading, ModalBody, ModalCloseButton,
   ModalContainer, ModalHeader, ModalTitle, Text
 } from "uikit";
 import getThemeValue from "uikit/util/getThemeValue";
+import { getAddress } from 'utils/addressHelpers';
 
 
 const getEllipsis = (account) => {
@@ -23,8 +25,11 @@ const DiscussOrder: React.FC<any> = (props) => {
   const bodyPadding = "24px"
   const headerBackground = "transparent"
   const minWidth = "320px"
-  const {bidData, onSend, onDismiss} = props
-
+  const {bidData, onSend, onDismiss, swapData} = props
+  const {data:farms} = useFarms()
+  const toSellerToken = farms.find((item)=>{
+    return (getAddress(item.lpAddresses) === swapData?.toSellerToken);
+  })
   const [yAmount, setYAmount]=useState(bidData?.amount)
   
   const handleYAmountChange = (input) => {
@@ -55,7 +60,7 @@ const DiscussOrder: React.FC<any> = (props) => {
           <div style={{marginTop:"1em"}}>
               
                 <div style={{display:"flex", marginBottom:"1em", alignItems:"center"}}>
-                    <Text style={{marginRight:"1em"}} >Y Amount</Text>
+                    <Text style={{marginRight:"1em"}} >{toSellerToken.lpSymbol}</Text>
                     <BalanceInput 
                             value={yAmount}                            
                             onUserInput={handleYAmountChange}

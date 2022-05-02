@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { AutoRenewIcon, Button, Skeleton, Text, useModal } from 'uikit';
 import { SwapLiquidityContext } from 'views/SwapLiquidity/context';
 import BaseCell, { CellContent } from 'views/SwapYield/components/Cells/BaseCell';
-import ExTokenCell from 'views/SwapYield/components/Cells/ExTokenCell';
+import LPTokenCell from 'views/SwapYield/components/Cells/LPTokenCell';
 import DiscussOrder from '../Modals/DiscussOrder';
 
 const StyledRow = styled.div`
@@ -47,27 +47,23 @@ const CandidateRow=({bidId, swapData})=>{
     const onSendAsk = () =>{
         setTableRefresh(tableRefresh + 1)
     }
-    const [showModal] = useModal(<DiscussOrder bidData={bidData} onSend={onSendAsk}/>,false)
+    const [showModal] = useModal(<DiscussOrder bidData={bidData} onSend={onSendAsk} swapData={swapData}/>,false)
     useEffect(()=>{        
         LpSwapContract.getBid(bidId).then(res=>{
+            console.debug("======== res ========", res, swapData)
             setBidData(res)
         })
-    }, [LpSwapContract, bidId])
+    }, [LpSwapContract, bidId, swapData])
     if (!bidData){
         return (<StyledRow >
             <StyledCell>
                 <CellContent>
                     <Skeleton/>
                 </CellContent>
-            </StyledCell>
+            </StyledCell>       
             <StyledCell>
-                <CellContent>
-                    <Text>
-                        YAmount
-                    </Text>
-                    <Skeleton mt="4px"/>
-                </CellContent>
-            </StyledCell>         
+                <LPTokenCell />                
+            </StyledCell>     
         </StyledRow>)
     }
     return (
@@ -80,7 +76,7 @@ const CandidateRow=({bidId, swapData})=>{
                 </CellContent>
             </StyledCell>
             <StyledCell>
-                <ExTokenCell exTokenAddress={swapData?.exToken} balance={bidData?.amount}/>                
+                <LPTokenCell lpTokenAddress={swapData?.toSellerToken} balance={bidData?.amount.toNumber()}/>                
             </StyledCell>
             <StyledCell>
                 <CellContent>
