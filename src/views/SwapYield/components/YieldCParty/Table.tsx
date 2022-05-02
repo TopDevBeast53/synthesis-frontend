@@ -2,7 +2,6 @@ import React, { useRef } from 'react'
 import styled from 'styled-components'
 import { useTranslation } from 'contexts/Localization'
 import { Button, ChevronUpIcon, Text } from 'uikit'
-import BaseCell from './BaseCell'
 import YieldCPartyRow from './Row'
 
 const StyledTable = styled.div`

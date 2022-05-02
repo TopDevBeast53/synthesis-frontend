@@ -5,7 +5,6 @@ import Page from 'components/Layout/Page'
 import { useTranslation } from 'contexts/Localization'
 import { useHelixLpSwap } from 'hooks/useContract'
 import { useFastFresh } from 'hooks/useRefresh'
-import useToast from 'hooks/useToast'
 import styled from 'styled-components'
 import { ButtonMenu, ButtonMenuItem } from 'uikit'
 import { SwapLiquidityContext } from '../context'
@@ -30,7 +29,6 @@ const Wrapper = styled.div`
 
 const Sell = ()=>{
     const { t } = useTranslation()
-    const { toastError } = useToast()
     const LpSwapContract = useHelixLpSwap()  
     const {account} = useWeb3React()
     const [menuIndex, setMenuIndex] = useState(0)    
@@ -55,7 +53,6 @@ const Sell = ()=>{
         if(!account) return
         // fetch swaps
         LpSwapContract.getSwaps().then((fetchedSwaps) => {
-            console.debug('????', fetchedSwaps)
             const fetchedSwapsWithIds = fetchedSwaps.map((s, i) => ({...s, id: i}))
             setSwaps(fetchedSwapsWithIds)
         })

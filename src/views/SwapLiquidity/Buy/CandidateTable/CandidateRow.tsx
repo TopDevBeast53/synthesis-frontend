@@ -4,7 +4,7 @@ import Balance from 'components/Balance';
 import { useHelixLpSwap } from 'hooks/useContract';
 import { SwapLiquidityContext } from 'views/SwapLiquidity/context'
 import styled from 'styled-components';
-import { AutoRenewIcon, Button, Skeleton, Text, useModal } from 'uikit';
+import { Button, Skeleton, Text, useModal } from 'uikit';
 import BaseCell, { CellContent } from 'views/SwapYield/components/Cells/BaseCell';
 import DiscussOrder from '../Modals/DiscussOrder';
 import { SwapState } from '../../types'
@@ -32,7 +32,6 @@ const CandidateRow=({bidId, swapData})=>{
     const {account} = useWeb3React()
     const {tableRefresh, setTableRefresh, filterState} = useContext(SwapLiquidityContext)
     const [bidData, setBidData] = useState<any>()
-    const [pendingTx, setPendingTx] = useState(false)
     const onSendAsk = () =>{
         setTableRefresh(tableRefresh + 1)
     }
@@ -86,8 +85,6 @@ const CandidateRow=({bidId, swapData})=>{
                     <StyledCell>
                         <CellContent>
                             <Button 
-                                isLoading={pendingTx}    
-                                endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}  
                                 width="100px" 
                                 style={{zIndex:20}} 
                                 onClick={showModal}> Update </Button>

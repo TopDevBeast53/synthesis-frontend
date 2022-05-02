@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react'
 import { SwapLiquidityContext } from 'views/SwapLiquidity/context'
 import styled from 'styled-components'
-import { AutoRenewIcon, Button, ChevronDownIcon, useDelayedUnmount, useModal } from 'uikit'
+import { Button, ChevronDownIcon, useDelayedUnmount, useModal } from 'uikit'
 import BaseCell from 'views/SwapYield/components/Cells/BaseCell'
 import LPTokenCell from 'views/SwapYield/components/Cells/LPTokenCell'
 import ToolTipCell from 'views/SwapYield/components/Cells/ToolTipCell'
@@ -31,7 +31,6 @@ const ActiveRow=(props)=>{
     const {tableRefresh, setTableRefresh} = useContext(SwapLiquidityContext)
     const {swapData} = props
     const [expanded, setExpanded] = useState(false)
-    const [pendingTx, setPendingTx] = useState(false)
     const shouldRenderDetail = useDelayedUnmount(expanded, 300)
     const handleOnRowClick = () => {
         setExpanded(!expanded)        
@@ -55,8 +54,6 @@ const ActiveRow=(props)=>{
                 </StyledCell>
                 <StyledCell style={{zIndex:10, flex:3}}>
                     <Button 
-                        isLoading={pendingTx}    
-                        endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
                         color="primary" onClick={showModal} scale="sm" width="100px"> Bid </Button>
                 </StyledCell>
                 <StyledCell>

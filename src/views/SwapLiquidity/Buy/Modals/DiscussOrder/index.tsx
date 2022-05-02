@@ -65,13 +65,15 @@ const DiscussOrder: React.FC<any> = (props) => {
     if (isAllowed === 0){
       const decimals = await exContract.decimals()
       const decimalUAmount = getDecimalAmount(new BigNumber(yAmount), decimals)
-      exContract.approve(LpSwapContract.address, decimalUAmount.toString()).then(res=>{
+      try {
+        const tx = await exContract.approve(LpSwapContract.address, decimalUAmount.toString());
+        await tx.wait()
         setAllowed(yAmount)
         setPendingTx(false)
-      }).catch(err=>{
-        toastError('Error', err.toString())
+      } catch (err) {
+        toastError('Error', 'Please check your network status or token balance')
         setPendingTx(false)
-      })
+      }
       return 
     }
     if(!await doValidation()) return 
@@ -93,7 +95,7 @@ const DiscussOrder: React.FC<any> = (props) => {
       )
     } catch(err) {
       setPendingTx(false); 
-      toastError('Error', err.toString())
+      toastError('Error', 'Please check your network status or token balance')
     }
   }
 
@@ -120,7 +122,8 @@ const DiscussOrder: React.FC<any> = (props) => {
                   endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}       
                   onClick={handleAsk}         
                   width="100%"
-                > Send </Button>        
+                > {pendingTx ? isAllowed===0 ? "Approving" :t('Confirming') : isAllowed===0 ? "Approve" : t('Confirm')}
+                 </Button>        
               
               
           </div>
