@@ -9,8 +9,8 @@ const SellTable= (props) => {
   return (
     <BaseTable>
       {
-          data.map((swapId)=>(
-            <Row key={swapId} data={swapId}/>
+          data.map((swap)=>(
+            <Row key={swap.id} data={swap}/>
           ))
       }
     </BaseTable>

@@ -1,12 +1,13 @@
+import React, { useContext, useEffect, useState } from 'react';
+import { useWeb3React } from '@web3-react/core'
 import Balance from 'components/Balance';
 import { useHelixYieldSwap } from 'hooks/useContract';
-import useToast from 'hooks/useToast';
-import React, { useContext, useEffect, useState } from 'react';
+import { SwapLiquidityContext } from 'views/SwapLiquidity/context'
 import styled from 'styled-components';
 import { AutoRenewIcon, Button, Skeleton, Text, useModal } from 'uikit';
-import { SwapLiquidityContext } from 'views/SwapLiquidity/context'
 import BaseCell, { CellContent } from 'views/SwapYield/components/Cells/BaseCell';
 import DiscussOrder from '../Modals/DiscussOrder';
+import { SwapState } from '../../types'
 
 const StyledRow = styled.div`
   background-color: transparent;
@@ -26,28 +27,16 @@ const StyledCell = styled(BaseCell)`
 const getEllipsis = (account) => {
     return account ? `${account.substring(0, 5)}...${account.substring(account.length - 5)}` : null;
 }
-const CandidateRow=({bidId})=>{
+const CandidateRow=({bidId, exToken})=>{
     const YieldSwapContract = useHelixYieldSwap()
-    const { toastSuccess, toastError } = useToast()
+    const {account} = useWeb3React()
+    const {tableRefresh, setTableRefresh, filterState} = useContext(SwapLiquidityContext)
     const [bidData, setBidData] = useState<any>()
-    const {tableRefresh, setTableRefresh} = useContext(SwapLiquidityContext)
     const [pendingTx, setPendingTx] = useState(false)
-    const handleAcceptClick = (e) => {        
-        e.stopPropagation();
-        setPendingTx(true)
-        YieldSwapContract.acceptBid(bidId).then(async (tx)=>{
-            await tx.wait()
-            toastSuccess("Success", "You Accepted the Bid")
-            setPendingTx(false)
-        }).catch(err=>{
-            toastError("Error", err.toString())
-            setPendingTx(false)
-        })        
-    }
     const onSendAsk = () =>{
         setTableRefresh(tableRefresh + 1)
     }
-    const [showModal] = useModal(<DiscussOrder bidData={bidData} onSend={onSendAsk}/>,false)
+    const [showModal] = useModal(<DiscussOrder bidData={bidData} bidId={bidId} onSend={onSendAsk} exToken={exToken}/>,false)
     useEffect(()=>{
         setBidData({bidder:"0x59201fb8cb2D61118B280c8542127331DD141654", amount:20 })
         YieldSwapContract.getBid(bidId).then(res=>{
@@ -72,7 +61,7 @@ const CandidateRow=({bidId})=>{
         </StyledRow>)
     }
     return (
-        <StyledRow onClick={showModal}>
+        <StyledRow>
             <StyledCell>
                 <CellContent>
                     <Text>
@@ -93,16 +82,20 @@ const CandidateRow=({bidId})=>{
                     />
                 </CellContent>
             </StyledCell>
-            <StyledCell>
-                <CellContent>
-                    <Button 
-                        isLoading={pendingTx}    
-                        endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}  
-                        width="100px" 
-                        style={{zIndex:20}} 
-                        onClick={handleAcceptClick}> Accept </Button>
-                </CellContent>       
-            </StyledCell>
+            {
+                filterState === SwapState.Applied && account === bidData?.bidder && (
+                    <StyledCell>
+                        <CellContent>
+                            <Button 
+                                isLoading={pendingTx}    
+                                endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}  
+                                width="100px" 
+                                style={{zIndex:20}} 
+                                onClick={showModal}> Update </Button>
+                        </CellContent>       
+                    </StyledCell>
+                )
+            }
         </StyledRow>
     )
 }

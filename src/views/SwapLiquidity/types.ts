@@ -6,7 +6,6 @@ export enum OrderState{
 export enum SwapState {
     All,
     Applied,
-    Pending,
     Finished,
 }
 
