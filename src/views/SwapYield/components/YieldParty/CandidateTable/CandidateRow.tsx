@@ -1,4 +1,3 @@
-import Balance from 'components/Balance';
 import { useHelixYieldSwap } from 'hooks/useContract';
 import useToast from 'hooks/useToast';
 import React, { useContext, useEffect, useState } from 'react';
@@ -6,6 +5,7 @@ import styled from 'styled-components';
 import { AutoRenewIcon, Button, Skeleton, Text, useModal } from 'uikit';
 import { YieldPartyContext } from 'views/SwapYield/context';
 import BaseCell, { CellContent } from '../../Cells/BaseCell';
+import ExTokenCell from '../../Cells/ExTokenCell';
 import DiscussOrder from '../Modals/DiscussOrder';
 
 const StyledRow = styled.div`
