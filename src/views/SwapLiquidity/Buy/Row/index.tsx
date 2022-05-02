@@ -11,7 +11,6 @@ const Row=({data})=>{
     if (filterState === SwapState.Applied) return <AppliedRow swapData={data}/>
     if (filterState === SwapState.Finished) return <FinishedRow swapData={data}/>
     return null
-
 }
 
 export default Row;

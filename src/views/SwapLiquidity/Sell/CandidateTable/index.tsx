@@ -30,7 +30,7 @@ const CandidateTable = (props) => {
         <StyledTable id="pools-table" role="table" ref={tableWrapperEl}>        
           {
             swap.bidIds.map((bidId)=>(
-              <CandidateRow key={bidId} bidId={bidId}/>
+              <CandidateRow key={bidId} bidId={bidId} swapData={swap}/>
             ))
           }
         </StyledTable>

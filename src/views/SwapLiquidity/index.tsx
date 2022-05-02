@@ -38,7 +38,7 @@ export default function SwapLiquidity() {
       <PageHeader background='transparent'> 
         <div style={{display:"flex", justifyContent:"space-between", alignItems:"center"}}>
           <Heading as="h1" scale="xxl" color="secondary" style={{display:"inline-block", verticalAlign:"middle"}}>
-            {t('Swap Yield')}  
+            {t('Swap Liquidity')}  
           </Heading>
           <Wrapper>
             <ButtonMenu activeIndex={menuIndex} scale="sm" variant="subtle" onItemClick={handleButtonMenuClick}>

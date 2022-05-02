@@ -51,13 +51,11 @@ const Sell = ()=>{
         
     }
     const [handleAdd] = useModal(<CreateOrderDialog />)
-    useEffect(()=>{
-        console.log("============= refersh ==============")
+    useEffect(()=>{        
         if(tableRefresh < 0) return
         if(!account) return
         YieldSwapContract.getSwapIds(account).then(async (ids)=>{
-            setSwapIds(ids)
-            console.log("==========  swapids  ==========", ids)
+            setSwapIds(ids)            
         }).catch(err=>{
             console.log(err)            
             // toastError('Error', err.toString())

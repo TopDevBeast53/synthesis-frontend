@@ -101,6 +101,10 @@ const AddRowModal = (props)=>{
     const selectedLPAllowance = selectedLPOption.allowance
     setPendingTx(true);   
     async function DoValidation(){
+      if (uAmount === 0 || yAmount === 0){
+        toastError('Error', `Both Token Amount Should be bigger than Zero`)
+        return false
+      }  
       if (duration > maxDuration || duration < minDuration){
         toastError('Error', `Duration should be in range between ${minDuration} and ${maxDuration}`)
         return false

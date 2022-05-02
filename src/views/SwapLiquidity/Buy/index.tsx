@@ -12,7 +12,6 @@ import { SwapLiquidityContext } from '../context'
 import BuyTable from './BuyTable'
 import { SwapState } from '../types'
 
-
 const Wrapper = styled.div`
   display: flex;    
   align-items: center;
@@ -37,10 +36,8 @@ const Sell = ()=>{
     const [menuIndex, setMenuIndex] = useState(0)    
     const [swaps, setSwaps] = useState([])
     const [bidIdsPerUser, setBidIdsPerUser] = useState([])
-       
     const fastRefresh = useFastFresh()
     const {tableRefresh, setFilterState} = useContext(SwapLiquidityContext)
-
     const filteredSwaps = useMemo(() => {        
         if(menuIndex === SwapState.Finished) return filter(swaps, {isWithdrawn: true, buyer: account})
         if(menuIndex === SwapState.All) return swaps.filter((s, i) => s.isOpen && !includes(bidIdsPerUser, i) && s.seller !== account)         
@@ -51,6 +48,7 @@ const Sell = ()=>{
     const handleButtonMenuClick = (newIndex) => {
         setFilterState(newIndex)
         setMenuIndex(newIndex)
+
     }    
     useEffect(()=>{
         if(tableRefresh < 0) return
@@ -67,7 +65,7 @@ const Sell = ()=>{
             setBidIdsPerUser(normalNumberBidIds)
         })
     }, [YieldSwapContract, account, tableRefresh, fastRefresh ])
-    
+
     return (        
         <Page>            
             <Wrapper>
@@ -84,7 +82,6 @@ const Sell = ()=>{
                 </ButtonMenu>                
             </Wrapper>            
             <BuyTable data={filteredSwaps}/>            
-            
         </Page>
     )
 }

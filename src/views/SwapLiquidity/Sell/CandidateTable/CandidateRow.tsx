@@ -4,8 +4,9 @@ import useToast from 'hooks/useToast';
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { AutoRenewIcon, Button, Skeleton, Text, useModal } from 'uikit';
-import { SwapLiquidityContext } from 'views/SwapLiquidity/context'
+import { SwapLiquidityContext } from 'views/SwapLiquidity/context';
 import BaseCell, { CellContent } from 'views/SwapYield/components/Cells/BaseCell';
+import ExTokenCell from 'views/SwapYield/components/Cells/ExTokenCell';
 import DiscussOrder from '../Modals/DiscussOrder';
 
 const StyledRow = styled.div`
@@ -26,7 +27,7 @@ const StyledCell = styled(BaseCell)`
 const getEllipsis = (account) => {
     return account ? `${account.substring(0, 5)}...${account.substring(account.length - 5)}` : null;
 }
-const CandidateRow=({bidId})=>{
+const CandidateRow=({bidId, swapData})=>{
     const YieldSwapContract = useHelixYieldSwap()
     const { toastSuccess, toastError } = useToast()
     const [bidData, setBidData] = useState<any>()
@@ -48,8 +49,7 @@ const CandidateRow=({bidId})=>{
         setTableRefresh(tableRefresh + 1)
     }
     const [showModal] = useModal(<DiscussOrder bidData={bidData} onSend={onSendAsk}/>,false)
-    useEffect(()=>{
-        setBidData({bidder:"0x59201fb8cb2D61118B280c8542127331DD141654", amount:20 })
+    useEffect(()=>{        
         YieldSwapContract.getBid(bidId).then(res=>{
             setBidData(res)
         })
@@ -81,17 +81,7 @@ const CandidateRow=({bidId})=>{
                 </CellContent>
             </StyledCell>
             <StyledCell>
-                <CellContent>
-                    <Text>
-                        YAmount
-                    </Text>
-                    <Balance
-                        mt="4px"                
-                        color='primary'                        
-                        value={bidData?.amount}
-                        fontSize="14px"
-                    />
-                </CellContent>
+                <ExTokenCell exTokenAddress={swapData?.exToken} balance={bidData?.amount}/>                
             </StyledCell>
             <StyledCell>
                 <CellContent>

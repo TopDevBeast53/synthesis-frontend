@@ -69,10 +69,7 @@ const ActiveRow=(props)=>{
             <StyledRow onClick={handleOnRowClick}>
                 <StyledCell>
                     <LPTokenCell lpTokenAddress={swapData?.lpToken} balance={swapData?.amount.toNumber()}/>
-                </StyledCell>
-                <StyledCell>
-                    <DurationCell duration={duration} />                    
-                </StyledCell>
+                </StyledCell>                
                 <StyledCell>
                     <ExTokenCell exTokenAddress={swapData?.exToken} balance={swapData?.ask.toNumber()}/>                   
                 </StyledCell>

@@ -26,7 +26,7 @@ const StyledCell = styled(BaseCell)`
 const getEllipsis = (account) => {
     return account ? `${account.substring(0, 5)}...${account.substring(account.length - 5)}` : null;
 }
-const CandidateRow=({bidId})=>{
+const CandidateRow=({bidId, swapData})=>{
     const YieldSwapContract = useHelixYieldSwap()
     const { toastSuccess, toastError } = useToast()
     const [bidData, setBidData] = useState<any>()
@@ -81,17 +81,7 @@ const CandidateRow=({bidId})=>{
                 </CellContent>
             </StyledCell>
             <StyledCell>
-                <CellContent>
-                    <Text>
-                        YAmount
-                    </Text>
-                    <Balance
-                        mt="4px"                
-                        color='primary'                        
-                        value={bidData?.amount}
-                        fontSize="14px"
-                    />
-                </CellContent>
+                <ExTokenCell exTokenAddress={swapData?.exToken} balance={bidData?.amount}/>
             </StyledCell>
             <StyledCell>
                 <CellContent>

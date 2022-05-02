@@ -38,8 +38,7 @@ const AddRowModal = (props)=>{
   const {onDismiss} = props
 
   const [uAmount, setUAmount]=useState(0)
-  const [yAmount, setYAmount]=useState(0)
-  const [duration, setDuration]=useState(1)  
+  const [yAmount, setYAmount]=useState(0)  
   const [pendingTx, setPendingTx] = useState(false)
   const YieldSwapContract = useHelixYieldSwap()  
   const allTokens = useAllTokens() // All Stable Token  
@@ -54,12 +53,7 @@ const AddRowModal = (props)=>{
     }
   })
   const [selectedLPOption, setSelectedLPOption] = useState<any>()
-  
   const [selectedToken, setSelectedToken] = useState<Token>(TokenOptions[0].value)
-  const [minDuration, setMinDuration] = useState(0)
-  const [maxDuration, setMaxDuration] = useState(0)
-  
-  
   const handleUAmountChange = (input) => {
     setUAmount(input)
   }
@@ -70,10 +64,6 @@ const AddRowModal = (props)=>{
     setSelectedLPOption(option)    
   }
   const handleTokenChange = (option) => { setSelectedToken(option.value)}
-  const handleDurationChange = (input) => {    
-    setDuration(input.target.value)
-  }
-  
   const [tempLPOptions, lpAddressList] = useMemo(()=>{
     const lpOptions= farmsLP.filter(lp=>lp.pid!==0).map(lp=>    
       (
@@ -99,12 +89,12 @@ const AddRowModal = (props)=>{
     const selectedLP = selectedLPOption.value
     const selectedLPContract:Erc20 = selectedLPOption.contract
     const selectedLPAllowance = selectedLPOption.allowance
-    setPendingTx(true);   
+    setPendingTx(true);      
     async function DoValidation(){
-      if (duration > maxDuration || duration < minDuration){
-        toastError('Error', `Duration should be in range between ${minDuration} and ${maxDuration}`)
+      if (uAmount === 0 || yAmount === 0){
+        toastError('Error', `Both Token Amount Should be bigger than Zero`)
         return false
-      }        
+      }      
       return true
     }
     if (selectedLPAllowance.lte(BIG_ZERO)){
@@ -126,8 +116,7 @@ const AddRowModal = (props)=>{
       return 
     }
     if(!await DoValidation()) return 
-
-    YieldSwapContract.openSwap(selectedToken.address, selectedLP.pid, uAmount, yAmount, 3600 * 24* duration).then(async (tx)=>{
+    YieldSwapContract.openSwap(selectedToken.address, selectedLP.pid, uAmount, yAmount, 0).then(async (tx)=>{
       await tx.wait()
       setPendingTx(false);
       toastSuccess(
@@ -158,13 +147,6 @@ const AddRowModal = (props)=>{
     })
   }, [YieldSwapContract.address, account, lpContracts, tempLPOptions, selectedLPOption])
 
-  useEffect(()=>{
-    Promise.all([YieldSwapContract.MIN_LOCK_DURATION(), YieldSwapContract.MAX_LOCK_DURATION()]).then((values) => {      
-      setMinDuration(values[0].toNumber()/24/3600)
-      setMaxDuration(values[1].toNumber()/24/3600)
-    })
-  }, [YieldSwapContract, account])
-
   if (!LPOptions) return null
   return (
     <Modal
@@ -188,10 +170,7 @@ const AddRowModal = (props)=>{
       <BalanceInput 
           value={yAmount}
           onUserInput={handleYAmountChange}
-      />
-      <Text bold>{t('Duration (days)')}:</Text>
-      <StyledInput type="number" max={maxDuration} min={minDuration} value={duration}  onChange={handleDurationChange}/>
-      
+      />      
       <Button
         isLoading={pendingTx}    
         endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
