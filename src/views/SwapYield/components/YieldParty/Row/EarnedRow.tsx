@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import { ToolTipText } from 'views/SwapYield/constants'
 import BaseCell from '../../Cells/BaseCell'
 import ExTokenCell from '../../Cells/ExTokenCell'
 import LPTokenCell from '../../Cells/LPTokenCell'
@@ -35,7 +36,7 @@ const EarnedRow=({swapData})=>{
                     <ExTokenCell exTokenAddress={swapData?.exToken} balance={swapData.ask.toNumber()}/>                   
                 </StyledCell>
                 <StyledCell>
-                    <ToolTipCell/>
+                    <ToolTipCell tooltipText={ToolTipText}/>
                 </StyledCell>                
             </StyledRow>
         </>

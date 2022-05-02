@@ -4,6 +4,7 @@ import moment from 'moment'
 import React, { useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { AutoRenewIcon, Button, ChevronDownIcon, useDelayedUnmount } from 'uikit'
+import { ToolTipText } from 'views/SwapYield/constants'
 import BaseCell from '../../Cells/BaseCell'
 import DurationCell from '../../Cells/DurationCells'
 import ExTokenCell from '../../Cells/ExTokenCell'
@@ -77,7 +78,7 @@ const ActiveRow=(props)=>{
                     <ExTokenCell exTokenAddress={swapData?.exToken} balance={swapData?.ask.toNumber()}/>                   
                 </StyledCell>
                 <StyledCell>
-                    <ToolTipCell/>
+                    <ToolTipCell tooltipText={ToolTipText}/>
                 </StyledCell>
                 <StyledCell style={{zIndex:10, flex:3}}>
                     <Button 

@@ -1,12 +1,14 @@
-import React, { useState, useContext } from 'react'
-import { SwapLiquidityContext } from 'views/SwapLiquidity/context'
+import React, { useContext, useState } from 'react'
 import styled from 'styled-components'
 import { Button, ChevronDownIcon, useDelayedUnmount, useModal } from 'uikit'
+import { ToolTipText } from 'views/SwapLiquidity/constants'
+import { SwapLiquidityContext } from 'views/SwapLiquidity/context'
 import BaseCell from 'views/SwapYield/components/Cells/BaseCell'
 import LPTokenCell from 'views/SwapYield/components/Cells/LPTokenCell'
 import ToolTipCell from 'views/SwapYield/components/Cells/ToolTipCell'
-import DiscussOrder from '../Modals/DiscussOrder';
 import CandidateTable from '../CandidateTable'
+import DiscussOrder from '../Modals/DiscussOrder'
+
 
 const StyledRow = styled.div`
   background-color: transparent;
@@ -50,7 +52,7 @@ const ActiveRow=(props)=>{
                     <LPTokenCell lpTokenAddress={swapData?.toSellerToken} balance={swapData?.ask.toNumber()}/>                   
                 </StyledCell>
                 <StyledCell>
-                    <ToolTipCell/>
+                    <ToolTipCell tooltipText={ToolTipText} />
                 </StyledCell>
                 <StyledCell style={{zIndex:10, flex:3}}>
                     <Button 

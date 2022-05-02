@@ -6,6 +6,7 @@ import { AutoRenewIcon, Button, ChevronDownIcon, useDelayedUnmount } from 'uikit
 import BaseCell from 'views/SwapYield/components/Cells/BaseCell'
 import LPTokenCell from 'views/SwapYield/components/Cells/LPTokenCell'
 import ToolTipCell from 'views/SwapYield/components/Cells/ToolTipCell'
+import { ToolTipText } from '../../constants'
 import CandidateTable from '../CandidateTable'
 
 const StyledRow = styled.div`
@@ -68,7 +69,7 @@ const ActiveRow=(props)=>{
                     <LPTokenCell lpTokenAddress={swapData?.toSellerToken} balance={swapData?.ask.toNumber()}/>                   
                 </StyledCell>
                 <StyledCell>
-                    <ToolTipCell/>
+                    <ToolTipCell tooltipText={ToolTipText}/>
                 </StyledCell>
                 <StyledCell style={{zIndex:10, flex:3}}>
                     <Button 

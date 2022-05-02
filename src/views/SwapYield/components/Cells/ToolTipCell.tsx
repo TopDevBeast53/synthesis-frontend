@@ -8,10 +8,10 @@ const ReferenceElement = styled.div`
 const Container = styled.div`
 `
 
-const ToolTipCell= () => {
+const ToolTipCell= ({tooltipText}) => {
 
   const { targetRef, tooltip, tooltipVisible } = useTooltip(
-    'The expected yields, redeemed after a negotiated duration, are exchanged for a negotiated quantity of stable coins, redeemed immediately.',
+    tooltipText,
     { placement: 'top-end', tooltipOffset: [20, 10] },
   )
 
