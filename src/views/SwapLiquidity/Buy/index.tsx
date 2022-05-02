@@ -3,7 +3,7 @@ import { useWeb3React } from '@web3-react/core'
 import { filter, includes } from 'lodash'
 import Page from 'components/Layout/Page'
 import { useTranslation } from 'contexts/Localization'
-import { useHelixYieldSwap } from 'hooks/useContract'
+import { useHelixLpSwap } from 'hooks/useContract'
 import { useFastFresh } from 'hooks/useRefresh'
 import useToast from 'hooks/useToast'
 import styled from 'styled-components'
@@ -31,7 +31,7 @@ const Wrapper = styled.div`
 const Sell = ()=>{
     const { t } = useTranslation()
     const { toastError } = useToast()
-    const YieldSwapContract = useHelixYieldSwap()  
+    const LpSwapContract = useHelixLpSwap()  
     const {account} = useWeb3React()
     const [menuIndex, setMenuIndex] = useState(0)    
     const [swaps, setSwaps] = useState([])
@@ -54,17 +54,17 @@ const Sell = ()=>{
         if(tableRefresh < 0) return
         if(!account) return
         // fetch swaps
-        YieldSwapContract.getSwaps().then((fetchedSwaps) => {
+        LpSwapContract.getSwaps().then((fetchedSwaps) => {
             const fetchedSwapsWithIds = fetchedSwaps.map((s, i) => ({...s, id: i}))
             setSwaps(fetchedSwapsWithIds)
         })
 
         // fetch bid Ids
-        YieldSwapContract.getBidderSwapIds(account).then((fetchBidderSwapIds) => {
+        LpSwapContract.getBidderSwapIds(account).then((fetchBidderSwapIds) => {
             const normalNumberBidIds = fetchBidderSwapIds.map(b => b.toNumber())
             setBidIdsPerUser(normalNumberBidIds)
         })
-    }, [YieldSwapContract, account, tableRefresh, fastRefresh ])
+    }, [LpSwapContract, account, tableRefresh, fastRefresh ])
 
     return (        
         <Page>            

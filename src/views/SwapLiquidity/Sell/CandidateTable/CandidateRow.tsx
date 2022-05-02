@@ -1,5 +1,5 @@
 import Balance from 'components/Balance';
-import { useHelixYieldSwap } from 'hooks/useContract';
+import { useHelixLpSwap } from 'hooks/useContract';
 import useToast from 'hooks/useToast';
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
@@ -28,7 +28,7 @@ const getEllipsis = (account) => {
     return account ? `${account.substring(0, 5)}...${account.substring(account.length - 5)}` : null;
 }
 const CandidateRow=({bidId, swapData})=>{
-    const YieldSwapContract = useHelixYieldSwap()
+    const LpSwapContract = useHelixLpSwap()
     const { toastSuccess, toastError } = useToast()
     const [bidData, setBidData] = useState<any>()
     const {tableRefresh, setTableRefresh} = useContext(SwapLiquidityContext)
@@ -36,7 +36,7 @@ const CandidateRow=({bidId, swapData})=>{
     const handleAcceptClick = (e) => {        
         e.stopPropagation();
         setPendingTx(true)
-        YieldSwapContract.acceptBid(bidId).then(async (tx)=>{
+        LpSwapContract.acceptBid(bidId).then(async (tx)=>{
             await tx.wait()
             toastSuccess("Success", "You Accepted the Bid")
             setPendingTx(false)
@@ -50,10 +50,10 @@ const CandidateRow=({bidId, swapData})=>{
     }
     const [showModal] = useModal(<DiscussOrder bidData={bidData} onSend={onSendAsk}/>,false)
     useEffect(()=>{        
-        YieldSwapContract.getBid(bidId).then(res=>{
+        LpSwapContract.getBid(bidId).then(res=>{
             setBidData(res)
         })
-    }, [YieldSwapContract, bidId])
+    }, [LpSwapContract, bidId])
     if (!bidData){
         return (<StyledRow >
             <StyledCell>

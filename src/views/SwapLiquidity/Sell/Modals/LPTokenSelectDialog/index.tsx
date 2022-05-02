@@ -13,7 +13,6 @@ const LPTokenSelecDialog = (props)=>{
   const { t } = useTranslation()
   const {onDismiss} = props
   const { data: farmsLP } = useFarms()
-  console.log("========= farms LP ===========", farmsLP)
   const farmLP = farmsLP[0]
   
   return (

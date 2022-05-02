@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useWeb3React } from '@web3-react/core'
 import Balance from 'components/Balance';
-import { useHelixYieldSwap } from 'hooks/useContract';
+import { useHelixLpSwap } from 'hooks/useContract';
 import { SwapLiquidityContext } from 'views/SwapLiquidity/context'
 import styled from 'styled-components';
 import { AutoRenewIcon, Button, Skeleton, Text, useModal } from 'uikit';
@@ -28,7 +28,7 @@ const getEllipsis = (account) => {
     return account ? `${account.substring(0, 5)}...${account.substring(account.length - 5)}` : null;
 }
 const CandidateRow=({bidId, exToken})=>{
-    const YieldSwapContract = useHelixYieldSwap()
+    const LpSwapContract = useHelixLpSwap()
     const {account} = useWeb3React()
     const {tableRefresh, setTableRefresh, filterState} = useContext(SwapLiquidityContext)
     const [bidData, setBidData] = useState<any>()
@@ -39,10 +39,10 @@ const CandidateRow=({bidId, exToken})=>{
     const [showModal] = useModal(<DiscussOrder bidData={bidData} bidId={bidId} onSend={onSendAsk} exToken={exToken}/>,false)
     useEffect(()=>{
         setBidData({bidder:"0x59201fb8cb2D61118B280c8542127331DD141654", amount:20 })
-        YieldSwapContract.getBid(bidId).then(res=>{
+        LpSwapContract.getBid(bidId).then(res=>{
             setBidData(res)
         })
-    }, [YieldSwapContract, bidId])
+    }, [LpSwapContract, bidId])
     if (!bidData){
         return (<StyledRow >
             <StyledCell>

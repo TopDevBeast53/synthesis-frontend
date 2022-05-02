@@ -4,7 +4,7 @@ import Select from 'components/Select/Select'
 import { Erc20 } from 'config/abi/types'
 import { useTranslation } from 'contexts/Localization'
 import { useAllTokens } from 'hooks/Tokens'
-import { useERC20s, useHelixYieldSwap } from 'hooks/useContract'
+import { useERC20s, useHelixLpSwap } from 'hooks/useContract'
 import useTheme from 'hooks/useTheme'
 import useToast from 'hooks/useToast'
 import React, { useEffect, useMemo, useState } from 'react'
@@ -40,7 +40,7 @@ const AddRowModal = (props)=>{
   const [uAmount, setUAmount]=useState(0)
   const [yAmount, setYAmount]=useState(0)  
   const [pendingTx, setPendingTx] = useState(false)
-  const YieldSwapContract = useHelixYieldSwap()  
+  const LpSwapContract = useHelixLpSwap()  
   const allTokens = useAllTokens() // All Stable Token  
   const { data: farmsLP } = useMemoFarms()
   
@@ -100,7 +100,7 @@ const AddRowModal = (props)=>{
     if (selectedLPAllowance.lte(BIG_ZERO)){
       const decimals = await selectedLPContract.decimals()
       const decimalUAmount = getDecimalAmount(new BigNumber(uAmount), decimals)
-      selectedLPContract.approve(YieldSwapContract.address, decimalUAmount.toString()).then( async (tx)=>{        
+      selectedLPContract.approve(LpSwapContract.address, decimalUAmount.toString()).then( async (tx)=>{        
         await tx.wait()
         toastSuccess(
           `${t('Congratulations')}!`,
@@ -116,7 +116,7 @@ const AddRowModal = (props)=>{
       return 
     }
     if(!await DoValidation()) return 
-    YieldSwapContract.openSwap(selectedToken.address, selectedLP.pid, uAmount, yAmount, 0).then(async (tx)=>{
+    LpSwapContract.openSwap(selectedToken.address, selectedLP.pid, uAmount, yAmount).then(async (tx)=>{
       await tx.wait()
       setPendingTx(false);
       toastSuccess(
@@ -134,7 +134,7 @@ const AddRowModal = (props)=>{
 
   useEffect(()=>{
     const allowanceContracts = lpContracts.map((lpContract)=>{
-      return lpContract.allowance(account, YieldSwapContract.address)
+      return lpContract.allowance(account, LpSwapContract.address)
     })
     Promise.all(allowanceContracts).then((allowances) => {      
       
@@ -145,7 +145,7 @@ const AddRowModal = (props)=>{
       setLPOptions(tempLPOptions)
       if(!selectedLPOption) setSelectedLPOption(tempLPOptions[0])
     })
-  }, [YieldSwapContract.address, account, lpContracts, tempLPOptions, selectedLPOption])
+  }, [LpSwapContract.address, account, lpContracts, tempLPOptions, selectedLPOption])
 
   if (!LPOptions) return null
   return (

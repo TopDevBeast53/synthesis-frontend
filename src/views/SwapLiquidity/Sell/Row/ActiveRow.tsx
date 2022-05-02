@@ -1,4 +1,4 @@
-import { useHelixYieldSwap } from 'hooks/useContract'
+import { useHelixLpSwap } from 'hooks/useContract'
 import useToast from 'hooks/useToast'
 import moment from 'moment'
 import React, { useMemo, useState } from 'react'
@@ -31,7 +31,7 @@ const ArrowIcon = styled(ChevronDownIcon)<{ toggled: boolean }>`
 `
 
 const ActiveRow=(props)=>{
-    const YieldSwapContract = useHelixYieldSwap()
+    const LpSwapContract = useHelixLpSwap()
     const { toastSuccess, toastError } = useToast()        
     const {swapData, swapId} = props
     const [expanded, setExpanded] = useState(false)
@@ -47,7 +47,7 @@ const ActiveRow=(props)=>{
     const handleCloseClick = (e) => {
         e.stopPropagation();        
         setPendingTx(true) 
-        YieldSwapContract.closeSwap(swapId).then(async (tx)=>{
+        LpSwapContract.closeSwap(swapId).then(async (tx)=>{
             await tx.wait()
             toastSuccess("Info", "You closed the Order")
             setPendingTx(false) 

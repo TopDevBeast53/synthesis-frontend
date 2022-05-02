@@ -1,7 +1,7 @@
 import { useWeb3React } from '@web3-react/core'
 import Page from 'components/Layout/Page'
 import { useTranslation } from 'contexts/Localization'
-import { useHelixYieldSwap } from 'hooks/useContract'
+import { useHelixLpSwap } from 'hooks/useContract'
 import { useFastFresh } from 'hooks/useRefresh'
 import useToast from 'hooks/useToast'
 import React, { useContext, useEffect, useState } from 'react'
@@ -33,7 +33,7 @@ const Wrapper = styled.div`
 const Sell = ()=>{
     const { t } = useTranslation()
     const { toastError } = useToast()
-    const YieldSwapContract = useHelixYieldSwap()  
+    const LpSwapContract = useHelixLpSwap()  
     const {account} = useWeb3React()
     const [menuIndex, setMenuIndex] = useState(0)    
     const [swapIds, setSwapIds] = useState([])
@@ -54,13 +54,13 @@ const Sell = ()=>{
     useEffect(()=>{        
         if(tableRefresh < 0) return
         if(!account) return
-        YieldSwapContract.getSwapIds(account).then(async (ids)=>{
+        LpSwapContract.getSwapIds(account).then(async (ids)=>{
             setSwapIds(ids)            
         }).catch(err=>{
-            console.log(err)            
+            console.error(err)            
             // toastError('Error', err.toString())
         })
-    }, [YieldSwapContract, account, toastError, tableRefresh, fastRefresh ])
+    }, [LpSwapContract, account, toastError, tableRefresh, fastRefresh ])
 
     
     return (        

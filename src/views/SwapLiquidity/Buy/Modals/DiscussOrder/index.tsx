@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import { useHelixYieldSwap, useERC20 } from 'hooks/useContract';
+import { useHelixLpSwap, useERC20 } from 'hooks/useContract';
 import BigNumber from 'bignumber.js'
 import { useWeb3React } from '@web3-react/core'
 import useToast from 'hooks/useToast';
@@ -22,7 +22,7 @@ const DiscussOrder: React.FC<any> = (props) => {
   const theme = useTheme(); 
   const { account } = useWeb3React();
   const { t } = useTranslation()
-  const YieldSwapContract = useHelixYieldSwap()
+  const LpSwapContract = useHelixLpSwap()
   const { toastSuccess, toastError } = useToast()
   const [pendingTx, setPendingTx] = useState(false)
   const [isAllowed, setAllowed] = useState(1)
@@ -37,7 +37,7 @@ const DiscussOrder: React.FC<any> = (props) => {
   
   async function doValidation(){      
     try{
-      const allowedValue =  await exContract.allowance(account, YieldSwapContract.address)
+      const allowedValue =  await exContract.allowance(account, LpSwapContract.address)
       if(allowedValue.lte(0))  {
         toastError('Error', "You didn't allow the LPToken to use")
         setAllowed(0)
@@ -63,7 +63,7 @@ const DiscussOrder: React.FC<any> = (props) => {
     if (isAllowed === 0){
       const decimals = await exContract.decimals()
       const decimalUAmount = getDecimalAmount(new BigNumber(yAmount), decimals)
-      exContract.approve(YieldSwapContract.address, decimalUAmount.toString()).then(res=>{
+      exContract.approve(LpSwapContract.address, decimalUAmount.toString()).then(res=>{
         setAllowed(yAmount)
         setPendingTx(false)
       }).catch(err=>{
@@ -75,10 +75,10 @@ const DiscussOrder: React.FC<any> = (props) => {
     if(!await doValidation()) return 
     try {
       if(bidData){
-        const tx = await YieldSwapContract.setBid(bidId, yAmount)
+        const tx = await LpSwapContract.setBid(bidId, yAmount)
         await tx.wait()
       } else {
-        const tx = await YieldSwapContract.makeBid(swapData?.id, yAmount)
+        const tx = await LpSwapContract.makeBid(swapData?.id, yAmount)
         await tx.wait()
       }
       if (onSend) onSend()

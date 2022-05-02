@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react'
-import { useHelixYieldSwap } from 'hooks/useContract'
+import { useHelixLpSwap } from 'hooks/useContract'
 import { SwapLiquidityContext } from 'views/SwapLiquidity/context'
 import useToast from 'hooks/useToast'
 import styled from 'styled-components'
@@ -30,7 +30,7 @@ const ArrowIcon = styled(ChevronDownIcon)<{ toggled: boolean }>`
 `
 
 const AppliedRow=(props)=>{
-    const YieldSwapContract = useHelixYieldSwap()
+    const LpSwapContract = useHelixLpSwap()
     const {tableRefresh, setTableRefresh} = useContext(SwapLiquidityContext)
     const { toastSuccess, toastError } = useToast()        
     const {swapData} = props
@@ -43,7 +43,7 @@ const AppliedRow=(props)=>{
     const handleAcceptClick = (e) => {
         e.stopPropagation();        
         setPendingTx(true) 
-        YieldSwapContract.acceptAsk(swapData?.id).then(async (tx)=>{
+        LpSwapContract.acceptAsk(swapData?.id).then(async (tx)=>{
             await tx.wait()
             toastSuccess("Info", "Bid success!")
             setTableRefresh(tableRefresh + 1)

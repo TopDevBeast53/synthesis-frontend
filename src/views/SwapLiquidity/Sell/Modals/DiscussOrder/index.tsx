@@ -1,5 +1,5 @@
 
-import { useHelixYieldSwap } from 'hooks/useContract';
+import { useHelixLpSwap } from 'hooks/useContract';
 import useToast from 'hooks/useToast';
 import React, { useState } from "react";
 import { useTheme } from 'styled-components';
@@ -16,7 +16,7 @@ const getEllipsis = (account) => {
 
 const DiscussOrder: React.FC<any> = (props) => {
   const theme = useTheme(); 
-  const YieldSwapContract = useHelixYieldSwap()
+  const LpSwapContract = useHelixLpSwap()
   const { toastSuccess, toastError } = useToast()
   const [pendingTx, setPendingTx] = useState(false)
   
@@ -32,7 +32,7 @@ const DiscussOrder: React.FC<any> = (props) => {
   }
   const handleSendClick =() =>{
     setPendingTx(true)       
-    YieldSwapContract.setAsk(bidData.swapId, yAmount).then(async (tx)=>{
+    LpSwapContract.setAsk(bidData.swapId, yAmount).then(async (tx)=>{
       await tx.wait()
       toastSuccess('Congratulations!', 'You Updated Amount !!! ')            
       if (onSend) onSend()
