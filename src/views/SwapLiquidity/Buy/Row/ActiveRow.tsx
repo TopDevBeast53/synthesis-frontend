@@ -3,7 +3,6 @@ import { SwapLiquidityContext } from 'views/SwapLiquidity/context'
 import styled from 'styled-components'
 import { AutoRenewIcon, Button, ChevronDownIcon, useDelayedUnmount, useModal } from 'uikit'
 import BaseCell from 'views/SwapYield/components/Cells/BaseCell'
-import ExTokenCell from 'views/SwapYield/components/Cells/ExTokenCell'
 import LPTokenCell from 'views/SwapYield/components/Cells/LPTokenCell'
 import ToolTipCell from 'views/SwapYield/components/Cells/ToolTipCell'
 import DiscussOrder from '../Modals/DiscussOrder';
@@ -46,10 +45,10 @@ const ActiveRow=(props)=>{
         <>
             <StyledRow onClick={handleOnRowClick}>
                 <StyledCell>
-                    <LPTokenCell lpTokenAddress={swapData?.lpToken} balance={swapData?.amount.toNumber()}/>
+                    <LPTokenCell lpTokenAddress={swapData?.toBuyerToken} balance={swapData?.amount.toNumber()}/>
                 </StyledCell>
                 <StyledCell>
-                    <ExTokenCell exTokenAddress={swapData?.exToken} balance={swapData?.ask.toNumber()}/>                   
+                    <LPTokenCell lpTokenAddress={swapData?.toSellerToken} balance={swapData?.ask.toNumber()}/>                   
                 </StyledCell>
                 <StyledCell>
                     <ToolTipCell/>

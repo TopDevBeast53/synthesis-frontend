@@ -27,7 +27,7 @@ const StyledCell = styled(BaseCell)`
 const getEllipsis = (account) => {
     return account ? `${account.substring(0, 5)}...${account.substring(account.length - 5)}` : null;
 }
-const CandidateRow=({bidId, exToken})=>{
+const CandidateRow=({bidId, swapData})=>{
     const LpSwapContract = useHelixLpSwap()
     const {account} = useWeb3React()
     const {tableRefresh, setTableRefresh, filterState} = useContext(SwapLiquidityContext)
@@ -36,9 +36,8 @@ const CandidateRow=({bidId, exToken})=>{
     const onSendAsk = () =>{
         setTableRefresh(tableRefresh + 1)
     }
-    const [showModal] = useModal(<DiscussOrder bidData={bidData} bidId={bidId} onSend={onSendAsk} exToken={exToken}/>,false)
+    const [showModal] = useModal(<DiscussOrder bidData={bidData} swapData={swapData} bidId={bidId} onSend={onSendAsk}/>,false)
     useEffect(()=>{
-        setBidData({bidder:"0x59201fb8cb2D61118B280c8542127331DD141654", amount:20 })
         LpSwapContract.getBid(bidId).then(res=>{
             setBidData(res)
         })

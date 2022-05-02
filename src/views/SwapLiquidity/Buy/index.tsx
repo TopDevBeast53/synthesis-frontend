@@ -39,7 +39,7 @@ const Sell = ()=>{
     const fastRefresh = useFastFresh()
     const {tableRefresh, setFilterState} = useContext(SwapLiquidityContext)
     const filteredSwaps = useMemo(() => {        
-        if(menuIndex === SwapState.Finished) return filter(swaps, {isWithdrawn: true, buyer: account})
+        if(menuIndex === SwapState.Finished) return filter(swaps, {isOpen: false, buyer: account})
         if(menuIndex === SwapState.All) return swaps.filter((s, i) => s.isOpen && !includes(bidIdsPerUser, i) && s.seller !== account)         
         if(menuIndex === SwapState.Applied) return swaps.filter((s, i) => s.isOpen && includes(bidIdsPerUser, i))            
         return []
@@ -55,6 +55,7 @@ const Sell = ()=>{
         if(!account) return
         // fetch swaps
         LpSwapContract.getSwaps().then((fetchedSwaps) => {
+            console.debug('????', fetchedSwaps)
             const fetchedSwapsWithIds = fetchedSwaps.map((s, i) => ({...s, id: i}))
             setSwaps(fetchedSwapsWithIds)
         })

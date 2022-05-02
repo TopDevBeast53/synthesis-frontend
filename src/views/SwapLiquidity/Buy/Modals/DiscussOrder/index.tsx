@@ -30,14 +30,16 @@ const DiscussOrder: React.FC<any> = (props) => {
   const bodyPadding = "24px"
   const headerBackground = "transparent"
   const minWidth = "320px"
-  const {bidData, bidId, swapData, exToken, onSend, onDismiss} = props
-  const exContract = useERC20(bidData ? exToken :swapData.exToken)
+  const {bidData, bidId, swapData, onSend, onDismiss} = props
+  const exContract = useERC20(swapData?.toSellerToken)
 
   const [yAmount, setYAmount]=useState(bidData?.amount)
   
   async function doValidation(){      
     try{
       const allowedValue =  await exContract.allowance(account, LpSwapContract.address)
+
+      console.debug('?????', allowedValue.toString())
       if(allowedValue.lte(0))  {
         toastError('Error', "You didn't allow the LPToken to use")
         setAllowed(0)
@@ -73,6 +75,7 @@ const DiscussOrder: React.FC<any> = (props) => {
       return 
     }
     if(!await doValidation()) return 
+
     try {
       if(bidData){
         const tx = await LpSwapContract.setBid(bidId, yAmount)
