@@ -1,12 +1,9 @@
 import { useHelixLpSwap } from 'hooks/useContract'
 import useToast from 'hooks/useToast'
-import moment from 'moment'
-import React, { useMemo, useState } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import { AutoRenewIcon, Button, ChevronDownIcon, useDelayedUnmount } from 'uikit'
 import BaseCell from 'views/SwapYield/components/Cells/BaseCell'
-import DurationCell from 'views/SwapYield/components/Cells/DurationCells'
-import ExTokenCell from 'views/SwapYield/components/Cells/ExTokenCell'
 import LPTokenCell from 'views/SwapYield/components/Cells/LPTokenCell'
 import ToolTipCell from 'views/SwapYield/components/Cells/ToolTipCell'
 import CandidateTable from '../CandidateTable'
@@ -37,10 +34,7 @@ const ActiveRow=(props)=>{
     const [expanded, setExpanded] = useState(false)
     const [pendingTx, setPendingTx] = useState(false)
     const shouldRenderDetail = useDelayedUnmount(expanded, 300)
-    const duration  = useMemo(()=>{
-        if(!swapData) return undefined
-        return moment.duration(swapData?.lockDuration.toNumber(), "s")
-    }, [swapData])
+
     const handleOnRowClick = () => {
         setExpanded(!expanded)        
     }
@@ -68,10 +62,10 @@ const ActiveRow=(props)=>{
         <>
             <StyledRow onClick={handleOnRowClick}>
                 <StyledCell>
-                    <LPTokenCell lpTokenAddress={swapData?.lpToken} balance={swapData?.amount.toNumber()}/>
+                    <LPTokenCell lpTokenAddress={swapData?.toBuyerToken} balance={swapData?.amount.toNumber()}/>
                 </StyledCell>                
-                <StyledCell>
-                    <ExTokenCell exTokenAddress={swapData?.exToken} balance={swapData?.ask.toNumber()}/>                   
+                <StyledCell>                    
+                    <LPTokenCell lpTokenAddress={swapData?.toSellerToken} balance={swapData?.ask.toNumber()}/>                   
                 </StyledCell>
                 <StyledCell>
                     <ToolTipCell/>

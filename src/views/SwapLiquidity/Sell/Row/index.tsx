@@ -10,7 +10,7 @@ const Row=({data: swapId})=>{
     const {filterState} = useContext(SwapLiquidityContext)
     const [swapData, setSwapData] = useState<any>()    
     useEffect(()=>{        
-        LpSwapContract.getSwap(swapId).then(swap=>{
+        LpSwapContract.getSwap(swapId).then(swap=>{            
             setSwapData(swap)            
         })
     }, [LpSwapContract, swapId])

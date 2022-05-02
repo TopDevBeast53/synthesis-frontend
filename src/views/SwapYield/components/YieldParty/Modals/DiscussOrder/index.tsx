@@ -1,4 +1,5 @@
 
+import { useAllTokens } from 'hooks/Tokens';
 import { useHelixYieldSwap } from 'hooks/useContract';
 import useToast from 'hooks/useToast';
 import React, { useState } from "react";
@@ -23,8 +24,9 @@ const DiscussOrder: React.FC<any> = (props) => {
   const bodyPadding = "24px"
   const headerBackground = "transparent"
   const minWidth = "320px"
-  const {bidData, onSend, onDismiss} = props
-
+  const {bidData, onSend, swapData, onDismiss} = props
+  const tokens = useAllTokens()
+  const exToken = tokens[swapData?.exToken]
   const [yAmount, setYAmount]=useState(bidData?.amount)
   
   const handleYAmountChange = (input) => {
@@ -42,7 +44,7 @@ const DiscussOrder: React.FC<any> = (props) => {
       setPendingTx(false)
     })
   }
-
+  console.debug("Bid Data", bidData)
   return (
     <ModalContainer minWidth={minWidth} {...props} >
       <ModalHeader background={getThemeValue(`colors.${headerBackground}`, headerBackground)(theme)}>
@@ -55,7 +57,7 @@ const DiscussOrder: React.FC<any> = (props) => {
           <div style={{marginTop:"1em"}}>
               
                 <div style={{display:"flex", marginBottom:"1em", alignItems:"center"}}>
-                    <Text style={{marginRight:"1em"}} >Y Amount</Text>
+                    <Text style={{marginRight:"1em"}} >{exToken?.symbol}</Text>
                     <BalanceInput 
                             value={yAmount}                            
                             onUserInput={handleYAmountChange}

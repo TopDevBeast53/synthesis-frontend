@@ -47,7 +47,7 @@ const CandidateRow=({bidId, swapData})=>{
     const onSendAsk = () =>{
         setTableRefresh(tableRefresh + 1)
     }
-    const [showModal] = useModal(<DiscussOrder bidData={bidData} onSend={onSendAsk}/>,false)
+    const [showModal] = useModal(<DiscussOrder bidData={bidData} onSend={onSendAsk} swapData={swapData}/>,false)
     useEffect(()=>{
         setBidData({bidder:"0x59201fb8cb2D61118B280c8542127331DD141654", amount:20 })
         YieldSwapContract.getBid(bidId).then(res=>{
