@@ -1,4 +1,3 @@
-import Balance from 'components/Balance';
 import { useHelixYieldSwap } from 'hooks/useContract';
 import useToast from 'hooks/useToast';
 import React, { useContext, useEffect, useState } from 'react';
