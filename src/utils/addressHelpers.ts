@@ -115,3 +115,6 @@ export const getYieldSwapAddress = () => {
 export const getReferralRegisterAddress = () => {
   return getAddress(addresses.referralRegister)
 }
+export const getHelixLPSwapAddress = () => {
+  return getAddress(addresses.helixLPSwap)
+}
