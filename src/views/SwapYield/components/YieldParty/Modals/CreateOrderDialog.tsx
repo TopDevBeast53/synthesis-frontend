@@ -3,6 +3,7 @@ import BigNumber from 'bignumber.js'
 import Select from 'components/Select/Select'
 import { Erc20 } from 'config/abi/types'
 import { useTranslation } from 'contexts/Localization'
+import { ethers } from 'ethers'
 import { useAllTokens } from 'hooks/Tokens'
 import { useERC20s, useHelixYieldSwap } from 'hooks/useContract'
 import useTheme from 'hooks/useTheme'
@@ -99,7 +100,7 @@ const AddRowModal = (props)=>{
     const selectedLP = selectedLPOption.value
     const selectedLPContract:Erc20 = selectedLPOption.contract
     const selectedLPAllowance = selectedLPOption.allowance
-    setPendingTx(true);   
+    
     async function DoValidation(){
       if (uAmount === 0 || yAmount === 0){
         toastError('Error', `Both Token Amount Should be bigger than Zero`)
@@ -112,15 +113,16 @@ const AddRowModal = (props)=>{
       return true
     }
     if (selectedLPAllowance.lte(BIG_ZERO)){
-      const decimals = await selectedLPContract.decimals()
-      const decimalUAmount = getDecimalAmount(new BigNumber(uAmount), decimals)
-      selectedLPContract.approve(YieldSwapContract.address, decimalUAmount.toString()).then( async (tx)=>{        
+      setPendingTx(true);
+      const decimals = await selectedLPContract.decimals()      
+      selectedLPContract.approve(YieldSwapContract.address, ethers.constants.MaxUint256).then( async (tx)=>{        
         await tx.wait()
         toastSuccess(
           `${t('Congratulations')}!`,
             t('You Apporved  !!! '),
-        )        
-        selectedLPOption.allowance=decimalUAmount
+        )                
+        selectedLPOption.allowance=getDecimalAmount(new BigNumber(Number.POSITIVE_INFINITY), decimals)
+
         setSelectedLPOption({...selectedLPOption})
         setPendingTx(false)
       }).catch(err=>{
@@ -130,7 +132,7 @@ const AddRowModal = (props)=>{
       return 
     }
     if(!await DoValidation()) return 
-
+    setPendingTx(true);
     YieldSwapContract.openSwap(selectedToken.address, selectedLP.pid, uAmount, yAmount, 3600 * 24* duration).then(async (tx)=>{
       await tx.wait()
       setPendingTx(false);

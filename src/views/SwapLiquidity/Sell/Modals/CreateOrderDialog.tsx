@@ -3,6 +3,7 @@ import BigNumber from 'bignumber.js'
 import Select from 'components/Select/Select'
 import { Erc20 } from 'config/abi/types'
 import { useTranslation } from 'contexts/Localization'
+import { ethers } from 'ethers'
 import { useERC20s, useHelixLpSwap } from 'hooks/useContract'
 import useTheme from 'hooks/useTheme'
 import useToast from 'hooks/useToast'
@@ -75,16 +76,16 @@ const AddRowModal = (props)=>{
       return true
     }
     if (selectedLPAllowance.lte(BIG_ZERO)){
-      const decimals = await selectedLPContract.decimals()
-      const decimalUAmount = getDecimalAmount(new BigNumber(uAmount), decimals)
+      const decimals = await selectedLPContract.decimals()      
       setPendingTx(true); 
-      selectedLPContract.approve(LpSwapContract.address, decimalUAmount.toString()).then( async (tx)=>{        
+      
+      selectedLPContract.approve(LpSwapContract.address, ethers.constants.MaxUint256).then( async (tx)=>{        
         await tx.wait()
         toastSuccess(
           `${t('Congratulations')}!`,
             t('You Apporved  !!! '),
         )        
-        selectedLPOption.allowance=decimalUAmount
+        selectedLPOption.allowance=getDecimalAmount(new BigNumber(Number.POSITIVE_INFINITY), decimals)
         setSelectedLPOption({...selectedLPOption})
         setPendingTx(false)
       }).catch(err=>{
@@ -134,7 +135,7 @@ const AddRowModal = (props)=>{
       title={t('Add Item') }
       headerBackground={theme.colors.gradients.cardHeader}    
       onDismiss={onDismiss}
-    > 
+    >
       
       <Text bold>{t('LP Token')}:</Text>           
       <Select options={LPOptions} onOptionChange={handleLPChange} style={{zIndex:"30"}}/>
