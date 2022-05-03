@@ -10,6 +10,10 @@ import { useTranslation } from 'contexts/Localization'
 import { useHelixYieldSwap } from 'hooks/useContract'
 import moment from 'moment'
 import { YieldCPartyContext } from 'views/SwapYield/context';
+import LPTokenCell from 'views/SwapYield/components/Cells/LPTokenCell'
+import ExTokenCell from 'views/SwapYield/components/Cells/ExTokenCell'
+import ToolTipCell from 'views/SwapYield/components/Cells/ToolTipCell'
+import { ToolTipText } from 'views/SwapYield/constants'
 import BaseCell, { CellContent } from './BaseCell'
 import DiscussOrder from './DiscussOrder'
 import { SwapState } from '../../types'
@@ -37,7 +41,6 @@ const ArrowIcon = styled(ChevronDownIcon)<{ toggled: boolean }>`
 const YieldCPartyRow=({data, state, loading})=>{
     const { t } = useTranslation()
     const {amount, ask, id, exToken, lpToken, lockDuration, lockUntilTimestamp, approved, bids} = data
-    
     const yieldSwapContract = useHelixYieldSwap();
     const tokens = useAllTokens()
     const {data:farms} = useFarms()
@@ -48,7 +51,6 @@ const YieldCPartyRow=({data, state, loading})=>{
     const {tableRefresh, setTableRefresh} = useContext(YieldCPartyContext)
     const lpTokenInfo = farms.find((item)=>(getAddress(item.lpAddresses) === lpToken))
     const exTokenInfo = tokens[exToken]  
-    
     const {timeInfo, isPast} = useMemo(() => {
         const withdrawDate = moment.unix(lockUntilTimestamp) 
         const today = moment() 
@@ -154,17 +156,7 @@ const YieldCPartyRow=({data, state, loading})=>{
         <>
             <StyledRow>
                 <StyledCell>
-                    <CellContent>
-                        <Text>
-                            {lpTokenInfo.lpSymbol}
-                        </Text>
-                        <Balance
-                            mt="4px"                
-                            color='primary'                        
-                            value={amount.toNumber()}
-                            fontSize="14px"
-                        />
-                    </CellContent>
+                    <LPTokenCell lpTokenAddress={lpToken} balance={amount.toString()}  />
                 </StyledCell>
                 {
                     state !== SwapState.Finished && (
@@ -181,17 +173,10 @@ const YieldCPartyRow=({data, state, loading})=>{
                     )
                 }
                 <StyledCell>
-                    <CellContent>
-                        <Text>
-                            {exTokenInfo.symbol}
-                        </Text>
-                        <Balance
-                            mt="4px"                
-                            color='primary'                        
-                            value={ask.toNumber()}
-                            fontSize="14px"
-                        />
-                    </CellContent>
+                    <ExTokenCell exTokenAddress={exToken} balance={ask.toString()}  />
+                </StyledCell>
+                <StyledCell>
+                    <ToolTipCell tooltipText={ToolTipText}/>
                 </StyledCell>
                 <StyledCell style={{zIndex:10, flex:3}}>
                     <CellContent>

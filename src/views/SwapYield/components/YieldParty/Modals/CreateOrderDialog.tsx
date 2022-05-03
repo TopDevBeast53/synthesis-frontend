@@ -1,7 +1,7 @@
 import { useWeb3React } from '@web3-react/core'
 import BigNumber from 'bignumber.js'
-import Select from 'components/Select/Select'
 import { ModalInput } from 'components/Modal'
+import Select from 'components/Select/Select'
 import { Erc20 } from 'config/abi/types'
 import { useTranslation } from 'contexts/Localization'
 import { ethers } from 'ethers'
@@ -12,13 +12,14 @@ import useToast from 'hooks/useToast'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Token } from 'sdk'
 import { useMemoFarms } from 'state/farms/hooks'
+import { useTokenBalance } from 'state/wallet/hooks'
 import styled from 'styled-components'
 import {
-  AutoRenewIcon, BalanceInput, Button, Input, Modal, Text
+  AutoRenewIcon, BalanceInput, Button, Input, Modal, Skeleton, Text
 } from 'uikit'
 import { getAddress } from 'utils/addressHelpers'
 import { BIG_ZERO } from 'utils/bigNumber'
-import { getDecimalAmount } from 'utils/formatBalance'
+import { getBalanceAmount, getDecimalAmount } from 'utils/formatBalance'
 import Group from '../../GroupComponent'
 
 
@@ -61,16 +62,20 @@ const AddRowModal = (props)=>{
     }
   })
   const [selectedLPOption, setSelectedLPOption] = useState<any>()
-  const maxBalanceOfLP = "1000"
-  
+  const maxBalanceOfLP = getBalanceAmount(selectedLPOption?.value.userData.tokenBalance)
+  const selectedLpPrice = selectedLPOption? new BigNumber(selectedLPOption?.value.tokenPriceBusd) : BIG_ZERO
+
   const [selectedToken, setSelectedToken] = useState<Token>(TokenOptions[0].value)
+
   const [minDuration, setMinDuration] = useState(0)
   const [maxDuration, setMaxDuration] = useState(0)
   
-  
+  useTokenBalance()
   const handleUAmountChange = useCallback(
     (e: React.FormEvent<HTMLInputElement>) => {
       if (e.currentTarget.validity.valid) {
+        if (e.currentTarget.value === "")
+          setUAmount("0")
         setUAmount(e.currentTarget.value.replace(/,/g, '.'))
       }
     },
@@ -114,12 +119,15 @@ const AddRowModal = (props)=>{
     const selectedLP = selectedLPOption.value
     const selectedLPContract:Erc20 = selectedLPOption.contract
     const selectedLPAllowance = selectedLPOption.allowance
-    
     async function DoValidation(){
       if (uAmount === "0" || yAmount === "0"){
         toastError('Error', `Both Token Amount Should be bigger than Zero`)
         return false
-      }  
+      }
+      if (maxBalanceOfLP.lt(uAmount)){
+        toastError('Error', `${selectedLP.lpSymbol} amount is over limit`)
+        return false
+      }
       if (duration > maxDuration || duration < minDuration){
         toastError('Error', `Duration should be in range between ${minDuration} and ${maxDuration}`)
         return false
@@ -188,7 +196,7 @@ const AddRowModal = (props)=>{
   }, [YieldSwapContract, account])
   
   const handleSelectMaxOfLPToken = useCallback(() => {
-    setUAmount(maxBalanceOfLP)
+    setUAmount(maxBalanceOfLP.toString())
   }, [maxBalanceOfLP, setUAmount])
  
   if (!LPOptions) return null
@@ -204,17 +212,25 @@ const AddRowModal = (props)=>{
         <Select options={LPOptions} onOptionChange={handleLPChange} style={{zIndex:"30", flex:"6"}}/>
       </Flex>
       
-      <div style={{marginBottom:"0.5em"}}>
-        <ModalInput
-          value={uAmount.toString()}
-          onSelectMax={handleSelectMaxOfLPToken}
-          onChange={handleUAmountChange}
-          max={maxBalanceOfLP}
-          symbol={selectedLPOption?.label}
-          addLiquidityUrl="#"
-          inputTitle={t('Amount')}
-        />
+      <div style={{marginBottom:"1em"}}>
+        {selectedLPOption? 
+          <ModalInput
+            value={uAmount.toString()}
+            onSelectMax={handleSelectMaxOfLPToken}
+            onChange={handleUAmountChange}
+            max={maxBalanceOfLP.toString()}
+            symbol={selectedLPOption?.label}
+            addLiquidityUrl="#"
+            inputTitle={t('Amount')}
+          />
+          :
+          <Skeleton/>
+        }
       </div>
+      <Flex>
+        <Text bold style={{flex:"3"}}>{t('Estimated Price')}:  </Text>
+        <Text style={{flex:"3"}} color="primary">~ {selectedLpPrice?.times(uAmount).toString()}  </Text>
+      </Flex>
       <Flex>
         <Text bold style={{flex:"3 3 120px"}}>{t('Duration (days)')}:</Text>
         <StyledInput style={{flex:"7 7"}} type="number" max={maxDuration} min={minDuration} value={duration}  onChange={handleDurationChange}/>

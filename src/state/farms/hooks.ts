@@ -8,6 +8,7 @@ import { getBalanceAmount } from 'utils/formatBalance'
 import { farmsConfig } from 'config/constants'
 import { useSlowFresh, useFastFresh } from 'hooks/useRefresh'
 import { deserializeToken } from 'state/user/hooks/helpers'
+import { getAddress } from 'utils/addressHelpers'
 import { fetchFarmsPublicDataAsync, fetchFarmUserDataAsync, nonArchivedFarms } from '.'
 import { State, SerializedFarm, DeserializedFarmUserData, DeserializedFarm, DeserializedFarmsState } from '../types'
 
@@ -119,6 +120,11 @@ export const useFarmFromPid = (pid: number): DeserializedFarm => {
 
 export const useFarmFromLpSymbol = (lpSymbol: string): DeserializedFarm => {
   const farm = useSelector((state: State) => state.farms.data.find((f) => f.lpSymbol === lpSymbol))
+  return deserializeFarm(farm)
+}
+
+export const useFarmFromLpAddress = (lpAddress: string): DeserializedFarm => {
+  const farm = useSelector((state: State) => state.farms.data.find((f) => getAddress(f.lpAddresses) === lpAddress))
   return deserializeFarm(farm)
 }
 
