@@ -4,7 +4,6 @@ import { filter, includes } from 'lodash'
 import Page from 'components/Layout/Page'
 import { useTranslation } from 'contexts/Localization'
 import { useHelixLpSwap } from 'hooks/useContract'
-import { useFastFresh } from 'hooks/useRefresh'
 import styled from 'styled-components'
 import { ButtonMenu, ButtonMenuItem } from 'uikit'
 import { SwapLiquidityContext } from '../context'
@@ -31,12 +30,11 @@ const Sell = ()=>{
     const { t } = useTranslation()
     const LpSwapContract = useHelixLpSwap()  
     const {account} = useWeb3React()
-    const [menuIndex, setMenuIndex] = useState(0)    
+    const [menuIndex, setMenuIndex] = useState(SwapState.All)    
     const [swaps, setSwaps] = useState([])
     const [bidIdsPerUser, setBidIdsPerUser] = useState([])
-    const fastRefresh = useFastFresh()
     const {tableRefresh, setFilterState} = useContext(SwapLiquidityContext)
-    const filteredSwaps = useMemo(() => {        
+    const filteredSwaps = useMemo(() => {  
         if(menuIndex === SwapState.Finished) return filter(swaps, {isOpen: false, buyer: account})
         if(menuIndex === SwapState.All) return swaps.filter((s, i) => s.isOpen && !includes(bidIdsPerUser, i) && s.seller !== account)         
         if(menuIndex === SwapState.Applied) return swaps.filter((s, i) => s.isOpen && includes(bidIdsPerUser, i))            
@@ -62,7 +60,7 @@ const Sell = ()=>{
             const normalNumberBidIds = fetchBidderSwapIds.map(b => b.toNumber())
             setBidIdsPerUser(normalNumberBidIds)
         })
-    }, [LpSwapContract, account, tableRefresh, fastRefresh ])
+    }, [LpSwapContract, account, tableRefresh ])
 
     return (        
         <Page>            

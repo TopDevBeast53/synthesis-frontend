@@ -4,6 +4,7 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { Button, Skeleton, Text, useModal } from 'uikit';
 import { YieldCPartyContext } from 'views/SwapYield/context';
+import ExTokenCell from '../../Cells/ExTokenCell';
 import BaseCell, { CellContent } from '../BaseCell';
 import DiscussOrder from '../DiscussOrder';
 
@@ -61,17 +62,7 @@ const CandidateRow=({bid, exToken, approved})=>{
                 </CellContent>
             </StyledCell>
             <StyledCell>
-                <CellContent>
-                    <Text>
-                        DAmount
-                    </Text>
-                    <Balance
-                        mt="4px"                
-                        color='primary'                        
-                        value={bid.amount.toNumber()}
-                        fontSize="14px"
-                    />
-                </CellContent>
+                <ExTokenCell exTokenAddress={exToken} balance={bid.amount.toString()} />
             </StyledCell>
             <StyledCell>
                 <CellContent>

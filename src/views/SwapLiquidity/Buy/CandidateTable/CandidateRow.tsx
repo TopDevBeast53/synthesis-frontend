@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useWeb3React } from '@web3-react/core'
-import Balance from 'components/Balance';
 import { useHelixLpSwap } from 'hooks/useContract';
 import { SwapLiquidityContext } from 'views/SwapLiquidity/context'
 import styled from 'styled-components';
 import { Button, Skeleton, Text, useModal } from 'uikit';
 import BaseCell, { CellContent } from 'views/SwapYield/components/Cells/BaseCell';
+import LPTokenCell from 'views/SwapYield/components/Cells/LPTokenCell';
 import DiscussOrder from '../Modals/DiscussOrder';
 import { SwapState } from '../../types'
 
@@ -50,9 +50,6 @@ const CandidateRow=({bidId, swapData})=>{
             </StyledCell>
             <StyledCell>
                 <CellContent>
-                    <Text>
-                        YAmount
-                    </Text>
                     <Skeleton mt="4px"/>
                 </CellContent>
             </StyledCell>         
@@ -68,17 +65,7 @@ const CandidateRow=({bidId, swapData})=>{
                 </CellContent>
             </StyledCell>
             <StyledCell>
-                <CellContent>
-                    <Text>
-                        YAmount
-                    </Text>
-                    <Balance
-                        mt="4px"                
-                        color='primary'                        
-                        value={bidData?.amount}
-                        fontSize="14px"
-                    />
-                </CellContent>
+                <LPTokenCell lpTokenAddress={swapData?.toBuyerToken} balance={bidData?.amount.toString()}/>                
             </StyledCell>
             {
                 filterState === SwapState.Applied && account === bidData?.bidder && (

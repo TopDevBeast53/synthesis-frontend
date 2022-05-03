@@ -1,16 +1,15 @@
 import React, { useState, useCallback } from 'react'
 import { useHelixLpSwap, useERC20 } from 'hooks/useContract'
+import { ethers } from 'ethers'
 import BigNumber from 'bignumber.js'
-import { useWeb3React } from '@web3-react/core'
 import useToast from 'hooks/useToast'
 import { ModalInput } from 'components/Modal'
 import { getAddress } from 'utils/addressHelpers'
-import { useFarms, useFarmFromLpSymbol, useLpTokenPrice, usePriceHelixBusd } from 'state/farms/hooks'
+import { useFarms, useFarmFromLpSymbol } from 'state/farms/hooks'
 import { useTranslation } from 'contexts/Localization'
 import { useTheme } from 'styled-components'
 import {
   AutoRenewIcon,
-  BalanceInput,
   Button,
   Heading,
   ModalBody,
@@ -18,7 +17,6 @@ import {
   ModalContainer,
   ModalHeader,
   ModalTitle,
-  Text,
 } from 'uikit'
 import getThemeValue from 'uikit/util/getThemeValue'
 import { getDecimalAmount, getBalanceAmount } from 'utils/formatBalance'
@@ -29,7 +27,6 @@ const getEllipsis = (account) => {
 
 const DiscussOrder: React.FC<any> = (props) => {
   const theme = useTheme()
-  const { account } = useWeb3React()
   const { t } = useTranslation()
   const LpSwapContract = useHelixLpSwap()
   const { toastSuccess, toastError } = useToast()
@@ -47,15 +44,16 @@ const DiscussOrder: React.FC<any> = (props) => {
   const exContract = useERC20(swapData?.toSellerToken)
 
   const [yAmount, setYAmount] = useState(bidData?.amount)
+  const decimalYAmount = getDecimalAmount(new BigNumber(yAmount))
   
-  const maxBalanceOfLP = getBalanceAmount(userData.tokenBalance).toString()
+  const maxBalanceOfLP = getBalanceAmount(userData?.tokenBalance).toString()
   const handleSelectMaxOfLPToken = useCallback(() => {
     setYAmount(maxBalanceOfLP)
   }, [maxBalanceOfLP, setYAmount])
   async function doValidation() {
     try {
-      const allowedValue = userData.allowance
-      if (allowedValue.lte(0)) {
+      const allowedValue = userData?.allowance
+      if (allowedValue.lte(decimalYAmount)) {
         toastError('Error', "You didn't allow the LPToken to use")
         setAllowed(0)
         setPendingTx(false)
@@ -81,10 +79,8 @@ const DiscussOrder: React.FC<any> = (props) => {
     setPendingTx(true)
 
     if (isAllowed === 0) {
-      const decimals = await exContract.decimals()
-      const decimalUAmount = getDecimalAmount(new BigNumber(yAmount), decimals)
       try {
-        const tx = await exContract.approve(LpSwapContract.address, decimalUAmount.toString())
+        const tx = await exContract.approve(LpSwapContract.address, ethers.constants.MaxUint256)
         await tx.wait()
         setAllowed(yAmount)
         setPendingTx(false)
@@ -98,10 +94,10 @@ const DiscussOrder: React.FC<any> = (props) => {
 
     try {
       if (bidData) {
-        const tx = await LpSwapContract.setBid(bidId, yAmount)
+        const tx = await LpSwapContract.setBid(bidId, decimalYAmount.toString())
         await tx.wait()
       } else {
-        const tx = await LpSwapContract.makeBid(swapData?.id, yAmount)
+        const tx = await LpSwapContract.makeBid(swapData?.id, decimalYAmount.toString())
         await tx.wait()
       }
       if (onSend) onSend()
@@ -124,8 +120,6 @@ const DiscussOrder: React.FC<any> = (props) => {
       </ModalHeader>
       <ModalBody p={bodyPadding}>
           <div style={{ display: 'flex', marginBottom: '1em', alignItems: 'center' }}>
-            {/* <BalanceInput value={yAmount} onUserInput={handleYAmountChange} /> */}
-
             <ModalInput
               value={yAmount}
               onSelectMax={handleSelectMaxOfLPToken}
@@ -151,18 +145,3 @@ const DiscussOrder: React.FC<any> = (props) => {
 }
 
 export default DiscussOrder
-
-// const DiscussOrder = () => {
-//     return (
-//         <div style={{ padding: "32px", width: "500px" }}>
-//             <Card>
-//                 <CardHeader>
-//                     <Heading size="xl">Card Header</Heading>
-//                 </CardHeader>
-//                 <CardBody>Body</CardBody>
-//                 <CardFooter>Footer</CardFooter>
-//             </Card>
-//         </div>
-//     )
-// }
-// export default DiscussOrder

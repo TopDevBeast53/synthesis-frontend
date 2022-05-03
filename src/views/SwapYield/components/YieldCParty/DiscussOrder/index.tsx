@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import BigNumber from 'bignumber.js'
+import { ethers } from 'ethers'
 import { useTheme } from 'styled-components'
 import {
   BalanceInput,
@@ -36,6 +37,7 @@ const DiscussOrder: React.FC<any> = (props) => {
   const [isAllowed, setAllowed] = useState(1)
 
   const [yAmount, setYAmount] = useState(0.0)
+  const decimalYAmount = getDecimalAmount(new BigNumber(yAmount))
 
   const handleYAmountChange = (input) => {
     setYAmount(input)
@@ -45,7 +47,7 @@ const DiscussOrder: React.FC<any> = (props) => {
       
     try{
       const allowedValue =  await exContract.allowance(account, yieldSwapContract.address)
-      if(allowedValue.lte(0))  {
+      if(allowedValue.lte(decimalYAmount.toString()))  {
         toastError('Error', "You didn't allow the LPToken to use")
         setAllowed(0)
         setPendingTx(false);        
@@ -66,9 +68,7 @@ const DiscussOrder: React.FC<any> = (props) => {
     setPendingTx(true)
 
     if (isAllowed === 0){
-      const decimals = await exContract.decimals()
-      const decimalUAmount = getDecimalAmount(new BigNumber(yAmount), decimals)
-      exContract.approve(yieldSwapContract.address, decimalUAmount.toString()).then(res=>{
+      exContract.approve(yieldSwapContract.address, ethers.constants.MaxUint256).then(res=>{
         setAllowed(yAmount)
         setPendingTx(false)
         console.debug('approved!', res)
@@ -81,10 +81,10 @@ const DiscussOrder: React.FC<any> = (props) => {
     if(!await doValidation()) return 
     try {
       if(bid){
-        const tx = await yieldSwapContract.setBid(bid.id, yAmount)
+        const tx = await yieldSwapContract.setBid(bid.id, decimalYAmount.toString())
         await tx.wait()
       } else {
-        const tx = await yieldSwapContract.makeBid(swapId, yAmount)
+        const tx = await yieldSwapContract.makeBid(swapId, decimalYAmount.toString())
         await tx.wait()
       }
       if (onSend) onSend()
