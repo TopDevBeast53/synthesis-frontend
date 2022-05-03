@@ -76,7 +76,7 @@ const CandidateRow=({bidId, swapData})=>{
                 </CellContent>
             </StyledCell>
             <StyledCell>
-                <LPTokenCell lpTokenAddress={swapData?.toSellerToken} balance={bidData?.amount.toNumber()}/>                
+                <LPTokenCell lpTokenAddress={swapData?.toSellerToken} balance={bidData?.amount.toString()}/>                
             </StyledCell>
             <StyledCell>
                 <CellContent>
