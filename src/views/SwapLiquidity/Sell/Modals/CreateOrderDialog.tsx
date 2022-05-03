@@ -77,7 +77,6 @@ const AddRowModal = (props)=>{
     }
     const decimalUAmount = getDecimalAmount(new BigNumber(uAmount))
     const decimalYAmount = getDecimalAmount(new BigNumber(yAmount))
-    console.log(selectedLPAllowance, decimalUAmount)
     if (selectedLPAllowance.lte(decimalUAmount)){
       const decimals = await selectedLPContract.decimals()      
       setPendingTx(true); 

@@ -30,10 +30,10 @@ const EarnedRow=({swapData})=>{
         <>
             <StyledRow>
                 <StyledCell>
-                    <LPTokenCell lpTokenAddress={swapData?.lpToken} balance={swapData.amount.toNumber()}/>
+                    <LPTokenCell lpTokenAddress={swapData?.lpToken} balance={swapData.amount.toString()}/>
                 </StyledCell>                
                 <StyledCell>                    
-                    <ExTokenCell exTokenAddress={swapData?.exToken} balance={swapData.ask.toNumber()}/>                   
+                    <ExTokenCell exTokenAddress={swapData?.exToken} balance={swapData.ask.toString()}/>                   
                 </StyledCell>
                 <StyledCell>
                     <ToolTipCell tooltipText={ToolTipText}/>

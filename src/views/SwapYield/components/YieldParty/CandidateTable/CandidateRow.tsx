@@ -62,9 +62,7 @@ const CandidateRow=({bidId, swapData})=>{
             </StyledCell>
             <StyledCell>
                 <CellContent>
-                    <Text>
-                        YAmount
-                    </Text>
+                    <Skeleton/>
                     <Skeleton mt="4px"/>
                 </CellContent>
             </StyledCell>         
@@ -80,7 +78,7 @@ const CandidateRow=({bidId, swapData})=>{
                 </CellContent>
             </StyledCell>
             <StyledCell>
-                <ExTokenCell exTokenAddress={swapData?.exToken} balance={bidData?.amount}/>
+                <ExTokenCell exTokenAddress={swapData?.exToken} balance={bidData?.amount.toString()}/>
             </StyledCell>
             <StyledCell>
                 <CellContent>
