@@ -75,7 +75,10 @@ const AddRowModal = (props)=>{
       }      
       return true
     }
-    if (selectedLPAllowance.lte(BIG_ZERO)){
+    const decimalUAmount = getDecimalAmount(new BigNumber(uAmount))
+    const decimalYAmount = getDecimalAmount(new BigNumber(yAmount))
+    console.log(selectedLPAllowance, decimalUAmount)
+    if (selectedLPAllowance.lte(decimalUAmount)){
       const decimals = await selectedLPContract.decimals()      
       setPendingTx(true); 
       
@@ -95,9 +98,8 @@ const AddRowModal = (props)=>{
       return 
     }
     if(!await DoValidation()) return 
-    setPendingTx(true); 
-    console.debug('???', selectedLPBuyOption)
-    LpSwapContract.openSwap(selectedLPOption.contract.address, selectedLPBuyOption.contract.address, uAmount, yAmount).then(async (tx)=>{
+    setPendingTx(true);     
+    LpSwapContract.openSwap(selectedLPOption.contract.address, selectedLPBuyOption.contract.address, decimalUAmount.toString(), decimalYAmount.toString()).then(async (tx)=>{
       await tx.wait()
       setPendingTx(false);
       toastSuccess(
@@ -123,7 +125,7 @@ const AddRowModal = (props)=>{
         tempLPOptions[i].allowance = new BigNumber(allowances[i].toString())
         tempLPOptions[i].contract = lpContracts[i]
       }      
-      setLPOptions(tempLPOptions)
+      setLPOptions(tempLPOptions)      
       if(!selectedLPOption) setSelectedLPOption(tempLPOptions[0])
       if(!selectedLPBuyOption) setSelectedLPBuyOption(tempLPOptions[1])
     })
