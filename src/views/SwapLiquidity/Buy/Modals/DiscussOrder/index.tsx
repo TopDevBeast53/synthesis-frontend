@@ -38,17 +38,17 @@ const DiscussOrder: React.FC<any> = (props) => {
   const minWidth = '320px'
   const { bidData, bidId, swapData, onSend, onDismiss } = props
   const {data:farms} = useFarms()
-  const lpToken = farms.find((item)=>(getAddress(item.lpAddresses) === swapData?.toSellerToken))    
+  const lpToken = farms.find((item)=>(getAddress(item.lpAddresses) === swapData?.toBuyerToken))    
   const { userData } = useFarmFromLpSymbol(lpToken?.lpSymbol)
 
   const exContract = useERC20(swapData?.toSellerToken)
 
-  const [yAmount, setYAmount] = useState(bidData?.amount)
+  const [yAmount, setYAmount] = useState(bidData?.amount.toString())
   const decimalYAmount = getDecimalAmount(new BigNumber(yAmount))
-  
+  const balanceYAmount = getBalanceAmount(new BigNumber(yAmount)).toString()
   const maxBalanceOfLP = getBalanceAmount(userData?.tokenBalance).toString()
   const handleSelectMaxOfLPToken = useCallback(() => {
-    setYAmount(maxBalanceOfLP)
+    setYAmount(getDecimalAmount(new BigNumber(maxBalanceOfLP)))
   }, [maxBalanceOfLP, setYAmount])
   async function doValidation() {
     try {
@@ -70,9 +70,10 @@ const DiscussOrder: React.FC<any> = (props) => {
 
   const handleYAmountChange = (input) => {
     if ( Number.parseInt(input.target.value)  > Number.parseInt(maxBalanceOfLP)) {
-      setYAmount(maxBalanceOfLP)
+      setYAmount(getDecimalAmount(new BigNumber(maxBalanceOfLP)))
     } else {
-      setYAmount(input.target.value)
+      console.debug('????', input.target.value)
+      setYAmount(getDecimalAmount(new BigNumber(input.target.value || 0)))
     }
   }
   const handleAsk = async () => {
@@ -94,10 +95,10 @@ const DiscussOrder: React.FC<any> = (props) => {
 
     try {
       if (bidData) {
-        const tx = await LpSwapContract.setBid(bidId, decimalYAmount.toString())
+        const tx = await LpSwapContract.setBid(bidId, yAmount.toString())
         await tx.wait()
       } else {
-        const tx = await LpSwapContract.makeBid(swapData?.id, decimalYAmount.toString())
+        const tx = await LpSwapContract.makeBid(swapData?.id, yAmount.toString())
         await tx.wait()
       }
       if (onSend) onSend()
@@ -121,7 +122,7 @@ const DiscussOrder: React.FC<any> = (props) => {
       <ModalBody p={bodyPadding}>
           <div style={{ display: 'flex', marginBottom: '1em', alignItems: 'center' }}>
             <ModalInput
-              value={yAmount}
+              value={balanceYAmount}
               onSelectMax={handleSelectMaxOfLPToken}
               onChange={handleYAmountChange}
               max={maxBalanceOfLP}
