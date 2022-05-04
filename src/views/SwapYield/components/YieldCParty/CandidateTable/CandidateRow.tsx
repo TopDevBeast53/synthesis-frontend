@@ -26,7 +26,7 @@ const StyledCell = styled(BaseCell)`
 const getEllipsis = (account) => {
     return account ? `${account.substring(0, 5)}...${account.substring(account.length - 5)}` : null;
 }
-const CandidateRow=({bid, exToken, approved})=>{
+const CandidateRow=({bid, exToken, approved, exAmount})=>{
     const { account } = useWeb3React()  
     const {tableRefresh, setTableRefresh} = useContext(YieldCPartyContext)
     
@@ -34,7 +34,7 @@ const CandidateRow=({bid, exToken, approved})=>{
         setTableRefresh(tableRefresh + 1)
     }
 
-    const [showModal] = useModal(<DiscussOrder bid={bid}  onSend={onSendAsk} exToken={exToken} approved={approved}/>,false)
+    const [showModal] = useModal(<DiscussOrder bid={bid}  onSend={onSendAsk} exToken={exToken} exAmount={exAmount} approved={approved}/>,false)
     if (!bid){
         return (<StyledRow >
             <StyledCell>

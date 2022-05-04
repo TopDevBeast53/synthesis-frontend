@@ -20,7 +20,7 @@ const StyledTableBorder = styled.div`
 `
 
 const CandidateTable = (props) => {
-    const {bids, exToken, approved} = props
+    const {bids, exToken, approved, exAmount} = props
     const tableWrapperEl = useRef<HTMLDivElement>(null)
     if(bids.length === 0) return null
 
@@ -29,7 +29,7 @@ const CandidateTable = (props) => {
         <StyledTable id="pools-table" role="table" ref={tableWrapperEl}>        
           {
             bids.map((bid)=>(
-              <CandidateRow key={bid.id} bid={bid} exToken={exToken} approved={approved}/>
+              <CandidateRow key={bid.id} bid={bid} exToken={exToken} approved={approved} exAmount={exAmount}/>
             ))
           }
         </StyledTable>

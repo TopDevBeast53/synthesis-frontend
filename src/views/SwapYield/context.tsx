@@ -9,5 +9,6 @@ export const YieldPartyContext = React.createContext({
 
 export const YieldCPartyContext = React.createContext({
     tableRefresh:undefined,
-    setTableRefresh:undefined
+    setTableRefresh:undefined,
+    updateMenuIndex: undefined
 })

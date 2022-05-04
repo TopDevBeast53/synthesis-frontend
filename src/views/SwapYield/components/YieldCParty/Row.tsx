@@ -43,7 +43,7 @@ const YieldCPartyRow=({data, state, loading})=>{
     const [pendingTx, setPendingTx] = useState(false)
     const [expanded, setExpanded] = useState(false)
     const shouldRenderDetail = useDelayedUnmount(expanded, 300)    
-    const {tableRefresh, setTableRefresh} = useContext(YieldCPartyContext)
+    const {tableRefresh, setTableRefresh, updateMenuIndex} = useContext(YieldCPartyContext)
     const {timeInfo, isPast} = useMemo(() => {
         const withdrawDate = moment.unix(lockUntilTimestamp) 
         const today = moment() 
@@ -76,17 +76,23 @@ const YieldCPartyRow=({data, state, loading})=>{
         setExpanded(!expanded)
     }
 
+    const handleBid = (e) => {
+        e.stopPropagation();        
+        showModal()
+    }
+
     const handleAcceptAsk = async (e) => {
         e.stopPropagation();        
         setPendingTx(true)
         try {
             const tx = await yieldSwapContract.acceptAsk(id)
-            await tx.wait()        
+            await tx.wait()    
+            updateMenuIndex(SwapState.Pending)    
             onSendAsk()    
             setPendingTx(false);     
             toastSuccess(
                 `${t('Success')}!`,
-                t('Bid Success!!! '),
+                t('Accepted! '),
             )
             
         } catch(err) {
@@ -185,7 +191,7 @@ const YieldCPartyRow=({data, state, loading})=>{
                     <CellContent>
                     {
                         state === SwapState.All && (
-                            <Button variant="secondary" scale="md" mr="8px" onClick={showModal}> Bid </Button>
+                            <Button variant="secondary" scale="md" mr="8px" onClick={handleBid}> Bid </Button>
                         )
                     }
                     {
@@ -220,7 +226,7 @@ const YieldCPartyRow=({data, state, loading})=>{
 
             {shouldRenderDetail && (
                 <div style={{padding:"10px 10px", minHeight:"5em"}}>
-                    <CandidateTable bids={bids} exToken={exToken} approved={approved}/>
+                    <CandidateTable bids={bids} exToken={exToken} approved={approved} exAmount={ask}/>
                 </div>
             )}   
         </>

@@ -110,7 +110,7 @@ const YieldCParty = ()=>{
                             </ButtonMenuItem>
                         </ButtonMenu>
                     </Wrapper>
-                    <YieldCPartyContext.Provider value={{tableRefresh:refresh,  setTableRefresh}}>
+                    <YieldCPartyContext.Provider value={{tableRefresh:refresh,  setTableRefresh, updateMenuIndex: setMenuIndex}}>
                     <YieldCPartyTable swaps={filteredSwaps} state={menuIndex} bids={bids} loading={loading}/>
                     </YieldCPartyContext.Provider>
                     </Page>

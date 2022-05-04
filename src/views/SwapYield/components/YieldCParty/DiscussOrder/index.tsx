@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, useContext } from 'react'
 import BigNumber from 'bignumber.js'
 import { ethers } from 'ethers'
 import { ModalInput } from 'components/Modal'
@@ -19,7 +19,9 @@ import useToast from 'hooks/useToast'
 import { useHelixYieldSwap, useERC20 } from 'hooks/useContract'
 import { BIG_ZERO } from 'utils/bigNumber'
 import getThemeValue from 'uikit/util/getThemeValue'
+import { YieldCPartyContext } from 'views/SwapYield/context';
 import { getDecimalAmount, getBalanceAmount } from 'utils/formatBalance'
+import { SwapState } from '../../../types'
 
 const DiscussOrder: React.FC<any> = (props) => {
   const theme = useTheme()
@@ -31,9 +33,10 @@ const DiscussOrder: React.FC<any> = (props) => {
   const headerBackground = 'transparent'
   const minWidth = '320px'
   const yieldSwapContract = useHelixYieldSwap()
-  const { swapId, exToken, exAmount, approved, onDismiss, bid, onSend } = props
+  const { swapId, exToken, exAmount, onDismiss, bid, onSend } = props
+  const {updateMenuIndex} = useContext(YieldCPartyContext)
   const exContract = useERC20(exToken)
-  const exTokenAmount = bid ? bid?.amount.toString() : exAmount.toString()
+  const exTokenAmount = exAmount.toString()
   const [pendingTx, setPendingTx] = useState(false)
   const [allowedValue, setAllowedValue] = useState(BIG_ZERO)
   const [maxBalance, setMaxBalance] = useState(BIG_ZERO)
@@ -94,7 +97,6 @@ const DiscussOrder: React.FC<any> = (props) => {
   }
 
   const handleAsk = async () => {
-    console.debug('here', approved)
     setPendingTx(true)
 
     if (allowedValue.lte(decimalYAmount.toString())){
@@ -118,11 +120,12 @@ const DiscussOrder: React.FC<any> = (props) => {
       if(bid){
         const tx = await yieldSwapContract.setBid(bid.id, decimalYAmount.toString())
         await tx.wait()
+
       } else {
         const tx = await yieldSwapContract.makeBid(swapId, decimalYAmount.toString())
         await tx.wait()
+        updateMenuIndex(SwapState.Applied)
       }
-      console.debug('???? are you here?')
       if (onSend) onSend()
       setPendingTx(false);   
       onDismiss()
@@ -147,7 +150,7 @@ const DiscussOrder: React.FC<any> = (props) => {
     <ModalContainer minWidth={minWidth} {...props}>
       <ModalHeader background={getThemeValue(`colors.${headerBackground}`, headerBackground)(theme)}>
         <ModalTitle>
-          <Heading>Asking : {getBalanceAmount(exTokenAmount).toString()}</Heading>
+          <Heading>Seller is asking : {getBalanceAmount(exTokenAmount).toString()}</Heading>
         </ModalTitle>
         <ModalCloseButton onDismiss={onDismiss} />
       </ModalHeader>
