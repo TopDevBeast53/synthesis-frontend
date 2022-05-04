@@ -133,10 +133,10 @@ export default {
   },
   helixYieldSwap: {
     56: '',
-    97: '0xBac68F8dA956196Af4C2C4c6cea1aA8619bC822C'
+    97: '0x6A3ADC956AA4f4c8aAD33B7aAAB055deb67AC9e2'
   },
   helixLPSwap: {
     56: '',
-    97: '0x40f89B812123579D56eEC8e908F45D294166579E',
+    97: '0xf10B928dC49F44ACC8Ee2a1b23b0e289796200ae',
   }
 }

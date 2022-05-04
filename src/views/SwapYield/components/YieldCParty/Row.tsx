@@ -1,9 +1,5 @@
 import React, { useState, useContext, useMemo } from 'react'
-import Balance from 'components/Balance'
 import styled from 'styled-components'
-import { useAllTokens } from 'hooks/Tokens'
-import { useFarms } from 'state/farms/hooks'
-import { getAddress } from 'utils/addressHelpers'
 import { AutoRenewIcon, Text, Button, useModal, ChevronDownIcon, useDelayedUnmount, Skeleton } from 'uikit'
 import useToast from 'hooks/useToast'
 import { useTranslation } from 'contexts/Localization'
@@ -42,15 +38,11 @@ const YieldCPartyRow=({data, state, loading})=>{
     const { t } = useTranslation()
     const {amount, ask, id, exToken, lpToken, lockDuration, lockUntilTimestamp, approved, bids} = data
     const yieldSwapContract = useHelixYieldSwap();
-    const tokens = useAllTokens()
-    const {data:farms} = useFarms()
     const { toastSuccess, toastError } = useToast()
     const [pendingTx, setPendingTx] = useState(false)
     const [expanded, setExpanded] = useState(false)
     const shouldRenderDetail = useDelayedUnmount(expanded, 300)    
     const {tableRefresh, setTableRefresh} = useContext(YieldCPartyContext)
-    const lpTokenInfo = farms.find((item)=>(getAddress(item.lpAddresses) === lpToken))
-    const exTokenInfo = tokens[exToken]  
     const {timeInfo, isPast} = useMemo(() => {
         const withdrawDate = moment.unix(lockUntilTimestamp) 
         const today = moment() 
@@ -77,13 +69,14 @@ const YieldCPartyRow=({data, state, loading})=>{
         setTableRefresh(tableRefresh + 1)
     }
 
-    const [showModal] = useModal(<DiscussOrder swapId={id} exToken={exToken} approved={approved} onSend={onSendAsk}/>,false)
+    const [showModal] = useModal(<DiscussOrder swapId={id} exToken={exToken} exAmount={ask} approved={approved} onSend={onSendAsk}/>,false)
 
     const handleExpand = () => {
         setExpanded(!expanded)
     }
 
-    const handleAcceptAsk = async () => {
+    const handleAcceptAsk = async (e) => {
+        e.stopPropagation();        
         setPendingTx(true)
         try {
             const tx = await yieldSwapContract.acceptAsk(id)
@@ -91,7 +84,7 @@ const YieldCPartyRow=({data, state, loading})=>{
             onSendAsk()    
             setPendingTx(false);     
             toastSuccess(
-                `${t('Congratulations')}!`,
+                `${t('Success')}!`,
                 t('Bid Success!!! '),
             )
             
@@ -101,7 +94,8 @@ const YieldCPartyRow=({data, state, loading})=>{
         }
     }
 
-    const handleWithdraw = async () => {
+    const handleWithdraw = async (e) => {
+        e.stopPropagation();        
         setPendingTx(true)
         try {
             const tx = await yieldSwapContract.withdraw(id)
@@ -109,7 +103,7 @@ const YieldCPartyRow=({data, state, loading})=>{
             setPendingTx(false);   
             onSendAsk()    
             toastSuccess(
-                `${t('Congratulations')}!`,
+                `${t('Success')}!`,
                 t('Withdraw Success!!! '),
             )
             
@@ -122,7 +116,7 @@ const YieldCPartyRow=({data, state, loading})=>{
     if(loading)
     {
         return (
-            <StyledRow >
+            <StyledRow>
                   <StyledCell>
                       <CellContent>
                           <Text>
@@ -154,7 +148,7 @@ const YieldCPartyRow=({data, state, loading})=>{
 
     return (
         <>
-            <StyledRow>
+            <StyledRow onClick={handleExpand}>
                 <StyledCell>
                     <LPTokenCell lpTokenAddress={lpToken} balance={amount.toString()}  />
                 </StyledCell>
@@ -162,9 +156,12 @@ const YieldCPartyRow=({data, state, loading})=>{
                     state !== SwapState.Finished && (
                         <StyledCell>
                             <CellContent>
-                                <Text>
-                                    Left Time
-                                </Text>
+                                {state === SwapState.Pending && (
+                                    <Text>
+                                        Left Time
+                                    </Text>
+
+                                )}
                                 <Text mt="4px" color='primary'>
                                     { (!isPast && state === SwapState.Pending) ? 'Now available!' : timeInfo}
                                 </Text>

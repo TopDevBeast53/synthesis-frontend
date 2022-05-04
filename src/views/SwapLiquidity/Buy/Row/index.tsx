@@ -7,10 +7,9 @@ import { SwapState } from '../../types'
 
 const Row=({data})=>{    
     const {filterState} = useContext(SwapLiquidityContext)
-    if (filterState === SwapState.All) return <ActiveRow swapData={data}/>
     if (filterState === SwapState.Applied) return <AppliedRow swapData={data}/>
     if (filterState === SwapState.Finished) return <FinishedRow swapData={data}/>
-    return null
+    return <ActiveRow swapData={data}/>
 }
 
 export default Row;

@@ -1,4 +1,5 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
+import { useWeb3React } from '@web3-react/core'
 import { useHelixLpSwap, useERC20 } from 'hooks/useContract'
 import { ethers } from 'ethers'
 import BigNumber from 'bignumber.js'
@@ -19,71 +20,81 @@ import {
   ModalTitle,
 } from 'uikit'
 import getThemeValue from 'uikit/util/getThemeValue'
+import { BIG_ZERO } from 'utils/bigNumber'
 import { getDecimalAmount, getBalanceAmount } from 'utils/formatBalance'
-
-const getEllipsis = (account) => {
-  return account ? `${account.substring(0, 5)}...${account.substring(account.length - 5)}` : null
-}
 
 const DiscussOrder: React.FC<any> = (props) => {
   const theme = useTheme()
   const { t } = useTranslation()
+  const {account} = useWeb3React()
   const LpSwapContract = useHelixLpSwap()
   const { toastSuccess, toastError } = useToast()
   const [pendingTx, setPendingTx] = useState(false)
-  const [isAllowed, setAllowed] = useState(1)
 
   const bodyPadding = '24px'
   const headerBackground = 'transparent'
   const minWidth = '320px'
   const { bidData, bidId, swapData, onSend, onDismiss } = props
   const {data:farms} = useFarms()
-  const lpToken = farms.find((item)=>(getAddress(item.lpAddresses) === swapData?.toBuyerToken))    
+  const lpToken = farms.find((item)=>(getAddress(item.lpAddresses) === swapData?.toSellerToken))    
   const { userData } = useFarmFromLpSymbol(lpToken?.lpSymbol)
+  const [allowedValue, setAllowedValue] = useState(BIG_ZERO)
 
   const exContract = useERC20(swapData?.toSellerToken)
-
-  const [yAmount, setYAmount] = useState(bidData?.amount.toString())
+  const exContractAmount = bidData ? bidData?.amount.toString() : swapData?.ask.toString()
+  
+  const [yAmount, setYAmount] = useState(getBalanceAmount(exContractAmount).toString())
   const decimalYAmount = getDecimalAmount(new BigNumber(yAmount))
-  const balanceYAmount = getBalanceAmount(new BigNumber(yAmount)).toString()
+  const balanceYAmount = getBalanceAmount(new BigNumber(yAmount))
   const maxBalanceOfLP = getBalanceAmount(userData?.tokenBalance).toString()
+  
   const handleSelectMaxOfLPToken = useCallback(() => {
-    setYAmount(getDecimalAmount(new BigNumber(maxBalanceOfLP)))
+    setYAmount(maxBalanceOfLP.toString())
   }, [maxBalanceOfLP, setYAmount])
-  async function doValidation() {
-    try {
-      const allowedValue = userData?.allowance
-      if (allowedValue.lte(decimalYAmount)) {
-        toastError('Error', "You didn't allow the LPToken to use")
-        setAllowed(0)
-        setPendingTx(false)
-        return false
-      }
-    } catch (err) {
-      toastError('Error', err.toString())
-      setAllowed(0)
+  
+  useEffect(() => {
+    exContract.allowance(account, LpSwapContract.address).then((res) => {
+      setAllowedValue(new BigNumber(res.toString()))
+    })
+  })
+  
+  function doValidation() {
+    if (allowedValue.lte(decimalYAmount)) {
+      toastError('Error', "You didn't allow the LPToken to use")
       setPendingTx(false)
       return false
+    }
+    if(balanceYAmount.isGreaterThan(maxBalanceOfLP)) {
+      toastError('Error', "You don't have enough token balance")
+      setPendingTx(false)
+      return false
+    }
+    if(decimalYAmount.toString() === '0') {
+      toastError('Error', "Token amount should be bigger than zero")
+      setPendingTx(false);        
+      return false  
     }
     return true
   }
 
-  const handleYAmountChange = (input) => {
-    if ( Number.parseInt(input.target.value)  > Number.parseInt(maxBalanceOfLP)) {
-      setYAmount(getDecimalAmount(new BigNumber(maxBalanceOfLP)))
-    } else {
-      console.debug('????', input.target.value)
-      setYAmount(getDecimalAmount(new BigNumber(input.target.value || 0)))
-    }
-  }
+  const handleYAmountChange = useCallback(
+    (e: React.FormEvent<HTMLInputElement>) => {
+      if (e.currentTarget.validity.valid) {
+        if (e.currentTarget.value === "")
+          setYAmount("0")
+        setYAmount(e.currentTarget.value.replace(/,/g, '.'))
+      }
+    },
+    [setYAmount],
+  )
   const handleAsk = async () => {
     setPendingTx(true)
 
-    if (isAllowed === 0) {
+    if (allowedValue.lte(decimalYAmount)) {
       try {
         const tx = await exContract.approve(LpSwapContract.address, ethers.constants.MaxUint256)
         await tx.wait()
-        setAllowed(yAmount)
+        setAllowedValue(getDecimalAmount(new BigNumber(Number.POSITIVE_INFINITY)))
         setPendingTx(false)
       } catch (err) {
         toastError('Error', err.toString())
@@ -91,20 +102,24 @@ const DiscussOrder: React.FC<any> = (props) => {
       }
       return
     }
-    if (!(await doValidation())) return
+    if (!doValidation()) return
 
     try {
       if (bidData) {
-        const tx = await LpSwapContract.setBid(bidId, yAmount.toString())
+        const tx = await LpSwapContract.setBid(bidId, decimalYAmount.toString())
         await tx.wait()
       } else {
-        const tx = await LpSwapContract.makeBid(swapData?.id, yAmount.toString())
+        const tx = await LpSwapContract.makeBid(swapData?.id, decimalYAmount.toString())
         await tx.wait()
       }
       if (onSend) onSend()
       setPendingTx(false)
       onDismiss()
-      toastSuccess(`${t('Congratulations')}!`, t('You Make Bid !!! '))
+      if(bidData) {
+        toastSuccess(`${t('Success')}!`, t('Update Success!'))
+      } else {
+        toastSuccess(`${t('Success')}!`, t('Bid Success!'))
+      }
     } catch (err) {
       setPendingTx(false)
       toastError('Error', err.toString())
@@ -115,14 +130,14 @@ const DiscussOrder: React.FC<any> = (props) => {
     <ModalContainer minWidth={minWidth} {...props}>
       <ModalHeader background={getThemeValue(`colors.${headerBackground}`, headerBackground)(theme)}>
         <ModalTitle>
-          <Heading>{getEllipsis(bidData?.bidder)}</Heading>
+          <Heading>Asking : {getBalanceAmount(exContractAmount).toString()}</Heading>
         </ModalTitle>
         <ModalCloseButton onDismiss={onDismiss} />
       </ModalHeader>
       <ModalBody p={bodyPadding}>
           <div style={{ display: 'flex', marginBottom: '1em', alignItems: 'center' }}>
             <ModalInput
-              value={balanceYAmount}
+              value={yAmount.toString()}
               onSelectMax={handleSelectMaxOfLPToken}
               onChange={handleYAmountChange}
               max={maxBalanceOfLP}
@@ -135,10 +150,11 @@ const DiscussOrder: React.FC<any> = (props) => {
             isLoading={pendingTx}
             endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
             onClick={handleAsk}
+            mt="24px"
             width="100%"
           >
             {' '}
-            {pendingTx ? (isAllowed === 0 ? 'Approving' : t('Confirming')) : isAllowed === 0 ? 'Approve' : t('Confirm')}
+            {pendingTx ? allowedValue.lte(decimalYAmount) ? "Approving" :t('Confirming') : allowedValue.lte(decimalYAmount)? "Approve" : t('Confirm')}
           </Button>
       </ModalBody>
     </ModalContainer>
