@@ -1,12 +1,10 @@
 import { useHelixLpSwap } from 'hooks/useContract';
 import useToast from 'hooks/useToast';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { AutoRenewIcon, Button, Skeleton, Text, useModal } from 'uikit';
-import { SwapLiquidityContext } from 'views/SwapLiquidity/context';
+import { AutoRenewIcon, Button, Skeleton, Text } from 'uikit';
 import BaseCell, { CellContent } from 'views/SwapYield/components/Cells/BaseCell';
 import LPTokenCell from 'views/SwapYield/components/Cells/LPTokenCell';
-import DiscussOrder from '../Modals/DiscussOrder';
 
 const StyledRow = styled.div`
   background-color: transparent;
@@ -29,28 +27,22 @@ const getEllipsis = (account) => {
 const CandidateRow=({bidId, swapData})=>{
     const LpSwapContract = useHelixLpSwap()
     const { toastSuccess, toastError } = useToast()
-    const [bidData, setBidData] = useState<any>()
-    const {tableRefresh, setTableRefresh} = useContext(SwapLiquidityContext)
+    const [bidData, setBidData] = useState<any>()    
     const [pendingTx, setPendingTx] = useState(false)
     const handleAcceptClick = (e) => {        
         e.stopPropagation();
         setPendingTx(true)
         LpSwapContract.acceptBid(bidId).then(async (tx)=>{
             await tx.wait()
-            toastSuccess("Success", "Accepted")
+            toastSuccess("Success", "Accepted!")
             setPendingTx(false)
         }).catch(err=>{
             toastError("Error", err.toString())
             setPendingTx(false)
         })        
-    }
-    const onSendAsk = () =>{
-        setTableRefresh(tableRefresh + 1)
-    }
-    const [showModal] = useModal(<DiscussOrder bidData={bidData} onSend={onSendAsk} swapData={swapData}/>,false)
+    }    
     useEffect(()=>{        
-        LpSwapContract.getBid(bidId).then(res=>{
-            console.debug("======== res ========", res, swapData)
+        LpSwapContract.getBid(bidId).then(res=>{            
             setBidData(res)
         })
     }, [LpSwapContract, bidId, swapData])
@@ -67,7 +59,7 @@ const CandidateRow=({bidId, swapData})=>{
         </StyledRow>)
     }
     return (
-        <StyledRow onClick={showModal}>
+        <StyledRow>
             <StyledCell>
                 <CellContent>
                     <Text>

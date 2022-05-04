@@ -1,12 +1,10 @@
 import { useHelixYieldSwap } from 'hooks/useContract';
 import useToast from 'hooks/useToast';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { AutoRenewIcon, Button, Skeleton, Text, useModal } from 'uikit';
-import { YieldPartyContext } from 'views/SwapYield/context';
+import { AutoRenewIcon, Button, Skeleton, Text } from 'uikit';
 import BaseCell, { CellContent } from '../../Cells/BaseCell';
 import ExTokenCell from '../../Cells/ExTokenCell';
-import DiscussOrder from '../Modals/DiscussOrder';
 
 const StyledRow = styled.div`
   background-color: transparent;
@@ -29,8 +27,7 @@ const getEllipsis = (account) => {
 const CandidateRow=({bidId, swapData})=>{
     const YieldSwapContract = useHelixYieldSwap()
     const { toastSuccess, toastError } = useToast()
-    const [bidData, setBidData] = useState<any>()
-    const {tableRefresh, setTableRefresh} = useContext(YieldPartyContext)
+    const [bidData, setBidData] = useState<any>()    
     const [pendingTx, setPendingTx] = useState(false)
     const handleAcceptClick = (e) => {        
         e.stopPropagation();
@@ -44,10 +41,7 @@ const CandidateRow=({bidId, swapData})=>{
             setPendingTx(false)
         })        
     }
-    const onSendAsk = () =>{
-        setTableRefresh(tableRefresh + 1)
-    }
-    const [showModal] = useModal(<DiscussOrder bidData={bidData} onSend={onSendAsk} swapData={swapData}/>,false)
+   
     useEffect(()=>{        
         YieldSwapContract.getBid(bidId).then(res=>{
             setBidData(res)
@@ -69,7 +63,7 @@ const CandidateRow=({bidId, swapData})=>{
         </StyledRow>)
     }
     return (
-        <StyledRow onClick={showModal}>
+        <StyledRow>
             <StyledCell>
                 <CellContent>
                     <Text>

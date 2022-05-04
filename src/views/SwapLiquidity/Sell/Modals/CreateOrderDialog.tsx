@@ -165,6 +165,7 @@ const AddRowModal = (props)=>{
     setUAmount(maxBalanceOfLP.toString())
   }, [maxBalanceOfLP, setUAmount])
   if (!LPOptions) return null
+  
   return (
     <Modal
       title={t('Add an Order') }

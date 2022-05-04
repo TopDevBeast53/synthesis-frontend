@@ -1,14 +1,16 @@
 import { useHelixLpSwap } from 'hooks/useContract'
 import useToast from 'hooks/useToast'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import styled from 'styled-components'
-import { AutoRenewIcon, Button, ChevronDownIcon, useDelayedUnmount } from 'uikit'
+import { AutoRenewIcon, Button, ChevronDownIcon, useDelayedUnmount, useModal } from 'uikit'
+import { SwapLiquidityContext } from 'views/SwapLiquidity/context'
 import ArrowCell from 'views/SwapYield/components/Cells/ArrowCell'
 import BaseCell from 'views/SwapYield/components/Cells/BaseCell'
 import LPTokenCell from 'views/SwapYield/components/Cells/LPTokenCell'
 import ToolTipCell from 'views/SwapYield/components/Cells/ToolTipCell'
 import { ToolTipText } from '../../constants'
 import CandidateTable from '../CandidateTable'
+import DiscussOrder from '../Modals/DiscussOrder'
 
 const StyledRow = styled.div`
   background-color: transparent;
@@ -36,6 +38,7 @@ const ActiveRow=(props)=>{
     const [expanded, setExpanded] = useState(false)
     const [pendingTx, setPendingTx] = useState(false)
     const shouldRenderDetail = useDelayedUnmount(expanded, 300)
+    const {setTableRefresh, tableRefresh} = useContext(SwapLiquidityContext)
 
     const handleOnRowClick = () => {
         setExpanded(!expanded)        
@@ -56,7 +59,14 @@ const ActiveRow=(props)=>{
             setPendingTx(false) 
         })
     }
-  
+    const onSendAsk = () =>{
+        setTableRefresh(tableRefresh + 1)
+    }
+    const [showDiscussModal] = useModal(<DiscussOrder swapId={swapId} onSend={onSendAsk} swapData={swapData}/>,false)
+    const handleUpdateClick = (e) => {
+        e.stopPropagation();
+        showDiscussModal()
+    }
     if(swapData){
         if(swapData.isOpen === false) return null
     }
@@ -74,6 +84,10 @@ const ActiveRow=(props)=>{
                 </StyledCell>
                 <StyledCell>
                     <ToolTipCell tooltipText={ToolTipText}/>
+                </StyledCell>
+                <StyledCell>
+                    <Button                         
+                        color="primary" onClick={handleUpdateClick} scale="sm" width="100px"> Update </Button>
                 </StyledCell>
                 <StyledCell style={{zIndex:10, flex:3}}>
                     <Button 

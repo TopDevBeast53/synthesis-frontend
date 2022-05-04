@@ -1,10 +1,11 @@
 import { useHelixYieldSwap } from 'hooks/useContract'
 import useToast from 'hooks/useToast'
 import moment from 'moment'
-import React, { useMemo, useState } from 'react'
+import React, { useContext, useMemo, useState } from 'react'
 import styled from 'styled-components'
-import { AutoRenewIcon, Button, ChevronDownIcon, useDelayedUnmount } from 'uikit'
+import { AutoRenewIcon, Button, ChevronDownIcon, useDelayedUnmount, useModal } from 'uikit'
 import { ToolTipText } from 'views/SwapYield/constants'
+import { YieldPartyContext } from 'views/SwapYield/context';
 import ArrowCell from '../../Cells/ArrowCell'
 import BaseCell from '../../Cells/BaseCell'
 import DurationCell from '../../Cells/DurationCells'
@@ -12,6 +13,7 @@ import ExTokenCell from '../../Cells/ExTokenCell'
 import LPTokenCell from '../../Cells/LPTokenCell'
 import ToolTipCell from '../../Cells/ToolTipCell'
 import CandidateTable from '../CandidateTable'
+import DiscussOrder from '../Modals/DiscussOrder'
 
 const StyledRow = styled.div`
   background-color: transparent;
@@ -35,6 +37,7 @@ const ArrowIcon = styled(ChevronDownIcon)<{ toggled: boolean }>`
 const ActiveRow=(props)=>{
     const YieldSwapContract = useHelixYieldSwap()
     const { toastSuccess, toastError } = useToast()        
+    const {tableRefresh, setTableRefresh} = useContext(YieldPartyContext)
     const {swapData, swapId} = props
     const [expanded, setExpanded] = useState(false)
     const [pendingTx, setPendingTx] = useState(false)
@@ -47,12 +50,13 @@ const ActiveRow=(props)=>{
         setExpanded(!expanded)        
     }
     const handleCloseClick = (e) => {
-        e.stopPropagation();        
+        e.stopPropagation();
         setPendingTx(true) 
         YieldSwapContract.closeSwap(swapId).then(async (tx)=>{
             await tx.wait()
             toastSuccess("Info", "You closed the Order")
-            setPendingTx(false) 
+            setPendingTx(false)
+           
         }).catch(err=>{
             if(err.code === 4001){
                 toastError("Error", err.message)    
@@ -62,7 +66,16 @@ const ActiveRow=(props)=>{
             setPendingTx(false) 
         })
     }
-  
+
+    const onSendAsk = () =>{
+        setTableRefresh(tableRefresh + 1)
+    }
+    const [showDiscussModal] = useModal(<DiscussOrder swapId={swapId} onSend={onSendAsk} swapData={swapData}/>,false)
+
+    const handleUpdateClick = (e) => {
+        e.stopPropagation();
+        showDiscussModal()
+    }
     if(swapData){
         if(swapData.isOpen === false) return null
     }
@@ -83,6 +96,10 @@ const ActiveRow=(props)=>{
                 </StyledCell>                
                 <StyledCell>
                     <ToolTipCell tooltipText={ToolTipText}/>
+                </StyledCell>
+                <StyledCell>
+                    <Button                         
+                        color="primary" onClick={handleUpdateClick} scale="sm" width="100px"> Update </Button>
                 </StyledCell>
                 <StyledCell style={{zIndex:10, flex:3}}>
                     <Button 

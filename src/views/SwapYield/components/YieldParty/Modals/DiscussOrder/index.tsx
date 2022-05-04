@@ -1,4 +1,5 @@
 
+import BigNumber from 'bignumber.js';
 import { useAllTokens } from 'hooks/Tokens';
 import { useHelixYieldSwap } from 'hooks/useContract';
 import useToast from 'hooks/useToast';
@@ -9,11 +10,9 @@ import {
   ModalContainer, ModalHeader, ModalTitle, Text
 } from "uikit";
 import getThemeValue from "uikit/util/getThemeValue";
+import { BIG_ZERO } from 'utils/bigNumber';
+import { getBalanceNumber, getDecimalAmount } from 'utils/formatBalance';
 
-
-const getEllipsis = (account) => {
-  return account ? `${account.substring(0, 5)}...${account.substring(account.length - 5)}` : null;
-}
 
 const DiscussOrder: React.FC<any> = (props) => {
   const theme = useTheme(); 
@@ -24,32 +23,38 @@ const DiscussOrder: React.FC<any> = (props) => {
   const bodyPadding = "24px"
   const headerBackground = "transparent"
   const minWidth = "320px"
-  const {bidData, onSend, swapData, onDismiss} = props
+  const {swapId, onSend, swapData, onDismiss} = props
   const tokens = useAllTokens()
   const exToken = tokens[swapData?.exToken]
-  const [yAmount, setYAmount]=useState(bidData?.amount)
+  const [yAmount, setYAmount]=useState(getBalanceNumber(swapData?.ask.toString()).toString())
   
   const handleYAmountChange = (input) => {
     setYAmount(input)
   }
-  const handleSendClick =() =>{
-    setPendingTx(true)       
-    YieldSwapContract.setAsk(bidData.swapId, yAmount).then(async (tx)=>{
+  const handleSendClick =() =>{        
+    const decimalYAmount = getDecimalAmount(new BigNumber(yAmount))
+    if(decimalYAmount.lte(BIG_ZERO)){
+      toastError("Error", "Token Amount should be bigger than zero")
+      return
+    }    
+    setPendingTx(true)
+    YieldSwapContract.setAsk(swapId, decimalYAmount.toString()).then(async (tx)=>{
       await tx.wait()
-      toastSuccess('Congratulations!', 'You Updated Amount !!! ')            
+      toastSuccess('Success!', 'Amount is updated!')            
       if (onSend) onSend()
       setPendingTx(false)
+      onDismiss()
     }).catch(err=>{
       toastError('Error', err.toString())
       setPendingTx(false)
     })
   }
-  console.debug("Bid Data", bidData)
+  
   return (
     <ModalContainer minWidth={minWidth} {...props} >
       <ModalHeader background={getThemeValue(`colors.${headerBackground}`, headerBackground)(theme)}>
         <ModalTitle>          
-          <Heading>{getEllipsis(bidData?.bidder)}</Heading>         
+          <Heading> Update Asking</Heading>         
         </ModalTitle>        
         <ModalCloseButton onDismiss={onDismiss}/>
       </ModalHeader>
