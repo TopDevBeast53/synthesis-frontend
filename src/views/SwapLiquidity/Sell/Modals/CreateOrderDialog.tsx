@@ -18,6 +18,7 @@ import {
 import { getAddress } from 'utils/addressHelpers'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { getBalanceAmount, getDecimalAmount } from 'utils/formatBalance'
+import getEstimatedPrice from 'utils/getEstimatedPrice'
 import Group from 'views/SwapYield/components/GroupComponent'
 
 const Flex = styled.div`
@@ -161,13 +162,14 @@ const AddRowModal = (props)=>{
     setUAmount(maxBalanceOfLP.toString())
   }, [maxBalanceOfLP, setUAmount])
   if (!LPOptions) return null
+  console.debug("=======debug", selectedLpPrice, selectedLPOption)
   return (
     <Modal
       title={t('Add Item') }
       headerBackground={theme.colors.gradients.cardHeader}    
       onDismiss={onDismiss}
     >
-    <Group style={{marginBottom:"1em"}}>
+    <Group style={{marginBottom:"2em"}} title="Send">
       <Flex>
         <Text bold style={{flex:"3"}}>{t('LP Token')}:</Text>           
         <Select options={LPOptions} onOptionChange={handleLPChange} style={{zIndex:"30", flex:"6"}}/>
@@ -190,10 +192,10 @@ const AddRowModal = (props)=>{
       </div>
       <Flex>
         <Text bold style={{flex:"3"}}>{t('Estimated Price')}:  </Text>
-        <Text style={{flex:"3"}} color="primary">~ {selectedLpPrice?.times(uAmount).toString()}  </Text>
+        <Text style={{flex:"3"}} color="primary">~ {getEstimatedPrice(selectedLpPrice, uAmount).toString()}  </Text>
       </Flex>      
     </Group>
-    <Group>
+    <Group title="Receive">
       <Flex>
         <Text bold style={{flex:"3"}}>{t('Exchange')}:</Text>             
         <Select options={LPOptions} onOptionChange={handleBuyOptionChange} style={{zIndex:"30", flex:"6"}}/>    
@@ -210,7 +212,7 @@ const AddRowModal = (props)=>{
       </Flex>
       <Flex>
         <Text bold style={{flex:"3"}}>{t('Estimated Price')}:  </Text>
-        <Text style={{flex:"3"}} color="primary">~ {selectedLpBuyPrice?.times(yAmount).toString()}  </Text>
+        <Text style={{flex:"3"}} color="primary">~ {getEstimatedPrice(selectedLpBuyPrice, yAmount).toString()} </Text>
       </Flex> 
     </Group>
       <Button

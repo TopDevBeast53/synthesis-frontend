@@ -20,6 +20,7 @@ import {
 import { getAddress } from 'utils/addressHelpers'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { getBalanceAmount, getDecimalAmount } from 'utils/formatBalance'
+import getEstimatedPrice from 'utils/getEstimatedPrice'
 import Group from '../../GroupComponent'
 
 
@@ -206,7 +207,7 @@ const AddRowModal = (props)=>{
       headerBackground={theme.colors.gradients.cardHeader}    
       onDismiss={onDismiss}
     > 
-    <Group style={{marginBottom:"1em"}}>
+    <Group style={{marginBottom:"2em"}} title="Send">
       <Flex>
         <Text bold style={{flex:"3"}}>{t('LP Token')}:</Text>           
         <Select options={LPOptions} onOptionChange={handleLPChange} style={{zIndex:"30", flex:"6"}}/>
@@ -229,14 +230,14 @@ const AddRowModal = (props)=>{
       </div>
       <Flex>
         <Text bold style={{flex:"3"}}>{t('Estimated Price')}:  </Text>
-        <Text style={{flex:"3"}} color="primary">~ {selectedLpPrice?.times(uAmount).toString()}  </Text>
+        <Text style={{flex:"3"}} color="primary">~ {getEstimatedPrice(selectedLpPrice, uAmount).toString()}</Text>
       </Flex>
       <Flex>
         <Text bold style={{flex:"3 3 120px"}}>{t('Duration (days)')}:</Text>
         <StyledInput style={{flex:"7 7"}} type="number" max={maxDuration} min={minDuration} value={duration}  onChange={handleDurationChange}/>
       </Flex>
     </Group>
-    <Group>
+    <Group title="Receive">
       <Flex>
         <Text bold style={{flex:"3"}}>{t('Exchange')}:</Text>                 
         <Select style={{flex:"6"}} options={TokenOptions} onOptionChange={handleTokenChange}/>
