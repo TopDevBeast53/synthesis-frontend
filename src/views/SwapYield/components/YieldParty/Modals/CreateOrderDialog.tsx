@@ -143,8 +143,8 @@ const AddRowModal = (props)=>{
       selectedLPContract.approve(YieldSwapContract.address, ethers.constants.MaxUint256).then( async (tx)=>{        
         await tx.wait()
         toastSuccess(
-          `${t('Congratulations')}!`,
-            t('You Apporved  !!! '),
+          `${t('Success')}!`,
+            t('Approved!'),
         )                
         selectedLPOption.allowance=getDecimalAmount(new BigNumber(Number.POSITIVE_INFINITY), decimals)
 
@@ -158,12 +158,12 @@ const AddRowModal = (props)=>{
     }
     if(!await DoValidation()) return 
     setPendingTx(true);
-    YieldSwapContract.openSwap(selectedToken.address, selectedLP.pid, decimalUAmount.toString(), decimalYAmount.toString(), 3600 * 24* duration).then(async (tx)=>{
+    YieldSwapContract.openSwap(selectedToken.address, selectedLP.pid, decimalUAmount.toString(), decimalYAmount.toString(), Math.round(3600 * 24* duration)).then(async (tx)=>{
       await tx.wait()
       setPendingTx(false);
       toastSuccess(
-          `${t('Congratulations')}!`,
-          t('You Added Item !!! '),
+          `${t('Success')}!`,
+          t('Order has been created!'),
       )
       if(onDismiss) onDismiss()
 

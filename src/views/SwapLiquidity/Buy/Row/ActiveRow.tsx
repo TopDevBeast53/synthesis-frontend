@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { Button, ChevronDownIcon, useDelayedUnmount, useModal } from 'uikit'
 import { ToolTipText } from 'views/SwapLiquidity/constants'
 import { SwapLiquidityContext } from 'views/SwapLiquidity/context'
+import ArrowCell from 'views/SwapYield/components/Cells/ArrowCell'
 import BaseCell from 'views/SwapYield/components/Cells/BaseCell'
 import LPTokenCell from 'views/SwapYield/components/Cells/LPTokenCell'
 import ToolTipCell from 'views/SwapYield/components/Cells/ToolTipCell'
@@ -45,9 +46,13 @@ const ActiveRow=(props)=>{
     return (
         <>
             <StyledRow onClick={handleOnRowClick}>
+                
                 <StyledCell>
                     <LPTokenCell lpTokenAddress={swapData?.toBuyerToken} balance={swapData?.amount.toString()}/>
-                </StyledCell>
+                </StyledCell>               
+                <StyledCell>
+                    <ArrowCell back/>
+                </StyledCell> 
                 <StyledCell>
                     <LPTokenCell lpTokenAddress={swapData?.toSellerToken} balance={swapData?.ask.toString()}/>                   
                 </StyledCell>

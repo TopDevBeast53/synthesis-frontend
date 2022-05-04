@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { ToolTipText } from 'views/SwapYield/constants'
 import BaseCell from '../../Cells/BaseCell'
+import ArrowCell from '../../Cells/ArrowCell'
 import ExTokenCell from '../../Cells/ExTokenCell'
 import LPTokenCell from '../../Cells/LPTokenCell'
 import ToolTipCell from '../../Cells/ToolTipCell'
@@ -9,7 +10,7 @@ import ToolTipCell from '../../Cells/ToolTipCell'
 
 const StyledRow = styled.div`
   background-color: transparent;
-  
+  align-items:center;
   display: flex;
   cursor: pointer;
 `
@@ -31,6 +32,9 @@ const EarnedRow=({swapData})=>{
             <StyledRow>
                 <StyledCell>
                     <LPTokenCell lpTokenAddress={swapData?.lpToken} balance={swapData.amount.toString()}/>
+                </StyledCell>
+                <StyledCell>
+                    <ArrowCell/>
                 </StyledCell>                
                 <StyledCell>                    
                     <ExTokenCell exTokenAddress={swapData?.exToken} balance={swapData.ask.toString()}/>                   

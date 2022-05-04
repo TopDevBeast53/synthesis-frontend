@@ -37,7 +37,7 @@ const CandidateRow=({bidId, swapData})=>{
         setPendingTx(true)
         LpSwapContract.acceptBid(bidId).then(async (tx)=>{
             await tx.wait()
-            toastSuccess("Success", "You Accepted the Bid")
+            toastSuccess("Success", "Accepted")
             setPendingTx(false)
         }).catch(err=>{
             toastError("Error", err.toString())

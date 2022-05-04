@@ -114,8 +114,8 @@ const AddRowModal = (props)=>{
       selectedLPContract.approve(LpSwapContract.address, ethers.constants.MaxUint256).then( async (tx)=>{        
         await tx.wait()
         toastSuccess(
-          `${t('Congratulations')}!`,
-            t('You Apporved  !!! '),
+          `${t('Success')}!`,
+            t('Approved!'),
         )        
         selectedLPOption.allowance=getDecimalAmount(new BigNumber(Number.POSITIVE_INFINITY), decimals)
         setSelectedLPOption({...selectedLPOption})
@@ -132,8 +132,8 @@ const AddRowModal = (props)=>{
       await tx.wait()
       setPendingTx(false);
       toastSuccess(
-          `${t('Congratulations')}!`,
-          t('You Added Item !!! '),
+          `${t('Success')}!`,
+          t('Order has been created!'),
       )
       if(onDismiss) onDismiss()
 
@@ -165,7 +165,6 @@ const AddRowModal = (props)=>{
     setUAmount(maxBalanceOfLP.toString())
   }, [maxBalanceOfLP, setUAmount])
   if (!LPOptions) return null
-  console.debug("=======debug", selectedLpPrice, selectedLPOption)
   return (
     <Modal
       title={t('Add an Order') }

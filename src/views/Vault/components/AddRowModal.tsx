@@ -77,7 +77,7 @@ const AddRowModal: React.FC<ModalProps> = ({
       await addNewDeposit(getDecimalAmount(amount, tokenDecimals ).toString(), durationIndex)
       if(onAdd) onAdd()
       toastSuccess(
-        `${t('Congratulations')}!`,
+        `${t('Success')}!`,
         t('You Added Item !!! '),
       )
     }catch(err){      

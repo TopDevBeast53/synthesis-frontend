@@ -3,6 +3,7 @@ import useToast from 'hooks/useToast'
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import { AutoRenewIcon, Button, ChevronDownIcon, useDelayedUnmount } from 'uikit'
+import ArrowCell from 'views/SwapYield/components/Cells/ArrowCell'
 import BaseCell from 'views/SwapYield/components/Cells/BaseCell'
 import LPTokenCell from 'views/SwapYield/components/Cells/LPTokenCell'
 import ToolTipCell from 'views/SwapYield/components/Cells/ToolTipCell'
@@ -64,6 +65,9 @@ const ActiveRow=(props)=>{
             <StyledRow onClick={handleOnRowClick}>
                 <StyledCell>
                     <LPTokenCell lpTokenAddress={swapData?.toBuyerToken} balance={swapData?.amount.toString()}/>
+                </StyledCell>
+                <StyledCell>
+                    <ArrowCell/>
                 </StyledCell>                
                 <StyledCell>                    
                     <LPTokenCell lpTokenAddress={swapData?.toSellerToken} balance={swapData?.ask.toString()}/>

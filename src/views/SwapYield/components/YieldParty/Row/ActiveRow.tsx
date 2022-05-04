@@ -5,6 +5,7 @@ import React, { useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { AutoRenewIcon, Button, ChevronDownIcon, useDelayedUnmount } from 'uikit'
 import { ToolTipText } from 'views/SwapYield/constants'
+import ArrowCell from '../../Cells/ArrowCell'
 import BaseCell from '../../Cells/BaseCell'
 import DurationCell from '../../Cells/DurationCells'
 import ExTokenCell from '../../Cells/ExTokenCell'
@@ -14,9 +15,9 @@ import CandidateTable from '../CandidateTable'
 
 const StyledRow = styled.div`
   background-color: transparent;
-  
+  align-items:center;
   display: flex;
-  cursor: pointer;
+  cursor: pointer;  
 `
 const StyledCell = styled(BaseCell)`
   flex: 4.5;
@@ -74,9 +75,12 @@ const ActiveRow=(props)=>{
                 <StyledCell>
                     <DurationCell duration={duration} />                    
                 </StyledCell>
+                <StyledCell >
+                    <ArrowCell/>
+                </StyledCell>
                 <StyledCell>
                     <ExTokenCell exTokenAddress={swapData?.exToken} balance={swapData?.ask.toString()}/>                   
-                </StyledCell>
+                </StyledCell>                
                 <StyledCell>
                     <ToolTipCell tooltipText={ToolTipText}/>
                 </StyledCell>

@@ -125,16 +125,15 @@ const DiscussOrder: React.FC<any> = (props) => {
       console.debug('???? are you here?')
       if (onSend) onSend()
       setPendingTx(false);   
-      onDismiss()   
+      onDismiss()
       if(bid) {
         toastSuccess(
           `${t('Success')}!`,
-          t('Update success!'),
-      )
+          t('Update success!'),)
       } else {
         toastSuccess(
             `${t('Success')}!`,
-            t('Bid added! '),
+            t('Bid added!'),
         )
       }
     } catch(err) {

@@ -6,6 +6,7 @@ import { useTranslation } from 'contexts/Localization'
 import { useHelixYieldSwap } from 'hooks/useContract'
 import moment from 'moment'
 import { YieldCPartyContext } from 'views/SwapYield/context';
+import ArrowCell from 'views/SwapYield/components/Cells/ArrowCell'
 import LPTokenCell from 'views/SwapYield/components/Cells/LPTokenCell'
 import ExTokenCell from 'views/SwapYield/components/Cells/ExTokenCell'
 import ToolTipCell from 'views/SwapYield/components/Cells/ToolTipCell'
@@ -152,6 +153,7 @@ const YieldCPartyRow=({data, state, loading})=>{
                 <StyledCell>
                     <LPTokenCell lpTokenAddress={lpToken} balance={amount.toString()}  />
                 </StyledCell>
+                
                 {
                     state !== SwapState.Finished && (
                         <StyledCell>
@@ -169,9 +171,13 @@ const YieldCPartyRow=({data, state, loading})=>{
                         </StyledCell>
                     )
                 }
+                <StyledCell >
+                    <ArrowCell back/>
+                </StyledCell>
                 <StyledCell>
                     <ExTokenCell exTokenAddress={exToken} balance={ask.toString()}  />
                 </StyledCell>
+                
                 <StyledCell>
                     <ToolTipCell tooltipText={ToolTipText}/>
                 </StyledCell>
