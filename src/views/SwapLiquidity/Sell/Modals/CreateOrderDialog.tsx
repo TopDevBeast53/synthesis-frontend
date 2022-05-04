@@ -69,6 +69,7 @@ const AddRowModal = (props)=>{
   }
   const handleBuyOptionChange = (option) => { setSelectedLPBuyOption(option)}
   const [tempLPOptions, lpAddressList] = useMemo(()=>{
+    
     const lpOptions= farmsLP.filter(lp=>lp.pid!==0).map(lp=>    
       (
         {
@@ -82,6 +83,7 @@ const AddRowModal = (props)=>{
     const addressList =  lpOptions.map((option)=>{
       return getAddress(option.value.lpAddresses)
     })
+    console.debug("templpoption========", lpOptions, farmsLP)
     return [lpOptions, addressList]
   },[farmsLP])
   
@@ -154,6 +156,7 @@ const AddRowModal = (props)=>{
       }      
       setLPOptions(tempLPOptions)      
       if(!selectedLPOption) setSelectedLPOption(tempLPOptions[0])
+      else 
       if(!selectedLPBuyOption) setSelectedLPBuyOption(tempLPOptions[1])
     })
   }, [LpSwapContract.address, account, lpContracts, tempLPOptions, selectedLPOption, selectedLPBuyOption])
@@ -165,7 +168,7 @@ const AddRowModal = (props)=>{
   console.debug("=======debug", selectedLpPrice, selectedLPOption)
   return (
     <Modal
-      title={t('Add Item') }
+      title={t('Add an Order') }
       headerBackground={theme.colors.gradients.cardHeader}    
       onDismiss={onDismiss}
     >

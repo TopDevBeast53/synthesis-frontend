@@ -203,7 +203,7 @@ const AddRowModal = (props)=>{
   if (!LPOptions) return null
   return (
     <Modal
-      title={t('Add Item') }
+      title={t('Add an Order') }
       headerBackground={theme.colors.gradients.cardHeader}    
       onDismiss={onDismiss}
     > 
