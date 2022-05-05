@@ -7,7 +7,7 @@ import { AutoRenewIcon, Button, ChevronDownIcon, useDelayedUnmount, useModal } f
 import { ToolTipText } from 'views/SwapYield/constants'
 import { YieldPartyContext } from 'views/SwapYield/context';
 import ArrowCell from '../../Cells/ArrowCell'
-import BaseCell from '../../Cells/BaseCell'
+import { StyledRow, StyledCell, StyledCellWithoutPadding } from '../../Cells/StyledCell'
 import DurationCell from '../../Cells/DurationCells'
 import ExTokenCell from '../../Cells/ExTokenCell'
 import LPTokenCell from '../../Cells/LPTokenCell'
@@ -15,20 +15,6 @@ import ToolTipCell from '../../Cells/ToolTipCell'
 import CandidateTable from '../CandidateTable'
 import DiscussOrder from '../Modals/DiscussOrder'
 
-const StyledRow = styled.div`
-  background-color: transparent;
-  align-items:center;
-  display: flex;
-  cursor: pointer;  
-`
-const StyledCell = styled(BaseCell)`
-  flex: 4.5;
-  padding-left:32px;
-  
-  ${({ theme }) => theme.mediaQueries.sm} {
-    flex: 1 0 120px;
-  }
-`
 const ArrowIcon = styled(ChevronDownIcon)<{ toggled: boolean }>`
   transform: ${({ toggled }) => (toggled ? 'rotate(180deg)' : 'rotate(0)')};
   height: 24px;
@@ -88,9 +74,9 @@ const ActiveRow=(props)=>{
                 <StyledCell>
                     <DurationCell duration={duration} />                    
                 </StyledCell>
-                <StyledCell >
+                <StyledCellWithoutPadding >
                     <ArrowCell/>
-                </StyledCell>
+                </StyledCellWithoutPadding>
                 <StyledCell>
                     <ExTokenCell exTokenAddress={swapData?.exToken} balance={swapData?.ask.toString()}/>                   
                 </StyledCell>                

@@ -5,27 +5,13 @@ import styled from 'styled-components'
 import { AutoRenewIcon, Button, ChevronDownIcon, useDelayedUnmount, useModal } from 'uikit'
 import { SwapLiquidityContext } from 'views/SwapLiquidity/context'
 import ArrowCell from 'views/SwapYield/components/Cells/ArrowCell'
-import BaseCell from 'views/SwapYield/components/Cells/BaseCell'
+import { StyledRow, StyledCell, StyledCellWithoutPadding } from 'views/SwapYield/components/Cells/StyledCell'
 import LPTokenCell from 'views/SwapYield/components/Cells/LPTokenCell'
 import ToolTipCell from 'views/SwapYield/components/Cells/ToolTipCell'
 import { ToolTipText } from '../../constants'
 import CandidateTable from '../CandidateTable'
 import DiscussOrder from '../Modals/DiscussOrder'
 
-const StyledRow = styled.div`
-  background-color: transparent;
-  
-  display: flex;
-  cursor: pointer;
-`
-const StyledCell = styled(BaseCell)`
-  flex: 4.5;
-  padding-left:32px;
-  
-  ${({ theme }) => theme.mediaQueries.sm} {
-    flex: 1 0 120px;
-  }
-`
 const ArrowIcon = styled(ChevronDownIcon)<{ toggled: boolean }>`
   transform: ${({ toggled }) => (toggled ? 'rotate(180deg)' : 'rotate(0)')};
   height: 24px;
@@ -76,9 +62,9 @@ const ActiveRow=(props)=>{
                 <StyledCell>
                     <LPTokenCell lpTokenAddress={swapData?.toBuyerToken} balance={swapData?.amount.toString()}/>
                 </StyledCell>
-                <StyledCell>
+                <StyledCellWithoutPadding>
                     <ArrowCell/>
-                </StyledCell>                
+                </StyledCellWithoutPadding>                
                 <StyledCell>                    
                     <LPTokenCell lpTokenAddress={swapData?.toSellerToken} balance={swapData?.ask.toString()}/>
                 </StyledCell>

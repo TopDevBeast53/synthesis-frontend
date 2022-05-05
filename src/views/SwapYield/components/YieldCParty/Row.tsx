@@ -11,24 +11,11 @@ import LPTokenCell from 'views/SwapYield/components/Cells/LPTokenCell'
 import ExTokenCell from 'views/SwapYield/components/Cells/ExTokenCell'
 import ToolTipCell from 'views/SwapYield/components/Cells/ToolTipCell'
 import { ToolTipText } from 'views/SwapYield/constants'
-import BaseCell, { CellContent } from './BaseCell'
+import { StyledRow, StyledCell, StyledCellWithoutPadding } from '../Cells/StyledCell'
+import { CellContent } from './BaseCell'
 import DiscussOrder from './DiscussOrder'
 import { SwapState } from '../../types'
 import CandidateTable from './CandidateTable'
-
-const StyledRow = styled.div`
-  background-color: transparent;
-  display: flex;
-  cursor: pointer;
-`
-const StyledCell = styled(BaseCell)`
-  flex: 4.5;
-  padding-left:32px;
-  
-  ${({ theme }) => theme.mediaQueries.sm} {
-    flex: 1 0 120px;
-  }
-`
 
 const ArrowIcon = styled(ChevronDownIcon)<{ toggled: boolean }>`
   transform: ${({ toggled }) => (toggled ? 'rotate(180deg)' : 'rotate(0)')};
@@ -177,9 +164,9 @@ const YieldCPartyRow=({data, state, loading})=>{
                         </StyledCell>
                     )
                 }
-                <StyledCell >
+                <StyledCellWithoutPadding >
                     <ArrowCell back/>
-                </StyledCell>
+                </StyledCellWithoutPadding>
                 <StyledCell>
                     <ExTokenCell exTokenAddress={exToken} balance={ask.toString()}  />
                 </StyledCell>
