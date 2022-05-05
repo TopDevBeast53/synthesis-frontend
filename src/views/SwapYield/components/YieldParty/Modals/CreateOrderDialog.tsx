@@ -19,7 +19,7 @@ import {
 } from 'uikit'
 import { getAddress } from 'utils/addressHelpers'
 import { BIG_ZERO } from 'utils/bigNumber'
-import { getBalanceAmount, getDecimalAmount } from 'utils/formatBalance'
+import { getBalanceAmount, getBalanceNumber, getDecimalAmount } from 'utils/formatBalance'
 import getEstimatedPrice from 'utils/getEstimatedPrice'
 import Group from '../../GroupComponent'
 
@@ -75,8 +75,6 @@ const AddRowModal = (props)=>{
   const handleUAmountChange = useCallback(
     (e: React.FormEvent<HTMLInputElement>) => {
       if (e.currentTarget.validity.valid) {
-        if (e.currentTarget.value === "")
-          setUAmount("0")
         setUAmount(e.currentTarget.value.replace(/,/g, '.'))
       }
     },
@@ -185,6 +183,7 @@ const AddRowModal = (props)=>{
         tempLPOptions[i].contract = lpContracts[i]
       }      
       setLPOptions(tempLPOptions)
+
       if(!selectedLPOption) setSelectedLPOption(tempLPOptions[0])
     })
   }, [YieldSwapContract.address, account, lpContracts, tempLPOptions, selectedLPOption])
@@ -199,7 +198,8 @@ const AddRowModal = (props)=>{
   const handleSelectMaxOfLPToken = useCallback(() => {
     setUAmount(maxBalanceOfLP.toString())
   }, [maxBalanceOfLP, setUAmount])
- 
+
+    const hasToApprove =  selectedLPOption?.allowance.lte(0) || selectedLPOption?.allowance.lte(decimalUAmount)
   if (!LPOptions) return null
   return (
     <Modal
@@ -261,7 +261,7 @@ const AddRowModal = (props)=>{
         onClick={handleConfirm} 
         mt="24px"
       >
-        {pendingTx ? selectedLPOption?.allowance.lte(decimalUAmount) ? "Approving" :t('Confirming') : selectedLPOption?.allowance.lte(decimalUAmount)? "Approve" : t('Confirm')}
+        {pendingTx ? hasToApprove ? "Approving" :t('Confirming') : hasToApprove? "Approve" : t('Confirm')}
       </Button>
       <Button variant="text" onClick={onDismiss} pb="0px">
         Close Window

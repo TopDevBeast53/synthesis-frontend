@@ -82,8 +82,7 @@ const AddRowModal = (props)=>{
     )
     const addressList =  lpOptions.map((option)=>{
       return getAddress(option.value.lpAddresses)
-    })
-    console.debug("templpoption========", lpOptions, farmsLP)
+    })    
     return [lpOptions, addressList]
   },[farmsLP])
   
@@ -164,6 +163,8 @@ const AddRowModal = (props)=>{
   const handleSelectMaxOfLPToken = useCallback(() => {
     setUAmount(maxBalanceOfLP.toString())
   }, [maxBalanceOfLP, setUAmount])
+
+  const hasToApprove =  selectedLPOption?.allowance.lte(0) || selectedLPOption?.allowance.lte(decimalUAmount)
   if (!LPOptions) return null
   
   return (
@@ -224,7 +225,7 @@ const AddRowModal = (props)=>{
         onClick={handleConfirm} 
         mt="24px"
       >
-        {pendingTx ? selectedLPOption?.allowance.lte(decimalUAmount) ? "Approving" :t('Confirming') : selectedLPOption?.allowance.lte(decimalUAmount)? "Approve" : t('Confirm')}
+        {pendingTx ? hasToApprove ? "Approving" :t('Confirming') : hasToApprove? "Approve" : t('Confirm')}
       </Button>
       <Button variant="text" onClick={onDismiss} pb="0px">
         Close Window
