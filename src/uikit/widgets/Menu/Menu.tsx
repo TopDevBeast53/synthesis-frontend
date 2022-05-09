@@ -28,8 +28,8 @@ const StyledNav = styled.nav`
   background-color: #101411;
   transform: translate3d(0, 0, 0);
 
-  padding-left: 15%;
-  padding-right: 15%;
+  padding-left: 15px;
+  padding-right: 15px;
 `;
 
 const FixedContainer = styled.div<{ showMenu: boolean; height: number }>`
@@ -80,7 +80,8 @@ const Menu: React.FC<NavProps> = ({
   buyCakeLabel,
   children,
 }) => {
-  const { isMobile } = useMatchBreakpoints();
+  const { isTablet, isMobile:ss } = useMatchBreakpoints();
+  const isMobile = isTablet || ss;
   const [showMenu, setShowMenu] = useState(true);
   const refPrevOffset = useRef(typeof window === "undefined" ? 0 : window.pageYOffset);
 
@@ -132,7 +133,7 @@ const Menu: React.FC<NavProps> = ({
           <StyledNav>
             <Flex>
               <Logo isDark={isDark} href={homeLink?.href ?? "/"} />
-              {!isMobile && <MenuItems items={links} activeItem={activeItem} activeSubItem={activeSubItem} ml="80px" />}
+              {!isMobile && <MenuItems items={links} activeItem={activeItem} activeSubItem={activeSubItem}/>}
             </Flex>
             <Flex alignItems="center" height="100%">
               {globalMenu} {userMenu}
