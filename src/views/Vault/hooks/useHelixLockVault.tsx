@@ -55,7 +55,7 @@ export const useHelixLockVault = () => {
   },[getHelixAutoPoolContract, callWithGasPrice])
 
   const deposit = useCallback(async (amount, depositId) => {    
-    const tx = await callWithGasPrice(getHelixAutoPoolContract(), 'deposit', [amount, 0, depositId])
+    const tx = await callWithGasPrice(getHelixAutoPoolContract(), 'updateDeposit', [amount, depositId])
     return tx.wait()    
   },[getHelixAutoPoolContract, callWithGasPrice])
 
@@ -71,7 +71,7 @@ export const useHelixLockVault = () => {
   },[getHelixAutoPoolContract, callWithGasPrice])
 
   const addNewDeposit = useCallback(async (amount, durationIndex) => {    
-    const tx = await callWithGasPrice(getHelixAutoPoolContract(), 'deposit', [amount, durationIndex, 0])
+    const tx = await callWithGasPrice(getHelixAutoPoolContract(), 'newDeposit', [amount, durationIndex])
     return tx.wait()
   },[getHelixAutoPoolContract, callWithGasPrice])
 
