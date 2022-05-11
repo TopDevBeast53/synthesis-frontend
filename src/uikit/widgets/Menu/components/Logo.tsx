@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import styled, { keyframes } from 'styled-components'
 import Flex from '../../../components/Box/Flex'
-import { LogoIcon, LogoWithTextIcon } from '../../../components/Svg'
+import { LogoIcon, LogoMain } from '../../../components/Svg'
 import { MenuContext } from '../context'
 
 interface Props {
@@ -49,7 +49,7 @@ const Logo: React.FC<Props> = ({ isDark, href }) => {
   const innerLogo = (
     <>
       <LogoIcon className="mobile-icon" />
-      <LogoWithTextIcon style={{ width: '120px' }} className="desktop-icon" isDark={isDark} />
+      <LogoMain style={{ width: '120px' }} className="desktop-icon" isDark={isDark} />
     </>
   )
 
