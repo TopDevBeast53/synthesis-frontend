@@ -1,7 +1,7 @@
-import styled from "styled-components";
+import styled from 'styled-components'
 // eslint-disable-next-line import/no-unresolved
-import { space } from "styled-system";
-import { Td } from "./Cell";
+import { space } from 'styled-system'
+import { Td } from './Cell'
 
 const Table = styled.table`
   max-width: 100%;
@@ -14,6 +14,6 @@ const Table = styled.table`
   }
 
   ${space}
-`;
+`
 
-export default Table;
+export default Table

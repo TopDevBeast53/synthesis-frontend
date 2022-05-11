@@ -4,12 +4,10 @@ import { Box, Flex } from 'uikit'
 import Footer from 'components/Menu/Footer'
 import { PageMeta } from 'components/Layout/Page'
 
-
 // background: ${({ theme }) => theme.colors.gradients.bubblegum};
 // ${({ theme }) => theme.mediaQueries.xs} {
 //   background-size: auto;
 // }
-
 
 // background-image: url('./images/SwapBackground.svg');
 
@@ -26,7 +24,7 @@ const StyledPage = styled.div<{ $removePadding: boolean }>`
     padding: ${({ $removePadding }) => ($removePadding ? '0' : '24px')};
     padding-bottom: 0;
   }
-  
+
   ${({ theme }) => theme.mediaQueries.lg} {
     padding: ${({ $removePadding }) => ($removePadding ? '0' : '32px')};
     padding-bottom: 0;

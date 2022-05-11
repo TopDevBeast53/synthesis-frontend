@@ -11,105 +11,105 @@ import { fetchProfile, fetchProfileAvatar, fetchProfileUsername } from '.'
 import { getProfile, GetProfileResponse } from './helpers'
 
 export const useFetchProfile = () => {
-  const { account } = useWeb3React()
-  const dispatch = useAppDispatch()
+    const { account } = useWeb3React()
+    const dispatch = useAppDispatch()
 
-  useEffect(() => {
-    if (account) {
-      dispatch(fetchProfile(account))
-    }
-  }, [account, dispatch])
+    useEffect(() => {
+        if (account) {
+            dispatch(fetchProfile(account))
+        }
+    }, [account, dispatch])
 }
 
 export const useProfileForAddress = (address: string) => {
-  const [profileState, setProfileState] = useState<{ profile: GetProfileResponse; isFetching: boolean }>({
-    profile: null,
-    isFetching: true,
-  })
-  const previousAddress = usePreviousValue(address)
-  const hasAddressChanged = previousAddress !== address
+    const [profileState, setProfileState] = useState<{ profile: GetProfileResponse; isFetching: boolean }>({
+        profile: null,
+        isFetching: true,
+    })
+    const previousAddress = usePreviousValue(address)
+    const hasAddressChanged = previousAddress !== address
 
-  useEffect(() => {
-    const fetchProfileForAddress = async () => {
-      try {
-        const profile = await getProfile(address)
-        setProfileState({ profile, isFetching: false })
-      } catch (error) {
-        console.error(`Failed to fetch profile for address ${address}`, error)
-        setProfileState({ profile: null, isFetching: false })
-      }
-    }
-    if (hasAddressChanged || (!profileState.isFetching && !profileState.profile)) {
-      fetchProfileForAddress()
-    }
-  }, [profileState, address, hasAddressChanged])
+    useEffect(() => {
+        const fetchProfileForAddress = async () => {
+            try {
+                const profile = await getProfile(address)
+                setProfileState({ profile, isFetching: false })
+            } catch (error) {
+                console.error(`Failed to fetch profile for address ${address}`, error)
+                setProfileState({ profile: null, isFetching: false })
+            }
+        }
+        if (hasAddressChanged || (!profileState.isFetching && !profileState.profile)) {
+            fetchProfileForAddress()
+        }
+    }, [profileState, address, hasAddressChanged])
 
-  // Clear state on account switch
-  useEffect(() => {
-    setProfileState({ profile: null, isFetching: true })
-  }, [address])
+    // Clear state on account switch
+    useEffect(() => {
+        setProfileState({ profile: null, isFetching: true })
+    }, [address])
 
-  return profileState
+    return profileState
 }
 
 export const useAchievementsForAddress = (address: string) => {
-  const [state, setState] = useState<{ achievements: Achievement[]; isFetching: boolean }>({
-    achievements: [],
-    isFetching: false,
-  })
-  const previousAddress = usePreviousValue(address)
-  const hasAddressChanged = previousAddress !== address
+    const [state, setState] = useState<{ achievements: Achievement[]; isFetching: boolean }>({
+        achievements: [],
+        isFetching: false,
+    })
+    const previousAddress = usePreviousValue(address)
+    const hasAddressChanged = previousAddress !== address
 
-  useEffect(() => {
-    const fetchProfileForAddress = async () => {
-      setState({ achievements: [], isFetching: true })
-      try {
-        const achievements = await getAchievements(address)
-        setState({ achievements, isFetching: false })
-      } catch (error) {
-        console.error(`Failed to fetch achievements for address ${address}`, error)
-        setState({ achievements: [], isFetching: false })
-      }
-    }
-    if (hasAddressChanged || (!state.isFetching && !state.achievements)) {
-      fetchProfileForAddress()
-    }
-  }, [state, address, hasAddressChanged])
+    useEffect(() => {
+        const fetchProfileForAddress = async () => {
+            setState({ achievements: [], isFetching: true })
+            try {
+                const achievements = await getAchievements(address)
+                setState({ achievements, isFetching: false })
+            } catch (error) {
+                console.error(`Failed to fetch achievements for address ${address}`, error)
+                setState({ achievements: [], isFetching: false })
+            }
+        }
+        if (hasAddressChanged || (!state.isFetching && !state.achievements)) {
+            fetchProfileForAddress()
+        }
+    }, [state, address, hasAddressChanged])
 
-  // Clear state on account switch
-  useEffect(() => {
-    setState({ achievements: [], isFetching: true })
-  }, [address])
+    // Clear state on account switch
+    useEffect(() => {
+        setState({ achievements: [], isFetching: true })
+    }, [address])
 
-  return state
+    return state
 }
 
 export const useProfile = () => {
-  const { isInitialized, isLoading, data, hasRegistered }: ProfileState = useSelector((state: State) => state.profile)
-  return { profile: data, hasProfile: isInitialized && hasRegistered, isInitialized, isLoading }
+    const { isInitialized, isLoading, data, hasRegistered }: ProfileState = useSelector((state: State) => state.profile)
+    return { profile: data, hasProfile: isInitialized && hasRegistered, isInitialized, isLoading }
 }
 
 export const useGetProfileAvatar = (account: string) => {
-  const profileAvatar = useSelector((state: State) => state.profile.profileAvatars[account])
-  const { username, nft, hasRegistered, usernameFetchStatus, avatarFetchStatus } = profileAvatar || {}
-  const dispatch = useAppDispatch()
+    const profileAvatar = useSelector((state: State) => state.profile.profileAvatars[account])
+    const { username, nft, hasRegistered, usernameFetchStatus, avatarFetchStatus } = profileAvatar || {}
+    const dispatch = useAppDispatch()
 
-  useEffect(() => {
-    const address = isAddress(account)
+    useEffect(() => {
+        const address = isAddress(account)
 
-    if (!nft && avatarFetchStatus !== FetchStatus.Fetched && address) {
-      dispatch(fetchProfileAvatar(account))
-    }
+        if (!nft && avatarFetchStatus !== FetchStatus.Fetched && address) {
+            dispatch(fetchProfileAvatar(account))
+        }
 
-    if (
-      !username &&
-      avatarFetchStatus === FetchStatus.Fetched &&
-      usernameFetchStatus !== FetchStatus.Fetched &&
-      address
-    ) {
-      dispatch(fetchProfileUsername({ account, hasRegistered }))
-    }
-  }, [account, nft, username, hasRegistered, avatarFetchStatus, usernameFetchStatus, dispatch])
+        if (
+            !username &&
+            avatarFetchStatus === FetchStatus.Fetched &&
+            usernameFetchStatus !== FetchStatus.Fetched &&
+            address
+        ) {
+            dispatch(fetchProfileUsername({ account, hasRegistered }))
+        }
+    }, [account, nft, username, hasRegistered, avatarFetchStatus, usernameFetchStatus, dispatch])
 
-  return { username, nft, usernameFetchStatus, avatarFetchStatus }
+    return { username, nft, usernameFetchStatus, avatarFetchStatus }
 }

@@ -4,14 +4,12 @@ import { getBalanceNumber } from 'utils/formatBalance'
 import TokenCell from './TokenCell'
 
 const ExTokenCell = (props) => {
-    const {exTokenAddress, balance} = props
-    const tokens = useAllTokens()
-    const exToken = tokens[exTokenAddress]
-    const amount = getBalanceNumber(balance)
+  const { exTokenAddress, balance } = props
+  const tokens = useAllTokens()
+  const exToken = tokens[exTokenAddress]
+  const amount = getBalanceNumber(balance)
 
-    return (
-        <TokenCell tokenSymbol={exToken?.symbol} balance={amount} />
-    )
+  return <TokenCell tokenSymbol={exToken?.symbol} balance={amount} />
 }
 
 export default ExTokenCell

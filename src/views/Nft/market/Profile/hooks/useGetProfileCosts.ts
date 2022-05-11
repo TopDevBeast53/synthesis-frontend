@@ -7,41 +7,43 @@ import { getPancakeProfileAddress } from 'utils/addressHelpers'
 import useToast from 'hooks/useToast'
 
 const useGetProfileCosts = () => {
-  const { t } = useTranslation()
-  const [isLoading, setIsLoading] = useState(true)
-  const [costs, setCosts] = useState({
-    numberCakeToReactivate: ethers.BigNumber.from(0),
-    numberCakeToRegister: ethers.BigNumber.from(0),
-    numberCakeToUpdate: ethers.BigNumber.from(0),
-  })
-  const { toastError } = useToast()
+    const { t } = useTranslation()
+    const [isLoading, setIsLoading] = useState(true)
+    const [costs, setCosts] = useState({
+        numberCakeToReactivate: ethers.BigNumber.from(0),
+        numberCakeToRegister: ethers.BigNumber.from(0),
+        numberCakeToUpdate: ethers.BigNumber.from(0),
+    })
+    const { toastError } = useToast()
 
-  useEffect(() => {
-    const fetchCosts = async () => {
-      try {
-        const calls = ['numberCakeToReactivate', 'numberCakeToRegister', 'numberCakeToUpdate'].map((method) => ({
-          address: getPancakeProfileAddress(),
-          name: method,
-        }))
-        const [[numberCakeToReactivate], [numberCakeToRegister], [numberCakeToUpdate]] = await multicallv2<
-          [[ethers.BigNumber], [ethers.BigNumber], [ethers.BigNumber]]
-        >(profileABI, calls)
+    useEffect(() => {
+        const fetchCosts = async () => {
+            try {
+                const calls = ['numberCakeToReactivate', 'numberCakeToRegister', 'numberCakeToUpdate'].map(
+                    (method) => ({
+                        address: getPancakeProfileAddress(),
+                        name: method,
+                    }),
+                )
+                const [[numberCakeToReactivate], [numberCakeToRegister], [numberCakeToUpdate]] = await multicallv2<
+                    [[ethers.BigNumber], [ethers.BigNumber], [ethers.BigNumber]]
+                >(profileABI, calls)
 
-        setCosts({
-          numberCakeToReactivate,
-          numberCakeToRegister,
-          numberCakeToUpdate,
-        })
-        setIsLoading(false)
-      } catch (error) {
-        toastError(t('Error'), t('Could not retrieve HELIXcosts for profile'))
-      }
-    }
+                setCosts({
+                    numberCakeToReactivate,
+                    numberCakeToRegister,
+                    numberCakeToUpdate,
+                })
+                setIsLoading(false)
+            } catch (error) {
+                toastError(t('Error'), t('Could not retrieve HELIXcosts for profile'))
+            }
+        }
 
-    fetchCosts()
-  }, [setCosts, toastError, t])
+        fetchCosts()
+    }, [setCosts, toastError, t])
 
-  return { costs, isLoading }
+    return { costs, isLoading }
 }
 
 export default useGetProfileCosts

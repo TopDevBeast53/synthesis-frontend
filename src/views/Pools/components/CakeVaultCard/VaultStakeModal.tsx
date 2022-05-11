@@ -214,8 +214,8 @@ const VaultStakeModal: React.FC<VaultStakeModalProps> = ({
         tokenContract,
         'approve',
         ['0xE9Bf1603aa7648118a1D309BA86c84834C2d8269', convertedStakeAmount.toString()],
-        callOptions
-      );
+        callOptions,
+      )
       const tx = await callWithGasPrice(vaultPoolContract, 'deposit', [convertedStakeAmount.toString()], callOptions)
       const receipt = await tx.wait()
       if (receipt.status) {

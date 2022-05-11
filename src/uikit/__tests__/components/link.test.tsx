@@ -1,9 +1,9 @@
-import React from "react";
-import { renderWithTheme } from "../../testHelpers";
-import { Link, LinkExternal } from "../../components/Link";
+import React from 'react'
+import { renderWithTheme } from '../../testHelpers'
+import { Link, LinkExternal } from '../../components/Link'
 
-it("renders link correctly", () => {
-  const { asFragment } = renderWithTheme(<Link href="https://helix.exchange">Link</Link>);
+it('renders link correctly', () => {
+  const { asFragment } = renderWithTheme(<Link href="https://helix.exchange">Link</Link>)
   expect(asFragment()).toMatchInlineSnapshot(`
     <DocumentFragment>
       .c0 {
@@ -40,11 +40,11 @@ it("renders link correctly", () => {
         Link
       </a>
     </DocumentFragment>
-  `);
-});
+  `)
+})
 
-it("renders link external link correctly", () => {
-  const { asFragment } = renderWithTheme(<LinkExternal href="https://helix.exchange">Link</LinkExternal>);
+it('renders link external link correctly', () => {
+  const { asFragment } = renderWithTheme(<LinkExternal href="https://helix.exchange">Link</LinkExternal>)
   expect(asFragment()).toMatchInlineSnapshot(`
     <DocumentFragment>
       .c0 {
@@ -105,5 +105,5 @@ it("renders link external link correctly", () => {
         </svg>
       </a>
     </DocumentFragment>
-  `);
-});
+  `)
+})

@@ -25,51 +25,51 @@ import nftMarketReducer from './nftMarket/reducer'
 const PERSISTED_KEYS: string[] = ['user', 'transactions', 'lists', 'profile']
 
 const safeCloneDeep = <T>(state: T) => {
-  try {
-    return JSON.parse(JSON.stringify(state)) as T
-  } catch (error) {
-    console.error(error)
-    return cloneDeep(state)
-  }
+    try {
+        return JSON.parse(JSON.stringify(state)) as T
+    } catch (error) {
+        console.error(error)
+        return cloneDeep(state)
+    }
 }
 
 const store = configureStore({
-  devTools: process.env.NODE_ENV !== 'production',
-  reducer: {
-    achievements: achievementsReducer,
-    block: blockReducer,
-    farms: farmsReducer,
-    pools: poolsReducer,
-    predictions: predictionsReducer,
-    profile: profileReducer,
-    teams: teamsReducer,
-    voting: votingReducer,
-    lottery: lotteryReducer,
-    info: infoReducer,
-    nftMarket: nftMarketReducer,
+    devTools: process.env.NODE_ENV !== 'production',
+    reducer: {
+        achievements: achievementsReducer,
+        block: blockReducer,
+        farms: farmsReducer,
+        pools: poolsReducer,
+        predictions: predictionsReducer,
+        profile: profileReducer,
+        teams: teamsReducer,
+        voting: votingReducer,
+        lottery: lotteryReducer,
+        info: infoReducer,
+        nftMarket: nftMarketReducer,
 
-    // Exchange
-    user,
-    transactions,
-    swap,
-    mint,
-    burn,
-    multicall,
-    lists,
-  },
-  middleware: (getDefaultMiddleware) => [
-    ...getDefaultMiddleware({ thunk: true }),
-    save({ states: PERSISTED_KEYS, debounce: 1000 }),
-  ],
-  preloadedState: load({
-    states: PERSISTED_KEYS,
-    preloadedState: {
-      user: safeCloneDeep(userInitialState),
-      transactions: safeCloneDeep(transactionsInitialState),
-      lists: safeCloneDeep(listsInitialState),
-      profile: safeCloneDeep(profileInitialState),
+        // Exchange
+        user,
+        transactions,
+        swap,
+        mint,
+        burn,
+        multicall,
+        lists,
     },
-  }),
+    middleware: (getDefaultMiddleware) => [
+        ...getDefaultMiddleware({ thunk: true }),
+        save({ states: PERSISTED_KEYS, debounce: 1000 }),
+    ],
+    preloadedState: load({
+        states: PERSISTED_KEYS,
+        preloadedState: {
+            user: safeCloneDeep(userInitialState),
+            transactions: safeCloneDeep(transactionsInitialState),
+            lists: safeCloneDeep(listsInitialState),
+            profile: safeCloneDeep(profileInitialState),
+        },
+    }),
 })
 
 store.dispatch(updateVersion())

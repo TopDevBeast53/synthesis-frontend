@@ -13,7 +13,6 @@ const StyledTable = styled.div`
   }
 `
 
-
 // background-color: ${({ theme }) => theme.colors.cardBorder};
 
 const StyledTableBorder = styled.div`
@@ -31,7 +30,7 @@ const ScrollButtonContainer = styled.div`
   padding-bottom: 5px;
 `
 
-const YieldPartyTable= (props) => {
+const YieldPartyTable = (props) => {
   const { t } = useTranslation()
   const { data } = props
   const tableWrapperEl = useRef<HTMLDivElement>(null)
@@ -40,15 +39,13 @@ const YieldPartyTable= (props) => {
       behavior: 'smooth',
     })
   }
-  
+
   return (
     <StyledTableBorder>
-      <StyledTable id="pools-table" role="table" ref={tableWrapperEl}>        
-        {
-          data.map((swapId)=>(
-            <YieldPartyRow key={swapId} data={swapId}/>
-          ))
-        }        
+      <StyledTable id="pools-table" role="table" ref={tableWrapperEl}>
+        {data.map((swapId) => (
+          <YieldPartyRow key={swapId} data={swapId} />
+        ))}
         <ScrollButtonContainer>
           <Button variant="text" onClick={scrollToTop}>
             {t('To Top')}

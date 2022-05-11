@@ -19,7 +19,10 @@ const Wrapper = styled.div`
   }
 `
 
-const ExpandableSectionButton: React.FC<ExpandableSectionButtonProps> = ({ onClick, expanded }: ExpandableSectionButtonProps) => {
+const ExpandableSectionButton: React.FC<ExpandableSectionButtonProps> = ({
+  onClick,
+  expanded,
+}: ExpandableSectionButtonProps) => {
   const { t } = useTranslation()
 
   return (

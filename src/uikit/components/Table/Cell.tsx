@@ -1,6 +1,6 @@
-import styled from "styled-components";
-import { typography } from "styled-system";
-import type { TypographyProps } from "styled-system";
+import styled from 'styled-components'
+import { typography } from 'styled-system'
+import type { TypographyProps } from 'styled-system'
 
 export const Td = styled.td<TypographyProps>`
   border-bottom: 1px solid ${({ theme }) => theme.colors.cardBorder};
@@ -9,10 +9,10 @@ export const Td = styled.td<TypographyProps>`
   vertical-align: middle;
 
   ${typography}
-`;
+`
 
-export const Th = styled(Td).attrs({ as: "th" })`
+export const Th = styled(Td).attrs({ as: 'th' })`
   color: ${({ theme }) => theme.colors.secondary};
   font-size: 12px;
   text-transform: uppercase;
-`;
+`

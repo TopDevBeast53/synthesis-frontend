@@ -1,4 +1,4 @@
-import { createGlobalStyle } from "styled-components";
+import { createGlobalStyle } from 'styled-components'
 
 const ResetCSS = createGlobalStyle`
   /* prettier-ignore */
@@ -112,6 +112,6 @@ const ResetCSS = createGlobalStyle`
   iframe {
     display: none;
   }
-`;
+`
 
-export default ResetCSS;
+export default ResetCSS

@@ -31,7 +31,6 @@ import { RedirectPathToSwapOnly, RedirectToSwap } from './views/Swap/redirects'
 import { useInactiveListener } from './hooks/useInactiveListener'
 import useSentryUser from './hooks/useSentryUser'
 
-
 // Route-based code splitting
 // Only pool is included in the main bundle because of it's the most visited page
 const Home = lazy(() => import('./views/Home'))
@@ -84,10 +83,13 @@ const App: React.FC = () => {
   return (
     <Router history={history}>
       <ResetCSS />
-      <GlobalStyle backgroundImageURL={
-         ['swap', 'geobot-staking'].includes(window.location.href.split('/')?.[3]) ? 
-        '/images/SwapBackground.svg' : '/images/MainBackground.svg'}
-        />
+      <GlobalStyle
+        backgroundImageURL={
+          ['swap', 'geobot-staking'].includes(window.location.href.split('/')?.[3])
+            ? '/images/SwapBackground.svg'
+            : '/images/MainBackground.svg'
+        }
+      />
       <Menu>
         <SuspenseWithChunkError fallback={<PageLoader />}>
           <Switch>
@@ -158,7 +160,7 @@ const App: React.FC = () => {
             </Route>
             <Route path="/voting/proposal/:id">
               <Proposal />
-            </Route> 
+            </Route>
 
             {/* NFT */}
             {/* <Route path="/nfts">

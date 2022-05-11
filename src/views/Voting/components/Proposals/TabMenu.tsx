@@ -24,8 +24,24 @@ const LabelFlex = styled(Flex)`
 `
 
 const options = [
-  { value: ProposalType.CORE, label: <LabelFlex> <VerifiedIcon color="currentColor" mr="4px" /> Core </LabelFlex> },
-  { value: ProposalType.COMMUNITY, label: <LabelFlex> <CommunityIcon color="currentColor" mr="4px" /> Community </LabelFlex>},
+  {
+    value: ProposalType.CORE,
+    label: (
+      <LabelFlex>
+        {' '}
+        <VerifiedIcon color="currentColor" mr="4px" /> Core{' '}
+      </LabelFlex>
+    ),
+  },
+  {
+    value: ProposalType.COMMUNITY,
+    label: (
+      <LabelFlex>
+        {' '}
+        <CommunityIcon color="currentColor" mr="4px" /> Community{' '}
+      </LabelFlex>
+    ),
+  },
   { value: ProposalType.ALL, label: <LabelFlex> All </LabelFlex> },
 ]
 
@@ -41,12 +57,7 @@ const TabMenu: React.FC<TabMenuProps> = ({ proposalType, onTypeChange }) => {
         return (
           <FilterLabel key={value}>
             <LabelFlex>
-              <Radio
-                scale="sm"
-                value={value}
-                checked={proposalType === value}
-                onChange={handleChange}
-              />
+              <Radio scale="sm" value={value} checked={proposalType === value} onChange={handleChange} />
               <Text ml="8px">{label}</Text>
             </LabelFlex>
           </FilterLabel>

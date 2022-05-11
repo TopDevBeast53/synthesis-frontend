@@ -7,27 +7,27 @@ import { setBlock } from '.'
 import { State } from '../types'
 
 export const usePollBlockNumber = (refreshTime = 6000) => {
-  const dispatch = useAppDispatch()
-  const isWindowVisible = useIsWindowVisible()
+    const dispatch = useAppDispatch()
+    const isWindowVisible = useIsWindowVisible()
 
-  useInterval(
-    () => {
-      const fetchBlock = async () => {
-        const blockNumber = await simpleRpcProvider.getBlockNumber()
-        dispatch(setBlock(blockNumber))
-      }
+    useInterval(
+        () => {
+            const fetchBlock = async () => {
+                const blockNumber = await simpleRpcProvider.getBlockNumber()
+                dispatch(setBlock(blockNumber))
+            }
 
-      fetchBlock()
-    },
-    isWindowVisible ? refreshTime : null,
-    true,
-  )
+            fetchBlock()
+        },
+        isWindowVisible ? refreshTime : null,
+        true,
+    )
 }
 
 export const useBlock = () => {
-  return useSelector((state: State) => state.block)
+    return useSelector((state: State) => state.block)
 }
 
 export const useInitialBlock = () => {
-  return useSelector((state: State) => state.block.initialBlock)
+    return useSelector((state: State) => state.block.initialBlock)
 }

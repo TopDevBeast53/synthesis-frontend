@@ -8,18 +8,18 @@ import { ethers } from 'ethers'
  * @returns transaction hash, or null
  */
 export const buyTokenUsingBNB = async (
-  contract: ethers.Contract,
-  collectionAddress: string,
-  tokenId: number,
+    contract: ethers.Contract,
+    collectionAddress: string,
+    tokenId: number,
 ): Promise<string> => {
-  try {
-    const tx = await contract.buyTokenUsingBNB(collectionAddress, tokenId)
-    const receipt = await tx.wait()
-    return receipt.transactionHash
-  } catch (error) {
-    console.error(error)
-    return null
-  }
+    try {
+        const tx = await contract.buyTokenUsingBNB(collectionAddress, tokenId)
+        const receipt = await tx.wait()
+        return receipt.transactionHash
+    } catch (error) {
+        console.error(error)
+        return null
+    }
 }
 
 /**
@@ -31,19 +31,19 @@ export const buyTokenUsingBNB = async (
  * @returns transaction hash, or null
  */
 export const buyTokenUsingWBNB = async (
-  contract: ethers.Contract,
-  collectionAddress: string,
-  tokenId: number,
-  price: ethers.BigNumber,
+    contract: ethers.Contract,
+    collectionAddress: string,
+    tokenId: number,
+    price: ethers.BigNumber,
 ): Promise<string> => {
-  try {
-    const tx = await contract.buyTokenUsingWBNB(collectionAddress, tokenId, price)
-    const receipt = await tx.wait()
-    return receipt.transactionHash
-  } catch (error) {
-    console.error(error)
-    return null
-  }
+    try {
+        const tx = await contract.buyTokenUsingWBNB(collectionAddress, tokenId, price)
+        const receipt = await tx.wait()
+        return receipt.transactionHash
+    } catch (error) {
+        console.error(error)
+        return null
+    }
 }
 
 /**
@@ -55,19 +55,19 @@ export const buyTokenUsingWBNB = async (
  * @returns transaction hash, or null
  */
 export const createAskOrder = async (
-  contract: ethers.Contract,
-  collectionAddress: string,
-  tokenId: number,
-  askPrice: ethers.BigNumber,
+    contract: ethers.Contract,
+    collectionAddress: string,
+    tokenId: number,
+    askPrice: ethers.BigNumber,
 ): Promise<string> => {
-  try {
-    const tx = await contract.createAskOrder(collectionAddress, tokenId, askPrice)
-    const receipt = await tx.wait()
-    return receipt.transactionHash
-  } catch (error) {
-    console.error(error)
-    return null
-  }
+    try {
+        const tx = await contract.createAskOrder(collectionAddress, tokenId, askPrice)
+        const receipt = await tx.wait()
+        return receipt.transactionHash
+    } catch (error) {
+        console.error(error)
+        return null
+    }
 }
 
 /**
@@ -79,19 +79,19 @@ export const createAskOrder = async (
  * @returns transaction hash, or null
  */
 export const modifyAskOrder = async (
-  contract: ethers.Contract,
-  collectionAddress: string,
-  tokenId: number,
-  newPrice: ethers.BigNumber,
+    contract: ethers.Contract,
+    collectionAddress: string,
+    tokenId: number,
+    newPrice: ethers.BigNumber,
 ): Promise<string> => {
-  try {
-    const tx = await contract.modifyAskOrder(collectionAddress, tokenId, newPrice)
-    const receipt = await tx.wait()
-    return receipt.transactionHash
-  } catch (error) {
-    console.error(error)
-    return null
-  }
+    try {
+        const tx = await contract.modifyAskOrder(collectionAddress, tokenId, newPrice)
+        const receipt = await tx.wait()
+        return receipt.transactionHash
+    } catch (error) {
+        console.error(error)
+        return null
+    }
 }
 
 /**
@@ -102,18 +102,18 @@ export const modifyAskOrder = async (
  * @returns transaction hash, or null
  */
 export const cancelAskOrder = async (
-  contract: ethers.Contract,
-  collectionAddress: string,
-  tokenId: number,
+    contract: ethers.Contract,
+    collectionAddress: string,
+    tokenId: number,
 ): Promise<string> => {
-  try {
-    const tx = await contract.cancelAskOrder(collectionAddress, tokenId)
-    const receipt = await tx.wait()
-    return receipt.transactionHash
-  } catch (error) {
-    console.error(error)
-    return null
-  }
+    try {
+        const tx = await contract.cancelAskOrder(collectionAddress, tokenId)
+        const receipt = await tx.wait()
+        return receipt.transactionHash
+    } catch (error) {
+        console.error(error)
+        return null
+    }
 }
 
 /**
@@ -123,13 +123,13 @@ export const cancelAskOrder = async (
  * @returns pending revenues, or null if failed
  */
 export const getPendingRevenue = async (contract: ethers.Contract, userAddress: string): Promise<ethers.BigNumber> => {
-  try {
-    const res = await contract.pendingRevenue(userAddress)
-    return res
-  } catch (error) {
-    console.error(error)
-    return null
-  }
+    try {
+        const res = await contract.pendingRevenue(userAddress)
+        return res
+    } catch (error) {
+        console.error(error)
+        return null
+    }
 }
 
 /**
@@ -138,12 +138,12 @@ export const getPendingRevenue = async (contract: ethers.Contract, userAddress: 
  * @returns transaction hash, or null
  */
 export const claimPendingRevenue = async (contract: ethers.Contract): Promise<string> => {
-  try {
-    const tx = await contract.claimPendingRevenue()
-    const receipt = await tx.wait()
-    return receipt.transactionHash
-  } catch (error) {
-    console.error(error)
-    return null
-  }
+    try {
+        const tx = await contract.claimPendingRevenue()
+        const receipt = await tx.wait()
+        return receipt.transactionHash
+    } catch (error) {
+        console.error(error)
+        return null
+    }
 }

@@ -11,15 +11,15 @@ import lpAprs from 'config/constants/lpAprs.json'
  * @returns Null if the APR is NaN or infinite.
  */
 export const getPoolApr = (
-  stakingTokenPrice: number,
-  rewardTokenPrice: number,
-  totalStaked: number,
-  tokenPerBlock: number,
+    stakingTokenPrice: number,
+    rewardTokenPrice: number,
+    totalStaked: number,
+    tokenPerBlock: number,
 ): number => {
-  const totalRewardPricePerYear = new BigNumber(rewardTokenPrice).times(tokenPerBlock).times(BLOCKS_PER_YEAR)
-  const totalStakingTokenInPool = new BigNumber(stakingTokenPrice).times(totalStaked)
-  const apr = totalRewardPricePerYear.div(totalStakingTokenInPool).times(100)
-  return apr.isNaN() || !apr.isFinite() ? null : apr.toNumber()
+    const totalRewardPricePerYear = new BigNumber(rewardTokenPrice).times(tokenPerBlock).times(BLOCKS_PER_YEAR)
+    const totalStakingTokenInPool = new BigNumber(stakingTokenPrice).times(totalStaked)
+    const apr = totalRewardPricePerYear.div(totalStakingTokenInPool).times(100)
+    return apr.isNaN() || !apr.isFinite() ? null : apr.toNumber()
 }
 
 /**
@@ -31,19 +31,19 @@ export const getPoolApr = (
  * @returns Farm Apr
  */
 export const getFarmApr = (
-  poolWeight: BigNumber,
-  helixPriceUsd: BigNumber,
-  poolLiquidityUsd: BigNumber,
-  farmAddress: string,
+    poolWeight: BigNumber,
+    helixPriceUsd: BigNumber,
+    poolLiquidityUsd: BigNumber,
+    farmAddress: string,
 ): { helixRewardsApr: number; lpRewardsApr: number } => {
-  const yearlyHelixRewardAllocation = poolWeight ? poolWeight.times(HELIX_PER_YEAR) : new BigNumber(NaN)
-  const helixRewardsApr = yearlyHelixRewardAllocation.times(helixPriceUsd).div(poolLiquidityUsd).times(100)
-  let helixRewardsAprAsNumber = null
-  if (!helixRewardsApr.isNaN() && helixRewardsApr.isFinite()) {
-    helixRewardsAprAsNumber = helixRewardsApr.toNumber()
-  }
-  const lpRewardsApr = lpAprs[farmAddress?.toLocaleLowerCase()] ?? 0
-  return { helixRewardsApr: helixRewardsAprAsNumber, lpRewardsApr }
+    const yearlyHelixRewardAllocation = poolWeight ? poolWeight.times(HELIX_PER_YEAR) : new BigNumber(NaN)
+    const helixRewardsApr = yearlyHelixRewardAllocation.times(helixPriceUsd).div(poolLiquidityUsd).times(100)
+    let helixRewardsAprAsNumber = null
+    if (!helixRewardsApr.isNaN() && helixRewardsApr.isFinite()) {
+        helixRewardsAprAsNumber = helixRewardsApr.toNumber()
+    }
+    const lpRewardsApr = lpAprs[farmAddress?.toLocaleLowerCase()] ?? 0
+    return { helixRewardsApr: helixRewardsAprAsNumber, lpRewardsApr }
 }
 
 export default null

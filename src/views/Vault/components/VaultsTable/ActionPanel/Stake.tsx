@@ -15,30 +15,27 @@ const IconButtonWrapper = styled.div`
   display: flex;
 `
 
-interface StackedActionProps {  
+interface StackedActionProps {
   isLoading
-  deposit  
+  deposit
   stakedBalance
   updateStake
 }
 
-const Staked: React.FunctionComponent<StackedActionProps> = ({ isLoading, deposit,stakedBalance,updateStake }) => {  
-  const { t } = useTranslation()  
-  const { balance: helixBalance} = useTokenBalance(tokens.helix.address)  
-  
-  const cakePrice = usePriceHelixBusd()
-  const {decimals, symbol} = tokens.helix
+const Staked: React.FunctionComponent<StackedActionProps> = ({ isLoading, deposit, stakedBalance, updateStake }) => {
+  const { t } = useTranslation()
+  const { balance: helixBalance } = useTokenBalance(tokens.helix.address)
 
-  const tokenPrice = getBalanceNumber(cakePrice, decimals) 
+  const cakePrice = usePriceHelixBusd()
+  const { decimals, symbol } = tokens.helix
+
+  const tokenPrice = getBalanceNumber(cakePrice, decimals)
   const stakedTokenBalance = getBalanceNumber(stakedBalance, decimals)
-  const stakedTokenDollarBalance = getBalanceNumber(
-    stakedBalance.multipliedBy(cakePrice),
-    decimals,
-  )
-  
+  const stakedTokenDollarBalance = getBalanceNumber(stakedBalance.multipliedBy(cakePrice), decimals)
+
   const canWithdraw = useMemo(() => {
-    const withdrawDate = moment.unix(deposit?.withdrawTimeStamp) 
-    const today = moment()    
+    const withdrawDate = moment.unix(deposit?.withdrawTimeStamp)
+    const today = moment()
     return withdrawDate.isSameOrBefore(today)
   }, [deposit])
 
@@ -47,7 +44,7 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({ isLoading, deposi
       totalBalance={helixBalance}
       stakedBalance={stakedBalance}
       tokenPrice={tokenPrice}
-      stakingToken ={tokens.helix}
+      stakingToken={tokens.helix}
       depositId={deposit.id}
       updateStake={updateStake}
     />,
@@ -56,14 +53,14 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({ isLoading, deposi
   const [onPresentUnstake] = useModal(
     <StakeModal
       totalBalance={helixBalance}
-      stakedBalance={stakedBalance}      
+      stakedBalance={stakedBalance}
       tokenPrice={tokenPrice}
-      stakingToken ={tokens.helix}
+      stakingToken={tokens.helix}
       depositId={deposit.id}
       isRemovingStake
       updateStake={updateStake}
     />,
-  )  
+  )
 
   if (isLoading) {
     return (
@@ -82,7 +79,7 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({ isLoading, deposi
 
   // Wallet connected, user data loaded and approved
   return (
-    <ActionContainer >
+    <ActionContainer>
       <ActionTitles>
         <Text fontSize="12px" bold color="secondary" as="span" textTransform="uppercase">
           {symbol}{' '}
@@ -93,13 +90,7 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({ isLoading, deposi
       </ActionTitles>
       <ActionContent>
         <Flex flex="1" pt="16px" flexDirection="column" alignSelf="flex-start">
-          <Balance
-            lineHeight="1"
-            bold
-            fontSize="20px"
-            decimals={5}
-            value={stakedTokenBalance}
-          />
+          <Balance lineHeight="1" bold fontSize="20px" decimals={5} value={stakedTokenBalance} />
           <Balance
             fontSize="12px"
             display="inline"
@@ -112,12 +103,12 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({ isLoading, deposi
         </Flex>
         <IconButtonWrapper>
           <IconButton variant="secondary" onClick={onPresentUnstake} mr="6px" disabled={!canWithdraw}>
-            <MinusIcon color={canWithdraw? "primary" : "textDisabled"} width="14px" />
+            <MinusIcon color={canWithdraw ? 'primary' : 'textDisabled'} width="14px" />
           </IconButton>
           <IconButton variant="secondary" onClick={onPresentStake}>
             <AddIcon color="primary" width="24px" height="24px" />
-          </IconButton>                
-        </IconButtonWrapper>        
+          </IconButton>
+        </IconButtonWrapper>
       </ActionContent>
     </ActionContainer>
   )

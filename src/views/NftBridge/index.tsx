@@ -15,7 +15,7 @@ const NFTDisplayPanel = styled(Flex)`
   padding-left: 24px;
   padding-right: 24px;
   margin-bottom: 32px;
-`;
+`
 
 const Wrapper = styled.div`
   display: flex;
@@ -52,18 +52,18 @@ export default function NftBridge() {
 
   return (
     <>
-      <PageHeader background='transparent'>
+      <PageHeader background="transparent">
         <Heading as="h1" scale="xxl" color="secondary">
           {t('Geobot Bridge')}
         </Heading>
       </PageHeader>
       <Page>
         <NFTDisplayPanel>
-          {
-            viewPageIndex === 0 
-            ? (<BridgeToSolana switcher={stakedOrUnstakedSwitch}/>) 
-            : (<BridgeToBSC switcher={stakedOrUnstakedSwitch}/>)
-          }
+          {viewPageIndex === 0 ? (
+            <BridgeToSolana switcher={stakedOrUnstakedSwitch} />
+          ) : (
+            <BridgeToBSC switcher={stakedOrUnstakedSwitch} />
+          )}
         </NFTDisplayPanel>
       </Page>
     </>

@@ -1,6 +1,6 @@
 export enum BuyButtonsEnum {
-  ENABLE,
-  BUY,
-  READY,
-  NONE,
+    ENABLE,
+    BUY,
+    READY,
+    NONE,
 }

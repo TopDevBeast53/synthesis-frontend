@@ -14,14 +14,14 @@ const NFTDisplayPanel = styled(Flex)`
   padding-left: 24px;
   padding-right: 24px;
   margin-bottom: 32px;
-`;
+`
 
 export default function NftYieldBoosting() {
   const { t } = useTranslation()
 
   return (
     <>
-      <PageHeader background='transparent'>
+      <PageHeader background="transparent">
         <Heading as="h1" scale="xxl" color="secondary">
           {t('Yield Boosting')}
         </Heading>

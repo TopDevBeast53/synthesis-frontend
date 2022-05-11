@@ -12,7 +12,7 @@ import ProposalsLoading from './ProposalsLoading'
 
 import ProposalRow from './ProposalRow'
 
-const Proposals = ({ filterState, proposalType }: { filterState: ProposalState, proposalType: ProposalType }) => {
+const Proposals = ({ filterState, proposalType }: { filterState: ProposalState; proposalType: ProposalType }) => {
   const { t } = useTranslation()
 
   const proposalStatus = useGetProposalLoadingStatus()

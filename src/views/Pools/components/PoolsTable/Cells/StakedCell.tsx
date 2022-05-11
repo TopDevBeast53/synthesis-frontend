@@ -36,7 +36,10 @@ const StakedCell: React.FC<StakedCellProps> = ({ pool, account, userDataLoaded }
 
   // pool
   const { stakingTokenPrice, stakingToken, userData } = pool
-  const stakedAutoDollarValue = getBalanceNumber(helixAsBigNumber.multipliedBy(stakingTokenPrice), stakingToken.decimals)
+  const stakedAutoDollarValue = getBalanceNumber(
+    helixAsBigNumber.multipliedBy(stakingTokenPrice),
+    stakingToken.decimals,
+  )
   const stakedBalance = userData?.stakedBalance ? new BigNumber(userData.stakedBalance) : BIG_ZERO
   const stakedTokenBalance = getBalanceNumber(stakedBalance, stakingToken.decimals)
   const stakedTokenDollarBalance = getBalanceNumber(

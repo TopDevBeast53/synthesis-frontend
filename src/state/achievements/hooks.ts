@@ -6,17 +6,17 @@ import { State, AchievementState } from '../types'
 import { fetchAchievements } from '.'
 
 export const useFetchAchievements = () => {
-  const { account } = useWeb3React()
-  const dispatch = useAppDispatch()
+    const { account } = useWeb3React()
+    const dispatch = useAppDispatch()
 
-  useEffect(() => {
-    if (account) {
-      dispatch(fetchAchievements(account))
-    }
-  }, [account, dispatch])
+    useEffect(() => {
+        if (account) {
+            dispatch(fetchAchievements(account))
+        }
+    }, [account, dispatch])
 }
 
 export const useAchievements = () => {
-  const achievements: AchievementState = useSelector((state: State) => state.achievements)
-  return achievements
+    const achievements: AchievementState = useSelector((state: State) => state.achievements)
+    return achievements
 }

@@ -269,8 +269,8 @@ const SetPositionCard: React.FC<SetPositionCardProps> = ({ position, togglePosit
               isLoading={isTxPending}
               endIcon={isTxPending ? <AutoRenewIcon color="currentColor" spin /> : null}
               style={{
-                background: "rgba(249, 250, 250, 0.08)",
-                backdropFilter: "blur(80px)",
+                background: 'rgba(249, 250, 250, 0.08)',
+                backdropFilter: 'blur(80px)',
               }}
             >
               {t(key)}

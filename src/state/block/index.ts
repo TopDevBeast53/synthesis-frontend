@@ -4,17 +4,17 @@ import { BlockState } from '../types'
 const initialState: BlockState = { currentBlock: 0, initialBlock: 0 }
 
 export const blockSlice = createSlice({
-  name: 'Block',
-  initialState,
-  reducers: {
-    setBlock: (state, action: PayloadAction<number>) => {
-      if (state.initialBlock === 0) {
-        state.initialBlock = action.payload
-      }
+    name: 'Block',
+    initialState,
+    reducers: {
+        setBlock: (state, action: PayloadAction<number>) => {
+            if (state.initialBlock === 0) {
+                state.initialBlock = action.payload
+            }
 
-      state.currentBlock = action.payload
+            state.currentBlock = action.payload
+        },
     },
-  },
 })
 
 // Actions

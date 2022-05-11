@@ -12,74 +12,68 @@ import CreateOrderDialog from './Modals/CreateOrderDialog'
 import SellTable from './SellTable'
 import { OrderState } from '../types'
 
-
-
 const Wrapper = styled.div`
-  display: flex;    
+  display: flex;
   align-items: center;
-  justify-content:space-between;
-  width:100%;
-  margin-bottom:1em;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 1em;
   a {
     padding-left: 12px;
     padding-right: 12px;
   }
 
   ${({ theme }) => theme.mediaQueries.sm} {
-    margin-left: 16px;    
+    margin-left: 16px;
   }
 `
 
-const Sell = ()=>{
-    const { t } = useTranslation()
-    const { toastError } = useToast()
-    const LpSwapContract = useHelixLpSwap()  
-    const {account} = useWeb3React()
-    const [menuIndex, setMenuIndex] = useState(0)    
-    const [swapIds, setSwapIds] = useState([])
-       
-    const fastRefresh = useFastFresh()
-    const {tableRefresh, setFilterState} = useContext(SwapLiquidityContext)
+const Sell = () => {
+  const { t } = useTranslation()
+  const { toastError } = useToast()
+  const LpSwapContract = useHelixLpSwap()
+  const { account } = useWeb3React()
+  const [menuIndex, setMenuIndex] = useState(0)
+  const [swapIds, setSwapIds] = useState([])
 
-    
+  const fastRefresh = useFastFresh()
+  const { tableRefresh, setFilterState } = useContext(SwapLiquidityContext)
 
-    const handleButtonMenuClick = (newIndex) => {
-        // setFilterOrderState(newIndex)
-        if(newIndex === 0) setFilterState(OrderState.Active)
-        if(newIndex === 1) setFilterState(OrderState.Completed)
-        setMenuIndex(newIndex)
-        
-    }
-    const [handleAdd] = useModal(<CreateOrderDialog />)
-    useEffect(()=>{        
-        if(tableRefresh < 0) return
-        if(!account) return
-        LpSwapContract.getSwapIds(account).then(async (ids)=>{
-            setSwapIds(ids)            
-        }).catch(err=>{
-            console.error(err)            
-            // toastError('Error', err.toString())
-        })
-    }, [LpSwapContract, account, toastError, tableRefresh, fastRefresh ])
+  const handleButtonMenuClick = (newIndex) => {
+    // setFilterOrderState(newIndex)
+    if (newIndex === 0) setFilterState(OrderState.Active)
+    if (newIndex === 1) setFilterState(OrderState.Completed)
+    setMenuIndex(newIndex)
+  }
+  const [handleAdd] = useModal(<CreateOrderDialog />)
+  useEffect(() => {
+    if (tableRefresh < 0) return
+    if (!account) return
+    LpSwapContract.getSwapIds(account)
+      .then(async (ids) => {
+        setSwapIds(ids)
+      })
+      .catch((err) => {
+        console.error(err)
+        // toastError('Error', err.toString())
+      })
+  }, [LpSwapContract, account, toastError, tableRefresh, fastRefresh])
 
-    
-    return (        
-        <Page>            
-            <Wrapper>
-                <ButtonMenu activeIndex={menuIndex} scale="sm" variant="subtle" onItemClick={handleButtonMenuClick}>
-                    <ButtonMenuItem>
-                        {t('Active')}
-                    </ButtonMenuItem>
-                    <ButtonMenuItem >
-                        {t('Closed')}
-                    </ButtonMenuItem>
-                </ButtonMenu>
-                <Button variant="secondary" scale="md" mr="1em" onClick={handleAdd}> Add </Button>
-            </Wrapper>            
-            <SellTable data={swapIds}/>            
-            
-        </Page>
-    )
+  return (
+    <Page>
+      <Wrapper>
+        <ButtonMenu activeIndex={menuIndex} scale="sm" variant="subtle" onItemClick={handleButtonMenuClick}>
+          <ButtonMenuItem>{t('Active')}</ButtonMenuItem>
+          <ButtonMenuItem>{t('Closed')}</ButtonMenuItem>
+        </ButtonMenu>
+        <Button variant="secondary" scale="md" mr="1em" onClick={handleAdd}>
+          {' '}
+          Add{' '}
+        </Button>
+      </Wrapper>
+      <SellTable data={swapIds} />
+    </Page>
+  )
 }
 
 export default Sell

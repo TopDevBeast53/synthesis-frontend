@@ -90,9 +90,7 @@ const CastVoteModal: React.FC<CastVoteModalProps> = ({ onSuccess, proposalId, vo
             onDismiss={handleDismiss}
           />
         )}
-        {view === ConfirmVoteView.DETAILS && (
-          <DetailsView total={total} />
-        )}
+        {view === ConfirmVoteView.DETAILS && <DetailsView total={total} />}
       </Box>
     </Modal>
   )

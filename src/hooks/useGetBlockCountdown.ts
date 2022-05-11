@@ -6,41 +6,41 @@ import { simpleRpcProvider } from 'utils/providers'
  * Returns a countdown in seconds of a given block
  */
 const useBlockCountdown = (blockNumber: number) => {
-  const timer = useRef<ReturnType<typeof setTimeout>>(null)
-  const [secondsRemaining, setSecondsRemaining] = useState(0)
+    const timer = useRef<ReturnType<typeof setTimeout>>(null)
+    const [secondsRemaining, setSecondsRemaining] = useState(0)
 
-  useEffect(() => {
-    const startCountdown = async () => {
-      const currentBlock = await simpleRpcProvider.getBlockNumber()
+    useEffect(() => {
+        const startCountdown = async () => {
+            const currentBlock = await simpleRpcProvider.getBlockNumber()
 
-      if (blockNumber > currentBlock) {
-        setSecondsRemaining((blockNumber - currentBlock) * BSC_BLOCK_TIME)
+            if (blockNumber > currentBlock) {
+                setSecondsRemaining((blockNumber - currentBlock) * BSC_BLOCK_TIME)
 
-        // Clear previous interval
-        if (timer.current) {
-          clearInterval(timer.current)
+                // Clear previous interval
+                if (timer.current) {
+                    clearInterval(timer.current)
+                }
+
+                timer.current = setInterval(() => {
+                    setSecondsRemaining((prevSecondsRemaining) => {
+                        if (prevSecondsRemaining === 1) {
+                            clearInterval(timer.current)
+                        }
+
+                        return prevSecondsRemaining - 1
+                    })
+                }, 1000)
+            }
         }
 
-        timer.current = setInterval(() => {
-          setSecondsRemaining((prevSecondsRemaining) => {
-            if (prevSecondsRemaining === 1) {
-              clearInterval(timer.current)
-            }
+        startCountdown()
 
-            return prevSecondsRemaining - 1
-          })
-        }, 1000)
-      }
-    }
+        return () => {
+            clearInterval(timer.current)
+        }
+    }, [setSecondsRemaining, blockNumber, timer])
 
-    startCountdown()
-
-    return () => {
-      clearInterval(timer.current)
-    }
-  }, [setSecondsRemaining, blockNumber, timer])
-
-  return secondsRemaining
+    return secondsRemaining
 }
 
 export default useBlockCountdown

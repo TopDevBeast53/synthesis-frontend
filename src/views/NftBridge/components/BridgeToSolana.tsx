@@ -8,7 +8,7 @@ import { useNFTBridge } from '../hooks/useNFTBridge'
 import NftCard from '../../NftStaking/components/NftCard'
 import NFTStartCollectPanel from '../../NftStaking/components/NFTStartCollectPanel'
 
-export default function BridgeToSolana({switcher}: {switcher: React.ReactNode}) {
+export default function BridgeToSolana({ switcher }: { switcher: React.ReactNode }) {
   const { t } = useTranslation()
   const { toastError, toastSuccess } = useToast()
 
@@ -19,7 +19,6 @@ export default function BridgeToSolana({switcher}: {switcher: React.ReactNode}) 
 
   const { getUnstakedNftsFromBSC, approveToBridgeContract } = useNFTBridge()
 
-  
   const handleGetTokens = useCallback(() => {
     try {
       setLoading(true)
@@ -33,35 +32,37 @@ export default function BridgeToSolana({switcher}: {switcher: React.ReactNode}) 
       setLoading(false)
     }
   }, [getUnstakedNftsFromBSC, toastError, t])
-  
+
   useEffect(() => {
-    handleGetTokens();
+    handleGetTokens()
   }, [handleGetTokens])
-  
-  const handleApprove = useCallback(async (tokenId:string) => {
-    try {
-      setLoading(true)
-      const receipt = await approveToBridgeContract(tokenId)
-      if (receipt.status) {
-        toastSuccess(t('Success'), t('Approved! Please click Brige To Solana button!'))
-        const updatedTokens = tokens.map((token:any)=>{
-          if (token.tokenId.toString() === tokenId.toString())
-            return {...token, ...{isApproved: true}}
-          return token
-        })
-        setTokens(updatedTokens)
+
+  const handleApprove = useCallback(
+    async (tokenId: string) => {
+      try {
+        setLoading(true)
+        const receipt = await approveToBridgeContract(tokenId)
+        if (receipt.status) {
+          toastSuccess(t('Success'), t('Approved! Please click Brige To Solana button!'))
+          const updatedTokens = tokens.map((token: any) => {
+            if (token.tokenId.toString() === tokenId.toString()) return { ...token, ...{ isApproved: true } }
+            return token
+          })
+          setTokens(updatedTokens)
+        }
+      } catch (e) {
+        logError(e)
+        toastError(t('Error'), t('Please try again.'))
+      } finally {
+        setLoading(false)
       }
-    } catch (e) {
-      logError(e)
-      toastError(t('Error'), t('Please try again.'))
-    } finally {
-      setLoading(false)
-    }
-  }, [approveToBridgeContract, tokens, toastSuccess, toastError, t])
+    },
+    [approveToBridgeContract, tokens, toastSuccess, toastError, t],
+  )
 
   const TokensList = () => (
     <div>
-      <Flex flexWrap="wrap" style={{margin: '-19px'}}>
+      <Flex flexWrap="wrap" style={{ margin: '-19px' }}>
         {tokens.map((token) => {
           return (
             <NftCard
@@ -69,22 +70,22 @@ export default function BridgeToSolana({switcher}: {switcher: React.ReactNode}) 
               tokenId={token.tokenId}
               infos={[
                 {
-                  caption: "Level",
+                  caption: 'Level',
                   value: token.level,
                 },
                 {
-                  caption: "HelixPoints",
+                  caption: 'HelixPoints',
                   value: token.helixPoints,
                 },
                 {
-                  caption: "Remain APTo Next Level",
+                  caption: 'Remain APTo Next Level',
                   value: token.remainHPToNextLevel,
-                }
+                },
               ]}
               actions={[
                 {
-                  id: "bridge_approve",
-                  caption: "Approve",
+                  id: 'bridge_approve',
+                  caption: 'Approve',
                   displayed: !token.isApproved,
                   action: handleApprove,
                   params: [token.tokenId],
@@ -109,33 +110,29 @@ export default function BridgeToSolana({switcher}: {switcher: React.ReactNode}) 
 
   return (
     <>
-      <Flex justifyContent="space-between" alignItems="center" style={{marginBottom: '32px', minHeight: '60px'}}>
+      <Flex justifyContent="space-between" alignItems="center" style={{ marginBottom: '32px', minHeight: '60px' }}>
         <Heading as="h2" mt="20px" mb="10px">
           My Geobots on Binance
         </Heading>
         {switcher}
       </Flex>
       <Flex position="relative" flexDirection="column">
-        {
-          loading 
-          ? (
-              <Flex
-                position="relative"
-                height="300px"
-                justifyContent="center"
-                py="4px"
-              >
-                <Flex justifyContent="center" style={{ paddingBottom: '8px' }}>
-                  <Text fontSize="18px" bold>
-                    Loading...
-                  </Text>
-                </Flex>
-                <Flex justifyContent="center">
-                  <CircleLoader size="30px"/>
-                </Flex>
-              </Flex>
-            )
-          : (tokens.length > 0 ? <TokensList /> : <NFTStartCollectPanel />)}
+        {loading ? (
+          <Flex position="relative" height="300px" justifyContent="center" py="4px">
+            <Flex justifyContent="center" style={{ paddingBottom: '8px' }}>
+              <Text fontSize="18px" bold>
+                Loading...
+              </Text>
+            </Flex>
+            <Flex justifyContent="center">
+              <CircleLoader size="30px" />
+            </Flex>
+          </Flex>
+        ) : tokens.length > 0 ? (
+          <TokensList />
+        ) : (
+          <NFTStartCollectPanel />
+        )}
       </Flex>
     </>
   )

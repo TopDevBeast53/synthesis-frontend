@@ -4,31 +4,28 @@ import { useTranslation } from 'contexts/Localization'
 import useTheme from 'hooks/useTheme'
 import React from 'react'
 import { useFarms } from 'state/farms/hooks'
-import { Modal, Text} from 'uikit'
+import { Modal, Text } from 'uikit'
 
-
-
-const LPTokenSelecDialog = (props)=>{
+const LPTokenSelecDialog = (props) => {
   const { theme } = useTheme()
   const { t } = useTranslation()
-  const {onDismiss} = props
+  const { onDismiss } = props
   const { data: farmsLP } = useFarms()
   const farmLP = farmsLP[0]
-  
+
   return (
-    <Modal
-      title={t('Select a LP Token') }
-      headerBackground={theme.colors.gradients.cardHeader}    
-      onDismiss={onDismiss}
-    >      
-    <div style={{display:"flex"}}>
-      <TokenPairImage variant="inverted" primaryToken={farmLP.token} secondaryToken={farmLP.quoteToken} width={40} height={40} />
-      <Text>
-        {farmLP.lpSymbol}
-      </Text>
-      
-    </div>
-    {/* <MenuItem
+    <Modal title={t('Select a LP Token')} headerBackground={theme.colors.gradients.cardHeader} onDismiss={onDismiss}>
+      <div style={{ display: 'flex' }}>
+        <TokenPairImage
+          variant="inverted"
+          primaryToken={farmLP.token}
+          secondaryToken={farmLP.quoteToken}
+          width={40}
+          height={40}
+        />
+        <Text>{farmLP.lpSymbol}</Text>
+      </div>
+      {/* <MenuItem
       style={style}
       className={`token-item-${key}`}      
     >
@@ -47,4 +44,3 @@ const LPTokenSelecDialog = (props)=>{
   )
 }
 export default LPTokenSelecDialog
-

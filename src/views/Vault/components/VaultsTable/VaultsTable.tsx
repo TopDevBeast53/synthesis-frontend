@@ -4,8 +4,8 @@ import styled from 'styled-components'
 import { Button, ChevronUpIcon } from 'uikit'
 import VaultRow from './VaultRow'
 
-interface PoolsTableProps {  
-  deposits    
+interface PoolsTableProps {
+  deposits
 }
 
 const StyledTable = styled.div`
@@ -16,7 +16,6 @@ const StyledTable = styled.div`
     border-bottom: 2px solid ${({ theme }) => theme.colors.disabled};
   }
 `
-
 
 // background-color: ${({ theme }) => theme.colors.cardBorder};
 
@@ -43,15 +42,13 @@ const VaultsTable: React.FC<PoolsTableProps> = ({ deposits }) => {
       behavior: 'smooth',
     })
   }
-  
+
   return (
     <StyledTableBorder>
-      <StyledTable id="pools-table" role="table" ref={tableWrapperEl}>        
-        {
-          deposits.map((deposit)=>(
-            <VaultRow key={deposit.id} deposit={deposit} />
-          ))
-        }
+      <StyledTable id="pools-table" role="table" ref={tableWrapperEl}>
+        {deposits.map((deposit) => (
+          <VaultRow key={deposit.id} deposit={deposit} />
+        ))}
         <ScrollButtonContainer>
           <Button variant="text" onClick={scrollToTop}>
             {t('To Top')}

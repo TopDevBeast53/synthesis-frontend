@@ -5,11 +5,11 @@ import AppliedRow from './AppliedRow'
 import FinishedRow from './FinishedRow'
 import { SwapState } from '../../types'
 
-const Row=({data})=>{    
-    const {filterState} = useContext(SwapLiquidityContext)
-    if (filterState === SwapState.Applied) return <AppliedRow swapData={data}/>
-    if (filterState === SwapState.Finished) return <FinishedRow swapData={data}/>
-    return <ActiveRow swapData={data}/>
+const Row = ({ data }) => {
+  const { filterState } = useContext(SwapLiquidityContext)
+  if (filterState === SwapState.Applied) return <AppliedRow swapData={data} />
+  if (filterState === SwapState.Finished) return <FinishedRow swapData={data} />
+  return <ActiveRow swapData={data} />
 }
 
-export default Row;
+export default Row

@@ -1,28 +1,28 @@
-import styled, { DefaultTheme } from "styled-components";
+import styled, { DefaultTheme } from 'styled-components'
 // eslint-disable-next-line import/no-unresolved
-import { space, variant, typography } from "styled-system";
-import { Colors } from "../../theme/types";
-import { scaleVariants, styleVariants } from "./theme";
-import { TagProps, variants } from "./types";
+import { space, variant, typography } from 'styled-system'
+import { Colors } from '../../theme/types'
+import { scaleVariants, styleVariants } from './theme'
+import { TagProps, variants } from './types'
 
 interface ThemedProps extends TagProps {
-  theme: DefaultTheme;
+  theme: DefaultTheme
 }
 
 const getOutlineStyles = ({ outline, theme, variant: variantKey = variants.PRIMARY }: ThemedProps) => {
   if (outline) {
-    const themeColorKey = styleVariants[variantKey].backgroundColor as keyof Colors;
-    const color = theme.colors[themeColorKey];
+    const themeColorKey = styleVariants[variantKey].backgroundColor as keyof Colors
+    const color = theme.colors[themeColorKey]
 
     return `
       color: ${color};
       background: ${theme.colors.background};
       border: 2px solid ${color};
-    `;
+    `
   }
 
-  return "";
-};
+  return ''
+}
 
 export const StyledTag = styled.div<ThemedProps>`
   align-items: center;
@@ -39,7 +39,7 @@ export const StyledTag = styled.div<ThemedProps>`
   ${({ textTransform }) => textTransform && `text-transform: ${textTransform};`}
 
   ${variant({
-    prop: "scale",
+    prop: 'scale',
     variants: scaleVariants,
   })}
   ${variant({
@@ -49,6 +49,6 @@ export const StyledTag = styled.div<ThemedProps>`
   ${typography}
 
   ${getOutlineStyles}
-`;
+`
 
-export default null;
+export default null

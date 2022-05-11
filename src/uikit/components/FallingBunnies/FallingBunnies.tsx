@@ -1,7 +1,7 @@
-import React from "react";
-import styled, { keyframes } from "styled-components";
-import BunnyIcon from "../Svg/Icons/Logo";
-import { BunnyProps, FallingBunniesProps } from "./types";
+import React from 'react'
+import styled, { keyframes } from 'styled-components'
+import BunnyIcon from '../Svg/Icons/Logo'
+import { BunnyProps, FallingBunniesProps } from './types'
 
 const bunnyFall = keyframes`
   0% {
@@ -18,7 +18,7 @@ const bunnyFall = keyframes`
     opacity: 0;
     transform: translate(150px, 100vh) rotateZ(360deg);
   }
-`;
+`
 
 const Bunny = styled.div<BunnyProps>`
   display: inline-flex;
@@ -33,7 +33,7 @@ const Bunny = styled.div<BunnyProps>`
   animation-name: ${bunnyFall};
   animation-duration: ${({ duration }) => `${duration}s`};
   animation-timing-function: linear;
-  animation-iteration-count: ${({ iterations }) => (Number.isFinite(iterations) ? String(iterations) : "infinite")};
+  animation-iteration-count: ${({ iterations }) => (Number.isFinite(iterations) ? String(iterations) : 'infinite')};
   animation-play-state: running;
 
   &:nth-child(5n + 5) {
@@ -63,7 +63,7 @@ const Bunny = styled.div<BunnyProps>`
   &:nth-child(3n + 7) {
     animation-delay: ${({ duration }) => `${(duration / 10) * 8}s`};
   }
-`;
+`
 
 const FallingBunnies: React.FC<FallingBunniesProps> = ({
   count = 30,
@@ -71,14 +71,16 @@ const FallingBunnies: React.FC<FallingBunniesProps> = ({
   iterations = Infinity,
   duration = 10,
 }) => {
-  const countAry = [...Array(count)].map((_, i)=>{return {val: i}})
+  const countAry = [...Array(count)].map((_, i) => {
+    return { val: i }
+  })
   const bunnies = countAry.map((e) => (
     <Bunny key={e.val} position={Math.random() * 100} iterations={iterations} duration={duration}>
       <BunnyIcon width={size} height={size} />
     </Bunny>
-  ));
+  ))
 
-  return <div>{bunnies}</div>;
-};
+  return <div>{bunnies}</div>
+}
 
-export default FallingBunnies;
+export default FallingBunnies

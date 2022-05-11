@@ -13,76 +13,75 @@ import { YieldPartyContext } from './context'
 import { OrderState } from './types'
 
 const Wrapper = styled.div`
-  display: flex;    
+  display: flex;
   align-items: center;
-  justify-content:space-between;
-  width:100%;
-  margin-bottom:1em;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 1em;
   a {
     padding-left: 12px;
     padding-right: 12px;
   }
 
   ${({ theme }) => theme.mediaQueries.sm} {
-    margin-left: 16px;    
+    margin-left: 16px;
   }
 `
 
-const YieldParty = ()=>{
-    const { t } = useTranslation()
-    const { toastError } = useToast()
-    const YieldSwapContract = useHelixYieldSwap()  
-    const {account} = useWeb3React()
-    const [menuIndex, setMenuIndex] = useState(0)
-    // const [filterOrderState, setFilterOrderState]=useState(OrderState.Active)    
-    const [swapIds, setSwapIds] = useState([])
-    const [refresh,setTableRefresh] = useState(0)
-    const [orderState, setOrderState] = useState(OrderState.Active)
-    const fastRefresh = useFastFresh()
+const YieldParty = () => {
+  const { t } = useTranslation()
+  const { toastError } = useToast()
+  const YieldSwapContract = useHelixYieldSwap()
+  const { account } = useWeb3React()
+  const [menuIndex, setMenuIndex] = useState(0)
+  // const [filterOrderState, setFilterOrderState]=useState(OrderState.Active)
+  const [swapIds, setSwapIds] = useState([])
+  const [refresh, setTableRefresh] = useState(0)
+  const [orderState, setOrderState] = useState(OrderState.Active)
+  const fastRefresh = useFastFresh()
 
-    const context ={
-        tableRefresh:refresh,  
-        setTableRefresh, 
-        filterState:orderState        
-    }
+  const context = {
+    tableRefresh: refresh,
+    setTableRefresh,
+    filterState: orderState,
+  }
 
-    const handleButtonMenuClick = (newIndex) => {
-        // setFilterOrderState(newIndex)
-        if(newIndex === 0) setOrderState(OrderState.Active)
-        if(newIndex === 1) setOrderState(OrderState.Completed)
-        setMenuIndex(newIndex)
-        
-    }
-    const [handleAdd] = useModal(<AddRowModal />)
-    useEffect(()=>{
-        if(refresh < 0) return
-        if(!account) return
-        YieldSwapContract.getSwapIds(account).then(async (ids)=>{
-            setSwapIds(ids)
-        }).catch(err=>{
-            console.error(err)
-            // toastError('Error', err.toString())
-        })
-    }, [YieldSwapContract, account, toastError, refresh, fastRefresh ])
-    return (        
-        <Page>            
-            <Wrapper>
-                <ButtonMenu activeIndex={menuIndex} scale="sm" variant="subtle" onItemClick={handleButtonMenuClick}>
-                    <ButtonMenuItem>
-                        {t('Active')}
-                    </ButtonMenuItem>
-                    <ButtonMenuItem >
-                        {t('Closed')}
-                    </ButtonMenuItem>
-                </ButtonMenu>
-                <Button variant="secondary" scale="md" mr="1em" onClick={handleAdd}> Add </Button>
-            </Wrapper>
-            <YieldPartyContext.Provider value={context}>
-                <YieldPartyTable data={swapIds}/>
-            </YieldPartyContext.Provider>
-            
-        </Page>
-    )
+  const handleButtonMenuClick = (newIndex) => {
+    // setFilterOrderState(newIndex)
+    if (newIndex === 0) setOrderState(OrderState.Active)
+    if (newIndex === 1) setOrderState(OrderState.Completed)
+    setMenuIndex(newIndex)
+  }
+  const [handleAdd] = useModal(<AddRowModal />)
+  useEffect(() => {
+    if (refresh < 0) return
+    if (!account) return
+    YieldSwapContract.getSwapIds(account)
+      .then(async (ids) => {
+        setSwapIds(ids)
+      })
+      .catch((err) => {
+        console.error(err)
+        // toastError('Error', err.toString())
+      })
+  }, [YieldSwapContract, account, toastError, refresh, fastRefresh])
+  return (
+    <Page>
+      <Wrapper>
+        <ButtonMenu activeIndex={menuIndex} scale="sm" variant="subtle" onItemClick={handleButtonMenuClick}>
+          <ButtonMenuItem>{t('Active')}</ButtonMenuItem>
+          <ButtonMenuItem>{t('Closed')}</ButtonMenuItem>
+        </ButtonMenu>
+        <Button variant="secondary" scale="md" mr="1em" onClick={handleAdd}>
+          {' '}
+          Add{' '}
+        </Button>
+      </Wrapper>
+      <YieldPartyContext.Provider value={context}>
+        <YieldPartyTable data={swapIds} />
+      </YieldPartyContext.Provider>
+    </Page>
+  )
 }
 
 export default YieldParty

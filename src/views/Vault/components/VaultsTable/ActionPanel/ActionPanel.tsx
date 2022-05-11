@@ -3,7 +3,6 @@ import styled, { css, keyframes } from 'styled-components'
 import Harvest from './Collect'
 import Stake from './Stake'
 
-
 const expandAnimation = keyframes`
   from {
     max-height: 0px;
@@ -55,8 +54,8 @@ const ActionContainer = styled.div`
     flex-basis: 0;
   }
 `
-interface ActionPanelProps {  
-  expanded: boolean  
+interface ActionPanelProps {
+  expanded: boolean
   earnings
   isLoading
   deposit
@@ -65,13 +64,19 @@ interface ActionPanelProps {
   updateStake?
 }
 
-
-const ActionPanel: React.FC<ActionPanelProps> = ({ expanded, earnings, isLoading, 
-  deposit,stakedBalance,updateEarnings,updateStake }) => {  
+const ActionPanel: React.FC<ActionPanelProps> = ({
+  expanded,
+  earnings,
+  isLoading,
+  deposit,
+  stakedBalance,
+  updateEarnings,
+  updateStake,
+}) => {
   return (
-    <StyledActionPanel expanded={expanded}>      
+    <StyledActionPanel expanded={expanded}>
       <ActionContainer>
-        <Harvest isLoading={isLoading} earnings={earnings} deposit={deposit} updateEarnings={updateEarnings}/>
+        <Harvest isLoading={isLoading} earnings={earnings} deposit={deposit} updateEarnings={updateEarnings} />
         <Stake isLoading={isLoading} deposit={deposit} stakedBalance={stakedBalance} updateStake={updateStake} />
       </ActionContainer>
     </StyledActionPanel>

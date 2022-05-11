@@ -8,7 +8,7 @@ import DetailsView from './CastVoteModal/DetailsView'
 const VoteDetailsModal: React.FC<InjectedModalProps> = ({ onDismiss }) => {
   const { t } = useTranslation()
 
-  const { helixBalance , isLoading } = useGetVotingPower()
+  const { helixBalance, isLoading } = useGetVotingPower()
   const total = Number(helixBalance.toString()) / 1e18
 
   const { theme } = useTheme()

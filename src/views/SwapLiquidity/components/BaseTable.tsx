@@ -12,7 +12,6 @@ const StyledTable = styled.div`
   }
 `
 
-
 // background-color: ${({ theme }) => theme.colors.cardBorder};
 
 const StyledTableBorder = styled.div`
@@ -30,20 +29,20 @@ const ScrollButtonContainer = styled.div`
   padding-bottom: 5px;
 `
 
-const BaseTable= (props) => {
-  const { t } = useTranslation()  
+const BaseTable = (props) => {
+  const { t } = useTranslation()
   const tableWrapperEl = useRef<HTMLDivElement>(null)
-  const {children} = props
+  const { children } = props
   const scrollToTop = (): void => {
     tableWrapperEl.current.scrollIntoView({
       behavior: 'smooth',
     })
   }
-  
+
   return (
     <StyledTableBorder>
-      <StyledTable id="pools-table" role="table" ref={tableWrapperEl}>        
-        {children}       
+      <StyledTable id="pools-table" role="table" ref={tableWrapperEl}>
+        {children}
         <ScrollButtonContainer>
           <Button variant="text" onClick={scrollToTop}>
             {t('To Top')}

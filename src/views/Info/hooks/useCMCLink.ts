@@ -10,24 +10,24 @@ const CMC_ENDPOINT = 'https://3rdparty-apis.coinmarketcap.com/v1/cryptocurrency/
  * @param address token address (all lowercase, checksummed are not supported by CMC)
  */
 const useCMCLink = (address: string): string | undefined => {
-  const [cmcPageUrl, setCMCPageUrl] = useState<string | undefined>(undefined)
+    const [cmcPageUrl, setCMCPageUrl] = useState<string | undefined>(undefined)
 
-  useEffect(() => {
-    const fetchLink = async () => {
-      const result = await fetch(`${CMC_ENDPOINT}${address}`)
-      // if link exists, format the url
-      if (result.status === 200) {
-        result.json().then(({ data }) => {
-          setCMCPageUrl(data.url)
-        })
-      }
-    }
-    if (address) {
-      fetchLink()
-    }
-  }, [address])
+    useEffect(() => {
+        const fetchLink = async () => {
+            const result = await fetch(`${CMC_ENDPOINT}${address}`)
+            // if link exists, format the url
+            if (result.status === 200) {
+                result.json().then(({ data }) => {
+                    setCMCPageUrl(data.url)
+                })
+            }
+        }
+        if (address) {
+            fetchLink()
+        }
+    }, [address])
 
-  return cmcPageUrl
+    return cmcPageUrl
 }
 
 export default useCMCLink

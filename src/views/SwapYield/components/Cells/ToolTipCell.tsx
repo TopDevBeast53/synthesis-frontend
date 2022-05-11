@@ -5,18 +5,16 @@ import { HelpIcon, useTooltip } from 'uikit'
 const ReferenceElement = styled.div`
   display: inline-block;
 `
-const Container = styled.div`
-`
+const Container = styled.div``
 
-const ToolTipCell= ({tooltipText}) => {
-
-  const { targetRef, tooltip, tooltipVisible } = useTooltip(
-    tooltipText,
-    { placement: 'top-end', tooltipOffset: [20, 10] },
-  )
+const ToolTipCell = ({ tooltipText }) => {
+  const { targetRef, tooltip, tooltipVisible } = useTooltip(tooltipText, {
+    placement: 'top-end',
+    tooltipOffset: [20, 10],
+  })
 
   return (
-    <Container>    
+    <Container>
       <ReferenceElement ref={targetRef}>
         <HelpIcon color="textSubtle" />
       </ReferenceElement>

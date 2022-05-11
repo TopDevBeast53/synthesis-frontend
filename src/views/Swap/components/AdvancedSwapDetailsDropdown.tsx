@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import useLastTruthy from 'hooks/useLast'
 import { AdvancedSwapDetails, AdvancedSwapDetailsProps } from './AdvancedSwapDetails'
 
-
 // background-color: ${({ theme }) => theme.colors.invertedContrast};
 
 const AdvancedDetailsFooter = styled.div<{ show: boolean }>`

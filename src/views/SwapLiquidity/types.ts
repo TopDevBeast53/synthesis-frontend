@@ -1,6 +1,6 @@
-export enum OrderState{
+export enum OrderState {
     Active,
-    Completed
+    Completed,
 }
 
 export enum SwapState {
@@ -8,4 +8,3 @@ export enum SwapState {
     Applied,
     Finished,
 }
-

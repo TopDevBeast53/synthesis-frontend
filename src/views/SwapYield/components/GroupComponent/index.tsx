@@ -8,20 +8,20 @@ const StyledBorder = styled.div`
   backdrop-filter: blur(80px);
   padding: 1em;
   background-size: 400% 400%;
-  position:relative
+  position: relative;
 `
 const StyledTitle = styled.div`
-position: absolute;
-left: 1em;
-top: -0.7em;
-color: #57e58e;
-font-weight:bold;
-background: #414147;
-padding: 0.3em 0.5em;
-border-radius:10px;
+  position: absolute;
+  left: 1em;
+  top: -0.7em;
+  color: #57e58e;
+  font-weight: bold;
+  background: #414147;
+  padding: 0.3em 0.5em;
+  border-radius: 10px;
 `
-const Group= (props) => {  
-  const {children, title} = props
+const Group = (props) => {
+  const { children, title } = props
 
   return (
     <StyledBorder {...props}>

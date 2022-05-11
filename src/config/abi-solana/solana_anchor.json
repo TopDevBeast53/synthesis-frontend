@@ -35,10 +35,7 @@
         {
           "name": "bscAddress",
           "type": {
-            "array": [
-              "u8",
-              40
-            ]
+            "array": ["u8", 40]
           }
         }
       ]
@@ -82,10 +79,7 @@
         {
           "name": "bsc",
           "type": {
-            "array": [
-              "u8",
-              40
-            ]
+            "array": ["u8", 40]
           },
           "index": false
         },

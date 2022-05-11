@@ -1,3 +1,3 @@
-import { getHelixMigratorAddress } from 'utils/addressHelpers';
+import { getHelixMigratorAddress } from 'utils/addressHelpers'
 
-export const helixMigratorAddress = getHelixMigratorAddress();
+export const helixMigratorAddress = getHelixMigratorAddress()

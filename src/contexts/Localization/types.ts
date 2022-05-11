@@ -2,17 +2,17 @@ import { ReactText } from 'react'
 import { Language } from 'uikit'
 
 export type ContextData = {
-  [key: string]: ReactText
+    [key: string]: ReactText
 }
 
 export interface ProviderState {
-  isFetching: boolean
-  currentLanguage: Language
+    isFetching: boolean
+    currentLanguage: Language
 }
 
 export interface ContextApi extends ProviderState {
-  setLanguage: (language: Language) => void
-  t: Translate
+    setLanguage: (language: Language) => void
+    t: Translate
 }
 
 export type Translate = (key: string, data?: ContextData) => string

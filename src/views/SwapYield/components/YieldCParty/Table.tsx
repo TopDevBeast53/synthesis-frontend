@@ -38,13 +38,13 @@ const StyledCol = styled.div`
   padding-top: 10px;
   padding-bottom: 5px;
   font-style: italic;
-` 
-const YieldCPartyTable= ({ swaps, state, bids, loading }) => {
+`
+const YieldCPartyTable = ({ swaps, state, bids, loading }) => {
   const { t } = useTranslation()
   const tableWrapperEl = useRef<HTMLDivElement>(null)
-  const rowData = swaps.map(s => {
-    const filteredBids = s.bidIds.map(i => bids[i.toNumber()])
-    return {...s, bids: filteredBids}
+  const rowData = swaps.map((s) => {
+    const filteredBids = s.bidIds.map((i) => bids[i.toNumber()])
+    return { ...s, bids: filteredBids }
   })
 
   const scrollToTop = (): void => {
@@ -52,26 +52,20 @@ const YieldCPartyTable= ({ swaps, state, bids, loading }) => {
       behavior: 'smooth',
     })
   }
-  
+
   return (
     <StyledTableBorder>
       <StyledTable id="pools-table" role="table" ref={tableWrapperEl}>
-        {
-          !loading && rowData.length === 0 && (
-            <StyledRow>
-              <StyledCol>
-                <Text>
-                  No Data
-                </Text>
-              </StyledCol>
-            </StyledRow>
-          )
-        }
-        {
-          rowData.map((data)=>(
-            <YieldCPartyRow key={data.id} data={data} state={state} loading={loading}/>
-          ))
-        }
+        {!loading && rowData.length === 0 && (
+          <StyledRow>
+            <StyledCol>
+              <Text>No Data</Text>
+            </StyledCol>
+          </StyledRow>
+        )}
+        {rowData.map((data) => (
+          <YieldCPartyRow key={data.id} data={data} state={state} loading={loading} />
+        ))}
         <ScrollButtonContainer>
           <Button variant="text" onClick={scrollToTop}>
             {t('To Top')}

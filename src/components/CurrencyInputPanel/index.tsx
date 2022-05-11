@@ -126,12 +126,12 @@ export default function CurrencyInputPanel({
         <Container>
           <LabelRow>
             {/* <RowBetween> */}
-              <NumericalInput
-                value={value}
-                onUserInput={(val) => {
-                  onUserInput(val)
-                }}
-              />
+            <NumericalInput
+              value={value}
+              onUserInput={(val) => {
+                onUserInput(val)
+              }}
+            />
             {/* </RowBetween> */}
           </LabelRow>
           {/* <InputRow selected={disableCurrencySelect}>

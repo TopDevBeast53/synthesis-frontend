@@ -12,8 +12,7 @@ import ExpandActionCell from './Cells/ExpandActionCell'
 import StakedCell from './Cells/StakedCell'
 import WithdrawTimeLeft from './Cells/WithdrawTimeLeft'
 
-
-interface PoolRowProps {  
+interface PoolRowProps {
   deposit?
 }
 
@@ -27,54 +26,55 @@ const VaultRow: React.FC<PoolRowProps> = ({ deposit }) => {
   const { isTablet, isDesktop } = useMatchBreakpoints()
   const [expanded, setExpanded] = useState(false)
   const shouldRenderActionPanel = useDelayedUnmount(expanded, 300)
-  const [isLoading, setLoading]= useState(true)
+  const [isLoading, setLoading] = useState(true)
   const [earnings, setEarnings] = useState(BIG_ZERO)
-  const [stakedBalance, setStakedBalance] = useState(deposit?.amount?deposit.amount:BIG_ZERO)
+  const [stakedBalance, setStakedBalance] = useState(deposit?.amount ? deposit.amount : BIG_ZERO)
   const toggleExpanded = () => {
     setExpanded((prev) => !prev)
   }
-  
-  const {getPendingRewardFromId} = useHelixLockVault()
+
+  const { getPendingRewardFromId } = useHelixLockVault()
 
   useEffect(() => {
     load()
-    async function load(){
+    async function load() {
       const result = await getPendingRewardFromId(deposit?.id)
       setLoading(false)
       setEarnings(new BigNumber(result))
     }
   }, [deposit, getPendingRewardFromId])
 
-  const  updateEarnings=(value)=>{
+  const updateEarnings = (value) => {
     setEarnings(new BigNumber(value))
   }
-  const updateStake=(newStaked)  => {        
+  const updateStake = (newStaked) => {
     setStakedBalance(newStaked)
-    getPendingRewardFromId(deposit?.id).then((value)=>{
-      setEarnings(new BigNumber(value))
-    }).catch(err=>{
-      logError(err)
-    })    
+    getPendingRewardFromId(deposit?.id)
+      .then((value) => {
+        setEarnings(new BigNumber(value))
+      })
+      .catch((err) => {
+        logError(err)
+      })
   }
 
   return (
     <>
       <StyledRow role="row" onClick={toggleExpanded}>
-      <EarningsCell isLoading={isLoading} earnings={earnings}/>
-      <StakedCell stakedBalance={stakedBalance}/>
-      <WithdrawTimeLeft deposit={deposit} />
-      <ExpandActionCell expanded={expanded} isFullLayout={isTablet || isDesktop} />
+        <EarningsCell isLoading={isLoading} earnings={earnings} />
+        <StakedCell stakedBalance={stakedBalance} />
+        <WithdrawTimeLeft deposit={deposit} />
+        <ExpandActionCell expanded={expanded} isFullLayout={isTablet || isDesktop} />
       </StyledRow>
       {shouldRenderActionPanel && (
-        <ActionPanel 
+        <ActionPanel
           earnings={earnings}
-          isLoading={isLoading}                    
+          isLoading={isLoading}
           expanded={expanded}
-          deposit = {deposit}          
+          deposit={deposit}
           stakedBalance={stakedBalance}
           updateEarnings={updateEarnings}
           updateStake={updateStake}
-          
         />
       )}
     </>

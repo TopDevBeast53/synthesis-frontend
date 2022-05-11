@@ -1,22 +1,22 @@
-import { InputHTMLAttributes } from "react";
-import styled from "styled-components";
-import Text from "../Text/Text";
+import { InputHTMLAttributes } from 'react'
+import styled from 'styled-components'
+import Text from '../Text/Text'
 
 interface SliderLabelProps {
-  progress: string;
+    progress: string
 }
 
 interface StyledInputProps extends InputHTMLAttributes<HTMLInputElement> {
-  isMax: boolean;
+    isMax: boolean
 }
 
 interface DisabledProp {
-  disabled?: boolean;
+    disabled?: boolean
 }
 
 const getCursorStyle = ({ disabled = false }: DisabledProp) => {
-  return disabled ? "not-allowed" : "cursor";
-};
+    return disabled ? 'not-allowed' : 'cursor'
+}
 
 const getBaseThumbStyles = ({ disabled }: StyledInputProps) => `
   -webkit-appearance: none;
@@ -26,69 +26,69 @@ const getBaseThumbStyles = ({ disabled }: StyledInputProps) => `
   cursor: ${getCursorStyle};
   width: 24px;
   height: 24px;
-  filter: ${disabled ? "grayscale(100%)" : "none"};
+  filter: ${disabled ? 'grayscale(100%)' : 'none'};
   transform: translate(-2px, -2px);
   transition: 200ms transform;
 
   &:hover {
-    transform: ${disabled ? "scale(1) translate(-2px, -2px)" : "scale(1.1) translate(-3px, -3px)"};
+    transform: ${disabled ? 'scale(1) translate(-2px, -2px)' : 'scale(1.1) translate(-3px, -3px)'};
   }
-`;
+`
 
 export const SliderLabelContainer = styled.div`
-  bottom: 0;
-  position: absolute;
-  left: 14px;
-  width: calc(100% - 30px);
-`;
+    bottom: 0;
+    position: absolute;
+    left: 14px;
+    width: calc(100% - 30px);
+`
 
 export const SliderLabel = styled(Text)<SliderLabelProps>`
-  bottom: 0;
-  font-size: 12px;
-  left: ${({ progress }) => progress};
-  position: absolute;
-  text-align: center;
-  min-width: 24px; // Slider thumb size
-`;
+    bottom: 0;
+    font-size: 12px;
+    left: ${({ progress }) => progress};
+    position: absolute;
+    text-align: center;
+    min-width: 24px; // Slider thumb size
+`
 
 export const SliderContainer = styled.div`
-  position: absolute;
-  left: 14px;
-  width: calc(100% - 14px);
-  border-radius: 12px;
-`;
+    position: absolute;
+    left: 14px;
+    width: calc(100% - 14px);
+    border-radius: 12px;
+`
 
 export const StyledInput = styled.input<StyledInputProps>`
-  cursor: ${getCursorStyle};
-  height: 32px;
-  position: relative;
+    cursor: ${getCursorStyle};
+    height: 32px;
+    position: relative;
 
-  ::-webkit-slider-thumb {
-    ${getBaseThumbStyles}
-  }
+    ::-webkit-slider-thumb {
+        ${getBaseThumbStyles}
+    }
 
-  ::-moz-range-thumb {
-    ${getBaseThumbStyles}
-  }
+    ::-moz-range-thumb {
+        ${getBaseThumbStyles}
+    }
 
-  ::-ms-thumb {
-    ${getBaseThumbStyles}
-  }
-`;
+    ::-ms-thumb {
+        ${getBaseThumbStyles}
+    }
+`
 
 export const BarBackground = styled.div<DisabledProp>`
-  background-color: ${({ theme, disabled }) => theme.colors[disabled ? "textDisabled" : "inputSecondary"]};
-  height: 2px;
-  position: absolute;
-  top: 15px;
-  width: 100%;
-`;
+    background-color: ${({ theme, disabled }) => theme.colors[disabled ? 'textDisabled' : 'inputSecondary']};
+    height: 2px;
+    position: absolute;
+    top: 15px;
+    width: 100%;
+`
 
 export const BarProgress = styled.div<DisabledProp>`
-  background-color: ${({ theme }) => theme.colors.primary};
-  filter: ${({ disabled }) => (disabled ? "grayscale(100%)" : "none")};
-  height: 10px;
-  position: absolute;
-  top: 11px;
-  border-radius: 12px;
-`;
+    background-color: ${({ theme }) => theme.colors.primary};
+    filter: ${({ disabled }) => (disabled ? 'grayscale(100%)' : 'none')};
+    height: 10px;
+    position: absolute;
+    top: 11px;
+    border-radius: 12px;
+`

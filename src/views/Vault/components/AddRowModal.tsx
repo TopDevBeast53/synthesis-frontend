@@ -1,13 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import {
-  Modal,
-  Text,
-  Button,  
-  Flex,  
-  AutoRenewIcon,
-  BalanceInput,
-  Slider,
-} from 'uikit'
+import { Modal, Text, Button, Flex, AutoRenewIcon, BalanceInput, Slider } from 'uikit'
 import Select from 'components/Select/Select'
 import { useTranslation } from 'contexts/Localization'
 import { useHelixVault } from 'hooks/useContract'
@@ -21,19 +13,14 @@ import { getFullDisplayBalance, formatNumber, getDecimalAmount } from 'utils/for
 import PercentageButton from './VaultCard/Modals/PercentageButton'
 import { useHelixLockVault } from '../hooks/useHelixLockVault'
 
-interface ModalProps {  
+interface ModalProps {
   stakingTokenBalance: BigNumber
   stakingTokenPrice: number
   onAdd?: () => void
-  onDismiss?: () => void  
+  onDismiss?: () => void
 }
 
-const AddRowModal: React.FC<ModalProps> = ({
-  stakingTokenBalance,
-  stakingTokenPrice,  
-  onAdd,
-  onDismiss
-}) => {
+const AddRowModal: React.FC<ModalProps> = ({ stakingTokenBalance, stakingTokenPrice, onAdd, onDismiss }) => {
   const { t } = useTranslation()
   const { theme } = useTheme()
   const tokenDecimals = tokens.helix.decimals
@@ -42,51 +29,48 @@ const AddRowModal: React.FC<ModalProps> = ({
   const [stakeAmount, setStakeAmount] = useState('')
   const [hasReachedStakeLimit] = useState(false)
   const [percent, setPercent] = useState(0)
-  const usdValueStaked = new BigNumber(stakeAmount).times(stakingTokenPrice)  
-  const formattedUsdValueStaked = !usdValueStaked.isNaN() && formatNumber(usdValueStaked.toNumber())  
+  const usdValueStaked = new BigNumber(stakeAmount).times(stakingTokenPrice)
+  const formattedUsdValueStaked = !usdValueStaked.isNaN() && formatNumber(usdValueStaked.toNumber())
   const fullDecimalStakeAmount = getDecimalAmount(new BigNumber(stakeAmount), tokenDecimals)
-  const userNotEnoughToken = stakingTokenBalance.lt(fullDecimalStakeAmount)  
-  const { toastSuccess, toastError } = useToast()  
+  const userNotEnoughToken = stakingTokenBalance.lt(fullDecimalStakeAmount)
+  const { toastSuccess, toastError } = useToast()
   const [durationOptions, setDurationOptions] = useState([])
-  const [durationIndex, setDurationIndex]=useState(0)
+  const [durationIndex, setDurationIndex] = useState(0)
 
-  const {getDurations, addNewDeposit} = useHelixLockVault()
+  const { getDurations, addNewDeposit } = useHelixLockVault()
   const helixVaultContract = useHelixVault()
-  useEffect(()=>{
+  useEffect(() => {
     load()
-    async function load(){
-      try{
-        const res:DurationStructOutput[] = await helixVaultContract.getDurations()        
-        const options = res.map((item:DurationStructOutput, index)=>{
-          const days= item.duration.toNumber() / 3600 / 24
+    async function load() {
+      try {
+        const res: DurationStructOutput[] = await helixVaultContract.getDurations()
+        const options = res.map((item: DurationStructOutput, index) => {
+          const days = item.duration.toNumber() / 3600 / 24
           return {
             label: `${days} days`,
-            value: index
+            value: index,
           }
-        }, [])        
+        }, [])
         setDurationOptions(options)
-      }catch(err){
+      } catch (err) {
         logError(err)
       }
     }
   }, [getDurations, helixVaultContract])
-  const handleDeposit = async ()=>{
+  const handleDeposit = async () => {
     setPendingTx(true)
-    const amount= new BigNumber(stakeAmount)
-    try{      
-      await addNewDeposit(getDecimalAmount(amount, tokenDecimals ).toString(), durationIndex)
-      if(onAdd) onAdd()
-      toastSuccess(
-        `${t('Success')}!`,
-        t('You Added Item !!! '),
-      )
-    }catch(err){      
+    const amount = new BigNumber(stakeAmount)
+    try {
+      await addNewDeposit(getDecimalAmount(amount, tokenDecimals).toString(), durationIndex)
+      if (onAdd) onAdd()
+      toastSuccess(`${t('Success')}!`, t('You Added Item !!! '))
+    } catch (err) {
       toastError(t('Error'), t('Please try again. Confirm the transaction and make sure you are paying enough gas!'))
     }
     setPendingTx(false)
     onDismiss()
-  }  
-    
+  }
+
   const handleStakeInputChange = (input: string) => {
     if (input) {
       const convertedInput = getDecimalAmount(new BigNumber(input), tokenDecimals)
@@ -109,27 +93,19 @@ const AddRowModal: React.FC<ModalProps> = ({
     setPercent(sliderPercent)
   }
   const handleOptionChange = (option) => {
-    setDurationIndex(option.value)    
+    setDurationIndex(option.value)
   }
   return (
-    <Modal
-      title={t('Add Item') }
-      onDismiss={onDismiss}
-      headerBackground={theme.colors.gradients.cardHeader}
-    
-    >     
-    <Text> {t('Period')} / {t('days')} </Text>
-    {
-      durationOptions.length !==0 &&
-        <Select
-        options={durationOptions}
-        onOptionChange={handleOptionChange}
-      />
-    }
-    
-    <Flex alignItems="center" justifyContent="space-between" mb="8px" mt={4}>
+    <Modal title={t('Add Item')} onDismiss={onDismiss} headerBackground={theme.colors.gradients.cardHeader}>
+      <Text>
+        {' '}
+        {t('Period')} / {t('days')}{' '}
+      </Text>
+      {durationOptions.length !== 0 && <Select options={durationOptions} onOptionChange={handleOptionChange} />}
+
+      <Flex alignItems="center" justifyContent="space-between" mb="8px" mt={4}>
         <Text bold>{t('Amount')}:</Text>
-        <Flex alignItems="center" minWidth="70px">          
+        <Flex alignItems="center" minWidth="70px">
           <Text ml="4px" bold>
             {t('Helix')}
           </Text>
@@ -181,7 +157,7 @@ const AddRowModal: React.FC<ModalProps> = ({
       <Button
         isLoading={pendingTx}
         endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
-        onClick={handleDeposit}        
+        onClick={handleDeposit}
         mt="24px"
       >
         {pendingTx ? t('Confirming') : t('Confirm')}

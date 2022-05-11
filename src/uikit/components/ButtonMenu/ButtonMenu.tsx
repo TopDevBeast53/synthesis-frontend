@@ -1,27 +1,27 @@
-import React, { cloneElement, Children, ReactElement } from "react";
-import styled from "styled-components";
-import type { DefaultTheme } from "styled-components";
-import { space } from "styled-system";
-import { scales, variants } from "../Button/types";
-import { ButtonMenuProps } from "./types";
+import React, { cloneElement, Children, ReactElement } from 'react'
+import styled from 'styled-components'
+import type { DefaultTheme } from 'styled-components'
+import { space } from 'styled-system'
+import { scales, variants } from '../Button/types'
+import { ButtonMenuProps } from './types'
 
 interface StyledButtonMenuProps extends ButtonMenuProps {
-  theme: DefaultTheme;
+  theme: DefaultTheme
 }
 
 const getBackgroundColor = ({ theme, variant }: StyledButtonMenuProps) => {
-  return theme.colors[variant === variants.SUBTLE ? "input" : "tertiary"];
-};
+  return theme.colors[variant === variants.SUBTLE ? 'input' : 'tertiary']
+}
 
 const StyledButtonMenu = styled.div<StyledButtonMenuProps>`
   background-color: ${getBackgroundColor};
   border-radius: 8px;
-  display: ${({ fullWidth }) => (fullWidth ? "flex" : "inline-flex")};
-  width: ${({ fullWidth }) => (fullWidth ? "100%" : "auto")};
+  display: ${({ fullWidth }) => (fullWidth ? 'flex' : 'inline-flex')};
+  width: ${({ fullWidth }) => (fullWidth ? '100%' : 'auto')};
 
   & > button,
   & > a {
-    flex: ${({ fullWidth }) => (fullWidth ? 1 : "auto")};
+    flex: ${({ fullWidth }) => (fullWidth ? 1 : 'auto')};
   }
 
   & > button + button,
@@ -42,12 +42,12 @@ const StyledButtonMenu = styled.div<StyledButtonMenuProps>`
           background-color: transparent;
           color: ${variant === variants.PRIMARY ? theme.colors.primary : theme.colors.textSubtle};
         }
-    `;
+    `
     }
-    return "";
+    return ''
   }}
   ${space}
-`;
+`
 
 const ButtonMenu: React.FC<ButtonMenuProps> = ({
   activeIndex = 0,
@@ -68,10 +68,10 @@ const ButtonMenu: React.FC<ButtonMenuProps> = ({
           scale,
           variant,
           disabled,
-        });
+        })
       })}
     </StyledButtonMenu>
-  );
-};
+  )
+}
 
-export default ButtonMenu;
+export default ButtonMenu

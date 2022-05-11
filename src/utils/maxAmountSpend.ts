@@ -6,14 +6,14 @@ import { MIN_BNB } from '../config/constants'
  * @param currencyAmount to return max of
  */
 export function maxAmountSpend(currencyAmount?: CurrencyAmount): CurrencyAmount | undefined {
-  if (!currencyAmount) return undefined
-  if (currencyAmount.currency === ETHER) {
-    if (JSBI.greaterThan(currencyAmount.raw, MIN_BNB)) {
-      return CurrencyAmount.ether(JSBI.subtract(currencyAmount.raw, MIN_BNB))
+    if (!currencyAmount) return undefined
+    if (currencyAmount.currency === ETHER) {
+        if (JSBI.greaterThan(currencyAmount.raw, MIN_BNB)) {
+            return CurrencyAmount.ether(JSBI.subtract(currencyAmount.raw, MIN_BNB))
+        }
+        return CurrencyAmount.ether(JSBI.BigInt(0))
     }
-    return CurrencyAmount.ether(JSBI.BigInt(0))
-  }
-  return currencyAmount
+    return currencyAmount
 }
 
 export default maxAmountSpend

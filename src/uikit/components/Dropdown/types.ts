@@ -1,11 +1,11 @@
-import ReactElement from 'react';
-export type Position = "top" | "top-right" | "bottom";
+import ReactElement from 'react'
+export type Position = 'top' | 'top-right' | 'bottom'
 
 export interface PositionProps {
-  position?: Position;
+    position?: Position
 }
 
 export interface DropdownProps extends PositionProps {
-  target: React.ReactElement;
-  children?: ReactElement.ReactNode;
+    target: React.ReactElement
+    children?: ReactElement.ReactNode
 }

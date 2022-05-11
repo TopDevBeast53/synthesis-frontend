@@ -17,7 +17,7 @@ export function usePoolsWithVault() {
     const helixPool = activePools.find((pool) => pool.sousId === 0)
     const helixAutoVault = { ...helixPool, vaultKey: VaultKey.HelixAutoPool }
     // const ifoPoolVault = { ...helixPool, vaultKey: VaultKey.IfoPool }
-    
+
     const helixAutoVaultWithApr = {
       ...helixAutoVault,
       apr: getAprData(helixAutoVault, helixAutoPool.fees.performanceFeeAsDecimal).apr,
@@ -30,8 +30,8 @@ export function usePoolsWithVault() {
     // }
     // return [ifoPoolWithApr, helixAutoVaultWithApr, ...poolsWithoutAutoVault]
     return [helixAutoVaultWithApr, ...poolsWithoutAutoVault]
-  // }, [poolsWithoutAutoVault, helixAutoPool.fees.performanceFeeAsDecimal, ifoPool.fees.performanceFeeAsDecimal])
-}, [poolsWithoutAutoVault, helixAutoPool.fees.performanceFeeAsDecimal])
+    // }, [poolsWithoutAutoVault, helixAutoPool.fees.performanceFeeAsDecimal, ifoPool.fees.performanceFeeAsDecimal])
+  }, [poolsWithoutAutoVault, helixAutoPool.fees.performanceFeeAsDecimal])
 
   return pools
 }

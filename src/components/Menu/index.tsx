@@ -22,7 +22,7 @@ const Menu = (props) => {
 
   return (
     <UikitMenu
-      linkComponent={(link) => <Link to={link.href} {...link}/>}
+      linkComponent={(link) => <Link to={link.href} {...link} />}
       userMenu={<UserMenu />}
       globalMenu={<GlobalSettings />}
       isDark={isDark}

@@ -35,96 +35,103 @@ const TableControls = styled.div`
   ${({ theme }) => theme.mediaQueries.sm} {
     flex-direction: row;
     flex-wrap: wrap;
-    padding: 16px 0px;    
+    padding: 16px 0px;
     margin-bottom: 0;
     padding-top: 0px;
   }
-  `
+`
 enum HelixEnabledState {
   UNKNOWN,
   ENABLED,
-  DISABLED
+  DISABLED,
 }
 
 const Vault: React.FC = () => {
   const { t } = useTranslation()
-  const { account } = useWeb3React()  
+  const { account } = useWeb3React()
   const helixContract = useHelix()
   const [helixEnabled, setHelixEnabled] = useState(HelixEnabledState.UNKNOWN)
   const [isLoading, setLoading] = useState(true)
-  const [deposits, setDeposits] = useState([])  
-  const [totalStake, setTotalStake] = useState(0) 
+  const [deposits, setDeposits] = useState([])
+  const [totalStake, setTotalStake] = useState(0)
   const [refresh, setRefresh] = useState(0)
 
   const fastRefresh = useFastFresh()
-  const {decimals} = tokens.helix  
+  const { decimals } = tokens.helix
   const cakePrice = usePriceHelixBusd()
-  
 
-  const { balance: helixBalance, fetchStatus:balanceFetchStatus} = useTokenBalance(tokens.helix.address)  
-  const stakingTokenBalance = balanceFetchStatus===FetchStatus.Fetched? helixBalance : BIG_ZERO  
-  
-  useEffect(()=>{
-      if(!account) return;   
-      setLoading(true)
-      helixContract.balanceOf(helixVaultAddress).then((value:any)=>{
+  const { balance: helixBalance, fetchStatus: balanceFetchStatus } = useTokenBalance(tokens.helix.address)
+  const stakingTokenBalance = balanceFetchStatus === FetchStatus.Fetched ? helixBalance : BIG_ZERO
+
+  useEffect(() => {
+    if (!account) return
+    setLoading(true)
+    helixContract
+      .balanceOf(helixVaultAddress)
+      .then((value: any) => {
         setTotalStake(getBalanceNumber(value.toString(), decimals))
-      }).catch(err=>{
+      })
+      .catch((err) => {
         logError(err)
       })
-      helixContract.allowance(account, helixVaultAddress).then((value)=>{
-        if(value.gt(0))
-          setHelixEnabled(HelixEnabledState.ENABLED)
-        else
-          setHelixEnabled(HelixEnabledState.DISABLED)
-      }).catch(err=>{
+    helixContract
+      .allowance(account, helixVaultAddress)
+      .then((value) => {
+        if (value.gt(0)) setHelixEnabled(HelixEnabledState.ENABLED)
+        else setHelixEnabled(HelixEnabledState.DISABLED)
+      })
+      .catch((err) => {
         logError(err)
-      })    
+      })
   }, [helixContract, account, setHelixEnabled, decimals])
-  
 
-  const {getDepositIds, getDepositFromId} = useHelixLockVault();
-  
-  useEffect(()=>{    
-    if(helixEnabled && account){      
-      load()      
+  const { getDepositIds, getDepositFromId } = useHelixLockVault()
+
+  useEffect(() => {
+    if (helixEnabled && account) {
+      load()
     }
-    async function load(){
-      
-      const idList = await getDepositIds();      
-      const promiseList = idList.map((id)=>{return getDepositFromId(id)})
-      let results = await Promise.all(promiseList);
-      results = results.reduce((prev, item:Deposit)=>{
-        if(item.withdrawn === false)
-          prev.push(item)
+    async function load() {
+      const idList = await getDepositIds()
+      const promiseList = idList.map((id) => {
+        return getDepositFromId(id)
+      })
+      let results = await Promise.all(promiseList)
+      results = results.reduce((prev, item: Deposit) => {
+        if (item.withdrawn === false) prev.push(item)
         return prev
-      },[])
+      }, [])
       setDeposits(results)
       setLoading(false)
-    }    
-  },[getDepositIds, account, getDepositFromId, helixEnabled, refresh, fastRefresh])  
+    }
+  }, [getDepositIds, account, getDepositFromId, helixEnabled, refresh, fastRefresh])
 
-  // TODO aren't arrays in dep array checked just by reference, i.e. it will rerender every time reference changes? 
-    
-  const handleAfterAdded=()=>{
-    setTimeout(()=>{
-      setRefresh(refresh + 1)    
+  // TODO aren't arrays in dep array checked just by reference, i.e. it will rerender every time reference changes?
+
+  const handleAfterAdded = () => {
+    setTimeout(() => {
+      setRefresh(refresh + 1)
     }, 5000)
-    
   }
-  const [handleAdd] = useModal(<AddRowModal stakingTokenBalance={stakingTokenBalance} stakingTokenPrice= {getBalanceNumber(cakePrice, decimals )} onAdd={handleAfterAdded}/>)
-  const handleEnable = useCallback( async ()=>{
-    try{
-      await helixContract.approve(helixVaultAddress, ethers.constants.MaxUint256);  
-      setHelixEnabled(HelixEnabledState.ENABLED);
-    }catch(e){      
+  const [handleAdd] = useModal(
+    <AddRowModal
+      stakingTokenBalance={stakingTokenBalance}
+      stakingTokenPrice={getBalanceNumber(cakePrice, decimals)}
+      onAdd={handleAfterAdded}
+    />,
+  )
+  const handleEnable = useCallback(async () => {
+    try {
+      await helixContract.approve(helixVaultAddress, ethers.constants.MaxUint256)
+      setHelixEnabled(HelixEnabledState.ENABLED)
+    } catch (e) {
       logError(e)
-    }    
-  },[helixContract])
-  const buttonScale ="md";
+    }
+  }, [helixContract])
+  const buttonScale = 'md'
   return (
     <>
-      <PageHeader background='transparent'>
+      <PageHeader background="transparent">
         <Flex justifyContent="space-between" flexDirection={['column', null, null, 'row']}>
           <Flex flex="1" flexDirection="column" mr={['8px', 0]}>
             <Heading as="h1" scale="xxl" color="secondary" mb="12px">
@@ -139,28 +146,32 @@ const Vault: React.FC = () => {
       <Page>
         <TableControls>
           <Flex justifyContent="start" width={1}>
-            {
-              helixEnabled===HelixEnabledState.ENABLED &&
-               <Button onClick={handleAdd} key={buttonScale} variant="secondary" scale={buttonScale} mr="8px"> Add </Button>              
-            }
-            {
-              helixEnabled === HelixEnabledState.DISABLED &&
-              <Button onClick={handleEnable} key={buttonScale} variant="secondary" scale={buttonScale} mr="8px"> Enable </Button>
-            }
+            {helixEnabled === HelixEnabledState.ENABLED && (
+              <Button onClick={handleAdd} key={buttonScale} variant="secondary" scale={buttonScale} mr="8px">
+                {' '}
+                Add{' '}
+              </Button>
+            )}
+            {helixEnabled === HelixEnabledState.DISABLED && (
+              <Button onClick={handleEnable} key={buttonScale} variant="secondary" scale={buttonScale} mr="8px">
+                {' '}
+                Enable{' '}
+              </Button>
+            )}
           </Flex>
-        </TableControls>        
-        {(isLoading) && (
+        </TableControls>
+        {isLoading && (
           <Flex justifyContent="center" mb="4px">
             <Loading />
           </Flex>
         )}
-        {deposits?.length === 0  && !isLoading ?
+        {deposits?.length === 0 && !isLoading ? (
           <Text fontSize="20px" color="failure" pb="32px">
             {t('No data')}
           </Text>
-          :
+        ) : (
           <VaultsTable deposits={deposits} />
-        }        
+        )}
       </Page>
     </>
   )

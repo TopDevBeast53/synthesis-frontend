@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import { useWeb3React } from '@web3-react/core'
 import Balance from 'components/Balance'
 import tokens from 'config/constants/tokens'
@@ -11,37 +11,37 @@ import { logError } from 'utils/sentry'
 import { useHelixLockVault } from '../../../hooks/useHelixLockVault'
 import { ActionContainer, ActionContent, ActionTitles } from './styles'
 
-interface HarvestActionProps {  
+interface HarvestActionProps {
   earnings
   isLoading
   deposit
   updateEarnings?
 }
 
-const HarvestAction: React.FunctionComponent<HarvestActionProps> = ({  
+const HarvestAction: React.FunctionComponent<HarvestActionProps> = ({
   isLoading,
   earnings,
   deposit,
-  updateEarnings
+  updateEarnings,
 }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const { claimReward } = useHelixLockVault()
   const { toastError, toastSuccess } = useToast()
   const [pendingTx, setPendingTx] = useState(false)
-  
-  const cakePrice = usePriceHelixBusd()    
-  const {decimals, symbol} = tokens.helix
-  
+
+  const cakePrice = usePriceHelixBusd()
+  const { decimals, symbol } = tokens.helix
+
   const hasEarnings = !isLoading && earnings.gt(0)
   const earningTokenBalance = getBalanceNumber(earnings, decimals)
   const earningTokenDollarBalance = getBalanceNumber(earnings.multipliedBy(cakePrice), decimals)
-  
+
   const onPresentCollect = async () => {
     setPendingTx(true)
     try {
       const receipt = await claimReward(deposit?.id)
-      if (receipt.status){          
+      if (receipt.status) {
         toastSuccess(t('Success'), t('Collected'))
         updateEarnings(0)
       } else {
@@ -50,7 +50,7 @@ const HarvestAction: React.FunctionComponent<HarvestActionProps> = ({
     } catch (e) {
       logError(e)
       toastError(t('Error'), t('Please try again.'))
-    }    
+    }
     setPendingTx(false)
   }
 
@@ -119,10 +119,12 @@ const HarvestAction: React.FunctionComponent<HarvestActionProps> = ({
             )}
           </>
         </Flex>
-        <Button disabled={!hasEarnings} 
-                isLoading={pendingTx}
-                endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
-                onClick={onPresentCollect}>
+        <Button
+          disabled={!hasEarnings}
+          isLoading={pendingTx}
+          endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
+          onClick={onPresentCollect}
+        >
           {t('Collect')}
         </Button>
       </ActionContent>

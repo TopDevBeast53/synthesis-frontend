@@ -1,7 +1,7 @@
-import styled, { DefaultTheme, keyframes, css } from "styled-components";
-import { space } from "styled-system";
-import { Box } from "../Box";
-import { CardProps } from "./types";
+import styled, { DefaultTheme, keyframes, css } from 'styled-components'
+import { space } from 'styled-system'
+import { Box } from '../Box'
+import { CardProps } from './types'
 
 const PromotedGradient = keyframes`
   0% {
@@ -13,10 +13,10 @@ const PromotedGradient = keyframes`
   100% {
     background-position: 50% 0%;
   }
-`;
+`
 
 interface StyledCardProps extends CardProps {
-  theme: DefaultTheme;
+  theme: DefaultTheme
 }
 
 /**
@@ -45,7 +45,7 @@ export const StyledCard = styled.div<StyledCardProps>`
   background: rgba(249, 250, 250, 0.08);
   backdrop-filter: blur(80px);
   border-radius: ${({ theme }) => theme.radii.card};
-  color: ${({ theme, isDisabled }) => theme.colors[isDisabled ? "textDisabled" : "text"]};
+  color: ${({ theme, isDisabled }) => theme.colors[isDisabled ? 'textDisabled' : 'text']};
   overflow: hidden;
   position: relative;
 
@@ -59,21 +59,21 @@ export const StyledCard = styled.div<StyledCardProps>`
   padding: 1px 1px 3px 1px;
 
   ${space}
-`;
+`
 
 // background: ${({ theme, background }) => background ?? theme.card.background};
 export const StyledCardInner = styled(Box)<{ background?: string; hasCustomBorder: boolean }>`
   width: 100%;
   height: 100%;
-  overflow: ${({ hasCustomBorder }) => (hasCustomBorder ? "initial" : "inherit")};
+  overflow: ${({ hasCustomBorder }) => (hasCustomBorder ? 'initial' : 'inherit')};
 
   border-radius: ${({ theme }) => theme.radii.card};
-  background: rgba(249, 250, 250, 0.0);
-`;
+  background: rgba(249, 250, 250, 0);
+`
 
 StyledCard.defaultProps = {
   isActive: false,
   isSuccess: false,
   isWarning: false,
   isDisabled: false,
-};
+}

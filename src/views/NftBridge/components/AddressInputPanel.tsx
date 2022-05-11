@@ -6,13 +6,7 @@ import { AutoColumn } from '../../../components/Layout/Column'
 import { RowBetween } from '../../../components/Layout/Row'
 import { getSolanaScanLink } from '../../../utils'
 
-export default function AddressInputPanel({
-  value,
-  onChange,
-}: {
-  value: string
-  onChange: (value: string) => void
-}) {
+export default function AddressInputPanel({ value, onChange }: { value: string; onChange: (value: string) => void }) {
   const { chainId } = useActiveWeb3React()
 
   const handleInput = useCallback(
@@ -27,22 +21,12 @@ export default function AddressInputPanel({
   return (
     <AutoColumn gap="md">
       <RowBetween>
-        <Text>
-          Destination Solana Address
-        </Text>
-        {
-          value.length === 44 && chainId && (
-          <Link external small 
-            href={
-              getSolanaScanLink(value, chainId === ChainId.MAINNET
-              ? 'mainnet' 
-              : 'testnet')
-            }
-          >
+        <Text>Destination Solana Address</Text>
+        {value.length === 44 && chainId && (
+          <Link external small href={getSolanaScanLink(value, chainId === ChainId.MAINNET ? 'mainnet' : 'testnet')}>
             View on SolanaScan
           </Link>
-          )
-        }
+        )}
       </RowBetween>
       <Input
         className="recipient-address-input"
@@ -51,7 +35,7 @@ export default function AddressInputPanel({
         autoCorrect="off"
         autoCapitalize="off"
         spellCheck="false"
-        placeholder='Solana Address'
+        placeholder="Solana Address"
         pattern="[^]{44}"
         onChange={handleInput}
         value={value}

@@ -6,13 +6,13 @@ import { TOTAL_FEE, LP_HOLDERS_FEE, WEEKS_IN_YEAR } from 'config/constants/info'
  * @param valueBefore - value to compare with
  */
 export const getAmountChange = (valueNow?: number, valueBefore?: number) => {
-  if (valueNow && valueBefore) {
-    return valueNow - valueBefore
-  }
-  if (valueNow) {
-    return valueNow
-  }
-  return 0
+    if (valueNow && valueBefore) {
+        return valueNow - valueBefore
+    }
+    if (valueNow) {
+        return valueNow
+    }
+    return 0
 }
 
 /**
@@ -21,10 +21,10 @@ export const getAmountChange = (valueNow?: number, valueBefore?: number) => {
  * @param valueBefore - value to compare with
  */
 export const getPercentChange = (valueNow?: number, valueBefore?: number): number => {
-  if (valueNow && valueBefore) {
-    return ((valueNow - valueBefore) / valueBefore) * 100
-  }
-  return 0
+    if (valueNow && valueBefore) {
+        return ((valueNow - valueBefore) / valueBefore) * 100
+    }
+    return 0
 }
 
 /**
@@ -36,28 +36,28 @@ export const getPercentChange = (valueNow?: number, valueBefore?: number): numbe
  * @returns amount change for the latest period and percentage change compared to previous period
  */
 export const getChangeForPeriod = (
-  valueNow?: number,
-  valueOnePeriodAgo?: number,
-  valueTwoPeriodsAgo?: number,
+    valueNow?: number,
+    valueOnePeriodAgo?: number,
+    valueTwoPeriodsAgo?: number,
 ): [number, number] => {
-  const currentPeriodAmount = getAmountChange(valueNow, valueOnePeriodAgo)
-  const previousPeriodAmount = getAmountChange(valueOnePeriodAgo, valueTwoPeriodsAgo)
-  const percentageChange = getPercentChange(currentPeriodAmount, previousPeriodAmount)
-  return [currentPeriodAmount, percentageChange]
+    const currentPeriodAmount = getAmountChange(valueNow, valueOnePeriodAgo)
+    const previousPeriodAmount = getAmountChange(valueOnePeriodAgo, valueTwoPeriodsAgo)
+    const percentageChange = getPercentChange(currentPeriodAmount, previousPeriodAmount)
+    return [currentPeriodAmount, percentageChange]
 }
 
 export const getLpFeesAndApr = (volumeUSD: number, volumeUSDWeek: number, liquidityUSD: number) => {
-  const totalFees24h = volumeUSD * TOTAL_FEE
-  const totalFees7d = volumeUSDWeek * TOTAL_FEE
-  const lpFees24h = volumeUSD * LP_HOLDERS_FEE
-  const lpFees7d = volumeUSDWeek * LP_HOLDERS_FEE
+    const totalFees24h = volumeUSD * TOTAL_FEE
+    const totalFees7d = volumeUSDWeek * TOTAL_FEE
+    const lpFees24h = volumeUSD * LP_HOLDERS_FEE
+    const lpFees7d = volumeUSDWeek * LP_HOLDERS_FEE
 
-  const lpApr7d = liquidityUSD > 0 ? (volumeUSDWeek * LP_HOLDERS_FEE * WEEKS_IN_YEAR * 100) / liquidityUSD : 0
-  return {
-    totalFees24h,
-    totalFees7d,
-    lpFees24h,
-    lpFees7d,
-    lpApr7d: lpApr7d !== Infinity ? lpApr7d : 0,
-  }
+    const lpApr7d = liquidityUSD > 0 ? (volumeUSDWeek * LP_HOLDERS_FEE * WEEKS_IN_YEAR * 100) / liquidityUSD : 0
+    return {
+        totalFees24h,
+        totalFees7d,
+        lpFees24h,
+        lpFees7d,
+        lpApr7d: lpApr7d !== Infinity ? lpApr7d : 0,
+    }
 }

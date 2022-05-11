@@ -4,32 +4,32 @@ import { getIfoPoolAddress } from 'utils/addressHelpers'
 import { multicallv2 } from 'utils/multicall'
 
 const fetchIfoPoolUser = async (account: string) => {
-  try {
-    const calls = ['userInfo', 'getUserCredit'].map((method) => ({
-      address: getIfoPoolAddress(),
-      name: method,
-      params: [account],
-    }))
-    const [userContractResponse, creditResponse] = await multicallv2(ifoPoolAbi, calls)
+    try {
+        const calls = ['userInfo', 'getUserCredit'].map((method) => ({
+            address: getIfoPoolAddress(),
+            name: method,
+            params: [account],
+        }))
+        const [userContractResponse, creditResponse] = await multicallv2(ifoPoolAbi, calls)
 
-    return {
-      isLoading: false,
-      userShares: new BigNumber(userContractResponse.shares.toString()).toJSON(),
-      lastDepositedTime: userContractResponse.lastDepositedTime.toString(),
-      lastUserActionTime: userContractResponse.lastUserActionTime.toString(),
-      helixAtLastUserAction: new BigNumber(userContractResponse.helixAtLastUserAction.toString()).toJSON(),
-      credit: new BigNumber(creditResponse.avgBalance.toString()).toJSON(),
+        return {
+            isLoading: false,
+            userShares: new BigNumber(userContractResponse.shares.toString()).toJSON(),
+            lastDepositedTime: userContractResponse.lastDepositedTime.toString(),
+            lastUserActionTime: userContractResponse.lastUserActionTime.toString(),
+            helixAtLastUserAction: new BigNumber(userContractResponse.helixAtLastUserAction.toString()).toJSON(),
+            credit: new BigNumber(creditResponse.avgBalance.toString()).toJSON(),
+        }
+    } catch (error) {
+        return {
+            isLoading: true,
+            userShares: null,
+            lastDepositedTime: null,
+            lastUserActionTime: null,
+            helixAtLastUserAction: null,
+            credit: null,
+        }
     }
-  } catch (error) {
-    return {
-      isLoading: true,
-      userShares: null,
-      lastDepositedTime: null,
-      lastUserActionTime: null,
-      helixAtLastUserAction: null,
-      credit: null,
-    }
-  }
 }
 
 export default fetchIfoPoolUser

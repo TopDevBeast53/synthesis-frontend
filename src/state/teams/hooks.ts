@@ -6,23 +6,23 @@ import { State, TeamsState } from '../types'
 import { fetchTeam, fetchTeams } from '.'
 
 export const useTeam = (id: number) => {
-  const team: Team = useSelector((state: State) => state.teams.data[id])
-  const dispatch = useAppDispatch()
+    const team: Team = useSelector((state: State) => state.teams.data[id])
+    const dispatch = useAppDispatch()
 
-  useEffect(() => {
-    dispatch(fetchTeam(id))
-  }, [id, dispatch])
+    useEffect(() => {
+        dispatch(fetchTeam(id))
+    }, [id, dispatch])
 
-  return team
+    return team
 }
 
 export const useTeams = () => {
-  const { isInitialized, isLoading, data }: TeamsState = useSelector((state: State) => state.teams)
-  const dispatch = useAppDispatch()
+    const { isInitialized, isLoading, data }: TeamsState = useSelector((state: State) => state.teams)
+    const dispatch = useAppDispatch()
 
-  useEffect(() => {
-    dispatch(fetchTeams())
-  }, [dispatch])
+    useEffect(() => {
+        dispatch(fetchTeams())
+    }, [dispatch])
 
-  return { teams: data, isInitialized, isLoading }
+    return { teams: data, isInitialized, isLoading }
 }

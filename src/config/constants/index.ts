@@ -5,26 +5,26 @@ import { mainnetTokens, testnetTokens } from './tokens'
 // Pancake prod router address 0x10ED43C718714eb63d5aA57B78B54704E256024E
 // Helix test net router address 0x9DbA93422D0ce20A755d07258E3bDF6D20d56193
 
-export const ROUTER_ADDRESS = '0xD254A05d40DE21494fD90cbb414D0F6D4f480f63';
+export const ROUTER_ADDRESS = '0xD254A05d40DE21494fD90cbb414D0F6D4f480f63'
 
 // a list of tokens by chain
 type ChainTokenList = {
-  readonly [chainId in ChainId]: Token[]
+    readonly [chainId in ChainId]: Token[]
 }
 
 // used to construct intermediary pairs for trading
 export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
-  [ChainId.MAINNET]: [
-    mainnetTokens.wbnb,
-    mainnetTokens.cake,
-    mainnetTokens.busd,
-    mainnetTokens.usdt,
-    mainnetTokens.btcb,
-    mainnetTokens.ust,
-    mainnetTokens.eth,
-    mainnetTokens.usdc,
-  ],
-  [ChainId.TESTNET]: [testnetTokens.wbnb, testnetTokens.helix, testnetTokens.busd],
+    [ChainId.MAINNET]: [
+        mainnetTokens.wbnb,
+        mainnetTokens.cake,
+        mainnetTokens.busd,
+        mainnetTokens.usdt,
+        mainnetTokens.btcb,
+        mainnetTokens.ust,
+        mainnetTokens.eth,
+        mainnetTokens.usdc,
+    ],
+    [ChainId.TESTNET]: [testnetTokens.wbnb, testnetTokens.helix, testnetTokens.busd],
 }
 
 /**
@@ -32,7 +32,7 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
  * @example { [WBTC.address]: [renBTC], [renBTC.address]: [WBTC] }
  */
 export const ADDITIONAL_BASES: { [chainId in ChainId]?: { [tokenAddress: string]: Token[] } } = {
-  [ChainId.MAINNET]: {},
+    [ChainId.MAINNET]: {},
 }
 
 /**
@@ -41,27 +41,27 @@ export const ADDITIONAL_BASES: { [chainId in ChainId]?: { [tokenAddress: string]
  * @example [AMPL.address]: [DAI, WETH[ChainId.MAINNET]]
  */
 export const CUSTOM_BASES: { [chainId in ChainId]?: { [tokenAddress: string]: Token[] } } = {
-  [ChainId.MAINNET]: {},
+    [ChainId.MAINNET]: {},
 }
 
 // used for display in the default list when adding liquidity
 export const SUGGESTED_BASES: ChainTokenList = {
-  [ChainId.MAINNET]: [mainnetTokens.busd, mainnetTokens.cake, mainnetTokens.btcb],
-  [ChainId.TESTNET]: [testnetTokens.wbnb, testnetTokens.cake, testnetTokens.busd],
+    [ChainId.MAINNET]: [mainnetTokens.busd, mainnetTokens.cake, mainnetTokens.btcb],
+    [ChainId.TESTNET]: [testnetTokens.wbnb, testnetTokens.cake, testnetTokens.busd],
 }
 
 // used to construct the list of all pairs we consider by default in the frontend
 export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
-  [ChainId.MAINNET]: [mainnetTokens.wbnb, mainnetTokens.dai, mainnetTokens.busd, mainnetTokens.usdt],
-  [ChainId.TESTNET]: [testnetTokens.wbnb, testnetTokens.cake, testnetTokens.busd],
+    [ChainId.MAINNET]: [mainnetTokens.wbnb, mainnetTokens.dai, mainnetTokens.busd, mainnetTokens.usdt],
+    [ChainId.TESTNET]: [testnetTokens.wbnb, testnetTokens.cake, testnetTokens.busd],
 }
 
 export const PINNED_PAIRS: { readonly [chainId in ChainId]?: [Token, Token][] } = {
-  [ChainId.MAINNET]: [
-    [mainnetTokens.cake, mainnetTokens.wbnb],
-    [mainnetTokens.busd, mainnetTokens.usdt],
-    [mainnetTokens.dai, mainnetTokens.usdt],
-  ],
+    [ChainId.MAINNET]: [
+        [mainnetTokens.cake, mainnetTokens.wbnb],
+        [mainnetTokens.busd, mainnetTokens.usdt],
+        [mainnetTokens.dai, mainnetTokens.usdt],
+    ],
 }
 
 export const NetworkContextName = 'NETWORK'
@@ -94,11 +94,11 @@ export const ONE_HUNDRED_PERCENT = new Percent('1')
 
 // SDN OFAC addresses
 export const BLOCKED_ADDRESSES: string[] = [
-  '0x7F367cC41522cE07553e823bf3be79A889DEbe1B',
-  '0xd882cFc20F52f2599D84b8e8D58C7FB62cfE344b',
-  '0x901bb9583b24D97e995513C6778dc6888AB6870e',
-  '0xA7e5d5A720f06526557c513402f2e6B5fA20b008',
-  '0x8576aCC5C05D6Ce88f4e49bf65BdF0C62F91353C',
+    '0x7F367cC41522cE07553e823bf3be79A889DEbe1B',
+    '0xd882cFc20F52f2599D84b8e8D58C7FB62cfE344b',
+    '0x901bb9583b24D97e995513C6778dc6888AB6870e',
+    '0xA7e5d5A720f06526557c513402f2e6B5fA20b008',
+    '0x8576aCC5C05D6Ce88f4e49bf65BdF0C62F91353C',
 ]
 
 export { default as farmsConfig } from './farms'

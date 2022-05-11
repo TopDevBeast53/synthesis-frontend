@@ -39,12 +39,7 @@ const Filters: React.FC<FiltersProps> = ({ filterState, onFilterChange }) => {
 
         return (
           <FilterLabel key={label}>
-            <Radio
-              scale="sm"
-              value={value}
-              checked={filterState === value}
-              onChange={handleChange}
-            />
+            <Radio scale="sm" value={value} checked={filterState === value} onChange={handleChange} />
             <Text ml="8px">{t(label)}</Text>
           </FilterLabel>
         )

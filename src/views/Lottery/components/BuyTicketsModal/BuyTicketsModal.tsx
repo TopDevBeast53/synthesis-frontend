@@ -327,7 +327,9 @@ const BuyTicketsModal: React.FC<BuyTicketsModalProps> = ({ onDismiss }) => {
         onUserInput={handleInputChange}
         currencyValue={
           cakePriceBusd.gt(0) &&
-          `~${ticketsToBuy ? getFullDisplayBalance(priceTicketInHelix.times(new BigNumber(ticketsToBuy))) : '0.00'} CAKE`
+          `~${
+            ticketsToBuy ? getFullDisplayBalance(priceTicketInHelix.times(new BigNumber(ticketsToBuy))) : '0.00'
+          } CAKE`
         }
       />
       <Flex alignItems="center" justifyContent="flex-end" mt="4px" mb="12px">

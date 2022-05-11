@@ -5,21 +5,18 @@ import { OrderState } from 'views/SwapYield/types'
 import ActiveRow from './ActiveRow'
 import EarnedRow from './EarnedRow'
 
-const Row=({data: swapId})=>{
-    const LpSwapContract = useHelixLpSwap()
-    const {filterState} = useContext(SwapLiquidityContext)
-    const [swapData, setSwapData] = useState<any>()    
-    useEffect(()=>{        
-        LpSwapContract.getSwap(swapId).then(swap=>{            
-            setSwapData(swap)            
-        })
-    }, [LpSwapContract, swapId])
+const Row = ({ data: swapId }) => {
+  const LpSwapContract = useHelixLpSwap()
+  const { filterState } = useContext(SwapLiquidityContext)
+  const [swapData, setSwapData] = useState<any>()
+  useEffect(() => {
+    LpSwapContract.getSwap(swapId).then((swap) => {
+      setSwapData(swap)
+    })
+  }, [LpSwapContract, swapId])
 
-    
-    
-    if(filterState === OrderState.Completed) return <EarnedRow swapData={swapData}/>
-    return <ActiveRow swapData={swapData} swapId={swapId}/>
-
+  if (filterState === OrderState.Completed) return <EarnedRow swapData={swapData} />
+  return <ActiveRow swapData={swapData} swapId={swapId} />
 }
 
-export default Row;
+export default Row

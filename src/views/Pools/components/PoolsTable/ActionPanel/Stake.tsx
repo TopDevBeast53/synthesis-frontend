@@ -80,7 +80,10 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({ pool, userDataLoa
   const { helixAsBigNumber, helixAsNumberBalance } = convertSharesToHelix(userShares, pricePerFullShare)
   const hasSharesStaked = userShares && userShares.gt(0)
   const isVaultWithShares = vaultKey && hasSharesStaked
-  const stakedAutoDollarValue = getBalanceNumber(helixAsBigNumber.multipliedBy(stakingTokenPrice), stakingToken.decimals)
+  const stakedAutoDollarValue = getBalanceNumber(
+    helixAsBigNumber.multipliedBy(stakingTokenPrice),
+    stakingToken.decimals,
+  )
 
   const needsApproval = vaultKey ? !isVaultApproved : !allowance.gt(0) && !isBnbPool
 
@@ -107,7 +110,9 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({ pool, userDataLoa
     />,
   )
 
-  const [onPresentVaultUnstake] = useModal(<VaultStakeModal stakingMax={helixAsBigNumber} pool={pool} isRemovingStake />)
+  const [onPresentVaultUnstake] = useModal(
+    <VaultStakeModal stakingMax={helixAsBigNumber} pool={pool} isRemovingStake />,
+  )
 
   const onStake = () => {
     if (vaultKey) {

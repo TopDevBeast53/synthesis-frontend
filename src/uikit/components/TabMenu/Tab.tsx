@@ -1,11 +1,11 @@
-import styled from "styled-components";
+import styled from 'styled-components'
 // eslint-disable-next-line import/no-unresolved
-import { color } from "styled-system";
-import { TabProps } from "./types";
+import { color } from 'styled-system'
+import { TabProps } from './types'
 
-const getBorderRadius = ({ scale }: TabProps) => (scale === "md" ? "16px 16px 0 0" : "24px 24px 0 0");
+const getBorderRadius = ({ scale }: TabProps) => (scale === 'md' ? '16px 16px 0 0' : '24px 24px 0 0')
 
-const getPadding = ({ scale }: TabProps) => (scale === "md" ? "8px" : "16px");
+const getPadding = ({ scale }: TabProps) => (scale === 'md' ? '8px' : '16px')
 
 const Tab = styled.button<TabProps>`
   display: inline-flex;
@@ -24,10 +24,10 @@ const Tab = styled.button<TabProps>`
   }
 
   ${color}
-`;
+`
 
 Tab.defaultProps = {
-  scale: "md",
-};
+  scale: 'md',
+}
 
-export default Tab;
+export default Tab

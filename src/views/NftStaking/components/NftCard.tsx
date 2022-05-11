@@ -29,24 +29,24 @@ const NFTCardInfoPanel = styled(Card)`
 enum NFTInfoMarkerType {
   level,
   points,
-  remainNextLevel
+  remainNextLevel,
 }
 
-const NFTInfoMarker = styled.div<{marker: NFTInfoMarkerType}>`
+const NFTInfoMarker = styled.div<{ marker: NFTInfoMarkerType }>`
   width: 14px;
   height: 14px;
   border-radius: 7px;
 
-  ${({marker}) => {
+  ${({ marker }) => {
     switch (marker) {
       case NFTInfoMarkerType.level:
-        return 'background: #FF6A50';
+        return 'background: #FF6A50'
       case NFTInfoMarkerType.points:
-        return 'background: #ABBEFF';
+        return 'background: #ABBEFF'
       case NFTInfoMarkerType.remainNextLevel:
-        return 'background: #ABBEFF';
-      default: 
-        return 'background: white';
+        return 'background: #ABBEFF'
+      default:
+        return 'background: white'
     }
   }}
 `
@@ -59,22 +59,22 @@ const NFTInfoSeparator = styled.div`
 `
 
 interface NFTInfo {
-  caption: string,
-  value: React.ReactNode,
+  caption: string
+  value: React.ReactNode
 }
 
 interface NFTAction {
-  id: string,
-  caption: string, 
-  action: (...value: any[]) => void,
-  displayed: boolean,
+  id: string
+  caption: string
+  action: (...value: any[]) => void
+  displayed: boolean
   params: any[]
 }
 
 interface NftCardProps {
-  name?: string | undefined,
-  infos: NFTInfo[],
-  actions: NFTAction[],
+  name?: string | undefined
+  infos: NFTInfo[]
+  actions: NFTAction[]
   bgSrc: string
   tokenId: string
   disabled?: boolean
@@ -107,28 +107,19 @@ const NftCard: React.FC<NftCardProps> = ({
       onhandleChangeCheckBox(tokenId, !isRememberChecked)
     }
     setIsRememberChecked(!isRememberChecked)
-  }, 
-    [onhandleChangeCheckBox, tokenId, isRememberChecked,setIsRememberChecked]
-  );
+  }, [onhandleChangeCheckBox, tokenId, isRememberChecked, setIsRememberChecked])
 
-  const [onPresentBridgeModal] = useModal(
-    <BridgeToSolanaModal tokenIDToBridge={tokenId} />
-  );
-  
+  const [onPresentBridgeModal] = useModal(<BridgeToSolanaModal tokenIDToBridge={tokenId} />)
+
   return (
     <NFTCard m="19px">
-      <NFTImage src={bgSrc} width={366} height={313}/>
+      <NFTImage src={bgSrc} width={366} height={313} />
 
-      <Flex 
-        justifyContent="space-between" 
-        alignItems="center"
-        style={{marginTop: '42px', marginBottom: '28px'}}
-      >
+      <Flex justifyContent="space-between" alignItems="center" style={{ marginTop: '42px', marginBottom: '28px' }}>
         <NFTIcon />
         <NFTNameText>
-          {name ?? "Pink Rose"} {' '}
-          {
-            onhandleChangeCheckBox && 
+          {name ?? 'Pink Rose'}{' '}
+          {onhandleChangeCheckBox && (
             <Checkbox
               name="confirmed"
               type="checkbox"
@@ -137,47 +128,42 @@ const NftCard: React.FC<NftCardProps> = ({
               scale="sm"
               disabled={disabled}
             />
-          }
+          )}
         </NFTNameText>
       </Flex>
 
-      <NFTCardInfoPanel style={{marginBottom: '25px'}}>
+      <NFTCardInfoPanel style={{ marginBottom: '25px' }}>
         <Flex flexDirection="column">
-          { 
-            infos.map(({caption, value}, index) => (
-              <div key={caption}>
-                {index !== 0 && <NFTInfoSeparator /> }
-                <Flex justifyContent="space-between" alignItems="center">
-                  <Flex alignItems="center">
-                    <NFTInfoMarker marker={NFTInfoMarkerType.level} />
-                    <NFTCardText type={NFTCardTextType.cardCaption} style={{marginLeft: '14px'}}>
-                      {caption}
-                    </NFTCardText>
-                  </Flex>
-                  <NFTCardText type={NFTCardTextType.cardValue}>
-                    {value}
+          {infos.map(({ caption, value }, index) => (
+            <div key={caption}>
+              {index !== 0 && <NFTInfoSeparator />}
+              <Flex justifyContent="space-between" alignItems="center">
+                <Flex alignItems="center">
+                  <NFTInfoMarker marker={NFTInfoMarkerType.level} />
+                  <NFTCardText type={NFTCardTextType.cardCaption} style={{ marginLeft: '14px' }}>
+                    {caption}
                   </NFTCardText>
                 </Flex>
-              </div>
-            ))
-          }
+                <NFTCardText type={NFTCardTextType.cardValue}>{value}</NFTCardText>
+              </Flex>
+            </div>
+          ))}
         </Flex>
       </NFTCardInfoPanel>
 
       <Flex position="relative" padding="0px 14px" flexDirection="column">
-        {
-          actions.filter(({displayed}) => displayed).map(({caption, action, id, params}) => (
+        {actions
+          .filter(({ displayed }) => displayed)
+          .map(({ caption, action, id, params }) => (
             <Button key={id} onClick={() => action(...params)} disabled={disabled} style={{ marginBottom: '8px' }}>
               {caption}
-            </Button>  
-          ))
-        }
-        {
-          showBridgeToSolanaModal &&
+            </Button>
+          ))}
+        {showBridgeToSolanaModal && (
           <Button onClick={onPresentBridgeModal} style={{ marginBottom: '8px' }}>
             {t('Bridge To Solana')}
           </Button>
-        }
+        )}
       </Flex>
     </NFTCard>
   )

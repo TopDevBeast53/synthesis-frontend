@@ -9,40 +9,40 @@ import { range } from 'lodash'
 const POLL_TIME_IN_SECONDS = 10
 
 const usePollPredictions = () => {
-  const timer = useRef<NodeJS.Timeout>(null)
-  const dispatch = useAppDispatch()
-  const { account } = useWeb3React()
-  const currentEpoch = useGetCurrentEpoch()
-  const earliestEpoch = useGetEarliestEpoch()
-  const status = useGetPredictionsStatus()
+    const timer = useRef<NodeJS.Timeout>(null)
+    const dispatch = useAppDispatch()
+    const { account } = useWeb3React()
+    const currentEpoch = useGetCurrentEpoch()
+    const earliestEpoch = useGetEarliestEpoch()
+    const status = useGetPredictionsStatus()
 
-  useEffect(() => {
-    // Clear old timer
-    if (timer.current) {
-      clearInterval(timer.current)
-    }
-
-    if (status !== PredictionStatus.INITIAL) {
-      timer.current = setInterval(async () => {
-        const liveCurrentAndRecent = [currentEpoch, currentEpoch - 1, currentEpoch - 2]
-
-        dispatch(fetchRounds(liveCurrentAndRecent))
-        dispatch(fetchMarketData())
-
-        if (account) {
-          const epochRange = range(earliestEpoch, currentEpoch + 1)
-          dispatch(fetchLedgerData({ account, epochs: epochRange }))
-          dispatch(fetchClaimableStatuses({ account, epochs: epochRange }))
+    useEffect(() => {
+        // Clear old timer
+        if (timer.current) {
+            clearInterval(timer.current)
         }
-      }, POLL_TIME_IN_SECONDS * 1000)
-    }
 
-    return () => {
-      if (timer.current) {
-        clearInterval(timer.current)
-      }
-    }
-  }, [timer, account, status, currentEpoch, earliestEpoch, dispatch])
+        if (status !== PredictionStatus.INITIAL) {
+            timer.current = setInterval(async () => {
+                const liveCurrentAndRecent = [currentEpoch, currentEpoch - 1, currentEpoch - 2]
+
+                dispatch(fetchRounds(liveCurrentAndRecent))
+                dispatch(fetchMarketData())
+
+                if (account) {
+                    const epochRange = range(earliestEpoch, currentEpoch + 1)
+                    dispatch(fetchLedgerData({ account, epochs: epochRange }))
+                    dispatch(fetchClaimableStatuses({ account, epochs: epochRange }))
+                }
+            }, POLL_TIME_IN_SECONDS * 1000)
+        }
+
+        return () => {
+            if (timer.current) {
+                clearInterval(timer.current)
+            }
+        }
+    }, [timer, account, status, currentEpoch, earliestEpoch, dispatch])
 }
 
 export default usePollPredictions

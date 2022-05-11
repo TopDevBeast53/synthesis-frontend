@@ -6,21 +6,18 @@ import React, { useEffect, useState } from 'react'
 import tokens from 'config/constants/tokens'
 import { Token } from 'sdk'
 import styled from 'styled-components'
-import {
-  AutoRenewIcon, BalanceInput, Button, Flex,
-  Image, Link, Modal, Slider, Text
-} from 'uikit'
+import { AutoRenewIcon, BalanceInput, Button, Flex, Image, Link, Modal, Slider, Text } from 'uikit'
 import { formatNumber, getDecimalAmount, getFullDisplayBalance } from 'utils/formatBalance'
 import { logError } from 'utils/sentry'
 import { useHelixLockVault } from 'views/Vault/hooks/useHelixLockVault'
 import { helixVaultAddress } from '../../../constants'
 import PercentageButton from './PercentageButton'
 
-interface StakeModalProps {  
+interface StakeModalProps {
   totalBalance: BigNumber
   stakedBalance: BigNumber
   tokenPrice: number
-  stakingToken:Token
+  stakingToken: Token
   depositId
   isRemovingStake?: boolean
   updateStake
@@ -31,7 +28,7 @@ const StyledLink = styled(Link)`
   width: 100%;
 `
 
-const StakeModal: React.FC<StakeModalProps> = ({    
+const StakeModal: React.FC<StakeModalProps> = ({
   totalBalance,
   tokenPrice,
   stakedBalance,
@@ -41,18 +38,17 @@ const StakeModal: React.FC<StakeModalProps> = ({
   updateStake,
   onDismiss,
 }) => {
-  
   const { t } = useTranslation()
-  const { theme } = useTheme()  
+  const { theme } = useTheme()
   const { toastSuccess, toastError } = useToast()
   const [pendingTx, setPendingTx] = useState(false)
   const [stakeAmount, setStakeAmount] = useState('')
   const [hasReachedStakeLimit, setHasReachedStakedLimit] = useState(false)
-  const [percent, setPercent] = useState(0)  
-  const {decimals, symbol} = tokens.helix  
+  const [percent, setPercent] = useState(0)
+  const { decimals, symbol } = tokens.helix
   const fullDecimalStakeAmount = getDecimalAmount(new BigNumber(stakeAmount), decimals)
   const getCalculatedStakingLimit = () => {
-    if(isRemovingStake) return stakedBalance
+    if (isRemovingStake) return stakedBalance
     return totalBalance
   }
   const userNotEnoughToken = isRemovingStake
@@ -60,20 +56,14 @@ const StakeModal: React.FC<StakeModalProps> = ({
     : totalBalance.lt(fullDecimalStakeAmount)
 
   const usdValueStaked = new BigNumber(stakeAmount).times(tokenPrice)
-  const formattedUsdValueStaked = !usdValueStaked.isNaN() && formatNumber(usdValueStaked.toNumber()) 
+  const formattedUsdValueStaked = !usdValueStaked.isNaN() && formatNumber(usdValueStaked.toNumber())
   const getTokenLink = stakingToken.address ? `/swap?outputCurrency=${stakingToken.address}` : '/swap'
 
   useEffect(() => {
     if (!isRemovingStake) {
       setHasReachedStakedLimit(fullDecimalStakeAmount.plus(stakedBalance).gt(totalBalance))
     }
-  }, [
-    totalBalance,
-    stakedBalance,    
-    isRemovingStake,
-    setHasReachedStakedLimit,
-    fullDecimalStakeAmount,
-  ])
+  }, [totalBalance, stakedBalance, isRemovingStake, setHasReachedStakedLimit, fullDecimalStakeAmount])
 
   const handleStakeInputChange = (input: string) => {
     if (input) {
@@ -96,33 +86,32 @@ const StakeModal: React.FC<StakeModalProps> = ({
     }
     setPercent(sliderPercent)
   }
-  const{deposit, withdraw} = useHelixLockVault()
-  const handleConfirmClick = async () => {    
+  const { deposit, withdraw } = useHelixLockVault()
+  const handleConfirmClick = async () => {
     setPendingTx(true)
     try {
-
       if (isRemovingStake) {
         // unstaking
-        // await onUnstake(stakeAmount, decimals)        
-        const stakeAmountNumber= getDecimalAmount(new BigNumber(stakeAmount))
-        await withdraw(stakeAmountNumber.toString(), depositId)        
-        let newBalance:BigNumber = stakedBalance
+        // await onUnstake(stakeAmount, decimals)
+        const stakeAmountNumber = getDecimalAmount(new BigNumber(stakeAmount))
+        await withdraw(stakeAmountNumber.toString(), depositId)
+        let newBalance: BigNumber = stakedBalance
         newBalance = newBalance.minus(stakeAmountNumber)
-        updateStake(newBalance, )
+        updateStake(newBalance)
         toastSuccess(
           `${t('Unstaked')}!`,
           t('Your %symbol% earnings have also been harvested to your wallet!', {
             symbol,
           }),
         )
-      } else {        
+      } else {
         // staking
-        const stakeAmountNumber= getDecimalAmount(new BigNumber(stakeAmount))
+        const stakeAmountNumber = getDecimalAmount(new BigNumber(stakeAmount))
         await deposit(stakeAmountNumber.toString(), depositId)
 
-        let newBalance:BigNumber = stakedBalance        
-        newBalance = newBalance.plus(stakeAmountNumber)        
-        updateStake(newBalance)        
+        let newBalance: BigNumber = stakedBalance
+        newBalance = newBalance.plus(stakeAmountNumber)
+        updateStake(newBalance)
         toastSuccess(
           `${t('Staked')}!`,
           t('Your %symbol% funds have been staked in the pool!', {
@@ -133,13 +122,12 @@ const StakeModal: React.FC<StakeModalProps> = ({
       setPendingTx(false)
       onDismiss()
     } catch (e) {
-      logError(e)      
+      logError(e)
       toastError(t('Error'), t('Please try again. Confirm the transaction and make sure you are paying enough gas!'))
       setPendingTx(false)
     }
   }
 
-  
   return (
     <Modal
       minWidth="346px"

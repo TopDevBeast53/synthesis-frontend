@@ -1,14 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import {
-  Flex,
-  Heading,
-  HistoryIcon,
-  IconButton,
-  NotificationDot,
-  Text,
-  useModal,
-} from 'uikit'
+import { Flex, Heading, HistoryIcon, IconButton, NotificationDot, Text, useModal } from 'uikit'
 import TransactionsModal from 'components/App/Transactions/TransactionsModal'
 import GlobalSettings from 'components/Menu/GlobalSettings'
 import { useExpertModeManager } from 'state/user/hooks'

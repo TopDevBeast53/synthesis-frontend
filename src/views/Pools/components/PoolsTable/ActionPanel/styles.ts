@@ -23,12 +23,12 @@ export const ActionContainer = styled.div<{ isAutoVault?: boolean }>`
 `
 
 export const ActionTitles = styled.div`
-  font-weight: 600;
-  font-size: 12px;
+    font-weight: 600;
+    font-size: 12px;
 `
 
 export const ActionContent = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 `

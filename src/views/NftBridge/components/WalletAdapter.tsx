@@ -8,27 +8,19 @@ import { clusterApiUrl } from '@solana/web3.js'
 import '@solana/wallet-adapter-react-ui/styles.css'
 
 const WalletAdapter = ({ children }: { children?: React.ReactNode }) => {
-
-// export function WalletAdapter({ children }: { children?: React.ReactNode }) {
+  // export function WalletAdapter({ children }: { children?: React.ReactNode }) {
   // TODO: This should be read from env
   const network = WalletAdapterNetwork.Testnet
 
   // You can also provide a custom RPC endpoint
   const endpoint = useMemo(() => clusterApiUrl(network), [network])
 
-  const wallets = useMemo(
-    () => [
-      getPhantomWallet(),
-    ],
-    []
-  )
+  const wallets = useMemo(() => [getPhantomWallet()], [])
 
   return (
     <ConnectionProvider endpoint={endpoint}>
       <WalletProvider wallets={wallets} autoConnect>
-        <WalletModalProvider>
-          {children}
-        </WalletModalProvider>
+        <WalletModalProvider>{children}</WalletModalProvider>
       </WalletProvider>
     </ConnectionProvider>
   )

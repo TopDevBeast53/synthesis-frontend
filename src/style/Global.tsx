@@ -7,7 +7,7 @@ declare module 'styled-components' {
   export interface DefaultTheme extends HelixTheme {}
 }
 
-const GlobalStyle = createGlobalStyle<{theme: HelixTheme, backgroundImageURL?: string}>`
+const GlobalStyle = createGlobalStyle<{ theme: HelixTheme; backgroundImageURL?: string }>`
   * {
     font-family: 'Helvetica Neue', sans-serif;
   }

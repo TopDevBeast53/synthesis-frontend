@@ -4,25 +4,25 @@ import { setLastOraclePrice } from 'state/predictions'
 import useGetLatestOraclePrice from './useGetLatestOraclePrice'
 
 const usePollOraclePrice = (seconds = 10) => {
-  const { price, refresh } = useGetLatestOraclePrice()
-  const dispatch = useAppDispatch()
+    const { price, refresh } = useGetLatestOraclePrice()
+    const dispatch = useAppDispatch()
 
-  // Poll for the oracle price
-  useEffect(() => {
-    refresh()
-    const timer = setInterval(() => {
-      refresh()
-    }, seconds * 1000)
+    // Poll for the oracle price
+    useEffect(() => {
+        refresh()
+        const timer = setInterval(() => {
+            refresh()
+        }, seconds * 1000)
 
-    return () => {
-      clearInterval(timer)
-    }
-  }, [seconds, refresh])
+        return () => {
+            clearInterval(timer)
+        }
+    }, [seconds, refresh])
 
-  // If the price changed update global state
-  useEffect(() => {
-    dispatch(setLastOraclePrice(price.toJSON()))
-  }, [price, dispatch])
+    // If the price changed update global state
+    useEffect(() => {
+        dispatch(setLastOraclePrice(price.toJSON()))
+    }, [price, dispatch])
 }
 
 export default usePollOraclePrice

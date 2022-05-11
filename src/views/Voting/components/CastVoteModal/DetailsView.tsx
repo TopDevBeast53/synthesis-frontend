@@ -8,9 +8,7 @@ interface DetailsViewProps {
   total: number
 }
 
-const DetailsView: React.FC<DetailsViewProps> = ({
-  total,
-}) => {
+const DetailsView: React.FC<DetailsViewProps> = ({ total }) => {
   const { t } = useTranslation()
 
   return (

@@ -7,15 +7,15 @@ import { SerializedFarm } from 'state/types'
  * @returns A preferred farm, if found - or the first element of the farms array
  */
 export const filterFarmsByQuoteToken = (
-  farms: SerializedFarm[],
-  preferredQuoteTokens: string[] = ['BUSD', 'WBNB'],
+    farms: SerializedFarm[],
+    preferredQuoteTokens: string[] = ['BUSD', 'WBNB'],
 ): SerializedFarm => {
-  const preferredFarm = farms.find((farm) => {
-    return preferredQuoteTokens.some((quoteToken) => {
-      return farm.quoteToken.symbol === quoteToken
+    const preferredFarm = farms.find((farm) => {
+        return preferredQuoteTokens.some((quoteToken) => {
+            return farm.quoteToken.symbol === quoteToken
+        })
     })
-  })
-  return preferredFarm || farms[0]
+    return preferredFarm || farms[0]
 }
 
 export default filterFarmsByQuoteToken

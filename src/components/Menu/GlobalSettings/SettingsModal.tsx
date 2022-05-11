@@ -61,7 +61,7 @@ const SettingsModal: React.FC<InjectedModalProps> = ({ onDismiss }) => {
       title={t('Settings')}
       headerBackground="gradients.cardHeader"
       onDismiss={onDismiss}
-      style={{ maxWidth: '420px', width:"90%" }}
+      style={{ maxWidth: '420px', width: '90%' }}
     >
       <ScrollableContainer>
         <Flex pb="24px" flexDirection="column">

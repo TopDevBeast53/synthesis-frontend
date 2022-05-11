@@ -1,7 +1,7 @@
-import React from "react";
-import styled, { keyframes } from "styled-components";
-import HelixIcon from "./HelixIcon";
-import { SpinnerProps } from "./types";
+import React from 'react'
+import styled, { keyframes } from 'styled-components'
+import HelixIcon from './HelixIcon'
+import { SpinnerProps } from './types'
 
 const rotate = keyframes`
   from {
@@ -10,11 +10,11 @@ const rotate = keyframes`
   to {
     transform: rotate(360deg);
   }
-`;
+`
 
 const Container = styled.div`
   position: relative;
-`;
+`
 
 const RotatingHelixIcon = styled(HelixIcon)`
   position: absolute;
@@ -22,14 +22,14 @@ const RotatingHelixIcon = styled(HelixIcon)`
   left: 0;
   animation: ${rotate} 2s linear infinite;
   transform: translate3d(0, 0, 0);
-`;
+`
 
 const Spinner: React.FC<SpinnerProps> = ({ size = 128 }) => {
   return (
     <Container>
       <RotatingHelixIcon width={`${size * 0.5}px`} />
     </Container>
-  );
-};
+  )
+}
 
-export default Spinner;
+export default Spinner

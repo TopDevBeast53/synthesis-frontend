@@ -1,19 +1,7 @@
 import React, { useMemo } from 'react'
 import BigNumber from 'bignumber.js'
 import styled from 'styled-components'
-import {
-  Card,
-  CardBody,
-  Text,
-  Flex,
-  HelpIcon,
-  Button,
-  Heading,
-  Skeleton,
-  useModal,
-  Box,
-  useTooltip,
-} from 'uikit'
+import { Card, CardBody, Text, Flex, HelpIcon, Button, Heading, Skeleton, useModal, Box, useTooltip } from 'uikit'
 import { useTranslation } from 'contexts/Localization'
 import { getBalanceNumber } from 'utils/formatBalance'
 import { usePriceHelixBusd } from 'state/farms/hooks'

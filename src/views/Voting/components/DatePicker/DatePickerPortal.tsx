@@ -109,13 +109,13 @@ const StyledDatePickerPortal = styled.div`
     padding: 8px;
   }
 
-  .react-datepicker__time-container 
-    .react-datepicker__time 
-    .react-datepicker__time-box 
-    ul.react-datepicker__time-list 
+  .react-datepicker__time-container
+    .react-datepicker__time
+    .react-datepicker__time-box
+    ul.react-datepicker__time-list
     li.react-datepicker__time-list-item:hover {
-      background-color: ${({ theme }) => theme.colors.secondary};
-      color: rgb(16, 20, 17);
+    background-color: ${({ theme }) => theme.colors.secondary};
+    color: rgb(16, 20, 17);
   }
 `
 

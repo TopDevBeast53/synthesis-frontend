@@ -20,7 +20,6 @@ const StyledTable = styled.div`
   }
 `
 
-
 // background-color: ${({ theme }) => theme.colors.cardBorder};
 
 const StyledTableBorder = styled.div`
