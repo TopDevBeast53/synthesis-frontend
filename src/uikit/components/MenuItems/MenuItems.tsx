@@ -16,7 +16,7 @@ const MenuItems: React.FC<MenuItemsProps> = ({ items = [], activeItem, activeSub
         console.debug('======', statusColor, isActive, linkProps, menuItems, icon)
         return (
           <DropdownMenu key={`${label}#${href}#${icon}`} items={menuItems} py={1} activeItem={activeSubItem}>
-            <MenuItem {...linkProps} isActive={isActive} statusColor={statusColor} variant="default">
+            <MenuItem {...linkProps} isActive={isActive} statusColor={statusColor}>
               {label || <IconComponent iconName={icon} color={isActive ? 'secondary' : 'textSubtle'} />}
             </MenuItem>
           </DropdownMenu>
