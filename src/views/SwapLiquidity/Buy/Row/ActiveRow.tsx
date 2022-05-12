@@ -15,52 +15,54 @@ const ArrowIcon = styled(ChevronDownIcon)<{ toggled: boolean }>`
   height: 24px;
 `
 
-const ActiveRow = (props) => {
-  const { tableRefresh, setTableRefresh } = useContext(SwapLiquidityContext)
-  const { swapData } = props
-  const [expanded, setExpanded] = useState(false)
-  const shouldRenderDetail = useDelayedUnmount(expanded, 300)
-  const handleOnRowClick = () => {
-    setExpanded(!expanded)
-  }
-  const onSendAsk = () => {
-    setTableRefresh(tableRefresh + 1)
-  }
-  const [showModal] = useModal(<DiscussOrder swapData={swapData} onSend={onSendAsk} />, false)
 
-  return (
-    <>
-      <StyledRow onClick={handleOnRowClick}>
-        <StyledCell>
-          <LPTokenCell lpTokenAddress={swapData?.toBuyerToken} balance={swapData?.amount.toString()} />
-        </StyledCell>
-        <StyledCellWithoutPadding>
-          <ArrowCell back />
-        </StyledCellWithoutPadding>
-        <StyledCell>
-          <LPTokenCell lpTokenAddress={swapData?.toSellerToken} balance={swapData?.ask.toString()} />
-        </StyledCell>
-        <StyledCell>
-          <ToolTipCell tooltipText={ToolTipText} />
-        </StyledCell>
-        <StyledCell style={{ zIndex: 10, flex: 3 }}>
-          <Button color="primary" onClick={showModal} scale="sm" width="100px">
-            {' '}
-            Bid{' '}
-          </Button>
-        </StyledCell>
-        <StyledCell>
-          <ArrowIcon color="primary" toggled={expanded} />
-        </StyledCell>
-      </StyledRow>
-
-      {shouldRenderDetail && (
-        <div style={{ padding: '10px 10px', minHeight: '5em' }}>
-          <CandidateTable swap={swapData} />
-        </div>
-      )}
-    </>
-  )
+const ActiveRow=(props)=>{
+    const {tableRefresh, setTableRefresh} = useContext(SwapLiquidityContext)
+    const {swapData} = props
+    const [expanded, setExpanded] = useState(false)
+    const shouldRenderDetail = useDelayedUnmount(expanded, 300)
+    const handleOnRowClick = () => {
+        setExpanded(!expanded)        
+    }
+    const onSendAsk = () =>{
+        setTableRefresh(tableRefresh + 1)
+    }
+    const [showModal] = useModal(<DiscussOrder swapData={swapData} onSend={onSendAsk}/>,false)
+   
+    return (
+        <>
+            <StyledRow onClick={handleOnRowClick}>
+                
+                <StyledCell>
+                    <LPTokenCell lpTokenAddress={swapData?.toBuyerToken} balance={swapData?.amount.toString()}/>
+                </StyledCell>               
+                <StyledCellWithoutPadding>
+                    <ArrowCell back/>
+                </StyledCellWithoutPadding> 
+                <StyledCell>
+                    <LPTokenCell lpTokenAddress={swapData?.toSellerToken} balance={swapData?.ask.toString()}/>                   
+                </StyledCell>
+                <StyledCellWithoutPadding>
+                    <ToolTipCell tooltipText={ToolTipText} />
+                </StyledCellWithoutPadding>
+                <StyledCell style={{zIndex:10}}>
+                    <Button 
+                        color="primary" onClick={showModal} scale="sm" width="100px"> Bid </Button>
+                </StyledCell>
+                <StyledCellWithoutPadding>
+                    <ArrowIcon color="primary" toggled={expanded} />                    
+                </StyledCellWithoutPadding>
+                
+            </StyledRow>
+        
+            {shouldRenderDetail && (
+                <div style={{padding:"10px 10px", minHeight:"5em"}}>
+                    <CandidateTable swap={swapData}/>
+                </div>
+            )}        
+        
+        </>
+    )
 }
 
 export default ActiveRow

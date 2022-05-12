@@ -21,7 +21,7 @@ export const ModalTitle = styled(Flex)`
 
 export const ModalBody = styled(Flex)`
   flex-direction: column;
-  max-height: 90vh;
+  max-height: 85vh;
   overflow-y: auto;
 `
 

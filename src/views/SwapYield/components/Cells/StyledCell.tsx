@@ -3,24 +3,22 @@ import BaseCell from './BaseCell'
 
 export const StyledRow = styled.div`
   background-color: transparent;
-
+  flex-wrap:wrap;
   display: flex;
   cursor: pointer;
 `
 
-export const StyledCell = styled(BaseCell)`
-  flex: 4.5;
-  padding-left: 32px;
+export const StyledCell = styled(BaseCell)`  
+  flex: 1 2 120px;  
+  padding-left:10px;  
 
-  ${({ theme }) => theme.mediaQueries.sm} {
-    flex: 1 0 120px;
+  ${({ theme }) => theme.mediaQueries.lg} {
+    padding-left:32px;
   }
 `
 
-export const StyledCellWithoutPadding = styled(BaseCell)`
-  flex: 4.5;
-
+export const StyledCellWithoutPadding = styled(BaseCell)`  
   ${({ theme }) => theme.mediaQueries.sm} {
-    flex: 1 0 120px;
+    flex: 1 0 30px;
   }
 `

@@ -163,62 +163,59 @@ const AddRowModal = (props) => {
   if (!LPOptions) return null
 
   return (
-    <Modal title={t('Add an Order')} headerBackground={theme.colors.gradients.cardHeader} onDismiss={onDismiss}>
-      <Group style={{ marginBottom: '2em' }} title="Send">
-        <Flex>
-          <Text bold style={{ flex: '3' }}>
-            {t('LP Token')}:
-          </Text>
-          <Select options={LPOptions} onOptionChange={handleLPChange} style={{ zIndex: '30', flex: '6' }} />
-        </Flex>
+    <Modal
+      title={t('Add an Order') }
+      headerBackground={theme.colors.gradients.cardHeader}    
+      onDismiss={onDismiss}
+      style={{maxWidth:"90%"}}
+      
+    >
+    <Group style={{marginBottom:"2em"}} title="Send">
+      <Flex>
+        <Text bold style={{flex:"3"}}>{t('LP Token')}:</Text>           
+        <Select options={LPOptions} onOptionChange={handleLPChange} style={{zIndex:"30", flex:"6"}}/>
+      </Flex>
+      
+      <div style={{marginBottom:"1em"}}>
+        {selectedLPOption? 
+          <ModalInput
+            value={uAmount.toString()}
+            onSelectMax={handleSelectMaxOfLPToken}
+            onChange={handleUAmountChange}
+            max={maxBalanceOfLP.toString()}
+            symbol={selectedLPOption?.label}
+            addLiquidityUrl="#"
+            inputTitle={t('Amount')}
+          />
+          :
+          <Skeleton/>
+        }
+      </div>
+      <Flex>
+        <Text bold style={{flex:"3"}}>{t('Estimated Price')}:  </Text>
+        <Text style={{flex:"3"}} color="primary">~ {getEstimatedPrice(selectedLpPrice, uAmount).toString()}  </Text>
+      </Flex>      
+    </Group>
+    <Group title="Receive">
+      <Flex>
+        <Text bold style={{flex:"3"}}>{t('Exchange')}:</Text>             
+        <Select options={LPOptions} onOptionChange={handleBuyOptionChange} style={{zIndex:"30", flex:"6"}}/>    
+        
+      </Flex>
 
-        <div style={{ marginBottom: '1em' }}>
-          {selectedLPOption ? (
-            <ModalInput
-              value={uAmount.toString()}
-              onSelectMax={handleSelectMaxOfLPToken}
-              onChange={handleUAmountChange}
-              max={maxBalanceOfLP.toString()}
-              symbol={selectedLPOption?.label}
-              addLiquidityUrl="#"
-              inputTitle={t('Amount')}
-            />
-          ) : (
-            <Skeleton />
-          )}
-        </div>
-        <Flex>
-          <Text bold style={{ flex: '3' }}>
-            {t('Estimated Price')}:{' '}
-          </Text>
-          <Text style={{ flex: '3' }} color="primary">
-            ~ {getEstimatedPrice(selectedLpPrice, uAmount).toString()}{' '}
-          </Text>
-        </Flex>
-      </Group>
-      <Group title="Receive">
-        <Flex>
-          <Text bold style={{ flex: '3' }}>
-            {t('Exchange')}:
-          </Text>
-          <Select options={LPOptions} onOptionChange={handleBuyOptionChange} style={{ zIndex: '30', flex: '6' }} />
-        </Flex>
-
-        <Flex>
-          <Text bold style={{ flex: '3' }}>
-            {t('Amount')}:
-          </Text>
-          <BalanceInput style={{ flex: '6' }} value={yAmount} onUserInput={handleYAmountChange} />
-        </Flex>
-        <Flex>
-          <Text bold style={{ flex: '3' }}>
-            {t('Estimated Price')}:{' '}
-          </Text>
-          <Text style={{ flex: '3' }} color="primary">
-            ~ {getEstimatedPrice(selectedLpBuyPrice, yAmount).toString()}{' '}
-          </Text>
-        </Flex>
-      </Group>
+      <Flex>
+        <Text bold style={{flex:"3"}}>{t('Amount')}:</Text>
+        <BalanceInput 
+            style={{flex:"6"}}
+            value={yAmount}
+            onUserInput={handleYAmountChange}
+        />
+      </Flex>
+      <Flex>
+        <Text bold style={{flex:"3"}}>{t('Estimated Price')}:  </Text>
+        <Text style={{flex:"3"}} color="primary">~ {getEstimatedPrice(selectedLpBuyPrice, yAmount).toString()} </Text>
+      </Flex> 
+    </Group>
       <Button
         isLoading={pendingTx}
         endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}

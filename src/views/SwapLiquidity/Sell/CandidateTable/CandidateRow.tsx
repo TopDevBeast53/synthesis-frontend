@@ -11,6 +11,8 @@ const StyledRow = styled.div`
   display: flex;
   align-items: center;
   cursor: pointer;
+  flex-wrap:wrap;
+    
 `
 const StyledCell = styled(BaseCell)`
   flex: 4.5;

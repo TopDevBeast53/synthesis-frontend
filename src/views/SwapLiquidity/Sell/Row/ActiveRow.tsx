@@ -26,84 +26,74 @@ const ActiveRow = (props) => {
   const shouldRenderDetail = useDelayedUnmount(expanded, 300)
   const { setTableRefresh, tableRefresh } = useContext(SwapLiquidityContext)
 
-  const handleOnRowClick = () => {
-    setExpanded(!expanded)
-  }
-  const handleCloseClick = (e) => {
-    e.stopPropagation()
-    setPendingTx(true)
-    LpSwapContract.closeSwap(swapId)
-      .then(async (tx) => {
-        await tx.wait()
-        toastSuccess('Info', 'You closed the Order')
-        setPendingTx(false)
-      })
-      .catch((err) => {
-        if (err.code === 4001) {
-          toastError('Error', err.message)
-        } else {
-          toastError('Error', err.toString())
-        }
-        setPendingTx(false)
-      })
-  }
-  const onSendAsk = () => {
-    setTableRefresh(tableRefresh + 1)
-  }
-  const [showDiscussModal] = useModal(<DiscussOrder swapId={swapId} onSend={onSendAsk} swapData={swapData} />, false)
-  const handleUpdateClick = (e) => {
-    e.stopPropagation()
-    showDiscussModal()
-  }
-  if (swapData) {
-    if (swapData.isOpen === false) return null
-  }
-  return (
-    <>
-      <StyledRow onClick={handleOnRowClick}>
-        <StyledCell>
-          <LPTokenCell lpTokenAddress={swapData?.toBuyerToken} balance={swapData?.amount.toString()} />
-        </StyledCell>
-        <StyledCellWithoutPadding>
-          <ArrowCell />
-        </StyledCellWithoutPadding>
-        <StyledCell>
-          <LPTokenCell lpTokenAddress={swapData?.toSellerToken} balance={swapData?.ask.toString()} />
-        </StyledCell>
-        <StyledCell>
-          <ToolTipCell tooltipText={ToolTipText} />
-        </StyledCell>
-        <StyledCell>
-          <Button color="primary" onClick={handleUpdateClick} scale="sm" width="100px">
-            {' '}
-            Update{' '}
-          </Button>
-        </StyledCell>
-        <StyledCell style={{ zIndex: 10, flex: 3 }}>
-          <Button
-            isLoading={pendingTx}
-            endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
-            color="primary"
-            onClick={handleCloseClick}
-            scale="sm"
-            width="100px"
-          >
-            {' '}
-            Close{' '}
-          </Button>
-        </StyledCell>
-        <StyledCell>
-          <ArrowIcon color="primary" toggled={expanded} />
-        </StyledCell>
-      </StyledRow>
+    const handleOnRowClick = () => {
+        setExpanded(!expanded)        
+    }
+    const handleCloseClick = (e) => {
+        e.stopPropagation();        
+        setPendingTx(true) 
+        LpSwapContract.closeSwap(swapId).then(async (tx)=>{
+            await tx.wait()
+            toastSuccess("Info", "You closed the Order")
+            setPendingTx(false) 
+        }).catch(err=>{
+            if(err.code === 4001){
+                toastError("Error", err.message)    
+            }else{
+                toastError("Error", err.toString())
+            }
+            setPendingTx(false) 
+        })
+    }
+    const onSendAsk = () =>{
+        setTableRefresh(tableRefresh + 1)
+    }
+    const [showDiscussModal] = useModal(<DiscussOrder swapId={swapId} onSend={onSendAsk} swapData={swapData}/>,false)
+    const handleUpdateClick = (e) => {
+        e.stopPropagation();
+        showDiscussModal()
+    }
+    if(swapData){
+        if(swapData.isOpen === false) return null
+    }
+    return (
+        <>
+            <StyledRow onClick={handleOnRowClick}>
+                <StyledCell>
+                    <LPTokenCell lpTokenAddress={swapData?.toBuyerToken} balance={swapData?.amount.toString()}/>
+                </StyledCell>
+                <StyledCellWithoutPadding>
+                    <ArrowCell/>
+                </StyledCellWithoutPadding>                
+                <StyledCell>                    
+                    <LPTokenCell lpTokenAddress={swapData?.toSellerToken} balance={swapData?.ask.toString()}/>
+                </StyledCell>
+                <StyledCellWithoutPadding>
+                    <ToolTipCell tooltipText={ToolTipText}/>
+                </StyledCellWithoutPadding>
 
-      {shouldRenderDetail && (
-        <div style={{ padding: '10px 10px', minHeight: '5em' }}>
-          <CandidateTable swap={swapData} />
-        </div>
-      )}
-    </>
-  )
+                <StyledCell style={{zIndex:10, flexDirection:"row"}}>
+                    <Button                         
+                        color="primary" onClick={handleUpdateClick} scale="sm" width="100px" style={{marginRight:"0.5em"}}> Update </Button>
+                    <Button 
+                        isLoading={pendingTx}    
+                        endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
+                        color="primary" onClick={handleCloseClick} scale="sm" width="100px"> Close </Button>
+                </StyledCell>
+                <StyledCellWithoutPadding>
+                    <ArrowIcon color="primary" toggled={expanded} />
+                </StyledCellWithoutPadding>
+                
+            </StyledRow>
+        
+            {shouldRenderDetail && (
+                <div style={{padding:"10px 10px", minHeight:"5em"}}>
+                    <CandidateTable swap={swapData}/>
+                </div>
+            )}        
+        
+        </>
+    )
 }
 
 export default ActiveRow
