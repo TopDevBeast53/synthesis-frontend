@@ -49,7 +49,7 @@ const StyledMenuItem = styled.a<StyledMenuItemProps>`
       ? `
     padding: 0 20px;
     ${theme.mediaQueries.xxl}{
-      padding: 0 28px;
+      padding: 0 20px;
     }
     
     height: 48px;
