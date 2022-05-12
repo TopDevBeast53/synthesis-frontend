@@ -9,7 +9,7 @@ const NFTCard = styled(Card)`
   background-color: rgba(16, 20, 17, 0.9);
   border-style: solid;
   border-width: 1px;
-  border-color: rgb(30, 30, 30);
+  border-color: #ABBDFF;
   :hover {
     background-color: rgba(16, 20, 17, 0.4);
     border-color: rgba(255, 255, 255);
@@ -25,7 +25,7 @@ const NFTCard = styled(Card)`
 
 const NFTCardInfoPanel = styled.div`
   border-radius: 0.75rem;
-  padding: 20px 29px 23px 29px;
+  padding: 20px 23px 23px 28px;
 `
 
 const NFTImageInfoPanel = styled(Card)`
@@ -132,7 +132,7 @@ const NftCard: React.FC<NftCardProps> = ({
     <div role = "button" tabIndex={0} onClick={handleCardSelect} onKeyDown={handleCardSelect} >
       <NFTCard m="10px" selected={isSelected}>
         <NFTImageInfoPanel>
-          <NFTImage src={bgSrc} width={316} height={253}/>
+          <NFTImage src={bgSrc} width={326} height={326}/>
         </NFTImageInfoPanel>
         <NFTCardInfoPanel>
           <Flex flexDirection="column">
