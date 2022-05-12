@@ -120,10 +120,10 @@ const App: React.FC = () => {
             <Route path="/referrals">
               <Referrals />
             </Route>
-            <Route path="/yield-swap-lps">
+            <Route path="/swap-lps">
               <SwapLiquidity />
             </Route>
-            <Route path="/yield-swap-yield">
+            <Route path="/swap-yield">
               <SwapYield />
             </Route>
             {/* 
