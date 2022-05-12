@@ -35,21 +35,28 @@ const Home: React.FC = () => {
         hasCurvedDivider={false}
       >
         <Column style={{ width: '56%', marginBottom: '171px' , marginLeft:"auto", marginRight:"auto"}}>
-          <Heading textAlign="left" style={{ fontSize: '68px' }}>
-            Easily Swap ERC20 Cryptoassets, LP Tokens & Yield.
+          <Heading textAlign="center" style={{ fontSize: '68px' }}>
+            Cheaper Swaps for Crypto, LP Tokens & Even Yield
           </Heading>
           <Flex mt="74px">
-            <Button mr="12px" width="256px">
-              <Text style={{ color: '#101411', padding: '13px', fontSize: '18px', fontWeight: 500 }}>Trade Crypto</Text>
-            </Button>
-            <Button mr="12px" width="300px" style={{ background: '#101411', border: '2px solid #ABBDFF' }}>
-              <Text style={{ color: '#ABBDFF', padding: '13px', fontSize: '18px', fontWeight: 500 }}>
-                Trade LP Tokens
-              </Text>
-            </Button>
-            <Button width="256px" style={{ background: '#ABBDFF' }}>
-              <Text style={{ color: '#101411', padding: '13px', fontSize: '18px', fontWeight: 500 }}>Trade Yield</Text>
-            </Button>
+            <a href="/swap">
+              <Button mr="12px" width="256px">
+                <Text style={{ color: '#101411', padding: '13px', fontSize: '18px', fontWeight: 500 }}>Exchange</Text>
+              </Button>
+            </a>
+            <a href="/yield-swap-lps">
+              <Button mr="12px" width="300px" style={{ background: '#101411', border: '2px solid #ABBDFF' }}>
+                <Text style={{ color: '#ABBDFF', padding: '13px', fontSize: '18px', fontWeight: 500 }}>
+                  LP Swap
+                </Text>
+              </Button>
+            </a>
+            <a href="/yield-swap-yield">
+              <Button width="256px" style={{ background: '#ABBDFF' }}>
+                <Text style={{ color: '#101411', padding: '13px', fontSize: '18px', fontWeight: 500 }}>Yield Swap</Text>
+              </Button>
+            </a>
+            
           </Flex>
         </Column>
         <MetricsSection />
