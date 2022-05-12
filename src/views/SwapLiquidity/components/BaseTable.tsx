@@ -45,7 +45,7 @@ const BaseTable = (props) => {
         {children}
         <ScrollButtonContainer>
           <Button variant="text" onClick={scrollToTop}>
-            {t('To Top')}
+            {t('(Connect Your Wallet to See Swap Orders) -  To Top')}
             <ChevronUpIcon color="primary" />
           </Button>
         </ScrollButtonContainer>

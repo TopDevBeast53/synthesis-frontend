@@ -48,7 +48,7 @@ const YieldPartyTable = (props) => {
         ))}
         <ScrollButtonContainer>
           <Button variant="text" onClick={scrollToTop}>
-            {t('To Top')}
+            {t('Connect Your Wallet to Swap Orders) - To Top')}
             <ChevronUpIcon color="primary" />
           </Button>
         </ScrollButtonContainer>
