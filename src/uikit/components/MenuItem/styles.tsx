@@ -48,7 +48,7 @@ const StyledMenuItem = styled.a<StyledMenuItemProps>`
     $variant === 'default'
       ? `
     padding: 0 20px;
-    ${theme.mediaQueries.xl}{
+    ${theme.mediaQueries.xxl}{
       padding: 0 28px;
     }
     
