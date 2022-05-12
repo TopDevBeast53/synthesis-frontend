@@ -127,7 +127,7 @@ const Menu: React.FC<NavProps> = ({
   const homeLink = links.find((link) => link.label === 'Home')
 
   const subLinksWithoutMobile = subLinks?.filter((subLink) => !subLink.isMobileOnly)
-  const subLinksMobileOnly = subLinks?.filter((subLink) => subLink.isMobileOnly)
+  const subLinksMobileOnly = subLinks?.filter((subLink) => subLink.isMobileOnly)  
 
   return (
     <MenuContext.Provider value={{ linkComponent }}>

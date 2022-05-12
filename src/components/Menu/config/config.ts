@@ -43,16 +43,16 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType[] = (t) => [
     },
     {
         label: t('Yield Swaps'),
-        href: '/swap-lps',
+        href: '/lps-swap',
         icon: 'Earn',
         items: [
             {
                 label: t('Swap LPs'),
-                href: '/swap-lps',
+                href: '/lps-swap',
             },
             {
                 label: t('Swap Yield'),
-                href: '/swap-yield',
+                href: '/yield-swap',
             },
         ],
     },

@@ -46,14 +46,14 @@ const Home: React.FC = () => {
                 </a>
               </Button>
               <Button mr="12px" width="300px" style={{ background: '#101411', border: '2px solid #ABBDFF' }}>
-                <a href="/swap-lps">
+                <a href="/lps-swap">
                   <Text style={{ color: '#ABBDFF', padding: '13px', fontSize: '18px', fontWeight: 500 }}>
                     LP Swap
                   </Text>
                 </a>
               </Button>
               <Button width="256px" style={{ background: '#ABBDFF' }}>
-                <a href="/swap-yield" >
+                <a href="/yield-swap" >
                   <Text style={{ color: '#101411', padding: '13px', fontSize: '18px', fontWeight: 500 }}>Yield Swap</Text>
                 </a>
               </Button>
