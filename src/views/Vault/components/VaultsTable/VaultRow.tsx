@@ -61,10 +61,10 @@ const VaultRow: React.FC<PoolRowProps> = ({ deposit }) => {
   return (
     <>
       <StyledRow role="row" onClick={toggleExpanded}>
-        <EarningsCell isLoading={isLoading} earnings={earnings} />
-        <StakedCell stakedBalance={stakedBalance} />
-        <WithdrawTimeLeft deposit={deposit} />
-        <ExpandActionCell expanded={expanded} isFullLayout={isTablet || isDesktop} />
+      <EarningsCell isLoading={isLoading} earnings={earnings}/>
+      { (isTablet || isDesktop ) && <StakedCell stakedBalance={stakedBalance}/>}      
+      <WithdrawTimeLeft deposit={deposit} />
+      <ExpandActionCell expanded={expanded} isFullLayout={isTablet || isDesktop} />
       </StyledRow>
       {shouldRenderActionPanel && (
         <ActionPanel
