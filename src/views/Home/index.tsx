@@ -34,7 +34,7 @@ const Home: React.FC = () => {
         index={2}
         hasCurvedDivider={false}
       >
-        <Column style={{ width: '56%', marginBottom: '171px' }}>
+        <Column style={{ width: '56%', marginBottom: '171px' , marginLeft:"auto", marginRight:"auto"}}>
           <Heading textAlign="left" style={{ fontSize: '68px' }}>
             Easily Swap ERC20 Cryptoassets, LP Tokens & Yield.
           </Heading>

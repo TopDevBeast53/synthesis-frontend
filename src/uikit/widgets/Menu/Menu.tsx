@@ -27,9 +27,13 @@ const StyledNav = styled.nav`
   height: ${MENU_HEIGHT}px;
   background-color: #101411;
   transform: translate3d(0, 0, 0);
-
   padding-left: 15px;
   padding-right: 15px;
+  ${({ theme }) => theme.mediaQueries.xxl} {
+    padding-left: 15%;
+    padding-right: 15%;
+  }
+  
 `
 
 const FixedContainer = styled.div<{ showMenu: boolean; height: number }>`

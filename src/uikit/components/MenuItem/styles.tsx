@@ -44,10 +44,14 @@ const StyledMenuItem = styled.a<StyledMenuItemProps>`
     }
   `}
 
-  ${({ $variant }) =>
+  ${({ $variant, theme }) =>
     $variant === 'default'
       ? `
     padding: 0 20px;
+    ${theme.mediaQueries.xl}{
+      padding: 0 28px;
+    }
+    
     height: 48px;
   `
       : `
