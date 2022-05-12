@@ -137,9 +137,18 @@ const Menu: React.FC<NavProps> = ({
           <StyledNav>
             <Flex>
               <Logo isDark={isDark} href={homeLink?.href ?? '/'} />
-              {!isMobile && <MenuItems items={links} activeItem={activeItem} activeSubItem={activeSubItem} />}
+              {!isMobile && <MenuItems items={links} activeItem={activeItem} activeSubItem={activeSubItem} ml="30px"/>}
             </Flex>
+            
             <Flex alignItems="center" height="100%">
+              <div style={{padding:"10px", border:"1px solid #57E58E", margin:"0 0.5em", fontSize:"1.1em"}}>
+                <a target="_blank" rel="noreferrer" href="https://extropy.io" style={{color:"#57E58E", width:"100px", textAlign:"center"}} >
+                  <span style={{}}>Audited by</span>
+                  <br/> 
+                  <span style={{fontWeight:"bold"}}>Extropy.io</span>
+                </a>
+                
+              </div>
               {globalMenu} {userMenu}
             </Flex>
           </StyledNav>
