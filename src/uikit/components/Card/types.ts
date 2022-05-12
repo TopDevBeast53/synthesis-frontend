@@ -24,11 +24,12 @@ export type CardTheme = {
 }
 
 export interface CardProps extends SpaceProps, HTMLAttributes<HTMLDivElement> {
-    isActive?: boolean
-    isSuccess?: boolean
-    isWarning?: boolean
-    isDisabled?: boolean
-    ribbon?: React.ReactNode
-    borderBackground?: string
-    background?: string
+  isActive?: boolean
+  isSuccess?: boolean
+  isWarning?: boolean
+  isDisabled?: boolean
+  selected? :boolean
+  ribbon?: React.ReactNode
+  borderBackground?: string
+  background?: string
 }

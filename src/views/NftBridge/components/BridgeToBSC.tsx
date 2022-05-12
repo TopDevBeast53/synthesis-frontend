@@ -159,14 +159,6 @@ function BridgeToBSCInner({ switcher }: { switcher: React.ReactNode }) {
     [getTokensInfo, mintBridgedNFT, toastSuccess, toastError, t],
   )
 
-  const handleEmpty = () => {
-    console.debug('finished!')
-  }
-
-  // const handleInitialize = async() => {
-  //   await initializeStateAccount(wallet);
-  // }
-
   const TokensList = () => (
     <div>
       <Flex flexWrap="wrap" style={{ margin: '-19px' }}>
@@ -179,24 +171,26 @@ function BridgeToBSCInner({ switcher }: { switcher: React.ReactNode }) {
               name={token.metadataExternal?.name}
               infos={[
                 {
-                  caption: 'Token ID',
-                  value: (
-                    <CopyValue value={token.mint.toString()}>{shortenAddress(token.mint.toString(), 3)}</CopyValue>
-                  ),
+                  type: "Token ID",
+                  caption: "Token ID",
+                  value: 
+                    <CopyValue value={token.mint.toString()}>
+                      {shortenAddress(token.mint.toString(), 3)}
+                    </CopyValue>
+                  
                 },
                 {
-                  caption: 'URI',
-                  value: (
-                    <CopyValue
-                      value={
-                        token.metadataExternal
-                          ? token.metadataExternal.image
-                          : 'https://arweave.net/vkk1RRYm9UsH7hIE92nBMcfYJBqBUwcYKh5zj__AjyA'
+                  type: "URI",
+                  caption: "URI",
+                  value: 
+                    <CopyValue value={
+                        token.metadataExternal 
+                        ? token.metadataExternal.image
+                        : "https://arweave.net/vkk1RRYm9UsH7hIE92nBMcfYJBqBUwcYKh5zj__AjyA"
                       }
                     >
                       Image link
                     </CopyValue>
-                  ),
                 },
               ]}
               actions={[

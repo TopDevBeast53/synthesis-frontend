@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import filter from 'lodash/filter'
-import { Flex, Heading, Button, Card, Text, ButtonMenu, ButtonMenuItem } from 'uikit'
+import { Flex, Heading, Button, Card, Text, ButtonMenu, ButtonMenuItem, AutoRenewIcon } from 'uikit'
 import { useTranslation } from 'contexts/Localization'
 import useToast from 'hooks/useToast'
 import styled from 'styled-components'
@@ -32,6 +32,7 @@ const NFTDisplayPanel = styled(Flex)`
 const GeneralCard = styled(Card)`
   padding: 14px 29px 15px 29px;
   min-width: 288px;
+  margin-top: 1 rem;
 `
 
 const Wrapper = styled.div`
@@ -54,6 +55,7 @@ export default function NftStaking() {
   const [selectedTokenIds, setSelectedTokenIds] = useState<number[]>([])
 
   const [loading, setLoading] = useState(true)
+  const [loadingStatus, setLoadingStatus] = useState(false)
   const [loadingAccumulatedAP, setLoadingAccumulatedAP] = useState(true)
   const [loadingPendingReward, setLoadingPendingReward] = useState(true)
   const [enableStakingBtn, setEnableStakingBtn] = useState(false)
@@ -66,11 +68,6 @@ export default function NftStaking() {
 
   const handleGetTokens = useCallback(() => {
     setLoading(true)
-    getTokens().then((res) => {
-      setTokens(res)
-      setLoading(false)
-    })
-
     setLoadingAccumulatedAP(true)
     getAccumulatedHP().then((res) => {
       setAccumulatedAP(res.toString())
@@ -82,6 +79,11 @@ export default function NftStaking() {
       setPendingReward(res.toString())
       setLoadingPendingReward(false)
     })
+
+    getTokens().then((res) => {
+      setTokens(res)
+      setLoading(false)
+    })
   }, [getTokens, getAccumulatedHP, getPendingReward])
 
   useEffect(() => {
@@ -90,7 +92,7 @@ export default function NftStaking() {
 
   const handleStaking = useCallback(async () => {
     try {
-      setLoading(true)
+      setLoadingStatus(true)
       const receipt = await stakingNft(selectedTokenIds, !viewStaked)
       if (receipt.status) {
         toastSuccess(t('Success'), t(!viewStaked ? 'Staked!' : 'Unstaked'))
@@ -103,7 +105,6 @@ export default function NftStaking() {
           return _t
         })
         setTokens(updatedTokens)
-        setSelectedTokenIds([])
       } else {
         toastError(t('Error'), t('Maybe show transaction hash so they could go there and check the problem.'))
       }
@@ -111,7 +112,8 @@ export default function NftStaking() {
       logError(e)
       toastError(t('Error'), t('Please try again.'))
     } finally {
-      setLoading(false)
+      setSelectedTokenIds([])
+      setLoadingStatus(false)
     }
   }, [stakingNft, viewStaked, tokens, selectedTokenIds, toastSuccess, toastError, t])
 
@@ -134,34 +136,32 @@ export default function NftStaking() {
     }
   }, [getPendingReward, withdrawReward, toastSuccess, toastError, t])
 
-  const handleBoost = useCallback(
-    async (tokenId) => {
-      try {
-        setLoading(true)
-        const receipt = await boostHelixNFT(tokenId, accumulatedAP)
-        if (receipt.status) {
-          const _upgradedToken: TokenInfo = await getHelixNftInfoById(tokenId)
-          const _accumulatedHP = await getAccumulatedHP()
-          toastSuccess(t('Success'), t('Boosted!'))
-          const updatedTokens = tokens.map((token: TokenInfo) => {
-            if (token.tokenId.toString() === tokenId.toString()) return { ...token, ..._upgradedToken }
-            return token
-          })
-          setTokens(updatedTokens)
-          setAccumulatedAP(_accumulatedHP)
-        } else {
-          toastError(t('Error'), t('Error transaction Or Insufficient accumulated HelixPoints .'))
-        }
-      } catch (e) {
-        logError(e)
-        toastError(t('Error'), t('Please try again.'))
-      } finally {
-        setLoading(false)
+  const handleBoost = useCallback(async (tokenId) => {
+    try {
+      setLoadingStatus(true)
+      const receipt = await boostHelixNFT(tokenId, accumulatedAP)
+      if (receipt.status){
+        const _upgradedToken: TokenInfo = await getHelixNftInfoById(tokenId)
+        const _accumulatedHP = await getAccumulatedHP()
+        toastSuccess(t('Success'), t('Boosted!'))
+        const updatedTokens = tokens.map((token: TokenInfo)=>{
+          if (token.tokenId.toString() === tokenId.toString())
+            return {...token, ..._upgradedToken}
+          return token
+        })
+        setTokens(updatedTokens)
+        setAccumulatedAP(_accumulatedHP)
+      } else {
+        toastError(t('Error'), t('Error transaction Or Insufficient accumulated HelixPoints .'))
       }
-    },
-    [boostHelixNFT, getAccumulatedHP, getHelixNftInfoById, tokens, accumulatedAP, toastSuccess, toastError, t],
-  )
-
+    } catch (e) {
+      logError(e)
+      toastError(t('Error'), t('Please try again.'))
+    } finally {
+      setLoadingStatus(false)
+    }
+  }, [boostHelixNFT, getAccumulatedHP, getHelixNftInfoById, tokens, accumulatedAP, toastSuccess, toastError, t])
+  
   const onhandleCheckbox = useCallback(
     (tokenId, isChecked) => {
       let _selIds
@@ -202,15 +202,18 @@ export default function NftStaking() {
               tokenId={token.tokenId}
               infos={[
                 {
-                  caption: 'Level',
+                  type: "level",
+                  caption: "Level",
                   value: token.level,
                 },
                 {
-                  caption: 'HelixPoints',
+                  type: "points",
+                  caption: "HelixPoints",
                   value: token.helixPoints,
                 },
                 {
-                  caption: 'Remain APTo Next Level',
+                  type: "remainNextLevel",
+                  caption: "Remain HP To Next Level",
                   value: token.remainHPToNextLevel,
                 },
               ]}
@@ -226,6 +229,7 @@ export default function NftStaking() {
               bgSrc={token.uri}
               disabled={token.disabled}
               onhandleChangeCheckBox={onhandleCheckbox}
+              loading={loadingStatus}
             />
           )
         })}
@@ -244,10 +248,10 @@ export default function NftStaking() {
       </PageHeader>
       <Page>
         <NFTDisplayPanel>
-          <Flex justifyContent="space-between">
-            <Flex>
-              <GeneralCard>
-                <NFTCardText type={NFTCardTextType.generalCaption} style={{ paddingBottom: '7px' }}>
+          <Flex justifyContent="space-between" flexWrap="wrap">
+            <Flex flexWrap="wrap">
+              <GeneralCard style={{marginTop: '15px'}}>
+                <NFTCardText type={NFTCardTextType.generalCaption} style={{paddingBottom: '7px'}}>
                   My Accumulated Helix Points
                 </NFTCardText>
                 <Flex alignItems="center">
@@ -257,11 +261,11 @@ export default function NftStaking() {
                   </NFTCardText>
                 </Flex>
               </GeneralCard>
-              <GeneralCard style={{ marginLeft: '25px' }}>
-                <NFTCardText type={NFTCardTextType.generalCaption} style={{ paddingBottom: '7px' }}>
+              <GeneralCard style={{marginTop: '15px', marginLeft: '25px'}}>
+                <NFTCardText type={NFTCardTextType.generalCaption} style={{paddingBottom: '7px'}}>
                   Pending Reward
                 </NFTCardText>
-                <Flex alignItems="center">
+                <Flex alignItems="center" flexWrap="wrap"> 
                   <NFTCardText type={NFTCardTextType.generalValue}>
                     {loadingPendingReward ? 'loading' : Number.parseFloat(pendingReward).toFixed(3)}
                   </NFTCardText>
@@ -272,13 +276,18 @@ export default function NftStaking() {
               </GeneralCard>
             </Flex>
 
-            <Flex flexDirection="column" flexShrink={1}>
+            <Flex flexDirection="column" flexShrink={1} style={{marginTop: '15px'}}> 
               <ShowStackedSwitch />
               <NFTCardText type={NFTCardTextType.generalCaption} style={{ marginTop: '10px' }}>
                 Selected: {selectedTokenIds.length}
               </NFTCardText>
-              <Button onClick={handleStaking} disabled={!enableStakingBtn} style={{ margin: '10px 0' }}>
-                {viewStaked ? 'Unstake' : 'Stake'}
+              <Button 
+                isLoading={loadingStatus} 
+                endIcon={loadingStatus ? <AutoRenewIcon spin color="currentColor" /> : null}  
+                onClick={handleStaking} 
+                disabled={!enableStakingBtn} 
+                style={{ margin: '10px 0' }}>
+                {viewStaked ? "Unstake" : "Stake"}
               </Button>
             </Flex>
           </Flex>

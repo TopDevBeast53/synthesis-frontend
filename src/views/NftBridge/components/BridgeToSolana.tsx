@@ -13,8 +13,6 @@ export default function BridgeToSolana({ switcher }: { switcher: React.ReactNode
   const { toastError, toastSuccess } = useToast()
 
   const [tokens, setTokens] = useState([])
-  const [selectedTokenID, setSelectedTokenID] = useState('')
-
   const [loading, setLoading] = useState(true)
 
   const { getUnstakedNftsFromBSC, approveToBridgeContract } = useNFTBridge()
@@ -70,15 +68,18 @@ export default function BridgeToSolana({ switcher }: { switcher: React.ReactNode
               tokenId={token.tokenId}
               infos={[
                 {
-                  caption: 'Level',
+                  type: "level",
+                  caption: "Level",
                   value: token.level,
                 },
                 {
-                  caption: 'HelixPoints',
+                  type: "points",
+                  caption: "HelixPoints",
                   value: token.helixPoints,
                 },
                 {
-                  caption: 'Remain APTo Next Level',
+                  type: "remainNextLevel",
+                  caption: "Remain HP To Next Level",
                   value: token.remainHPToNextLevel,
                 },
               ]}

@@ -27,7 +27,7 @@ export const NFTCardText = styled(Text)<{ type: NFTCardTextType }>`
       case NFTCardTextType.generalCaption:
       case NFTCardTextType.cardCaption:
       case NFTCardTextType.cardValue:
-        return 'font-size: 18px'
+        return 'font-size: 15px';
       case NFTCardTextType.generalValue:
       default:
         return 'font-size: 50px'
