@@ -71,10 +71,10 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType[] = (t) => [
                 label: 'Geobot Staking',
                 href: '/geobot-staking',
             },
-            {
-                label: 'Yield Boosting',
-                href: '/geobot-yield-boosting',
-            },
+            // {
+            //     label: 'Yield Boosting',
+            //     href: '/geobot-yield-boosting',
+            // },
             {
                 type: DropdownMenuItemType.DIVIDER,
             },

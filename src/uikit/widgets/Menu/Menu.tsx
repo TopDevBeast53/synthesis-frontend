@@ -141,11 +141,11 @@ const Menu: React.FC<NavProps> = ({
             </Flex>
             
             <Flex alignItems="center" height="100%">
-              <div style={{padding:"10px", border:"1px solid #57E58E", margin:"0 0.5em", fontSize:"1.1em"}}>
-                <a target="_blank" rel="noreferrer" href="https://extropy.io" style={{color:"#57E58E", width:"100px", textAlign:"center"}} >
-                  <span style={{}}>Audited by</span>
+              <div style={{padding:"10px 5px", border:"1px solid #57E58E", margin:"0 0.5em"}}>
+                <a target="_blank" rel="noreferrer" href="https://extropy.io" style={{display:"inline-block", color:"#57E58E", width:"110px", textAlign:"center"}} >
+                  <span style={{fontSize:"1em"}}>Audited by</span>
                   <br/> 
-                  <span style={{fontWeight:"bold"}}>Extropy.io</span>
+                  <span style={{fontWeight:"bold",fontSize:"1.05em"}}>Extropy.io</span>
                 </a>
                 
               </div>
