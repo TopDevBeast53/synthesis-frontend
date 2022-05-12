@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import CountUp from 'react-countup'
-import { Text, TextProps } from 'uikit'
+import { Text, TextProps, useMatchBreakpoints } from 'uikit'
 
 interface BalanceProps extends TextProps {
   value: number
@@ -22,13 +22,14 @@ const Balance: React.FC<BalanceProps> = ({
   ...props
 }) => {
   const previousValue = useRef(0)
+  const { isMobile } = useMatchBreakpoints()
 
   useEffect(() => {
     previousValue.current = value
   }, [value])
 
   return (
-    <Text color={isDisabled ? 'textDisabled' : color} onClick={onClick} {...props}>
+    <Text color={isDisabled ? 'textDisabled' : color} onClick={onClick} {...props} style={ {wordBreak: isMobile ? "break-word" : "inherit"}}> 
       <CountUp
         start={previousValue.current}
         end={value}

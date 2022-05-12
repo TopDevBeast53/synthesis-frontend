@@ -307,7 +307,7 @@ const Pools: React.FC = () => {
           </FilterContainer>
         </PoolControls>
         {showFinishedPools && (
-          <Text fontSize="20px" color="failure" pb="32px">
+          <Text fontSize="20px" color="failure" pb="32px" style={{background:"#101411", padding:"1em", borderRadius:"0.5em"}}>
             {t('These pools are no longer distributing rewards. Please unstake your tokens.')}
           </Text>
         )}

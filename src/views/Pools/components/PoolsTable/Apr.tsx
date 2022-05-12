@@ -70,7 +70,7 @@ const Apr: React.FC<AprProps> = ({ pool, showIcon, stakedBalance, performanceFee
             isDisabled={isFinished}
             value={isFinished ? 0 : apr}
             decimals={2}
-            unit="%"
+            unit="%"            
           />
           {!isFinished && showIcon && (
             <Button onClick={openRoiModal} variant="text" width="20px" height="20px" padding="0px" marginLeft="4px">
