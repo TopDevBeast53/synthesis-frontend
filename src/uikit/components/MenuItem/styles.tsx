@@ -46,10 +46,13 @@ const StyledMenuItem = styled.a<StyledMenuItemProps>`
 
   ${({ $variant, theme }) =>
     $variant === 'default'
-      ? `
-    padding: 0 20px;
-    ${theme.mediaQueries.xxl}{
+      ? `    
+    padding: 0 10px;    
+    @media screen and (min-width: 1650px){
       padding: 0 20px;
+    }
+    @media screen and (min-width: 1800px){
+      padding: 0 28px;
     }
     
     height: 48px;
