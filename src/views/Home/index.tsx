@@ -39,23 +39,24 @@ const Home: React.FC = () => {
             Cheaper Swaps for Crypto, LP Tokens & Even Yield
           </Heading>
           <Flex mt="74px">
-            <a href="/swap">
+            
               <Button mr="12px" width="256px">
-                <Text style={{ color: '#101411', padding: '13px', fontSize: '18px', fontWeight: 500 }}>Exchange</Text>
+                <a href="/swap">
+                  <Text style={{ color: '#101411', padding: '13px', fontSize: '18px', fontWeight: 500 }}>Exchange</Text>
+                </a>
               </Button>
-            </a>
-            <a href="/yield-swap-lps">
               <Button mr="12px" width="300px" style={{ background: '#101411', border: '2px solid #ABBDFF' }}>
-                <Text style={{ color: '#ABBDFF', padding: '13px', fontSize: '18px', fontWeight: 500 }}>
-                  LP Swap
-                </Text>
+                <a href="/yield-swap-lps">
+                  <Text style={{ color: '#ABBDFF', padding: '13px', fontSize: '18px', fontWeight: 500 }}>
+                    LP Swap
+                  </Text>
+                </a>
               </Button>
-            </a>
-            <a href="/yield-swap-yield">
               <Button width="256px" style={{ background: '#ABBDFF' }}>
-                <Text style={{ color: '#101411', padding: '13px', fontSize: '18px', fontWeight: 500 }}>Yield Swap</Text>
+                <a href="/yield-swap-yield" >
+                  <Text style={{ color: '#101411', padding: '13px', fontSize: '18px', fontWeight: 500 }}>Yield Swap</Text>
+                </a>
               </Button>
-            </a>
             
           </Flex>
         </Column>
