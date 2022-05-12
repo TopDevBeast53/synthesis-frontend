@@ -69,12 +69,12 @@ const YieldParty = () => {
     <Page>
       <Wrapper>
         <ButtonMenu activeIndex={menuIndex} scale="sm" variant="subtle" onItemClick={handleButtonMenuClick}>
-          <ButtonMenuItem>{t('Active')}</ButtonMenuItem>
-          <ButtonMenuItem>{t('Closed')}</ButtonMenuItem>
+          <ButtonMenuItem>{t('Open')}</ButtonMenuItem>
+          <ButtonMenuItem>{t('Executed')}</ButtonMenuItem>
         </ButtonMenu>
         <Button variant="secondary" scale="md" mr="1em" onClick={handleAdd}>
           {' '}
-          Add{' '}
+          Create Swap{' '}
         </Button>
       </Wrapper>
       <YieldPartyContext.Provider value={context}>

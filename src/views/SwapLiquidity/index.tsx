@@ -40,17 +40,17 @@ export default function SwapLiquidity() {
       <PageHeader background="transparent">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Heading as="h1" scale="xxl" color="secondary" style={{ display: 'inline-block', verticalAlign: 'middle' }}>
-            {t('Swap Liquidity')}
+            {t('Swap LP Tokens')}
           </Heading>
           <Wrapper>
             <ButtonMenu activeIndex={menuIndex} scale="sm" variant="subtle" onItemClick={handleButtonMenuClick}>
-              <ButtonMenuItem>{t('Sell')}</ButtonMenuItem>
-              <ButtonMenuItem>{t('Buy')}</ButtonMenuItem>
+              <ButtonMenuItem>{t('Find LP Swaps')}</ButtonMenuItem>
+              <ButtonMenuItem>{t('My LP Swaps')}</ButtonMenuItem>
             </ButtonMenu>
           </Wrapper>
         </div>
       </PageHeader>
-      <>{menuIndex === 0 ? <Sell /> : menuIndex === 1 && <Buy />}</>
+      <>{menuIndex === 0 ? <Buy /> : menuIndex === 1 && <Sell />}</>
     </SwapLiquidityContext.Provider>
   )
 }

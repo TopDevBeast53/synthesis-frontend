@@ -5,10 +5,11 @@ import Page from 'components/Layout/Page'
 import { useTranslation } from 'contexts/Localization'
 import { useHelixLpSwap } from 'hooks/useContract'
 import styled from 'styled-components'
-import { ButtonMenu, ButtonMenuItem } from 'uikit'
+import { Button, ButtonMenu, ButtonMenuItem, useModal } from 'uikit'
 import { SwapLiquidityContext } from '../context'
 import BuyTable from './BuyTable'
 import { SwapState } from '../types'
+import CreateOrderDialog from '../Sell/Modals/CreateOrderDialog'
 
 const Wrapper = styled.div`
   display: flex;
@@ -42,6 +43,8 @@ const Sell = () => {
     return []
   }, [menuIndex, swaps, bidIdsPerUser, account])
 
+  const [handleAdd] = useModal(<CreateOrderDialog />)
+
   const handleButtonMenuClick = (newIndex) => {
     setFilterState(newIndex)
     setMenuIndex(newIndex)
@@ -66,10 +69,14 @@ const Sell = () => {
     <Page>
       <Wrapper>
         <ButtonMenu activeIndex={menuIndex} scale="sm" variant="subtle" onItemClick={handleButtonMenuClick}>
-          <ButtonMenuItem>{t('All')}</ButtonMenuItem>
-          <ButtonMenuItem>{t('Applied')}</ButtonMenuItem>
-          <ButtonMenuItem>{t('Finished')}</ButtonMenuItem>
+          <ButtonMenuItem>{t('Open')}</ButtonMenuItem>
+          <ButtonMenuItem>{t('My Bids')}</ButtonMenuItem>
+          <ButtonMenuItem>{t('Executed')}</ButtonMenuItem>
         </ButtonMenu>
+        <Button variant="secondary" scale="md" mr="1em" onClick={handleAdd}>
+          {' '}
+          Create Swap{' '}
+        </Button>
       </Wrapper>
       <BuyTable data={filteredSwaps} />
     </Page>

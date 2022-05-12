@@ -35,13 +35,13 @@ export default function SwapYield() {
           </Heading>
           <Wrapper>
             <ButtonMenu activeIndex={menuIndex} scale="sm" variant="subtle" onItemClick={handleButtonMenuClick}>
-              <ButtonMenuItem>{t('Sell')}</ButtonMenuItem>
-              <ButtonMenuItem>{t('Buy')}</ButtonMenuItem>
+              <ButtonMenuItem>{t('Find Yield Swaps')}</ButtonMenuItem>
+              <ButtonMenuItem>{t('My Yield Swaps')}</ButtonMenuItem>
             </ButtonMenu>
           </Wrapper>
         </div>
       </PageHeader>
-      <>{menuIndex === 0 ? <YieldParty /> : menuIndex === 1 && <YieldCParty />}</>
+      <>{menuIndex === 0 ? <YieldCParty /> : menuIndex === 1 && <YieldParty />}</>
     </>
   )
 }

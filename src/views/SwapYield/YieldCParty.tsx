@@ -3,13 +3,14 @@ import { useWeb3React } from '@web3-react/core'
 import { useFastFresh } from 'hooks/useRefresh'
 import styled from 'styled-components'
 import { useTranslation } from 'contexts/Localization'
-import { ButtonMenu, ButtonMenuItem } from 'uikit'
+import { Button, ButtonMenu, ButtonMenuItem, useModal } from 'uikit'
 import { filter, includes } from 'lodash'
 import { useHelixYieldSwap } from 'hooks/useContract'
 import Page from 'components/Layout/Page'
 import YieldCPartyTable from './components/YieldCParty/Table'
 import { SwapState } from './types'
 import { YieldCPartyContext } from './context'
+import AddRowModal from './components/YieldParty/Modals/CreateOrderDialog'
 
 const Wrapper = styled.div`
   display: flex;
@@ -54,6 +55,7 @@ const YieldCParty = () => {
     setMenuIndex(newIndex)
   }
 
+  const [handleAdd] = useModal(<AddRowModal />)
   useEffect(() => {
     if (refresh < 0) return
     setLoading(true)
@@ -96,11 +98,15 @@ const YieldCParty = () => {
           <Wrapper>
             {/* TODO: Should be read from constants */}
             <ButtonMenu activeIndex={menuIndex} scale="sm" variant="subtle" onItemClick={handleButtonMenuClick}>
-              <ButtonMenuItem>{t('Orders')}</ButtonMenuItem>
-              <ButtonMenuItem>{t('Applied Orders')}</ButtonMenuItem>
-              <ButtonMenuItem>{t('Pending')}</ButtonMenuItem>
-              <ButtonMenuItem>{t('Withdrawn')}</ButtonMenuItem>
+              <ButtonMenuItem>{t('Open')}</ButtonMenuItem>
+              <ButtonMenuItem>{t('My Bids')}</ButtonMenuItem>
+              <ButtonMenuItem>{t('Active Swaps')}</ButtonMenuItem>
+              <ButtonMenuItem>{t('Completed Swaps')}</ButtonMenuItem>
             </ButtonMenu>
+            <Button variant="secondary" scale="md" mr="1em" onClick={handleAdd}>
+              {' '}
+              Create Swap{' '}
+            </Button>
           </Wrapper>
           <YieldCPartyContext.Provider
             value={{ tableRefresh: refresh, setTableRefresh, updateMenuIndex: setMenuIndex }}
