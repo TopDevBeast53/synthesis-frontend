@@ -19,6 +19,7 @@ export const StyledListItem = styled.li`
   font-size: 16px;
   margin-bottom: 8px;
   text-transform: capitalize;
+  padding-bottom: 5px;
 
   &:first-child {
     color: ${darkColors.secondary};

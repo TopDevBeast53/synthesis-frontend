@@ -31,9 +31,12 @@ const MenuItem: React.FC<FooterProps> = ({
           alignItems="flex-start"
           mb={['42px', null, '24px']}
         >
-          {items?.map((item) => (
+          <Box display={['none', null, 'block']} style={{alignSelf:"center"}}>
+            <LogoFooter isDark width="140px" />
+          </Box>
+          {items?.map((item, index) => (
             <StyledList key={item.label}>
-              <StyledListItem>{item.label}</StyledListItem>
+              <StyledListItem style={{paddingBottom:"15px"}}>{item.label}</StyledListItem>
               {item.items?.map(({ label, href, isHighlighted = false }) => (
                 <StyledListItem key={label}>
                   {href ? (
@@ -51,13 +54,11 @@ const MenuItem: React.FC<FooterProps> = ({
                   )}
                 </StyledListItem>
               ))}
+              {(index+1 === items.length)&&<SocialLinks order={[2]} pb={['42px', null, '32px']} mb={['0', null, '32px']} />}
             </StyledList>
-          ))}
-          <Box display={['none', null, 'block']}>
-            <LogoFooter isDark width="140px" />
-          </Box>
+          ))}          
         </Flex>
-        <SocialLinks order={[2]} pb={['42px', null, '32px']} mb={['0', null, '32px']} />
+        {/* <SocialLinks order={[2]} pb={['42px', null, '32px']} mb={['0', null, '32px']} /> */}
       </Flex>
     </StyledFooter>
   )
