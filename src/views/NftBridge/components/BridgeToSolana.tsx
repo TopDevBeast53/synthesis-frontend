@@ -113,7 +113,7 @@ export default function BridgeToSolana({ switcher }: { switcher: React.ReactNode
     <>
       <Flex justifyContent="space-between" alignItems="center" style={{ marginBottom: '32px', minHeight: '60px' }}>
         <Heading as="h2" mt="20px" mb="10px">
-          My Geobots on Binance
+          My Geobots on Ethereum
         </Heading>
         {switcher}
       </Flex>
