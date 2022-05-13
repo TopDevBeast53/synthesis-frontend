@@ -5,6 +5,9 @@ import { Heading, Text, Button, Flex, Card } from 'uikit'
 import Column from 'components/Layout/Column'
 import Chain from 'uikit/components/Svg/Icons/Chain'
 import ArrowsUp from 'uikit/components/Svg/Icons/ArrowsUp'
+import DeRisk from 'uikit/components/Svg/Icons/DeRisk'
+import InstantlySwap from 'uikit/components/Svg/Icons/InstantlySwap'
+import NewPositions from 'uikit/components/Svg/Icons/NewPositions'
 import SyncAlt from 'uikit/components/Svg/Icons/SyncAlt'
 import MetricsSection from './components/MetricsSection'
 
@@ -75,7 +78,7 @@ const Home: React.FC = () => {
             </Heading>
             <Card style={{ background: 'rgba(16, 20, 17, 0.6)', marginBottom: '10px' }}>
               <Flex style={{ padding: '44px 10%', width: '100%', justifyContent: 'space-between' }}>
-                <Chain />
+                <InstantlySwap style={{ width: "100px" }}/>
                 <Column style={{ maxWidth: '70%' }}>
                   <Heading pb="13px">Instantly Swap Yield Positions at Low Cost</Heading>
                   <Text>
@@ -87,7 +90,7 @@ const Home: React.FC = () => {
             </Card>
             <Card style={{ background: 'rgba(16, 20, 17, 0.6)', marginBottom: '10px' }}>
               <Flex style={{ padding: '44px 10%', width: '100%', justifyContent: 'space-between' }}>
-                <Chain />
+                <DeRisk style={{ width: "100px" }}/>
                 <Column style={{ maxWidth: '70%' }}>
                   <Heading pb="13px">Easily De-Risk By Locking in Fixed Returns</Heading>
                   <Text>
@@ -99,7 +102,7 @@ const Home: React.FC = () => {
             </Card>
             <Card style={{ background: 'rgba(16, 20, 17, 0.6)', marginBottom: '10px' }}>
               <Flex style={{ padding: '44px 10%', width: '100%', justifyContent: 'space-between' }}>
-                <ArrowsUp />
+                <NewPositions style={{ width: "100px" }}/>
                 <Column style={{ maxWidth: '70%' }}>
                   <Heading pb="13px">Enter New Yield Positions at Discount Rates</Heading>
                   <Text>
