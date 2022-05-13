@@ -48,14 +48,14 @@ const Home: React.FC = () => {
                   <Text style={{ color: '#101411', padding: '13px', fontSize: '18px', fontWeight: 500 }}>Trade Crypto</Text>
                 </a>
               </Button>
-              <Button mr="12px" width="300px" style={{ background: '#101411', border: '2px solid #ABBDFF' }}>
+              <Button mr="12px" width="300px" style={{ background: '#101411', border: '2px solid #ABBEFF' }}>
                 <a href="/lps-swap">
-                  <Text style={{ color: '#ABBDFF', padding: '13px', fontSize: '18px', fontWeight: 500 }}>
+                  <Text style={{ color: '#ABBEFF', padding: '13px', fontSize: '18px', fontWeight: 500 }}>
                     Trade LP Tokens
                   </Text>
                 </a>
               </Button>
-              <Button width="256px" style={{ background: '#ABBDFF' }}>
+              <Button width="256px" style={{ background: '#ABBEFF' }}>
                 <a href="/yield-swap" >
                   <Text style={{ color: '#101411', padding: '13px', fontSize: '18px', fontWeight: 500 }}>Trade Yield</Text>
                 </a>

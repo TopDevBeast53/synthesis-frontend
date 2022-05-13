@@ -9,7 +9,7 @@ const NFTCard = styled(Card)`
   background-color: rgba(16, 20, 17, 0.9);
   border-style: solid;
   border-width: 1px;
-  border-color: #ABBDFF;
+  border-color: #ABBEFF;
   :hover {
     background-color: rgba(16, 20, 17, 0.4);
     border-color: rgba(255, 255, 255);
