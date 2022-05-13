@@ -243,7 +243,7 @@ export default function NftStaking() {
     <>
       <PageHeader background="transparent">
         <Heading as="h1" scale="xxl" color="secondary">
-          {t('My Geobots')}
+          {t('Stake Your Geobots')}
         </Heading>
       </PageHeader>
       <Page>

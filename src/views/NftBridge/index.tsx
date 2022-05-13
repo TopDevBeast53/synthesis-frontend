@@ -45,7 +45,7 @@ export default function NftBridge() {
     <Wrapper>
       <ButtonMenu activeIndex={viewPageIndex} onItemClick={onhandleItemClick} scale="sm" variant="subtle">
         <ButtonMenuItem>{t('Bridge To Solana')}</ButtonMenuItem>
-        <ButtonMenuItem>{t('Bridge To BSC')}</ButtonMenuItem>
+        <ButtonMenuItem>{t('Bridge To Ethereum')}</ButtonMenuItem>
       </ButtonMenu>
     </Wrapper>
   )
