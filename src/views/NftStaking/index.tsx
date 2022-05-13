@@ -49,14 +49,14 @@ export default function NftStaking() {
   const { t } = useTranslation()
   const { toastError, toastSuccess } = useToast()
   const [tokens, setTokens] = useState([])
-  const [accumulatedAP, setAccumulatedAP] = useState('')
+  const [accumulatedHP, setAccumulatedHP] = useState('')
   const [pendingReward, setPendingReward] = useState('')
   const [viewStaked, setViewStaked] = useState(false)
   const [selectedTokenIds, setSelectedTokenIds] = useState<number[]>([])
 
   const [loading, setLoading] = useState(true)
   const [loadingStatus, setLoadingStatus] = useState(false)
-  const [loadingAccumulatedAP, setLoadingAccumulatedAP] = useState(true)
+  const [loadingAccumulatedHP, setLoadingAccumulatedHP] = useState(true)
   const [loadingPendingReward, setLoadingPendingReward] = useState(true)
   const [enableStakingBtn, setEnableStakingBtn] = useState(false)
 
@@ -68,10 +68,10 @@ export default function NftStaking() {
 
   const handleGetTokens = useCallback(() => {
     setLoading(true)
-    setLoadingAccumulatedAP(true)
+    setLoadingAccumulatedHP(true)
     getAccumulatedHP().then((res) => {
-      setAccumulatedAP(res.toString())
-      setLoadingAccumulatedAP(false)
+      setAccumulatedHP(res.toString())
+      setLoadingAccumulatedHP(false)
     })
 
     setLoadingPendingReward(true)
@@ -92,7 +92,7 @@ export default function NftStaking() {
 
   const handleStaking = useCallback(async () => {
     try {
-      setLoadingStatus(true)
+      setLoading(true)
       const receipt = await stakingNft(selectedTokenIds, !viewStaked)
       if (receipt.status) {
         toastSuccess(t('Success'), t(!viewStaked ? 'Staked!' : 'Unstaked'))
@@ -113,7 +113,7 @@ export default function NftStaking() {
       toastError(t('Error'), t('Please try again.'))
     } finally {
       setSelectedTokenIds([])
-      setLoadingStatus(false)
+      setLoading(false)
     }
   }, [stakingNft, viewStaked, tokens, selectedTokenIds, toastSuccess, toastError, t])
 
@@ -139,7 +139,7 @@ export default function NftStaking() {
   const handleBoost = useCallback(async (tokenId) => {
     try {
       setLoading(true)
-      const receipt = await boostHelixNFT(tokenId, accumulatedAP)
+      const receipt = await boostHelixNFT(tokenId, accumulatedHP)
       if (receipt.status){
         const _upgradedToken: TokenInfo = await getHelixNftInfoById(tokenId)
         const _accumulatedHP = await getAccumulatedHP()
@@ -150,17 +150,17 @@ export default function NftStaking() {
           return token
         })
         setTokens(updatedTokens)
-        setAccumulatedAP(_accumulatedHP)
+        setAccumulatedHP(_accumulatedHP)
       } else {
-        toastError(t('Error'), t('Error transaction Or Insufficient accumulated HelixPoints .'))
+        toastError(t('Error'), t('Insufficient accumulated HelixPoints.'))
       }
     } catch (e) {
       logError(e)
-      toastError(t('Error'), t('Please try again.'))
+      toastError(t('Error'), t('Insufficient accumulated HelixPoints.'))
     } finally {
       setLoading(false)
     }
-  }, [boostHelixNFT, getAccumulatedHP, getHelixNftInfoById, tokens, accumulatedAP, toastSuccess, toastError, t])
+  }, [boostHelixNFT, getAccumulatedHP, getHelixNftInfoById, tokens, accumulatedHP, toastSuccess, toastError, t])
   
   const onhandleCheckbox = useCallback(
     (tokenId, isChecked) => {
@@ -221,7 +221,7 @@ export default function NftStaking() {
                 {
                   id: 'boost',
                   caption: 'Boost',
-                  displayed: parseInt(accumulatedAP) > 0,
+                  displayed: parseInt(accumulatedHP) > 0,
                   action: handleBoost,
                   params: [token.tokenId],
                 },
@@ -257,7 +257,7 @@ export default function NftStaking() {
                 <Flex alignItems="center">
                   <CurrencyLogo currency={helixToken} size="41px" />
                   <NFTCardText type={NFTCardTextType.generalValue} style={{ paddingLeft: '18px' }}>
-                    {loadingAccumulatedAP ? 'loading' : Number.parseFloat(accumulatedAP).toFixed(3)}
+                    {loadingAccumulatedHP ? 'loading' : Number.parseFloat(accumulatedHP).toFixed(3)}
                   </NFTCardText>
                 </Flex>
               </GeneralCard>
