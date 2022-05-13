@@ -68,6 +68,16 @@ const Inner = styled.div<{ isPushed: boolean; showMenu: boolean }>`
   max-width: 100%;
 `
 
+const StyledAuditDiv = styled.div`
+padding:"5px 0"; 
+border:"1px solid #57E58E"; 
+margin:"0 0.5em"; 
+font-size:"1em";
+&:hover{
+  opacity:0.4
+}
+`
+
 const Menu: React.FC<NavProps> = ({
   linkComponent = 'a',
   userMenu,
@@ -144,14 +154,14 @@ const Menu: React.FC<NavProps> = ({
             </Flex>
             
             <Flex alignItems="center" height="100%">
-              <div style={{padding:"5px 0", border:"1px solid #57E58E", margin:"0 0.5em", fontSize:"1em"}}>
+              <StyledAuditDiv>
                 <a target="_blank" rel="noreferrer" href="https://extropy.io" style={{display:"inline-block", color:"#57E58E", width:"110px", textAlign:"center"}} >
                   <span style={{fontSize:"1em"}}>Audited by</span>
                   <br/> 
                   <span style={{fontWeight:"bold",fontSize:"1.05em"}}>Extropy.io</span>
                 </a>
                 
-              </div>
+              </StyledAuditDiv>
               {globalMenu} {userMenu}
             </Flex>
           </StyledNav>
