@@ -138,7 +138,7 @@ export default function NftStaking() {
 
   const handleBoost = useCallback(async (tokenId) => {
     try {
-      setLoadingStatus(true)
+      setLoading(true)
       const receipt = await boostHelixNFT(tokenId, accumulatedAP)
       if (receipt.status){
         const _upgradedToken: TokenInfo = await getHelixNftInfoById(tokenId)
@@ -158,7 +158,7 @@ export default function NftStaking() {
       logError(e)
       toastError(t('Error'), t('Please try again.'))
     } finally {
-      setLoadingStatus(false)
+      setLoading(false)
     }
   }, [boostHelixNFT, getAccumulatedHP, getHelixNftInfoById, tokens, accumulatedAP, toastSuccess, toastError, t])
   
@@ -194,7 +194,7 @@ export default function NftStaking() {
 
   const tokensUI = (
     <div>
-      <Flex flexWrap="wrap" style={{ margin: '-19px' }}>
+      <Flex flexWrap="wrap" justifyContent="center" style={{ margin: '-19px' }}>
         {filterNft.map((token) => {
           return (
             <NftCard
