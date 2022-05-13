@@ -148,6 +148,12 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType[] = (t) => [
                 href: '/migration',
                 icon: 'Earn',
             },
+            {
+                label: 'Docs',
+                href: 'https://geometry.gitbook.io/helix',
+                type: DropdownMenuItemType.EXTERNAL_LINK,
+            },
+            
             //     {
             //       type: DropdownMenuItemType.DIVIDER,
             //     },
