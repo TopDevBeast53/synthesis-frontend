@@ -94,7 +94,7 @@ const Home: React.FC = () => {
                 <Column style={{ maxWidth: '70%' }}>
                   <Heading pb="13px">Easily De-Risk By Locking in Fixed Returns</Heading>
                   <Text>
-                    Create yield-generating positions and lock in guaranteed fixed returns using Yield Swaps, allowing
+                    Create yield generating positions and lock in guaranteed fixed returns using Yield Swaps, allowing
                     for safer strategies to be implemented.
                   </Text>
                 </Column>
