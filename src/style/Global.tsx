@@ -9,7 +9,7 @@ declare module 'styled-components' {
 
 const GlobalStyle = createGlobalStyle<{ theme: HelixTheme; backgroundImageURL?: string }>`
   * {
-    font-family: 'Helvetica Neue', sans-serif;
+    font-family: 'inter', sans-serif;
   }
   body {
     background: ${({ theme, backgroundImageURL }) => `${theme.colors.background} url('${backgroundImageURL}')`};
