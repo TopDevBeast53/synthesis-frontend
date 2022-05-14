@@ -3,44 +3,44 @@ import { ContextApi } from 'contexts/Localization/types'
 
 export const footerLinks: (t: ContextApi['t']) => FooterLinkType[] = (t) => [
     {
-        label:"Products",
+        label:"Helix",
         items:[
             {
-                label:"Helix",
-                href:"#"
+                label:"Trade Crypto",
+                href:"/swap"
             },
             {
-                label:"2nd Platform",
-                href:"#"
+                label:"Trade LP Tokens",
+                href:"/lp-swaps"
             },
             {
-                label:"Nexus",
-                href:"#"
+                label:"Trade Yield",
+                href:"/yield-swaps"
             },
             {
-                label:"Roadmap",
-                href:"#"
+                label:"Add Liquidity",
+                href:"/liquidity"
             }
         ]
     },
     {
-        label:"Learn",
+        label:"Earn",
         items:[
             {
-                label:"Docs",
-                href:"#"
+                label:"Helix Farms",
+                href:"/farms"
             },
             {
-                label:"Medium",
-                href:"#"
+                label:"Helix Pools",
+                href:"/pools"
             },
             {
-                label:"Github",
-                href:"#"
+                label:"Helix Vaults",
+                href:"/vault"
             },
             {
-                label:"SLP Whitepaper",
-                href:"#"
+                label:"Geobot Staking",
+                href:"/geobot-staking"
             }
         ]
     },
@@ -49,37 +49,41 @@ export const footerLinks: (t: ContextApi['t']) => FooterLinkType[] = (t) => [
         items:[
             {
                 label:"Discord",
-                href:"#"                
+                href:"https://discord.gg/geometry"                
             },
             {
                 label:"Governance",
-                href:"#"
-            },
-            {
-                label:"Geometry Twitter",
-                href:"#"
+                href:"/voting"
             },
             {
                 label:"Helix Twitter",
-                href:"#"
+                href:"https://twitter.com/helixgeometry"
+            },
+            {
+                label:"Geometry Twitter",
+                href:"https://twitter.com/geometryfinance"
             }
         ]
     },
     {
-        label:"Contact",
+        label:"Geometry",
         items:[
             {
-                label:"Email us: hi@geometry.fi",
-                href:"#"
+                label:"Geometry.fi",
+                href:"https://geometry.fi"
+            },
+            {
+                label:"Medium",
+                href:"https://medium.com/geometryfinance"
+            },
+            {
+                label:"SLP Whitepaper",
+                href:"https://geometry.fi/whitepaper"
             },
             {
                 label:"Support Tickets",
-                href:"#"
-            },
-            {
-                label:"Create Ticket",
-                href:"#"
-            }            
+                href:"https://discord.gg/QtKhZbZJZU"
+            }        
         ]
     },
     {
@@ -87,11 +91,11 @@ export const footerLinks: (t: ContextApi['t']) => FooterLinkType[] = (t) => [
         items:[
             {
                 label:"Privacy policy",
-                href:"#"
+                href:"/privacy"
             },
             {
                 label:"Terms & conditions",
-                href:"#"
+                href:"/terms"
             }            
         ]
     }
