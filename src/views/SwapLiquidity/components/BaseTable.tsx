@@ -1,5 +1,6 @@
 import { useTranslation } from 'contexts/Localization'
 import React, { useRef } from 'react'
+import { useWeb3React } from '@web3-react/core'
 import styled from 'styled-components'
 import { Button, ChevronUpIcon } from 'uikit'
 
@@ -31,6 +32,7 @@ const ScrollButtonContainer = styled.div`
 
 const BaseTable = (props) => {
   const { t } = useTranslation()
+  const { account } = useWeb3React()
   const tableWrapperEl = useRef<HTMLDivElement>(null)
   const { children } = props
   const scrollToTop = (): void => {
@@ -45,7 +47,7 @@ const BaseTable = (props) => {
         {children}
         <ScrollButtonContainer>
           <Button variant="text" onClick={scrollToTop}>
-            {t('(Connect Your Wallet to See Swap Orders) -  To Top')}
+            { account ? t('To Top') : t('Connect Your Wallet to See Swap Orders')}
             <ChevronUpIcon color="primary" />
           </Button>
         </ScrollButtonContainer>

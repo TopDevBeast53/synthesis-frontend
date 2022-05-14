@@ -1,5 +1,6 @@
 import React, { useRef } from 'react'
 import styled from 'styled-components'
+import { useWeb3React } from '@web3-react/core'
 import { useTranslation } from 'contexts/Localization'
 import { Button, ChevronUpIcon, Text } from 'uikit'
 import YieldCPartyRow from './Row'
@@ -41,6 +42,7 @@ const StyledCol = styled.div`
 `
 const YieldCPartyTable = ({ swaps, state, bids, loading }) => {
   const { t } = useTranslation()
+  const { account } = useWeb3React()
   const tableWrapperEl = useRef<HTMLDivElement>(null)
   const rowData = swaps.map((s) => {
     const filteredBids = s.bidIds.map((i) => bids[i.toNumber()])
@@ -68,7 +70,7 @@ const YieldCPartyTable = ({ swaps, state, bids, loading }) => {
         ))}
         <ScrollButtonContainer>
           <Button variant="text" onClick={scrollToTop}>
-            {t('(Connect Your Wallet to See Swap Orders) - To Top')}
+            { account ? t('To Top') : t('Connect Your Wallet to See Swap Orders')}
             <ChevronUpIcon color="primary" />
           </Button>
         </ScrollButtonContainer>

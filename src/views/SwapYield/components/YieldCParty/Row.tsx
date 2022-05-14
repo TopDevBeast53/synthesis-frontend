@@ -1,4 +1,5 @@
 import React, { useState, useContext, useMemo } from 'react'
+import { useWeb3React } from '@web3-react/core'
 import styled from 'styled-components'
 import { AutoRenewIcon, Text, Button, useModal, ChevronDownIcon, useDelayedUnmount, Skeleton } from 'uikit'
 import useToast from 'hooks/useToast'
@@ -24,6 +25,7 @@ const ArrowIcon = styled(ChevronDownIcon)<{ toggled: boolean }>`
 
 const YieldCPartyRow = ({ data, state, loading }) => {
   const { t } = useTranslation()
+  const { account } = useWeb3React()
   const { amount, ask, id, exToken, lpToken, lockDuration, lockUntilTimestamp, approved, bids } = data
   const yieldSwapContract = useHelixYieldSwap()
   const { toastSuccess, toastError } = useToast()
@@ -198,7 +200,7 @@ const YieldCPartyRow = ({ data, state, loading }) => {
         )}
       </StyledRow>
 
-      {shouldRenderDetail && (
+      {shouldRenderDetail && account && (
         <div style={{ padding: '10px 10px', minHeight: '5em' }}>
           <CandidateTable bids={bids} exToken={exToken} approved={approved} exAmount={ask} />
         </div>

@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import { useWeb3React } from '@web3-react/core'
-import { useFastFresh } from 'hooks/useRefresh'
 import styled from 'styled-components'
 import { useTranslation } from 'contexts/Localization'
 import { Button, ButtonMenu, ButtonMenuItem, useModal } from 'uikit'
@@ -11,6 +10,7 @@ import YieldCPartyTable from './components/YieldCParty/Table'
 import { SwapState } from './types'
 import { YieldCPartyContext } from './context'
 import AddRowModal from './components/YieldParty/Modals/CreateOrderDialog'
+import { useYieldSwap } from './hooks/useSwapYield'
 
 const Wrapper = styled.div`
   display: flex;
@@ -32,6 +32,7 @@ const YieldCParty = () => {
   const { t } = useTranslation()
   const yieldSwapContract = useHelixYieldSwap()
   const { account } = useWeb3React()
+  const { fetchSwapData, fetchBids } = useYieldSwap()
 
   const [menuIndex, setMenuIndex] = useState(SwapState.All)
   const [swaps, setSwaps] = useState([])
@@ -39,7 +40,6 @@ const YieldCParty = () => {
   const [hasBidOnSwap, setHasBidOnSwap] = useState([])
   const [refresh, setTableRefresh] = useState(0)
   const [loading, setLoading] = useState(false)
-  const fastRefresh = useFastFresh()
 
   const filteredSwaps = useMemo(() => {
     if (menuIndex === SwapState.Pending)
@@ -61,10 +61,8 @@ const YieldCParty = () => {
     setLoading(true)
     const fetchData = async () => {
       try {
-        // TODO: Should be update
-
         // fetch swaps
-        const fetchedSwaps = await yieldSwapContract.getSwaps()
+        const fetchedSwaps = await fetchSwapData();
         const fetchedSwapsWithIds = fetchedSwaps.map((s, i) => {
           return { ...s, id: i }
         })
@@ -77,7 +75,7 @@ const YieldCParty = () => {
 
         // fetch bid contents
         const bidIds = fetchedSwaps.reduce((prev, cur) => prev.concat(cur.bidIds), [])
-        const fetchedBids = await Promise.all(bidIds.map((b) => yieldSwapContract.bids(b)))
+        const fetchedBids = await fetchBids(bidIds);
         const filteredBids = fetchedBids.map((b, i) => {
           return { ...b, id: i }
         })
@@ -95,19 +93,23 @@ const YieldCParty = () => {
     <>
       {
         <Page>
-          <Wrapper>
-            {/* TODO: Should be read from constants */}
-            <ButtonMenu activeIndex={menuIndex} scale="sm" variant="subtle" onItemClick={handleButtonMenuClick}>
-              <ButtonMenuItem>{t('Open')}</ButtonMenuItem>
-              <ButtonMenuItem>{t('My Bids')}</ButtonMenuItem>
-              <ButtonMenuItem>{t('Active Swaps')}</ButtonMenuItem>
-              <ButtonMenuItem>{t('Completed Swaps')}</ButtonMenuItem>
-            </ButtonMenu>
-            <Button variant="secondary" scale="md" mr="1em" onClick={handleAdd}>
-              {' '}
-              Create Swap{' '}
-            </Button>
-          </Wrapper>
+          {
+            account && (
+              <Wrapper>
+                {/* TODO: Should be read from constants */}
+                <ButtonMenu activeIndex={menuIndex} scale="sm" variant="subtle" onItemClick={handleButtonMenuClick}>
+                  <ButtonMenuItem>{t('Open')}</ButtonMenuItem>
+                  <ButtonMenuItem>{t('My Bids')}</ButtonMenuItem>
+                  <ButtonMenuItem>{t('Active Swaps')}</ButtonMenuItem>
+                  <ButtonMenuItem>{t('Completed Swaps')}</ButtonMenuItem>
+                </ButtonMenu>
+                <Button variant="secondary" scale="md" mr="1em" onClick={handleAdd}>
+                  {' '}
+                  Create Swap{' '}
+                </Button>
+              </Wrapper>
+            )
+          }
           <YieldCPartyContext.Provider
             value={{ tableRefresh: refresh, setTableRefresh, updateMenuIndex: setMenuIndex }}
           >

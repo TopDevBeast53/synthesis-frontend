@@ -1,5 +1,6 @@
-import { useTranslation } from 'contexts/Localization'
 import React, { useRef } from 'react'
+import { useTranslation } from 'contexts/Localization'
+import { useWeb3React } from '@web3-react/core'
 import styled from 'styled-components'
 import { Button, ChevronUpIcon } from 'uikit'
 import YieldPartyRow from './Row'
@@ -32,6 +33,7 @@ const ScrollButtonContainer = styled.div`
 
 const YieldPartyTable = (props) => {
   const { t } = useTranslation()
+  const { account } = useWeb3React()
   const { data } = props
   const tableWrapperEl = useRef<HTMLDivElement>(null)
   const scrollToTop = (): void => {
@@ -48,7 +50,7 @@ const YieldPartyTable = (props) => {
         ))}
         <ScrollButtonContainer>
           <Button variant="text" onClick={scrollToTop}>
-            {t('Connect Your Wallet to Swap Orders) - To Top')}
+            { account ? t('To Top') : t('Connect Your Wallet to See Swap Orders')}
             <ChevronUpIcon color="primary" />
           </Button>
         </ScrollButtonContainer>
