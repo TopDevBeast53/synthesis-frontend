@@ -104,7 +104,7 @@ const Home: React.FC = () => {
               <Flex style={{ padding: '44px 10%', width: '100%', justifyContent: 'space-between' }}>
                 <NewPositions style={{ width: "100px" }}/>
                 <Column style={{ maxWidth: '70%' }}>
-                  <Heading pb="13px">Enter New Yield Positions at Discount Rates</Heading>
+                  <Heading pb="13px">Enter New Yield Positions at Discounted Rates</Heading>
                   <Text>
                     Access unique opportunities to buy yield-bearing LP tokens and yield itself at lower-than-predicted
                     rates, opening up totally new revenue streams.

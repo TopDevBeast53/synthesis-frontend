@@ -5,7 +5,7 @@ import { Link } from '../Link'
 import { StyledFooter, StyledIconMobileContainer, StyledList, StyledListItem, StyledText } from './styles'
 import SocialLinks from './Components/SocialLinks'
 import { FooterProps } from './types'
-import { LogoFooter } from '../Svg'
+import { HelixByGeometryBlue } from '../Svg'
 
 const MenuItem: React.FC<FooterProps> = ({
   items,
@@ -22,7 +22,7 @@ const MenuItem: React.FC<FooterProps> = ({
     <StyledFooter p={['40px 16px', null, '56px 40px 32px 40px']} {...props} justifyContent="center">
       <Flex flexDirection="column" width={['100%', null, '1200px;']}>
         <StyledIconMobileContainer display={['block', null, 'none']}>
-          <LogoFooter isDark={isDark} width="130px" />
+          <HelixByGeometryBlue isDark={isDark} width="130px" />
         </StyledIconMobileContainer>
         <Flex
           order={[2, null, 1]}
@@ -32,7 +32,7 @@ const MenuItem: React.FC<FooterProps> = ({
           mb={['42px', null, '24px']}
         >
           <Box display={['none', null, 'block']} style={{alignSelf:"center"}}>
-            <LogoFooter isDark width="140px" />
+            <HelixByGeometryBlue isDark width="140px" />
           </Box>
           {items?.map((item, index) => (
             <StyledList key={item.label}>
