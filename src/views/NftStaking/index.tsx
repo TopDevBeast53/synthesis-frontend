@@ -276,18 +276,15 @@ export default function NftStaking() {
               </GeneralCard>
             </Flex>
 
-            <Flex flexDirection="column" flexShrink={1} style={{marginTop: '15px'}}> 
+            <Flex flexDirection="column" justifyContent="space-between" flexShrink={1} style={{marginTop: '15px'}}> 
               <ShowStackedSwitch />
-              <NFTCardText type={NFTCardTextType.generalCaption} style={{ marginTop: '10px' }}>
-                Selected: {selectedTokenIds.length}
-              </NFTCardText>
               <Button 
                 isLoading={loadingStatus} 
                 endIcon={loadingStatus ? <AutoRenewIcon spin color="currentColor" /> : null}  
                 onClick={handleStaking} 
                 disabled={!enableStakingBtn} 
                 style={{ margin: '10px 0' }}>
-                {viewStaked ? "Unstake" : "Stake"}
+                {viewStaked ? `Unstake (${selectedTokenIds.length})` : `Stake (${selectedTokenIds.length})` }
               </Button>
             </Flex>
           </Flex>
