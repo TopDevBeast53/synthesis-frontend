@@ -7,7 +7,7 @@ import useToast from 'hooks/useToast'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Button, ButtonMenu, ButtonMenuItem, useModal } from 'uikit'
-import AddRowModal from './components/YieldParty/Modals/CreateOrderDialog'
+import CreateSwapModal from './components/YieldParty/Modals/CreateOrderDialog'
 import YieldPartyTable from './components/YieldParty/Table'
 import { YieldPartyContext } from './context'
 import { OrderState } from './types'
@@ -52,7 +52,7 @@ const YieldParty = () => {
     if (newIndex === 1) setOrderState(OrderState.Completed)
     setMenuIndex(newIndex)
   }
-  const [handleAdd] = useModal(<AddRowModal />)
+  const [handleAdd] = useModal(<CreateSwapModal />)
   useEffect(() => {
     if (refresh < 0) return
     if (!account) return

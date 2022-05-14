@@ -14,12 +14,15 @@ import { Token } from 'sdk'
 import { useMemoFarms } from 'state/farms/hooks'
 import { useTokenBalance } from 'state/wallet/hooks'
 import styled from 'styled-components'
-import { AutoRenewIcon, BalanceInput, Button, Input, Modal, Skeleton, Text } from 'uikit'
+import { AutoRenewIcon, BalanceInput, Button, ButtonMenu, ButtonMenuItem, Input, Modal, Skeleton, Text } from 'uikit'
 import { getAddress } from 'utils/addressHelpers'
 import { BIG_ZERO } from 'utils/bigNumber'
-import { getBalanceAmount, getBalanceNumber, getDecimalAmount } from 'utils/formatBalance'
+import { getBalanceAmount, getDecimalAmount } from 'utils/formatBalance'
 import getEstimatedPrice from 'utils/getEstimatedPrice'
-import Group from '../../GroupComponent'
+import Group from '../../../GroupComponent'
+import LpToStable from './LpToStable'
+import StableToLp from './StableToLp'
+import LpToLp from './LpToLp'
 
 const StyledInput = styled(Input)`
   ::-webkit-inner-spin-button {
@@ -36,13 +39,13 @@ const Flex = styled.div`
   align-items: center;
   margin-bottom: 0.5em;
 `
-const AddRowModal = (props) => {
+const CreateOrderDialog = (props) => {
   const { theme } = useTheme()
   const { t } = useTranslation()
   const { toastSuccess, toastError } = useToast()
   const { account } = useWeb3React()
   const { onDismiss } = props
-
+  const [swapType, setSwapType]= useState(0)
   const [uAmount, setUAmount] = useState('0')
   const [yAmount, setYAmount] = useState('0')
   const [duration, setDuration] = useState(1)
@@ -97,6 +100,7 @@ const AddRowModal = (props) => {
       .map((lp) => ({
         label: lp.lpSymbol,
         value: lp,
+        maxBalance: lp.userData.tokenBalance,
         allowance: BIG_ZERO,
         contract: undefined,
       }))
@@ -158,6 +162,7 @@ const AddRowModal = (props) => {
       decimalUAmount.toString(),
       decimalYAmount.toString(),
       Math.round(3600 * 24 * duration),
+      true, true
     )
       .then(async (tx) => {
         await tx.wait()
@@ -178,7 +183,7 @@ const AddRowModal = (props) => {
     Promise.all(allowanceContracts).then((allowances) => {
       for (let i = 0; i < tempLPOptions.length; i++) {
         tempLPOptions[i].allowance = new BigNumber(allowances[i].toString())
-        tempLPOptions[i].contract = lpContracts[i]
+        tempLPOptions[i].contract = lpContracts[i]        
       }
       setLPOptions(tempLPOptions)
 
@@ -199,9 +204,27 @@ const AddRowModal = (props) => {
 
   const hasToApprove = selectedLPOption?.allowance.lte(0) || selectedLPOption?.allowance.lte(decimalUAmount)
   if (!LPOptions) return null
+
+  const propData = {
+      toBuyerTokenOptions:LPOptions, 
+      minDuration, 
+      maxDuration, 
+      handleUAmountChange, 
+      uAmount,
+      handleSelectMaxOfToBuyerToken:handleSelectMaxOfLPToken,
+      toSellerTokenOptions:TokenOptions, 
+      yAmount, 
+      handleYAmountChange, 
+      handleToSellerTokenOptionChange:handleTokenChange
+ }
   return (
     <Modal title={t('Add an Order')} headerBackground={theme.colors.gradients.cardHeader} onDismiss={onDismiss}>
-      <Group style={{ marginBottom: '2em' }} title="Send">
+      <ButtonMenu activeIndex={swapType} scale="sm" variant="subtle" onItemClick={(index)=>{setSwapType(index)}}>
+        <ButtonMenuItem>{t('Yield-Stable')}</ButtonMenuItem>
+        <ButtonMenuItem>{t('Stable-Yield')}</ButtonMenuItem>
+        <ButtonMenuItem>{t('Yield-Yield')}</ButtonMenuItem>        
+      </ButtonMenu>
+      {/* <Group style={{ margin: '2em 0' }} title="Send">
         <Flex>
           <Text bold style={{ flex: '3' }}>
             {t('LP Token')}:
@@ -260,7 +283,12 @@ const AddRowModal = (props) => {
           </Text>
           <BalanceInput style={{ flex: '6' }} value={yAmount} onUserInput={handleYAmountChange} />
         </Flex>
-      </Group>
+      </Group> */}
+      {
+          swapType === 0 ? <LpToStable {...propData} />            
+          : swapType === 1 ? <StableToLp {...propData} toSellerTokenOptions={LPOptions} toBuyerTokenOptions={TokenOptions}/>
+          : <LpToLp {...propData} toSellerTokenOptions={LPOptions} toBuyerTokenOptions={LPOptions}/>
+      }
 
       <Button
         isLoading={pendingTx}
@@ -276,4 +304,4 @@ const AddRowModal = (props) => {
     </Modal>
   )
 }
-export default AddRowModal
+export default CreateOrderDialog

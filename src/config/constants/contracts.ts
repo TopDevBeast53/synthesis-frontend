@@ -134,7 +134,7 @@ export default {
     },
     helixYieldSwap: {
         56: '',
-        97: '0x6A3ADC956AA4f4c8aAD33B7aAAB055deb67AC9e2',
+        97: '0x43E31012CE68B255200d6f865a7ccA24848D68aF',
     },
     helixLPSwap: {
         56: '',

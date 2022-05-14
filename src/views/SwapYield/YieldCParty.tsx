@@ -9,8 +9,9 @@ import Page from 'components/Layout/Page'
 import YieldCPartyTable from './components/YieldCParty/Table'
 import { SwapState } from './types'
 import { YieldCPartyContext } from './context'
-import AddRowModal from './components/YieldParty/Modals/CreateOrderDialog'
+import CreateSwapModal from './components/YieldParty/Modals/CreateOrderDialog'
 import { useYieldSwap } from './hooks/useSwapYield'
+
 
 const Wrapper = styled.div`
   display: flex;
@@ -55,7 +56,7 @@ const YieldCParty = () => {
     setMenuIndex(newIndex)
   }
 
-  const [handleAdd] = useModal(<AddRowModal />)
+  const [handleAdd] = useModal(<CreateSwapModal />)
   useEffect(() => {
     if (refresh < 0) return
     setLoading(true)

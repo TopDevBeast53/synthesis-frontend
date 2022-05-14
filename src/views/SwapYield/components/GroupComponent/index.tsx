@@ -26,7 +26,7 @@ const Group = (props) => {
   return (
     <StyledBorder {...props}>
       {children}
-      <StyledTitle> {title} </StyledTitle>
+      {/* <StyledTitle> {title} </StyledTitle> */}
     </StyledBorder>
   )
 }
