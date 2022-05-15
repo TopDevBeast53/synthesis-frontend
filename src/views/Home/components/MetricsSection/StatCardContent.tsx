@@ -32,7 +32,7 @@ const StatCardContent: React.FC<{ headingText: string; bodyText: string }> = ({ 
             {remainingWords}
           </Heading>
         )}
-        <Heading color="#101411" mt="7px" style={{ fontSize: '31px', lineHeight: '42.16px', fontStyle: 'normal' }}>
+        <Heading color="#101411" mt="7px" style={{ fontSize: '31px', lineHeight: '42.16px', fontStyle: 'normal', textAlign:"center" }}>
           {lastWord}
         </Heading>
       </Column>
