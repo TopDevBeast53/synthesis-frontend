@@ -61,16 +61,20 @@ const Sell = () => {
 
   return (
     <Page>
-      <Wrapper>
-        <ButtonMenu activeIndex={menuIndex} scale="sm" variant="subtle" onItemClick={handleButtonMenuClick}>
-          <ButtonMenuItem>{t('Open')}</ButtonMenuItem>
-          <ButtonMenuItem>{t('Executed')}</ButtonMenuItem>
-        </ButtonMenu>
-        <Button variant="secondary" scale="md" mr="1em" onClick={handleAdd}>
-          {' '}
-          Create Swap{' '}
-        </Button>
-      </Wrapper>
+      {
+        account && (
+          <Wrapper>
+            <ButtonMenu activeIndex={menuIndex} scale="sm" variant="subtle" onItemClick={handleButtonMenuClick}>
+              <ButtonMenuItem>{t('Open')}</ButtonMenuItem>
+              <ButtonMenuItem>{t('Executed')}</ButtonMenuItem>
+            </ButtonMenu>
+            <Button variant="secondary" scale="md" mr="1em" onClick={handleAdd}>
+              {' '}
+              Create Swap{' '}
+            </Button>
+          </Wrapper>
+        )
+      }
       <SellTable data={swapIds} />
     </Page>
   )

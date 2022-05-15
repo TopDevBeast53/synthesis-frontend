@@ -1,4 +1,5 @@
 import React, { useContext, useState } from 'react'
+import { useWeb3React } from '@web3-react/core'
 import styled from 'styled-components'
 import { Button, ChevronDownIcon, useDelayedUnmount, useModal } from 'uikit'
 import { ToolTipText } from 'views/SwapLiquidity/constants'
@@ -18,10 +19,12 @@ const ArrowIcon = styled(ChevronDownIcon)<{ toggled: boolean }>`
 
 const ActiveRow=(props)=>{
     const {tableRefresh, setTableRefresh} = useContext(SwapLiquidityContext)
+    const { account } = useWeb3React()
     const {swapData} = props
     const [expanded, setExpanded] = useState(false)
     const shouldRenderDetail = useDelayedUnmount(expanded, 300)
     const handleOnRowClick = () => {
+        if(!account)    return
         setExpanded(!expanded)        
     }
     const onSendAsk = () =>{
@@ -45,10 +48,14 @@ const ActiveRow=(props)=>{
                 <StyledCellWithoutPadding>
                     <ToolTipCell tooltipText={ToolTipText} />
                 </StyledCellWithoutPadding>
-                <StyledCell style={{zIndex:10}}>
-                    <Button 
-                        color="primary" onClick={showModal} scale="sm" width="100px"> Bid </Button>
-                </StyledCell>
+                {
+                    account && (
+                        <StyledCell style={{zIndex:10}}>
+                            <Button 
+                                color="primary" onClick={showModal} scale="sm" width="100px"> Bid </Button>
+                        </StyledCell>
+                    )
+                }
                 <StyledCellWithoutPadding>
                     <ArrowIcon color="primary" toggled={expanded} />                    
                 </StyledCellWithoutPadding>

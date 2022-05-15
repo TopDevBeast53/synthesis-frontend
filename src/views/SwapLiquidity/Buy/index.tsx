@@ -10,6 +10,7 @@ import { SwapLiquidityContext } from '../context'
 import BuyTable from './BuyTable'
 import { SwapState } from '../types'
 import CreateOrderDialog from '../Sell/Modals/CreateOrderDialog'
+import { useLpSwap } from '../hooks/useLPSwap'
 
 const Wrapper = styled.div`
   display: flex;
@@ -31,6 +32,7 @@ const Sell = () => {
   const { t } = useTranslation()
   const LpSwapContract = useHelixLpSwap()
   const { account } = useWeb3React()
+  const { fetchSwapData } = useLpSwap()
   const [menuIndex, setMenuIndex] = useState(SwapState.All)
   const [swaps, setSwaps] = useState([])
   const [bidIdsPerUser, setBidIdsPerUser] = useState([])
@@ -50,34 +52,42 @@ const Sell = () => {
     setMenuIndex(newIndex)
   }
   useEffect(() => {
-    if (tableRefresh < 0) return
-    if (!account) return
-    // fetch swaps
-    LpSwapContract.getSwaps().then((fetchedSwaps) => {
+    async function fetchData() {
+      if (tableRefresh < 0) return
+  
+      // fetch swaps
+      const fetchedSwaps = await fetchSwapData();
       const fetchedSwapsWithIds = fetchedSwaps.map((s, i) => ({ ...s, id: i }))
       setSwaps(fetchedSwapsWithIds)
-    })
 
-    // fetch bid Ids
-    LpSwapContract.getBidderSwapIds(account).then((fetchBidderSwapIds) => {
-      const normalNumberBidIds = fetchBidderSwapIds.map((b) => b.toNumber())
-      setBidIdsPerUser(normalNumberBidIds)
-    })
-  }, [LpSwapContract, account, tableRefresh])
+      if (!account) return
+  
+      // fetch bid Ids
+      LpSwapContract.getBidderSwapIds(account).then((fetchBidderSwapIds) => {
+        const normalNumberBidIds = fetchBidderSwapIds.map((b) => b.toNumber())
+        setBidIdsPerUser(normalNumberBidIds)
+      })
+    }
+    fetchData()
+  }, [LpSwapContract, account, tableRefresh, fetchSwapData])
 
   return (
     <Page>
-      <Wrapper>
-        <ButtonMenu activeIndex={menuIndex} scale="sm" variant="subtle" onItemClick={handleButtonMenuClick}>
-          <ButtonMenuItem>{t('Open')}</ButtonMenuItem>
-          <ButtonMenuItem>{t('My Bids')}</ButtonMenuItem>
-          <ButtonMenuItem>{t('Executed')}</ButtonMenuItem>
-        </ButtonMenu>
-        <Button variant="secondary" scale="md" mr="1em" onClick={handleAdd}>
-          {' '}
-          Create Swap{' '}
-        </Button>
-      </Wrapper>
+      {
+        account && (
+          <Wrapper>
+            <ButtonMenu activeIndex={menuIndex} scale="sm" variant="subtle" onItemClick={handleButtonMenuClick}>
+              <ButtonMenuItem>{t('Open')}</ButtonMenuItem>
+              <ButtonMenuItem>{t('My Bids')}</ButtonMenuItem>
+              <ButtonMenuItem>{t('Executed')}</ButtonMenuItem>
+            </ButtonMenu>
+            <Button variant="secondary" scale="md" mr="1em" onClick={handleAdd}>
+              {' '}
+              Create Swap{' '}
+            </Button>
+          </Wrapper>
+        )
+      }
       <BuyTable data={filteredSwaps} />
     </Page>
   )
