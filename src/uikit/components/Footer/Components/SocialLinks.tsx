@@ -30,10 +30,10 @@ import { socials } from '../config'
 // )
 const SocialLinks:React.FC<FlexProps> = ({...props}) => (
   <Flex {...props}>
-    <Link href="https://geometry.fi" mr="24px">
+    <Link href="https://geometry.fi" mr="16px">
       <GeometryIconNoCircle style={{width:"32px"}}/>
     </Link>
-    <Link href="https://helix.finance" mr="24px">
+    <Link href="https://helix.finance" mr="16px">
       <HelixIconNoCircle style={{width:"32px"}}/>
     </Link>
     <Link href="https://nexus.helix.finance">
