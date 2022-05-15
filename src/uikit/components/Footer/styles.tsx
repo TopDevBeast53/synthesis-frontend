@@ -9,6 +9,7 @@ export const StyledFooter = styled(Flex)`
 export const StyledList = styled.ul`
   list-style: none;
   margin-bottom: 40px;
+  flex:1;
 
   ${({ theme }) => theme.mediaQueries.md} {
     margin-bottom: 0px;
@@ -16,15 +17,20 @@ export const StyledList = styled.ul`
 `
 
 export const StyledListItem = styled.li`
-  font-size: 16px;
-  margin-bottom: 8px;
+  font-size: 14px;
+  margin-top: 10px;
   text-transform: capitalize;
-  padding-bottom: 5px;
+  font-weight:500;    
 
   &:first-child {
+    margin-top:0px;
+    padding-bottom:5px;
     color: ${darkColors.secondary};
-    font-weight: 600;
-    text-transform: uppercase;
+    font-weight: 700;    
+    font-size: 16px;
+  }
+  a{
+    font-size: 14px;
   }
 `
 
