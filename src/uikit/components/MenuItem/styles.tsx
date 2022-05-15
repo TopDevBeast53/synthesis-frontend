@@ -6,14 +6,15 @@ export const StyledMenuItemContainer = styled.div<StyledMenuItemProps>`
 
   ${({ $isActive, $variant, theme }) =>
     $isActive &&
-    $variant === 'subMenu' &&
+
     `
       &:after{
         content: "";
         position: absolute;
-        bottom: 0;
+        bottom: ${    $variant === 'subMenu' ? "0" : "5px"};
+        left:${    $variant === 'subMenu' ? "0" : "5%"};
         height: 4px;
-        width: 100%;
+        width: ${    $variant === 'subMenu' ? "100%" : "90%"};
         background-color: ${theme.colors.primary};
         border-radius: 2px 2px 0 0;
       }
@@ -29,8 +30,8 @@ const StyledMenuItem = styled.a<StyledMenuItemProps>`
   color: ${({ theme, $isActive }) => ($isActive ? theme.colors.secondary : theme.colors.textSubtle)};
   font-size: 18px;
   font-weight: ${({ $isActive }) => ($isActive ? '700' : '500')};
-  line-height: 148%;
-
+  line-height: 148%;  
+  position:relative; 
   ${({ $statusColor, theme }) =>
     $statusColor &&
     `
