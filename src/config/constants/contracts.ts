@@ -93,7 +93,7 @@ export default {
     },
     masterChef: {
         56: '',
-        97: '0xa380bD46C4Ee53f606Ca7F6665875c11C7fDF18E',
+        97: '0x56451b5Fb2A9bBe47eC6717CC6d77C3558Fe58cA',
     },
     sousChef: {
         56: '',
@@ -134,10 +134,10 @@ export default {
     },
     helixYieldSwap: {
         56: '',
-        97: '0x43E31012CE68B255200d6f865a7ccA24848D68aF',
+        97: '0x3d915a41357c95fE059F07B68661aD966DfAB8A8',
     },
     helixLPSwap: {
         56: '',
-        97: '0xf10B928dC49F44ACC8Ee2a1b23b0e289796200ae',
+        97: '0x1A6a1fcb7E6457Dd8a75c67829745B9b6b34e28f',
     },
 }
