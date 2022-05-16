@@ -11,7 +11,6 @@ import ArrowCell from 'views/SwapYield/components/Cells/ArrowCell'
 import LPTokenCell from 'views/SwapYield/components/Cells/LPTokenCell'
 import ExTokenCell from 'views/SwapYield/components/Cells/ExTokenCell'
 import ToolTipCell from 'views/SwapYield/components/Cells/ToolTipCell'
-import { ToolTipText } from 'views/SwapYield/constants'
 import { StyledRow, StyledCell, StyledCellWithoutPadding } from '../Cells/StyledCell'
 import { CellContent } from './BaseCell'
 import DiscussOrder from './DiscussOrder'
@@ -154,7 +153,12 @@ const YieldCPartyRow = ({ data, state, loading }) => {
         </StyledCell>
 
         <StyledCell>
-          <ToolTipCell tooltipText={ToolTipText} />
+        <ToolTipCell 
+            buyerToken={lpToken} 
+            buyerTokenAmount={amount.toString()} 
+            sellerToken={exToken} 
+            sellerTokenAmount={ask.toString()}
+        />
         </StyledCell>
         <StyledCell style={{ zIndex: 10, flex: 3 }}>
           <CellContent>

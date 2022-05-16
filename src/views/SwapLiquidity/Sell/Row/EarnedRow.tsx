@@ -1,5 +1,4 @@
 import React from 'react'
-import { ToolTipText } from 'views/SwapLiquidity/constants'
 import ArrowCell from 'views/SwapYield/components/Cells/ArrowCell'
 import { StyledRow, StyledCell, StyledCellWithoutPadding } from 'views/SwapYield/components/Cells/StyledCell'
 import LPTokenCell from 'views/SwapYield/components/Cells/LPTokenCell'
@@ -22,7 +21,12 @@ const EarnedRow=({swapData})=>{
                     <LPTokenCell lpTokenAddress={swapData?.toSellerToken} balance={swapData?.ask.toString()}/>                   
                 </StyledCell>
                 <StyledCellWithoutPadding>
-                    <ToolTipCell tooltipText={ToolTipText}/>
+                    <ToolTipCell 
+                        buyerToken={swapData?.toBuyerToken} 
+                        buyerTokenAmount={swapData?.amount.toString()} 
+                        sellerToken={swapData?.toSellerToken} 
+                        sellerTokenAmount={swapData?.ask.toString()}
+                    />
                 </StyledCellWithoutPadding>                
             </StyledRow>
         </>

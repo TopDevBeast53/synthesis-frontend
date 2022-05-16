@@ -1,9 +1,8 @@
+import React, { useContext, useState } from 'react'
 import { useHelixLpSwap } from 'hooks/useContract'
 import useToast from 'hooks/useToast'
-import React, { useContext, useState } from 'react'
 import styled from 'styled-components'
 import { AutoRenewIcon, Button, ChevronDownIcon, useDelayedUnmount } from 'uikit'
-import { ToolTipText } from 'views/SwapLiquidity/constants'
 import { SwapLiquidityContext } from 'views/SwapLiquidity/context'
 import ArrowCell from 'views/SwapYield/components/Cells/ArrowCell'
 import { StyledRow, StyledCell, StyledCellWithoutPadding } from 'views/SwapYield/components/Cells/StyledCell'
@@ -58,7 +57,12 @@ const AppliedRow=(props)=>{
                     <LPTokenCell lpTokenAddress={swapData?.toSellerToken} balance={swapData?.ask.toString()}/>                   
                 </StyledCell>
                 <StyledCellWithoutPadding>
-                    <ToolTipCell tooltipText={ToolTipText} />
+                <ToolTipCell 
+                    buyerToken={swapData?.toBuyerToken} 
+                    buyerTokenAmount={swapData?.amount.toString()} 
+                    sellerToken={swapData?.toSellerToken} 
+                    sellerTokenAmount={swapData?.ask.toString()}
+                />
                 </StyledCellWithoutPadding>
                 <StyledCell style={{zIndex:10, flex:3}}>
                     <Button 

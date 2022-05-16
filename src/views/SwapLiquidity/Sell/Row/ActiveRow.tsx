@@ -8,7 +8,6 @@ import ArrowCell from 'views/SwapYield/components/Cells/ArrowCell'
 import { StyledRow, StyledCell, StyledCellWithoutPadding } from 'views/SwapYield/components/Cells/StyledCell'
 import LPTokenCell from 'views/SwapYield/components/Cells/LPTokenCell'
 import ToolTipCell from 'views/SwapYield/components/Cells/ToolTipCell'
-import { ToolTipText } from '../../constants'
 import CandidateTable from '../CandidateTable'
 import DiscussOrder from '../Modals/DiscussOrder'
 
@@ -69,7 +68,12 @@ const ActiveRow = (props) => {
                     <LPTokenCell lpTokenAddress={swapData?.toSellerToken} balance={swapData?.ask.toString()}/>
                 </StyledCell>
                 <StyledCellWithoutPadding>
-                    <ToolTipCell tooltipText={ToolTipText}/>
+                    <ToolTipCell 
+                        buyerToken={swapData?.toBuyerToken} 
+                        buyerTokenAmount={swapData?.amount.toString()} 
+                        sellerToken={swapData?.toSellerToken} 
+                        sellerTokenAmount={swapData?.ask.toString()}
+                    />
                 </StyledCellWithoutPadding>
 
                 <StyledCell style={{zIndex:10, flexDirection:"row"}}>

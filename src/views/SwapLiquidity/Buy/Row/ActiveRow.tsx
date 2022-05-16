@@ -2,7 +2,6 @@ import React, { useContext, useState } from 'react'
 import { useWeb3React } from '@web3-react/core'
 import styled from 'styled-components'
 import { Button, ChevronDownIcon, useDelayedUnmount, useModal } from 'uikit'
-import { ToolTipText } from 'views/SwapLiquidity/constants'
 import { SwapLiquidityContext } from 'views/SwapLiquidity/context'
 import ArrowCell from 'views/SwapYield/components/Cells/ArrowCell'
 import { StyledRow, StyledCell, StyledCellWithoutPadding } from 'views/SwapYield/components/Cells/StyledCell'
@@ -15,7 +14,6 @@ const ArrowIcon = styled(ChevronDownIcon)<{ toggled: boolean }>`
   transform: ${({ toggled }) => (toggled ? 'rotate(180deg)' : 'rotate(0)')};
   height: 24px;
 `
-
 
 const ActiveRow=(props)=>{
     const {tableRefresh, setTableRefresh} = useContext(SwapLiquidityContext)
@@ -46,7 +44,12 @@ const ActiveRow=(props)=>{
                     <LPTokenCell lpTokenAddress={swapData?.toSellerToken} balance={swapData?.ask.toString()}/>                   
                 </StyledCell>
                 <StyledCellWithoutPadding>
-                    <ToolTipCell tooltipText={ToolTipText} />
+                    <ToolTipCell 
+                        buyerToken={swapData?.toBuyerToken} 
+                        buyerTokenAmount={swapData?.amount.toString()} 
+                        sellerToken={swapData?.toSellerToken} 
+                        sellerTokenAmount={swapData?.ask.toString()}
+                    />
                 </StyledCellWithoutPadding>
                 {
                     account && (

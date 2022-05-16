@@ -1,10 +1,11 @@
+import React, { useContext, useMemo, useState } from 'react'
 import { useHelixYieldSwap } from 'hooks/useContract'
 import useToast from 'hooks/useToast'
+import { useFarms } from 'state/farms/hooks'
 import moment from 'moment'
-import React, { useContext, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { AutoRenewIcon, Button, ChevronDownIcon, useDelayedUnmount, useModal } from 'uikit'
-import { ToolTipText } from 'views/SwapYield/constants'
+import { getAddress } from 'utils/addressHelpers'
 import { YieldPartyContext } from 'views/SwapYield/context'
 import ArrowCell from '../../Cells/ArrowCell'
 import { StyledRow, StyledCell, StyledCellWithoutPadding } from '../../Cells/StyledCell'
@@ -22,9 +23,11 @@ const ArrowIcon = styled(ChevronDownIcon)<{ toggled: boolean }>`
 
 const ActiveRow = (props) => {
   const YieldSwapContract = useHelixYieldSwap()
+  const { data: farms } = useFarms()
   const { toastSuccess, toastError } = useToast()
   const { tableRefresh, setTableRefresh } = useContext(YieldPartyContext)
   const { swapData, swapId } = props
+
   const [expanded, setExpanded] = useState(false)
   const [pendingTx, setPendingTx] = useState(false)
   const shouldRenderDetail = useDelayedUnmount(expanded, 300)
@@ -82,7 +85,12 @@ const ActiveRow = (props) => {
           <ExTokenCell exTokenAddress={swapData?.exToken} balance={swapData?.ask.toString()} />
         </StyledCell>
         <StyledCell>
-          <ToolTipCell tooltipText={ToolTipText} />
+          <ToolTipCell 
+            buyerToken={swapData?.lpToken} 
+            buyerTokenAmount={swapData?.amount.toString()} 
+            sellerToken={swapData?.exToken} 
+            sellerTokenAmount={swapData?.ask.toString()}
+          />
         </StyledCell>
         <StyledCell>
           <Button color="primary" onClick={handleUpdateClick} scale="sm" width="100px">
