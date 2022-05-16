@@ -5,7 +5,9 @@ import styled from 'styled-components'
 import { useMatchBreakpoints } from 'uikit'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { logError } from 'utils/sentry'
+import tokens from 'config/constants/tokens'
 import { useHelixLockVault } from 'views/Vault/hooks/useHelixLockVault'
+import { CurrencyLogo } from 'components/Logo'
 import ActionPanel from './ActionPanel/ActionPanel'
 import EarningsCell from './Cells/EarningsCell'
 import ExpandActionCell from './Cells/ExpandActionCell'
@@ -15,6 +17,15 @@ import WithdrawTimeLeft from './Cells/WithdrawTimeLeft'
 interface PoolRowProps {
   deposit?
 }
+
+const Container = styled.div`
+  display: flex;
+  align-items: center;
+
+  ${({ theme }) => theme.mediaQueries.sm} {
+    padding-left: 32px;
+  }
+`
 
 const StyledRow = styled.div`
   background-color: transparent;
@@ -61,8 +72,18 @@ const VaultRow: React.FC<PoolRowProps> = ({ deposit }) => {
   return (
     <>
       <StyledRow role="row" onClick={toggleExpanded}>
+      { (isTablet || isDesktop ) && (
+        <>
+          <Container>
+            <CurrencyLogo currency={tokens.helix} size="36px" />
+          </Container>   
+          <StakedCell stakedBalance={stakedBalance}/>
+        </>
+      ) }   
+      <Container>
+        <CurrencyLogo currency={tokens.helix} size="36px" />
+      </Container>   
       <EarningsCell isLoading={isLoading} earnings={earnings}/>
-      { (isTablet || isDesktop ) && <StakedCell stakedBalance={stakedBalance}/>}      
       <WithdrawTimeLeft deposit={deposit} />
       <ExpandActionCell expanded={expanded} isFullLayout={isTablet || isDesktop} />
       </StyledRow>
