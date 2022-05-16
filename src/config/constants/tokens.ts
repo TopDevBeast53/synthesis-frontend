@@ -11,17 +11,30 @@ interface TokenList {
 const defineTokens = <T extends TokenList>(t: T) => t
 
 export const mainnetTokens = defineTokens({
-    helix: new Token(TESTNET, '0xC232Ce0b83b3B320CdA3ec78c57A0D101A4Ac5cD', 18, 'HELIX', 'Helix'),
-    wbnb: new Token(
+    helix: new Token(
         MAINNET,
-        '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',
+        '',
         18,
-        'WBNB',
-        'Wrapped BNB',
-        'https://www.binance.com/',
+        'HELIX',
+        'Helix',
+        'https://helix.finance/',
     ),
-    // bnb here points to the wbnb contract. Wherever the currency BNB is required, conditional checks for the symbol 'BNB' can be used
-    bnb: new Token(MAINNET, '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c', 18, 'BNB', 'BNB', 'https://www.binance.com/'),
+    weth: new Token(
+        MAINNET,
+        '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
+        18,
+        'WETH',
+        'Wrapped ETH',
+        'https://www.ethereum.org/',
+    ),
+    eth: new Token(
+        MAINNET,
+        '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
+        18,
+        'ETH',
+        'ETH',
+        'https://www.ethereum.org/',
+    ),
     cake: new Token(
         MAINNET,
         '0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82',
@@ -119,14 +132,6 @@ export const mainnetTokens = defineTokens({
         'UST',
         'Wrapped UST Token',
         'https://mirror.finance/',
-    ),
-    eth: new Token(
-        MAINNET,
-        '0x2170Ed0880ac9A755fd29B2688956BD959F933F8',
-        18,
-        'ETH',
-        'Binance-Peg Ethereum Token',
-        'https://ethereum.org/en/',
     ),
     usdc: new Token(
         MAINNET,
@@ -2009,27 +2014,25 @@ export const mainnetTokens = defineTokens({
 } as const)
 
 export const testnetTokens = defineTokens({
-    helix: new Token(TESTNET, '0xC232Ce0b83b3B320CdA3ec78c57A0D101A4Ac5cD', 18, 'HELIX', 'Helix'),
-    wbnb: new Token(
+    helix: new Token(
         TESTNET,
-        '0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd',
+        '0x0600D5569E3011233BF1df7fc84de595Ef13f4B6',
         18,
-        'WBNB',
-        'Wrapped BNB',
-        'https://www.binance.com/',
+        'HELIX',
+        'Helix',
+        'https://helix.finance/',
     ),
-    cake: new Token(
+    weth: new Token(
         TESTNET,
-        '0xF9f93cF501BFaDB6494589Cb4b4C15dE49E85D0e',
+        '0xc778417E063141139Fce010982780140Aa0cD5Ab',
         18,
-        'CAKE',
-        'PancakeSwap Token',
-        'https://helix.exchange/',
+        'WETH',
+        'Wrapped ETH',
+        'https://www.ethereum.org/',
     ),
-    busd: new Token(
+    usdc: new Token(
         TESTNET,
-        // '0xeD24FC36d5Ee211Ea25A80239Fb8C4Cfd80f12Ee',
-        '0x78867BbEeF44f2326bF8DDd1941a4439382EF2A7',
+        '0xeb8f08a975Ab53E34D8a0330E0D34de942C95926',
         18,
         'BUSD',
         'Binance USD',
@@ -2037,7 +2040,7 @@ export const testnetTokens = defineTokens({
     ),
     usdt: new Token(
         TESTNET,
-        '0x337610d27c682E347C9cD60BD4b3b107C9d34dDd',
+        '0x3B00Ef435fA4FcFF5C209a37d1f3dcff37c705aD',
         18,
         'USDT',
         'Tether USD',
@@ -2045,27 +2048,11 @@ export const testnetTokens = defineTokens({
     ),
     dai: new Token(
         TESTNET,
-        '0x8a9424745056Eb399FD19a0EC26A14316684e274',
+        '0x95b58a6Bff3D14B7DB2f5cb5F0Ad413DC2940658',
         18,
         'DAI',
         'Dai Stablecoin',
         'https://www.makerdao.com/',
-    ),
-    syrup: new Token(
-        TESTNET,
-        '0xfE1e507CeB712BDe086f3579d2c03248b2dB77f9',
-        18,
-        'SYRUP',
-        'SyrupBar Token',
-        'https://helix.exchange/',
-    ),
-    bake: new Token(
-        TESTNET,
-        '0xE02dF9e3e622DeBdD69fb838bB799E3F168902c5',
-        18,
-        'BAKE',
-        'Bakeryswap Token',
-        'https://www.bakeryswap.org/',
     ),
 } as const)
 

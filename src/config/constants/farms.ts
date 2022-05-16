@@ -12,27 +12,27 @@ const farms: SerializedFarmConfig[] = [
         pid: 0,
         lpSymbol: 'HELIX',
         lpAddresses: {
-            97: serializedTokens.helix.address,
+            4: serializedTokens.helix.address,
             56: '',
         },
         token: serializedTokens.helix,
-        quoteToken: serializedTokens.wbnb,
+        quoteToken: serializedTokens.weth,
     },
     {
         pid: 1,
-        lpSymbol: 'HELIX-BNB',
+        lpSymbol: 'HELIX-ETH',
         lpAddresses: {
-            97: '0x33eA8E14b4B24E99016113BE3Ff092e6628B520e',
+            4: '0x33eA8E14b4B24E99016113BE3Ff092e6628B520e',
             56: '',
         },
         token: serializedTokens.helix,
-        quoteToken: serializedTokens.wbnb,
+        quoteToken: serializedTokens.weth,
     },
     {
         pid: 2,
         lpSymbol: 'HELIX-USDT',
         lpAddresses: {
-            97: '0xD02D1e50690db3B0256F4bB0E02f40eAAFA6429b',
+            4: '0xD02D1e50690db3B0256F4bB0E02f40eAAFA6429b',
             56: '',
         },
         token: serializedTokens.helix,
@@ -40,23 +40,23 @@ const farms: SerializedFarmConfig[] = [
     },
     {
         pid: 3,
-        lpSymbol: 'BNB-BUSD',
+        lpSymbol: 'ETH-USDC',
         lpAddresses: {
-            97: '0x0137F587119bE0D0F1efDbf87dBe409C670Ad9AD',
+            4: '0x0137F587119bE0D0F1efDbf87dBe409C670Ad9AD',
             56: '',
         },
-        token: serializedTokens.wbnb,
-        quoteToken: serializedTokens.busd,
+        token: serializedTokens.weth,
+        quoteToken: serializedTokens.usdc,
     },
     {
         pid: 4,
-        lpSymbol: 'HELIX-BUSD',
+        lpSymbol: 'HELIX-USDC',
         lpAddresses: {
-            97: '0xC5Ed153B78E4f4237e113e13f4F86AeE4945679f',
+            4: '0xC5Ed153B78E4f4237e113e13f4F86AeE4945679f',
             56: '',
         },
         token: serializedTokens.helix,
-        quoteToken: serializedTokens.busd,
+        quoteToken: serializedTokens.usdc,
     },
 
     // {
