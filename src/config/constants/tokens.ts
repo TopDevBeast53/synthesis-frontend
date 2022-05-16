@@ -12,8 +12,8 @@ const defineTokens = <T extends TokenList>(t: T) => t
 
 export const mainnetTokens = defineTokens({
     helix: new Token(
-        MAINNET,
-        '',
+        TESTNET,
+        '0x0600D5569E3011233BF1df7fc84de595Ef13f4B6',
         18,
         'HELIX',
         'Helix',
