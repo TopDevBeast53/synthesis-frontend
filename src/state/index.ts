@@ -20,7 +20,7 @@ import mint from './mint/reducer'
 import lists, { initialState as listsInitialState } from './lists/reducer'
 import burn from './burn/reducer'
 import multicall from './multicall/reducer'
-import nftMarketReducer from './nftMarket/reducer'
+// import nftMarketReducer from './nftMarket/reducer'
 
 const PERSISTED_KEYS: string[] = ['user', 'transactions', 'lists', 'profile']
 
@@ -46,7 +46,7 @@ const store = configureStore({
         voting: votingReducer,
         lottery: lotteryReducer,
         info: infoReducer,
-        nftMarket: nftMarketReducer,
+        nftMarket: null,
 
         // Exchange
         user,

@@ -1,7 +1,6 @@
 import { MenuItemsType } from 'uikit'
 import { DropdownMenuItemType } from 'uikit/components/DropdownMenu/types'
 import { ContextApi } from 'contexts/Localization/types'
-// import { nftsBaseUrl } from 'views/Nft/market/constants'
 
 export type ConfigMenuItemsType = MenuItemsType & { hideSubNav?: boolean }
 

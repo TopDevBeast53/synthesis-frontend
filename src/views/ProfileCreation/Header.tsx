@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import styled from 'styled-components'
 import { Breadcrumbs, Heading, Text, Link, Button } from 'uikit'
 import { useTranslation } from 'contexts/Localization'
-import { nftsBaseUrl } from 'views/Nft/market/constants'
+// import { nftsBaseUrl } from 'views/Nft/market/constants'
 import { ProfileCreationContext } from './contexts/ProfileCreationProvider'
 
 const Wrapper = styled.div`
@@ -29,7 +29,7 @@ const Header: React.FC = () => {
       <Text color="textSubtle" mb="8px">
         {t('Total cost: 1.5 CAKE')}
       </Text>
-      <Link href={`${nftsBaseUrl}/profile`}>
+      <Link>
         <Button mb="24px" scale="sm" variant="secondary">
           {t('Back to profile')}
         </Button>
