@@ -1,9 +1,10 @@
 import React from 'react'
 import { useAllTokens } from 'hooks/Tokens'
 import styled from 'styled-components'
-import { getBalanceNumber } from 'utils/formatBalance'
 import { TokenImage } from 'components/TokenImage'
-import TokenCell from './TokenCell'
+import { getBalanceNumber } from 'utils/formatBalance'
+import BaseTokenCell from './BaseTokenCell'
+
 
 const Container = styled.div`
   display: flex;
@@ -19,7 +20,7 @@ const ExTokenCell = (props) => {
   return(
     <Container>
       <TokenImage  token={exToken} width={32} height={32}/>
-      <TokenCell tokenSymbol={exToken?.symbol} balance={amount} />
+      <BaseTokenCell tokenSymbol={exToken?.symbol} balance={amount} />
     </Container>
   ) 
 }

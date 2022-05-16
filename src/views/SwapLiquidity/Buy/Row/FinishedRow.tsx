@@ -19,10 +19,9 @@ const FinishedRow=({swapData})=>{
                 </StyledCell>
                 <StyledCellWithoutPadding>
                     <ToolTipCell 
-                        buyerToken={swapData?.toBuyerToken} 
-                        buyerTokenAmount={swapData?.amount.toString()} 
-                        sellerToken={swapData?.toSellerToken} 
-                        sellerTokenAmount={swapData?.ask.toString()}
+                        seller={swapData?.seller}             
+                        buyer={swapData?.buyer} 
+                        askAmount={swapData?.ask.toString()}
                     />
                 </StyledCellWithoutPadding>                
             </StyledRow>

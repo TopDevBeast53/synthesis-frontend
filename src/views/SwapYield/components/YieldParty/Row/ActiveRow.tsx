@@ -1,17 +1,14 @@
-import React, { useContext, useMemo, useState } from 'react'
 import { useHelixYieldSwap } from 'hooks/useContract'
 import useToast from 'hooks/useToast'
-import { useFarms } from 'state/farms/hooks'
 import moment from 'moment'
+import React, { useContext, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { AutoRenewIcon, Button, ChevronDownIcon, useDelayedUnmount, useModal } from 'uikit'
-import { getAddress } from 'utils/addressHelpers'
 import { YieldPartyContext } from 'views/SwapYield/context'
 import ArrowCell from '../../Cells/ArrowCell'
-import { StyledRow, StyledCell, StyledCellWithoutPadding } from '../../Cells/StyledCell'
 import DurationCell from '../../Cells/DurationCells'
-import ExTokenCell from '../../Cells/ExTokenCell'
-import LPTokenCell from '../../Cells/LPTokenCell'
+import { StyledCell, StyledCellWithoutPadding, StyledRow } from '../../Cells/StyledCell'
+import TokenCell from '../../Cells/TokenCell'
 import ToolTipCell from '../../Cells/ToolTipCell'
 import CandidateTable from '../CandidateTable'
 import DiscussOrder from '../Modals/DiscussOrder'
@@ -23,7 +20,6 @@ const ArrowIcon = styled(ChevronDownIcon)<{ toggled: boolean }>`
 
 const ActiveRow = (props) => {
   const YieldSwapContract = useHelixYieldSwap()
-  const { data: farms } = useFarms()
   const { toastSuccess, toastError } = useToast()
   const { tableRefresh, setTableRefresh } = useContext(YieldPartyContext)
   const { swapData, swapId } = props
@@ -68,12 +64,13 @@ const ActiveRow = (props) => {
   }
   if (swapData) {
     if (swapData.isOpen === false) return null
-  }
+  }  
   return (
     <>
       <StyledRow onClick={handleOnRowClick}>
         <StyledCell>
-          <LPTokenCell lpTokenAddress={swapData?.lpToken} balance={swapData?.amount.toString()} />
+        <TokenCell swapData={swapData} tokenInfo={swapData?.seller}/>
+          {/* <LPTokenCell lpTokenAddress={swapData?.buyer.token} balance={swapData?.buyer.amount.toString()} /> */}
         </StyledCell>
         <StyledCell>
           <DurationCell duration={duration} />
@@ -82,14 +79,14 @@ const ActiveRow = (props) => {
           <ArrowCell />
         </StyledCellWithoutPadding>
         <StyledCell>
-          <ExTokenCell exTokenAddress={swapData?.exToken} balance={swapData?.ask.toString()} />
+          <TokenCell swapData={swapData} tokenInfo={swapData?.buyer}/>          
+          {/* <ExTokenCell exTokenAddress={swapData?.seller.token} balance={swapData?.ask.toString()} /> */}
         </StyledCell>
         <StyledCell>
           <ToolTipCell 
-            buyerToken={swapData?.lpToken} 
-            buyerTokenAmount={swapData?.amount.toString()} 
-            sellerToken={swapData?.exToken} 
-            sellerTokenAmount={swapData?.ask.toString()}
+            seller={swapData?.seller}             
+            buyer={swapData?.buyer} 
+            askAmount={swapData?.ask.toString()}
           />
         </StyledCell>
         <StyledCell>

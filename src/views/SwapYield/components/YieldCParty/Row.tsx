@@ -153,12 +153,12 @@ const YieldCPartyRow = ({ data, state, loading }) => {
         </StyledCell>
 
         <StyledCell>
-        <ToolTipCell 
+        {/* <ToolTipCell 
             buyerToken={lpToken} 
             buyerTokenAmount={amount.toString()} 
             sellerToken={exToken} 
             sellerTokenAmount={ask.toString()}
-        />
+        /> */}
         </StyledCell>
         <StyledCell style={{ zIndex: 10, flex: 3 }}>
           <CellContent>

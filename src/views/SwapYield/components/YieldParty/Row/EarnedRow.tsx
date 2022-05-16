@@ -1,9 +1,8 @@
 import React from 'react'
 import { StyledRow, StyledCell, StyledCellWithoutPadding } from '../../Cells/StyledCell'
 import ArrowCell from '../../Cells/ArrowCell'
-import ExTokenCell from '../../Cells/ExTokenCell'
-import LPTokenCell from '../../Cells/LPTokenCell'
 import ToolTipCell from '../../Cells/ToolTipCell'
+import TokenCell from '../../Cells/TokenCell'
 
 const EarnedRow=({swapData})=>{ 
     if(swapData){
@@ -13,20 +12,19 @@ const EarnedRow=({swapData})=>{
         <>
             <StyledRow>
                 <StyledCell>
-                    <LPTokenCell lpTokenAddress={swapData?.lpToken} balance={swapData?.amount.toString()}/>
+                    <TokenCell swapData={swapData} tokenInfo={swapData?.seller}/>                    
                 </StyledCell>
                 <StyledCellWithoutPadding>
                     <ArrowCell/>
                 </StyledCellWithoutPadding>                
                 <StyledCell>                    
-                    <ExTokenCell exTokenAddress={swapData?.exToken} balance={swapData?.ask.toString()}/>                   
+                    <TokenCell swapData={swapData} tokenInfo={swapData?.buyer}/>
                 </StyledCell>
                 <StyledCell>
                 <ToolTipCell 
-                    buyerToken={swapData?.lpToken} 
-                    buyerTokenAmount={swapData?.amount.toString()} 
-                    sellerToken={swapData?.exToken} 
-                    sellerTokenAmount={swapData?.ask.toString()}
+                    seller={swapData?.seller}             
+                    buyer={swapData?.buyer} 
+                    askAmount={swapData?.ask.toString()}
                 />
                 </StyledCell>                
             </StyledRow>

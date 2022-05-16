@@ -21,12 +21,11 @@ const EarnedRow=({swapData})=>{
                     <LPTokenCell lpTokenAddress={swapData?.toSellerToken} balance={swapData?.ask.toString()}/>                   
                 </StyledCell>
                 <StyledCellWithoutPadding>
-                    <ToolTipCell 
-                        buyerToken={swapData?.toBuyerToken} 
-                        buyerTokenAmount={swapData?.amount.toString()} 
-                        sellerToken={swapData?.toSellerToken} 
-                        sellerTokenAmount={swapData?.ask.toString()}
-                    />
+                <ToolTipCell 
+                    seller={swapData?.seller}             
+                    buyer={swapData?.buyer} 
+                    askAmount={swapData?.ask.toString()}
+                />
                 </StyledCellWithoutPadding>                
             </StyledRow>
         </>
