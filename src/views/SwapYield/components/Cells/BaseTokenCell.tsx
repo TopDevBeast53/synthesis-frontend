@@ -5,7 +5,7 @@ import { CellContent } from './BaseCell'
 
 const BaseTokenCell = (props) => {
   const { tokenSymbol, balance } = props // moment Duration
-  if (!tokenSymbol || !balance) {
+  if (!tokenSymbol || balance === undefined) {
     return (
       <CellContent>
         <Skeleton />

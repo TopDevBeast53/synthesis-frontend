@@ -107,6 +107,10 @@ export default (props)=>{
           toastError('Error', `Duration should be in range between ${minDuration} and ${maxDuration}`)
           return false
         }
+        if (selectedToBuyerTokenOption.address === selectedToSellerTokenOption.address){
+          toastError('Error', `You can't Swap same kind of token`)
+          return false
+        }
         return true
     }
     const handleBtnClick = async ()=>{

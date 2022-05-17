@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import { AutoRenewIcon, Button, Skeleton, Text } from 'uikit'
 import BaseCell, { CellContent } from '../../Cells/BaseCell'
 import ExTokenCell from '../../Cells/ExTokenCell'
+import TokenCell from '../../Cells/TokenCell'
 
 const StyledRow = styled.div`
   background-color: transparent;
@@ -73,7 +74,7 @@ const CandidateRow = ({ bidId, swapData }) => {
         </CellContent>
       </StyledCell>
       <StyledCell>
-        <ExTokenCell exTokenAddress={swapData?.exToken} balance={bidData?.amount.toString()} />
+        <TokenCell tokenInfo={swapData?.buyer} amount={bidData?.amount.toString()} />
       </StyledCell>
       <StyledCell>
         <CellContent>

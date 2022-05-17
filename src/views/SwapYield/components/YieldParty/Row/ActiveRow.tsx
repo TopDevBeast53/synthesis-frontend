@@ -63,14 +63,14 @@ const ActiveRow = (props) => {
     showDiscussModal()
   }
   if (swapData) {
-    if (swapData.isOpen === false) return null
+    if (swapData.status !== 0) return null
   }  
+
   return (
     <>
       <StyledRow onClick={handleOnRowClick}>
         <StyledCell>
-        <TokenCell swapData={swapData} tokenInfo={swapData?.seller}/>
-          {/* <LPTokenCell lpTokenAddress={swapData?.buyer.token} balance={swapData?.buyer.amount.toString()} /> */}
+        <TokenCell tokenInfo={swapData?.seller} amount={swapData?.seller.amount.toString()}/>          
         </StyledCell>
         <StyledCell>
           <DurationCell duration={duration} />
@@ -79,8 +79,7 @@ const ActiveRow = (props) => {
           <ArrowCell />
         </StyledCellWithoutPadding>
         <StyledCell>
-          <TokenCell swapData={swapData} tokenInfo={swapData?.buyer}/>          
-          {/* <ExTokenCell exTokenAddress={swapData?.seller.token} balance={swapData?.ask.toString()} /> */}
+          <TokenCell tokenInfo={swapData?.buyer} amount={swapData?.ask.toString()}/>          
         </StyledCell>
         <StyledCell>
           <ToolTipCell 

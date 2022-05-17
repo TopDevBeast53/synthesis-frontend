@@ -7,8 +7,7 @@ import React, { useContext, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { AutoRenewIcon, Button, ChevronDownIcon, Skeleton, Text, useDelayedUnmount, useModal } from 'uikit'
 import ArrowCell from 'views/SwapYield/components/Cells/ArrowCell'
-import ExTokenCell from 'views/SwapYield/components/Cells/ExTokenCell'
-import LPTokenCell from 'views/SwapYield/components/Cells/LPTokenCell'
+import TokenCell from 'views/SwapYield/components/Cells/TokenCell'
 import { YieldCPartyContext } from 'views/SwapYield/context'
 import { SwapState } from '../../types'
 import { StyledCell, StyledCellWithoutPadding, StyledRow } from '../Cells/StyledCell'
@@ -24,7 +23,7 @@ const ArrowIcon = styled(ChevronDownIcon)<{ toggled: boolean }>`
 const YieldCPartyRow = ({ data, state, loading }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
-  const { amount, ask, id, exToken, lpToken, lockDuration, lockUntilTimestamp, approved, bids } = data
+  const { id, lockDuration, lockUntilTimestamp, bids, buyer, seller, ask } = data
   const yieldSwapContract = useHelixYieldSwap()
   const { toastSuccess, toastError } = useToast()
   const [pendingTx, setPendingTx] = useState(false)
@@ -58,7 +57,7 @@ const YieldCPartyRow = ({ data, state, loading }) => {
   }
 
   const [showModal] = useModal(
-    <DiscussOrder swapId={id} exToken={exToken} exAmount={ask} approved={approved} onSend={onSendAsk} />,
+    <DiscussOrder swapId={id} tokenInfo={buyer} amount={data.ask} onSend={onSendAsk} />,
     false,
   )
 
@@ -131,7 +130,7 @@ const YieldCPartyRow = ({ data, state, loading }) => {
     <>
       <StyledRow onClick={handleExpand}>
         <StyledCell>
-          <LPTokenCell lpTokenAddress={lpToken} balance={amount.toString()} />
+          <TokenCell tokenInfo={seller} amount={seller.amount.toString()} />
         </StyledCell>
 
         {state !== SwapState.Finished && (
@@ -148,7 +147,8 @@ const YieldCPartyRow = ({ data, state, loading }) => {
           <ArrowCell back />
         </StyledCellWithoutPadding>
         <StyledCell>
-          <ExTokenCell exTokenAddress={exToken} balance={ask.toString()} />
+          
+          <TokenCell tokenInfo={buyer} amount={data?.ask.toString()}/>                    
         </StyledCell>
 
         <StyledCell>
@@ -205,7 +205,7 @@ const YieldCPartyRow = ({ data, state, loading }) => {
 
       {shouldRenderDetail && account && (
         <div style={{ padding: '10px 10px', minHeight: '5em' }}>
-          <CandidateTable bids={bids} exToken={exToken} approved={approved} exAmount={ask} />
+          <CandidateTable bids={bids} exToken={buyer} exAmount={ask} />
         </div>
       )}
     </>

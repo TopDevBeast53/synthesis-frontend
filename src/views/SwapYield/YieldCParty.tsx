@@ -44,11 +44,11 @@ const YieldCParty = () => {
 
   const filteredSwaps = useMemo(() => {
     if (menuIndex === SwapState.Pending)
-      return swaps.filter((s, i) => !s.isOpen && !s.isWithdrawn && includes(hasBidOnSwap, i))
-    if (menuIndex === SwapState.Finished) return filter(swaps, { isWithdrawn: true, buyer: account })
+      return swaps.filter((s, i) => s.status === 1 && includes(hasBidOnSwap, i))
+    if (menuIndex === SwapState.Finished) return swaps.filter((s) => s.status === 2 && s.seller.party === account)
     if (menuIndex === SwapState.All)
-      return swaps.filter((s, i) => s.isOpen && !includes(hasBidOnSwap, i) && s.seller !== account)
-    if (menuIndex === SwapState.Applied) return swaps.filter((s, i) => s.isOpen && includes(hasBidOnSwap, i))
+      return swaps.filter((s, i) => s.status === 0 && !includes(hasBidOnSwap, i) && s.seller.party !== account)
+    if (menuIndex === SwapState.Applied) return swaps.filter((s, i) => s.status === 0 && includes(hasBidOnSwap, i))
     return []
   }, [menuIndex, swaps, hasBidOnSwap, account])
 
@@ -68,12 +68,12 @@ const YieldCParty = () => {
           return { ...s, id: i }
         })
         setSwaps(fetchedSwapsWithIds)
-
+        
         // fetch bid Ids
         const fetchBidderSwapIds = await yieldSwapContract.getBidderSwapIds(account)
         const normalNumberBidIds = fetchBidderSwapIds.map((b) => b.toNumber())
         setHasBidOnSwap(normalNumberBidIds)
-
+        
         // fetch bid contents
         const bidIds = fetchedSwaps.reduce((prev, cur) => prev.concat(cur.bidIds), [])
         const fetchedBids = await fetchBids(bidIds);
