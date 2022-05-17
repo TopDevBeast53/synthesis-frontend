@@ -2032,10 +2032,10 @@ export const testnetTokens = defineTokens({
     ),
     usdc: new Token(
         TESTNET,
-        '0xeb8f08a975Ab53E34D8a0330E0D34de942C95926',
-        18,
-        'BUSD',
-        'Binance USD',
+        '0x4DBCdF9B62e891a7cec5A2568C3F4FAF9E8Abe2b',
+        6,
+        'USDC',
+        'USDC',
         'https://www.paxos.com/busd/',
     ),
     usdt: new Token(
@@ -2048,7 +2048,7 @@ export const testnetTokens = defineTokens({
     ),
     dai: new Token(
         TESTNET,
-        '0x95b58a6Bff3D14B7DB2f5cb5F0Ad413DC2940658',
+        '0x5592EC0cfb4dbc12D3aB100b257153436a1f0FEa',
         18,
         'DAI',
         'Dai Stablecoin',
