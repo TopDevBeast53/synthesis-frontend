@@ -99,13 +99,24 @@ const CreateOrderDialog = (props) => {
   }, [YieldSwapContract, account])
 
   if (!LPOptions) return null
-  
 
+  const handleConfirm = (toBuyerTokenAddress, toSellerTokenAddress, decimalUAmount, decimalYAmount, duration, isToBuyerTokenLP, isToSellerTokenLp) => {
+    return YieldSwapContract.openSwap(
+      toBuyerTokenAddress,
+      toSellerTokenAddress,
+      decimalUAmount.toString(),
+      decimalYAmount.toString(),
+      duration,
+      isToBuyerTokenLP, isToSellerTokenLp
+    )
+  }
   const propData = {
       toBuyerTokenOptions:LPOptions, 
       minDuration, 
       maxDuration,                   
       toSellerTokenOptions:TokenOptions, 
+      contractAddress:YieldSwapContract.address,
+      handleConfirm
  }
   return (
     <Modal title={t('Add an Order')} headerBackground={theme.colors.gradients.cardHeader} onDismiss={onDismiss}>

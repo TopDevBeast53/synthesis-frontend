@@ -3,7 +3,6 @@ import { ModalInput } from 'components/Modal';
 import Select from 'components/Select/Select';
 import { useTranslation } from 'contexts/Localization';
 import { ethers } from 'ethers';
-import { useHelixYieldSwap } from 'hooks/useContract';
 import useToast from 'hooks/useToast';
 import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
@@ -35,12 +34,12 @@ export default (props)=>{
     const { t } = useTranslation()
     const {toBuyerTokenOptions, minDuration, maxDuration, 
         toSellerTokenOptions, onDismiss, isToBuyerTokenLp, isToSellerTokenLp,
+        handleConfirm, contractAddress, hidDuration
      } = props
     const { toastSuccess, toastError } = useToast()
     const [uAmount, setUAmount] = useState('0')
     const [yAmount, setYAmount] = useState('0')
     const [pendingTx, setPendingTx] = useState(false)
-    const YieldSwapContract = useHelixYieldSwap()
     const handleUAmountChange = useCallback(
         (e: React.FormEvent<HTMLInputElement>) => {
           if (e.currentTarget.validity.valid) {
@@ -82,7 +81,7 @@ export default (props)=>{
         const Erc20Contract = selectedToBuyerTokenOption.contract
         const decimals = await Erc20Contract.decimals()
         setPendingTx(true)
-        Erc20Contract.approve(YieldSwapContract.address, ethers.constants.MaxUint256)
+        Erc20Contract.approve(contractAddress, ethers.constants.MaxUint256)
         .then(async (tx) => {
           await tx.wait()
           toastSuccess(`${t('Success')}!`, t('Approved!'))
@@ -119,7 +118,15 @@ export default (props)=>{
             setPendingTx(true)
             console.info("========", selectedToBuyerTokenOption, selectedToSellerTokenOption)
             console.info("========", isToBuyerTokenLp, isToSellerTokenLp)
-            YieldSwapContract.openSwap(
+            // YieldSwapContract.openSwap(
+            //   selectedToBuyerTokenOption.address,
+            //   selectedToSellerTokenOption.address,
+            //   decimalUAmount.toString(),
+            //   decimalYAmount.toString(),
+            //   Math.round(3600 * 24 * selectedDuration),
+            //   isToBuyerTokenLp, isToSellerTokenLp
+            // )
+            handleConfirm(
               selectedToBuyerTokenOption.address,
               selectedToSellerTokenOption.address,
               decimalUAmount.toString(),
@@ -141,12 +148,12 @@ export default (props)=>{
     }
     return (
         <>
-        <Group style={{ margin: '2em 0' }} title="Send">
+        <Group style={{ margin: '2em 0', zIndex:"15" }} title="Send">
             <Flex>
             <Text bold style={{ flex: '3' }}>
                 {isToBuyerTokenLp ? t('LP Token') : t('Token')}:
             </Text>
-            <Select options={toBuyerTokenOptions} onOptionChange={handleToBuyerTokenOptionChange} style={{ zIndex: '30', flex: '6' }} />
+            <Select options={toBuyerTokenOptions} onOptionChange={handleToBuyerTokenOptionChange} style={{flex: '6' }} />
             </Flex>
 
             <div style={{ marginBottom: '1em' }}>
@@ -189,19 +196,23 @@ export default (props)=>{
             <BalanceInput style={{ flex: '6' }} value={yAmount} onUserInput={handleYAmountChange}/>
             </Flex>
         </Group>
-        <Flex>
-            <Text bold style={{ flex: '3 3 120px' }}>
-                {t('Duration (days)')}:
-            </Text>
-            <StyledInput
-                style={{ flex: '7 7' }}
-                type="number"
-                max={maxDuration}
-                min={minDuration}
-                value={selectedDuration}
-                onChange={handleDurationChange}
-            />
-        </Flex>
+        {
+          !hidDuration &&
+          <Flex>
+              <Text bold style={{ flex: '3 3 120px' }}>
+                  {t('Duration (days)')}:
+              </Text>
+              <StyledInput
+                  style={{ flex: '7 7' }}
+                  type="number"
+                  max={maxDuration}
+                  min={minDuration}
+                  value={selectedDuration}
+                  onChange={handleDurationChange}
+              />
+          </Flex>
+        }
+        
         <Button
             isLoading={pendingTx}
             endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}

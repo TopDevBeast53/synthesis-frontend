@@ -1,4 +1,3 @@
-import Balance from 'components/Balance'
 import { useWeb3React } from '@web3-react/core'
 import React, { useContext } from 'react'
 import styled from 'styled-components'

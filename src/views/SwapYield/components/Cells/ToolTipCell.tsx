@@ -24,14 +24,15 @@ const ToolTipCell = ({ seller, buyer, askAmount }) => {
   const { data: farms } = useFarms()
   const tokens = useAllTokens()
 
-  const tooltipText = (seller && buyer) ? 
-                                        ToolTipText(
-                                          getTokenSymbol(farms, tokens, seller), 
-                                          seller.amount.toString(), 
-                                          getTokenSymbol(farms, tokens, buyer), 
-                                          askAmount.toString()) 
-                                        :
-                                          ""
+  const tooltipText =""
+  //  (seller && buyer) ? 
+  //                                       ToolTipText(
+  //                                         getTokenSymbol(farms, tokens, seller), 
+  //                                         seller.amount.toString(), 
+  //                                         getTokenSymbol(farms, tokens, buyer), 
+  //                                         askAmount.toString()) 
+  //                                       :
+  //                                         ""
   const { targetRef, tooltip, tooltipVisible } = useTooltip(tooltipText, {
     placement: 'top-end',
     tooltipOffset: [20, 10],
