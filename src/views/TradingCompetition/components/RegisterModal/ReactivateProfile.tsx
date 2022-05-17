@@ -1,9 +1,9 @@
 import React from 'react'
 import { Heading, Button, Text } from 'uikit'
-import history from 'routerHistory'
+// import history from 'routerHistory'
 import { useTranslation } from 'contexts/Localization'
 import { CompetitionProps } from 'views/TradingCompetition/types'
-import { nftsBaseUrl } from 'views/Nft/market/constants'
+// import { nftsBaseUrl } from 'views/Nft/market/constants'
 import { useWeb3React } from '@web3-react/core'
 
 const ReactivateProfile: React.FC<CompetitionProps> = ({ onDismiss }) => {
@@ -11,7 +11,7 @@ const ReactivateProfile: React.FC<CompetitionProps> = ({ onDismiss }) => {
   const { t } = useTranslation()
 
   const handleClick = () => {
-    history.push(`${nftsBaseUrl}/profile/${account.toLowerCase()}`)
+    // history.push(`${nftsBaseUrl}/profile/${account.toLowerCase()}`)
     onDismiss()
   }
 

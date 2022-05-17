@@ -13,40 +13,40 @@
     {
       "name": "Helix",
       "symbol": "HELIX",
-      "address": "0xC232Ce0b83b3B320CdA3ec78c57A0D101A4Ac5cD",
-      "chainId": 97,
+      "address": "0x0600D5569E3011233BF1df7fc84de595Ef13f4B6",
+      "chainId": 4,
       "decimals": 18,
       "logoURI": "local://images/tokens/0xC232Ce0b83b3B320CdA3ec78c57A0D101A4Ac5cD.png"
     },
     {
-      "name": "Wrapped BNB",
-      "symbol": "WBNB",
-      "address": "0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd",
-      "chainId": 97,
+      "name": "Wrapped ETH",
+      "symbol": "WETH",
+      "address": "0xc778417E063141139Fce010982780140Aa0cD5Ab",
+      "chainId": 4,
       "decimals": 18,
       "logoURI": "local://images/tokens/0xae13d989dac2f0debff460ac112a837c89baa7cd.png"
     },
     {
-      "name": "PancakeSwap Token",
-      "symbol": "CAKE",
-      "address": "0xF9f93cF501BFaDB6494589Cb4b4C15dE49E85D0e",
-      "chainId": 97,
+      "name": "DAI",
+      "symbol": "DAI",
+      "address": "0x5592EC0cfb4dbc12D3aB100b257153436a1f0FEa",
+      "chainId": 4,
       "decimals": 18,
       "logoURI": "local://images/tokens/0xf9f93cf501bfadb6494589cb4b4c15de49e85d0e.png"
     },
     {
-      "name": "Binance USD",
-      "symbol": "BUSD",
-      "address": "0x78867BbEeF44f2326bF8DDd1941a4439382EF2A7",
-      "chainId": 97,
-      "decimals": 18,
+      "name": "USDC",
+      "symbol": "USDC",
+      "address": "0x4DBCdF9B62e891a7cec5A2568C3F4FAF9E8Abe2b",
+      "chainId": 4,
+      "decimals": 6,
       "logoURI": "local://images/tokens/0x78867bbeef44f2326bf8ddd1941a4439382ef2a7.png"
     },
     {
       "name": "USDT",
       "symbol": "USDT",
-      "address": "0x337610d27c682E347C9cD60BD4b3b107C9d34dDd",
-      "chainId": 97,
+      "address": "0x3B00Ef435fA4FcFF5C209a37d1f3dcff37c705aD",
+      "chainId": 4,
       "decimals": 18,
       "logoURI": "local://images/tokens/0x337610d27c682E347C9cD60BD4b3b107C9d34dDd.png"
     }

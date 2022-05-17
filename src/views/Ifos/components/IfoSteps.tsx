@@ -20,7 +20,7 @@ import {
   useModal,
   Link,
 } from 'uikit'
-import { Link as RouterLink } from 'react-router-dom'
+// import { Link as RouterLink } from 'react-router-dom'
 import { useWeb3React } from '@web3-react/core'
 import { Ifo } from 'config/constants/types'
 import { WalletIfoData } from 'views/Ifos/types'
@@ -29,7 +29,7 @@ import useTokenBalance from 'hooks/useTokenBalance'
 import Container from 'components/Layout/Container'
 import { useProfile } from 'state/profile/hooks'
 import Balance from 'components/Balance'
-import { nftsBaseUrl } from 'views/Nft/market/constants'
+// import { nftsBaseUrl } from 'views/Nft/market/constants'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { FlexGap } from 'components/Layout/Flex'
 import { getBalanceNumber } from 'utils/formatBalance'
@@ -216,7 +216,7 @@ const IfoSteps: React.FC<Props> = ({ ifo, walletIfoData, isLive }) => {
       }
 
       return (
-        <Button as={RouterLink} to={`${nftsBaseUrl}/profile/${account.toLowerCase()}`}>
+        <Button>
           {t('Activate your Profile')}
         </Button>
       )

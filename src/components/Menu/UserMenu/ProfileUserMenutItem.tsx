@@ -4,7 +4,7 @@ import { Flex, Skeleton, UserMenuItem } from 'uikit'
 import { useWeb3React } from '@web3-react/core'
 import { useTranslation } from 'contexts/Localization'
 import history from 'routerHistory'
-import { nftsBaseUrl } from 'views/Nft/market/constants'
+// import { nftsBaseUrl } from 'views/Nft/market/constants'
 
 interface ProfileUserMenuItemProps {
   isLoading: boolean
@@ -23,7 +23,7 @@ const ProfileUserMenuItem: React.FC<ProfileUserMenuItemProps> = ({ isLoading, ha
   const { t } = useTranslation()
 
   const handleClick = () => {
-    history.push(`${nftsBaseUrl}/profile/${account.toLowerCase()}/achievements`)
+    // history.push(`${nftsBaseUrl}/profile/${account.toLowerCase()}/achievements`)
   }
 
   const handleNoProfileClick = () => {

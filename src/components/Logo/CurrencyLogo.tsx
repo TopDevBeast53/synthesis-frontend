@@ -1,5 +1,5 @@
 import { Currency, ETHER, Token } from 'sdk'
-import { BinanceIcon } from 'uikit'
+import { EtherIcon } from 'uikit'
 import React, { useMemo } from 'react'
 import styled from 'styled-components'
 import tokens from 'config/constants/tokens'
@@ -14,7 +14,7 @@ const StyledLogo = styled(Logo)<{ size: string }>`
 `
 
 const getImageUrlFromToken = (token: Token) => {
-  const address = token.symbol === 'BNB' ? tokens.wbnb.address : token.address
+  const address = token.symbol === 'ETH' ? tokens.weth.address : token.address
   return `/images/tokens/${address}.svg`
 }
 
@@ -42,7 +42,7 @@ export default function CurrencyLogo({
   }, [currency, uriLocations])
 
   if (currency === ETHER) {
-    return <BinanceIcon width={size} style={style} />
+    return <EtherIcon width={size} style={style} />
   }
 
   return <StyledLogo size={size} srcs={srcs} alt={`${currency?.symbol ?? 'token'} logo`} style={style} />

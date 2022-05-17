@@ -48,8 +48,8 @@ export const fetchPoolsBlockLimits = async () => {
 }
 
 export const fetchPoolsTotalStaking = async () => {
-    const nonBnbPools = poolsConfig.filter((p) => p.stakingToken.symbol !== 'BNB')
-    const bnbPool = poolsConfig.filter((p) => p.stakingToken.symbol === 'BNB')
+    const nonBnbPools = poolsConfig.filter((p) => p.stakingToken.symbol !== 'ETH')
+    const bnbPool = poolsConfig.filter((p) => p.stakingToken.symbol === 'ETH')
 
     const callsNonBnbPools = nonBnbPools.map((poolConfig) => {
         return {
@@ -61,7 +61,7 @@ export const fetchPoolsTotalStaking = async () => {
 
     const callsBnbPools = bnbPool.map((poolConfig) => {
         return {
-            address: tokens.wbnb.address,
+            address: tokens.weth.address,
             name: 'balanceOf',
             params: [getAddress(poolConfig.contractAddress)],
         }
