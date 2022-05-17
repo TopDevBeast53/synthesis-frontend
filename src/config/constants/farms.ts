@@ -36,7 +36,7 @@ const farms: SerializedFarmConfig[] = [
             56: '',
         },
         token: serializedTokens.helix,
-        quoteToken: serializedTokens.usdt,
+        quoteToken: serializedTokens.dai,
     },
     {
         pid: 3,
