@@ -1,13 +1,12 @@
+import React, { useContext, useState } from 'react'
 import { useHelixLpSwap } from 'hooks/useContract'
 import useToast from 'hooks/useToast'
-import React, { useContext, useState } from 'react'
 import styled from 'styled-components'
 import { AutoRenewIcon, Button, ChevronDownIcon, useDelayedUnmount } from 'uikit'
-import { ToolTipText } from 'views/SwapLiquidity/constants'
 import { SwapLiquidityContext } from 'views/SwapLiquidity/context'
 import ArrowCell from 'views/SwapYield/components/Cells/ArrowCell'
 import { StyledRow, StyledCell, StyledCellWithoutPadding } from 'views/SwapYield/components/Cells/StyledCell'
-import LPTokenCell from 'views/SwapYield/components/Cells/LPTokenCell'
+import TokensCell from 'views/SwapYield/components/Cells/TokensCell'
 import ToolTipCell from 'views/SwapYield/components/Cells/ToolTipCell'
 import CandidateTable from '../CandidateTable'
 
@@ -49,16 +48,20 @@ const AppliedRow=(props)=>{
         <>
             <StyledRow onClick={handleOnRowClick}>
                 <StyledCell>
-                    <LPTokenCell lpTokenAddress={swapData?.toBuyerToken} balance={swapData?.amount.toString()}/>
+                    <TokensCell token={swapData?.toBuyerToken} balance={swapData?.amount.toString()}/>
                 </StyledCell>               
                 <StyledCellWithoutPadding>
                     <ArrowCell back/>
                 </StyledCellWithoutPadding> 
                 <StyledCell>
-                    <LPTokenCell lpTokenAddress={swapData?.toSellerToken} balance={swapData?.ask.toString()}/>                   
+                    <TokensCell token={swapData?.toSellerToken} balance={swapData?.ask.toString()}/>                   
                 </StyledCell>
                 <StyledCellWithoutPadding>
-                    <ToolTipCell tooltipText={ToolTipText} />
+                <ToolTipCell 
+                    seller={swapData?.seller}             
+                    buyer={swapData?.buyer} 
+                    askAmount={swapData?.ask.toString()}
+                />
                 </StyledCellWithoutPadding>
                 <StyledCell style={{zIndex:10, flex:3}}>
                     <Button 

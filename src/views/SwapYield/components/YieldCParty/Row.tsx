@@ -1,22 +1,19 @@
-import React, { useState, useContext, useMemo } from 'react'
 import { useWeb3React } from '@web3-react/core'
-import styled from 'styled-components'
-import { AutoRenewIcon, Text, Button, useModal, ChevronDownIcon, useDelayedUnmount, Skeleton } from 'uikit'
-import useToast from 'hooks/useToast'
 import { useTranslation } from 'contexts/Localization'
 import { useHelixYieldSwap } from 'hooks/useContract'
+import useToast from 'hooks/useToast'
 import moment from 'moment'
-import { YieldCPartyContext } from 'views/SwapYield/context'
+import React, { useContext, useMemo, useState } from 'react'
+import styled from 'styled-components'
+import { AutoRenewIcon, Button, ChevronDownIcon, Skeleton, Text, useDelayedUnmount, useModal } from 'uikit'
 import ArrowCell from 'views/SwapYield/components/Cells/ArrowCell'
-import LPTokenCell from 'views/SwapYield/components/Cells/LPTokenCell'
-import ExTokenCell from 'views/SwapYield/components/Cells/ExTokenCell'
-import ToolTipCell from 'views/SwapYield/components/Cells/ToolTipCell'
-import { ToolTipText } from 'views/SwapYield/constants'
-import { StyledRow, StyledCell, StyledCellWithoutPadding } from '../Cells/StyledCell'
-import { CellContent } from './BaseCell'
-import DiscussOrder from './DiscussOrder'
+import TokenCell from 'views/SwapYield/components/Cells/TokenCell'
+import { YieldCPartyContext } from 'views/SwapYield/context'
 import { SwapState } from '../../types'
+import { StyledCell, StyledCellWithoutPadding, StyledRow } from '../Cells/StyledCell'
+import { CellContent } from './BaseCell'
 import CandidateTable from './CandidateTable'
+import DiscussOrder from './DiscussOrder'
 
 const ArrowIcon = styled(ChevronDownIcon)<{ toggled: boolean }>`
   transform: ${({ toggled }) => (toggled ? 'rotate(180deg)' : 'rotate(0)')};
@@ -26,7 +23,7 @@ const ArrowIcon = styled(ChevronDownIcon)<{ toggled: boolean }>`
 const YieldCPartyRow = ({ data, state, loading }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
-  const { amount, ask, id, exToken, lpToken, lockDuration, lockUntilTimestamp, approved, bids } = data
+  const { id, lockDuration, lockUntilTimestamp, bids, buyer, seller, ask } = data
   const yieldSwapContract = useHelixYieldSwap()
   const { toastSuccess, toastError } = useToast()
   const [pendingTx, setPendingTx] = useState(false)
@@ -60,7 +57,7 @@ const YieldCPartyRow = ({ data, state, loading }) => {
   }
 
   const [showModal] = useModal(
-    <DiscussOrder swapId={id} exToken={exToken} exAmount={ask} approved={approved} onSend={onSendAsk} />,
+    <DiscussOrder swapId={id} tokenInfo={buyer} amount={data.ask} onSend={onSendAsk} />,
     false,
   )
 
@@ -133,7 +130,7 @@ const YieldCPartyRow = ({ data, state, loading }) => {
     <>
       <StyledRow onClick={handleExpand}>
         <StyledCell>
-          <LPTokenCell lpTokenAddress={lpToken} balance={amount.toString()} />
+          <TokenCell tokenInfo={seller} amount={seller.amount.toString()} />
         </StyledCell>
 
         {state !== SwapState.Finished && (
@@ -150,11 +147,17 @@ const YieldCPartyRow = ({ data, state, loading }) => {
           <ArrowCell back />
         </StyledCellWithoutPadding>
         <StyledCell>
-          <ExTokenCell exTokenAddress={exToken} balance={ask.toString()} />
+          
+          <TokenCell tokenInfo={buyer} amount={data?.ask.toString()}/>                    
         </StyledCell>
 
         <StyledCell>
-          <ToolTipCell tooltipText={ToolTipText} />
+        {/* <ToolTipCell 
+            buyerToken={lpToken} 
+            buyerTokenAmount={amount.toString()} 
+            sellerToken={exToken} 
+            sellerTokenAmount={ask.toString()}
+        /> */}
         </StyledCell>
         <StyledCell style={{ zIndex: 10, flex: 3 }}>
           <CellContent>
@@ -202,7 +205,7 @@ const YieldCPartyRow = ({ data, state, loading }) => {
 
       {shouldRenderDetail && account && (
         <div style={{ padding: '10px 10px', minHeight: '5em' }}>
-          <CandidateTable bids={bids} exToken={exToken} approved={approved} exAmount={ask} />
+          <CandidateTable bids={bids} exToken={buyer} exAmount={ask} />
         </div>
       )}
     </>

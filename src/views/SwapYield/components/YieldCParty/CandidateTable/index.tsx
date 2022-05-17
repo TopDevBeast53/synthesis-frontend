@@ -27,7 +27,7 @@ const CandidateTable = (props) => {
     <StyledTableBorder>
       <StyledTable id="pools-table" role="table" ref={tableWrapperEl}>
         {bids.map((bid) => (
-          <CandidateRow key={bid.id} bid={bid} exToken={exToken} approved={approved} exAmount={exAmount} />
+          <CandidateRow key={bid.id} bid={bid} exToken={exToken} exAmount={exAmount} />
         ))}
       </StyledTable>
     </StyledTableBorder>

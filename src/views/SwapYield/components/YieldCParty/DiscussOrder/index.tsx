@@ -21,6 +21,7 @@ import { BIG_ZERO } from 'utils/bigNumber'
 import getThemeValue from 'uikit/util/getThemeValue'
 import { YieldCPartyContext } from 'views/SwapYield/context'
 import { getDecimalAmount, getBalanceAmount } from 'utils/formatBalance'
+import { useTokenSymbol } from 'views/SwapYield/hooks/useTokenSymbol'
 import { SwapState } from '../../../types'
 
 const DiscussOrder: React.FC<any> = (props) => {
@@ -33,14 +34,15 @@ const DiscussOrder: React.FC<any> = (props) => {
   const headerBackground = 'transparent'
   const minWidth = '320px'
   const yieldSwapContract = useHelixYieldSwap()
-  const { swapId, exToken, exAmount, onDismiss, bid, onSend } = props
+  const { swapId, tokenInfo, amount, onDismiss, bid, onSend } = props
   const { updateMenuIndex } = useContext(YieldCPartyContext)
-  const exContract = useERC20(exToken)
-  const exTokenAmount = exAmount.toString()
+  const tokenAddress = tokenInfo.token
+  const symbol = useTokenSymbol(tokenInfo)
+  const erc20Contract = useERC20(tokenAddress)
+  const exTokenAmount = amount.toString()
   const [pendingTx, setPendingTx] = useState(false)
   const [allowedValue, setAllowedValue] = useState(BIG_ZERO)
   const [maxBalance, setMaxBalance] = useState(BIG_ZERO)
-  const [symbol, setSymbol] = useState('')
   const [yAmount, setYAmount] = useState('0')
   const decimalYAmount = getDecimalAmount(new BigNumber(yAmount))
 
@@ -53,18 +55,18 @@ const DiscussOrder: React.FC<any> = (props) => {
     },
     [setYAmount],
   )
-
+  
   useEffect(() => {
-    exContract.allowance(account, yieldSwapContract.address).then((res) => {
+    erc20Contract.allowance(account, yieldSwapContract.address).then((res) => {
       setAllowedValue(new BigNumber(res.toString()))
     })
-    exContract.balanceOf(account).then((res) => {
+    erc20Contract.balanceOf(account).then((res) => {
       setMaxBalance(getBalanceAmount(new BigNumber(res.toString())))
     })
 
-    exContract.symbol().then((res) => {
-      setSymbol(res)
-    })
+    // erc20Contract.symbol().then((res) => {
+    //   setSymbol(res)
+    // })
   })
 
   const handleSelectMaxOfToken = useCallback(() => {
@@ -96,7 +98,7 @@ const DiscussOrder: React.FC<any> = (props) => {
     setPendingTx(true)
 
     if (allowedValue.lte(decimalYAmount.toString())) {
-      exContract
+      erc20Contract
         .approve(yieldSwapContract.address, ethers.constants.MaxUint256)
         .then(async (tx) => {
           await tx.wait()

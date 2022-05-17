@@ -12,9 +12,10 @@ export const StyledMenuItemContainer = styled.div<StyledMenuItemProps>`
         content: "";
         position: absolute;
         bottom: ${    $variant === 'subMenu' ? "0" : "5px"};
-        left:${    $variant === 'subMenu' ? "0" : "5%"};
+        left:${    $variant === 'subMenu' ? "0" : "8px"};
+        right:${    $variant === 'subMenu' ? "0" : "8px"};
         height: 4px;
-        width: ${    $variant === 'subMenu' ? "100%" : "90%"};
+        width: ${    $variant === 'subMenu' ? "100%" : ""};
         background-color: ${theme.colors.primary};
         border-radius: 2px 2px 0 0;
       }
@@ -29,7 +30,7 @@ const StyledMenuItem = styled.a<StyledMenuItemProps>`
   font-family: 'system-ui', sans-serif;
   color: ${({ theme, $isActive }) => ($isActive ? theme.colors.secondary : theme.colors.textSubtle)};
   font-size: 18px;
-  font-weight: ${({ $isActive }) => ($isActive ? '700' : '500')};
+  font-weight: ${({ $isActive }) => ($isActive ? '500' : '500')};
   line-height: 148%;  
   position:relative; 
   ${({ $statusColor, theme }) =>
@@ -64,8 +65,8 @@ const StyledMenuItem = styled.a<StyledMenuItemProps>`
   `}
 
   &:hover {
-    background: ${({ theme }) => theme.colors.tertiary};
     border-radius: 12px;
+    color: #57e58e;
   }
 `
 

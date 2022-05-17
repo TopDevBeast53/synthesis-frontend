@@ -6,9 +6,8 @@ import { AutoRenewIcon, Button, ChevronDownIcon, useDelayedUnmount, useModal } f
 import { SwapLiquidityContext } from 'views/SwapLiquidity/context'
 import ArrowCell from 'views/SwapYield/components/Cells/ArrowCell'
 import { StyledRow, StyledCell, StyledCellWithoutPadding } from 'views/SwapYield/components/Cells/StyledCell'
-import LPTokenCell from 'views/SwapYield/components/Cells/LPTokenCell'
+import TokensCell from 'views/SwapYield/components/Cells/TokensCell'
 import ToolTipCell from 'views/SwapYield/components/Cells/ToolTipCell'
-import { ToolTipText } from '../../constants'
 import CandidateTable from '../CandidateTable'
 import DiscussOrder from '../Modals/DiscussOrder'
 
@@ -60,16 +59,20 @@ const ActiveRow = (props) => {
         <>
             <StyledRow onClick={handleOnRowClick}>
                 <StyledCell>
-                    <LPTokenCell lpTokenAddress={swapData?.toBuyerToken} balance={swapData?.amount.toString()}/>
+                    <TokensCell token={swapData?.toBuyerToken} balance={swapData?.amount.toString()}/>
                 </StyledCell>
                 <StyledCellWithoutPadding>
                     <ArrowCell/>
                 </StyledCellWithoutPadding>                
                 <StyledCell>                    
-                    <LPTokenCell lpTokenAddress={swapData?.toSellerToken} balance={swapData?.ask.toString()}/>
+                    <TokensCell token={swapData?.toSellerToken} balance={swapData?.ask.toString()}/>
                 </StyledCell>
                 <StyledCellWithoutPadding>
-                    <ToolTipCell tooltipText={ToolTipText}/>
+                    <ToolTipCell 
+                        seller={swapData?.seller}             
+                        buyer={swapData?.buyer} 
+                        askAmount={swapData?.ask.toString()}
+                    />
                 </StyledCellWithoutPadding>
 
                 <StyledCell style={{zIndex:10, flexDirection:"row"}}>

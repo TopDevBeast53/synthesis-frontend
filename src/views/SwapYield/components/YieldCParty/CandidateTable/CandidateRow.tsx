@@ -1,10 +1,9 @@
-import Balance from 'components/Balance'
 import { useWeb3React } from '@web3-react/core'
 import React, { useContext } from 'react'
 import styled from 'styled-components'
 import { Button, Skeleton, Text, useModal } from 'uikit'
 import { YieldCPartyContext } from 'views/SwapYield/context'
-import ExTokenCell from '../../Cells/ExTokenCell'
+import TokenCell from '../../Cells/TokenCell'
 import BaseCell, { CellContent } from '../BaseCell'
 import DiscussOrder from '../DiscussOrder'
 
@@ -25,7 +24,7 @@ const StyledCell = styled(BaseCell)`
 const getEllipsis = (account) => {
   return account ? `${account.substring(0, 5)}...${account.substring(account.length - 5)}` : null
 }
-const CandidateRow = ({ bid, exToken, approved, exAmount }) => {
+const CandidateRow = ({ bid, exToken, exAmount }) => {
   const { account } = useWeb3React()
   const { tableRefresh, setTableRefresh } = useContext(YieldCPartyContext)
 
@@ -34,7 +33,7 @@ const CandidateRow = ({ bid, exToken, approved, exAmount }) => {
   }
 
   const [showModal] = useModal(
-    <DiscussOrder bid={bid} onSend={onSendAsk} exToken={exToken} exAmount={exAmount} approved={approved} />,
+    <DiscussOrder bid={bid} onSend={onSendAsk} tokenInfo={exToken} amount={exAmount} />,
     false,
   )
   if (!bid) {
@@ -62,7 +61,7 @@ const CandidateRow = ({ bid, exToken, approved, exAmount }) => {
         </CellContent>
       </StyledCell>
       <StyledCell>
-        <ExTokenCell exTokenAddress={exToken} balance={bid.amount.toString()} />
+        <TokenCell tokenInfo={exToken} amount={exAmount.toString()} />
       </StyledCell>
       <StyledCell>
         <CellContent>

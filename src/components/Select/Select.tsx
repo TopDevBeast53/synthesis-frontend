@@ -80,8 +80,9 @@ const DropDownContainer = styled(Box)<{ isOpen: boolean }>`
 const DropDownList = styled.ul`
   padding: 0;
   margin: 0;
-  box-sizing: border-box;
+  box-sizing: border-box;  
   z-index: ${({ theme }) => theme.zIndices.dropdown};
+  
 `
 
 const ListItem = styled.li`

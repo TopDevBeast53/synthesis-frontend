@@ -4,13 +4,11 @@ import moment from 'moment'
 import React, { useContext, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { AutoRenewIcon, Button, ChevronDownIcon, useDelayedUnmount, useModal } from 'uikit'
-import { ToolTipText } from 'views/SwapYield/constants'
 import { YieldPartyContext } from 'views/SwapYield/context'
 import ArrowCell from '../../Cells/ArrowCell'
-import { StyledRow, StyledCell, StyledCellWithoutPadding } from '../../Cells/StyledCell'
 import DurationCell from '../../Cells/DurationCells'
-import ExTokenCell from '../../Cells/ExTokenCell'
-import LPTokenCell from '../../Cells/LPTokenCell'
+import { StyledCell, StyledCellWithoutPadding, StyledRow } from '../../Cells/StyledCell'
+import TokenCell from '../../Cells/TokenCell'
 import ToolTipCell from '../../Cells/ToolTipCell'
 import CandidateTable from '../CandidateTable'
 import DiscussOrder from '../Modals/DiscussOrder'
@@ -25,6 +23,7 @@ const ActiveRow = (props) => {
   const { toastSuccess, toastError } = useToast()
   const { tableRefresh, setTableRefresh } = useContext(YieldPartyContext)
   const { swapData, swapId } = props
+
   const [expanded, setExpanded] = useState(false)
   const [pendingTx, setPendingTx] = useState(false)
   const shouldRenderDetail = useDelayedUnmount(expanded, 300)
@@ -64,13 +63,14 @@ const ActiveRow = (props) => {
     showDiscussModal()
   }
   if (swapData) {
-    if (swapData.isOpen === false) return null
-  }
+    if (swapData.status !== 0) return null
+  }  
+
   return (
     <>
       <StyledRow onClick={handleOnRowClick}>
         <StyledCell>
-          <LPTokenCell lpTokenAddress={swapData?.lpToken} balance={swapData?.amount.toString()} />
+        <TokenCell tokenInfo={swapData?.seller} amount={swapData?.seller.amount.toString()}/>          
         </StyledCell>
         <StyledCell>
           <DurationCell duration={duration} />
@@ -79,10 +79,14 @@ const ActiveRow = (props) => {
           <ArrowCell />
         </StyledCellWithoutPadding>
         <StyledCell>
-          <ExTokenCell exTokenAddress={swapData?.exToken} balance={swapData?.ask.toString()} />
+          <TokenCell tokenInfo={swapData?.buyer} amount={swapData?.ask.toString()}/>          
         </StyledCell>
         <StyledCell>
-          <ToolTipCell tooltipText={ToolTipText} />
+          <ToolTipCell 
+            seller={swapData?.seller}             
+            buyer={swapData?.buyer} 
+            askAmount={swapData?.ask.toString()}
+          />
         </StyledCell>
         <StyledCell>
           <Button color="primary" onClick={handleUpdateClick} scale="sm" width="100px">

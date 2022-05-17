@@ -1,25 +1,27 @@
 import React from 'react'
-import Balance from 'components/Balance'
-import { Skeleton, Text } from 'uikit'
+import { Skeleton} from 'uikit'
 import { CellContent } from './BaseCell'
+import ExTokenCell from './ExTokenCell'
+import LPTokenCell from './LPTokenCell'
 
 const TokenCell = (props) => {
-  const { tokenSymbol, balance } = props // moment Duration
-  if (!tokenSymbol || !balance) {
+  const { tokenInfo, amount } = props
+  if(!tokenInfo || amount ===undefined){
     return (
-      <CellContent>
+        <CellContent>
         <Skeleton />
         <Skeleton mt="4px" />
       </CellContent>
     )
-  }
-  return (
-    <>
-      <CellContent>
-        <Text>{tokenSymbol}</Text>
-        <Balance mt="4px" color="primary" value={balance} fontSize="14px" />
-      </CellContent>
-    </>
+  } 
+  return (    
+        tokenInfo.isLp === true ?
+        <LPTokenCell lpTokenAddress={tokenInfo?.token} balance={amount} />
+        :
+        <ExTokenCell exTokenAddress={tokenInfo?.token} balance={amount} />
+      
   )
+  
 }
+
 export default TokenCell

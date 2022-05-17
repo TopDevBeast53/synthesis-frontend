@@ -1,29 +1,32 @@
 import React from 'react'
-import { ToolTipText } from 'views/SwapYield/constants'
 import { StyledRow, StyledCell, StyledCellWithoutPadding } from '../../Cells/StyledCell'
 import ArrowCell from '../../Cells/ArrowCell'
-import ExTokenCell from '../../Cells/ExTokenCell'
-import LPTokenCell from '../../Cells/LPTokenCell'
 import ToolTipCell from '../../Cells/ToolTipCell'
+import TokenCell from '../../Cells/TokenCell'
 
 const EarnedRow=({swapData})=>{ 
     if(swapData){
-        if(swapData.isOpen === true) return null
+        if(swapData.status !== 1) return null
     }    
+    console.log(swapData)
     return (
         <>
             <StyledRow>
                 <StyledCell>
-                    <LPTokenCell lpTokenAddress={swapData?.lpToken} balance={swapData?.amount.toString()}/>
+                    <TokenCell tokenInfo={swapData?.seller} amount={swapData?.seller.amount.toString()}/>
                 </StyledCell>
                 <StyledCellWithoutPadding>
                     <ArrowCell/>
                 </StyledCellWithoutPadding>                
                 <StyledCell>                    
-                    <ExTokenCell exTokenAddress={swapData?.exToken} balance={swapData?.ask.toString()}/>                   
+                    <TokenCell tokenInfo={swapData?.buyer} amount={swapData?.ask.toString()}/>
                 </StyledCell>
                 <StyledCell>
-                    <ToolTipCell tooltipText={ToolTipText}/>
+                <ToolTipCell 
+                    seller={swapData?.seller}             
+                    buyer={swapData?.buyer} 
+                    askAmount={swapData?.ask.toString()}
+                />
                 </StyledCell>                
             </StyledRow>
         </>

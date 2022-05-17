@@ -2,11 +2,10 @@ import React, { useContext, useState } from 'react'
 import { useWeb3React } from '@web3-react/core'
 import styled from 'styled-components'
 import { Button, ChevronDownIcon, useDelayedUnmount, useModal } from 'uikit'
-import { ToolTipText } from 'views/SwapLiquidity/constants'
 import { SwapLiquidityContext } from 'views/SwapLiquidity/context'
 import ArrowCell from 'views/SwapYield/components/Cells/ArrowCell'
 import { StyledRow, StyledCell, StyledCellWithoutPadding } from 'views/SwapYield/components/Cells/StyledCell'
-import LPTokenCell from 'views/SwapYield/components/Cells/LPTokenCell'
+import TokensCell from 'views/SwapYield/components/Cells/TokensCell'
 import ToolTipCell from 'views/SwapYield/components/Cells/ToolTipCell'
 import CandidateTable from '../CandidateTable'
 import DiscussOrder from '../Modals/DiscussOrder'
@@ -16,13 +15,13 @@ const ArrowIcon = styled(ChevronDownIcon)<{ toggled: boolean }>`
   height: 24px;
 `
 
-
 const ActiveRow=(props)=>{
     const {tableRefresh, setTableRefresh} = useContext(SwapLiquidityContext)
     const { account } = useWeb3React()
     const {swapData} = props
     const [expanded, setExpanded] = useState(false)
     const shouldRenderDetail = useDelayedUnmount(expanded, 300)
+
     const handleOnRowClick = () => {
         if(!account)    return
         setExpanded(!expanded)        
@@ -31,22 +30,25 @@ const ActiveRow=(props)=>{
         setTableRefresh(tableRefresh + 1)
     }
     const [showModal] = useModal(<DiscussOrder swapData={swapData} onSend={onSendAsk}/>,false)
-   
+
     return (
         <>
             <StyledRow onClick={handleOnRowClick}>
-                
                 <StyledCell>
-                    <LPTokenCell lpTokenAddress={swapData?.toBuyerToken} balance={swapData?.amount.toString()}/>
+                    <TokensCell token={swapData?.toBuyerToken} balance={swapData?.amount.toString()} />
                 </StyledCell>               
                 <StyledCellWithoutPadding>
                     <ArrowCell back/>
                 </StyledCellWithoutPadding> 
                 <StyledCell>
-                    <LPTokenCell lpTokenAddress={swapData?.toSellerToken} balance={swapData?.ask.toString()}/>                   
+                    <TokensCell token={swapData?.toSellerToken} balance={swapData?.ask.toString()} />
                 </StyledCell>
                 <StyledCellWithoutPadding>
-                    <ToolTipCell tooltipText={ToolTipText} />
+                    <ToolTipCell 
+                        seller={swapData?.seller}             
+                        buyer={swapData?.buyer} 
+                        askAmount={swapData?.ask.toString()}
+                    />
                 </StyledCellWithoutPadding>
                 {
                     account && (
