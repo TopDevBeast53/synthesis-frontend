@@ -36,7 +36,7 @@ export const footerLinks: (t: ContextApi['t']) => FooterLinkType[] = (t) => [
             },
             {
                 label:"Helix Vaults",
-                href:"/vault"
+                href:"/vaults"
             },
             {
                 label:"Geobot Staking",

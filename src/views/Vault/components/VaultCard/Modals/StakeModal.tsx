@@ -10,7 +10,6 @@ import { AutoRenewIcon, BalanceInput, Button, Flex, Image, Link, Modal, Slider, 
 import { formatNumber, getDecimalAmount, getFullDisplayBalance } from 'utils/formatBalance'
 import { logError } from 'utils/sentry'
 import { useHelixLockVault } from 'views/Vault/hooks/useHelixLockVault'
-import { helixVaultAddress } from '../../../constants'
 import PercentageButton from './PercentageButton'
 
 interface StakeModalProps {
@@ -45,7 +44,7 @@ const StakeModal: React.FC<StakeModalProps> = ({
   const [stakeAmount, setStakeAmount] = useState('')
   const [hasReachedStakeLimit, setHasReachedStakedLimit] = useState(false)
   const [percent, setPercent] = useState(0)
-  const { decimals, symbol } = tokens.helix
+  const { decimals, symbol, address } = tokens.helix
   const fullDecimalStakeAmount = getDecimalAmount(new BigNumber(stakeAmount), decimals)
   const getCalculatedStakingLimit = () => {
     if (isRemovingStake) return stakedBalance
@@ -138,7 +137,7 @@ const StakeModal: React.FC<StakeModalProps> = ({
       <Flex alignItems="center" justifyContent="space-between" mb="8px">
         <Text bold>{isRemovingStake ? t('Unstake') : t('Stake')}:</Text>
         <Flex alignItems="center" minWidth="70px">
-          <Image src={`/images/tokens/${helixVaultAddress}.png`} width={24} height={24} alt={symbol} />
+          <Image src={`/images/tokens/${address}.png`} width={24} height={24} alt={symbol} />
           <Text ml="4px" bold>
             {symbol}
           </Text>

@@ -104,7 +104,7 @@ const App: React.FC = () => {
             <Route path="/pools">
               <Pools />
             </Route>
-            <Route path="/vault">
+            <Route path="/vaults">
               <Vault />
             </Route>
             <Route path="/migration">

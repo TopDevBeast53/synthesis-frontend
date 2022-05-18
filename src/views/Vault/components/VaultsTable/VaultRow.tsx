@@ -6,7 +6,7 @@ import { useMatchBreakpoints } from 'uikit'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { logError } from 'utils/sentry'
 import tokens from 'config/constants/tokens'
-import { useHelixLockVault } from 'views/Vault/hooks/useHelixLockVault'
+import { useHelixVault } from 'hooks/useContract'
 import { CurrencyLogo } from 'components/Logo'
 import ActionPanel from './ActionPanel/ActionPanel'
 import EarningsCell from './Cells/EarningsCell'
@@ -35,6 +35,7 @@ const StyledRow = styled.div`
 
 const VaultRow: React.FC<PoolRowProps> = ({ deposit }) => {
   const { isTablet, isDesktop } = useMatchBreakpoints()
+  const helixVaultContract = useHelixVault()
   const [expanded, setExpanded] = useState(false)
   const shouldRenderActionPanel = useDelayedUnmount(expanded, 300)
   const [isLoading, setLoading] = useState(true)
@@ -44,25 +45,23 @@ const VaultRow: React.FC<PoolRowProps> = ({ deposit }) => {
     setExpanded((prev) => !prev)
   }
 
-  const { getPendingRewardFromId } = useHelixLockVault()
-
   useEffect(() => {
     load()
     async function load() {
-      const result = await getPendingRewardFromId(deposit?.id)
+      const result = await helixVaultContract.pendingReward(deposit?.id)
       setLoading(false)
-      setEarnings(new BigNumber(result))
+      setEarnings(new BigNumber(result.toString()))
     }
-  }, [deposit, getPendingRewardFromId])
+  }, [helixVaultContract, deposit])
 
   const updateEarnings = (value) => {
     setEarnings(new BigNumber(value))
   }
   const updateStake = (newStaked) => {
     setStakedBalance(newStaked)
-    getPendingRewardFromId(deposit?.id)
+    helixVaultContract.pendingReward(deposit?.id)
       .then((value) => {
-        setEarnings(new BigNumber(value))
+        setEarnings(new BigNumber(value.toString()))
       })
       .catch((err) => {
         logError(err)

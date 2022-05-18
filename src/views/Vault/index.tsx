@@ -1,4 +1,5 @@
 import { useWeb3React } from '@web3-react/core'
+import BigNumber from 'bignumber.js'
 import Page from 'components/Layout/Page'
 import Loading from 'components/Loading'
 import PageHeader from 'components/PageHeader'
@@ -6,7 +7,7 @@ import tokens from 'config/constants/tokens'
 import { FetchStatus } from 'config/constants/types'
 import { useTranslation } from 'contexts/Localization'
 import { ethers } from 'ethers'
-import { useHelix } from 'hooks/useContract'
+import { useHelix, useHelixVault } from 'hooks/useContract'
 import useTokenBalance from 'hooks/useTokenBalance'
 import { useFastFresh } from 'hooks/useRefresh'
 import React, { useCallback, useEffect, useState } from 'react'
@@ -20,7 +21,6 @@ import { logError } from 'utils/sentry'
 import AddRowModal from './components/AddRowModal'
 import VaultsTable from './components/VaultsTable/VaultsTable'
 import { helixVaultAddress } from './constants'
-import { useHelixLockVault } from './hooks/useHelixLockVault'
 
 const TableControls = styled.div`
   display: flex;
@@ -50,6 +50,7 @@ const Vault: React.FC = () => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const helixContract = useHelix()
+  const helixVaultContract = useHelixVault()
   const [helixEnabled, setHelixEnabled] = useState(HelixEnabledState.UNKNOWN)
   const [isLoading, setLoading] = useState(true)
   const [deposits, setDeposits] = useState([])
@@ -85,18 +86,32 @@ const Vault: React.FC = () => {
       })
   }, [helixContract, account, setHelixEnabled, decimals])
 
-  const { getDepositIds, getDepositFromId } = useHelixLockVault()
+  const txResponseToArray = (tx) => {
+    const result = tx.toString()
+    if (result === '') return []
+    return result.split(',')
+  }
 
   useEffect(() => {
     if (helixEnabled && account) {
       load()
     }
     async function load() {
-      const idList = await getDepositIds()
-      const promiseList = idList.map((id) => {
-        return getDepositFromId(id)
-      })
-      let results = await Promise.all(promiseList)
+      const idList = await helixVaultContract.getDepositIds(account)
+
+      let results = await Promise.all(idList.map(id => {
+        return helixVaultContract.deposits(id).then((res) => {
+          const resArr = txResponseToArray(res)
+          const deposit: Deposit = {
+            id: Number(id),
+            amount: new BigNumber(resArr[1]),
+            withdrawTimeStamp: Number(resArr[4]),
+            withdrawn: resArr[6] === 'true',
+          }
+
+          return deposit
+        })
+      }))
       results = results.reduce((prev, item: Deposit) => {
         if (item.withdrawn === false) prev.push(item)
         return prev
@@ -104,7 +119,7 @@ const Vault: React.FC = () => {
       setDeposits(results)
       setLoading(false)
     }
-  }, [getDepositIds, account, getDepositFromId, helixEnabled, refresh, fastRefresh])
+  }, [helixVaultContract, account, helixEnabled, refresh, fastRefresh])
 
   // TODO aren't arrays in dep array checked just by reference, i.e. it will rerender every time reference changes?
 
