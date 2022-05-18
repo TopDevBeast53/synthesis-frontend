@@ -5,7 +5,7 @@ import { mainnetTokens, testnetTokens } from './tokens'
 // Pancake prod router address 0x10ED43C718714eb63d5aA57B78B54704E256024E
 // Helix test net router address 0x9DbA93422D0ce20A755d07258E3bDF6D20d56193
 
-export const ROUTER_ADDRESS = '0x7284939040EDE1422EAa2e9364b4A13c331f8896'
+export const ROUTER_ADDRESS = '0xd6517DE0F0D52c2c3589cAEcA54B9c9d73Aa0892'
 
 // a list of tokens by chain
 type ChainTokenList = {
