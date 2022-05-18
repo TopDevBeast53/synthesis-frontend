@@ -14,7 +14,7 @@ import {
   useTooltip,
 } from 'uikit'
 import { BASE_BSC_SCAN_URL } from 'config'
-import { getBscScanLink } from 'utils'
+import { getEtherScanLink } from 'utils'
 import { useBlock } from 'state/block/hooks'
 import { useVaultPoolByKey, useVaultPools } from 'state/pools/hooks'
 import BigNumber from 'bignumber.js'
@@ -204,7 +204,7 @@ const ActionPanel: React.FC<ActionPanelProps> = ({ account, pool, userDataLoaded
       <Flex mb="8px" justifyContent="space-between">
         <Text>{hasPoolStarted ? t('Ends in') : t('Starts in')}:</Text>
         <Flex>
-          <Link external href={getBscScanLink(hasPoolStarted ? endBlock : startBlock, 'countdown')}>
+          <Link external href={getEtherScanLink(hasPoolStarted ? endBlock : startBlock, 'countdown')}>
             <Balance fontSize="16px" value={blocksToDisplay} decimals={0} color="primary" />
             <Text ml="4px" color="primary" textTransform="lowercase">
               {t('Blocks')}

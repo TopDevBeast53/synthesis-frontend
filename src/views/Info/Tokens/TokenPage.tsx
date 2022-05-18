@@ -18,7 +18,7 @@ import {
   useMatchBreakpoints,
 } from 'uikit'
 import Page from 'components/Layout/Page'
-import { getBscScanLink } from 'utils'
+import { getEtherScanLink } from 'utils'
 import truncateHash from 'utils/truncateHash'
 import useCMCLink from 'views/Info/hooks/useCMCLink'
 import { CurrencyLogo } from 'views/Info/components/CurrencyLogo'
@@ -138,8 +138,8 @@ const TokenPage: React.FC<RouteComponentProps<{ address: string }>> = ({
                 </Flex>
               </Breadcrumbs>
               <Flex justifyContent={[null, null, 'flex-end']} mt={['8px', '8px', 0]}>
-                <LinkExternal mr="8px" color="primary" href={getBscScanLink(address, 'address')}>
-                  {t('View on BscScan')}
+                <LinkExternal mr="8px" color="primary" href={getEtherScanLink(address, 'address')}>
+                  {t('View on EtherScan')}
                 </LinkExternal>
                 {cmcLink && (
                   <StyledCMCLink href={cmcLink} rel="noopener noreferrer nofollow" target="_blank">

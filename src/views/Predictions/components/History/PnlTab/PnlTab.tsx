@@ -5,7 +5,7 @@ import { Box, Flex, Heading, Text, Button, Link, OpenNewIcon } from 'uikit'
 import { useTranslation } from 'contexts/Localization'
 import { getRoundResult, Result } from 'state/predictions/helpers'
 import { REWARD_RATE } from 'state/predictions/config'
-import { getBscScanLink } from 'utils'
+import { getEtherScanLink } from 'utils'
 import { multiplyPriceByAmount } from 'utils/prices'
 import { useBNBBusdPrice } from 'hooks/useBUSDPrice'
 import { useGetCurrentEpoch } from 'state/predictions/hooks'
@@ -185,7 +185,7 @@ const PnlTab: React.FC<PnlTabProps> = ({ hasBetHistory, bets }) => {
         <SummaryRow type="entered" summary={summary} bnbBusdPrice={bnbBusdPrice} />
 
         <Flex justifyContent="center" mt="24px">
-          <Link href={`${getBscScanLink(account, 'address')}#internaltx`} mb="16px" external>
+          <Link href={`${getEtherScanLink(account, 'address')}#internaltx`} mb="16px" external>
             <Button mt="8px" width="100%">
               {t('View Reclaimed & Won')}
               <OpenNewIcon color="white" ml="4px" />

@@ -14,6 +14,11 @@ export const BASE_BSC_SCAN_URLS = {
     [ChainId.TESTNET]: 'https://testnet.bscscan.com',
 }
 
+export const BASE_ETH_SCAN_URLS = {
+    [ChainId.MAINNET]: 'https://etherscan.io',
+    [ChainId.TESTNET]: 'https://rinkeby.etherscan.io/',
+}
+
 export const BASE_SOLANA_SCAN_URLS = 'https://explorer.solana.com/'
 
 // CAKE_PER_BLOCK details

@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { Bet } from 'state/types'
 import { useTranslation } from 'contexts/Localization'
-import { getBscScanLink } from 'utils'
+import { getEtherScanLink } from 'utils'
 import { Flex, Text, Link, Heading } from 'uikit'
 import { Result } from 'state/predictions/helpers'
 import { PayoutRow, RoundResultHistory } from '../RoundResult'
@@ -44,7 +44,7 @@ const BetDetails: React.FC<BetDetailsProps> = ({ bet, result }) => {
       {bet.round.lockBlock && (
         <Flex alignItems="center" justifyContent="space-between" mb="8px">
           <Text>{t('Opening Block')}</Text>
-          <Link href={getBscScanLink(bet.round.lockBlock, 'block')} external>
+          <Link href={getEtherScanLink(bet.round.lockBlock, 'block')} external>
             {bet.round.lockBlock}
           </Link>
         </Flex>
@@ -52,7 +52,7 @@ const BetDetails: React.FC<BetDetailsProps> = ({ bet, result }) => {
       {bet.round.closeBlock && (
         <Flex alignItems="center" justifyContent="space-between">
           <Text>{t('Closing Block')}</Text>
-          <Link href={getBscScanLink(bet.round.closeBlock, 'block')} external>
+          <Link href={getEtherScanLink(bet.round.closeBlock, 'block')} external>
             {bet.round.closeBlock}
           </Link>
         </Flex>

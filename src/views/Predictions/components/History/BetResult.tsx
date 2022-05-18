@@ -10,7 +10,7 @@ import { fetchLedgerData, markAsCollected } from 'state/predictions'
 import { Result } from 'state/predictions/helpers'
 import { useGetIsClaimable } from 'state/predictions/hooks'
 import { useBNBBusdPrice } from 'hooks/useBUSDPrice'
-import { getBscScanLink } from 'utils'
+import { getEtherScanLink } from 'utils'
 import { multiplyPriceByAmount } from 'utils/prices'
 import useIsRefundable from '../../hooks/useIsRefundable'
 import { formatBnb, getNetPayout } from './helpers'
@@ -133,8 +133,8 @@ const BetResult: React.FC<BetResultProps> = ({ bet, result }) => {
         )}
         {bet.claimed && bet.claimedHash && (
           <Flex justifyContent="center">
-            <LinkExternal href={getBscScanLink(bet.claimedHash, 'transaction')} mb="16px">
-              {t('View on BscScan')}
+            <LinkExternal href={getEtherScanLink(bet.claimedHash, 'transaction')} mb="16px">
+              {t('View on EtherScan')}
             </LinkExternal>
           </Flex>
         )}

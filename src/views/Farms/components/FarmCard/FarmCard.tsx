@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js'
 import styled from 'styled-components'
 import { Card, Flex, Text, Skeleton } from 'uikit'
 import { DeserializedFarm } from 'state/types'
-import { getBscScanLink } from 'utils'
+import { getEtherScanLink } from 'utils'
 import { useTranslation } from 'contexts/Localization'
 import ExpandableSectionButton from 'components/ExpandableSectionButton'
 import { BASE_ADD_LIQUIDITY_URL } from 'config'
@@ -118,7 +118,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, displayApr, removed, helixPri
         {showExpandableSection && (
           <DetailsSection
             removed={removed}
-            bscScanAddress={getBscScanLink(lpAddress, 'address')}
+            bscScanAddress={getEtherScanLink(lpAddress, 'address')}
             infoAddress={`/info/pool/${lpAddress}`}
             totalValueFormatted={totalValueFormatted}
             lpLabel={lpLabel}

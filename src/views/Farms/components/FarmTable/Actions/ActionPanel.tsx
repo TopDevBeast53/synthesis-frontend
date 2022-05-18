@@ -5,7 +5,7 @@ import { LinkExternal, Text } from 'uikit'
 import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'
 import getLiquidityUrlPathParts from 'utils/getLiquidityUrlPathParts'
 import { getAddress } from 'utils/addressHelpers'
-import { getBscScanLink } from 'utils'
+import { getEtherScanLink } from 'utils'
 import { CommunityTag, CoreTag, DualTag } from 'components/Tags'
 
 import HarvestAction from './HarvestAction'
@@ -149,7 +149,7 @@ const ActionPanel: React.FunctionComponent<ActionPanelProps> = ({
     tokenAddress: token.address,
   })
   const lpAddress = getAddress(farm.lpAddresses)
-  const bsc = getBscScanLink(lpAddress, 'address')
+  const bsc = getEtherScanLink(lpAddress, 'address')
   const info = `/info/pool/${lpAddress}`
 
   return (

@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { Flex, Heading, Text, Link, useTooltip } from 'uikit'
 import { useTranslation } from 'contexts/Localization'
 import { ContextApi } from 'contexts/Localization/types'
-import { getBscScanLink } from 'utils'
+import { getEtherScanLink } from 'utils'
 
 export interface TimerProps {
   prefix?: string
@@ -67,8 +67,8 @@ const TooltipContent = ({ blockNumber, t }: { blockNumber: number; t: ContextApi
     <Text color="body" mb="10px" fontWeight="600">
       {t('Block %num%', { num: blockNumber })}
     </Text>
-    <Link external href={getBscScanLink(blockNumber, 'block')}>
-      {t('View on BscScan')}
+    <Link external href={getEtherScanLink(blockNumber, 'block')}>
+      {t('View on EtherScan')}
     </Link>
   </>
 )

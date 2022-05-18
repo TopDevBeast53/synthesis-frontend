@@ -18,7 +18,7 @@ import {
 import { useGetProfileAvatar } from 'state/profile/hooks'
 import useTheme from 'hooks/useTheme'
 import styled from 'styled-components'
-import { getBscScanLink } from 'utils'
+import { getEtherScanLink } from 'utils'
 import truncateHash from 'utils/truncateHash'
 import {
   useGetOrFetchLeaderboardAddressResult,
@@ -76,7 +76,7 @@ const WalletStatsModal: React.FC<WalletStatsModalProps> = ({ account, onDismiss,
                 {profileAvatar.username}
               </Heading>
             )}
-            <ExternalLink href={getBscScanLink(address, 'address')}>{truncateHash(address)}</ExternalLink>
+            <ExternalLink href={getEtherScanLink(address, 'address')}>{truncateHash(address)}</ExternalLink>
           </Box>
         </Flex>
         <IconButton variant="text" onClick={handleDismiss} aria-label="Close the dialog">

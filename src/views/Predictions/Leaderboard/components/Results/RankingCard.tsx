@@ -17,7 +17,7 @@ import {
 import { PredictionUser } from 'state/types'
 import { useGetProfileAvatar } from 'state/profile/hooks'
 import styled from 'styled-components'
-import { getBscScanLink } from 'utils'
+import { getEtherScanLink } from 'utils'
 import truncateHash from 'utils/truncateHash'
 import { useTranslation } from 'contexts/Localization'
 import WalletStatsModal from '../WalletStatsModal'
@@ -76,8 +76,8 @@ const RankingCard: React.FC<RankingCardProps> = ({ rank, user }) => {
             options={{ placement: 'bottom' }}
           >
             <SubMenuItem onClick={onPresentWalletStatsModal}>{t('View Stats')}</SubMenuItem>
-            <SubMenuItem as={Link} href={getBscScanLink(user.id, 'address')} bold={false} color="text" external>
-              {t('View on BscScan')}
+            <SubMenuItem as={Link} href={getEtherScanLink(user.id, 'address')} bold={false} color="text" external>
+              {t('View on EtherScan')}
             </SubMenuItem>
           </SubMenu>
         </Flex>

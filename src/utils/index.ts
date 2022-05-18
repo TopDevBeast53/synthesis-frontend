@@ -7,7 +7,7 @@ import { BigNumber } from '@ethersproject/bignumber'
 import { abi as IUniswapV2Router02ABI } from '@uniswap/v2-periphery/build/IUniswapV2Router02.json'
 import { ChainId, JSBI, Percent, Token, CurrencyAmount, Currency, ETHER } from 'sdk'
 import { ROUTER_ADDRESS } from '../config/constants'
-import { BASE_BSC_SCAN_URLS, BASE_SOLANA_SCAN_URLS } from '../config'
+import { BASE_BSC_SCAN_URLS, BASE_SOLANA_SCAN_URLS, BASE_ETH_SCAN_URLS } from '../config'
 import { TokenAddressMap } from '../state/lists/hooks'
 import { simpleRpcProvider } from './providers'
 
@@ -62,7 +62,31 @@ export function getBscScanLink(
     }
 }
 
-export function getBscScanLinkForNft(
+export function getEtherScanLink(
+    data: string | number,
+    type: 'transaction' | 'token' | 'address' | 'block' | 'countdown',
+    chainId: ChainId = ChainId.MAINNET,
+): string {
+    switch (type) {
+        case 'transaction': {
+            return `${BASE_ETH_SCAN_URLS[chainId]}/tx/${data}`
+        }
+        case 'token': {
+            return `${BASE_ETH_SCAN_URLS[chainId]}/token/${data}`
+        }
+        case 'block': {
+            return `${BASE_ETH_SCAN_URLS[chainId]}/block/${data}`
+        }
+        case 'countdown': {
+            return `${BASE_ETH_SCAN_URLS[chainId]}/block/countdown/${data}`
+        }
+        default: {
+            return `${BASE_ETH_SCAN_URLS[chainId]}/address/${data}`
+        }
+    }
+}
+
+export function getEtherScanLinkForNft(
     collectionAddress: string,
     tokenId: string,
     chainId: ChainId = ChainId.MAINNET,

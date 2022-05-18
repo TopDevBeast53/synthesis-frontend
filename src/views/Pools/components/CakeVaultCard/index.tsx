@@ -9,7 +9,7 @@ import { DeserializedPool, VaultKey } from 'state/types'
 import { convertSharesToHelix } from 'views/Pools/helpers'
 import { FlexGap } from 'components/Layout/Flex'
 import { vaultPoolConfig } from 'config/constants/pools'
-import { getBscScanLink } from 'utils'
+import { getEtherScanLink } from 'utils'
 import AprRow from '../PoolCard/AprRow'
 import { StyledCard } from '../PoolCard/StyledCard'
 import CardFooter from '../PoolCard/CardFooter'
@@ -65,7 +65,7 @@ export const CreditCalcBlock = () => {
       <Flex mr="6px" alignItems="center">
         <Link
           external
-          href={getBscScanLink(hasEndBlockOver ? creditEndBlock : creditStartBlock, 'block')}
+          href={getEtherScanLink(hasEndBlockOver ? creditEndBlock : creditStartBlock, 'block')}
           mr="4px"
           color={hasEndBlockOver ? 'warning' : 'primary'}
           fontSize="14px"

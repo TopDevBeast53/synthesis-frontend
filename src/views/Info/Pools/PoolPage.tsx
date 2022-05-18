@@ -19,7 +19,7 @@ import {
 } from 'uikit'
 import styled from 'styled-components'
 import Page from 'components/Layout/Page'
-import { getBscScanLink } from 'utils'
+import { getEtherScanLink } from 'utils'
 import { CurrencyLogo, DoubleCurrencyLogo } from 'views/Info/components/CurrencyLogo'
 import { formatAmount } from 'views/Info/utils/formatInfoNumbers'
 import Percent from 'views/Info/components/Percent'
@@ -105,8 +105,8 @@ const PoolPage: React.FC<RouteComponentProps<{ address: string }>> = ({
               </Flex>
             </Breadcrumbs>
             <Flex justifyContent={[null, null, 'flex-end']} mt={['8px', '8px', 0]}>
-              <LinkExternal mr="8px" href={getBscScanLink(address, 'address')}>
-                {t('View on BscScan')}
+              <LinkExternal mr="8px" href={getEtherScanLink(address, 'address')}>
+                {t('View on EtherScan')}
               </LinkExternal>
               <SaveIcon fill={watchlistPools.includes(address)} onClick={() => addPoolToWatchlist(address)} />
             </Flex>
