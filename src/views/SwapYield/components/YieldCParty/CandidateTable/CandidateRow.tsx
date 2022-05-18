@@ -61,7 +61,7 @@ const CandidateRow = ({ bid, exToken, exAmount }) => {
         </CellContent>
       </StyledCell>
       <StyledCell>
-        <TokenCell tokenInfo={exToken} amount={exAmount.toString()} />
+        <TokenCell tokenInfo={exToken} amount={bid.amount.toString()} />
       </StyledCell>
       <StyledCell>
         <CellContent>

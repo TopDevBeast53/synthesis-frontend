@@ -63,11 +63,10 @@ const DiscussOrder: React.FC<any> = (props) => {
     erc20Contract.balanceOf(account).then((res) => {
       setMaxBalance(getBalanceAmount(new BigNumber(res.toString())))
     })
-
     // erc20Contract.symbol().then((res) => {
     //   setSymbol(res)
     // })
-  })
+  },[erc20Contract, account, yieldSwapContract.address])
 
   const handleSelectMaxOfToken = useCallback(() => {
     setYAmount(maxBalance.toString())
@@ -95,8 +94,7 @@ const DiscussOrder: React.FC<any> = (props) => {
   }
 
   const handleAsk = async () => {
-    setPendingTx(true)
-
+    setPendingTx(true)    
     if (allowedValue.lte(decimalYAmount.toString())) {
       erc20Contract
         .approve(yieldSwapContract.address, ethers.constants.MaxUint256)

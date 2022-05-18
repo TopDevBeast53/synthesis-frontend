@@ -48,7 +48,10 @@ const Sell = () => {
   const [handleAdd] = useModal(<CreateOrderDialog />)
   useEffect(() => {
     if (tableRefresh < 0) return
-    if (!account) return
+    if (!account) {
+      setSwapIds([])
+      return
+    } 
     LpSwapContract.getSwapIds(account)
       .then(async (ids) => {
         setSwapIds(ids)

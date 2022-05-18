@@ -44,11 +44,11 @@ const ActiveRow=(props)=>{
                     <TokensCell token={swapData?.toSellerToken} balance={swapData?.ask.toString()} />
                 </StyledCell>
                 <StyledCellWithoutPadding>
-                    <ToolTipCell 
+                    {/* <ToolTipCell 
                         seller={swapData?.seller}             
                         buyer={swapData?.buyer} 
                         askAmount={swapData?.ask.toString()}
-                    />
+                    /> */}
                 </StyledCellWithoutPadding>
                 {
                     account && (

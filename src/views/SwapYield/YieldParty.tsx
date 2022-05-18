@@ -55,7 +55,10 @@ const YieldParty = () => {
   const [handleAdd] = useModal(<CreateSwapModal />)
   useEffect(() => {
     if (refresh < 0) return
-    if (!account) return
+    if (!account) {
+      setSwapIds([])
+      return
+    } 
     YieldSwapContract.getSwapIds(account)
       .then(async (ids) => {
         setSwapIds(ids)

@@ -3,7 +3,7 @@ import { useWeb3React } from '@web3-react/core'
 import styled from 'styled-components'
 import { useTranslation } from 'contexts/Localization'
 import { Button, ButtonMenu, ButtonMenuItem, useModal } from 'uikit'
-import { filter, includes } from 'lodash'
+import { includes } from 'lodash'
 import { useHelixYieldSwap } from 'hooks/useContract'
 import Page from 'components/Layout/Page'
 import YieldCPartyTable from './components/YieldCParty/Table'
@@ -11,7 +11,6 @@ import { SwapState } from './types'
 import { YieldCPartyContext } from './context'
 import CreateSwapModal from './components/YieldParty/Modals/CreateOrderDialog'
 import { useYieldSwap } from './hooks/useSwapYield'
-
 
 const Wrapper = styled.div`
   display: flex;
@@ -43,6 +42,7 @@ const YieldCParty = () => {
   const [loading, setLoading] = useState(false)
 
   const filteredSwaps = useMemo(() => {
+    if(!account) return []
     if (menuIndex === SwapState.Pending)
       return swaps.filter((s, i) => s.status === 1 && includes(hasBidOnSwap, i))
     if (menuIndex === SwapState.Finished) return swaps.filter((s) => s.status === 2 && s.seller.party === account)
@@ -60,34 +60,46 @@ const YieldCParty = () => {
   useEffect(() => {
     if (refresh < 0) return
     setLoading(true)
-    const fetchData = async () => {
-      try {
-        // fetch swaps
-        const fetchedSwaps = await fetchSwapData();
-        const fetchedSwapsWithIds = fetchedSwaps.map((s, i) => {
-          return { ...s, id: i }
-        })
-        setSwaps(fetchedSwapsWithIds)
-        
-        // fetch bid Ids
-        const fetchBidderSwapIds = await yieldSwapContract.getBidderSwapIds(account)
-        const normalNumberBidIds = fetchBidderSwapIds.map((b) => b.toNumber())
-        setHasBidOnSwap(normalNumberBidIds)
-        
-        // fetch bid contents
-        const bidIds = fetchedSwaps.reduce((prev, cur) => prev.concat(cur.bidIds), [])
-        const fetchedBids = await fetchBids(bidIds);
-        const filteredBids = fetchedBids.map((b, i) => {
-          return { ...b, id: i }
-        })
-        setBids(filteredBids)
-      } catch (err) {
-        console.error(err)
-      }
-      setLoading(false)
+    let isSubscribed = true
+    let bidFetched = true
+    try {
+      // fetch swaps
+      fetchSwapData().then((fetchedSwaps) => {
+        if(isSubscribed) {
+          const fetchedSwapsWithIds = fetchedSwaps.map((s, i) => {
+            return { ...s, id: i }
+          })
+          setSwaps(fetchedSwapsWithIds)
+  
+          const bidIds = fetchedSwaps.reduce((prev, cur) => prev.concat(cur.bidIds), [])
+          fetchBids(bidIds).then((fetchedBids) => {
+            const filteredBids = fetchedBids.map((b, i) => {
+              return { ...b, id: i }
+            })
+            setBids(filteredBids)
+          });
+        }
+      });
+      
+      // fetch bid Ids
+      yieldSwapContract.getBidderSwapIds(account).then((fetchBidderSwapIds) => {
+        if(bidFetched) {
+          const normalNumberBidIds = fetchBidderSwapIds.map((b) => b.toNumber())
+          setHasBidOnSwap(normalNumberBidIds)
+        }
+      })
+      
+    } catch (err) {
+      console.error(err)
     }
-    fetchData()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    setLoading(false)
+
+    // eslint-disable-next-line consistent-return
+    return () => {
+      isSubscribed = false
+      bidFetched = false
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [account, refresh, menuIndex])
 
   return (

@@ -81,13 +81,13 @@ const ActiveRow = (props) => {
         <StyledCell>
           <TokenCell tokenInfo={swapData?.buyer} amount={swapData?.ask.toString()}/>          
         </StyledCell>
-        <StyledCell>
+        <StyledCellWithoutPadding>
           <ToolTipCell 
             seller={swapData?.seller}             
             buyer={swapData?.buyer} 
             askAmount={swapData?.ask.toString()}
           />
-        </StyledCell>
+        </StyledCellWithoutPadding>
         <StyledCell>
           <Button color="primary" onClick={handleUpdateClick} scale="sm" width="100px">
             {' '}

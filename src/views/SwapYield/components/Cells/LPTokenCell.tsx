@@ -8,7 +8,7 @@ import BaseTokenCell from './BaseTokenCell'
 
 const Container = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
 `
 const LPTokenCell = (props) => {
   const { lpTokenAddress, balance } = props

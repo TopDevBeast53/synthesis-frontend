@@ -38,6 +38,7 @@ const Sell = () => {
   const [bidIdsPerUser, setBidIdsPerUser] = useState([])
   const { tableRefresh, setFilterState } = useContext(SwapLiquidityContext)
   const filteredSwaps = useMemo(() => {
+    if(!account) return []
     if (menuIndex === SwapState.Finished) return filter(swaps, { isOpen: false, buyer: account })
     if (menuIndex === SwapState.All)
       return swaps.filter((s, i) => s.isOpen && !includes(bidIdsPerUser, i) && s.seller !== account)

@@ -11,6 +11,7 @@ import TokenCell from 'views/SwapYield/components/Cells/TokenCell'
 import { YieldCPartyContext } from 'views/SwapYield/context'
 import { SwapState } from '../../types'
 import { StyledCell, StyledCellWithoutPadding, StyledRow } from '../Cells/StyledCell'
+import ToolTipCell from '../Cells/ToolTipCell'
 import { CellContent } from './BaseCell'
 import CandidateTable from './CandidateTable'
 import DiscussOrder from './DiscussOrder'
@@ -152,12 +153,11 @@ const YieldCPartyRow = ({ data, state, loading }) => {
         </StyledCell>
 
         <StyledCell>
-        {/* <ToolTipCell 
-            buyerToken={lpToken} 
-            buyerTokenAmount={amount.toString()} 
-            sellerToken={exToken} 
-            sellerTokenAmount={ask.toString()}
-        /> */}
+          <ToolTipCell 
+            seller={seller}             
+            buyer={buyer} 
+            askAmount={ask.toString()}
+          />        
         </StyledCell>
         <StyledCell style={{ zIndex: 10, flex: 3 }}>
           <CellContent>
@@ -205,7 +205,7 @@ const YieldCPartyRow = ({ data, state, loading }) => {
 
       {shouldRenderDetail && account && (
         <div style={{ padding: '10px 10px', minHeight: '5em' }}>
-          <CandidateTable bids={bids} exToken={buyer} exAmount={ask} />
+          <CandidateTable bids={bids} exToken={buyer} exAmount={ask.toString()} />
         </div>
       )}
     </>

@@ -8,7 +8,7 @@ import BaseTokenCell from './BaseTokenCell'
 
 const Container = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: start;
 `
 
 const ExTokenCell = (props) => {
