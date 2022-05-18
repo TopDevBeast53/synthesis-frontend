@@ -173,19 +173,6 @@
     "type": "event"
   },
   {
-    "inputs": [],
-    "name": "MAX_FEE_PERCENT",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [
       {
         "internalType": "uint256",
@@ -223,12 +210,12 @@
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "buyerAmount",
+        "name": "treasuryAmount",
         "type": "uint256"
       },
       {
         "internalType": "uint256",
-        "name": "treasuryAmount",
+        "name": "buyerAmount",
         "type": "uint256"
       }
     ],
@@ -247,12 +234,12 @@
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "sellerAmount",
+        "name": "treasuryAmount",
         "type": "uint256"
       },
       {
         "internalType": "uint256",
-        "name": "treasuryAmount",
+        "name": "sellerAmount",
         "type": "uint256"
       }
     ],

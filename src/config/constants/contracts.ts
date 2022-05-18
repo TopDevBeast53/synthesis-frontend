@@ -118,7 +118,7 @@ export default {
     },
     helixMigrator: {
         56: '',
-        4: '0x6038466a15FF62C22Cba83E9194EA2d9c8Ffc9Bd',
+        4: '0x130b5EB2631C009e88153841774C3C8f844762a2',
     },
     referralRegister: {
         56: '',
@@ -130,14 +130,14 @@ export default {
     },
     helixVault: {
         56: '',
-        4: '0x33D00c73B35EFf358548AdE855011dcb34426a64',
+        4: '0x3dC7D4335c0a7e9eF161b13439488882AC405eE5',
     },
     helixYieldSwap: {
         56: '',
-        4: '0x43E31012CE68B255200d6f865a7ccA24848D68aF',
+        4: '0x4E7fC6460Ae032088C0f3b99A57caCAe7f1A34E3',
     },
     helixLPSwap: {
         56: '',
-        4: '0xf10B928dC49F44ACC8Ee2a1b23b0e289796200ae',
+        4: '0x184edc8611e93D4216d643F635A753c62dE69Cbb',
     },
 }

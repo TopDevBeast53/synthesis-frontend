@@ -1,24 +1,22 @@
 [
   {
+    "anonymous": false,
     "inputs": [
       {
-        "internalType": "contract HelixToken",
-        "name": "token",
-        "type": "address"
-      },
-      {
+        "indexed": false,
         "internalType": "uint256",
-        "name": "defaultStakingRef",
+        "name": "stakingRefFee",
         "type": "uint256"
       },
       {
+        "indexed": false,
         "internalType": "uint256",
-        "name": "defaultSwapRef",
+        "name": "swapRefFee",
         "type": "uint256"
       }
     ],
-    "stateMutability": "nonpayable",
-    "type": "constructor"
+    "name": "FeesSet",
+    "type": "event"
   },
   {
     "anonymous": false,
@@ -62,6 +60,57 @@
       }
     ],
     "name": "ReferralReward",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "referred",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "referrer",
+        "type": "address"
+      }
+    ],
+    "name": "ReferrerAdded",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "referred",
+        "type": "address"
+      }
+    ],
+    "name": "ReferrerRemoved",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "referrer",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "rewards",
+        "type": "uint256"
+      }
+    ],
+    "name": "Withdrawn",
     "type": "event"
   },
   {
@@ -167,16 +216,26 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "helixToken",
-    "outputs": [
+    "inputs": [
       {
-        "internalType": "contract HelixToken",
-        "name": "",
+        "internalType": "contract IHelixToken",
+        "name": "_token",
         "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "defaultStakingRef",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "defaultSwapRef",
+        "type": "uint256"
       }
     ],
-    "stateMutability": "view",
+    "name": "initialize",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -319,6 +378,19 @@
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "token",
+    "outputs": [
+      {
+        "internalType": "contract IHelixToken",
+        "name": "",
+        "type": "address"
       }
     ],
     "stateMutability": "view",

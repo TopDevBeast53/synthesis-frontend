@@ -1,24 +1,16 @@
 [
   {
+    "anonymous": false,
     "inputs": [
       {
-        "internalType": "contract IERC20",
-        "name": "_token",
-        "type": "address"
-      },
-      {
-        "internalType": "contract IMasterChef",
-        "name": "_masterchef",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_treasury",
-        "type": "address"
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "callFee",
+        "type": "uint256"
       }
     ],
-    "stateMutability": "nonpayable",
-    "type": "constructor"
+    "name": "CallFeeSet",
+    "type": "event"
   },
   {
     "anonymous": false,
@@ -116,6 +108,19 @@
   },
   {
     "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "performanceFee",
+        "type": "uint256"
+      }
+    ],
+    "name": "PerformanceFeeSet",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
     "inputs": [],
     "name": "Unpause",
     "type": "event"
@@ -156,6 +161,32 @@
       }
     ],
     "name": "Withdraw",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "withdrawFeePeriod",
+        "type": "uint256"
+      }
+    ],
+    "name": "WithdrawFeePeriodSet",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "withdrawFee",
+        "type": "uint256"
+      }
+    ],
+    "name": "WithdrawFeeSet",
     "type": "event"
   },
   {
@@ -329,6 +360,29 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "contract IERC20Upgradeable",
+        "name": "_token",
+        "type": "address"
+      },
+      {
+        "internalType": "contract IMasterChef",
+        "name": "_masterchef",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_treasury",
+        "type": "address"
+      }
+    ],
+    "name": "initialize",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "lastHarvestedTime",
     "outputs": [
@@ -477,7 +531,7 @@
     "name": "token",
     "outputs": [
       {
-        "internalType": "contract IERC20",
+        "internalType": "contract IERC20Upgradeable",
         "name": "",
         "type": "address"
       }
