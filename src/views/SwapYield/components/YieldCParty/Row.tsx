@@ -24,7 +24,7 @@ const ArrowIcon = styled(ChevronDownIcon)<{ toggled: boolean }>`
 const YieldCPartyRow = ({ data, state, loading }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
-  const { id, lockDuration, lockUntilTimestamp, bids, buyer, seller, ask } = data
+  const { id, lockDuration, bidIds, lockUntilTimestamp, buyer, seller, ask } = data
   const yieldSwapContract = useHelixYieldSwap()
   const { toastSuccess, toastError } = useToast()
   const [pendingTx, setPendingTx] = useState(false)
@@ -205,7 +205,7 @@ const YieldCPartyRow = ({ data, state, loading }) => {
 
       {shouldRenderDetail && account && (
         <div style={{ padding: '10px 10px', minHeight: '5em' }}>
-          <CandidateTable bids={bids} exToken={buyer} exAmount={ask.toString()} />
+          <CandidateTable bids={bidIds} exToken={buyer} exAmount={ask.toString()} />
         </div>
       )}
     </>

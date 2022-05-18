@@ -32,11 +32,10 @@ const YieldCParty = () => {
   const { t } = useTranslation()
   const yieldSwapContract = useHelixYieldSwap()
   const { account } = useWeb3React()
-  const { fetchSwapData, fetchBids } = useYieldSwap()
+  const { fetchSwapData } = useYieldSwap()
 
   const [menuIndex, setMenuIndex] = useState(SwapState.All)
   const [swaps, setSwaps] = useState([])
-  const [bids, setBids] = useState([])
   const [hasBidOnSwap, setHasBidOnSwap] = useState([])
   const [refresh, setTableRefresh] = useState(0)
   const [loading, setLoading] = useState(false)
@@ -70,14 +69,6 @@ const YieldCParty = () => {
             return { ...s, id: i }
           })
           setSwaps(fetchedSwapsWithIds)
-  
-          const bidIds = fetchedSwaps.reduce((prev, cur) => prev.concat(cur.bidIds), [])
-          fetchBids(bidIds).then((fetchedBids) => {
-            const filteredBids = fetchedBids.map((b, i) => {
-              return { ...b, id: i }
-            })
-            setBids(filteredBids)
-          });
         }
       });
       
@@ -126,7 +117,7 @@ const YieldCParty = () => {
           <YieldCPartyContext.Provider
             value={{ tableRefresh: refresh, setTableRefresh, updateMenuIndex: setMenuIndex }}
           >
-            <YieldCPartyTable swaps={filteredSwaps} state={menuIndex} bids={bids} loading={loading} />
+            <YieldCPartyTable swaps={filteredSwaps} state={menuIndex} loading={loading} />
           </YieldCPartyContext.Provider>
         </Page>
       }

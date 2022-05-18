@@ -1,5 +1,6 @@
+import React, { useContext, useState, useEffect } from 'react'
 import { useWeb3React } from '@web3-react/core'
-import React, { useContext } from 'react'
+import { useHelixYieldSwap } from 'hooks/useContract'
 import styled from 'styled-components'
 import { Button, Skeleton, Text, useModal } from 'uikit'
 import { YieldCPartyContext } from 'views/SwapYield/context'
@@ -24,13 +25,22 @@ const StyledCell = styled(BaseCell)`
 const getEllipsis = (account) => {
   return account ? `${account.substring(0, 5)}...${account.substring(account.length - 5)}` : null
 }
-const CandidateRow = ({ bid, exToken, exAmount }) => {
+const CandidateRow = ({ bidId, exToken, exAmount }) => {
   const { account } = useWeb3React()
   const { tableRefresh, setTableRefresh } = useContext(YieldCPartyContext)
-
+  const YieldSwapContract = useHelixYieldSwap()
+  const [bid, setBid] = useState<any>();
   const onSendAsk = () => {
     setTableRefresh(tableRefresh + 1)
   }
+
+  useEffect(() => {
+    YieldSwapContract.bids(bidId).then((res) => {
+      setBid(res)
+    }).catch((err) => {
+      console.error(err)
+    })
+  })
 
   const [showModal] = useModal(
     <DiscussOrder bid={bid} onSend={onSendAsk} tokenInfo={exToken} amount={exAmount} />,
@@ -46,7 +56,6 @@ const CandidateRow = ({ bid, exToken, exAmount }) => {
         </StyledCell>
         <StyledCell>
           <CellContent>
-            <Text>DAmount</Text>
             <Skeleton mt="4px" />
           </CellContent>
         </StyledCell>

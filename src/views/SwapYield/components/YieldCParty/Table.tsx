@@ -40,14 +40,10 @@ const StyledCol = styled.div`
   padding-bottom: 5px;
   font-style: italic;
 `
-const YieldCPartyTable = ({ swaps, state, bids, loading }) => {
+const YieldCPartyTable = ({ swaps, state, loading }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const tableWrapperEl = useRef<HTMLDivElement>(null)
-  const rowData = swaps.map((s) => {
-    const filteredBids = s.bidIds.map((i) => bids[i.toNumber()])
-    return { ...s, bids: filteredBids }
-  })
 
   const scrollToTop = (): void => {
     tableWrapperEl.current.scrollIntoView({
@@ -58,14 +54,14 @@ const YieldCPartyTable = ({ swaps, state, bids, loading }) => {
   return (
     <StyledTableBorder>
       <StyledTable id="pools-table" role="table" ref={tableWrapperEl}>
-        {!loading && rowData.length === 0 && (
+        {!loading && swaps.length === 0 && (
           <StyledRow>
             <StyledCol>
               <Text>No Data</Text>
             </StyledCol>
           </StyledRow>
         )}
-        {rowData.map((data) => (
+        {swaps.map((data) => (
           <YieldCPartyRow key={data.id} data={data} state={state} loading={loading} />
         ))}
         <ScrollButtonContainer>
