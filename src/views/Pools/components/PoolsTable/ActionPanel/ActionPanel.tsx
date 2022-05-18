@@ -13,7 +13,6 @@ import {
   TimerIcon,
   useTooltip,
 } from 'uikit'
-import { BASE_BSC_SCAN_URL } from 'config'
 import { getEtherScanLink } from 'utils'
 import { useBlock } from 'state/block/hooks'
 import { useVaultPoolByKey, useVaultPools } from 'state/pools/hooks'
@@ -268,7 +267,7 @@ const ActionPanel: React.FC<ActionPanelProps> = ({ account, pool, userDataLoaded
         {poolContractAddress && (
           <Flex mb="8px" justifyContent={['flex-end', 'flex-end', 'flex-start']}>
             <LinkExternal
-              href={`${BASE_BSC_SCAN_URL}/address/${vaultKey ? vaultContractAddress : poolContractAddress}`}
+              href={getEtherScanLink(vaultKey ? vaultContractAddress : poolContractAddress, 'address')}
               bold={false}
             >
               {t('View Contract')}
