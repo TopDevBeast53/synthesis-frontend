@@ -103,7 +103,7 @@ export const mainnetTokens = defineTokens({
     ),
     dai: new Token(
         MAINNET,
-        '0x5592EC0cfb4dbc12D3aB100b257153436a1f0FEa',
+        '0x6B175474E89094C44Da98b954EedeAC495271d0F',
         18,
         'DAI',
         'Dai Stablecoin',
@@ -111,7 +111,7 @@ export const mainnetTokens = defineTokens({
     ),
     usdt: new Token(
         MAINNET,
-        '0x3B00Ef435fA4FcFF5C209a37d1f3dcff37c705aD',
+        '0x55d398326f99059ff775485246999027b3197955',
         18,
         'USDT',
         'Tether USD',
@@ -135,7 +135,7 @@ export const mainnetTokens = defineTokens({
     ),
     usdc: new Token(
         MAINNET,
-        '0x4DBCdF9B62e891a7cec5A2568C3F4FAF9E8Abe2b',
+        '0x07865c6e87b9f70255377e024ace6630c1eaa37f',
         18,
         'USDC',
         'Binance-Peg USD Coin',

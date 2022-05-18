@@ -5,11 +5,7 @@ import { SvgProps } from '../types'
 const Icon: React.FC<SvgProps> = (props) => {
   return (
     <Svg viewBox="0 0 16 16" {...props}>
-      <circle cx="8" cy="8" r="8" fill="#F0B90B" />
-      <path
-        d="M5.01656 8.00006L3.79256 9.23256L2.56006 8.00006L3.79256 6.76756L5.01656 8.00006ZM8.00006 5.01656L10.1081 7.12456L11.3406 5.89206L9.23256 3.79256L8.00006 2.56006L6.76756 3.79256L4.66806 5.89206L5.90056 7.12456L8.00006 5.01656ZM12.2076 6.76756L10.9836 8.00006L12.2161 9.23256L13.4401 8.00006L12.2076 6.76756ZM8.00006 10.9836L5.89206 8.87556L4.66806 10.1081L6.77606 12.2161L8.00006 13.4401L9.23256 12.2076L11.3406 10.0996L10.1081 8.87556L8.00006 10.9836ZM8.00006 9.23256L9.23256 8.00006L8.00006 6.76756L6.76756 8.00006L8.00006 9.23256Z"
-        fill="#FFFDFA"
-      />
+      <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><circle className="cls-1" cx="16" cy="16" r="16" style={{fill:"#627eea"}}/><path className="cls-2" style={{fill:"#fff", fillOpacity:"0.6"}} d="M16.5,4v8.87L24,16.22Z"/><path className="cls-3" style={{fill:"#fff"}} d="M16.5,4,9,16.22l7.5-3.35Z"/><path className="cls-2" style={{fill:"#fff", fillOpacity:"0.6"}} d="M16.5,22v6L24,17.62Z"/><path className="cls-3" style={{fill:"#fff"}} d="M16.5,28V22L9,17.62Z"/><path className="cls-4" style={{fill:"#fff", fillOpacity:"0.2"}} d="M16.5,20.57,24,16.22,16.5,12.87Z"/><path className="cls-2" style={{fill:"#fff", fillOpacity:"0.6"}} d="M9,16.22l7.5,4.35v-7.7Z"/></svg>
     </Svg>
   )
 }
