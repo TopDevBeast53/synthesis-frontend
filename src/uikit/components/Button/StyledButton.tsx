@@ -51,7 +51,13 @@ const StyledButton = styled.button<BaseButtonProps>`
   cursor: pointer;
   display: inline-flex;
   font-family: inherit;
-  font-size: 16px;
+  font-size:12px;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    font-size: 14px;
+  }
+  ${({ theme }) => theme.mediaQueries.md} {
+    font-size: 16px;
+  }
   font-weight: 600;
   justify-content: center;
   letter-spacing: 0.03em;

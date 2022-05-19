@@ -15,7 +15,7 @@ const Wrapper = styled.div`
   }
   div{
     flex-direction:column;
-    margin-top:25px;
+    margin-top:32px;
   }
 
   ${({ theme }) => theme.mediaQueries.sm} {

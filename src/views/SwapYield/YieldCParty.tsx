@@ -21,7 +21,10 @@ const Wrapper = styled.div`
     padding-left: 12px;
     padding-right: 12px;
   }
-  
+  text-align:center;
+  ${({ theme }) => theme.mediaQueries.md} {
+    text-align:left;
+  }
 
   ${({ theme }) => theme.mediaQueries.sm} {
     margin-left: 16px;
@@ -104,7 +107,7 @@ const YieldCParty = () => {
               <Wrapper>
                 {/* TODO: Should be read from constants */}
                 {
-                  !isMobile ?
+                  true ?
                   <ButtonMenu activeIndex={menuIndex} scale="sm" variant="subtle" onItemClick={handleButtonMenuClick}>
                     <ButtonMenuItem>{t('Open')}</ButtonMenuItem>
                     <ButtonMenuItem>{t('My Bids')}</ButtonMenuItem>
@@ -120,7 +123,7 @@ const YieldCParty = () => {
                   </ButtonMenu>
                 }
                 <Button variant="secondary" scale="md" mr="1em" onClick={handleAdd} 
-                  style={isMobile ? {marginTop: "25px", textAlign: "center", marginLeft:"auto", marginRight:"auto", display:"block"}: {}}>
+                  style={isMobile ? {marginTop: "32px", textAlign: "center", marginLeft:"auto", marginRight:"auto", display:"block"}: {}}>
                   {' '}
                   Create Swap{' '}
                 </Button>
