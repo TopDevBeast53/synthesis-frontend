@@ -78,7 +78,7 @@ export const useVaultApprove = (vaultKey: VaultKey, setLastUpdated: () => void) 
       toastSuccess(
         t('Contract Enabled'),
         <ToastDescriptionWithTx txHash={receipt.transactionHash}>
-          {t('You can now stake in the %symbol% vault!', { symbol: 'CAKE' })}
+          {t('You can now stake in the %symbol% vault!', { symbol: 'HELIX' })}
         </ToastDescriptionWithTx>,
       )
       setLastUpdated()

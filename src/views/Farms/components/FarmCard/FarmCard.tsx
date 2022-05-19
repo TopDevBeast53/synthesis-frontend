@@ -63,7 +63,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, displayApr, removed, helixPri
   })
   const addLiquidityUrl = `${BASE_ADD_LIQUIDITY_URL}/${liquidityUrlPathParts}`
   const lpAddress = getAddress(farm.lpAddresses)
-  const isPromotedFarm = farm.token.symbol === 'CAKE'
+  const isPromotedFarm = farm.token.symbol === 'HELIX'
 
   return (
     <StyledCard isActive={isPromotedFarm}>

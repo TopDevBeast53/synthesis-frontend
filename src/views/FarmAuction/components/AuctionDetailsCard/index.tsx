@@ -75,7 +75,7 @@ const AuctionDetails: React.FC<AuctionDetailsProps> = ({ auction, connectedBidde
             <Text small color="textSubtle">
               {t('Your existing bid')}
             </Text>
-            <Text small>{getBalanceNumber(amount).toLocaleString()} CAKE</Text>
+            <Text small>{getBalanceNumber(amount).toLocaleString()} HELIX</Text>
           </Flex>
           <Flex justifyContent="space-between" width="100%" pt="8px">
             <Text small color="textSubtle">
