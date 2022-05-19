@@ -5,7 +5,7 @@ import useToast from 'hooks/useToast'
 import moment from 'moment'
 import React, { useContext, useMemo, useState } from 'react'
 import styled from 'styled-components'
-import { AutoRenewIcon, Button, ChevronDownIcon, Skeleton, Text, useDelayedUnmount, useModal } from 'uikit'
+import { AutoRenewIcon, Button, ChevronDownIcon, Skeleton, Text, useDelayedUnmount, useMatchBreakpoints, useModal } from 'uikit'
 import ArrowCell from 'views/SwapYield/components/Cells/ArrowCell'
 import TokenCell from 'views/SwapYield/components/Cells/TokenCell'
 import { YieldCPartyContext } from 'views/SwapYield/context'
@@ -25,6 +25,7 @@ const YieldCPartyRow = ({ data, state, loading }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const { id, lockDuration, bidIds, lockUntilTimestamp, buyer, seller, ask } = data
+  const {isMobile} = useMatchBreakpoints()
   const yieldSwapContract = useHelixYieldSwap()
   const { toastSuccess, toastError } = useToast()
   const [pendingTx, setPendingTx] = useState(false)
@@ -130,39 +131,42 @@ const YieldCPartyRow = ({ data, state, loading }) => {
   return (
     <>
       <StyledRow onClick={handleExpand}>
-        <StyledCell>
+        <StyledCell style={{flex:isMobile ? "1": "3 1 140px"}}>
           <TokenCell tokenInfo={seller} amount={seller.amount.toString()} />
         </StyledCell>
 
         {state !== SwapState.Finished && (
-          <StyledCell>
+          <StyledCell style={{flex:isMobile ? "none": "1 1 70px"}}>
             <CellContent>
               {state === SwapState.Pending && <Text>Left Time</Text>}
-              <Text mt="4px" color="primary">
+              <Text fontSize={isMobile ? "12px": undefined} mt="4px" color="primary">
                 {!isPast && state === SwapState.Pending ? 'Now available!' : timeInfo}
               </Text>
             </CellContent>
           </StyledCell>
         )}
-        <StyledCellWithoutPadding>
-          <ArrowCell back />
-        </StyledCellWithoutPadding>
-        <StyledCell>
-          
+        {/* {
+          !isMobile &&
+          <StyledCell  style={{flex:"1 1 20px"}}>
+            <ArrowCell back />
+          </StyledCell>
+        } */}
+        
+        <StyledCell style={{flex:isMobile ? "1": "3 1 140px"}}>          
           <TokenCell tokenInfo={buyer} amount={data?.ask.toString()}/>                    
         </StyledCell>
 
-        <StyledCell>
+        <StyledCellWithoutPadding style={{alignSelf:"center"}}>
           <ToolTipCell 
             seller={seller}             
             buyer={buyer} 
             askAmount={ask.toString()}
           />        
-        </StyledCell>
-        <StyledCell style={{ zIndex: 10, flex: 3 }}>
+        </StyledCellWithoutPadding>
+        <StyledCell style={{ zIndex: 10, flex:isMobile ? "None": "3" }} ml="8px">
           <CellContent>
             {state === SwapState.All && (
-              <Button variant="secondary" scale="md" mr="8px" onClick={handleBid}>
+              <Button variant="secondary" scale={isMobile?"sm":"md"} mr="8px" onClick={handleBid}>
                 {' '}
                 Bid{' '}
               </Button>
@@ -170,7 +174,7 @@ const YieldCPartyRow = ({ data, state, loading }) => {
             {state === SwapState.Applied && (
               <Button
                 variant="secondary"
-                scale="md"
+                scale={isMobile?"sm":"md"}
                 mr="8px"
                 isLoading={pendingTx}
                 endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
@@ -184,7 +188,8 @@ const YieldCPartyRow = ({ data, state, loading }) => {
             {state === SwapState.Pending && !isPast && (
               <Button
                 variant="secondary"
-                scale="md"
+                scale={isMobile?"sm":"md"}
+                
                 mr="8px"
                 isLoading={pendingTx}
                 endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
@@ -196,10 +201,12 @@ const YieldCPartyRow = ({ data, state, loading }) => {
             )}
           </CellContent>
         </StyledCell>
-        {(state === SwapState.All || state === SwapState.Applied) && (
-          <StyledCell>
-            <ArrowIcon color="primary" toggled={expanded} onClick={handleExpand} />
-          </StyledCell>
+        {(state === SwapState.All || state === SwapState.Applied) && (          
+            !isMobile &&
+            <StyledCellWithoutPadding>
+              <ArrowIcon color="primary" toggled={expanded} onClick={handleExpand} />
+            </StyledCellWithoutPadding>
+          
         )}
       </StyledRow>
 

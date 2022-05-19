@@ -8,7 +8,8 @@ import { SubMenuItemsProps } from './types'
 const SubMenuItems: React.FC<SubMenuItemsProps> = ({ items = [], activeItem, isMobileOnly = false, ...props }) => {
   return (
     <StyledSubMenuItems
-      justifyContent={[isMobileOnly ? 'flex-end' : 'start', null, 'center']}
+      // justifyContent={[isMobileOnly ? 'flex-end' : 'start', null, 'center']}
+      justifyContent="center"
       {...props}
       pl={['12px', null, '0px']}
       $isMobileOnly={isMobileOnly}

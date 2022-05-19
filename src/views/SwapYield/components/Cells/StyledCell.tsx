@@ -9,9 +9,15 @@ export const StyledRow = styled.div`
 `
 
 export const StyledCell = styled(BaseCell)`  
-  flex: 1 2 120px;  
-  padding-left:10px;  
-
+  flex:1;
+  padding-right:0px;
+  padding-left:0px;
+  
+  ${({ theme }) => theme.mediaQueries.sm} {
+    flex: 1 2 120px; 
+    padding-right:10px;
+    padding-left:10px;    
+  }
   ${({ theme }) => theme.mediaQueries.lg} {
     padding-left:32px;
   }

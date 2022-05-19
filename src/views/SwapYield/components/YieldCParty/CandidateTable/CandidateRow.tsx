@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from 'react'
 import { useWeb3React } from '@web3-react/core'
 import { useHelixYieldSwap } from 'hooks/useContract'
 import styled from 'styled-components'
-import { Button, Skeleton, Text, useModal } from 'uikit'
+import { Button, Skeleton, Text, useMatchBreakpoints, useModal } from 'uikit'
 import { YieldCPartyContext } from 'views/SwapYield/context'
 import TokenCell from '../../Cells/TokenCell'
 import BaseCell, { CellContent } from '../BaseCell'
@@ -16,10 +16,11 @@ const StyledRow = styled.div`
 `
 const StyledCell = styled(BaseCell)`
   flex: 4.5;
-  padding-left: 32px;
+  padding-left: 10px;
 
   ${({ theme }) => theme.mediaQueries.sm} {
     flex: 1 0 120px;
+    padding-left: 32px;
   }
 `
 const getEllipsis = (account) => {
@@ -29,7 +30,8 @@ const CandidateRow = ({ bidId, exToken, exAmount }) => {
   const { account } = useWeb3React()
   const { tableRefresh, setTableRefresh } = useContext(YieldCPartyContext)
   const YieldSwapContract = useHelixYieldSwap()
-  const [bid, setBid] = useState<any>();
+  const [bid, setBid] = useState<any>()
+  const {isMobile} = useMatchBreakpoints()
   const onSendAsk = () => {
     setTableRefresh(tableRefresh + 1)
   }
@@ -66,7 +68,7 @@ const CandidateRow = ({ bidId, exToken, exAmount }) => {
     <StyledRow>
       <StyledCell>
         <CellContent>
-          <Text>{getEllipsis(bid.bidder)}</Text>
+          <Text fontSize={isMobile ? "12px": undefined}>{getEllipsis(bid.bidder)}</Text>
         </CellContent>
       </StyledCell>
       <StyledCell>

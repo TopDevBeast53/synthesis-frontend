@@ -3,7 +3,8 @@ import { SpaceProps } from 'styled-system'
 import { BaseButtonProps, Scale, variants } from '../Button/types'
 
 export interface ButtonMenuItemProps extends BaseButtonProps {
-    isActive?: boolean
+    isActive?: boolean,
+    style?
 }
 
 export interface ButtonMenuProps extends SpaceProps {
@@ -13,5 +14,6 @@ export interface ButtonMenuProps extends SpaceProps {
     scale?: Scale
     disabled?: boolean
     children: ReactElement[]
-    fullWidth?: boolean
+    fullWidth?: boolean,
+    style?
 }

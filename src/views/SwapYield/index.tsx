@@ -8,15 +8,32 @@ import { ButtonMenu, ButtonMenuItem, Heading } from 'uikit'
 import YieldCParty from './YieldCParty'
 import YieldParty from './YieldParty'
 
-const Wrapper = styled.div`
-  display: inline-block;
+const Wrapper = styled.div`  
   a {
     padding-left: 12px;
     padding-right: 12px;
   }
+  div{
+    flex-direction:column;
+    margin-top:25px;
+  }
 
   ${({ theme }) => theme.mediaQueries.sm} {
-    margin-left: 16px;
+    margin-left: 16px;    
+    display: inline-block;
+  }
+  ${({ theme }) => theme.mediaQueries.md} {
+    div{
+      flex-direction:row;
+    }      
+  }
+`
+const FlexDiv = styled.div`
+
+  ${({ theme }) => theme.mediaQueries.sm} {
+    justify-content:space-between;
+    align-items:center;
+    display:flex;
   }
 `
 
@@ -30,8 +47,9 @@ export default function SwapYield() {
   usePollFarmsWithUserData()
   return (
     <>
-      <PageHeader background="transparent">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <PageHeader background="transparent" style={{textAlign:"center"}}>
+        {/* <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}> */}
+        <FlexDiv>
           <Heading as="h1" scale="xxl" color="secondary" style={{ display: 'inline-block', verticalAlign: 'middle' }}>
             {t('Swap Yield')}
           </Heading>
@@ -45,7 +63,7 @@ export default function SwapYield() {
               </Wrapper>
             )
           }
-        </div>
+        </FlexDiv>
       </PageHeader>
       <>{menuIndex === 0 ? <YieldCParty /> : menuIndex === 1 && <YieldParty />}</>
     </>

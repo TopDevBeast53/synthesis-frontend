@@ -56,7 +56,8 @@ const ButtonMenu: React.FC<ButtonMenuProps> = ({
   onItemClick,
   disabled,
   children,
-  fullWidth = false,
+  fullWidth = false,  
+
   ...props
 }) => {
   return (

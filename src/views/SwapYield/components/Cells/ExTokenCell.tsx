@@ -2,6 +2,7 @@ import React from 'react'
 import { useAllTokens } from 'hooks/Tokens'
 import styled from 'styled-components'
 import { TokenImage } from 'components/TokenImage'
+import { useMatchBreakpoints } from 'uikit'
 import { getBalanceNumber } from 'utils/formatBalance'
 import BaseTokenCell from './BaseTokenCell'
 
@@ -16,10 +17,11 @@ const ExTokenCell = (props) => {
   const tokens = useAllTokens()
   const exToken = tokens[exTokenAddress]
   const amount = getBalanceNumber(balance)
+  const {isMobile} = useMatchBreakpoints()
 
   return(
     <Container>
-      <TokenImage  token={exToken} width={32} height={32}/>
+      { !isMobile && <TokenImage  token={exToken} width={32} height={32}/> }
       <BaseTokenCell tokenSymbol={exToken?.symbol} balance={amount} />
     </Container>
   ) 

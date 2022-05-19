@@ -1,10 +1,12 @@
 import React from 'react'
 import Balance from 'components/Balance'
-import { Skeleton, Text } from 'uikit'
+import { Skeleton, Text, useMatchBreakpoints } from 'uikit'
 import { CellContent } from './BaseCell'
 
 const BaseTokenCell = (props) => {
   const { tokenSymbol, balance } = props // moment Duration
+  const {isMobile} = useMatchBreakpoints()
+
   if (!tokenSymbol || balance === undefined) {
     return (
       <CellContent>
@@ -16,7 +18,7 @@ const BaseTokenCell = (props) => {
   return (
     <>
       <CellContent>
-        <Text>{tokenSymbol}</Text>
+        <Text fontSize={isMobile ? "12px": undefined}>{tokenSymbol}</Text>
         <Balance mt="4px" color="primary" value={balance} fontSize="14px" />
       </CellContent>
     </>

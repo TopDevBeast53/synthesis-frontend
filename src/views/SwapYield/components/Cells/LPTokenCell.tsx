@@ -3,6 +3,7 @@ import { useFarms } from 'state/farms/hooks'
 import styled from 'styled-components'
 import { getAddress } from 'utils/addressHelpers'
 import { getBalanceNumber } from 'utils/formatBalance'
+import { useMatchBreakpoints } from 'uikit'
 import { TokenPairImage } from 'components/TokenImage'
 import BaseTokenCell from './BaseTokenCell'
 
@@ -15,10 +16,11 @@ const LPTokenCell = (props) => {
   const { data: farms } = useFarms()  
   const lpToken = farms.find((item) => getAddress(item.lpAddresses) === lpTokenAddress)
   const amount = getBalanceNumber(balance)
+  const {isMobile} = useMatchBreakpoints()
   return(
     <>
       <Container>
-        <TokenPairImage primaryToken={lpToken?.token} secondaryToken={lpToken?.quoteToken} width={32} height={32} />
+        {!isMobile && <TokenPairImage primaryToken={lpToken?.token} secondaryToken={lpToken?.quoteToken} width={32} height={32} />}
         <BaseTokenCell tokenSymbol={lpToken?.lpSymbol} balance={amount} />
       </Container>
     </>

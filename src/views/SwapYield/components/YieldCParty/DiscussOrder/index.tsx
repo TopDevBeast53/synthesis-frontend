@@ -150,7 +150,7 @@ const DiscussOrder: React.FC<any> = (props) => {
         <ModalCloseButton onDismiss={onDismiss} />
       </ModalHeader>
       <ModalBody p={bodyPadding}>
-        <div style={{ display: 'flex', marginBottom: '1em', alignItems: 'center' }}>
+        <div style={{ display: 'flex', marginBottom: '1em', alignItems: 'center'}}>
           <ModalInput
             value={yAmount.toString()}
             onSelectMax={handleSelectMaxOfToken}

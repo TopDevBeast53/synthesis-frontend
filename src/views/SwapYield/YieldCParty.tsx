@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react'
 import { useWeb3React } from '@web3-react/core'
 import styled from 'styled-components'
 import { useTranslation } from 'contexts/Localization'
-import { Button, ButtonMenu, ButtonMenuItem, useModal } from 'uikit'
+import { Button, ButtonMenu, ButtonMenuItem, useMatchBreakpoints, useModal } from 'uikit'
 import { includes } from 'lodash'
 import { useHelixYieldSwap } from 'hooks/useContract'
 import Page from 'components/Layout/Page'
@@ -12,8 +12,7 @@ import { YieldCPartyContext } from './context'
 import CreateSwapModal from './components/YieldParty/Modals/CreateOrderDialog'
 import { useYieldSwap } from './hooks/useSwapYield'
 
-const Wrapper = styled.div`
-  display: flex;
+const Wrapper = styled.div`  
   align-items: center;
   justify-content: space-between;
   width: 100%;
@@ -22,9 +21,11 @@ const Wrapper = styled.div`
     padding-left: 12px;
     padding-right: 12px;
   }
+  
 
   ${({ theme }) => theme.mediaQueries.sm} {
     margin-left: 16px;
+    display: flex;
   }
 `
 
@@ -33,6 +34,7 @@ const YieldCParty = () => {
   const yieldSwapContract = useHelixYieldSwap()
   const { account } = useWeb3React()
   const { fetchSwapData } = useYieldSwap()
+  const {isMobile} = useMatchBreakpoints()
 
   const [menuIndex, setMenuIndex] = useState(SwapState.All)
   const [swaps, setSwaps] = useState([])
@@ -101,13 +103,24 @@ const YieldCParty = () => {
             account && (
               <Wrapper>
                 {/* TODO: Should be read from constants */}
-                <ButtonMenu activeIndex={menuIndex} scale="sm" variant="subtle" onItemClick={handleButtonMenuClick}>
-                  <ButtonMenuItem>{t('Open')}</ButtonMenuItem>
-                  <ButtonMenuItem>{t('My Bids')}</ButtonMenuItem>
-                  <ButtonMenuItem>{t('Active Swaps')}</ButtonMenuItem>
-                  <ButtonMenuItem>{t('Completed Swaps')}</ButtonMenuItem>
-                </ButtonMenu>
-                <Button variant="secondary" scale="md" mr="1em" onClick={handleAdd}>
+                {
+                  !isMobile ?
+                  <ButtonMenu activeIndex={menuIndex} scale="sm" variant="subtle" onItemClick={handleButtonMenuClick}>
+                    <ButtonMenuItem>{t('Open')}</ButtonMenuItem>
+                    <ButtonMenuItem>{t('My Bids')}</ButtonMenuItem>
+                    <ButtonMenuItem>{t('Active Swaps')}</ButtonMenuItem>
+                    <ButtonMenuItem>{t('Completed Swaps')}</ButtonMenuItem>
+                  </ButtonMenu>
+                  :
+                  <ButtonMenu activeIndex={menuIndex} scale="sm" variant="subtle" onItemClick={handleButtonMenuClick} style={{flexWrap:"wrap"}}>
+                    <ButtonMenuItem width="48%">{t('Open')}</ButtonMenuItem>
+                    <ButtonMenuItem width="48%">{t('My Bids')}</ButtonMenuItem>
+                    <ButtonMenuItem>{t('Active Swaps')}</ButtonMenuItem>
+                    <ButtonMenuItem>{t('Completed Swaps')}</ButtonMenuItem>
+                  </ButtonMenu>
+                }
+                <Button variant="secondary" scale="md" mr="1em" onClick={handleAdd} 
+                  style={isMobile ? {marginTop: "25px", textAlign: "center", marginLeft:"auto", marginRight:"auto", display:"block"}: {}}>
                   {' '}
                   Create Swap{' '}
                 </Button>
