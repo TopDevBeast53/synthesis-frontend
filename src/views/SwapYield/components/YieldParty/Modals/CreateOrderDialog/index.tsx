@@ -116,6 +116,7 @@ const CreateOrderDialog = (props) => {
       maxDuration,                   
       toSellerTokenOptions:TokenOptions, 
       contractAddress:YieldSwapContract.address,
+      onDismiss,
       handleConfirm
  }
   return (

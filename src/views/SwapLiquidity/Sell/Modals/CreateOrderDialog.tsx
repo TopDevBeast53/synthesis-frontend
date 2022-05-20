@@ -89,6 +89,7 @@ const CreateOrderDialog = (props) => {
       toSellerTokenOptions:allOptions, 
       hidDuration:true, 
       contractAddress:LpSwapContract.address,
+      onDismiss,
       handleConfirm
     }
  if (!allOptions) return null
