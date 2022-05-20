@@ -1,34 +1,34 @@
-import React, { lazy } from 'react'
-import { Router, Redirect, Route, Switch } from 'react-router-dom'
-import { ResetCSS } from 'uikit'
 // import { useWeb3React } from '@web3-react/core'
 import BigNumber from 'bignumber.js'
+import SubgraphHealthIndicator from 'components/SubgraphHealthIndicator'
 import useEagerConnect from 'hooks/useEagerConnect'
-import useUserAgent from 'hooks/useUserAgent'
 import useScrollOnRouteChange from 'hooks/useScrollOnRouteChange'
+import useUserAgent from 'hooks/useUserAgent'
+import React, { lazy } from 'react'
+import { Redirect, Route, Router, Switch } from 'react-router-dom'
 import { usePollBlockNumber } from 'state/block/hooks'
 import { usePollCoreFarmData } from 'state/farms/hooks'
 import { useFetchProfile } from 'state/profile/hooks'
-import SubgraphHealthIndicator from 'components/SubgraphHealthIndicator'
-import GlobalStyle from './style/Global'
+import { ResetCSS, useMatchBreakpoints } from 'uikit'
+import PageLoader from './components/Loader/PageLoader'
 import Menu from './components/Menu'
 import SuspenseWithChunkError from './components/SuspenseWithChunkError'
 import { ToastListener } from './contexts/ToastsContext'
-import PageLoader from './components/Loader/PageLoader'
+import { useInactiveListener } from './hooks/useInactiveListener'
+import useSentryUser from './hooks/useSentryUser'
 import history from './routerHistory'
-// Views included in the main bundle
-import Pools from './views/Pools'
-import Vault from './views/Vault'
-import Swap from './views/Swap'
+import GlobalStyle from './style/Global'
 import {
   RedirectDuplicateTokenIds,
   RedirectOldAddLiquidityPathStructure,
-  RedirectToAddLiquidity,
+  RedirectToAddLiquidity
 } from './views/AddLiquidity/redirects'
+// Views included in the main bundle
+import Pools from './views/Pools'
 import RedirectOldRemoveLiquidityPathStructure from './views/RemoveLiquidity/redirects'
+import Swap from './views/Swap'
 import { RedirectPathToSwapOnly, RedirectToSwap } from './views/Swap/redirects'
-import { useInactiveListener } from './hooks/useInactiveListener'
-import useSentryUser from './hooks/useSentryUser'
+import Vault from './views/Vault'
 
 // Route-based code splitting
 // Only pool is included in the main bundle because of it's the most visited page
@@ -78,6 +78,8 @@ const App: React.FC = () => {
   useUserAgent()
   useInactiveListener()
   useSentryUser()
+  
+  const {isMobile} = useMatchBreakpoints()
 
   return (
     <Router history={history}>
@@ -86,7 +88,9 @@ const App: React.FC = () => {
         backgroundImageURL={
           ['swap', 'geobot-staking'].includes(window.location.href.split('/')?.[3])
             ? '/images/SwapBackground.svg'
-            : '/images/MainBackground.svg'
+            : isMobile 
+            ? '/images/MainBackgroundb.jpg'
+            : '/images/MainBackground.svg'  
         }
       />
       <Menu>
