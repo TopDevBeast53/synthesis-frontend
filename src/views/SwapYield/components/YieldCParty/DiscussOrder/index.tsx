@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useContext } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import BigNumber from 'bignumber.js'
 import { ethers } from 'ethers'
 import { ModalInput } from 'components/Modal'
@@ -19,10 +19,8 @@ import useToast from 'hooks/useToast'
 import { useHelixYieldSwap, useERC20 } from 'hooks/useContract'
 import { BIG_ZERO } from 'utils/bigNumber'
 import getThemeValue from 'uikit/util/getThemeValue'
-import { YieldCPartyContext } from 'views/SwapYield/context'
 import { getDecimalAmount, getBalanceAmount } from 'utils/formatBalance'
 import { useTokenSymbol } from 'views/SwapYield/hooks/useTokenSymbol'
-import { SwapState } from '../../../types'
 
 const DiscussOrder: React.FC<any> = (props) => {
   const theme = useTheme()
@@ -34,8 +32,7 @@ const DiscussOrder: React.FC<any> = (props) => {
   const headerBackground = 'transparent'
   const minWidth = '320px'
   const yieldSwapContract = useHelixYieldSwap()
-  const { swapId, tokenInfo, amount, onDismiss, bid, onSend } = props
-  const { updateMenuIndex } = useContext(YieldCPartyContext)
+  const { swapId, tokenInfo, amount, onDismiss, bid, bidId, onSend } = props
   const tokenAddress = tokenInfo.token
   const symbol = useTokenSymbol(tokenInfo)
   const erc20Contract = useERC20(tokenAddress)
@@ -116,7 +113,7 @@ const DiscussOrder: React.FC<any> = (props) => {
     if (!(await doValidation())) return
     try {
       if(bid){
-        yieldSwapContract.setBid(bid.id, decimalYAmount.toString()).then(async (tx) => {
+        yieldSwapContract.setBid(bidId, decimalYAmount.toString()).then(async (tx) => {
           await tx.wait()
           if (onSend) onSend()
           setPendingTx(false);   
@@ -127,11 +124,10 @@ const DiscussOrder: React.FC<any> = (props) => {
       } else {
         yieldSwapContract.makeBid(swapId, decimalYAmount.toString()).then(async (tx) => {
           await tx.wait()
-          updateMenuIndex(SwapState.Applied)
           if (onSend) onSend()
           setPendingTx(false);   
           onDismiss()
-          toastSuccess(`${t('Success')}!`,t('Bid added!'))
+          toastSuccess(`${t('Success')}!`,t('Bid added! Please check in My Bids.'))
         })
       }
     } catch (err) {

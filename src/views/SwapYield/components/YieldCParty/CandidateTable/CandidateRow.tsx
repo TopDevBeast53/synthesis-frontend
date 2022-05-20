@@ -45,7 +45,7 @@ const CandidateRow = ({ bidId, exToken, exAmount }) => {
   })
 
   const [showModal] = useModal(
-    <DiscussOrder bid={bid} onSend={onSendAsk} tokenInfo={exToken} amount={exAmount} />,
+    <DiscussOrder bid={bid} onSend={onSendAsk} tokenInfo={exToken} amount={exAmount} bidId={bidId}/>,
     false,
   )
   if (!bid) {

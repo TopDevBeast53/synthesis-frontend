@@ -70,7 +70,8 @@ const Sell = () => {
       })
     }
     fetchData()
-  }, [LpSwapContract, account, tableRefresh, fetchSwapData])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [LpSwapContract.address, account, tableRefresh])
 
   return (
     <Page>
