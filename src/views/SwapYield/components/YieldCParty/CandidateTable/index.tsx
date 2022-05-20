@@ -21,7 +21,7 @@ const StyledTableBorder = styled.div`
 const CandidateTable = (props) => {
   const { bids, exToken, exAmount } = props
   const tableWrapperEl = useRef<HTMLDivElement>(null)
-  if (bids.length === 0) return null
+  if (bids.length === 0) return <h3 style={{ textAlign: 'center', color: 'white' }}>No bids</h3>
 
   return (
     <StyledTableBorder>
