@@ -6,7 +6,7 @@ import { simpleRpcProvider } from 'utils/providers'
 import { setBlock } from '.'
 import { State } from '../types'
 
-export const usePollBlockNumber = (refreshTime = 6000) => {
+export const usePollBlockNumber = (refreshTime = 12000) => {
     const dispatch = useAppDispatch()
     const isWindowVisible = useIsWindowVisible()
 

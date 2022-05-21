@@ -37,7 +37,7 @@ const FarmsPoolsRow = () => {
   const startTimer = useCallback(() => {
     timer.current = setInterval(() => {
       setShowFarms((prev) => !prev)
-    }, 6000)
+    }, 12000)
   }, [timer])
 
   useEffect(() => {
