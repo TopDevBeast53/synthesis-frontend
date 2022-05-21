@@ -17,8 +17,15 @@ const getFontSize = ({ fontSize, small }: TextProps) => {
 }
 
 const Text = styled.div<TextProps>`
-  color: ${getColor};
-  font-size: ${getFontSize};
+  color: ${getColor};  
+  font-size: ${({ fontSize })=> (fontSize || "12px")};
+  
+  ${({ theme }) => theme.mediaQueries.md} {
+    font-size: ${({ fontSize })=> (fontSize || "14px")};
+  }
+  ${({ theme }) => theme.mediaQueries.lg} {
+    font-size: ${getFontSize};
+  }
   font-weight: ${({ bold }) => (bold ? 600 : 400)};
   line-height: 1.5;
   ${({ textTransform }) => textTransform && `text-transform: ${textTransform};`}

@@ -32,7 +32,11 @@ const StyledTokenInput = styled.div<InputProps>`
   border-radius: 12px;
   box-shadow: ${getBoxShadow};
   color: ${({ theme }) => theme.colors.text};
-  padding: 8px 16px 8px 0;
+  padding: 8px 8px 8px 0;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    padding: 8px 16px 8px 0;
+  }
+  
   width: 100%;
 `
 
@@ -45,10 +49,12 @@ const StyledInput = styled(Input)`
 
   ${({ theme }) => theme.mediaQueries.xs} {
     width: 80px;
+    font-size:12px;
   }
 
   ${({ theme }) => theme.mediaQueries.sm} {
     width: auto;
+    font-size:16px;
   }
 `
 
@@ -88,9 +94,9 @@ const ModalInput: React.FC<ModalInputProps> = ({
       <StyledTokenInput isWarning={isBalanceZero}>
         <Flex justifyContent="space-between" pl="16px">
           <Text fontSize="14px">{inputTitle}</Text>
-          <Text fontSize="14px">{t('Balance: %balance%', { balance: displayBalance(max) })}</Text>
+          <Text fontSize="14px" style={{textOverflow:"ellipsis", overflow:"hidden"}} ml="15px">{t('Balance: %balance%', { balance: displayBalance(max) })}</Text>
         </Flex>
-        <Flex alignItems="flex-end" justifyContent="space-around">
+        <Flex alignItems="center" justifyContent="space-around">
           <StyledInput
             pattern={`^[0-9]*[.,]?[0-9]{0,${decimals}}$`}
             inputMode="decimal"
@@ -103,7 +109,7 @@ const ModalInput: React.FC<ModalInputProps> = ({
           <Button scale="sm" onClick={onSelectMax} mr="8px">
             {t('Max')}
           </Button>
-          <Text fontSize="16px">{symbol}</Text>
+          <Text>{symbol}</Text>
         </Flex>
       </StyledTokenInput>
       {isBalanceZero && (

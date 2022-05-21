@@ -3,7 +3,7 @@ import useToast from 'hooks/useToast'
 import moment from 'moment'
 import React, { useContext, useMemo, useState } from 'react'
 import styled from 'styled-components'
-import { AutoRenewIcon, Button, ChevronDownIcon, useDelayedUnmount, useModal } from 'uikit'
+import { AutoRenewIcon, Button, ChevronDownIcon, useDelayedUnmount, useMatchBreakpoints, useModal } from 'uikit'
 import { YieldPartyContext } from 'views/SwapYield/context'
 import ArrowCell from '../../Cells/ArrowCell'
 import DurationCell from '../../Cells/DurationCells'
@@ -23,6 +23,7 @@ const ActiveRow = (props) => {
   const { toastSuccess, toastError } = useToast()
   const { tableRefresh, setTableRefresh } = useContext(YieldPartyContext)
   const { swapData, swapId } = props
+  const {isMobile} = useMatchBreakpoints()
 
   const [expanded, setExpanded] = useState(false)
   const [pendingTx, setPendingTx] = useState(false)
@@ -69,32 +70,30 @@ const ActiveRow = (props) => {
   return (
     <>
       <StyledRow onClick={handleOnRowClick}>
-        <StyledCell>
-        <TokenCell tokenInfo={swapData?.seller} amount={swapData?.seller.amount.toString()}/>          
+        <StyledCell style={{flex:isMobile ? "1": "3 1 10px"}}>
+          <TokenCell tokenInfo={swapData?.seller} amount={swapData?.seller.amount.toString()}/>          
         </StyledCell>
-        <StyledCell>
+        <StyledCell style={{flex:isMobile ? "none": "1 1 70px"}}> 
           <DurationCell duration={duration} />
         </StyledCell>
-        <StyledCellWithoutPadding>
+        {/* <StyledCellWithoutPadding>
           <ArrowCell />
-        </StyledCellWithoutPadding>
-        <StyledCell>
+        </StyledCellWithoutPadding> */}
+        <StyledCell style={{flex:isMobile ? "1": "3 1 130px"}}>
           <TokenCell tokenInfo={swapData?.buyer} amount={swapData?.ask.toString()}/>          
         </StyledCell>
         <StyledCellWithoutPadding>
           <ToolTipCell 
-            seller={swapData?.seller}             
+            seller={swapData?.seller}
             buyer={swapData?.buyer} 
             askAmount={swapData?.ask.toString()}
           />
         </StyledCellWithoutPadding>
-        <StyledCell>
-          <Button color="primary" onClick={handleUpdateClick} scale="sm" width="100px">
+        <StyledCell style={{flexDirection:"row"}}>
+          <Button color="primary" onClick={handleUpdateClick} scale="sm" width="100px" ml="15px">
             {' '}
             Update{' '}
           </Button>
-        </StyledCell>
-        <StyledCell style={{ zIndex: 10, flex: 3 }}>
           <Button
             isLoading={pendingTx}
             endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
@@ -102,11 +101,12 @@ const ActiveRow = (props) => {
             onClick={handleCloseClick}
             scale="sm"
             width="100px"
+            ml="15px"
           >
             {' '}
             Close{' '}
           </Button>
-        </StyledCell>
+        </StyledCell>        
         <StyledCell>
           <ArrowIcon color="primary" toggled={expanded} />
         </StyledCell>

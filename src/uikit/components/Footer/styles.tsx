@@ -3,14 +3,15 @@ import { darkColors } from '../../theme/colors'
 import { Box, Flex } from '../Box'
 
 export const StyledFooter = styled(Flex)`
-  background: ${darkColors.backgroundAlt};
+  background: ${darkColors.backgroundAlt};  
 `
 
 export const StyledList = styled.ul`
   list-style: none;
-  margin-bottom: 40px;
-  flex:1;
-
+  margin-bottom: 40px;  
+  ${({ theme }) => theme.mediaQueries.sm} {
+    flex:1;    
+  }
   ${({ theme }) => theme.mediaQueries.md} {
     margin-bottom: 0px;
   }
@@ -36,6 +37,7 @@ export const StyledListItem = styled.li`
 
 export const StyledIconMobileContainer = styled(Box)`
   margin-bottom: 24px;
+  text-align:center;
 `
 
 export const StyledToolsContainer = styled(Flex)`

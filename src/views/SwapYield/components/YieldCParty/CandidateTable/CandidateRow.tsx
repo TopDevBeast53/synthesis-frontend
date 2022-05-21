@@ -77,7 +77,11 @@ const CandidateRow = ({ bidId, exToken, exAmount }) => {
       <StyledCell>
         <CellContent>
           {account === bid.bidder && (
-            <Button width="100px" style={{ zIndex: 20 }} onClick={showModal}>
+            <Button 
+              maxWidth="100px"
+              scale = {isMobile ? 'sm' : 'md'} 
+              style={{ zIndex: 20 }}
+              onClick={showModal}>
               {' '}
               Update{' '}
             </Button>

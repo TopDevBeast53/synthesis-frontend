@@ -152,7 +152,7 @@ const YieldCPartyRow = ({ data, state, loading }) => {
           </StyledCell>
         } */}
         
-        <StyledCell style={{flex:isMobile ? "1": "3 1 140px"}}>          
+        <StyledCell style={{flex:isMobile ? "1": "3 1 140px"}}>
           <TokenCell tokenInfo={buyer} amount={data?.ask.toString()}/>                    
         </StyledCell>
 

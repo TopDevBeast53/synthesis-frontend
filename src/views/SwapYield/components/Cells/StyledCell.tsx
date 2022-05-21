@@ -6,6 +6,7 @@ export const StyledRow = styled.div`
   flex-wrap:wrap;
   display: flex;
   cursor: pointer;
+  padding-right:12px;  
 `
 
 export const StyledCell = styled(BaseCell)`  

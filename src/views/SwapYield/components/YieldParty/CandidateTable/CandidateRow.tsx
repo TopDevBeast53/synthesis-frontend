@@ -2,7 +2,7 @@ import { useHelixYieldSwap } from 'hooks/useContract'
 import useToast from 'hooks/useToast'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { AutoRenewIcon, Button, Skeleton, Text } from 'uikit'
+import { AutoRenewIcon, Button, Skeleton, Text, useMatchBreakpoints } from 'uikit'
 import BaseCell, { CellContent } from '../../Cells/BaseCell'
 import ExTokenCell from '../../Cells/ExTokenCell'
 import TokenCell from '../../Cells/TokenCell'
@@ -15,10 +15,11 @@ const StyledRow = styled.div`
 `
 const StyledCell = styled(BaseCell)`
   flex: 4.5;
-  padding-left: 32px;
+  padding-left: 10px;
 
   ${({ theme }) => theme.mediaQueries.sm} {
     flex: 1 0 120px;
+    padding-left: 32px;
   }
 `
 const getEllipsis = (account) => {
@@ -29,6 +30,7 @@ const CandidateRow = ({ bidId, swapData }) => {
   const { toastSuccess, toastError } = useToast()
   const [bidData, setBidData] = useState<any>()
   const [pendingTx, setPendingTx] = useState(false)
+  const { isMobile } = useMatchBreakpoints()
   const handleAcceptClick = (e) => {
     e.stopPropagation()
     setPendingTx(true)
@@ -80,9 +82,10 @@ const CandidateRow = ({ bidId, swapData }) => {
         <CellContent>
           <Button
             isLoading={pendingTx}
-            endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
-            width="100px"
+            endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}            
             style={{ zIndex: 20 }}
+            maxWidth="100px"
+            scale = {isMobile ? 'sm' : 'md'}
             onClick={handleAcceptClick}
           >
             {' '}

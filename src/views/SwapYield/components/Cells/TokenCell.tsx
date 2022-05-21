@@ -9,8 +9,8 @@ const TokenCell = (props) => {
   if(!tokenInfo || amount ===undefined){
     return (
         <CellContent>
-        <Skeleton />
-        <Skeleton mt="4px" />
+          <Skeleton />
+          <Skeleton mt="4px" />
       </CellContent>
     )
   } 
