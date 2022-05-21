@@ -9,6 +9,7 @@ import useGetTopPoolsByApr from 'views/Home/hooks/useGetTopPoolsByApr'
 import { vaultPoolConfig } from 'config/constants/pools'
 import TopFarmPool from './TopFarmPool'
 import RowHeading from './RowHeading'
+import { FAST_INTERVAL } from 'contexts/RefreshContext'
 
 const Grid = styled.div`
   display: grid;
@@ -37,7 +38,7 @@ const FarmsPoolsRow = () => {
   const startTimer = useCallback(() => {
     timer.current = setInterval(() => {
       setShowFarms((prev) => !prev)
-    }, 12000)
+    }, FAST_INTERVAL)
   }, [timer])
 
   useEffect(() => {

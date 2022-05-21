@@ -1,3 +1,4 @@
+import { FAST_INTERVAL } from 'contexts/RefreshContext'
 import useInterval from 'hooks/useInterval'
 import useIsWindowVisible from 'hooks/useIsWindowVisible'
 import { useSelector } from 'react-redux'
@@ -6,7 +7,7 @@ import { simpleRpcProvider } from 'utils/providers'
 import { setBlock } from '.'
 import { State } from '../types'
 
-export const usePollBlockNumber = (refreshTime = 12000) => {
+export const usePollBlockNumber = (refreshTime = FAST_INTERVAL) => {
     const dispatch = useAppDispatch()
     const isWindowVisible = useIsWindowVisible()
 
