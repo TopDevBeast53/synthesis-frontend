@@ -10,17 +10,33 @@ import Sell from './Sell'
 import Buy from './Buy'
 
 const Wrapper = styled.div`
-  display: inline-block;
   a {
     padding-left: 12px;
     padding-right: 12px;
   }
+  div{
+    flex-direction:column;
+    margin-top:32px;
+  }
 
   ${({ theme }) => theme.mediaQueries.sm} {
-    margin-left: 16px;
+    margin-left: 16px;    
+    display: inline-block;
+  }
+  ${({ theme }) => theme.mediaQueries.md} {
+    div{
+      flex-direction:row;
+    }      
   }
 `
+const FlexDiv = styled.div`
 
+  ${({ theme }) => theme.mediaQueries.sm} {
+    justify-content:space-between;
+    align-items:center;
+    display:flex;
+  }
+`
 export default function SwapLiquidity() {
   const { t } = useTranslation()
   const { account } = useWeb3React()
@@ -39,8 +55,8 @@ export default function SwapLiquidity() {
   }
   return (
     <SwapLiquidityContext.Provider value={context}>
-      <PageHeader background="transparent">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <PageHeader background="transparent" style={{textAlign:"center"}}>
+        <FlexDiv>
           <Heading as="h1" scale="xxl" color="secondary" style={{ display: 'inline-block', verticalAlign: 'middle' }}>
             {t('Swap LP Tokens')}
           </Heading>
@@ -54,7 +70,7 @@ export default function SwapLiquidity() {
               </Wrapper>
             )
           }
-        </div>
+        </FlexDiv>
       </PageHeader>
       <>{menuIndex === 0 ? <Buy /> : menuIndex === 1 && <Sell />}</>
     </SwapLiquidityContext.Provider>

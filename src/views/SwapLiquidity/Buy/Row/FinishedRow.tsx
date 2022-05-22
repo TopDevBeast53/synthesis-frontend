@@ -4,7 +4,7 @@ import { StyledRow, StyledCell, StyledCellWithoutPadding } from 'views/SwapYield
 import TokensCell from 'views/SwapYield/components/Cells/TokensCell'
 import ToolTipCell from 'views/SwapYield/components/Cells/ToolTipCell'
 
-const FinishedRow=({swapData})=>{ 
+const FinishedRow=({swapData, seller, buyer})=>{ 
     return (
         <>
             <StyledRow>
@@ -19,9 +19,10 @@ const FinishedRow=({swapData})=>{
                 </StyledCell>
                 <StyledCellWithoutPadding>
                     <ToolTipCell 
-                        seller={swapData?.seller}             
-                        buyer={swapData?.buyer} 
+                        seller={seller}             
+                        buyer={buyer} 
                         askAmount={swapData?.ask.toString()}
+                        isLiquidity
                     />
                 </StyledCellWithoutPadding>                
             </StyledRow>

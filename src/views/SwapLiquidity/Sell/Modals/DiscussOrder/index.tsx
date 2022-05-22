@@ -20,6 +20,8 @@ import {
 } from 'uikit'
 import getThemeValue from 'uikit/util/getThemeValue'
 import { getAddress } from 'utils/addressHelpers'
+import { getTokenSymbol } from 'views/SwapYield/components/Cells/ToolTipCell'
+import { useAllTokens } from 'hooks/Tokens'
 
 const getEllipsis = (account) => {
   return account ? `${account.substring(0, 5)}...${account.substring(account.length - 5)}` : null
@@ -34,11 +36,10 @@ const DiscussOrder: React.FC<any> = (props) => {
   const bodyPadding = '24px'
   const headerBackground = 'transparent'
   const minWidth = '320px'
-  const { swapId, onSend, onDismiss, swapData } = props
+  const { swapId, onSend, onDismiss, swapData,buyer } = props  
   const { data: farms } = useFarms()
-  const toSellerToken = farms.find((item) => {
-    return getAddress(item.lpAddresses) === swapData?.toSellerToken
-  })
+  const tokens = useAllTokens()
+  
   const [yAmount, setYAmount] = useState(getBalanceNumber(swapData?.ask.toString()).toString())
 
   const handleYAmountChange = (input) => {
@@ -76,7 +77,7 @@ const DiscussOrder: React.FC<any> = (props) => {
       <ModalBody p={bodyPadding}>
         <div style={{ marginTop: '1em' }}>
           <div style={{ display: 'flex', marginBottom: '1em', alignItems: 'center' }}>
-            <Text style={{ marginRight: '1em' }}>{toSellerToken.lpSymbol}</Text>
+            <Text style={{ marginRight: '1em' }}>{getTokenSymbol(farms, tokens, buyer)}</Text>
             <BalanceInput value={yAmount} onUserInput={handleYAmountChange} />
           </div>
           <Button

@@ -1,6 +1,7 @@
+import { useAllTokens } from 'hooks/Tokens'
 import { useHelixLpSwap } from 'hooks/useContract'
 import useToast from 'hooks/useToast'
-import React, { useContext, useState } from 'react'
+import React, { useContext, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { AutoRenewIcon, Button, ChevronDownIcon, useDelayedUnmount, useModal } from 'uikit'
 import { SwapLiquidityContext } from 'views/SwapLiquidity/context'
@@ -17,14 +18,14 @@ const ArrowIcon = styled(ChevronDownIcon)<{ toggled: boolean }>`
 `
 
 const ActiveRow = (props) => {
-  const LpSwapContract = useHelixLpSwap()
-  const { toastSuccess, toastError } = useToast()
-  const { swapData, swapId } = props
-  const [expanded, setExpanded] = useState(false)
-  const [pendingTx, setPendingTx] = useState(false)
-  const shouldRenderDetail = useDelayedUnmount(expanded, 300)
-  const { setTableRefresh, tableRefresh } = useContext(SwapLiquidityContext)
-
+    const LpSwapContract = useHelixLpSwap()
+    const { toastSuccess, toastError } = useToast()
+    const { swapData, swapId, seller, buyer } = props
+    const [expanded, setExpanded] = useState(false)
+    const [pendingTx, setPendingTx] = useState(false)
+    const shouldRenderDetail = useDelayedUnmount(expanded, 300)
+    const { setTableRefresh, tableRefresh } = useContext(SwapLiquidityContext)
+    
     const handleOnRowClick = () => {
         setExpanded(!expanded)        
     }
@@ -47,14 +48,14 @@ const ActiveRow = (props) => {
     const onSendAsk = () =>{
         setTableRefresh(tableRefresh + 1)
     }
-    const [showDiscussModal] = useModal(<DiscussOrder swapId={swapId} onSend={onSendAsk} swapData={swapData}/>,false)
+    const [showDiscussModal] = useModal(<DiscussOrder swapId={swapId} onSend={onSendAsk} swapData={swapData} buyer={buyer}/>,false)
     const handleUpdateClick = (e) => {
         e.stopPropagation();
         showDiscussModal()
     }
     if(swapData){
         if(swapData.isOpen === false) return null
-    }
+    }    
     return (
         <>
             <StyledRow onClick={handleOnRowClick}>
@@ -69,9 +70,10 @@ const ActiveRow = (props) => {
                 </StyledCell>
                 <StyledCellWithoutPadding>
                     <ToolTipCell 
-                        seller={swapData?.seller}             
-                        buyer={swapData?.buyer} 
+                        seller={seller}             
+                        buyer={buyer} 
                         askAmount={swapData?.ask.toString()}
+                        isLiquidity
                     />
                 </StyledCellWithoutPadding>
 

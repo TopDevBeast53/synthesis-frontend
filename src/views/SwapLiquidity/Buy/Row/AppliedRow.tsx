@@ -19,7 +19,7 @@ const AppliedRow=(props)=>{
     const LpSwapContract = useHelixLpSwap()
     const {tableRefresh, setTableRefresh} = useContext(SwapLiquidityContext)
     const { toastSuccess, toastError } = useToast()        
-    const {swapData} = props
+    const {swapData, seller, buyer} = props
     const [expanded, setExpanded] = useState(false)
     const [pendingTx, setPendingTx] = useState(false)
     const shouldRenderDetail = useDelayedUnmount(expanded, 300)
@@ -58,9 +58,10 @@ const AppliedRow=(props)=>{
                 </StyledCell>
                 <StyledCellWithoutPadding>
                 <ToolTipCell 
-                    seller={swapData?.seller}             
-                    buyer={swapData?.buyer} 
+                    seller={seller}             
+                    buyer={buyer} 
                     askAmount={swapData?.ask.toString()}
+                    isLiquidity
                 />
                 </StyledCellWithoutPadding>
                 <StyledCell style={{zIndex:10, flex:3}}>

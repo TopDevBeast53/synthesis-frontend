@@ -4,7 +4,7 @@ import { StyledRow, StyledCell, StyledCellWithoutPadding } from 'views/SwapYield
 import TokensCell from 'views/SwapYield/components/Cells/TokensCell'
 import ToolTipCell from 'views/SwapYield/components/Cells/ToolTipCell'
 
-const EarnedRow=({swapData})=>{ 
+const EarnedRow=({swapData, seller, buyer})=>{ 
     if(swapData){
         if(swapData.isOpen === true) return null
     }    
@@ -22,9 +22,10 @@ const EarnedRow=({swapData})=>{
                 </StyledCell>
                 <StyledCellWithoutPadding>
                 <ToolTipCell 
-                    seller={swapData?.seller}             
-                    buyer={swapData?.buyer} 
+                    seller={seller}             
+                    buyer={buyer} 
                     askAmount={swapData?.ask.toString()}
+                    isLiquidity
                 />
                 </StyledCellWithoutPadding>                
             </StyledRow>

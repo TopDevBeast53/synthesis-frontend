@@ -18,7 +18,7 @@ const ArrowIcon = styled(ChevronDownIcon)<{ toggled: boolean }>`
 const ActiveRow=(props)=>{
     const {tableRefresh, setTableRefresh} = useContext(SwapLiquidityContext)
     const { account } = useWeb3React()
-    const {swapData} = props
+    const {swapData, seller, buyer} = props
     const [expanded, setExpanded] = useState(false)
     const shouldRenderDetail = useDelayedUnmount(expanded, 300)
 
@@ -29,7 +29,7 @@ const ActiveRow=(props)=>{
     const onSendAsk = () =>{
         setTableRefresh(tableRefresh + 1)
     }
-    const [showModal] = useModal(<DiscussOrder swapData={swapData} onSend={onSendAsk}/>,false)
+    const [showModal] = useModal(<DiscussOrder swapData={swapData} onSend={onSendAsk} buyer={buyer}/>,false)
 
     return (
         <>
@@ -44,11 +44,12 @@ const ActiveRow=(props)=>{
                     <TokensCell token={swapData?.toSellerToken} balance={swapData?.ask.toString()} />
                 </StyledCell>
                 <StyledCellWithoutPadding>
-                    {/* <ToolTipCell 
-                        seller={swapData?.seller}             
-                        buyer={swapData?.buyer} 
+                    <ToolTipCell 
+                        seller={seller}             
+                        buyer={buyer} 
                         askAmount={swapData?.ask.toString()}
-                    /> */}
+                        isLiquidity
+                    />
                 </StyledCellWithoutPadding>
                 {
                     account && (

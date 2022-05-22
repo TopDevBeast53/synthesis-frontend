@@ -34,7 +34,7 @@ const DiscussOrder: React.FC<any> = (props) => {
   const bodyPadding = '24px'
   const headerBackground = 'transparent'
   const minWidth = '320px'
-  const { bidData, bidId, swapData, onSend, onDismiss } = props
+  const { bidData, bidId, swapData, onSend, onDismiss, buyer } = props
   const { data: farms } = useFarms()
   const lpToken = farms.find((item) => getAddress(item.lpAddresses) === swapData?.toSellerToken)
   const { userData } = useFarmFromLpSymbol(lpToken?.lpSymbol)
