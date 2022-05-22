@@ -85,13 +85,14 @@ const App: React.FC = () => {
     <Router history={history}>
       <ResetCSS />
       <GlobalStyle
-        backgroundImageURL={
+        backgroundImageURL='/images/MainBackground.svg'
+        /* backgroundImageURL={
           ['swap', 'geobot-staking'].includes(window.location.href.split('/')?.[3])
             ? '/images/SwapBackground.svg'
             : isMobile 
             ? '/images/MainBackgroundb.jpg'
             : '/images/MainBackground.svg'  
-        }
+        } */
       />
       <Menu>
         <SuspenseWithChunkError fallback={<PageLoader />}>
