@@ -153,14 +153,24 @@ const YieldCPartyRow = ({ data, state, loading }) => {
         } */}
         
         <StyledCell style={{flex:isMobile ? "1": "3 1 140px"}}>
-          <TokenCell tokenInfo={buyer} amount={data?.ask.toString()}/>                    
+          <TokenCell tokenInfo={buyer} 
+                    amount={
+                        (state === SwapState.Pending || state === SwapState.Finished)  ?
+                        data?.buyer.amount.toString()
+                        :
+                        data?.ask.toString()
+                      }
+          />                    
         </StyledCell>
 
         <StyledCellWithoutPadding style={{alignSelf:"center"}}>
           <ToolTipCell 
             seller={seller}             
             buyer={buyer} 
-            askAmount={ask.toString()}
+            askAmount={(state === SwapState.Pending || state === SwapState.Finished)  ?
+              data?.buyer.amount.toString()
+              :
+              data?.ask.toString()}
           />        
         </StyledCellWithoutPadding>
         <StyledCell style={{ zIndex: 10, flex:isMobile ? "None": "3" }} ml="8px">

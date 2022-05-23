@@ -16,7 +16,7 @@ const YieldPartyRow = ({ data: swapId }) => {
   }, [YieldSwapContract, swapId])
 
   if (filterState === OrderState.Active) return <ActiveRow swapData={swapData} swapId={swapId} />
-  if (filterState === OrderState.Completed) return <EarnedRow swapData={swapData} />
+  if (filterState === OrderState.Completed) return <EarnedRow swapData={swapData} swapId={swapId} />
   return null
 }
 

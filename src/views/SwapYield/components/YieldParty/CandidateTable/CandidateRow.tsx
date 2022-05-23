@@ -1,3 +1,4 @@
+import { useWeb3React } from '@web3-react/core'
 import { useHelixYieldSwap } from 'hooks/useContract'
 import useToast from 'hooks/useToast'
 import React, { useEffect, useState } from 'react'
@@ -22,7 +23,7 @@ const StyledCell = styled(BaseCell)`
     padding-left: 32px;
   }
 `
-const getEllipsis = (account) => {
+const getEllipsis = (account) => {  
   return account ? `${account.substring(0, 5)}...${account.substring(account.length - 5)}` : null
 }
 const CandidateRow = ({ bidId, swapData }) => {
@@ -31,6 +32,7 @@ const CandidateRow = ({ bidId, swapData }) => {
   const [bidData, setBidData] = useState<any>()
   const [pendingTx, setPendingTx] = useState(false)
   const { isMobile } = useMatchBreakpoints()
+  const {account} = useWeb3React()
   const handleAcceptClick = (e) => {
     e.stopPropagation()
     setPendingTx(true)
@@ -72,7 +74,7 @@ const CandidateRow = ({ bidId, swapData }) => {
     <StyledRow>
       <StyledCell>
         <CellContent>
-          <Text>{getEllipsis(bidData?.bidder)}</Text>
+          <Text>{account === bidData?.bidder ? 'Me' : getEllipsis(bidData?.bidder)}</Text>
         </CellContent>
       </StyledCell>
       <StyledCell>

@@ -113,22 +113,19 @@ const DiscussOrder: React.FC<any> = (props) => {
     if (!(await doValidation())) return
     try {
       if(bid){
-        yieldSwapContract.setBid(bidId, decimalYAmount.toString()).then(async (tx) => {
-          await tx.wait()
-          if (onSend) onSend()
-          setPendingTx(false);   
-          onDismiss()
-          toastSuccess(`${t('Success')}!`,t('Update success!'))
-        })
-
+        const tx = await yieldSwapContract.setBid(bidId, decimalYAmount.toString())
+        await tx.wait()
+        if (onSend) onSend()
+        setPendingTx(false);   
+        onDismiss()
+        toastSuccess(`${t('Success')}!`,t('Update success!'))
       } else {
-        yieldSwapContract.makeBid(swapId, decimalYAmount.toString()).then(async (tx) => {
-          await tx.wait()
-          if (onSend) onSend()
-          setPendingTx(false);   
-          onDismiss()
-          toastSuccess(`${t('Success')}!`,t('Bid added! Please check in My Bids.'))
-        })
+        const tx = await yieldSwapContract.makeBid(swapId, decimalYAmount.toString())
+        await tx.wait()
+        if (onSend) onSend()
+        setPendingTx(false);   
+        onDismiss()
+        toastSuccess(`${t('Success')}!`,t('Bid added! Please check in My Bids.'))        
       }
     } catch (err) {
       setPendingTx(false)

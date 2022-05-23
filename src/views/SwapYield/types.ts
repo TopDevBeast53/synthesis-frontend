@@ -1,6 +1,7 @@
 export enum OrderState {
     Active,
     Completed,
+    Withdrawn
 }
 
 export enum SwapState {

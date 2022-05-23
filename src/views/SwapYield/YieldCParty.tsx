@@ -96,7 +96,7 @@ const YieldCParty = () => {
       bidFetched = false
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [account, refresh, menuIndex])
+  }, [account, refresh, menuIndex, yieldSwapContract])
 
   return (
     <>
