@@ -43,12 +43,8 @@ const EarnedRow=({swapData, swapId})=>{
         }
       }
     if(swapData){
-        if(swapData.status === 0) return null
-    }else{
-        return null
-    }    
-    console.log("=====swap data", swapData, isPast)
-
+        if(swapData.status !== 1) return null
+    }        
     return (
         <>
             <StyledRow>

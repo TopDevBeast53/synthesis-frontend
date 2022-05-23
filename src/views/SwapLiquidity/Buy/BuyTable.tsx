@@ -2,7 +2,7 @@ import React from 'react'
 import BaseTable from '../components/BaseTable'
 import Row from './Row'
 
-const SellTable = (props) => {
+const BuyTable = (props) => {
   const { data } = props
   return (
     <BaseTable>
@@ -13,4 +13,4 @@ const SellTable = (props) => {
   )
 }
 
-export default SellTable
+export default BuyTable

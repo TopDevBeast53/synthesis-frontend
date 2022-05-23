@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { AutoRenewIcon, Button, Skeleton, Text } from 'uikit'
 import BaseCell, { CellContent } from 'views/SwapYield/components/Cells/BaseCell'
-import LPTokenCell from 'views/SwapYield/components/Cells/LPTokenCell'
+import TokensCell from 'views/SwapYield/components/Cells/TokensCell'
 
 const StyledRow = styled.div`
   background-color: transparent;
@@ -58,7 +58,7 @@ const CandidateRow = ({ bidId, swapData }) => {
           </CellContent>
         </StyledCell>
         <StyledCell>
-          <LPTokenCell />
+          <Skeleton />
         </StyledCell>
       </StyledRow>
     )
@@ -71,7 +71,7 @@ const CandidateRow = ({ bidId, swapData }) => {
         </CellContent>
       </StyledCell>
       <StyledCell>
-        <LPTokenCell lpTokenAddress={swapData?.toSellerToken} balance={bidData?.amount.toString()} />
+        <TokensCell token={swapData?.toSellerToken} balance={bidData?.amount.toString()} />        
       </StyledCell>
       <StyledCell>
         <CellContent>

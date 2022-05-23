@@ -5,7 +5,6 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { AutoRenewIcon, Button, Skeleton, Text, useMatchBreakpoints } from 'uikit'
 import BaseCell, { CellContent } from '../../Cells/BaseCell'
-import ExTokenCell from '../../Cells/ExTokenCell'
 import TokenCell from '../../Cells/TokenCell'
 
 const StyledRow = styled.div`

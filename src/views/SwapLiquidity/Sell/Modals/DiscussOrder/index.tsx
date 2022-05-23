@@ -1,11 +1,10 @@
 import BigNumber from 'bignumber.js'
+import { useAllTokens } from 'hooks/Tokens'
 import { useHelixLpSwap } from 'hooks/useContract'
 import useToast from 'hooks/useToast'
 import React, { useState } from 'react'
 import { useFarms } from 'state/farms/hooks'
 import { useTheme } from 'styled-components'
-import { BIG_ZERO } from 'utils/bigNumber'
-import { getBalanceNumber, getDecimalAmount } from 'utils/formatBalance'
 import {
   AutoRenewIcon,
   BalanceInput,
@@ -16,16 +15,16 @@ import {
   ModalContainer,
   ModalHeader,
   ModalTitle,
-  Text,
+  Text
 } from 'uikit'
 import getThemeValue from 'uikit/util/getThemeValue'
-import { getAddress } from 'utils/addressHelpers'
+import { BIG_ZERO } from 'utils/bigNumber'
+import { getBalanceNumber, getDecimalAmount } from 'utils/formatBalance'
 import { getTokenSymbol } from 'views/SwapYield/components/Cells/ToolTipCell'
-import { useAllTokens } from 'hooks/Tokens'
 
-const getEllipsis = (account) => {
-  return account ? `${account.substring(0, 5)}...${account.substring(account.length - 5)}` : null
-}
+// const getEllipsis = (account) => {
+//   return account ? `${account.substring(0, 5)}...${account.substring(account.length - 5)}` : null
+// }
 
 const DiscussOrder: React.FC<any> = (props) => {
   const theme = useTheme()

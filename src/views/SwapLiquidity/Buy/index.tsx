@@ -39,17 +39,17 @@ const Sell = () => {
   const { fetchSwapData } = useLpSwap()
   const [menuIndex, setMenuIndex] = useState(SwapState.All)
   const [swaps, setSwaps] = useState([])
-  const [bidIdsPerUser, setBidIdsPerUser] = useState([])
+  const [biddedSwapIdsOfCurrentUser, setBidIdsPerUser] = useState([])
   const { tableRefresh, setFilterState } = useContext(SwapLiquidityContext)
   const {isMobile} = useMatchBreakpoints()
   const filteredSwaps = useMemo(() => {
     if(!account) return []
     if (menuIndex === SwapState.Finished) return filter(swaps, { isOpen: false, buyer: account })
     if (menuIndex === SwapState.All)
-      return swaps.filter((s, i) => s.isOpen && !includes(bidIdsPerUser, i) && s.seller !== account)
-    if (menuIndex === SwapState.Applied) return swaps.filter((s, i) => s.isOpen && includes(bidIdsPerUser, i))
+      return swaps.filter((s, i) => s.isOpen && !includes(biddedSwapIdsOfCurrentUser, i) && s.seller !== account)
+    if (menuIndex === SwapState.Applied) return swaps.filter((s, i) => s.isOpen && includes(biddedSwapIdsOfCurrentUser, i))
     return []
-  }, [menuIndex, swaps, bidIdsPerUser, account])
+  }, [menuIndex, swaps, biddedSwapIdsOfCurrentUser, account])
 
   const [handleAdd] = useModal(<CreateOrderDialog />)
 
@@ -60,24 +60,26 @@ const Sell = () => {
   useEffect(() => {
     async function fetchData() {
       if (tableRefresh < 0) return
-  
       // fetch swaps
       const fetchedSwaps = await fetchSwapData();
       const fetchedSwapsWithIds = fetchedSwaps.map((s, i) => ({ ...s, id: i }))
       setSwaps(fetchedSwapsWithIds)
-
-      if (!account) return
-  
-      // fetch bid Ids
-      LpSwapContract.getBidderSwapIds(account).then((fetchBidderSwapIds) => {
-        const normalNumberBidIds = fetchBidderSwapIds.map((b) => b.toNumber())
-        setBidIdsPerUser(normalNumberBidIds)
-      })
     }
     fetchData()
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [LpSwapContract.address, account, tableRefresh])
+  }, [LpSwapContract.address, tableRefresh])
 
+  useEffect(()=>{    
+    if (tableRefresh < 0) return    
+    if (!account) return
+    async function fetchBidSwapId() {      
+      const fetchBidderSwapIds = await LpSwapContract.getBidderSwapIds(account)
+      const normalNumberBidIds = fetchBidderSwapIds.map((b) => b.toNumber())      
+      setBidIdsPerUser(normalNumberBidIds)
+    }
+    // fetch bid Ids
+    fetchBidSwapId()
+  }, [account,tableRefresh, LpSwapContract])  
   return (
     <Page>
       {

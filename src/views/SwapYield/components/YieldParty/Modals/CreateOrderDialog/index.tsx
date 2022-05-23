@@ -6,7 +6,7 @@ import { useERC20s, useHelixYieldSwap } from 'hooks/useContract'
 import useTheme from 'hooks/useTheme'
 import React, { useEffect, useMemo, useState } from 'react'
 import { useMemoFarms } from 'state/farms/hooks'
-import { useAllTokenBalances, useTokenBalance } from 'state/wallet/hooks'
+import { useAllTokenBalances } from 'state/wallet/hooks'
 import { Button, ButtonMenu, ButtonMenuItem, Modal } from 'uikit'
 import { getAddress } from 'utils/addressHelpers'
 import { BIG_ZERO } from 'utils/bigNumber'
@@ -44,8 +44,6 @@ const CreateOrderDialog = (props) => {
   const [minDuration, setMinDuration] = useState(0)
   const [maxDuration, setMaxDuration] = useState(0)
 
-  useTokenBalance()
-  
   const [tempLPOptions, lpAddressList] = useMemo(() => {
     const lpOptions = farmsLP
       .filter((lp) => lp.pid !== 0)

@@ -1,13 +1,13 @@
-import React, { useContext, useEffect, useState } from 'react'
 import { useWeb3React } from '@web3-react/core'
 import { useHelixLpSwap } from 'hooks/useContract'
-import { SwapLiquidityContext } from 'views/SwapLiquidity/context'
+import React, { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Button, Skeleton, Text, useModal } from 'uikit'
+import { SwapLiquidityContext } from 'views/SwapLiquidity/context'
 import BaseCell, { CellContent } from 'views/SwapYield/components/Cells/BaseCell'
-import LPTokenCell from 'views/SwapYield/components/Cells/LPTokenCell'
-import DiscussOrder from '../Modals/DiscussOrder'
+import TokensCell from 'views/SwapYield/components/Cells/TokensCell'
 import { SwapState } from '../../types'
+import DiscussOrder from '../Modals/DiscussOrder'
 
 const StyledRow = styled.div`
   background-color: transparent;
@@ -27,7 +27,7 @@ const StyledCell = styled(BaseCell)`
 const getEllipsis = (account) => {
   return account ? `${account.substring(0, 5)}...${account.substring(account.length - 5)}` : null
 }
-const CandidateRow = ({ bidId, swapData }) => {
+const CandidateRow = ({ bidId, swapData, buyer }) => {
   const LpSwapContract = useHelixLpSwap()
   const { account } = useWeb3React()
   const { tableRefresh, setTableRefresh, filterState } = useContext(SwapLiquidityContext)
@@ -36,7 +36,7 @@ const CandidateRow = ({ bidId, swapData }) => {
     setTableRefresh(tableRefresh + 1)
   }
   const [showModal] = useModal(
-    <DiscussOrder bidData={bidData} swapData={swapData} bidId={bidId} onSend={onSendAsk} />,
+    <DiscussOrder bidData={bidData} swapData={swapData} bidId={bidId} onSend={onSendAsk} buyer={buyer}/>,
     false,
   )
   useEffect(() => {
@@ -67,8 +67,8 @@ const CandidateRow = ({ bidId, swapData }) => {
           <Text>{getEllipsis(bidData?.bidder)}</Text>
         </CellContent>
       </StyledCell>
-      <StyledCell>
-        <LPTokenCell lpTokenAddress={swapData?.toBuyerToken} balance={bidData?.amount.toString()} />
+      <StyledCell>        
+          <TokensCell token={swapData?.toSellerToken} balance={bidData?.amount.toString()} />
       </StyledCell>
       {filterState === SwapState.Applied && account === bidData?.bidder && (
         <StyledCell>

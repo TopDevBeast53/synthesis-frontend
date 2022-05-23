@@ -16,7 +16,7 @@ const StyledTableBorder = styled.div`
   backdrop-filter: blur(80px);
   padding: 1px 1px 3px 1px;
   background-size: 400% 400%;
-`
+` 
 
 const CandidateTable = (props) => {
   const { swap } = props

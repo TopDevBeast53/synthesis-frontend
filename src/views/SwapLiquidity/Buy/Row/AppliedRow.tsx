@@ -78,7 +78,7 @@ const AppliedRow=(props)=>{
         
             {shouldRenderDetail && (
                 <div style={{padding:"10px 10px", minHeight:"5em"}}>
-                    <CandidateTable swap={swapData}/>
+                    <CandidateTable swap={swapData} buyer={buyer}/>
                 </div>
             )}        
         

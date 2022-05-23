@@ -19,7 +19,7 @@ const StyledTableBorder = styled.div`
 `
 
 const CandidateTable = (props) => {
-  const { swap } = props
+  const { swap, buyer } = props
   const tableWrapperEl = useRef<HTMLDivElement>(null)
   if (!swap) return null
   if (swap.bidIds.length === 0) return <h3 style={{ textAlign: 'center', color: 'white' }}>No bids</h3>
@@ -28,7 +28,7 @@ const CandidateTable = (props) => {
     <StyledTableBorder>
       <StyledTable id="pools-table" role="table" ref={tableWrapperEl}>
         {swap.bidIds.map((bidId) => (
-          <CandidateRow key={bidId} bidId={bidId} swapData={swap} />
+          <CandidateRow key={bidId} bidId={bidId} swapData={swap} buyer={buyer} />
         ))}
       </StyledTable>
     </StyledTableBorder>

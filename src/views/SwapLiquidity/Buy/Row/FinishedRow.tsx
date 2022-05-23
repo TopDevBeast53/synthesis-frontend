@@ -15,13 +15,13 @@ const FinishedRow=({swapData, seller, buyer})=>{
                     <ArrowCell back/>
                 </StyledCellWithoutPadding> 
                 <StyledCell>
-                    <TokensCell token={swapData?.toSellerToken} balance={swapData?.ask.toString()}/>                   
+                    <TokensCell token={swapData?.toSellerToken} balance={swapData?.cost.toString()}/>                   
                 </StyledCell>
                 <StyledCellWithoutPadding>
                     <ToolTipCell 
                         seller={seller}             
                         buyer={buyer} 
-                        askAmount={swapData?.ask.toString()}
+                        askAmount={swapData?.cost.toString()}
                         isLiquidity
                     />
                 </StyledCellWithoutPadding>                

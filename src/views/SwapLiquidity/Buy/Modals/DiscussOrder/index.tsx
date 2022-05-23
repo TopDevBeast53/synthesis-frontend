@@ -1,13 +1,14 @@
-import React, { useState, useCallback, useEffect } from 'react'
 import { useWeb3React } from '@web3-react/core'
-import { useHelixLpSwap, useERC20 } from 'hooks/useContract'
-import { ethers } from 'ethers'
 import BigNumber from 'bignumber.js'
-import useToast from 'hooks/useToast'
 import { ModalInput } from 'components/Modal'
-import { getAddress } from 'utils/addressHelpers'
-import { useFarms, useFarmFromLpSymbol } from 'state/farms/hooks'
 import { useTranslation } from 'contexts/Localization'
+import { ethers } from 'ethers'
+import { useAllTokens } from 'hooks/Tokens'
+import { useERC20, useHelixLpSwap } from 'hooks/useContract'
+import useToast from 'hooks/useToast'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { useMemoFarms } from 'state/farms/hooks'
+import { useAllTokenBalances } from 'state/wallet/hooks'
 import { useTheme } from 'styled-components'
 import {
   AutoRenewIcon,
@@ -17,11 +18,12 @@ import {
   ModalCloseButton,
   ModalContainer,
   ModalHeader,
-  ModalTitle,
+  ModalTitle
 } from 'uikit'
 import getThemeValue from 'uikit/util/getThemeValue'
+import { getAddress } from 'utils/addressHelpers'
 import { BIG_ZERO } from 'utils/bigNumber'
-import { getDecimalAmount, getBalanceAmount } from 'utils/formatBalance'
+import { getBalanceAmount, getDecimalAmount } from 'utils/formatBalance'
 
 const DiscussOrder: React.FC<any> = (props) => {
   const theme = useTheme()
@@ -35,9 +37,9 @@ const DiscussOrder: React.FC<any> = (props) => {
   const headerBackground = 'transparent'
   const minWidth = '320px'
   const { bidData, bidId, swapData, onSend, onDismiss, buyer } = props
-  const { data: farms } = useFarms()
-  const lpToken = farms.find((item) => getAddress(item.lpAddresses) === swapData?.toSellerToken)
-  const { userData } = useFarmFromLpSymbol(lpToken?.lpSymbol)
+  const allTokens = useAllTokens() // All Stable Token
+  const allTokenBalances = useAllTokenBalances()  
+  const { data: farms } = useMemoFarms()  
   const [allowedValue, setAllowedValue] = useState(BIG_ZERO)
 
   const exContract = useERC20(swapData?.toSellerToken)
@@ -46,11 +48,25 @@ const DiscussOrder: React.FC<any> = (props) => {
   const [yAmount, setYAmount] = useState(getBalanceAmount(exContractAmount).toString())
   const decimalYAmount = getDecimalAmount(new BigNumber(yAmount))
   const balanceYAmount = getBalanceAmount(new BigNumber(yAmount))
-  const maxBalanceOfLP = getBalanceAmount(userData?.tokenBalance).toString()
+  const symbolName = useMemo(()=>{
+    if(buyer.isLp){
+      const lp = farms.find((item) => getAddress(item.lpAddresses) === buyer.token)
+      return lp ?  lp.lpSymbol : ""
+    }
+    return allTokens[buyer.token] ? allTokens[buyer.token].symbol : ""
+  },[allTokens, buyer, farms])
+  const maxBalance = useMemo(()=>{
+    if(buyer.isLp){
+      const lp = farms.find((item) => getAddress(item.lpAddresses) === buyer.token)
+      return lp ?  getBalanceAmount(lp.userData.tokenBalance) : BIG_ZERO
+    }
+    return allTokenBalances[buyer.token] ? allTokenBalances[buyer.token].toExact() : BIG_ZERO
+
+  }, [allTokenBalances, farms, buyer])  
 
   const handleSelectMaxOfLPToken = useCallback(() => {
-    setYAmount(maxBalanceOfLP.toString())
-  }, [maxBalanceOfLP, setYAmount])
+    setYAmount(maxBalance.toString())
+  }, [maxBalance, setYAmount])
 
   useEffect(() => {
     exContract.allowance(account, LpSwapContract.address).then((res) => {
@@ -64,7 +80,7 @@ const DiscussOrder: React.FC<any> = (props) => {
       setPendingTx(false)
       return false
     }
-    if (balanceYAmount.isGreaterThan(maxBalanceOfLP)) {
+    if (balanceYAmount.isGreaterThan(maxBalance)) {
       toastError('Error', "You don't have enough token balance")
       setPendingTx(false)
       return false
@@ -139,8 +155,8 @@ const DiscussOrder: React.FC<any> = (props) => {
             value={yAmount.toString()}
             onSelectMax={handleSelectMaxOfLPToken}
             onChange={handleYAmountChange}
-            max={maxBalanceOfLP}
-            symbol={lpToken?.lpSymbol}
+            max={maxBalance.toString()}
+            symbol={symbolName}
             addLiquidityUrl="#"
             inputTitle={t('Amount')}
           />
