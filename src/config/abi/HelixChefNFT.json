@@ -3,64 +3,19 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
-        "internalType": "address",
-        "name": "token",
-        "type": "address"
-      }
-    ],
-    "name": "AddNewRewardToken",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "boostedHP",
-        "type": "uint256"
-      }
-    ],
-    "name": "BoostHelixNFT",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
         "indexed": true,
         "internalType": "address",
-        "name": "token",
+        "name": "user",
         "type": "address"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "rewardPerBlock",
+        "name": "accruedReward",
         "type": "uint256"
       }
     ],
-    "name": "ChangeRewardToken",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "token",
-        "type": "address"
-      }
-    ],
-    "name": "DisableRewardToken",
+    "name": "AccrueReward",
     "type": "event"
   },
   {
@@ -86,25 +41,13 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": true,
+        "indexed": false,
         "internalType": "address",
-        "name": "user",
+        "name": "account",
         "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "amountRB",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256[]",
-        "name": "tokensId",
-        "type": "uint256[]"
       }
     ],
-    "name": "StakeTokens",
+    "name": "Paused",
     "type": "event"
   },
   {
@@ -118,70 +61,60 @@
       },
       {
         "indexed": false,
-        "internalType": "uint256",
-        "name": "amountRB",
-        "type": "uint256"
+        "internalType": "uint256[]",
+        "name": "tokenIds",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "StakeTokens",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "Unpaused",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
       },
       {
         "indexed": false,
         "internalType": "uint256[]",
-        "name": "tokensId",
+        "name": "tokenIds",
         "type": "uint256[]"
       }
     ],
-    "name": "UnstakeToken",
+    "name": "UnstakeTokens",
     "type": "event"
   },
   {
-    "inputs": [],
-    "name": "PRECISION_FACTOR",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [
       {
         "internalType": "address",
-        "name": "newToken",
+        "name": "_user",
         "type": "address"
       },
       {
         "internalType": "uint256",
-        "name": "startBlock",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "rewardPerBlock",
+        "name": "_fee",
         "type": "uint256"
       }
     ],
-    "name": "addNewRewardToken",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      }
-    ],
-    "name": "boostHelixNFT",
+    "name": "accrueReward",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -190,49 +123,13 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "token",
+        "name": "_address",
         "type": "address"
       }
     ],
-    "name": "disableRewardToken",
+    "name": "addAccruer",
     "outputs": [],
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "token",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "startBlock",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "rewardPerBlock",
-        "type": "uint256"
-      }
-    ],
-    "name": "enableRewardToken",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "getListRewardTokens",
-    "outputs": [
-      {
-        "internalType": "address[]",
-        "name": "",
-        "type": "address[]"
-      }
-    ],
-    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -241,9 +138,46 @@
         "internalType": "address",
         "name": "_user",
         "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_fee",
+        "type": "uint256"
       }
     ],
-    "name": "getUserHelixPointAmount",
+    "name": "getAccruedReward",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "reward",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_index",
+        "type": "uint256"
+      }
+    ],
+    "name": "getAccruer",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getNumAccruers",
     "outputs": [
       {
         "internalType": "uint256",
@@ -276,14 +210,46 @@
   {
     "inputs": [
       {
+        "internalType": "address",
+        "name": "_user",
+        "type": "address"
+      }
+    ],
+    "name": "getUsersStakedNfts",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "helixNFT",
+    "outputs": [
+      {
+        "internalType": "contract IHelixNFT",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "contract IHelixNFT",
         "name": "_helixNFT",
         "type": "address"
       },
       {
-        "internalType": "uint256",
-        "name": "_lastRewardBlock",
-        "type": "uint256"
+        "internalType": "contract IERC20",
+        "name": "_rewardToken",
+        "type": "address"
       }
     ],
     "name": "initialize",
@@ -292,13 +258,19 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "lastRewardBlock",
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_address",
+        "type": "address"
+      }
+    ],
+    "name": "isAccruer",
     "outputs": [
       {
-        "internalType": "uint256",
+        "internalType": "bool",
         "name": "",
-        "type": "uint256"
+        "type": "bool"
       }
     ],
     "stateMutability": "view",
@@ -318,6 +290,26 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "pause",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "paused",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -328,17 +320,25 @@
     "name": "pendingReward",
     "outputs": [
       {
-        "internalType": "address[]",
+        "internalType": "uint256",
         "name": "",
-        "type": "address[]"
-      },
-      {
-        "internalType": "uint256[]",
-        "name": "",
-        "type": "uint256[]"
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_address",
+        "type": "address"
+      }
+    ],
+    "name": "removeAccruer",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -349,77 +349,13 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "name": "rewardDebt",
+    "inputs": [],
+    "name": "rewardToken",
     "outputs": [
       {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "name": "rewardTokenAddresses",
-    "outputs": [
-      {
-        "internalType": "address",
+        "internalType": "contract IERC20",
         "name": "",
         "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "name": "rewardTokens",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "rewardPerBlock",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "startBlock",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "accTokenPerShare",
-        "type": "uint256"
-      },
-      {
-        "internalType": "bool",
-        "name": "enabled",
-        "type": "bool"
       }
     ],
     "stateMutability": "view",
@@ -429,7 +365,7 @@
     "inputs": [
       {
         "internalType": "uint256[]",
-        "name": "tokensId",
+        "name": "_tokenIds",
         "type": "uint256[]"
       }
     ],
@@ -440,7 +376,7 @@
   },
   {
     "inputs": [],
-    "name": "totalHelixPoints",
+    "name": "totalStakedNfts",
     "outputs": [
       {
         "internalType": "uint256",
@@ -465,21 +401,21 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256[]",
-        "name": "tokensId",
-        "type": "uint256[]"
-      }
-    ],
-    "name": "unstake",
+    "inputs": [],
+    "name": "unpause",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "updatePool",
+    "inputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "_tokenIds",
+        "type": "uint256[]"
+      }
+    ],
+    "name": "unstake",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -496,7 +432,26 @@
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "helixPointAmount",
+        "name": "pendingReward",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "usersStakedNfts",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
         "type": "uint256"
       }
     ],
