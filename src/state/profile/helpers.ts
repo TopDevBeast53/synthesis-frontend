@@ -49,7 +49,7 @@ export const getUsername = async (address: string): Promise<string> => {
  * Intended to be used for getting a profile avatar
  */
 export const getProfileAvatar = async (address: string) => {
-    try {
+    try {        
         const hasRegistered = await profileContract.hasRegistered(address)
 
         if (!hasRegistered) {
@@ -86,66 +86,71 @@ export const getProfileAvatar = async (address: string) => {
 }
 
 export const getProfile = async (address: string): Promise<GetProfileResponse> => {
-    try {
-        const hasRegistered = await profileContract.hasRegistered(address)
+    return null
+    /*
+        Disable the function of getProfile(). Since We don't use any info related to the Profile. 
+        Also we have got the error with hasRegistered function()
+    */
+    // try {        
+    //     const hasRegistered = await profileContract.hasRegistered(address)
 
-        if (!hasRegistered) {
-            return { hasRegistered, profile: null }
-        }
+    //     if (!hasRegistered) {
+    //         return { hasRegistered, profile: null }
+    //     }
 
-        const profileResponse = await profileContract.getUserProfile(address)
-        const { userId, points, teamId, tokenId, collectionAddress, isActive } =
-            transformProfileResponse(profileResponse)
-        const team = await getTeam(teamId)
-        const username = await getUsername(address)
-        // let nftToken: NftToken
+    //     const profileResponse = await profileContract.getUserProfile(address)
+    //     const { userId, points, teamId, tokenId, collectionAddress, isActive } =
+    //         transformProfileResponse(profileResponse)
+    //     const team = await getTeam(teamId)
+    //     const username = await getUsername(address)
+    //     // let nftToken: NftToken
 
-        // // If the profile is not active the tokenId returns 0, which is still a valid token id
-        // // so only fetch the nft data if active
-        // if (isActive) {
-        //     const apiRes = await getNftApi(collectionAddress, tokenId.toString())
+    //     // // If the profile is not active the tokenId returns 0, which is still a valid token id
+    //     // // so only fetch the nft data if active
+    //     // if (isActive) {
+    //     //     const apiRes = await getNftApi(collectionAddress, tokenId.toString())
 
-        //     nftToken = {
-        //         tokenId: apiRes.tokenId,
-        //         name: apiRes.name,
-        //         collectionName: apiRes.collection.name,
-        //         collectionAddress,
-        //         description: apiRes.description,
-        //         attributes: apiRes.attributes,
-        //         createdAt: apiRes.createdAt,
-        //         updatedAt: apiRes.updatedAt,
-        //         image: {
-        //             original: apiRes.image?.original,
-        //             thumbnail: apiRes.image?.thumbnail,
-        //         },
-        //     }
+    //     //     nftToken = {
+    //     //         tokenId: apiRes.tokenId,
+    //     //         name: apiRes.name,
+    //     //         collectionName: apiRes.collection.name,
+    //     //         collectionAddress,
+    //     //         description: apiRes.description,
+    //     //         attributes: apiRes.attributes,
+    //     //         createdAt: apiRes.createdAt,
+    //     //         updatedAt: apiRes.updatedAt,
+    //     //         image: {
+    //     //             original: apiRes.image?.original,
+    //     //             thumbnail: apiRes.image?.thumbnail,
+    //     //         },
+    //     //     }
 
-        //     // Save the preview image in a cookie so it can be used on the exchange
-        //     Cookies.set(
-        //         `profile_${address}`,
-        //         {
-        //             username,
-        //             avatar: `${nftToken.image.thumbnail}`,
-        //         },
-        //         { domain: 'pancakeswap.finance', secure: true, expires: 30 },
-        //     )
-        // }
+    //     //     // Save the preview image in a cookie so it can be used on the exchange
+    //     //     Cookies.set(
+    //     //         `profile_${address}`,
+    //     //         {
+    //     //             username,
+    //     //             avatar: `${nftToken.image.thumbnail}`,
+    //     //         },
+    //     //         { domain: 'pancakeswap.finance', secure: true, expires: 30 },
+    //     //     )
+    //     // }
 
-        const profile = {
-            userId,
-            points,
-            teamId,
-            tokenId,
-            username,
-            collectionAddress,
-            isActive,
-            nft: null, // nftToken,
-            team,
-        } as Profile
+    //     const profile = {
+    //         userId,
+    //         points,
+    //         teamId,
+    //         tokenId,
+    //         username,
+    //         collectionAddress,
+    //         isActive,
+    //         nft: null, // nftToken,
+    //         team,
+    //     } as Profile
 
-        return { hasRegistered, profile }
-    } catch (e) {
-        console.error(e)
-        return null
-    }
+    //     return { hasRegistered, profile }
+    // } catch (e) {
+    //     console.error(e)
+    //     return null
+    // }
 }
