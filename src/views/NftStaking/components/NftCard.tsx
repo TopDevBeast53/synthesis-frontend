@@ -1,9 +1,7 @@
 import React, { useState, useCallback} from 'react'
-import { Card, Flex, Image, Button, useModal, AutoRenewIcon } from 'uikit'
+import { Card, Flex, Image, Button, AutoRenewIcon } from 'uikit'
 import styled from 'styled-components'
-import { useTranslation } from 'contexts/Localization'
 import { NFTCardText, NFTCardTextType } from './NFTCardText'
-import BridgeToSolanaModal from '../../NftBridge/components/BridgeToSolanaModal'
 
 const NFTCard = styled(Card)`
   background-color: rgba(16, 20, 17, 0.9);
@@ -86,7 +84,6 @@ interface NftCardProps {
   disabled?: boolean
   loading?: boolean
   onhandleChangeCheckBox?: (tokenId: string, isChecked: boolean) => void
-  showBridgeToSolanaModal?: boolean
 }
 
 const NFTImage = styled(Image)`
@@ -102,9 +99,7 @@ const NftCard: React.FC<NftCardProps> = ({
   disabled,
   loading,
   onhandleChangeCheckBox,
-  showBridgeToSolanaModal,
 }) => {
-  const { t } = useTranslation()
   const [isSelected, setSelected] = useState(false)
 
   const [isRememberChecked, setIsRememberChecked] = useState(false)
@@ -118,10 +113,6 @@ const NftCard: React.FC<NftCardProps> = ({
     setSelected(!isSelected)    
   }, 
     [onhandleChangeCheckBox, tokenId, isRememberChecked, setIsRememberChecked, isSelected, loading]
-  );
-
-  const [onPresentBridgeModal] = useModal(
-    <BridgeToSolanaModal tokenIDToBridge={tokenId} />
   );
 
   const handleClick = (e, action, params) => {
@@ -171,12 +162,6 @@ const NftCard: React.FC<NftCardProps> = ({
                 {caption}
               </Button>  
             ))
-          }
-          {
-            showBridgeToSolanaModal &&
-            <Button onClick={onPresentBridgeModal} style={{ marginBottom: '8px' }}>
-              {t('Bridge To Solana')}
-            </Button>
           }
         </Flex>
       </NFTCard>

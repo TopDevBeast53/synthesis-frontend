@@ -11,7 +11,6 @@ import Page from '../Page'
 import NftCard from './components/NftCard'
 import { NFTCardText, NFTCardTextType } from './components/NFTCardText'
 import NFTStartCollectPanel from './components/NFTStartCollectPanel'
-import { useBoostNft } from './hooks/useBoostNft'
 import { useGetNftInfo } from './hooks/useGetNftInfo'
 import { useStakingNft } from './hooks/useStakingNft'
 
