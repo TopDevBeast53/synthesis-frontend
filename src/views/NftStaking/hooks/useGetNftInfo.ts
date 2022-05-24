@@ -1,18 +1,20 @@
+import { Contract } from '@ethersproject/contracts'
+import helixNFTABI from 'config/abi/HelixNFT.json'
+import { ethers } from 'ethers'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
+import { useHelixNFT } from 'hooks/useContract'
 import { useCallback } from 'react'
 import { getProviderOrSigner } from 'utils'
-import { Contract } from '@ethersproject/contracts'
-import { ethers } from 'ethers'
 import { formatBigNumber } from 'utils/formatBalance'
-import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
-
-import helixNFTABI from 'config/abi/HelixNFT.json'
 import { helixNFTAddress } from '../constants'
 import { TokenInfo } from '../type'
+
 
 export const useGetNftInfo = () => {
     const { library, account } = useActiveWeb3React()
     const { callWithGasPrice } = useCallWithGasPrice()
+    const helixNFTContract = useHelixNFT()
 
     const getHelixNFTContract = useCallback(() => {
         return new Contract(helixNFTAddress, helixNFTABI, getProviderOrSigner(library, account))
@@ -66,28 +68,21 @@ export const useGetNftInfo = () => {
     )
 
     const getTokens = useCallback(async () => {
-        let tx: any
+        let ids=[]
         try {
-            tx = await callWithGasPrice(getHelixNFTContract(), 'getTokenIdsOfOwner', [account])
+            ids = await helixNFTContract.getTokenIdsOfOwner(account)
         } catch (e) {
             return []
         }
-        const tokenIds = tx
-            .toString()
-            .split(',')
-            .map((v) => ({ id: v }))
-        if (tokenIds.length > 0) {
+        
+        if (ids.length > 0) {
             const results = await Promise.all(
-                tokenIds.map((e: any) => callWithGasPrice(getHelixNFTContract(), 'getToken', [e.id])),
+                ids.map((id: any) => helixNFTContract.getToken(id))
             )
-            const res = results.map((token: any) => ({
+            const res = results.map((token) => ({
                 tokenId: token.tokenId.toString(),
-                tokenOwner: token.tokenOwner.toString(),
-                level: parseInt(token.level),
-                helixPoints: parseInt(formatBigNumber(ethers.BigNumber.from(token.helixPoints.toString()))),
-                remainHPToNextLevel: parseInt(
-                    formatBigNumber(ethers.BigNumber.from(token.remainHPToNextLvl.toString())),
-                ),
+                externalTokenId: token.externalTokenID.toString(),
+                tokenOwner: token.tokenOwner.toString(),                
                 isStaked: token.isStaked,
                 uri: token.uri,
                 disabled: false,
@@ -96,7 +91,7 @@ export const useGetNftInfo = () => {
             return res
         }
         return []
-    }, [getHelixNFTContract, callWithGasPrice, account])
+    }, [helixNFTContract, account])
 
     return {
         getLastTokenId,

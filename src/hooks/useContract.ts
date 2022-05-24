@@ -35,6 +35,10 @@ import {
     getHelixVaultContract,
     getHelixYieldSwapContract,
     getHelixLPSwapContract,
+    getHelixNFTContract,
+    getHelixChefNFTContract,
+    getHelixNFTBridgeContract,
+
 } from 'utils/contractHelpers'
 import { getMulticallAddress } from 'utils/addressHelpers'
 import { VaultKey } from 'state/types'
@@ -120,7 +124,18 @@ export const useHelixLpSwap = () => {
     const { library } = useActiveWeb3React()
     return useMemo(() => getHelixLPSwapContract(library.getSigner()), [library])
 }
-
+export const useHelixNFT = () => {
+    const { library } = useActiveWeb3React()
+    return useMemo(() => getHelixNFTContract(library.getSigner()), [library])
+}
+export const useHelixNFTChef = () => {
+    const { library } = useActiveWeb3React()
+    return useMemo(() => getHelixChefNFTContract(library.getSigner()), [library])
+}
+export const useHelixNFTBridge = () => {
+    const { library } = useActiveWeb3React()
+    return useMemo(() => getHelixNFTBridgeContract(library.getSigner()), [library])
+}
 export const useBunnyFactory = () => {
     const { library } = useActiveWeb3React()
     return useMemo(() => getBunnyFactoryContract(library.getSigner()), [library])

@@ -1,3 +1,4 @@
+
 export default {
     lotteryV2: {
         4: '0x5790c3534F30437641541a0FA04C992799602998',
@@ -105,16 +106,22 @@ export default {
         4: '0x049602E6f3169a73F0fEE4c4a5e6696e1B218b87',
     },
     helixNFT: {
+        1: '',
+        4: '0xc0AB46Da33c7De5696d59eBA4Cb6B0a70e25F42C',
         56: '',
-        4: '0x77f6fBC82Cf7236460C6DE6BE457154cEb0a9Db6',
+        97: '0x27D056ACc52033D0680dA1932497F70A3Ee1f51f',
     },
     helixNFTChef: {
+        1: '',
+        4: '0x1E816D21Adf0ca0578cDba81D9B2AFea63a2bBbA',
         56: '',
-        4: '0x9da01A4402a904B2FeB608CD474cC95f50Ce6940',
+        97: '0x491FAefdf0C8995F8C8FE0b76984eB93e206E64C',
     },
     helixNFTBridge: {
+        1: '',
+        4: '0xbeC9687664237c4761f0039D9FB76c04060ceED0',
         56: '',
-        4: '0xE9Bf1603aa7648118a1D309BA86c84834C2d8269',
+        97: '0x1080694300484786fDe5Ed5127442e9874428a7d',
     },
     helixMigrator: {
         56: '',

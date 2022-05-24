@@ -109,14 +109,15 @@ const NftCard: React.FC<NftCardProps> = ({
 
   const [isRememberChecked, setIsRememberChecked] = useState(false)
 
-  const handleCardSelect = useCallback(() => {
+  const handleCardSelect = useCallback(() => {    
+    if(loading) return
     if (onhandleChangeCheckBox != null) {
       onhandleChangeCheckBox(tokenId, !isRememberChecked)
     }
     setIsRememberChecked(!isRememberChecked)
     setSelected(!isSelected)    
   }, 
-    [onhandleChangeCheckBox, tokenId, isRememberChecked, setIsRememberChecked, isSelected]
+    [onhandleChangeCheckBox, tokenId, isRememberChecked, setIsRememberChecked, isSelected, loading]
   );
 
   const [onPresentBridgeModal] = useModal(
@@ -125,6 +126,7 @@ const NftCard: React.FC<NftCardProps> = ({
 
   const handleClick = (e, action, params) => {
     e.stopPropagation()
+    if(loading) return
     action(...params)
   }
   

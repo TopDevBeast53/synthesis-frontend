@@ -1,14 +1,13 @@
-import React, { useMemo, useState } from 'react'
-import moment from 'moment'
-import { AutoRenewIcon, Button, useMatchBreakpoints, Text } from 'uikit'
 import { useHelixYieldSwap } from 'hooks/useContract'
 import useToast from 'hooks/useToast'
+import moment from 'moment'
+import React, { useMemo, useState } from 'react'
+import { AutoRenewIcon, Button, Text, useMatchBreakpoints } from 'uikit'
 import { OrderState } from 'views/SwapYield/types'
-import { StyledRow, StyledCell, StyledCellWithoutPadding } from '../../Cells/StyledCell'
-import ArrowCell from '../../Cells/ArrowCell'
-import ToolTipCell from '../../Cells/ToolTipCell'
-import TokenCell from '../../Cells/TokenCell'
 import { CellContent } from '../../Cells/BaseCell'
+import { StyledCell, StyledRow } from '../../Cells/StyledCell'
+import TokenCell from '../../Cells/TokenCell'
+import ToolTipCell from '../../Cells/ToolTipCell'
 
 const EarnedRow=({swapData, swapId})=>{ 
     const {isMobile} = useMatchBreakpoints()

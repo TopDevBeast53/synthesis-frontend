@@ -1,7 +1,6 @@
-import { useAllTokens } from 'hooks/Tokens'
 import { useHelixLpSwap } from 'hooks/useContract'
 import useToast from 'hooks/useToast'
-import React, { useContext, useMemo, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import styled from 'styled-components'
 import { AutoRenewIcon, Button, ChevronDownIcon, useDelayedUnmount, useModal } from 'uikit'
 import { SwapLiquidityContext } from 'views/SwapLiquidity/context'

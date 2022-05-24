@@ -1,23 +1,41 @@
-import React, { useState, useCallback, useEffect } from 'react'
-import filter from 'lodash/filter'
-import { Flex, Heading, Button, Card, Text, ButtonMenu, ButtonMenuItem, AutoRenewIcon } from 'uikit'
+import PageHeader from 'components/PageHeader'
 import { useTranslation } from 'contexts/Localization'
 import useToast from 'hooks/useToast'
+import filter from 'lodash/filter'
+import React, { CSSProperties, useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
+import { AutoRenewIcon, Button, ButtonMenu, ButtonMenuItem, Card, CopyIcon, Flex, Heading, IconButton, Text, useMatchBreakpoints } from 'uikit'
 import { logError } from 'utils/sentry'
-
-import { CurrencyLogo } from 'components/Logo'
-import unserializedTokens from 'config/constants/tokens'
-import PageHeader from 'components/PageHeader'
-import { NFTCardText, NFTCardTextType } from './components/NFTCardText'
-import { useGetNftInfo } from './hooks/useGetNftInfo'
 import CircleLoader from '../../components/Loader/CircleLoader'
-import NftCard from './components/NftCard'
-import { useStakingNft } from './hooks/useStakingNft'
-import { useBoostNft } from './hooks/useBoostNft'
 import Page from '../Page'
-import { TokenInfo } from './type'
+import NftCard from './components/NftCard'
+import { NFTCardText, NFTCardTextType } from './components/NFTCardText'
 import NFTStartCollectPanel from './components/NFTStartCollectPanel'
+import { useBoostNft } from './hooks/useBoostNft'
+import { useGetNftInfo } from './hooks/useGetNftInfo'
+import { useStakingNft } from './hooks/useStakingNft'
+
+const Tooltip = styled.div<{ isTooltipDisplayed: boolean }>`
+  display: ${({ isTooltipDisplayed }) => (isTooltipDisplayed ? 'inline-block' : 'none')};
+  position: absolute;
+  padding: 8px;
+  top: -28px;
+  right: -20px;
+  text-align: center;
+  background-color: ${({ theme }) => theme.colors.contrast};
+  color: ${({ theme }) => theme.colors.invertedContrast};
+  border-radius: 4px;
+  opacity: 0.7;
+  width: 100px;
+`
+
+const StyledCopyIcon = styled(CopyIcon)`
+  width: 14px;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    width: 18px;
+  }
+`
+
 
 const NFTDisplayPanel = styled(Flex)`
   position: relative;
@@ -49,42 +67,34 @@ export default function NftStaking() {
   const { t } = useTranslation()
   const { toastError, toastSuccess } = useToast()
   const [tokens, setTokens] = useState([])
-  const [accumulatedHP, setAccumulatedHP] = useState('')
   const [pendingReward, setPendingReward] = useState('')
   const [viewStaked, setViewStaked] = useState(false)
   const [selectedTokenIds, setSelectedTokenIds] = useState<number[]>([])
 
   const [loading, setLoading] = useState(true)
-  const [loadingStatus, setLoadingStatus] = useState(false)
-  const [loadingAccumulatedHP, setLoadingAccumulatedHP] = useState(true)
+  const [loadingStatus, setLoadingStatus] = useState(false)  
   const [loadingPendingReward, setLoadingPendingReward] = useState(true)
   const [enableStakingBtn, setEnableStakingBtn] = useState(false)
-
-  const { getTokens, getHelixNftInfoById } = useGetNftInfo()
+  const { getTokens} = useGetNftInfo()
   const { stakingNft, getPendingReward, withdrawReward } = useStakingNft()
-  const { getAccumulatedHP, boostHelixNFT } = useBoostNft()
+
+  const { isMobile } = useMatchBreakpoints()
 
   const filterNft = filter(tokens, (token: any) => token.isStaked === viewStaked)
 
   const handleGetTokens = useCallback(() => {
-    setLoading(true)
-    setLoadingAccumulatedHP(true)
-    getAccumulatedHP().then((res) => {
-      setAccumulatedHP(res.toString())
-      setLoadingAccumulatedHP(false)
-    })
+    setLoading(true)        
 
     setLoadingPendingReward(true)
     getPendingReward().then((res) => {
       setPendingReward(res.toString())
       setLoadingPendingReward(false)
-    })
-
+    })    
     getTokens().then((res) => {
       setTokens(res)
       setLoading(false)
     })
-  }, [getTokens, getAccumulatedHP, getPendingReward])
+  }, [getTokens, getPendingReward])
 
   useEffect(() => {
     handleGetTokens()
@@ -92,7 +102,8 @@ export default function NftStaking() {
 
   const handleStaking = useCallback(async () => {
     try {
-      setLoading(true)
+      setLoadingStatus(true)
+      
       const receipt = await stakingNft(selectedTokenIds, !viewStaked)
       if (receipt.status) {
         toastSuccess(t('Success'), t(!viewStaked ? 'Staked!' : 'Unstaked'))
@@ -113,7 +124,7 @@ export default function NftStaking() {
       toastError(t('Error'), t('Please try again.'))
     } finally {
       setSelectedTokenIds([])
-      setLoading(false)
+      setLoadingStatus(false)
     }
   }, [stakingNft, viewStaked, tokens, selectedTokenIds, toastSuccess, toastError, t])
 
@@ -136,33 +147,8 @@ export default function NftStaking() {
     }
   }, [getPendingReward, withdrawReward, toastSuccess, toastError, t])
 
-  const handleBoost = useCallback(async (tokenId) => {
-    try {
-      setLoading(true)
-      const receipt = await boostHelixNFT(tokenId, accumulatedHP)
-      if (receipt.status){
-        const _upgradedToken: TokenInfo = await getHelixNftInfoById(tokenId)
-        const _accumulatedHP = await getAccumulatedHP()
-        toastSuccess(t('Success'), t('Boosted!'))
-        const updatedTokens = tokens.map((token: TokenInfo)=>{
-          if (token.tokenId.toString() === tokenId.toString())
-            return {...token, ..._upgradedToken}
-          return token
-        })
-        setTokens(updatedTokens)
-        setAccumulatedHP(_accumulatedHP)
-      } else {
-        toastError(t('Error'), t('Insufficient accumulated HelixPoints.'))
-      }
-    } catch (e) {
-      logError(e)
-      toastError(t('Error'), t('Insufficient accumulated HelixPoints.'))
-    } finally {
-      setLoading(false)
-    }
-  }, [boostHelixNFT, getAccumulatedHP, getHelixNftInfoById, tokens, accumulatedHP, toastSuccess, toastError, t])
-  
-  const onhandleCheckbox = useCallback(
+    
+  const onhandleCheckbox = useCallback(    
     (tokenId, isChecked) => {
       let _selIds
       if (isChecked) {
@@ -202,30 +188,14 @@ export default function NftStaking() {
               tokenId={token.tokenId}
               infos={[
                 {
-                  type: "level",
-                  caption: "Level",
-                  value: token.level,
-                },
-                {
-                  type: "points",
-                  caption: "HelixPoints",
-                  value: token.helixPoints,
-                },
-                {
-                  type: "remainNextLevel",
-                  caption: "Remain HP To Next Level",
-                  value: token.remainHPToNextLevel,
-                },
+                  type:"level",
+                  caption: 'Token ID',
+                  value: (
+                    <CopyValue value={token.externalTokenId}>{shortenAddress(token.externalTokenId, isMobile? 1 : 3)}</CopyValue>
+                  ),
+                }
               ]}
-              actions={[
-                {
-                  id: 'boost',
-                  caption: 'Boost',
-                  displayed: parseInt(accumulatedHP) > 0,
-                  action: handleBoost,
-                  params: [token.tokenId],
-                },
-              ]}
+              actions={[]}
               bgSrc={token.uri}
               disabled={token.disabled}
               onhandleChangeCheckBox={onhandleCheckbox}
@@ -236,9 +206,6 @@ export default function NftStaking() {
       </Flex>
     </div>
   )
-
-  const helixToken = unserializedTokens.helix
-
   return (
     <>
       <PageHeader background="transparent">
@@ -249,18 +216,7 @@ export default function NftStaking() {
       <Page>
         <NFTDisplayPanel>
           <Flex justifyContent="space-between" flexWrap="wrap">
-            <Flex flexWrap="wrap">
-              <GeneralCard style={{marginTop: '15px'}}>
-                <NFTCardText type={NFTCardTextType.generalCaption} style={{paddingBottom: '7px'}}>
-                  My Accumulated Helix Points
-                </NFTCardText>
-                <Flex alignItems="center">
-                  <CurrencyLogo currency={helixToken} size="41px" />
-                  <NFTCardText type={NFTCardTextType.generalValue} style={{ paddingLeft: '18px' }}>
-                    {loadingAccumulatedHP ? 'loading' : Number.parseFloat(accumulatedHP).toFixed(3)}
-                  </NFTCardText>
-                </Flex>
-              </GeneralCard>
+            <Flex flexWrap="wrap">              
               <GeneralCard style={{marginTop: '15px', marginLeft: '25px'}}>
                 <NFTCardText type={NFTCardTextType.generalCaption} style={{paddingBottom: '7px'}}>
                   Pending Reward
@@ -282,7 +238,7 @@ export default function NftStaking() {
                 isLoading={loadingStatus} 
                 endIcon={loadingStatus ? <AutoRenewIcon spin color="currentColor" /> : null}  
                 onClick={handleStaking} 
-                disabled={!enableStakingBtn} 
+                disabled={!enableStakingBtn || selectedTokenIds.length === 0} 
                 style={{ margin: '10px 0' }}>
                 {viewStaked ? `Unstake (${selectedTokenIds.length})` : `Stake (${selectedTokenIds.length})` }
               </Button>
@@ -311,4 +267,43 @@ export default function NftStaking() {
       </Page>
     </>
   )
+}
+
+function CopyValue({
+  value,
+  children,
+  style,
+}: {
+  value: string
+  children: React.ReactNode
+  style?: CSSProperties | undefined
+}) {
+  const [isTooltipDisplayed, setIsTooltipDisplayed] = useState(false)
+
+  function displayTooltip() {
+    setIsTooltipDisplayed(true)
+    setTimeout(() => {
+      setIsTooltipDisplayed(false)
+    }, 500)
+  }
+
+  const copyValue = () => {
+    if (navigator.clipboard && navigator.permissions) {
+      navigator.clipboard.writeText(value).then(() => displayTooltip())
+    }
+  }
+
+  return (
+    <Flex alignItems="center" position="relative" style={style}>
+      {children}
+      <IconButton variant="text" onClick={copyValue} scale="xs" style={{ marginLeft: '4px' }}>
+        <StyledCopyIcon color="primary" />
+      </IconButton>
+      <Tooltip isTooltipDisplayed={isTooltipDisplayed}>Copied</Tooltip>
+    </Flex>
+  )
+}
+
+function shortenAddress(address: string, trimLen = 4) {
+  return `${address.substring(0, trimLen)}...${address.substring(address.length - (trimLen + 2))}`
 }

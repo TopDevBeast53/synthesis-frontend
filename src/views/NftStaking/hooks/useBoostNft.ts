@@ -1,19 +1,18 @@
+import { Contract } from '@ethersproject/contracts'
+import BigNumber from 'bignumber.js'
+import helixChefNFTABI from 'config/abi/HelixChefNFT.json'
+import helixNFTABI from 'config/abi/HelixNFT.json'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { useCallback } from 'react'
 import { getProviderOrSigner } from 'utils'
-import { Contract } from '@ethersproject/contracts'
-import { ethers } from 'ethers'
-import BigNumber from 'bignumber.js'
-import { formatBigNumber, getDecimalAmount } from 'utils/formatBalance'
-import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
-
-import helixNFTABI from 'config/abi/HelixNFT.json'
-import helixChefNFTABI from 'config/abi/HelixChefNFT.json'
+import { getDecimalAmount } from 'utils/formatBalance'
 import { helixNFTAddress, helixNFTChefAddress } from '../constants'
+
 
 export const useBoostNft = () => {
     const { library, account } = useActiveWeb3React()
-    const { callWithGasPrice } = useCallWithGasPrice()
+    const { callWithGasPrice } = useCallWithGasPrice()    
 
     const getHelixNFTContract = useCallback(() => {
         return new Contract(helixNFTAddress, helixNFTABI, getProviderOrSigner(library, account))
@@ -22,11 +21,6 @@ export const useBoostNft = () => {
     const getHelixChefNFTContract = useCallback(() => {
         return new Contract(helixNFTChefAddress, helixChefNFTABI, getProviderOrSigner(library, account))
     }, [library, account])
-
-    const getAccumulatedHP = useCallback(async () => {
-        const tx = await callWithGasPrice(getHelixNFTContract(), 'getAccumulatedHP', [account])
-        return formatBigNumber(ethers.BigNumber.from(tx.toString()))
-    }, [getHelixNFTContract, callWithGasPrice, account])
 
     const getLevel = useCallback(
         async (tokenId) => {
@@ -65,7 +59,6 @@ export const useBoostNft = () => {
     )
 
     return {
-        getAccumulatedHP,
         getLevel,
         getHelixPoints,
         getremainHPToNextLevel,

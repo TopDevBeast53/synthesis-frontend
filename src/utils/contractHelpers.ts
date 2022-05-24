@@ -34,6 +34,9 @@ import {
     getHelixVaultAddress,
     getYieldSwapAddress,
     getHelixLPSwapAddress,
+    getHelixChefNftAddress,
+    getHelixNftAddress,
+    getHelixNftBridgeAddress,
 } from 'utils/addressHelpers'
 
 // ABI
@@ -74,6 +77,9 @@ import erc721CollectionAbi from 'config/abi/erc721collection.json'
 import helixVaultAbi from 'config/abi/HelixVault.json'
 import yieldSwapAbi from 'config/abi/HelixYieldSwap.json'
 import lpSwapAbi from 'config/abi/HelixLpSwap.json'
+import NFTAbi from 'config/abi/HelixNFT.json'
+import cheftNFTAbi from 'config/abi/HelixChefNFT.json'
+import bridgeNFTAbi from 'config/abi/HelixNFTBridge.json'
 
 // Types
 import {
@@ -112,6 +118,9 @@ import {
     HelixVault,
     HelixYieldSwap,
     HelixLpSwap,
+    HelixChefNFT,
+    HelixNFT,
+    HelixNFTBridge
 } from 'config/abi/types'
 
 const getContract = (abi: any, address: string, signer?: ethers.Signer | ethers.providers.Provider) => {
@@ -233,3 +242,13 @@ export const getHelixYieldSwapContract = (signer?: ethers.Signer | ethers.provid
 export const getHelixLPSwapContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
     return getContract(lpSwapAbi, getHelixLPSwapAddress(), signer) as HelixLpSwap
 }
+
+export const getHelixChefNFTContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
+    return getContract(cheftNFTAbi, getHelixChefNftAddress(), signer) as HelixChefNFT
+} 
+export const getHelixNFTContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
+    return getContract(NFTAbi, getHelixNftAddress(), signer) as HelixNFT
+} 
+export const getHelixNFTBridgeContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
+    return getContract(bridgeNFTAbi, getHelixNftBridgeAddress(), signer) as HelixNFTBridge
+} 
