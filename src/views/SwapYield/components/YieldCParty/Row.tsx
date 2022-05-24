@@ -62,7 +62,8 @@ const YieldCPartyRow = ({ data, state, loading }) => {
     false,
   )
 
-  const handleExpand = () => {
+  const handleExpand = () => {    
+    if(state === SwapState.Finished || state === SwapState.Pending) return
     setExpanded(!expanded)
   }
 
