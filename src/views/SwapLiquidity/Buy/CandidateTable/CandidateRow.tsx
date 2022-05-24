@@ -36,7 +36,7 @@ const CandidateRow = ({ bidId, swapData, buyer }) => {
     setTableRefresh(tableRefresh + 1)
   }
   const [showModal] = useModal(
-    <DiscussOrder bidData={bidData} swapData={swapData} bidId={bidId} onSend={onSendAsk} buyer={buyer}/>,
+    <DiscussOrder bidData={bidData} swapData={swapData} bidId={bidId} sendAsk={onSendAsk} buyer={buyer}/>,
     false,
   )
   useEffect(() => {

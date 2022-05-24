@@ -29,7 +29,7 @@ const ActiveRow=(props)=>{
     const onSendAsk = () =>{
         setTableRefresh(tableRefresh + 1)
     }
-    const [showModal] = useModal(<DiscussOrder swapData={swapData} onSend={onSendAsk} buyer={buyer}/>,false)
+    const [showModal] = useModal(<DiscussOrder swapData={swapData} sendAsk={onSendAsk} buyer={buyer}/>,false)
 
     return (
         <>

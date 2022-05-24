@@ -35,7 +35,7 @@ const DiscussOrder: React.FC<any> = (props) => {
   const bodyPadding = '24px'
   const headerBackground = 'transparent'
   const minWidth = '320px'
-  const { swapId, onSend, onDismiss, swapData,buyer } = props  
+  const { swapId, sendAsk, onDismiss, swapData,buyer } = props  
   const { data: farms } = useFarms()
   const tokens = useAllTokens()
   
@@ -55,7 +55,7 @@ const DiscussOrder: React.FC<any> = (props) => {
       .then(async (tx) => {
         await tx.wait()
         toastSuccess('Success!', 'Amount is updated!')
-        if (onSend) onSend()
+        if (sendAsk) sendAsk()
         setPendingTx(false)
         onDismiss()
       })

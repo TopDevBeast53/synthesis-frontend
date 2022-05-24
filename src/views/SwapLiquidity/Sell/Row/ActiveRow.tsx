@@ -47,7 +47,7 @@ const ActiveRow = (props) => {
     const onSendAsk = () =>{
         setTableRefresh(tableRefresh + 1)
     }
-    const [showDiscussModal] = useModal(<DiscussOrder swapId={swapId} onSend={onSendAsk} swapData={swapData} buyer={buyer}/>,false)
+    const [showDiscussModal] = useModal(<DiscussOrder swapId={swapId} sendAsk={onSendAsk} swapData={swapData} buyer={buyer}/>,false)
     const handleUpdateClick = (e) => {
         e.stopPropagation();
         showDiscussModal()

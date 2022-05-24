@@ -40,8 +40,7 @@ async function fetchChunk(
   //     results: c0.results.concat(c1.results),
   //     blockNumber: c1.blockNumber,
   //   }
-  // }
-  console.debug('Fetching chunk', multicallContract, chunk, minBlockNumber)
+  // }  
   let resultsBlockNumber
   let returnData
   try {

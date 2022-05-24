@@ -36,7 +36,7 @@ const DiscussOrder: React.FC<any> = (props) => {
   const bodyPadding = '24px'
   const headerBackground = 'transparent'
   const minWidth = '320px'
-  const { bidData, bidId, swapData, onSend, onDismiss, buyer } = props
+  const { bidData, bidId, swapData, sendAsk, onDismiss, buyer } = props
   const allTokens = useAllTokens() // All Stable Token
   const allTokenBalances = useAllTokenBalances()  
   const { data: farms } = useMemoFarms()  
@@ -127,7 +127,7 @@ const DiscussOrder: React.FC<any> = (props) => {
         const tx = await LpSwapContract.makeBid(swapData?.id, decimalYAmount.toString())
         await tx.wait()
       }
-      if (onSend) onSend()
+      if (sendAsk) sendAsk()
       setPendingTx(false)
       onDismiss()
       if (bidData) {

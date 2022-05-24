@@ -15,8 +15,7 @@ export function validateSolidityTypeInstance(value: JSBI, solidityType: Solidity
 export function validateAndParseAddress(address: string): string {
     try {
         const checksummedAddress = getAddress(address)
-        if (address !== checksummedAddress) {
-            console.log(address, checksummedAddress)
+        if (address !== checksummedAddress) {            
         }
         warning(address === checksummedAddress, `${address} is not checksummed.`)
         return checksummedAddress
