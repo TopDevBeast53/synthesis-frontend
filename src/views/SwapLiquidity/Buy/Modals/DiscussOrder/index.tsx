@@ -25,7 +25,7 @@ import { getAddress } from 'utils/addressHelpers'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { getBalanceAmount, getDecimalAmount } from 'utils/formatBalance'
 
-const DiscussOrder: React.FC<any> = (props) => {
+const DiscussOrder: React.FC<any> = ({onDismiss, ...props}) => {
   const theme = useTheme()
   const { t } = useTranslation()
   const { account } = useWeb3React()
@@ -36,7 +36,7 @@ const DiscussOrder: React.FC<any> = (props) => {
   const bodyPadding = '24px'
   const headerBackground = 'transparent'
   const minWidth = '320px'
-  const { bidData, bidId, swapData, sendAsk, onDismiss, buyer } = props
+  const { bidData, bidId, swapData, sendAsk, buyer } = props
   const allTokens = useAllTokens() // All Stable Token
   const allTokenBalances = useAllTokenBalances()  
   const { data: farms } = useMemoFarms()  

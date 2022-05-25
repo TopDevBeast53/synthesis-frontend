@@ -26,7 +26,7 @@ import { getTokenDecimals, getTokenSymbol } from 'views/SwapYield/components/Cel
 //   return account ? `${account.substring(0, 5)}...${account.substring(account.length - 5)}` : null
 // }
 
-const DiscussOrder: React.FC<any> = (props) => {
+const DiscussOrder: React.FC<any> = ({onDismiss, ...props}) => {
   const theme = useTheme()
   const LpSwapContract = useHelixLpSwap()
   const { toastSuccess, toastError } = useToast()
@@ -35,7 +35,7 @@ const DiscussOrder: React.FC<any> = (props) => {
   const bodyPadding = '24px'
   const headerBackground = 'transparent'
   const minWidth = '320px'
-  const { swapId, sendAsk, onDismiss, swapData,buyer } = props  
+  const { swapId, sendAsk, swapData,buyer } = props  
   const { data: farms } = useFarms()
   const tokens = useAllTokens()
   
@@ -64,7 +64,6 @@ const DiscussOrder: React.FC<any> = (props) => {
         setPendingTx(false)
       })
   }
-
   return (
     <ModalContainer minWidth={minWidth} {...props}>
       <ModalHeader background={getThemeValue(`colors.${headerBackground}`, headerBackground)(theme)}>

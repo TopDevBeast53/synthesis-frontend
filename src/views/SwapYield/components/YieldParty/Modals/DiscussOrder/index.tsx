@@ -20,7 +20,7 @@ import getThemeValue from 'uikit/util/getThemeValue'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { getBalanceNumber, getDecimalAmount } from 'utils/formatBalance'
 
-const DiscussOrder: React.FC<any> = (props) => {
+const DiscussOrder: React.FC<any> = ({onDismiss, onSend,  ...props}) => {
   const theme = useTheme()
   const YieldSwapContract = useHelixYieldSwap()
   const { toastSuccess, toastError } = useToast()
@@ -29,7 +29,7 @@ const DiscussOrder: React.FC<any> = (props) => {
   const bodyPadding = '24px'
   const headerBackground = 'transparent'
   const minWidth = '320px'
-  const { swapId, onSend, swapData, onDismiss } = props
+  const { swapId, swapData } = props
   const tokens = useAllTokens()
   const exToken = tokens[swapData?.exToken]
   const [yAmount, setYAmount] = useState(getBalanceNumber(swapData?.ask.toString()).toString())

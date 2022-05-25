@@ -164,7 +164,7 @@ const RoiCalculatorModal: React.FC<RoiCalculatorModalProps> = ({
               scale="xs"
               p="4px 16px"
               width="68px"
-              variant="tertiary"
+              variant="tertiary"              
               onClick={() => setPrincipalFromUSDValue('100')}
             >
               $100
@@ -173,17 +173,18 @@ const RoiCalculatorModal: React.FC<RoiCalculatorModalProps> = ({
               scale="xs"
               p="4px 16px"
               width="68px"
-              variant="tertiary"
+              variant="tertiary"              
               onClick={() => setPrincipalFromUSDValue('1000')}
             >
               $1000
             </Button>
             <Button
               disabled={stakingTokenBalance.lte(0) || !account}
-              scale="xs"
+              scale="xs"              
               p="4px 16px"
               width="128px"
               variant="tertiary"
+              style={{fontSize:"12px"}}
               onClick={() =>
                 setPrincipalFromUSDValue(getBalanceNumber(stakingTokenBalance.times(stakingTokenPrice)).toString())
               }

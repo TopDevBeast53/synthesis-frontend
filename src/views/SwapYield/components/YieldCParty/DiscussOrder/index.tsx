@@ -22,7 +22,7 @@ import getThemeValue from 'uikit/util/getThemeValue'
 import { getDecimalAmount, getBalanceAmount } from 'utils/formatBalance'
 import { useTokenDecimals, useTokenSymbol } from 'views/SwapYield/hooks/useTokenSymbol'
 
-const DiscussOrder: React.FC<any> = (props) => {
+const DiscussOrder: React.FC<any> = ({onDismiss, onSend, ...props}) => {
   const theme = useTheme()
   const { t } = useTranslation()
   const { account } = useWeb3React()
@@ -32,7 +32,7 @@ const DiscussOrder: React.FC<any> = (props) => {
   const headerBackground = 'transparent'
   const minWidth = '320px'
   const yieldSwapContract = useHelixYieldSwap()
-  const { swapId, tokenInfo, amount, onDismiss, bid, bidId, onSend } = props
+  const { swapId, tokenInfo, amount, bid, bidId } = props
   const tokenAddress = tokenInfo.token
   const symbol = useTokenSymbol(tokenInfo)
   const decimals = useTokenDecimals(tokenInfo)
