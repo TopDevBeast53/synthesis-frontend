@@ -19,6 +19,7 @@ import {
 import getThemeValue from 'uikit/util/getThemeValue'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { getBalanceNumber, getDecimalAmount } from 'utils/formatBalance'
+import { useTokenDecimals, useTokenSymbol } from 'views/SwapYield/hooks/useTokenSymbol'
 
 const DiscussOrder: React.FC<any> = ({onDismiss, onSend,  ...props}) => {
   const theme = useTheme()
@@ -30,15 +31,15 @@ const DiscussOrder: React.FC<any> = ({onDismiss, onSend,  ...props}) => {
   const headerBackground = 'transparent'
   const minWidth = '320px'
   const { swapId, swapData } = props
-  const tokens = useAllTokens()
-  const exToken = tokens[swapData?.buyer.token]
-  const [yAmount, setYAmount] = useState(getBalanceNumber(swapData?.ask.toString(), exToken?.decimals).toString())
+  const tokenSymbol = useTokenSymbol(swapData?.buyer)
+  const decimals = useTokenDecimals(swapData?.buyer)  
+  const [yAmount, setYAmount] = useState(getBalanceNumber(swapData?.ask.toString(), decimals).toString())
 
   const handleYAmountChange = (input) => {
     setYAmount(input)
   }
   const handleSendClick = () => {
-    const decimalYAmount = getDecimalAmount(new BigNumber(yAmount), exToken?.decimals)
+    const decimalYAmount = getDecimalAmount(new BigNumber(yAmount), decimals)
     if (decimalYAmount.lte(BIG_ZERO)) {
       toastError('Error', 'Token Amount should be bigger than zero')
       return
@@ -69,7 +70,7 @@ const DiscussOrder: React.FC<any> = ({onDismiss, onSend,  ...props}) => {
       <ModalBody p={bodyPadding}>
         <div style={{ marginTop: '1em' }}>
           <div style={{ display: 'flex', marginBottom: '1em', alignItems: 'center' }}>
-            <Text style={{ marginRight: '1em' }}>{exToken?.symbol}</Text>
+            <Text style={{ marginRight: '1em' }}>{tokenSymbol}</Text>
             <BalanceInput value={yAmount} onUserInput={handleYAmountChange} />
           </div>
           <Button
