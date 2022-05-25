@@ -2,7 +2,7 @@ import { useWeb3React } from '@web3-react/core'
 import { useHelixLpSwap } from 'hooks/useContract'
 import React, { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { Button, Skeleton, Text, useModal } from 'uikit'
+import { Button, Skeleton, Text, useMatchBreakpoints, useModal } from 'uikit'
 import { SwapLiquidityContext } from 'views/SwapLiquidity/context'
 import BaseCell, { CellContent } from 'views/SwapYield/components/Cells/BaseCell'
 import TokensCell from 'views/SwapYield/components/Cells/TokensCell'
@@ -32,6 +32,7 @@ const CandidateRow = ({ bidId, swapData, buyer }) => {
   const { account } = useWeb3React()
   const { tableRefresh, setTableRefresh, filterState } = useContext(SwapLiquidityContext)
   const [bidData, setBidData] = useState<any>()
+  const { isMobile } = useMatchBreakpoints()
   const onSendAsk = () => {
     setTableRefresh(tableRefresh + 1)
   }
@@ -73,7 +74,7 @@ const CandidateRow = ({ bidId, swapData, buyer }) => {
       {filterState === SwapState.Applied && account === bidData?.bidder && (
         <StyledCell>
           <CellContent>
-            <Button width="100px" style={{ zIndex: 20 }} onClick={showModal}>
+            <Button width="100px" style={{ zIndex: 20 }} scale={isMobile?"sm":"md"} onClick={showModal}>
               {' '}
               Update{' '}
             </Button>

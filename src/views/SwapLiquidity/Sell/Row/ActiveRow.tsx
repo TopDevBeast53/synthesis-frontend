@@ -2,7 +2,7 @@ import { useHelixLpSwap } from 'hooks/useContract'
 import useToast from 'hooks/useToast'
 import React, { useContext, useState } from 'react'
 import styled from 'styled-components'
-import { AutoRenewIcon, Button, ChevronDownIcon, useDelayedUnmount, useModal } from 'uikit'
+import { AutoRenewIcon, Button, ChevronDownIcon, useDelayedUnmount, useMatchBreakpoints, useModal } from 'uikit'
 import { SwapLiquidityContext } from 'views/SwapLiquidity/context'
 import ArrowCell from 'views/SwapYield/components/Cells/ArrowCell'
 import { StyledCell, StyledCellWithoutPadding, StyledRow } from 'views/SwapYield/components/Cells/StyledCell'
@@ -24,6 +24,7 @@ const ActiveRow = (props) => {
     const [pendingTx, setPendingTx] = useState(false)
     const shouldRenderDetail = useDelayedUnmount(expanded, 300)
     const { setTableRefresh, tableRefresh } = useContext(SwapLiquidityContext)
+    const { isMobile } = useMatchBreakpoints()
     
     const handleOnRowClick = () => {
         setExpanded(!expanded)        
@@ -61,9 +62,9 @@ const ActiveRow = (props) => {
                 <StyledCell>
                     <TokensCell token={swapData?.toBuyerToken} balance={swapData?.amount.toString()}/>
                 </StyledCell>
-                <StyledCellWithoutPadding>
+                {/* <StyledCellWithoutPadding>
                     <ArrowCell/>
-                </StyledCellWithoutPadding>                
+                </StyledCellWithoutPadding>                 */}
                 <StyledCell>                    
                     <TokensCell token={swapData?.toSellerToken} balance={swapData?.ask.toString()}/>
                 </StyledCell>
@@ -78,16 +79,19 @@ const ActiveRow = (props) => {
 
                 <StyledCell style={{zIndex:10, flexDirection:"row"}}>
                     <Button                         
-                        color="primary" onClick={handleUpdateClick} scale="sm" width="100px" style={{marginRight:"0.5em"}}> Update </Button>
-                    <Button 
+                        color="primary" onClick={handleUpdateClick} scale="sm" width="100px" ml="15px"> Update </Button>
+                    <Button                         
                         isLoading={pendingTx}    
                         endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
+                        ml="15px"
                         color="primary" onClick={handleCloseClick} scale="sm" width="100px"> Close </Button>
                 </StyledCell>
-                <StyledCellWithoutPadding>
-                    <ArrowIcon color="primary" toggled={expanded} />
-                </StyledCellWithoutPadding>
-                
+                {
+                    !isMobile &&
+                    <StyledCellWithoutPadding>
+                        <ArrowIcon color="primary" toggled={expanded} />
+                    </StyledCellWithoutPadding>
+                }
             </StyledRow>
         
             {shouldRenderDetail && (

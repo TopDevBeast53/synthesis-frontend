@@ -1,11 +1,10 @@
-import React, { useContext, useState } from 'react'
 import { useHelixLpSwap } from 'hooks/useContract'
 import useToast from 'hooks/useToast'
+import React, { useContext, useState } from 'react'
 import styled from 'styled-components'
-import { AutoRenewIcon, Button, ChevronDownIcon, useDelayedUnmount } from 'uikit'
+import { AutoRenewIcon, Button, ChevronDownIcon, useDelayedUnmount, useMatchBreakpoints } from 'uikit'
 import { SwapLiquidityContext } from 'views/SwapLiquidity/context'
-import ArrowCell from 'views/SwapYield/components/Cells/ArrowCell'
-import { StyledRow, StyledCell, StyledCellWithoutPadding } from 'views/SwapYield/components/Cells/StyledCell'
+import { StyledCell, StyledCellWithoutPadding, StyledRow } from 'views/SwapYield/components/Cells/StyledCell'
 import TokensCell from 'views/SwapYield/components/Cells/TokensCell'
 import ToolTipCell from 'views/SwapYield/components/Cells/ToolTipCell'
 import CandidateTable from '../CandidateTable'
@@ -23,6 +22,7 @@ const AppliedRow=(props)=>{
     const [expanded, setExpanded] = useState(false)
     const [pendingTx, setPendingTx] = useState(false)
     const shouldRenderDetail = useDelayedUnmount(expanded, 300)
+    const { isMobile } = useMatchBreakpoints()
     const handleOnRowClick = () => {
         setExpanded(!expanded)        
     }
@@ -50,29 +50,32 @@ const AppliedRow=(props)=>{
                 <StyledCell>
                     <TokensCell token={swapData?.toBuyerToken} balance={swapData?.amount.toString()}/>
                 </StyledCell>               
-                <StyledCellWithoutPadding>
+                {/* <StyledCellWithoutPadding>
                     <ArrowCell back/>
-                </StyledCellWithoutPadding> 
+                </StyledCellWithoutPadding>  */}
                 <StyledCell>
                     <TokensCell token={swapData?.toSellerToken} balance={swapData?.ask.toString()}/>                   
                 </StyledCell>
-                <StyledCellWithoutPadding>
-                <ToolTipCell 
-                    seller={seller}             
-                    buyer={buyer} 
-                    askAmount={swapData?.ask.toString()}
-                    isLiquidity
-                />
+                <StyledCellWithoutPadding ml="8px">
+                    <ToolTipCell 
+                        seller={seller}             
+                        buyer={buyer} 
+                        askAmount={swapData?.ask.toString()}
+                        isLiquidity
+                    />
                 </StyledCellWithoutPadding>
-                <StyledCell style={{zIndex:10, flex:3}}>
+                <StyledCell style={{zIndex:10}} ml="8px" mr="8px">
                     <Button 
                         isLoading={pendingTx}    
                         endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
-                        color="primary" onClick={handleAcceptClick} scale="sm" width="100px"> Accept </Button>
+                        color="primary" onClick={handleAcceptClick} scale={isMobile?"sm":"md"} maxWidth="100px"> Accept </Button>
                 </StyledCell>
-                <StyledCellWithoutPadding>
-                    <ArrowIcon color="primary" toggled={expanded} />
-                </StyledCellWithoutPadding>
+                {
+                    !isMobile &&
+                    <StyledCellWithoutPadding>
+                        <ArrowIcon color="primary" toggled={expanded} />
+                    </StyledCellWithoutPadding>
+                }
                 
             </StyledRow>
         

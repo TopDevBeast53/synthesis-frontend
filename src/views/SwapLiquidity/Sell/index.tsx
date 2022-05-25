@@ -6,7 +6,7 @@ import { useFastFresh } from 'hooks/useRefresh'
 import useToast from 'hooks/useToast'
 import React, { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { Button, ButtonMenu, ButtonMenuItem, useModal } from 'uikit'
+import { Button, ButtonMenu, ButtonMenuItem, useMatchBreakpoints, useModal } from 'uikit'
 import { SwapLiquidityContext } from '../context'
 import CreateOrderDialog from './Modals/CreateOrderDialog'
 import SellTable from './SellTable'
@@ -35,6 +35,7 @@ const Sell = () => {
   const { account } = useWeb3React()
   const [menuIndex, setMenuIndex] = useState(0)
   const [swapIds, setSwapIds] = useState([])
+  const { isMobile } = useMatchBreakpoints()
 
   const fastRefresh = useFastFresh()
   const { tableRefresh, setFilterState } = useContext(SwapLiquidityContext)
@@ -71,7 +72,7 @@ const Sell = () => {
               <ButtonMenuItem>{t('Open')}</ButtonMenuItem>
               <ButtonMenuItem>{t('Executed')}</ButtonMenuItem>
             </ButtonMenu>
-            <Button variant="secondary" scale="md" mr="1em" onClick={handleAdd}>
+            <Button variant="secondary" scale={ isMobile ? "sm" : "md" } mr="1em" onClick={handleAdd}>
               {' '}
               Create Swap{' '}
             </Button>

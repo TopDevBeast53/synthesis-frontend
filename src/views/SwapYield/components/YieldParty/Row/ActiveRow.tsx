@@ -105,10 +105,13 @@ const ActiveRow = (props) => {
             {' '}
             Close{' '}
           </Button>
-        </StyledCell>        
-        <StyledCell>
-          <ArrowIcon color="primary" toggled={expanded} />
         </StyledCell>
+        {
+          !isMobile &&
+          <StyledCell>
+            <ArrowIcon color="primary" toggled={expanded} />
+          </StyledCell>
+        }        
       </StyledRow>
 
       {shouldRenderDetail && (

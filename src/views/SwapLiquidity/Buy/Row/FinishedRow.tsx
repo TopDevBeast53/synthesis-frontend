@@ -11,9 +11,9 @@ const FinishedRow=({swapData, seller, buyer})=>{
                 <StyledCell>
                     <TokensCell token={swapData?.toBuyerToken} balance={swapData?.amount.toString()}/>
                 </StyledCell>               
-                <StyledCellWithoutPadding>
+                {/* <StyledCellWithoutPadding>
                     <ArrowCell back/>
-                </StyledCellWithoutPadding> 
+                </StyledCellWithoutPadding>  */}
                 <StyledCell>
                     <TokensCell token={swapData?.toSellerToken} balance={swapData?.cost.toString()}/>                   
                 </StyledCell>

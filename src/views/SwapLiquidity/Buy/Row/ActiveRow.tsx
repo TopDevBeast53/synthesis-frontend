@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react'
 import { useWeb3React } from '@web3-react/core'
 import styled from 'styled-components'
-import { Button, ChevronDownIcon, useDelayedUnmount, useModal } from 'uikit'
+import { Button, ChevronDownIcon, useDelayedUnmount, useMatchBreakpoints, useModal } from 'uikit'
 import { SwapLiquidityContext } from 'views/SwapLiquidity/context'
 import ArrowCell from 'views/SwapYield/components/Cells/ArrowCell'
 import { StyledRow, StyledCell, StyledCellWithoutPadding } from 'views/SwapYield/components/Cells/StyledCell'
@@ -21,6 +21,7 @@ const ActiveRow=(props)=>{
     const {swapData, seller, buyer} = props
     const [expanded, setExpanded] = useState(false)
     const shouldRenderDetail = useDelayedUnmount(expanded, 300)
+    const { isMobile } = useMatchBreakpoints()
 
     const handleOnRowClick = () => {
         if(!account)    return
@@ -37,9 +38,9 @@ const ActiveRow=(props)=>{
                 <StyledCell>
                     <TokensCell token={swapData?.toBuyerToken} balance={swapData?.amount.toString()} />
                 </StyledCell>               
-                <StyledCellWithoutPadding>
+                {/* <StyledCellWithoutPadding>
                     <ArrowCell back/>
-                </StyledCellWithoutPadding> 
+                </StyledCellWithoutPadding>  */}
                 <StyledCell>
                     <TokensCell token={swapData?.toSellerToken} balance={swapData?.ask.toString()} />
                 </StyledCell>
@@ -53,15 +54,19 @@ const ActiveRow=(props)=>{
                 </StyledCellWithoutPadding>
                 {
                     account && (
-                        <StyledCell style={{zIndex:10}}>
+                        <StyledCell style={{zIndex:10}} ml="8px" mr="8px">
                             <Button 
-                                color="primary" onClick={showModal} scale="sm" width="100px"> Bid </Button>
+                                color="primary" onClick={showModal} scale={isMobile?"sm":"md"} maxWidth="100px"> Bid </Button>
                         </StyledCell>
                     )
                 }
-                <StyledCellWithoutPadding>
-                    <ArrowIcon color="primary" toggled={expanded} />                    
-                </StyledCellWithoutPadding>
+                {
+                    !isMobile &&                    
+                    <StyledCellWithoutPadding>
+                        <ArrowIcon color="primary" toggled={expanded} />                    
+                    </StyledCellWithoutPadding>
+                }
+                
                 
             </StyledRow>
         
