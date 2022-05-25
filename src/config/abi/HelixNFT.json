@@ -272,12 +272,12 @@
         "type": "uint256"
       }
     ],
-    "name": "getExternalTokenID",
+    "name": "getExternalTokenIDs",
     "outputs": [
       {
-        "internalType": "string",
+        "internalType": "string[]",
         "name": "",
-        "type": "string"
+        "type": "string[]"
       }
     ],
     "stateMutability": "view",
@@ -395,34 +395,51 @@
     "name": "getToken",
     "outputs": [
       {
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      },
-      {
         "internalType": "address",
-        "name": "tokenOwner",
+        "name": "",
         "type": "address"
       },
       {
-        "internalType": "bool",
-        "name": "isStaked",
-        "type": "bool"
+        "internalType": "string",
+        "name": "",
+        "type": "string"
       },
       {
         "internalType": "uint256",
-        "name": "createTimestamp",
+        "name": "",
         "type": "uint256"
       },
       {
-        "internalType": "string",
-        "name": "externalTokenID",
-        "type": "string"
-      },
-      {
-        "internalType": "string",
-        "name": "uri",
-        "type": "string"
+        "components": [
+          {
+            "internalType": "string[]",
+            "name": "externalTokenIDs",
+            "type": "string[]"
+          },
+          {
+            "internalType": "string",
+            "name": "tokenURI",
+            "type": "string"
+          },
+          {
+            "internalType": "uint256",
+            "name": "createTimestamp",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "isStaked",
+            "type": "bool"
+          },
+          {
+            "internalType": "uint256",
+            "name": "wrappedNfts",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct HelixNFT.Token",
+        "name": "",
+        "type": "tuple"
       }
     ],
     "stateMutability": "view",
@@ -543,9 +560,9 @@
         "type": "address"
       },
       {
-        "internalType": "string",
-        "name": "externalTokenID",
-        "type": "string"
+        "internalType": "string[]",
+        "name": "externalTokenIDs",
+        "type": "string[]"
       },
       {
         "internalType": "string",

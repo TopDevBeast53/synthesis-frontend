@@ -18,6 +18,12 @@
         "internalType": "address",
         "name": "user",
         "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "externalTokenID",
+        "type": "string"
       }
     ],
     "name": "AddBridger",
@@ -26,12 +32,6 @@
   {
     "anonymous": false,
     "inputs": [
-      {
-        "indexed": false,
-        "internalType": "string",
-        "name": "externalTokenID",
-        "type": "string"
-      },
       {
         "indexed": false,
         "internalType": "string",
@@ -68,11 +68,42 @@
     "type": "event"
   },
   {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "Paused",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "Unpaused",
+    "type": "event"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
         "name": "_bridger",
         "type": "address"
+      },
+      {
+        "internalType": "string",
+        "name": "externalTokenID",
+        "type": "string"
       }
     ],
     "name": "addBridger",
@@ -89,9 +120,9 @@
   {
     "inputs": [
       {
-        "internalType": "string",
-        "name": "externalTokenID",
-        "type": "string"
+        "internalType": "string[]",
+        "name": "externalTokenIDs",
+        "type": "string[]"
       },
       {
         "internalType": "address",
@@ -104,7 +135,7 @@
         "type": "string"
       }
     ],
-    "name": "bridgeToBSC",
+    "name": "bridgeToEthereum",
     "outputs": [
       {
         "internalType": "bool",
@@ -192,25 +223,6 @@
         "type": "string"
       }
     ],
-    "name": "getMinted",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "string",
-        "name": "externalTokenID",
-        "type": "string"
-      }
-    ],
     "name": "getPickUpOwner",
     "outputs": [
       {
@@ -261,19 +273,6 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "string",
-        "name": "externalTokenID",
-        "type": "string"
-      }
-    ],
-    "name": "mintBridgedNFT",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
     "inputs": [],
     "name": "owner",
     "outputs": [
@@ -281,6 +280,26 @@
         "internalType": "address",
         "name": "",
         "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "pause",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "paused",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
       }
     ],
     "stateMutability": "view",
@@ -302,6 +321,13 @@
       }
     ],
     "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "unpause",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
