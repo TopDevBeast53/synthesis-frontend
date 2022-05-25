@@ -14,9 +14,9 @@ const EarnedRow=({swapData, seller, buyer})=>{
                 <StyledCell>
                     <TokensCell token={swapData?.toBuyerToken} balance={swapData?.amount.toString()}/>
                 </StyledCell>  
-                <StyledCellWithoutPadding style={{flex:"0", alignSelf:"center"}}>
+                {/* <StyledCellWithoutPadding style={{flex:"0", alignSelf:"center"}}>
                     <ArrowCell/>
-                </StyledCellWithoutPadding>               
+                </StyledCellWithoutPadding>                */}
                 <StyledCell>                    
                     <TokensCell token={swapData?.toSellerToken} balance={swapData?.cost.toString()}/>                   
                 </StyledCell>

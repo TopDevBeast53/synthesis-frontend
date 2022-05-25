@@ -74,7 +74,7 @@ export default (props)=>{
         setSelectedDuration(input.target.value)
     }
     const decimalUAmount = getDecimalAmount(new BigNumber(uAmount), selectedToBuyerTokenOption?.decimals)
-    const decimalYAmount = getDecimalAmount(new BigNumber(yAmount), selectedToSellerTokenOption.decimals)
+    const decimalYAmount = getDecimalAmount(new BigNumber(yAmount), selectedToSellerTokenOption?.decimals)
     
     const hasToApprove = selectedToBuyerTokenOption?.allowance.lte(0) || selectedToBuyerTokenOption?.allowance.lte(decimalUAmount)
     const doApprove = async () => {
@@ -121,7 +121,9 @@ export default (props)=>{
             if (!(await DoValidation())) return
             setPendingTx(true)
             console.info("========", selectedToBuyerTokenOption, selectedToSellerTokenOption)
-            console.info("========", isToBuyerTokenLp, isToSellerTokenLp)
+            console.info("========", isToBuyerTokenLp, isToSellerTokenLp)              
+            console.info("========", decimalUAmount.toString(), decimalYAmount.toString())
+
             // YieldSwapContract.openSwap(
             //   selectedToBuyerTokenOption.address,
             //   selectedToSellerTokenOption.address,

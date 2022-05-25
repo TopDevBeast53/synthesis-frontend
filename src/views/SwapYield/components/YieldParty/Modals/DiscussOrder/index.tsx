@@ -31,8 +31,8 @@ const DiscussOrder: React.FC<any> = ({onDismiss, onSend,  ...props}) => {
   const minWidth = '320px'
   const { swapId, swapData } = props
   const tokens = useAllTokens()
-  const exToken = tokens[swapData?.exToken]
-  const [yAmount, setYAmount] = useState(getBalanceNumber(swapData?.ask.toString()).toString())
+  const exToken = tokens[swapData?.buyer.token]
+  const [yAmount, setYAmount] = useState(getBalanceNumber(swapData?.ask.toString(), exToken.decimals).toString())
 
   const handleYAmountChange = (input) => {
     setYAmount(input)

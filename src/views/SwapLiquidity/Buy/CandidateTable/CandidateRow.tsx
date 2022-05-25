@@ -65,7 +65,7 @@ const CandidateRow = ({ bidId, swapData, buyer }) => {
     <StyledRow>
       <StyledCell>
         <CellContent>
-          <Text>{getEllipsis(bidData?.bidder)}</Text>
+          <Text fontSize={isMobile ? "12px": undefined}>{account === bidData?.bidder ? 'Me' : getEllipsis(bidData?.bidder)}</Text>
         </CellContent>
       </StyledCell>
       <StyledCell>        

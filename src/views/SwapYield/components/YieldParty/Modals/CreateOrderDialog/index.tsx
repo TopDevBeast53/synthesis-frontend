@@ -33,6 +33,7 @@ const CreateOrderDialog = (props) => {
       label: allTokens[key].symbol,
       value: allTokens[key],
       address:allTokens[key].address,
+      decimals:allTokens[key].decimals,
       maxBalance: allTokenBalances[key]? new BigNumber(allTokenBalances[key].toExact()):BIG_ZERO,
       allowance:BIG_ZERO,
       contract:undefined
@@ -50,6 +51,7 @@ const CreateOrderDialog = (props) => {
       .map((lp) => ({
         label: lp.lpSymbol,
         value: lp,
+        decimals:lp.token.decimals,
         address:getAddress(lp.lpAddresses),
         maxBalance: getBalanceAmount(lp.userData.tokenBalance),
         allowance: BIG_ZERO,

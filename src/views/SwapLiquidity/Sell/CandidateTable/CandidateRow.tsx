@@ -1,8 +1,9 @@
+import { useWeb3React } from '@web3-react/core'
 import { useHelixLpSwap } from 'hooks/useContract'
 import useToast from 'hooks/useToast'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { AutoRenewIcon, Button, Skeleton, Text } from 'uikit'
+import { AutoRenewIcon, Button, Skeleton, Text, useMatchBreakpoints } from 'uikit'
 import BaseCell, { CellContent } from 'views/SwapYield/components/Cells/BaseCell'
 import TokensCell from 'views/SwapYield/components/Cells/TokensCell'
 
@@ -30,6 +31,8 @@ const CandidateRow = ({ bidId, swapData }) => {
   const { toastSuccess, toastError } = useToast()
   const [bidData, setBidData] = useState<any>()
   const [pendingTx, setPendingTx] = useState(false)
+  const { isMobile } = useMatchBreakpoints()
+  const { account } = useWeb3React()
   const handleAcceptClick = (e) => {
     e.stopPropagation()
     setPendingTx(true)
@@ -67,7 +70,7 @@ const CandidateRow = ({ bidId, swapData }) => {
     <StyledRow>
       <StyledCell>
         <CellContent>
-          <Text>{getEllipsis(bidData?.bidder)}</Text>
+        <Text fontSize={isMobile ? "12px": undefined}>{account === bidData?.bidder ? 'Me' : getEllipsis(bidData?.bidder)}</Text>
         </CellContent>
       </StyledCell>
       <StyledCell>
