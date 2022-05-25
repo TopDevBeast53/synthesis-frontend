@@ -42,8 +42,8 @@ const EarnedRow=({swapData, swapId})=>{
         }
       }
     if(swapData){
-        if(swapData.status === 0) return null
-    }        
+        if(swapData.status === 0 || swapData?.buyer.amount.isZero()) return null
+    }     
     return (
         <>
             <StyledRow>

@@ -6,7 +6,7 @@ import ToolTipCell from 'views/SwapYield/components/Cells/ToolTipCell'
 
 const EarnedRow=({swapData, seller, buyer})=>{ 
     if(swapData){
-        if(swapData.isOpen === true) return null
+        if(swapData.isOpen === true || swapData?.cost.isZero()) return null
     }    
     return (
         <>
