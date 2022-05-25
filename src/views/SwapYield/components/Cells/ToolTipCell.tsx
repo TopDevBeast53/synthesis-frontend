@@ -5,6 +5,7 @@ import { useFarms } from 'state/farms/hooks'
 import { getAddress } from 'utils/addressHelpers'
 import { HelpIcon, useTooltip } from 'uikit'
 import { ToolTipText } from 'views/SwapLiquidity/constants'
+import { getBalanceNumber } from 'utils/formatBalance'
 
 const ReferenceElement = styled.div`
   display: inline-block;
@@ -34,9 +35,9 @@ const ToolTipCell = ({ seller, buyer, askAmount, isLiquidity=false }) => {
   const tooltipText = (seller && buyer) ? 
                                         ToolTipText(
                                           getTokenSymbol(farms, tokens, seller), 
-                                          seller.amount.toString(), 
+                                          getBalanceNumber(seller.amount.toString(), getTokenDecimals(farms, tokens, seller)).toString(), 
                                           getTokenSymbol(farms, tokens, buyer), 
-                                          askAmount.toString(), isLiquidity) 
+                                          getBalanceNumber(askAmount.toString(), getTokenDecimals(farms, tokens, buyer)).toString(), isLiquidity) 
                                         :
                                           ""
   const { targetRef, tooltip, tooltipVisible } = useTooltip(tooltipText, {

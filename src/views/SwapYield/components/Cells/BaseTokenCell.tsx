@@ -19,7 +19,7 @@ const BaseTokenCell = (props) => {
     <>
       <CellContent>
         <Text fontSize={isMobile ? "12px": undefined}>{tokenSymbol}</Text>
-        <Balance mt="4px" color="primary" value={balance} fontSize="14px" />
+        <Balance mt="4px" color="primary" value={balance} fontSize="14px" decimals={4}/>
       </CellContent>
     </>
   )

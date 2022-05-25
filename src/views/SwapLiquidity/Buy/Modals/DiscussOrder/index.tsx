@@ -147,7 +147,7 @@ const DiscussOrder: React.FC<any> = (props) => {
     <ModalContainer minWidth={minWidth} {...props}>
       <ModalHeader background={getThemeValue(`colors.${headerBackground}`, headerBackground)(theme)}>
         <ModalTitle>
-          <Heading>Asking : {getBalanceAmount(exContractAmount).toString()}</Heading>
+          <Heading>Asking : {getBalanceAmount(exContractAmount, buyerDecimals).toString()}</Heading>
         </ModalTitle>
         <ModalCloseButton onDismiss={onDismiss} />
       </ModalHeader>
