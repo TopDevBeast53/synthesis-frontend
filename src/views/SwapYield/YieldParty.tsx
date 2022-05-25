@@ -1,5 +1,6 @@
 import { useWeb3React } from '@web3-react/core'
 import Page from 'components/Layout/Page'
+import Loading from 'components/Loading'
 import { useTranslation } from 'contexts/Localization'
 import { useHelixYieldSwap } from 'hooks/useContract'
 import { useFastFresh } from 'hooks/useRefresh'
@@ -35,7 +36,7 @@ const YieldParty = () => {
   const { account } = useWeb3React()
   const [menuIndex, setMenuIndex] = useState(0)
   // const [filterOrderState, setFilterOrderState]=useState(OrderState.Active)
-  const [swapIds, setSwapIds] = useState([])
+  const [swapIds, setSwapIds] = useState<any[]>()
   const [refresh, setTableRefresh] = useState(0)
   const [orderState, setOrderState] = useState(OrderState.Active)
   const fastRefresh = useFastFresh()
@@ -80,9 +81,15 @@ const YieldParty = () => {
           Create Swap{' '}
         </Button>
       </Wrapper>
-      <YieldPartyContext.Provider value={context}>
-        <YieldPartyTable data={swapIds} />
-      </YieldPartyContext.Provider>
+      {
+        !swapIds?
+        <Loading/>
+        :
+        <YieldPartyContext.Provider value={context}>
+          <YieldPartyTable data={swapIds} />
+        </YieldPartyContext.Provider>
+
+      }
     </Page>
   )
 }

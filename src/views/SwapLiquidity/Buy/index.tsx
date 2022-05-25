@@ -6,6 +6,7 @@ import { useTranslation } from 'contexts/Localization'
 import { useHelixLpSwap } from 'hooks/useContract'
 import styled from 'styled-components'
 import { Button, ButtonMenu, ButtonMenuItem, useMatchBreakpoints, useModal } from 'uikit'
+import Loading from 'components/Loading'
 import { SwapLiquidityContext } from '../context'
 import BuyTable from './BuyTable'
 import { SwapState } from '../types'
@@ -38,11 +39,12 @@ const Sell = () => {
   const { account } = useWeb3React()
   const { fetchSwapData } = useLpSwap()
   const [menuIndex, setMenuIndex] = useState(SwapState.All)
-  const [swaps, setSwaps] = useState([])
+  const [swaps, setSwaps] = useState<any[]>()
   const [biddedSwapIdsOfCurrentUser, setBidIdsPerUser] = useState([])
   const { tableRefresh, setFilterState } = useContext(SwapLiquidityContext)
   const {isMobile} = useMatchBreakpoints()
   const filteredSwaps = useMemo(() => {
+    if(!swaps) return []
     if(!account) return []
     if (menuIndex === SwapState.Finished) return filter(swaps, { isOpen: false, buyer: account })
     if (menuIndex === SwapState.All)
@@ -99,7 +101,13 @@ const Sell = () => {
           </Wrapper>
         )
       }
-      <BuyTable data={filteredSwaps} />
+      {
+        swaps===undefined?
+        <Loading/>
+        :
+        <BuyTable data={filteredSwaps} />
+      }
+      
     </Page>
   )
 }

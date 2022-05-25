@@ -1,5 +1,6 @@
 import { useWeb3React } from '@web3-react/core'
 import Page from 'components/Layout/Page'
+import Loading from 'components/Loading'
 import { useTranslation } from 'contexts/Localization'
 import { useHelixLpSwap } from 'hooks/useContract'
 import { useFastFresh } from 'hooks/useRefresh'
@@ -8,9 +9,9 @@ import React, { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Button, ButtonMenu, ButtonMenuItem, useMatchBreakpoints, useModal } from 'uikit'
 import { SwapLiquidityContext } from '../context'
+import { OrderState } from '../types'
 import CreateOrderDialog from './Modals/CreateOrderDialog'
 import SellTable from './SellTable'
-import { OrderState } from '../types'
 
 const Wrapper = styled.div`
   display: flex;
@@ -34,7 +35,7 @@ const Sell = () => {
   const LpSwapContract = useHelixLpSwap()
   const { account } = useWeb3React()
   const [menuIndex, setMenuIndex] = useState(0)
-  const [swapIds, setSwapIds] = useState([])
+  const [swapIds, setSwapIds] = useState<any[]>()
   const { isMobile } = useMatchBreakpoints()
 
   const fastRefresh = useFastFresh()
@@ -79,7 +80,13 @@ const Sell = () => {
           </Wrapper>
         )
       }
-      <SellTable data={swapIds} />
+      {
+        !swapIds ?
+        <Loading/>
+        :
+        <SellTable data={swapIds} />
+      }
+      
     </Page>
   )
 }

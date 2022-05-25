@@ -1,4 +1,6 @@
+import React from 'react'
 import styled from 'styled-components'
+import CircleLoader from './Loader/CircleLoader'
 
 const Loading = styled.div`
   border: 8px solid #f3f3f3;
@@ -28,4 +30,17 @@ const Loading = styled.div`
   }
 `
 
-export default Loading
+export default () => {
+  return (
+    <div style={{ display:"flex", position:"relative", justifyContent:"center", alignItems:"center"}}>
+      <div style={{ display:"flex", justifyContent:"center", paddingBottom: '8px', paddingRight:"10px" }}>
+        <div style={{fontSize:"18px", fontWeight:"bold", color:"white"}}>
+          Loading...
+        </div>
+      </div>
+      <div style={{ display:"flex", justifyContent:"center", paddingBottom: '8px' }}>
+        <CircleLoader size="30px" />
+      </div>
+    </div>
+  )
+}

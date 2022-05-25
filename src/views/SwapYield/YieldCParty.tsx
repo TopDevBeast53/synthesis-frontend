@@ -1,16 +1,17 @@
-import React, { useState, useEffect, useMemo } from 'react'
 import { useWeb3React } from '@web3-react/core'
-import styled from 'styled-components'
-import { useTranslation } from 'contexts/Localization'
-import { Button, ButtonMenu, ButtonMenuItem, useMatchBreakpoints, useModal } from 'uikit'
-import { includes } from 'lodash'
-import { useHelixYieldSwap } from 'hooks/useContract'
 import Page from 'components/Layout/Page'
+import Loading from 'components/Loading'
+import { useTranslation } from 'contexts/Localization'
+import { useHelixYieldSwap } from 'hooks/useContract'
+import { includes } from 'lodash'
+import React, { useEffect, useMemo, useState } from 'react'
+import styled from 'styled-components'
+import { Button, ButtonMenu, ButtonMenuItem, useMatchBreakpoints, useModal } from 'uikit'
 import YieldCPartyTable from './components/YieldCParty/Table'
-import { SwapState } from './types'
-import { YieldCPartyContext } from './context'
 import CreateSwapModal from './components/YieldParty/Modals/CreateOrderDialog'
+import { YieldCPartyContext } from './context'
 import { useYieldSwap } from './hooks/useSwapYield'
+import { SwapState } from './types'
 
 const Wrapper = styled.div`  
   align-items: center;
@@ -40,12 +41,13 @@ const YieldCParty = () => {
   const {isMobile} = useMatchBreakpoints()
 
   const [menuIndex, setMenuIndex] = useState(SwapState.All)
-  const [swaps, setSwaps] = useState([])
+  const [swaps, setSwaps] = useState<any[]>()
   const [hasBidOnSwap, setHasBidOnSwap] = useState([])
   const [refresh, setTableRefresh] = useState(0)
   const [loading, setLoading] = useState(false)
 
   const filteredSwaps = useMemo(() => {
+    if(!swaps) return[]
     if(!account) return []
     if (menuIndex === SwapState.Pending)
       return swaps.filter((s, i) => s.status === 1 && includes(hasBidOnSwap, i))
@@ -130,11 +132,16 @@ const YieldCParty = () => {
               </Wrapper>
             )
           }
-          <YieldCPartyContext.Provider
-            value={{ tableRefresh: refresh, setTableRefresh, updateMenuIndex: setMenuIndex }}
-          >
-            <YieldCPartyTable swaps={filteredSwaps} state={menuIndex} loading={loading} />
-          </YieldCPartyContext.Provider>
+          {
+            !swaps?
+            <Loading/>
+            :
+            <YieldCPartyContext.Provider
+              value={{ tableRefresh: refresh, setTableRefresh, updateMenuIndex: setMenuIndex }}
+            >
+              <YieldCPartyTable swaps={filteredSwaps} state={menuIndex} loading={loading} />
+            </YieldCPartyContext.Provider>
+          }
         </Page>
       }
     </>
