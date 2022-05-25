@@ -16,7 +16,7 @@ const ExTokenCell = (props) => {
   const { exTokenAddress, balance } = props
   const tokens = useAllTokens()
   const exToken = tokens[exTokenAddress]
-  const amount = getBalanceNumber(balance)
+  const amount = getBalanceNumber(balance, exToken.decimals)
   const {isMobile} = useMatchBreakpoints()
 
   return(

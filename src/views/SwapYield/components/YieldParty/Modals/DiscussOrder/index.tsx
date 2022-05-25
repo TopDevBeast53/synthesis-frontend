@@ -38,7 +38,7 @@ const DiscussOrder: React.FC<any> = (props) => {
     setYAmount(input)
   }
   const handleSendClick = () => {
-    const decimalYAmount = getDecimalAmount(new BigNumber(yAmount))
+    const decimalYAmount = getDecimalAmount(new BigNumber(yAmount), exToken.decimals)
     if (decimalYAmount.lte(BIG_ZERO)) {
       toastError('Error', 'Token Amount should be bigger than zero')
       return

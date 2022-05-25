@@ -15,7 +15,7 @@ const LPTokenCell = (props) => {
   const { lpTokenAddress, balance } = props
   const { data: farms } = useFarms()  
   const lpToken = farms.find((item) => getAddress(item.lpAddresses) === lpTokenAddress)
-  const amount = getBalanceNumber(balance)
+  const amount = getBalanceNumber(balance, lpToken.token.decimals)
   const {isMobile} = useMatchBreakpoints()
   return(
     <>

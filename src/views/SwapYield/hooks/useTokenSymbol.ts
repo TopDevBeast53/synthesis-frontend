@@ -15,3 +15,17 @@ export const useTokenSymbol = (tokenInfo) => {
     const exToken = allTokens[address]
     return exToken? exToken.symbol : ""
 }
+
+export const useTokenDecimals = (tokenInfo) => {
+    const { data: farms } = useFarms()
+    const allTokens = useAllTokens()
+    if(!tokenInfo) return 18
+    const address  = tokenInfo.token
+    if (tokenInfo.isLp){
+        const lpToken = farms.find((item) => getAddress(item.lpAddresses) === address)
+        return lpToken.token.decimals
+    }
+    
+    const exToken = allTokens[address]
+    return exToken? exToken.decimals : 18
+}

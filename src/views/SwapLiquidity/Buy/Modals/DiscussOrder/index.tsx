@@ -41,25 +41,26 @@ const DiscussOrder: React.FC<any> = (props) => {
   const allTokenBalances = useAllTokenBalances()  
   const { data: farms } = useMemoFarms()  
   const [allowedValue, setAllowedValue] = useState(BIG_ZERO)
+  const [symbolName, buyerDecimals] = useMemo(()=>{    
+    if(buyer.isLp){
+      const lp = farms.find((item) => getAddress(item.lpAddresses) === buyer.token)      
+      return lp ?  [lp.lpSymbol, lp.token.decimals] : ["", 18]
+    }    
+    return allTokens[buyer.token] ? [allTokens[buyer.token].symbol, allTokens[buyer.token].decimals] : ["", 18]
+  },[allTokens, buyer, farms])
 
   const exContract = useERC20(swapData?.toSellerToken)
   const exContractAmount = bidData ? bidData?.amount.toString() : swapData?.ask.toString()
 
-  const [yAmount, setYAmount] = useState(getBalanceAmount(exContractAmount).toString())
-  const decimalYAmount = getDecimalAmount(new BigNumber(yAmount))
-  const balanceYAmount = getBalanceAmount(new BigNumber(yAmount))
-  const symbolName = useMemo(()=>{
-    if(buyer.isLp){
-      const lp = farms.find((item) => getAddress(item.lpAddresses) === buyer.token)
-      return lp ?  lp.lpSymbol : ""
-    }
-    return allTokens[buyer.token] ? allTokens[buyer.token].symbol : ""
-  },[allTokens, buyer, farms])
+  const [yAmount, setYAmount] = useState(getBalanceAmount(exContractAmount, buyerDecimals).toString()) 
+  const decimalYAmount = getDecimalAmount(new BigNumber(yAmount), buyerDecimals)
+
   const maxBalance = useMemo(()=>{
     if(buyer.isLp){
       const lp = farms.find((item) => getAddress(item.lpAddresses) === buyer.token)
-      return lp ?  getBalanceAmount(lp.userData.tokenBalance) : BIG_ZERO
+      return lp ?  getBalanceAmount(lp.userData.tokenBalance, lp.token.decimals) : BIG_ZERO
     }
+    
     return allTokenBalances[buyer.token] ? allTokenBalances[buyer.token].toExact() : BIG_ZERO
 
   }, [allTokenBalances, farms, buyer])  
@@ -80,7 +81,7 @@ const DiscussOrder: React.FC<any> = (props) => {
       setPendingTx(false)
       return false
     }
-    if (balanceYAmount.isGreaterThan(maxBalance)) {
+    if ((new BigNumber(yAmount)).isGreaterThan(maxBalance)) {
       toastError('Error', "You don't have enough token balance")
       setPendingTx(false)
       return false
@@ -109,7 +110,7 @@ const DiscussOrder: React.FC<any> = (props) => {
       try {
         const tx = await exContract.approve(LpSwapContract.address, ethers.constants.MaxUint256)
         await tx.wait()
-        setAllowedValue(getDecimalAmount(new BigNumber(Number.POSITIVE_INFINITY)))
+        setAllowedValue(getDecimalAmount(new BigNumber(Number.POSITIVE_INFINITY), buyerDecimals))
         setPendingTx(false)
       } catch (err) {
         toastError('Error', err.toString())
@@ -124,6 +125,7 @@ const DiscussOrder: React.FC<any> = (props) => {
         const tx = await LpSwapContract.setBid(bidId, decimalYAmount.toString())
         await tx.wait()
       } else {
+        console.log("=swap data id ========", swapData.id, swapData, decimalYAmount.toString())
         const tx = await LpSwapContract.makeBid(swapData?.id, decimalYAmount.toString())
         await tx.wait()
       }

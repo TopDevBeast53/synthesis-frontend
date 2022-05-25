@@ -20,7 +20,7 @@ import { useHelixYieldSwap, useERC20 } from 'hooks/useContract'
 import { BIG_ZERO } from 'utils/bigNumber'
 import getThemeValue from 'uikit/util/getThemeValue'
 import { getDecimalAmount, getBalanceAmount } from 'utils/formatBalance'
-import { useTokenSymbol } from 'views/SwapYield/hooks/useTokenSymbol'
+import { useTokenDecimals, useTokenSymbol } from 'views/SwapYield/hooks/useTokenSymbol'
 
 const DiscussOrder: React.FC<any> = (props) => {
   const theme = useTheme()
@@ -35,13 +35,14 @@ const DiscussOrder: React.FC<any> = (props) => {
   const { swapId, tokenInfo, amount, onDismiss, bid, bidId, onSend } = props
   const tokenAddress = tokenInfo.token
   const symbol = useTokenSymbol(tokenInfo)
+  const decimals = useTokenDecimals(tokenInfo)
   const erc20Contract = useERC20(tokenAddress)
   const exTokenAmount = amount.toString()
   const [pendingTx, setPendingTx] = useState(false)
   const [allowedValue, setAllowedValue] = useState(BIG_ZERO)
   const [maxBalance, setMaxBalance] = useState(BIG_ZERO)
   const [yAmount, setYAmount] = useState('0')
-  const decimalYAmount = getDecimalAmount(new BigNumber(yAmount))
+  const decimalYAmount = getDecimalAmount(new BigNumber(yAmount), decimals)
 
   const handleYAmountChange = useCallback(
     (e: React.FormEvent<HTMLInputElement>) => {
@@ -97,7 +98,7 @@ const DiscussOrder: React.FC<any> = (props) => {
         .approve(yieldSwapContract.address, ethers.constants.MaxUint256)
         .then(async (tx) => {
           await tx.wait()
-          setAllowedValue(getDecimalAmount(new BigNumber(Number.POSITIVE_INFINITY)))
+          setAllowedValue(getDecimalAmount(new BigNumber(Number.POSITIVE_INFINITY), decimals))
           setPendingTx(false)
         })
         .catch((err) => {

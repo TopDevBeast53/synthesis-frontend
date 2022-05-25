@@ -20,7 +20,7 @@ import {
 import getThemeValue from 'uikit/util/getThemeValue'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { getBalanceNumber, getDecimalAmount } from 'utils/formatBalance'
-import { getTokenSymbol } from 'views/SwapYield/components/Cells/ToolTipCell'
+import { getTokenDecimals, getTokenSymbol } from 'views/SwapYield/components/Cells/ToolTipCell'
 
 // const getEllipsis = (account) => {
 //   return account ? `${account.substring(0, 5)}...${account.substring(account.length - 5)}` : null
@@ -39,13 +39,13 @@ const DiscussOrder: React.FC<any> = (props) => {
   const { data: farms } = useFarms()
   const tokens = useAllTokens()
   
-  const [yAmount, setYAmount] = useState(getBalanceNumber(swapData?.ask.toString()).toString())
+  const [yAmount, setYAmount] = useState(getBalanceNumber(swapData?.ask.toString(), getTokenDecimals(farms, tokens, buyer)).toString())
 
   const handleYAmountChange = (input) => {
     setYAmount(input)
   }
   const handleSendClick = () => {
-    const decimalYAmount = getDecimalAmount(new BigNumber(yAmount))
+    const decimalYAmount = getDecimalAmount(new BigNumber(yAmount), getTokenDecimals(farms, tokens, buyer))
     if (decimalYAmount.lte(BIG_ZERO)) {
       toastError('Error', 'Token Amount should be bigger than zero')
       return
