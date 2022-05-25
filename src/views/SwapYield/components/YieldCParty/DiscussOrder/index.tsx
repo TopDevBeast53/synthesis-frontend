@@ -58,13 +58,13 @@ const DiscussOrder: React.FC<any> = ({onDismiss, onSend, ...props}) => {
     erc20Contract.allowance(account, yieldSwapContract.address).then((res) => {
       setAllowedValue(new BigNumber(res.toString()))
     })
-    erc20Contract.balanceOf(account).then((res) => {
-      setMaxBalance(getBalanceAmount(new BigNumber(res.toString())))
+    erc20Contract.balanceOf(account).then((res) => {      
+      setMaxBalance(getBalanceAmount(new BigNumber(res.toString()), decimals))
     })
     // erc20Contract.symbol().then((res) => {
     //   setSymbol(res)
     // })
-  },[erc20Contract, account, yieldSwapContract.address])
+  },[erc20Contract, account, yieldSwapContract.address, decimals])
 
   const handleSelectMaxOfToken = useCallback(() => {
     setYAmount(maxBalance.toString())
@@ -139,7 +139,7 @@ const DiscussOrder: React.FC<any> = ({onDismiss, onSend, ...props}) => {
     <ModalContainer minWidth={minWidth} {...props}>
       <ModalHeader background={getThemeValue(`colors.${headerBackground}`, headerBackground)(theme)}>
         <ModalTitle>
-          <Heading>Seller is asking : {getBalanceAmount(exTokenAmount).toString()}</Heading>
+          <Heading>Seller is asking : {getBalanceAmount(exTokenAmount, decimals).toString()}</Heading>
         </ModalTitle>
         <ModalCloseButton onDismiss={onDismiss} />
       </ModalHeader>

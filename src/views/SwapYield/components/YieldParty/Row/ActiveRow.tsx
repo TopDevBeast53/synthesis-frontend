@@ -59,9 +59,9 @@ const ActiveRow = (props) => {
   const [showDiscussModal] = useModal(<DiscussOrder swapId={swapId} onSend={onSendAsk} swapData={swapData} />, false)
 
   const handleUpdateClick = (e) => {
-    e.stopPropagation()
+    e.stopPropagation()    
     showDiscussModal()
-  }
+  }  
   if (swapData) {
     if (swapData.status !== 0) return null
   }  
@@ -88,24 +88,27 @@ const ActiveRow = (props) => {
             askAmount={swapData?.ask.toString()}
           />
         </StyledCellWithoutPadding>
-        <StyledCell style={{flexDirection:"row"}}>
-          <Button color="primary" onClick={handleUpdateClick} scale="sm" width="100px" ml="15px">
-            {' '}
-            Update{' '}
-          </Button>
-          <Button
-            isLoading={pendingTx}
-            endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
-            color="primary"
-            onClick={handleCloseClick}
-            scale="sm"
-            width="100px"
-            ml="15px"
-          >
-            {' '}
-            Close{' '}
-          </Button>
-        </StyledCell>
+          {
+            swapData &&
+            <StyledCell style={{flexDirection:"row"}}>
+              <Button color="primary" onClick={handleUpdateClick} scale="sm" width="100px" ml="15px">
+                {' '}
+                Update{' '}
+              </Button>
+              <Button
+                isLoading={pendingTx}
+                endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
+                color="primary"
+                onClick={handleCloseClick}
+                scale="sm"
+                width="100px"
+                ml="15px"
+              >
+                {' '}
+                Close{' '}
+              </Button>
+            </StyledCell>
+          }
         {
           !isMobile &&
           <StyledCell>

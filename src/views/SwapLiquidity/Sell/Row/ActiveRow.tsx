@@ -76,16 +76,19 @@ const ActiveRow = (props) => {
                         isLiquidity
                     />
                 </StyledCellWithoutPadding>
+                {
+                    swapData&&
+                    <StyledCell style={{zIndex:10, flexDirection:"row"}}>
+                        <Button                         
+                            color="primary" onClick={handleUpdateClick} scale="sm" width="100px" ml="15px"> Update </Button>
+                        <Button                         
+                            isLoading={pendingTx}    
+                            endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
+                            ml="15px"
+                            color="primary" onClick={handleCloseClick} scale="sm" width="100px"> Close </Button>
+                    </StyledCell>
 
-                <StyledCell style={{zIndex:10, flexDirection:"row"}}>
-                    <Button                         
-                        color="primary" onClick={handleUpdateClick} scale="sm" width="100px" ml="15px"> Update </Button>
-                    <Button                         
-                        isLoading={pendingTx}    
-                        endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
-                        ml="15px"
-                        color="primary" onClick={handleCloseClick} scale="sm" width="100px"> Close </Button>
-                </StyledCell>
+                }
                 {
                     !isMobile &&
                     <StyledCellWithoutPadding>

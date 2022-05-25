@@ -32,13 +32,13 @@ const DiscussOrder: React.FC<any> = ({onDismiss, onSend,  ...props}) => {
   const { swapId, swapData } = props
   const tokens = useAllTokens()
   const exToken = tokens[swapData?.buyer.token]
-  const [yAmount, setYAmount] = useState(getBalanceNumber(swapData?.ask.toString(), exToken.decimals).toString())
+  const [yAmount, setYAmount] = useState(getBalanceNumber(swapData?.ask.toString(), exToken?.decimals).toString())
 
   const handleYAmountChange = (input) => {
     setYAmount(input)
   }
   const handleSendClick = () => {
-    const decimalYAmount = getDecimalAmount(new BigNumber(yAmount), exToken.decimals)
+    const decimalYAmount = getDecimalAmount(new BigNumber(yAmount), exToken?.decimals)
     if (decimalYAmount.lte(BIG_ZERO)) {
       toastError('Error', 'Token Amount should be bigger than zero')
       return

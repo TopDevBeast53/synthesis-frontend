@@ -53,7 +53,7 @@ const CreateOrderDialog = (props) => {
         value: lp,
         decimals:lp.token.decimals,
         address:getAddress(lp.lpAddresses),
-        maxBalance: getBalanceAmount(lp.userData.tokenBalance),
+        maxBalance: getBalanceAmount(lp.userData.tokenBalance, lp.token.decimals),
         allowance: BIG_ZERO,
         contract: undefined,
       }))

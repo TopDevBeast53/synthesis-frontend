@@ -2,7 +2,7 @@ import { useHelixYieldSwap } from 'hooks/useContract'
 import useToast from 'hooks/useToast'
 import moment from 'moment'
 import React, { useMemo, useState } from 'react'
-import { AutoRenewIcon, Button, Text, useMatchBreakpoints } from 'uikit'
+import { AutoRenewIcon, Button, Skeleton, Text, useMatchBreakpoints } from 'uikit'
 import { OrderState } from 'views/SwapYield/types'
 import { CellContent } from '../../Cells/BaseCell'
 import { StyledCell, StyledRow } from '../../Cells/StyledCell'
@@ -42,7 +42,7 @@ const EarnedRow=({swapData, swapId})=>{
         }
       }
     if(swapData){
-        if(swapData.status !== 1) return null
+        if(swapData.status === 0) return null
     }        
     return (
         <>
@@ -51,10 +51,15 @@ const EarnedRow=({swapData, swapId})=>{
                     <TokenCell tokenInfo={swapData?.seller} amount={swapData?.seller.amount.toString()}/>
                 </StyledCell>
                 <StyledCell style={{flex:isMobile ? "none": "1 1 70px"}}>
-                    <CellContent>                   
-                        <Text fontSize={isMobile ? "12px": undefined} mt="4px" color="primary">
-                            {swapData.status === OrderState.Withdrawn ? "Withdrawn" : !isPast ? 'Now available!' : timeInfo}
-                        </Text>
+                    <CellContent>
+                        {
+                            swapData?
+                                <Text fontSize={isMobile ? "12px": undefined} mt="4px" color="primary">
+                                    {swapData?.status === OrderState.Withdrawn ? "Withdrawn" : !isPast ? 'Now available!' : timeInfo}
+                                </Text>
+                            :
+                            <Skeleton/>
+                        }                   
                     </CellContent>
                 </StyledCell>
                 {/* <StyledCellWithoutPadding>
@@ -73,7 +78,7 @@ const EarnedRow=({swapData, swapId})=>{
                     <StyledCell style={{ zIndex: 10, flex:isMobile ? "None": "1" }} ml="8px">
                         <CellContent>
                         {
-                            (swapData.status === OrderState.Completed && !isPast) &&
+                            (swapData?.status === OrderState.Completed && !isPast) &&
                                     <Button
                                         variant="secondary"
                                         scale={isMobile?"sm":"md"}

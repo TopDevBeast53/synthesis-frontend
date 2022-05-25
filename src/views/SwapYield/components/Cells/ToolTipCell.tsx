@@ -29,9 +29,9 @@ export const getTokenDecimals = (farms, tokens, tokenInfo) => {
   return token?  token.decimals : 18
 }
 const ToolTipCell = ({ seller, buyer, askAmount, isLiquidity=false }) => {
-
   const { data: farms } = useFarms()
   const tokens = useAllTokens()
+  
   const tooltipText = (seller && buyer) ? 
                                         ToolTipText(
                                           getTokenSymbol(farms, tokens, seller), 
@@ -44,7 +44,9 @@ const ToolTipCell = ({ seller, buyer, askAmount, isLiquidity=false }) => {
     placement: 'top-end',
     tooltipOffset: [20, 10],
   })
-
+  if(!seller || !buyer){
+    return null    
+  }
 
   return (
     <Container>
