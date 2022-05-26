@@ -79,14 +79,17 @@ export const useGetNftInfo = () => {
             const results = await Promise.all(
                 ids.map((id: any) => helixNFTContract.getToken(id))
             )
-            const res = results.map((token) => ({
-                tokenId: token.tokenId.toString(),
-                externalTokenId: token.externalTokenID.toString(),
-                tokenOwner: token.tokenOwner.toString(),                
+            console.log("results =============", results)
+            const res = results.map(([tokenOwner,uri, tokenId, token]) => ({
+                tokenId: tokenId.toString(),
+                externalTokenIds: token.externalTokenIDs,
+                tokenOwner, 
+                wrappedNfts:token.wrappedNfts.toString(),               
                 isStaked: token.isStaked,
-                uri: token.uri,
+                uri,
                 disabled: false,
             }))
+            console.log("res =============", res)
 
             return res
         }

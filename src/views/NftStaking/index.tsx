@@ -188,9 +188,9 @@ export default function NftStaking() {
               infos={[
                 {
                   type:"level",
-                  caption: 'Token ID',
+                  caption: 'Wrapped NFTs',
                   value: (
-                    <CopyValue value={token.externalTokenId}>{shortenAddress(token.externalTokenId, isMobile? 1 : 3)}</CopyValue>
+                    <span>{token.wrappedNfts}</span>
                   ),
                 }
               ]}
