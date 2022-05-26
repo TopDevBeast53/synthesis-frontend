@@ -156,5 +156,15 @@ export { default as WalletFilledIcon } from './Icons/WalletFilled'
 export { default as WalletIcon } from './Icons/Wallet'
 export { default as WarningIcon } from './Icons/Warning'
 
+export { default as ThreeDotIcon} from './Icons/3dots'
+export { default as Earn1Icon} from './Icons/Earn1'
+export { default as NFT1Icon} from './Icons/NFT1'
+export { default as ReferalsIcon} from './Icons/Referals'
+export { default as Trade1Icon} from './Icons/Trade1'
+export { default as Vote1Icon} from './Icons/Vote1'
+export { default as YieldSwapIcon} from './Icons/YieldSwap'
+
+
+
 export { default as Svg } from './Svg'
 export type { SvgProps } from './types'

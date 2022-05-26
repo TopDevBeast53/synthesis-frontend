@@ -24,7 +24,7 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType[] = (t) => [
     {
         label: t('Earn'),
         href: '/farms',
-        icon: 'Earn',
+        icon: 'Earn1',
         items: [
             {
                 label: t('Farms'),
@@ -43,7 +43,8 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType[] = (t) => [
     {
         label: t('Yield Swaps'),
         href: '/lps-swap',
-        icon: 'Earn',
+        mobileLabel:"YS",
+        icon: 'YieldSwap',
         items: [
             {
                 label: t('Swap LPs'),
@@ -58,13 +59,14 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType[] = (t) => [
     {
         label: t('Referrals'),
         href: '/referrals',
-        icon: 'Earn',
+        icon: 'Referals',
+        showItemsOnMobile:false,
         items: [],
     },
     {
         label: t('NFT'),
         href: '/geobot-staking',
-        icon: 'Earn',
+        icon: 'NFT1',
         items: [
             {
                 label: 'Geobot Staking',
@@ -88,6 +90,8 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType[] = (t) => [
     {
         label: t('Voting'),
         href: '/voting',
+        icon:'Vote1',
+        showItemsOnMobile:false,
     },
     // {
     //   label: t('Win'),

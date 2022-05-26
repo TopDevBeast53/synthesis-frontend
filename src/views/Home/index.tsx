@@ -76,7 +76,7 @@ const Home: React.FC = () => {
             </Heading>
             <Card style={{ background: 'rgba(16, 20, 17, 0.6)', marginBottom: '10px' }}>
               <Flex style={{ padding: isMobile ? '15px 5%':'44px 10%', width: '100%', justifyContent: 'space-between' }}>
-                <InstantlySwap style={{ width: "100px", marginRight:"5px" }}/>
+                <InstantlySwap style={isMobile ? { width: "80px", marginRight:"15px" } :{ width: "100px", marginRight:"5px" }}/>
                 <Column style={{ maxWidth: '70%' }}>
                   <Heading pb="13px">Instantly Swap Yield Positions at Low Cost</Heading>
                   <Text>
@@ -88,7 +88,7 @@ const Home: React.FC = () => {
             </Card>
             <Card style={{ background: 'rgba(16, 20, 17, 0.6)', marginBottom: '10px' }}>
               <Flex style={{ padding: isMobile ? '15px 5%':'44px 10%', width: '100%', justifyContent: 'space-between' }}>
-                <DeRisk style={{ width: "100px", marginRight:"5px" }}/>
+                <DeRisk style={isMobile ? { width: "80px", marginRight:"15px" } :{ width: "100px", marginRight:"5px" }}/>
                 <Column style={{ maxWidth: '70%' }}>
                   <Heading pb="13px">Easily De-Risk By Locking in Fixed Returns</Heading>
                   <Text>
@@ -100,7 +100,7 @@ const Home: React.FC = () => {
             </Card>
             <Card style={{ background: 'rgba(16, 20, 17, 0.6)', marginBottom: '10px' }}>
               <Flex style={{ padding: isMobile ? '15px 5%':'44px 10%', width: '100%', justifyContent: 'space-between' }}>
-                <NewPositions style={{ width: "100px", marginRight:"5px" }}/>
+                <NewPositions style={isMobile ? { width: "80px", marginRight:"15px" } :{ width: "100px", marginRight:"5px" }}/>
                 <Column style={{ maxWidth: '70%' }}>
                   <Heading pb="13px">Enter Yield Positions at Discounted Rates</Heading>
                   <Text>

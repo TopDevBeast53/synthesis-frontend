@@ -14,7 +14,7 @@ const BottomNav: React.FC<BottomNavProps> = ({ items = [], activeItem = '', acti
     <>
       {isBottomMenuOpen && <Overlay />}
       <StyledBottomNav justifyContent="space-around" {...props}>
-        {items.map(({ label, items: menuItems, href, icon, showOnMobile = true, showItemsOnMobile = true }, index) => {
+        {items.map(({ label, items: menuItems, href, icon, showOnMobile = true, showItemsOnMobile = true, mobileLabel=undefined }, index) => {
           const statusColor = menuItems?.find((menuItem) => menuItem.status !== undefined)?.status?.color
           return (
             showOnMobile && (
@@ -33,6 +33,7 @@ const BottomNav: React.FC<BottomNavProps> = ({ items = [], activeItem = '', acti
                       href={href}
                       isActive={href === activeItem}
                       label={label}
+                      mobileLabel = {mobileLabel}
                       iconName={icon}
                       showItemsOnMobile={showItemsOnMobile}
                     />

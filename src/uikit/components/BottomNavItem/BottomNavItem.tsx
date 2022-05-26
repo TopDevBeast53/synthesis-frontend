@@ -31,7 +31,7 @@ const BottomNavItem: React.FC<BottomNavItemProps> = ({
         fontWeight={isActive ? '600' : '400'}
         fontSize="10px"
       >
-        {label}
+        {props.mobileLabel? props.mobileLabel : label}
       </StyledBottomNavText>
     </Flex>
   )

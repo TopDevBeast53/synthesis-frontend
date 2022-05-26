@@ -7,6 +7,7 @@ export type MenuItemsType = {
     icon?: string
     items?: DropdownMenuItems[]
     showOnMobile?: boolean
+    mobileLabel?:string
     showItemsOnMobile?: boolean
 }
 
