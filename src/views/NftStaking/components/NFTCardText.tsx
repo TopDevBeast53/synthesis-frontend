@@ -30,7 +30,21 @@ export const NFTCardText = styled(Text)<{ type: NFTCardTextType }>`
         return 'font-size: 15px';
       case NFTCardTextType.generalValue:
       default:
-        return 'font-size: 50px'
+        return 'font-size: 30px'
     }
   }};
+  ${({ theme }) => theme.mediaQueries.md} {
+    ${({ type }) => {
+      switch (type) {
+        case NFTCardTextType.generalCaption:
+        case NFTCardTextType.cardCaption:
+        case NFTCardTextType.cardValue:
+          return 'font-size: 15px';
+        case NFTCardTextType.generalValue:
+        default:
+          return 'font-size: 50px'
+      }
+    }};
+  }
+  
 `

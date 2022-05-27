@@ -4,9 +4,11 @@ import styled from 'styled-components'
 import { Card, Flex, Text, Button } from 'uikit'
 
 const NFTStartCollectCard = styled(Card)`
-  padding: 58px 68px 55px 122px;
+  padding: 25px 25px;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    padding: 58px 68px 55px 122px;    
+  }
 `
-
 const NFTStartCollectText = styled(Text)`
   weight: 400;
   font-size: 70px;
@@ -20,7 +22,7 @@ const StartCollectImageBackground = styled.div`
   background-repeat: no-repeat;
   background-position: center center;
   background: url('/images/nfts/NFTBackground.png');
-  height: 485px;
+  // height: 485px;
   width: 545px;
 
   border-radius: 12px;
@@ -43,14 +45,14 @@ const NFTStartCollectPanel: React.FC = () => {
   return (
     <NFTStartCollectCard>
       <NFTStartCollectFlex>
-        <Flex flexDirection="column" style={{ marginBottom: '20px' }}>
+        {/* <Flex flexDirection="column" style={{ marginBottom: '20px' }}>
           <NFTStartCollectText>Start</NFTStartCollectText>
           <NFTStartCollectText>to collect!</NFTStartCollectText>
-        </Flex>
+        </Flex> */}
 
         <NFTStartCollectFlex style={{ borderRadius: '12px' }}>
           <StartCollectImageBackground>
-            <Flex justifyContent="center" alignItems="center" style={{ height: '100%' }}>
+            <Flex justifyContent="center" alignItems="center" style={{ height: '50vh' }}>
               <Button onClick={() => window.open(COLLECT_NFT_LINK, '_blank')}>Start to collect!</Button>
             </Flex>
           </StartCollectImageBackground>

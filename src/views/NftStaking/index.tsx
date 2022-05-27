@@ -47,7 +47,10 @@ const NFTDisplayPanel = styled(Flex)`
 `
 
 const GeneralCard = styled(Card)`
-  padding: 14px 29px 15px 29px;
+  padding: 15px 15px;
+  ${({ theme }) => theme.mediaQueries.md} {
+    padding: 14px 29px 15px 29px;
+  }
   min-width: 288px;
   margin-top: 1 rem;
 `
@@ -68,14 +71,14 @@ export default function NftStaking() {
   const [tokens, setTokens] = useState([])
   const [pendingReward, setPendingReward] = useState('')
   const [viewStaked, setViewStaked] = useState(false)
-  const [selectedTokenIds, setSelectedTokenIds] = useState<number[]>([])
-
+  const [selectedTokenIds, setSelectedTokenIds] = useState<number[]>([])  
   const [loading, setLoading] = useState(true)
   const [loadingStatus, setLoadingStatus] = useState(false)  
   const [loadingPendingReward, setLoadingPendingReward] = useState(true)
   const [enableStakingBtn, setEnableStakingBtn] = useState(false)
   const { getTokens} = useGetNftInfo()
   const { stakingNft, getPendingReward, withdrawReward } = useStakingNft()
+  const {isMobile} = useMatchBreakpoints()
 
   const filterNft = filter(tokens, (token: any) => token.isStaked === viewStaked)
 
@@ -197,6 +200,7 @@ export default function NftStaking() {
               disabled={token.disabled}
               onhandleChangeCheckBox={onhandleCheckbox}
               loading={loadingStatus}
+              isSelected={selectedTokenIds?.includes(token.tokenId)}
             />
           )
         })}
@@ -210,39 +214,40 @@ export default function NftStaking() {
           {t('Stake Your Geobots')}
         </Heading>
       </PageHeader>
-      <Page>
+      <Page removePadding>
         <NFTDisplayPanel>
-          <Flex justifyContent="space-between" flexWrap="wrap">
-            <Flex flexWrap="wrap">              
-              <GeneralCard style={{marginTop: '15px', marginLeft: '25px'}}>
+          <Flex  flexDirection={isMobile?"column":"row"} alignItems="center" justifyContent={isMobile ? "center" : "space-between"} flexWrap="wrap">
+            <Flex flexWrap="wrap" alignItems="center">
+              <GeneralCard>
                 <NFTCardText type={NFTCardTextType.generalCaption} style={{paddingBottom: '7px'}}>
                   Pending Reward
                 </NFTCardText>
-                <Flex alignItems="center" flexWrap="wrap"> 
-                  <NFTCardText type={NFTCardTextType.generalValue}>
+                <Flex alignItems="center" flexWrap="wrap" justifyContent="space-between"> 
+                  <NFTCardText type={NFTCardTextType.generalValue} style={{ marginRight: '25px' }}>
                     {loadingPendingReward ? 'loading' : Number.parseFloat(pendingReward).toFixed(3)}
                   </NFTCardText>
-                  <Button onClick={handleWithdraw} style={{ marginLeft: '25px' }}>
+                  <Button onClick={handleWithdraw} >
                     Withdraw
                   </Button>
                 </Flex>
               </GeneralCard>
             </Flex>
 
-            <Flex flexDirection="column" justifyContent="space-between" flexShrink={1} style={{marginTop: '15px'}}> 
+            <Flex flexDirection="column" justifyContent="start" flexShrink={1} style={{marginTop: isMobile ? '32px' : '0px'}}> 
               <ShowStackedSwitch />
               <Button 
+                mt="15px"
                 isLoading={loadingStatus} 
                 endIcon={loadingStatus ? <AutoRenewIcon spin color="currentColor" /> : null}  
                 onClick={handleStaking} 
                 disabled={!enableStakingBtn || selectedTokenIds.length === 0} 
-                style={{ margin: '10px 0' }}>
+                >
                 {viewStaked ? `Unstake (${selectedTokenIds.length})` : `Stake (${selectedTokenIds.length})` }
               </Button>
             </Flex>
           </Flex>
 
-          <div style={{ marginTop: '62px' }}>
+          <div style={{ marginTop: isMobile? '32px' :'62px' }}>
             {loading ? (
               <Flex position="relative" height="300px" justifyContent="center" py="8px">
                 <Flex justifyContent="center" style={{ paddingBottom: '8px' }}>

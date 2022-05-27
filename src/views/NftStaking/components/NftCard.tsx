@@ -23,7 +23,10 @@ const NFTCard = styled(Card)`
 
 const NFTCardInfoPanel = styled.div`
   border-radius: 0.75rem;
-  padding: 20px 23px 23px 28px;
+  padding: 20px 8px 20px 8px;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    padding: 20px 33px 20px 38px;
+  }
 `
 
 const NFTImageInfoPanel = styled(Card)`
@@ -83,11 +86,16 @@ interface NftCardProps {
   tokenId: string
   disabled?: boolean
   loading?: boolean
+  isSelected?:boolean
   onhandleChangeCheckBox?: (tokenId: string, isChecked: boolean) => void
 }
 
 const NFTImage = styled(Image)`
   background-color: black;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    max-width: 316px;
+    max-height: 316px;
+  }
 `
 
 const NftCard: React.FC<NftCardProps> = ({
@@ -98,9 +106,10 @@ const NftCard: React.FC<NftCardProps> = ({
   tokenId,
   disabled,
   loading,
+  isSelected,
   onhandleChangeCheckBox,
 }) => {
-  const [isSelected, setSelected] = useState(false)
+  // const [isSelected, setSelected] = useState(false)
 
   const [isRememberChecked, setIsRememberChecked] = useState(false)
 
@@ -110,9 +119,9 @@ const NftCard: React.FC<NftCardProps> = ({
       onhandleChangeCheckBox(tokenId, !isRememberChecked)
     }
     setIsRememberChecked(!isRememberChecked)
-    setSelected(!isSelected)    
+    // setSelected(!isSelected)    
   }, 
-    [onhandleChangeCheckBox, tokenId, isRememberChecked, setIsRememberChecked, isSelected, loading]
+    [onhandleChangeCheckBox, tokenId, isRememberChecked, setIsRememberChecked, loading]
   );
 
   const handleClick = (e, action, params) => {
@@ -120,12 +129,12 @@ const NftCard: React.FC<NftCardProps> = ({
     if(loading) return
     action(...params)
   }
-  
+
   return (
     <div role = "button" tabIndex={0} onClick={handleCardSelect} onKeyDown={handleCardSelect} >
       <NFTCard m="10px" selected={isSelected}>
         <NFTImageInfoPanel>
-          <NFTImage src={bgSrc} width={326} height={326}/>
+          <NFTImage src={bgSrc} width={240} height={240}/>
         </NFTImageInfoPanel>
         <NFTCardInfoPanel>
           <Flex flexDirection="column">

@@ -19,6 +19,7 @@ const StyledPage = styled.div<{ $removePadding: boolean }>`
   padding: ${({ $removePadding }) => ($removePadding ? '0' : '16px')};
   padding-bottom: 0;
   min-height: calc(100vh - 64px);
+  
 
   ${({ theme }) => theme.mediaQueries.sm} {
     padding: ${({ $removePadding }) => ($removePadding ? '0' : '24px')};
