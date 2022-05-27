@@ -39,7 +39,7 @@ const DiscussOrder: React.FC<any> = ({onDismiss, onSend, ...props}) => {
   const erc20Contract = useERC20(tokenAddress)
   const exTokenAmount = amount.toString()
   const [pendingTx, setPendingTx] = useState(false)
-  const [allowedValue, setAllowedValue] = useState(BIG_ZERO)
+  const [allowedValue, setAllowedValue] = useState<BigNumber>()
   const [maxBalance, setMaxBalance] = useState(BIG_ZERO)
   const [yAmount, setYAmount] = useState('0')
   const decimalYAmount = getDecimalAmount(new BigNumber(yAmount), decimals)
@@ -55,15 +55,21 @@ const DiscussOrder: React.FC<any> = ({onDismiss, onSend, ...props}) => {
   )
   
   useEffect(() => {
+    let unmounted=false
     erc20Contract.allowance(account, yieldSwapContract.address).then((res) => {
+      if(unmounted) return
       setAllowedValue(new BigNumber(res.toString()))
     })
     erc20Contract.balanceOf(account).then((res) => {      
+      if (unmounted) return
       setMaxBalance(getBalanceAmount(new BigNumber(res.toString()), decimals))
     })
     // erc20Contract.symbol().then((res) => {
     //   setSymbol(res)
     // })
+    return ()=>{
+      unmounted=true
+    }  
   },[erc20Contract, account, yieldSwapContract.address, decimals])
 
   const handleSelectMaxOfToken = useCallback(() => {
@@ -130,7 +136,7 @@ const DiscussOrder: React.FC<any> = ({onDismiss, onSend, ...props}) => {
     }
   }
 
-  if (symbol === '') return null
+  if (symbol === '' || allowedValue === undefined) return null
   return (
     <ModalContainer minWidth={minWidth} {...props}>
       <ModalHeader background={getThemeValue(`colors.${headerBackground}`, headerBackground)(theme)}>

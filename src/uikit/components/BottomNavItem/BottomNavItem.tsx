@@ -11,6 +11,7 @@ const BottomNavItem: React.FC<BottomNavItemProps> = ({
   href,
   showItemsOnMobile = false,
   isActive = false,
+  mobileLabel,
   ...props
 }) => {
   const { linkComponent } = useContext(MenuContext)
@@ -31,7 +32,7 @@ const BottomNavItem: React.FC<BottomNavItemProps> = ({
         fontWeight={isActive ? '600' : '400'}
         fontSize="10px"
       >
-        {props.mobileLabel? props.mobileLabel : label}
+        {mobileLabel || label}
       </StyledBottomNavText>
     </Flex>
   )

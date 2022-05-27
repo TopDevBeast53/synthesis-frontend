@@ -67,6 +67,7 @@ const CreateOrderDialog = (props) => {
   const tokenContracts = useERC20s(tokenAddressList)
 
   useEffect(() => {
+    let unmounted=false
     const allowanceContracts = lpContracts.map((lpContract) => {
       return lpContract.allowance(account, YieldSwapContract.address)
     })
@@ -75,8 +76,12 @@ const CreateOrderDialog = (props) => {
         tempLPOptions[i].allowance = new BigNumber(allowances[i].toString())
         tempLPOptions[i].contract = lpContracts[i]        
       }
+      if (unmounted) return
       setLPOptions(tempLPOptions)
     })
+    return ()=>{
+      unmounted=true
+    }
   }, [YieldSwapContract.address, account, lpContracts, tempLPOptions])
 
   useEffect(() => {
@@ -92,10 +97,15 @@ const CreateOrderDialog = (props) => {
   })
 
   useEffect(() => {
+    let unmounted=false
     Promise.all([YieldSwapContract.MIN_LOCK_DURATION(), YieldSwapContract.MAX_LOCK_DURATION()]).then((values) => {
+      if(unmounted) return
       setMinDuration(values[0].toNumber() / 24 / 3600)
       setMaxDuration(values[1].toNumber() / 24 / 3600)
     })
+    return ()=>{
+      unmounted=true
+    } 
   }, [YieldSwapContract, account])
 
   if (!LPOptions) return null

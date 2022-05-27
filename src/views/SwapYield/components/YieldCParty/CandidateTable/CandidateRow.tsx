@@ -1,8 +1,9 @@
-import React, { useContext, useState, useEffect } from 'react'
 import { useWeb3React } from '@web3-react/core'
 import { useHelixYieldSwap } from 'hooks/useContract'
+import React, { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Button, Skeleton, Text, useMatchBreakpoints, useModal } from 'uikit'
+import handleError from 'utils/handleError'
 import { YieldCPartyContext } from 'views/SwapYield/context'
 import TokenCell from '../../Cells/TokenCell'
 import BaseCell, { CellContent } from '../BaseCell'
@@ -37,11 +38,16 @@ const CandidateRow = ({ bidId, exToken, exAmount }) => {
   }
 
   useEffect(() => {
+    let unmounted=false
     YieldSwapContract.bids(bidId).then((res) => {
+      if (unmounted) return
       setBid(res)
     }).catch((err) => {
-      console.error(err)
+      handleError(err)      
     })
+    return ()=>{
+      unmounted=true
+    } 
   })
 
   const [showModal] = useModal(

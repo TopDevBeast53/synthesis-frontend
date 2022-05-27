@@ -59,7 +59,11 @@ const Sell = () => {
     setFilterState(newIndex)
     setMenuIndex(newIndex)
   }
-  useEffect(() => {
+  useEffect(()=>{
+    setFilterState(menuIndex)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+  useEffect(() => {    
     async function fetchData() {
       if (tableRefresh < 0) return
       // fetch swaps
@@ -81,7 +85,7 @@ const Sell = () => {
     }
     // fetch bid Ids
     fetchBidSwapId()
-  }, [account,tableRefresh, LpSwapContract])  
+  }, [account,tableRefresh, LpSwapContract])    
   return (
     <Page>
       {

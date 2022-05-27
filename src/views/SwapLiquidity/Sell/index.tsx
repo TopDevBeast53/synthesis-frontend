@@ -48,6 +48,10 @@ const Sell = () => {
     if (newIndex === 1) setFilterState(OrderState.Completed)
     setMenuIndex(newIndex)
   }
+  useEffect(()=>{
+    setFilterState(menuIndex)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
   const [handleAdd] = useModal(<CreateOrderDialog />)
   useEffect(() => {
     if (tableRefresh < 0) return

@@ -64,7 +64,8 @@ const CreateOrderDialog = (props) => {
     const allContracts = useERC20s(addressList)
 
     useEffect(() => {
-        const allowanceContracts = allContracts.map((contract) => {
+        let unmounted=false
+        const allowanceContracts = allContracts.map((contract) => {          
           return contract.allowance(account, LpSwapContract.address)
         })
         Promise.all(allowanceContracts).then((allowances) => {
@@ -72,9 +73,12 @@ const CreateOrderDialog = (props) => {
             tempAllOptions[i].allowance = new BigNumber(allowances[i].toString())
             tempAllOptions[i].contract = allContracts[i]        
           }
+          if(unmounted) return
           setAllOptions(tempAllOptions)
         })
-        
+        return ()=>{
+          unmounted=true
+        }  
       }, [LpSwapContract.address, account, allContracts, tempAllOptions])
 
     const handleConfirm = (toBuyerTokenAddress, toSellerTokenAddress, decimalUAmount, decimalYAmount) => {

@@ -41,7 +41,7 @@ const DiscussOrder: React.FC<any> = ({onDismiss, ...props}) => {
   const allTokens = useAllTokens() // All Stable Token
   const allTokenBalances = useAllTokenBalances()  
   const { data: farms } = useMemoFarms()  
-  const [allowedValue, setAllowedValue] = useState(BIG_ZERO)
+  const [allowedValue, setAllowedValue] = useState<BigNumber>()
   const [symbolName, buyerDecimals] = useMemo(()=>{    
     if(buyer.isLp){
       const lp = farms.find((item) => getAddress(item.lpAddresses) === buyer.token)      
@@ -71,10 +71,15 @@ const DiscussOrder: React.FC<any> = ({onDismiss, ...props}) => {
   }, [maxBalance, setYAmount])
 
   useEffect(() => {
+    let unmounted=false;
     exContract.allowance(account, LpSwapContract.address).then((res) => {
+      if (unmounted) return      
       setAllowedValue(new BigNumber(res.toString()))
     })
-  })
+    return ()=>{
+      unmounted=true
+    }
+  },[exContract, LpSwapContract, account])
 
   function doValidation() {
     if (allowedValue.lte(decimalYAmount)) {
@@ -142,7 +147,7 @@ const DiscussOrder: React.FC<any> = ({onDismiss, ...props}) => {
       handleError(err, toastError)
     }
   }
-
+  if (symbolName === '' || allowedValue === undefined) return null
   return (
     <ModalContainer minWidth={minWidth} {...props}>
       <ModalHeader background={getThemeValue(`colors.${headerBackground}`, headerBackground)(theme)}>

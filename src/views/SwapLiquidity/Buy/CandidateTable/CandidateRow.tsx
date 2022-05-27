@@ -41,9 +41,14 @@ const CandidateRow = ({ bidId, swapData, buyer }) => {
     false,
   )
   useEffect(() => {
+    let unmounted=false;
     LpSwapContract.getBid(bidId).then((res) => {
+      if (unmounted) return
       setBidData(res)
     })
+    return ()=>{
+      unmounted=true
+    }    
   }, [LpSwapContract, bidId])
   if (!bidData) {
     return (
