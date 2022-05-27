@@ -1,5 +1,4 @@
 import BigNumber from 'bignumber.js'
-import { useAllTokens } from 'hooks/Tokens'
 import { useHelixYieldSwap } from 'hooks/useContract'
 import useToast from 'hooks/useToast'
 import React, { useState } from 'react'
@@ -14,11 +13,12 @@ import {
   ModalContainer,
   ModalHeader,
   ModalTitle,
-  Text,
+  Text
 } from 'uikit'
 import getThemeValue from 'uikit/util/getThemeValue'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { getBalanceNumber, getDecimalAmount } from 'utils/formatBalance'
+import handleError from 'utils/handleError'
 import { useTokenDecimals, useTokenSymbol } from 'views/SwapYield/hooks/useTokenSymbol'
 
 const DiscussOrder: React.FC<any> = ({onDismiss, onSend,  ...props}) => {
@@ -54,7 +54,7 @@ const DiscussOrder: React.FC<any> = ({onDismiss, onSend,  ...props}) => {
         onDismiss()
       })
       .catch((err) => {
-        toastError('Error', err.toString())
+        handleError(err, toastError)        
         setPendingTx(false)
       })
   }

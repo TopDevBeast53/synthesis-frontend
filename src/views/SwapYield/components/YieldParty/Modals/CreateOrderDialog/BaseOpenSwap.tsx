@@ -9,6 +9,7 @@ import styled from 'styled-components';
 import { AutoRenewIcon, BalanceInput, Button, Input, Skeleton, Text } from 'uikit';
 import { BIG_ZERO } from 'utils/bigNumber';
 import { getDecimalAmount } from 'utils/formatBalance';
+import handleError from 'utils/handleError';
 import Group from 'views/SwapYield/components/GroupComponent';
 
 const StyledInput = styled(Input)`
@@ -90,8 +91,8 @@ export default (props)=>{
           setPendingTx(false)
         })
         .catch((err) => {
-          toastError('Error', err.toString())
           setPendingTx(false)
+          handleError(err, toastError) 
         })
     }
     async function DoValidation() {
@@ -120,18 +121,6 @@ export default (props)=>{
         else {
             if (!(await DoValidation())) return
             setPendingTx(true)
-            console.info("========", selectedToBuyerTokenOption, selectedToSellerTokenOption)
-            console.info("========", isToBuyerTokenLp, isToSellerTokenLp)              
-            console.info("========", decimalUAmount.toString(), decimalYAmount.toString())
-
-            // YieldSwapContract.openSwap(
-            //   selectedToBuyerTokenOption.address,
-            //   selectedToSellerTokenOption.address,
-            //   decimalUAmount.toString(),
-            //   decimalYAmount.toString(),
-            //   Math.round(3600 * 24 * selectedDuration),
-            //   isToBuyerTokenLp, isToSellerTokenLp
-            // )
             handleConfirm(
               selectedToBuyerTokenOption.address,
               selectedToSellerTokenOption.address,
@@ -148,7 +137,7 @@ export default (props)=>{
               })
               .catch((err) => {
                 setPendingTx(false)
-                toastError('Error', err.toString())
+                handleError(err, toastError)                
             })
         }
     }

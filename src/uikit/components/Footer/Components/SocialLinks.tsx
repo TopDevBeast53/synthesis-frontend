@@ -1,13 +1,10 @@
 import { ReactComponent as GeometryIconNoCircle } from "images/icon-noCircle-geometry.svg";
 import { ReactComponent as HelixIconNoCircle } from "images/icon-noCircle-helix.svg";
 import { ReactComponent as NexusIconNoCircle } from "images/icon-noCircle-nexus.svg";
-import React from 'react'
-import { darkColors } from '../../../theme'
-import { FlexProps } from '../../Box'
-import Flex from '../../Box/Flex'
-import Link from '../../Link/Link'
-import IconComponent from '../../Svg/IconComponent'
-import { socials } from '../config'
+import React from 'react';
+import { FlexProps } from '../../Box';
+import Flex from '../../Box/Flex';
+import Link from '../../Link/Link';
 
 // const SocialLinks: React.FC<FlexProps> = ({ ...props }) => (
 //   <Flex {...props}>

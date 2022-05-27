@@ -1,25 +1,25 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import { useWeb3React } from '@web3-react/core'
 import BigNumber from 'bignumber.js'
-import { ethers } from 'ethers'
 import { ModalInput } from 'components/Modal'
+import { useTranslation } from 'contexts/Localization'
+import { ethers } from 'ethers'
+import { useERC20, useHelixYieldSwap } from 'hooks/useContract'
+import useToast from 'hooks/useToast'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useTheme } from 'styled-components'
 import {
-  Button,
+  AutoRenewIcon, Button,
   Heading,
   ModalBody,
   ModalCloseButton,
   ModalContainer,
   ModalHeader,
-  ModalTitle,
-  AutoRenewIcon,
+  ModalTitle
 } from 'uikit'
-import { useWeb3React } from '@web3-react/core'
-import { useTranslation } from 'contexts/Localization'
-import useToast from 'hooks/useToast'
-import { useHelixYieldSwap, useERC20 } from 'hooks/useContract'
-import { BIG_ZERO } from 'utils/bigNumber'
 import getThemeValue from 'uikit/util/getThemeValue'
-import { getDecimalAmount, getBalanceAmount } from 'utils/formatBalance'
+import { BIG_ZERO } from 'utils/bigNumber'
+import { getBalanceAmount, getDecimalAmount } from 'utils/formatBalance'
+import handleError from 'utils/handleError'
 import { useTokenDecimals, useTokenSymbol } from 'views/SwapYield/hooks/useTokenSymbol'
 
 const DiscussOrder: React.FC<any> = ({onDismiss, onSend, ...props}) => {
@@ -78,7 +78,7 @@ const DiscussOrder: React.FC<any> = ({onDismiss, onSend, ...props}) => {
         return false
       }
     } catch (err) {
-      toastError('Error', err.toString())
+      handleError(err, toastError)
       setPendingTx(false)
       return false
     }
@@ -102,11 +102,7 @@ const DiscussOrder: React.FC<any> = ({onDismiss, onSend, ...props}) => {
           setPendingTx(false)
         })
         .catch((err) => {
-          if (err.message) {
-            toastError('Error', err.message.toString())
-          } else {
-            toastError('Error', err.toString())
-          }
+          handleError(err, toastError)          
           setPendingTx(false)
         })
       return
@@ -130,7 +126,7 @@ const DiscussOrder: React.FC<any> = ({onDismiss, onSend, ...props}) => {
       }
     } catch (err) {
       setPendingTx(false)
-      toastError('Error', err.toString())
+      handleError(err, toastError)      
     }
   }
 

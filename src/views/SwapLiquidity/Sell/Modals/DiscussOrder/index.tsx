@@ -20,6 +20,7 @@ import {
 import getThemeValue from 'uikit/util/getThemeValue'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { getBalanceNumber, getDecimalAmount } from 'utils/formatBalance'
+import handleError from 'utils/handleError'
 import { getTokenDecimals, getTokenSymbol } from 'views/SwapYield/components/Cells/ToolTipCell'
 
 // const getEllipsis = (account) => {
@@ -60,7 +61,7 @@ const DiscussOrder: React.FC<any> = ({onDismiss, ...props}) => {
         onDismiss()
       })
       .catch((err) => {
-        toastError('Error', err.toString())
+        handleError(err, toastError)
         setPendingTx(false)
       })
   }

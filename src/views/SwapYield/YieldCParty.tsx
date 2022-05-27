@@ -108,22 +108,12 @@ const YieldCParty = () => {
             account && (
               <Wrapper>
                 {/* TODO: Should be read from constants */}
-                {
-                  true ?
                   <ButtonMenu activeIndex={menuIndex} scale="sm" variant="subtle" onItemClick={handleButtonMenuClick}>
                     <ButtonMenuItem>{t('Open')}</ButtonMenuItem>
                     <ButtonMenuItem>{t('My Bids')}</ButtonMenuItem>
                     <ButtonMenuItem>{t('Active Swaps')}</ButtonMenuItem>
                     <ButtonMenuItem>{t('Completed Swaps')}</ButtonMenuItem>
                   </ButtonMenu>
-                  :
-                  <ButtonMenu activeIndex={menuIndex} scale="sm" variant="subtle" onItemClick={handleButtonMenuClick} style={{flexWrap:"wrap"}}>
-                    <ButtonMenuItem width="48%">{t('Open')}</ButtonMenuItem>
-                    <ButtonMenuItem width="48%">{t('My Bids')}</ButtonMenuItem>
-                    <ButtonMenuItem>{t('Active Swaps')}</ButtonMenuItem>
-                    <ButtonMenuItem>{t('Completed Swaps')}</ButtonMenuItem>
-                  </ButtonMenu>
-                }
                 <Button variant="secondary" scale="md" mr="1em" onClick={handleAdd} 
                   style={isMobile ? {marginTop: "32px", textAlign: "center", marginLeft:"auto", marginRight:"auto", display:"block"}: {}}>
                   {' '}

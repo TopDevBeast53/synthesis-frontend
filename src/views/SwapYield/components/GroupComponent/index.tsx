@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-// background-color: ${({ theme }) => theme.colors.cardBorder};
 
 const StyledBorder = styled.div`
   border-radius: ${({ theme }) => theme.radii.card};
@@ -11,12 +10,11 @@ const StyledBorder = styled.div`
   position: relative;
 `
 const Group = (props) => {
-  const { children, title } = props
+  const { children} = props
 
   return (
     <StyledBorder {...props}>
       {children}
-      {/* <StyledTitle> {title} </StyledTitle> */}
     </StyledBorder>
   )
 }

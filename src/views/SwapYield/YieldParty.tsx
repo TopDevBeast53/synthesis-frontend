@@ -8,6 +8,7 @@ import useToast from 'hooks/useToast'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Button, ButtonMenu, ButtonMenuItem, useModal } from 'uikit'
+import handleError from 'utils/handleError'
 import CreateSwapModal from './components/YieldParty/Modals/CreateOrderDialog'
 import YieldPartyTable from './components/YieldParty/Table'
 import { YieldPartyContext } from './context'
@@ -66,7 +67,7 @@ const YieldParty = () => {
       })
       .catch((err) => {
         console.error(err)
-        // toastError('Error', err.toString())
+        handleError(err, toastError)
       })
   }, [YieldSwapContract, account, toastError, refresh, fastRefresh])
   return (

@@ -1,6 +1,5 @@
 export default(err,toastError?)=>{
-    let errMsg = "Unknown Error"
-    console.log("handleError======", err)
+    let errMsg = "Unknown Error"    
     if(err.code === 4001){
         errMsg = err.message
     }

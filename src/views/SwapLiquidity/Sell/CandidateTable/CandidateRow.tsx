@@ -4,6 +4,7 @@ import useToast from 'hooks/useToast'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { AutoRenewIcon, Button, Skeleton, Text, useMatchBreakpoints } from 'uikit'
+import handleError from 'utils/handleError'
 import BaseCell, { CellContent } from 'views/SwapYield/components/Cells/BaseCell'
 import TokensCell from 'views/SwapYield/components/Cells/TokensCell'
 
@@ -42,8 +43,8 @@ const CandidateRow = ({ bidId, swapData }) => {
         toastSuccess('Success', 'Accepted!')
         setPendingTx(false)
       })
-      .catch((err) => {
-        toastError('Error', err.toString())
+      .catch((err) => {        
+        handleError(err, toastError)
         setPendingTx(false)
       })
   }

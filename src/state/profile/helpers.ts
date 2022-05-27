@@ -1,8 +1,6 @@
-import Cookies from 'js-cookie'
-import { Profile } from 'state/types'
 import { PancakeProfile } from 'config/abi/types/PancakeProfile'
+import { Profile } from 'state/types'
 import { getProfileContract } from 'utils/contractHelpers'
-import { getTeam } from 'state/teams/helpers'
 // import { NftToken } from 'state/nftMarket/types'
 // import { getNftApi } from 'state/nftMarket/helpers'
 

@@ -79,7 +79,6 @@ export const useGetNftInfo = () => {
             const results = await Promise.all(
                 ids.map((id: any) => helixNFTContract.getToken(id))
             )
-            console.log("results =============", results)
             const res = results.map(([tokenOwner,uri, tokenId, token]) => ({
                 tokenId: tokenId.toString(),
                 externalTokenIds: token.externalTokenIDs,
@@ -89,8 +88,6 @@ export const useGetNftInfo = () => {
                 uri,
                 disabled: false,
             }))
-            console.log("res =============", res)
-
             return res
         }
         return []

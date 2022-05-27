@@ -24,6 +24,7 @@ import getThemeValue from 'uikit/util/getThemeValue'
 import { getAddress } from 'utils/addressHelpers'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { getBalanceAmount, getDecimalAmount } from 'utils/formatBalance'
+import handleError from 'utils/handleError'
 
 const DiscussOrder: React.FC<any> = ({onDismiss, ...props}) => {
   const theme = useTheme()
@@ -113,7 +114,7 @@ const DiscussOrder: React.FC<any> = ({onDismiss, ...props}) => {
         setAllowedValue(getDecimalAmount(new BigNumber(Number.POSITIVE_INFINITY), buyerDecimals))
         setPendingTx(false)
       } catch (err) {
-        toastError('Error', err.toString())
+        handleError(err, toastError)
         setPendingTx(false)
       }
       return
@@ -125,7 +126,6 @@ const DiscussOrder: React.FC<any> = ({onDismiss, ...props}) => {
         const tx = await LpSwapContract.setBid(bidId, decimalYAmount.toString())
         await tx.wait()
       } else {
-        console.log("=swap data id ========", swapData.id, swapData, decimalYAmount.toString())
         const tx = await LpSwapContract.makeBid(swapData?.id, decimalYAmount.toString())
         await tx.wait()
       }
@@ -139,7 +139,7 @@ const DiscussOrder: React.FC<any> = ({onDismiss, ...props}) => {
       }
     } catch (err) {
       setPendingTx(false)
-      toastError('Error', err.toString())
+      handleError(err, toastError)
     }
   }
 

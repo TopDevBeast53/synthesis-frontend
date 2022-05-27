@@ -4,6 +4,7 @@ import useToast from 'hooks/useToast'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { AutoRenewIcon, Button, Skeleton, Text, useMatchBreakpoints } from 'uikit'
+import handleError from 'utils/handleError'
 import BaseCell, { CellContent } from '../../Cells/BaseCell'
 import TokenCell from '../../Cells/TokenCell'
 
@@ -41,8 +42,8 @@ const CandidateRow = ({ bidId, swapData }) => {
         toastSuccess('Success', 'You Accepted the Bid')
         setPendingTx(false)
       })
-      .catch((err) => {
-        toastError('Error', err.toString())
+      .catch((err) => {                
+        handleError(err, toastError)
         setPendingTx(false)
       })
   }

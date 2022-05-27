@@ -8,6 +8,7 @@ import useToast from 'hooks/useToast'
 import React, { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Button, ButtonMenu, ButtonMenuItem, useMatchBreakpoints, useModal } from 'uikit'
+import handleError from 'utils/handleError'
 import { SwapLiquidityContext } from '../context'
 import { OrderState } from '../types'
 import CreateOrderDialog from './Modals/CreateOrderDialog'
@@ -60,7 +61,7 @@ const Sell = () => {
       })
       .catch((err) => {
         console.error(err)
-        // toastError('Error', err.toString())
+        handleError(err, toastError)
       })
   }, [LpSwapContract, account, toastError, tableRefresh, fastRefresh])
 

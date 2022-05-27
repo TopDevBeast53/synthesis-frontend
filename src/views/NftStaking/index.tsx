@@ -77,8 +77,6 @@ export default function NftStaking() {
   const { getTokens} = useGetNftInfo()
   const { stakingNft, getPendingReward, withdrawReward } = useStakingNft()
 
-  const { isMobile } = useMatchBreakpoints()
-
   const filterNft = filter(tokens, (token: any) => token.isStaked === viewStaked)
 
   const handleGetTokens = useCallback(() => {
@@ -268,41 +266,3 @@ export default function NftStaking() {
   )
 }
 
-function CopyValue({
-  value,
-  children,
-  style,
-}: {
-  value: string
-  children: React.ReactNode
-  style?: CSSProperties | undefined
-}) {
-  const [isTooltipDisplayed, setIsTooltipDisplayed] = useState(false)
-
-  function displayTooltip() {
-    setIsTooltipDisplayed(true)
-    setTimeout(() => {
-      setIsTooltipDisplayed(false)
-    }, 500)
-  }
-
-  const copyValue = () => {
-    if (navigator.clipboard && navigator.permissions) {
-      navigator.clipboard.writeText(value).then(() => displayTooltip())
-    }
-  }
-
-  return (
-    <Flex alignItems="center" position="relative" style={style}>
-      {children}
-      <IconButton variant="text" onClick={copyValue} scale="xs" style={{ marginLeft: '4px' }}>
-        <StyledCopyIcon color="primary" />
-      </IconButton>
-      <Tooltip isTooltipDisplayed={isTooltipDisplayed}>Copied</Tooltip>
-    </Flex>
-  )
-}
-
-function shortenAddress(address: string, trimLen = 4) {
-  return `${address.substring(0, trimLen)}...${address.substring(address.length - (trimLen + 2))}`
-}

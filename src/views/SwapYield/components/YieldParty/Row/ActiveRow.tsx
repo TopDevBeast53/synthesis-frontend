@@ -4,6 +4,7 @@ import moment from 'moment'
 import React, { useContext, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { AutoRenewIcon, Button, ChevronDownIcon, useDelayedUnmount, useMatchBreakpoints, useModal } from 'uikit'
+import handleError from 'utils/handleError'
 import { YieldPartyContext } from 'views/SwapYield/context'
 import DurationCell from '../../Cells/DurationCells'
 import { StyledCell, StyledCellWithoutPadding, StyledRow } from '../../Cells/StyledCell'
@@ -44,11 +45,7 @@ const ActiveRow = (props) => {
         setPendingTx(false)
       })
       .catch((err) => {
-        if (err.code === 4001) {
-          toastError('Error', err.message)
-        } else {
-          toastError('Error', err.toString())
-        }
+        handleError(err, toastError)
         setPendingTx(false)
       })
   }
