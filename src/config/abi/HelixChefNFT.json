@@ -24,6 +24,25 @@
       {
         "indexed": true,
         "internalType": "address",
+        "name": "adder",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "added",
+        "type": "address"
+      }
+    ],
+    "name": "AddAccruer",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
         "name": "previousOwner",
         "type": "address"
       },
@@ -56,6 +75,25 @@
       {
         "indexed": true,
         "internalType": "address",
+        "name": "remover",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "removed",
+        "type": "address"
+      }
+    ],
+    "name": "RemoveAccruer",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
         "name": "user",
         "type": "address"
       },
@@ -66,7 +104,7 @@
         "type": "uint256[]"
       }
     ],
-    "name": "StakeTokens",
+    "name": "Stake",
     "type": "event"
   },
   {
@@ -98,7 +136,26 @@
         "type": "uint256[]"
       }
     ],
-    "name": "UnstakeTokens",
+    "name": "Unstake",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "withdrawer",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "WithdrawRewardToken",
     "type": "event"
   },
   {
@@ -149,7 +206,7 @@
     "outputs": [
       {
         "internalType": "uint256",
-        "name": "reward",
+        "name": "",
         "type": "uint256"
       }
     ],
