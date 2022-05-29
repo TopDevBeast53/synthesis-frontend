@@ -234,6 +234,24 @@
     "inputs": [
       {
         "internalType": "address",
+        "name": "_account",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "burn",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
         "name": "",
         "type": "address"
       },
@@ -319,7 +337,7 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "delegatee",
+        "name": "_delegatee",
         "type": "address"
       }
     ],
@@ -332,32 +350,32 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "delegatee",
+        "name": "_delegatee",
         "type": "address"
       },
       {
         "internalType": "uint256",
-        "name": "nonce",
+        "name": "_nonce",
         "type": "uint256"
       },
       {
         "internalType": "uint256",
-        "name": "expiry",
+        "name": "_expiry",
         "type": "uint256"
       },
       {
         "internalType": "uint8",
-        "name": "v",
+        "name": "_v",
         "type": "uint8"
       },
       {
         "internalType": "bytes32",
-        "name": "r",
+        "name": "_r",
         "type": "bytes32"
       },
       {
         "internalType": "bytes32",
-        "name": "s",
+        "name": "_s",
         "type": "bytes32"
       }
     ],
@@ -370,7 +388,7 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "delegator",
+        "name": "_delegator",
         "type": "address"
       }
     ],
@@ -389,7 +407,7 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "account",
+        "name": "_account",
         "type": "address"
       }
     ],
@@ -453,12 +471,12 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "account",
+        "name": "_account",
         "type": "address"
       },
       {
         "internalType": "uint256",
-        "name": "blockNumber",
+        "name": "_blockNumber",
         "type": "uint256"
       }
     ],
@@ -501,7 +519,7 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "account",
+        "name": "_account",
         "type": "address"
       }
     ],
