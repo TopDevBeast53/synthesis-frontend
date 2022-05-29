@@ -88,60 +88,60 @@ export default {
         56: '0x0a8901b0E25DEb55A87524f0cC164E9644020EBA',
         4: '0xfC0c3F11fDA72Cb9A56F28Ec8D44C0ae4B3ABF86',
     },
+    sousChef: {
+        56: '',
+        4: '0xe911B52fa2a24A84Da9D6039684046E437B8C673',
+    },
+    voting: {
+        56: '',
+        4: '0xC3A5dc2D9eC0e8CC6603F81FDc0Fd7aB53E389b3',
+    },
     multiCall: {
         56: '',
         4: '0x6CfcdedFed8122029d8457Aab73ee855D4B92fC5',
     },
     masterChef: {
         56: '',
-        4: '0xd2c91c108eA227EF56f756224c729C13B85DCf65',
-    },
-    sousChef: {
-        56: '',
-        4: '0xe911B52fa2a24A84Da9D6039684046E437B8C673',
+        4: '0x9c344695a43E85774F8F886DaBF9AE5C11428bC2',
     },
     helixAutoPool: {
         // AutoPool
         56: '',
-        4: '0x049602E6f3169a73F0fEE4c4a5e6696e1B218b87',
+        4: '0x6C3f85c7F3979308751EBFba244F6eF5400aA911',
     },
     helixNFT: {
         1: '',
-        4: '0xE4cA8AB07e713428660955972A6BBF281C1aeeAA',
+        4: '0xE54Ae8147af2B800CA0b47036176b37f42a94800',
         56: '',
     },
     helixNFTChef: {
         1: '',
-        4: '0xfB33FF918d127018B837523456FC941E85AD106F',
+        4: '0x9D5aD9644CAE37f8A89D3fa6756A38E944bbfAb8',
         56: '',
     },
     helixNFTBridge: {
         1: '',
-        4: '0x01Fdf7E59E9e3E751BBd9Ee0E732D60fB4a1a688',
+        4: '0x3E9bdCfF21871c0751b8Fb3b17AC883e36aBa23B',
         56: '',
     },
     helixMigrator: {
         56: '',
-        4: '0x130b5EB2631C009e88153841774C3C8f844762a2',
+        4: '0x582B14BD30221Da1B16f86041c9155B6097c85D0',
     },
     referralRegister: {
         56: '',
-        4: '0x2D0bEd91Fa17bE81F80eEB7e1A59567954817F64',
-    },
-    voting: {
-        56: '',
-        4: '0xC3A5dc2D9eC0e8CC6603F81FDc0Fd7aB53E389b3',
+        4: '0x79f06e19cE76eEd33FEf1fC27c2e9B1ACB0E9B57',
     },
     helixVault: {
         56: '',
-        4: '0xb83E0D192c69385822548684681BCdbdAF827902',
+        4: '0xF9a8da398f852968203C975426653d4336Ea249B',
     },
     helixYieldSwap: {
         56: '',
-        4: '0xD1Cb5A2d352635e377d8676660E6175247ba8A10',
+        4: '0xaEaD56A540873130c5B973E1A64378aca343F6BC',
     },
     helixLPSwap: {
         56: '',
-        4: '0xC193F98463274bA4DA23bFb7A45993bB52465E7B',
+        4: '0xe9987A2fFCe10623680de0F4c5f66566b53E739E',
     },
 }
