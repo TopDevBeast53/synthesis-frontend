@@ -3,19 +3,6 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "callFee",
-        "type": "uint256"
-      }
-    ],
-    "name": "CallFeeSet",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
         "indexed": true,
         "internalType": "address",
         "name": "sender",
@@ -89,12 +76,6 @@
   },
   {
     "anonymous": false,
-    "inputs": [],
-    "name": "Pause",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
     "inputs": [
       {
         "indexed": false,
@@ -110,19 +91,76 @@
     "anonymous": false,
     "inputs": [
       {
+        "indexed": true,
+        "internalType": "address",
+        "name": "setter",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "callFee",
+        "type": "uint256"
+      }
+    ],
+    "name": "SetCallFee",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "setter",
+        "type": "address"
+      },
+      {
         "indexed": false,
         "internalType": "uint256",
         "name": "performanceFee",
         "type": "uint256"
       }
     ],
-    "name": "PerformanceFeeSet",
+    "name": "SetPerformanceFee",
     "type": "event"
   },
   {
     "anonymous": false,
-    "inputs": [],
-    "name": "Unpause",
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "setter",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "withdrawFee",
+        "type": "uint256"
+      }
+    ],
+    "name": "SetWithdrawFee",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "setter",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "withdrawFeePeriod",
+        "type": "uint256"
+      }
+    ],
+    "name": "SetWithdrawFeePeriod",
     "type": "event"
   },
   {
@@ -161,32 +199,6 @@
       }
     ],
     "name": "Withdraw",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "withdrawFeePeriod",
-        "type": "uint256"
-      }
-    ],
-    "name": "WithdrawFeePeriodSet",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "withdrawFee",
-        "type": "uint256"
-      }
-    ],
-    "name": "WithdrawFeeSet",
     "type": "event"
   },
   {

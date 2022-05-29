@@ -24,7 +24,7 @@ export const useRegisterReferral = (referrerAddress: string) => {
       ReferralRegisterABI,
       getProviderOrSigner(library, account),
     )
-    const tx = await callWithGasPrice(contract, 'addRef', [referrerAddress])
+    const tx = await callWithGasPrice(contract, 'addReferrer', [referrerAddress])
     return tx.wait()
   }, [callWithGasPrice, referrerAddress, library, account])
   return addRefCb

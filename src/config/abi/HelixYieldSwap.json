@@ -1,111 +1,131 @@
 [
   {
+    "anonymous": false,
     "inputs": [
       {
-        "internalType": "contract IMasterChef",
-        "name": "_chef",
-        "type": "address"
-      },
-      {
+        "indexed": true,
         "internalType": "address",
-        "name": "_treasury",
+        "name": "buyer",
         "type": "address"
       },
       {
-        "internalType": "uint256",
-        "name": "_MIN_LOCK_DURATION",
-        "type": "uint256"
+        "indexed": true,
+        "internalType": "address",
+        "name": "seller",
+        "type": "address"
       },
       {
-        "internalType": "uint256",
-        "name": "_MAX_LOCK_DURATION",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "constructor"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
         "indexed": true,
         "internalType": "uint256",
         "name": "swapId",
         "type": "uint256"
-      }
-    ],
-    "name": "AskAccepted",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "swapId",
-        "type": "uint256"
-      }
-    ],
-    "name": "AskSet",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "bidId",
-        "type": "uint256"
-      }
-    ],
-    "name": "BidAccepted",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "bidId",
-        "type": "uint256"
-      }
-    ],
-    "name": "BidMade",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "bidId",
-        "type": "uint256"
-      }
-    ],
-    "name": "BidSet",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
+      },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "buyerTreasuryFee",
+        "name": "ask",
         "type": "uint256"
       }
     ],
-    "name": "BuyerFeeSet",
+    "name": "AcceptAsk",
     "type": "event"
   },
   {
     "anonymous": false,
     "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "seller",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "buyer",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "swapId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "bidId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "AcceptBid",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "seller",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "swapId",
+        "type": "uint256"
+      }
+    ],
+    "name": "CloseSwap",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "bidder",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "swapId",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "bidId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "MakeBid",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "setter",
+        "type": "address"
+      },
       {
         "indexed": false,
         "internalType": "uint256",
@@ -120,6 +140,12 @@
     "anonymous": false,
     "inputs": [
       {
+        "indexed": true,
+        "internalType": "address",
+        "name": "setter",
+        "type": "address"
+      },
+      {
         "indexed": false,
         "internalType": "uint256",
         "name": "minLockDuration",
@@ -127,6 +153,37 @@
       }
     ],
     "name": "MinLockDurationSet",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "toBuyerToken",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "toSellerToken",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "swapId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "seller",
+        "type": "address"
+      }
+    ],
+    "name": "OpenSwap",
     "type": "event"
   },
   {
@@ -153,12 +210,12 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "uint256",
-        "name": "sellerTreasuryFee",
-        "type": "uint256"
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
       }
     ],
-    "name": "SellerFeeSet",
+    "name": "Paused",
     "type": "event"
   },
   {
@@ -166,12 +223,24 @@
     "inputs": [
       {
         "indexed": true,
+        "internalType": "address",
+        "name": "seller",
+        "type": "address"
+      },
+      {
+        "indexed": true,
         "internalType": "uint256",
         "name": "swapId",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "ask",
+        "type": "uint256"
       }
     ],
-    "name": "SwapClosed",
+    "name": "SetAsk",
     "type": "event"
   },
   {
@@ -179,12 +248,100 @@
     "inputs": [
       {
         "indexed": true,
+        "internalType": "address",
+        "name": "bidder",
+        "type": "address"
+      },
+      {
+        "indexed": true,
         "internalType": "uint256",
-        "name": "swapId",
+        "name": "bidId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
         "type": "uint256"
       }
     ],
-    "name": "SwapOpened",
+    "name": "SetBid",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "setter",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "chef",
+        "type": "address"
+      }
+    ],
+    "name": "SetChef",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "setter",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "collectorPercent",
+        "type": "uint256"
+      }
+    ],
+    "name": "SetCollectorPercent",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "setter",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "feeHandler",
+        "type": "address"
+      }
+    ],
+    "name": "SetFeeHandler",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "setter",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "rewardToken",
+        "type": "address"
+      }
+    ],
+    "name": "SetRewardToken",
     "type": "event"
   },
   {
@@ -193,11 +350,11 @@
       {
         "indexed": false,
         "internalType": "address",
-        "name": "treasury",
+        "name": "account",
         "type": "address"
       }
     ],
-    "name": "TreasurySet",
+    "name": "Unpaused",
     "type": "event"
   },
   {
@@ -205,12 +362,24 @@
     "inputs": [
       {
         "indexed": true,
+        "internalType": "address",
+        "name": "seller",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "buyer",
+        "type": "address"
+      },
+      {
+        "indexed": true,
         "internalType": "uint256",
         "name": "swapId",
         "type": "uint256"
       }
     ],
-    "name": "Withdrawn",
+    "name": "Withdraw",
     "type": "event"
   },
   {
@@ -263,35 +432,6 @@
     "name": "acceptBid",
     "outputs": [],
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_amount",
-        "type": "uint256"
-      },
-      {
-        "internalType": "bool",
-        "name": "_partyIsSeller",
-        "type": "bool"
-      }
-    ],
-    "name": "applyTreasuryFee",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "treasuryAmount",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "counterpartyAmount",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -373,19 +513,6 @@
   },
   {
     "inputs": [],
-    "name": "buyerTreasuryFee",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
     "name": "chef",
     "outputs": [
       {
@@ -408,6 +535,32 @@
     "name": "closeSwap",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "collectorPercent",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "feeHandler",
+    "outputs": [
+      {
+        "internalType": "contract IFeeHandler",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -522,6 +675,49 @@
         "internalType": "struct YieldSwap.Bid[]",
         "name": "",
         "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "getCollectorFee",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "collectorFee",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "getCollectorFeeSplit",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "collectorFee",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "remainder",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -780,6 +976,52 @@
   {
     "inputs": [
       {
+        "internalType": "contract IMasterChef",
+        "name": "_chef",
+        "type": "address"
+      },
+      {
+        "internalType": "contract IERC20",
+        "name": "_rewardToken",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_feeHandler",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_MIN_LOCK_DURATION",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_MAX_LOCK_DURATION",
+        "type": "uint256"
+      }
+    ],
+    "name": "initialize",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "isFeeHandlerSet",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "uint256",
         "name": "_swapId",
         "type": "uint256"
@@ -853,6 +1095,26 @@
   },
   {
     "inputs": [],
+    "name": "pause",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "paused",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "renounceOwnership",
     "outputs": [],
     "stateMutability": "nonpayable",
@@ -860,12 +1122,12 @@
   },
   {
     "inputs": [],
-    "name": "sellerTreasuryFee",
+    "name": "rewardToken",
     "outputs": [
       {
-        "internalType": "uint256",
+        "internalType": "contract IERC20",
         "name": "",
-        "type": "uint256"
+        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -910,12 +1172,38 @@
   {
     "inputs": [
       {
+        "internalType": "contract IMasterChef",
+        "name": "_chef",
+        "type": "address"
+      }
+    ],
+    "name": "setChef",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "uint256",
-        "name": "_buyerTreasuryFee",
+        "name": "_collectorPercent",
         "type": "uint256"
       }
     ],
-    "name": "setBuyerTreasuryFee",
+    "name": "setCollectorPercent",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_feeHandler",
+        "type": "address"
+      }
+    ],
+    "name": "setFeeHandler",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -949,25 +1237,12 @@
   {
     "inputs": [
       {
-        "internalType": "uint256",
-        "name": "_sellerTreasuryFee",
-        "type": "uint256"
-      }
-    ],
-    "name": "setSellerTreasuryFee",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_treasury",
+        "internalType": "contract IERC20",
+        "name": "_rewardToken",
         "type": "address"
       }
     ],
-    "name": "setTreasury",
+    "name": "setRewardToken",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -1099,15 +1374,9 @@
   },
   {
     "inputs": [],
-    "name": "treasury",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
+    "name": "unpause",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {

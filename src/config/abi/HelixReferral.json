@@ -4,18 +4,18 @@
     "inputs": [
       {
         "indexed": false,
-        "internalType": "uint256",
-        "name": "stakingRefFee",
-        "type": "uint256"
+        "internalType": "address",
+        "name": "referred",
+        "type": "address"
       },
       {
         "indexed": false,
-        "internalType": "uint256",
-        "name": "swapRefFee",
-        "type": "uint256"
+        "internalType": "address",
+        "name": "referrer",
+        "type": "address"
       }
     ],
-    "name": "FeesSet",
+    "name": "AddReferrer",
     "type": "event"
   },
   {
@@ -41,44 +41,13 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": true,
-        "internalType": "address",
-        "name": "referred",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "referrer",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      }
-    ],
-    "name": "ReferralReward",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
         "indexed": false,
         "internalType": "address",
-        "name": "referred",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "referrer",
+        "name": "account",
         "type": "address"
       }
     ],
-    "name": "ReferrerAdded",
+    "name": "Paused",
     "type": "event"
   },
   {
@@ -98,26 +67,240 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": false,
+        "indexed": true,
         "internalType": "address",
         "name": "referrer",
         "type": "address"
       },
       {
+        "indexed": true,
+        "internalType": "address",
+        "name": "referred",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "reward",
+        "type": "uint256"
+      },
+      {
         "indexed": false,
         "internalType": "uint256",
-        "name": "rewards",
+        "name": "stakeAmount",
         "type": "uint256"
       }
     ],
-    "name": "Withdrawn",
+    "name": "RewardStake",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "referrer",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "referred",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "reward",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "swapAmount",
+        "type": "uint256"
+      }
+    ],
+    "name": "RewardSwap",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "setter",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "collectorPercent",
+        "type": "uint256"
+      }
+    ],
+    "name": "SetCollectorPercent",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "setter",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "feeHandler",
+        "type": "address"
+      }
+    ],
+    "name": "SetFeeHandler",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "setter",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "lastMintBlock",
+        "type": "uint256"
+      }
+    ],
+    "name": "SetLastRewardBlock",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "setter",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "stakeRewardPercent",
+        "type": "uint256"
+      }
+    ],
+    "name": "SetStakeRewardPercent",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "setter",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "stakeRewardPercent",
+        "type": "uint256"
+      }
+    ],
+    "name": "SetSwapRewardPercent",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "setter",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "_toMintPerBlock",
+        "type": "uint256"
+      }
+    ],
+    "name": "SetToMintPerBlock",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "Unpaused",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "minted",
+        "type": "uint256"
+      }
+    ],
+    "name": "Update",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "referrer",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "referrerReward",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "collectorFee",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "rewardBalance",
+        "type": "uint256"
+      }
+    ],
+    "name": "Withdraw",
     "type": "event"
   },
   {
     "inputs": [
       {
         "internalType": "address",
-        "name": "account",
+        "name": "_recorder",
         "type": "address"
       }
     ],
@@ -140,20 +323,14 @@
         "type": "address"
       }
     ],
-    "name": "addRef",
+    "name": "addReferrer",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "name": "balance",
+    "inputs": [],
+    "name": "collectorPercent",
     "outputs": [
       {
         "internalType": "uint256",
@@ -165,29 +342,66 @@
     "type": "function"
   },
   {
-    "inputs": [
+    "inputs": [],
+    "name": "feeHandler",
+    "outputs": [
       {
-        "internalType": "address",
-        "name": "account",
+        "internalType": "contract IFeeHandler",
+        "name": "",
         "type": "address"
       }
     ],
-    "name": "delRecorder",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "nonpayable",
+    "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "index",
+        "name": "_amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "getCollectorFee",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "collectorFee",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "getCollectorFeeSplit",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "collectorFee",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "remainder",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_index",
         "type": "uint256"
       }
     ],
@@ -216,20 +430,48 @@
     "type": "function"
   },
   {
-    "inputs": [
+    "inputs": [],
+    "name": "helixToken",
+    "outputs": [
       {
         "internalType": "contract IHelixToken",
-        "name": "_token",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_helixToken",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_feeHandler",
         "type": "address"
       },
       {
         "internalType": "uint256",
-        "name": "defaultStakingRef",
+        "name": "_stakeRewardPercent",
         "type": "uint256"
       },
       {
         "internalType": "uint256",
-        "name": "defaultSwapRef",
+        "name": "_swapRewardPercent",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_toMintPerBlock",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_lastMintBlock",
         "type": "uint256"
       }
     ],
@@ -239,10 +481,23 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "isFeeHandlerSet",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
-        "name": "account",
+        "name": "_address",
         "type": "address"
       }
     ],
@@ -252,6 +507,19 @@
         "internalType": "bool",
         "name": "",
         "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "lastMintBlock",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -271,39 +539,23 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "user",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      }
-    ],
-    "name": "recordStakingRewardWithdrawal",
+    "inputs": [],
+    "name": "pause",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
-    "inputs": [
+    "inputs": [],
+    "name": "paused",
+    "outputs": [
       {
-        "internalType": "address",
-        "name": "user",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
       }
     ],
-    "name": "recordSwapReward",
-    "outputs": [],
-    "stateMutability": "nonpayable",
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -314,7 +566,7 @@
         "type": "address"
       }
     ],
-    "name": "ref",
+    "name": "referrers",
     "outputs": [
       {
         "internalType": "address",
@@ -326,8 +578,27 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_recorder",
+        "type": "address"
+      }
+    ],
+    "name": "removeRecorder",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [],
-    "name": "removeRef",
+    "name": "removeReferrer",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -342,24 +613,139 @@
   {
     "inputs": [
       {
-        "internalType": "uint256",
-        "name": "_stakingRefFee",
-        "type": "uint256"
+        "internalType": "address",
+        "name": "_referred",
+        "type": "address"
       },
       {
         "internalType": "uint256",
-        "name": "_swapRefFee",
+        "name": "_stakeAmount",
         "type": "uint256"
       }
     ],
-    "name": "setFees",
+    "name": "rewardStake",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_referred",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_swapAmount",
+        "type": "uint256"
+      }
+    ],
+    "name": "rewardSwap",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "rewards",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_collectorPercent",
+        "type": "uint256"
+      }
+    ],
+    "name": "setCollectorPercent",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_feeHandler",
+        "type": "address"
+      }
+    ],
+    "name": "setFeeHandler",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_lastMintBlock",
+        "type": "uint256"
+      }
+    ],
+    "name": "setLastRewardBlock",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_stakeRewardPercent",
+        "type": "uint256"
+      }
+    ],
+    "name": "setStakeRewardPercent",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_swapRewardPercent",
+        "type": "uint256"
+      }
+    ],
+    "name": "setSwapRewardPercent",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_toMintPerBlock",
+        "type": "uint256"
+      }
+    ],
+    "name": "setToMintPerBlock",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
     "inputs": [],
-    "name": "stakingRefFee",
+    "name": "stakeRewardPercent",
     "outputs": [
       {
         "internalType": "uint256",
@@ -372,7 +758,7 @@
   },
   {
     "inputs": [],
-    "name": "swapRefFee",
+    "name": "swapRewardPercent",
     "outputs": [
       {
         "internalType": "uint256",
@@ -385,12 +771,12 @@
   },
   {
     "inputs": [],
-    "name": "token",
+    "name": "toMintPerBlock",
     "outputs": [
       {
-        "internalType": "contract IHelixToken",
+        "internalType": "uint256",
         "name": "",
-        "type": "address"
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -405,6 +791,20 @@
       }
     ],
     "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "unpause",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "update",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

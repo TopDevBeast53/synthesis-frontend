@@ -1,11 +1,13 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import styled from 'styled-components'
+import { ethers } from 'ethers'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { Flex, Button, Card, Text } from 'uikit'
 import { Contract } from '@ethersproject/contracts'
 import ReferralRegisterABI from 'config/abi/HelixReferral.json'
 import { getProviderOrSigner } from 'utils'
+import { formatBigNumber } from 'utils/formatBalance'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import tokens from 'config/constants/tokens'
 import CurrencyLogo from 'components/Logo/CurrencyLogo'
@@ -27,7 +29,7 @@ const useGetRef = (account: string | null) => {
       getProviderOrSigner(library, account),
     )
     if (!account) return null
-    const result = await contract.ref(account)
+    const result = await contract.referrers(account)
     return result
   }, [library, account])
 }
@@ -41,7 +43,7 @@ const useGetBalance = (account: string | null) => {
       getProviderOrSigner(library, account),
     )
     if (!account) return null
-    const result = await contract.balance(account)
+    const result = await contract.rewards(account)
     return result
   }, [library, account])
 }
@@ -81,12 +83,6 @@ function getReferralLink(address: string): string {
   return `${window.location.hostname}/referrals?ref=${address}`
 }
 
-function formatBalance(bal: string): string {
-  const prefix = bal.substring(0, bal.length - 18)
-  const suffix = bal.substring(bal.length - 18, bal.length - 15)
-  return `${prefix}.${suffix}`
-}
-
 export default function Referrals() {
   const { account } = useActiveWeb3React()
   const getRef = useGetRef(account)
@@ -120,12 +116,7 @@ export default function Referrals() {
         if (value === null) {
           return
         }
-        const currentVal = value.toString()
-        if (currentVal === '0') {
-          setPendingBalance('0')
-        } else {
-          setPendingBalance(formatBalance(currentVal))
-        }
+        setPendingBalance(formatBigNumber(ethers.BigNumber.from(value), 3))
         setIsBalanceLoading(false)
         setReloadBalance(false)
       })

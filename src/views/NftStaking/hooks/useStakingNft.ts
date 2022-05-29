@@ -1,11 +1,12 @@
-import { useCallback } from 'react'
-import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
-import { getProviderOrSigner } from 'utils'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { Contract } from '@ethersproject/contracts'
-import { formatBigNumber } from 'utils/formatBalance'
-import { useHelixNFTChef } from 'hooks/useContract'
 import helixChefNFTABI from 'config/abi/HelixChefNFT.json'
+import { ethers } from 'ethers'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
+import { useHelixNFTChef } from 'hooks/useContract'
+import { useCallback } from 'react'
+import { getProviderOrSigner } from 'utils'
+import { formatBigNumber } from 'utils/formatBalance'
 import { helixNFTChefAddress } from '../constants'
 
 export const useStakingNft = () => {
@@ -28,7 +29,7 @@ export const useStakingNft = () => {
 
     const getPendingReward = useCallback(async () => {        
         const reward = await helixNFTChefContract.pendingReward(account)
-        return formatBigNumber(reward)        
+        return formatBigNumber(reward, 3)        
     }, [helixNFTChefContract, account])
 
     const withdrawReward = useCallback(async () => {
