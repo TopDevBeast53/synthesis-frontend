@@ -166,7 +166,7 @@ export const useLpTokenPrice = (symbol: string) => {
  * @@deprecated use the BUSD hook in /hooks
  */
 export const usePriceHelixBusd = (): BigNumber => {
-    const helixBnbFarm = useFarmFromPid(1)
+    const helixBnbFarm = useFarmFromPid(2)
 
     const helixPriceBusdAsString = helixBnbFarm.tokenPriceBusd
 

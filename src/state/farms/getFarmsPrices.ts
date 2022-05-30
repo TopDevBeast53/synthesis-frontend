@@ -21,7 +21,7 @@ const getFarmBaseTokenPrice = (
 ): BigNumber => {
     const hasTokenPriceVsQuote = Boolean(farm.tokenPriceVsQuote)
 
-    if (farm.quoteToken.symbol === tokens.busd.symbol) {
+    if (farm.quoteToken.symbol === tokens.usdc.symbol) {
         return hasTokenPriceVsQuote ? new BigNumber(farm.tokenPriceVsQuote) : BIG_ZERO
     }
 
@@ -97,6 +97,10 @@ const getFarmQuoteTokenPrice = (
     }
 
     if (quoteTokenFarm.quoteToken.symbol === 'USDC') {
+        return quoteTokenFarm.tokenPriceVsQuote ? new BigNumber(quoteTokenFarm.tokenPriceVsQuote) : BIG_ZERO
+    }
+
+    if (quoteTokenFarm.quoteToken.symbol === 'USDT') {
         return quoteTokenFarm.tokenPriceVsQuote ? new BigNumber(quoteTokenFarm.tokenPriceVsQuote) : BIG_ZERO
     }
 
