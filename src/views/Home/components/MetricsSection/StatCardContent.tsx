@@ -24,15 +24,15 @@ const StatCardContent: React.FC<{ headingText: string; bodyText: string }> = ({ 
           {bodyText}
         </Text>
         {isSmallerScreen && remainingWords.length > 13 ? (
-          <Heading color="#101411" fontSize="31px" style={{ fontWeight: '500', lineHeight: '24.48px' }}>
+          <Heading color="#101411" fontSize={isMobile?"22px":"31px"} style={{ fontWeight: '500', lineHeight: '24.48px' }}>
             {remainingWords}
           </Heading>
         ) : (
-          <Heading color="#101411" fontSize="31px" style={{ fontWeight: '500', lineHeight: '24.48px' }}>
+          <Heading color="#101411" fontSize={isMobile?"22px":"31px"} style={{ fontWeight: '500', lineHeight: '24.48px' }}>
             {remainingWords}
           </Heading>
         )}
-        <Heading color="#101411" mt="7px" style={{ fontSize: '31px', lineHeight: '42.16px', fontStyle: 'normal', textAlign:"center" }}>
+        <Heading color="#101411" mt="7px"  fontSize={isMobile?"22px":"31px"} style={{ lineHeight: '42.16px', fontStyle: 'normal', textAlign:"center" }}>
           {lastWord}
         </Heading>
       </Column>

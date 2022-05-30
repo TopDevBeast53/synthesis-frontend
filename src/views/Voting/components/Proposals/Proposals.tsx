@@ -29,7 +29,7 @@ const Proposals = ({ filterState, proposalType }: { filterState: ProposalState; 
   const filteredProposals = filterProposalsByState(filterProposalsByType(proposals, proposalType), filterState)
 
   return (
-    <Container py="62px">
+    <>
       <Card>
         {isLoading && <ProposalsLoading />}
         {isFetched &&
@@ -43,7 +43,8 @@ const Proposals = ({ filterState, proposalType }: { filterState: ProposalState; 
           </Flex>
         )}
       </Card>
-    </Container>
+    </>
+    
   )
 }
 

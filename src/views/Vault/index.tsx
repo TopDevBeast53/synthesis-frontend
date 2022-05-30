@@ -182,7 +182,7 @@ const Vault: React.FC = () => {
         )}
         {deposits?.length === 0 && !isLoading ? (
           <Text fontSize="20px" color="failure" pb="32px">
-            {t('No data')}
+            {t('Create a vault to earn higher yield on your staked HELIX')}
           </Text>
         ) : (
           <VaultsTable deposits={deposits} />
