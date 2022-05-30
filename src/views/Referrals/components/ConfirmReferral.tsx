@@ -74,7 +74,7 @@ export default function ConfirmReferral(props: Props) {
       </Flex>
       <Flex justifyContent="center">
         <Text fontSize="22px" color="secondary" mb="8px" ml="4px">
-          By accepting this referral request, {displayAddress} will be rewarded <b>10%</b> when you swap/trade.
+          By accepting this referral request, {displayAddress} will be rewarded <b>5%</b> when you swap/trade.
         </Text>
         <Flex alignItems="center" style={{ marginLeft: '2px' }}>
           <QuestionHelper
