@@ -11,9 +11,10 @@ interface TokenList {
 const defineTokens = <T extends TokenList>(t: T) => t
 
 export const mainnetTokens = defineTokens({
+    // Update Me: update svg file name equal to the token address
     helix: new Token(
         TESTNET,
-        '0x79DD2dad8D04F9279F94580DBEd2306A0aE118Bd',
+        '0x79DD2dad8D04F9279F94580DBEd2306A0aE118Bd', 
         18,
         'HELIX',
         'Helix',
