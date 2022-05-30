@@ -102,12 +102,12 @@ export default {
     },
     masterChef: {
         56: '',
-        4: '0x9c344695a43E85774F8F886DaBF9AE5C11428bC2',
+        4: '0x5aF843e733F08BcAAD11F4AaD08F34be596Ac01f',
     },
     helixAutoPool: {
         // AutoPool
         56: '',
-        4: '0x6C3f85c7F3979308751EBFba244F6eF5400aA911',
+        4: '0x8CFa0D2d55434aF19882eb2Ad9cd41a6119CDCa2',
     },
     helixNFT: {
         1: '',
@@ -138,7 +138,7 @@ export default {
     },
     helixYieldSwap: {
         56: '',
-        4: '0xaEaD56A540873130c5B973E1A64378aca343F6BC',
+        4: '0x348DdAaE8D5095d31b9D1C7Dab7404Cf7967450d',
     },
     helixLPSwap: {
         56: '',

@@ -45,7 +45,7 @@
     {
       "name": "USDT",
       "symbol": "USDT",
-      "address": "0x3B00Ef435fA4FcFF5C209a37d1f3dcff37c705aD",
+      "address": "0x2a4a8B7555bDbBfef4a50E4E5c4Ed42C7A504Ce5",
       "chainId": 4,
       "decimals": 6,
       "logoURI": "local://images/tokens/0x337610d27c682E347C9cD60BD4b3b107C9d34dDd.png"
