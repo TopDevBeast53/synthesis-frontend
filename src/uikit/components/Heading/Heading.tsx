@@ -27,7 +27,6 @@ const Heading = styled(Text).attrs({ bold: true })<HeadingProps>`
   line-height: 1.1;
   text-align:center;
   ${({ theme }) => theme.mediaQueries.sm} {
-    text-align:start;
     font-size: ${({ scale }) => style[scale || scales.MD].fontSize};    
   }
   ${({ theme }) => theme.mediaQueries.lg} {

@@ -2,7 +2,7 @@ import Column from 'components/Layout/Column'
 import { PageMeta } from 'components/Layout/Page'
 import PageSection from 'components/PageSection'
 import React from 'react'
-import { Button, Card, Flex, Heading, Text, useMatchBreakpoints } from 'uikit'
+import { Button, Card, Flex, Heading, Text, useMatchBreakpoints, Link } from 'uikit'
 import DeRisk from 'uikit/components/Svg/Icons/DeRisk'
 import InstantlySwap from 'uikit/components/Svg/Icons/InstantlySwap'
 import NewPositions from 'uikit/components/Svg/Icons/NewPositions'
@@ -41,23 +41,24 @@ const Home: React.FC = () => {
           </Heading>
           <Flex mt="74px">
             
-              <Button mr="12px" width="256px">
-                <a href="/swap">
-                  <Text style={{ color: '#101411', fontWeight: 500 }}>Trade Crypto</Text>
-                </a>
-              </Button>
-              <Button mr="12px" width="300px" style={{ background: '#101411', border: '2px solid #ABBEFF' }}>
-                <a href="/lps-swap">
-                  <Text style={{ color: '#ABBEFF', fontWeight: 500 }}>
-                    Trade LP Tokens
-                  </Text>
-                </a>
-              </Button>
-              <Button width="256px" style={{ background: '#ABBEFF' }}>
-                <a href="/yield-swap" >
-                  <Text style={{ color: '#101411', fontWeight: 500 }}>Trade Yield</Text>
-                </a>
-              </Button>
+              <Link href="/swap" style={{width: '256px', textDecoration: 'none'}} mr="12px">
+                <Button>
+                    <Text style={{ color: '#101411', fontWeight: 500 }}>Trade Crypto</Text>
+                </Button>
+              </Link>
+              <Link href="/lps-swap" style={{width: '300px', textDecoration: 'none'}} mr="12px">
+                <Button style={{ background: '#101411', border: '2px solid #ABBEFF' }}>
+                    <Text style={{ color: '#ABBEFF', fontWeight: 500 }}>
+                      Trade LP Tokens
+                    </Text>
+                </Button>
+              </Link>
+
+              <Link href="/yield-swap" style={{width: '256px', textDecoration: 'none'}}>
+                <Button style={{ background: '#ABBEFF' }}>
+                    <Text style={{ color: '#101411', fontWeight: 500 }}>Trade Yield</Text>
+                </Button>
+              </Link>
             
           </Flex>
         </Column>
@@ -72,7 +73,7 @@ const Home: React.FC = () => {
         <Card>
           <Column style={{ padding: isMobile ? '10px' : '70px', alignItems: 'center' }}>
             <Heading as="h1" scale="xxl" color="secondary" textAlign="center"  width="60%" style={{ paddingBottom: '50px' }}>
-              Helix provides a wide range of new opportunities
+              Helix provides a range of new opportunities
             </Heading>
             <Card style={{ background: 'rgba(16, 20, 17, 0.6)', marginBottom: '10px' }}>
               <Flex style={{ padding: isMobile ? '15px 5%':'44px 10%', width: '100%', justifyContent: 'space-between' }}>
