@@ -1,8 +1,9 @@
 import Column from 'components/Layout/Column'
+import { useHistory } from "react-router-dom"
 import { PageMeta } from 'components/Layout/Page'
 import PageSection from 'components/PageSection'
 import React from 'react'
-import { Button, Card, Flex, Heading, Text, useMatchBreakpoints, Link } from 'uikit'
+import { Button, Card, Flex, Heading, Text, useMatchBreakpoints } from 'uikit'
 import DeRisk from 'uikit/components/Svg/Icons/DeRisk'
 import InstantlySwap from 'uikit/components/Svg/Icons/InstantlySwap'
 import NewPositions from 'uikit/components/Svg/Icons/NewPositions'
@@ -11,6 +12,10 @@ import MetricsSection from './components/MetricsSection'
 const Home: React.FC = () => {
   const HomeSectionContainerStyles = { margin: '0', width: '100%', maxWidth: '968px' }
   const { isMobile } = useMatchBreakpoints()
+  const history = useHistory();
+  const handleClick = (src) => {
+    history.push(src)
+  }
 
   return (
     <>
@@ -41,24 +46,17 @@ const Home: React.FC = () => {
           </Heading>
           <Flex mt="74px">
             
-              <Link href="/swap" style={{width: '256px', textDecoration: 'none'}} mr="12px">
-                <Button>
-                    <Text style={{ color: '#101411', fontWeight: 500 }}>Trade Crypto</Text>
-                </Button>
-              </Link>
-              <Link href="/lps-swap" style={{width: '300px', textDecoration: 'none'}} mr="12px">
-                <Button style={{ background: '#101411', border: '2px solid #ABBEFF' }}>
-                    <Text style={{ color: '#ABBEFF', fontWeight: 500 }}>
-                      Trade LP Tokens
-                    </Text>
-                </Button>
-              </Link>
-
-              <Link href="/yield-swap" style={{width: '256px', textDecoration: 'none'}}>
-                <Button style={{ background: '#ABBEFF' }}>
-                    <Text style={{ color: '#101411', fontWeight: 500 }}>Trade Yield</Text>
-                </Button>
-              </Link>
+            <Button mr="12px" width="256px" onClick={() =>{handleClick("/swap")}}>
+                <Text style={{ color: '#101411', fontWeight: 500 }}>Trade Crypto</Text>
+            </Button>
+            <Button mr="12px" width="300px" style={{ background: '#101411', border: '2px solid #ABBEFF' }} onClick={() =>{handleClick("/lps-swap")}}>
+                <Text style={{ color: '#ABBEFF', fontWeight: 500 }}>
+                  Trade LP Tokens
+                </Text>
+            </Button>
+            <Button width="256px" style={{ background: '#ABBEFF' }} onClick={() =>{handleClick("/yield-swap")}}>
+                <Text style={{ color: '#101411', fontWeight: 500 }}>Trade Yield</Text>
+            </Button>
             
           </Flex>
         </Column>
