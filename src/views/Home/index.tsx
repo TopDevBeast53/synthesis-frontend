@@ -42,7 +42,7 @@ const Home: React.FC = () => {
       >
         <Column style={{ width: isMobile? '100%' : '70%', marginBottom: '171px' , marginLeft:"auto", marginRight:"auto"}}>
           <Heading as="h1" scale="xxl" color="secondary" mb="24px" textAlign="center">
-            Cheaper Swaps for Crypto, LP Tokens & Even Yield
+            Cheaper Swaps for Crypto, LP Tokens  & <br/>Even Yield
           </Heading>
           <Flex mt="74px">
             
