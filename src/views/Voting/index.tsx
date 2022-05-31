@@ -15,16 +15,16 @@ const Content = styled.div`
   padding:64px 0px;
 `
 
-const PageHeading = styled(Heading)`
-  font-size: 32px;
-  weight: 400;
-  line-height: 73.5px;
-  padding-bottom: 84px;
-  ${({ theme }) => theme.mediaQueries.sm} {
-    text-align:start;
-    font-size: 70px;  
-  }
-`
+// const PageHeading = styled(Heading)`
+//   font-size: 32px;
+//   weight: 400;
+//   line-height: 73.5px;
+//   padding-bottom: 84px;
+//   ${({ theme }) => theme.mediaQueries.sm} {
+//     text-align:start;
+//     font-size: 70px;  
+//   }
+// `
 
 const GeneralCard = styled(Card)`
   padding: 14px 0px 15px 15px;
@@ -66,8 +66,8 @@ const DisplayPanel = styled.div`
 
 const Voting = () => {
   const [filterState, setFilterState] = useState(ProposalState.ACTIVE)
-  const [proposalType, setProposalType] = useState(ProposalType.CORE)
-  const { isMobile, isTablet } = useMatchBreakpoints()
+  const [proposalType, setProposalType] = useState(ProposalType.ALL)
+  const { isTablet } = useMatchBreakpoints()
 
   return (
     <>

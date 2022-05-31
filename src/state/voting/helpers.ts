@@ -81,6 +81,7 @@ export const getVotes = async (first: number, skip: number, where: VoteWhere): P
                         choices
                     }
                     metadata
+                    vp
                 }
             }
         `,

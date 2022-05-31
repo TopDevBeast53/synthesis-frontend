@@ -479,6 +479,7 @@ export interface Vote {
         votingPower: string
         verificationHash: string
     }
+    vp: number
     _inValid?: boolean
 }
 

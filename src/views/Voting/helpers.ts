@@ -36,7 +36,7 @@ export interface Message {
 export const generateMetaData = () => {
     return {
         plugins: {},
-        network: 56,
+        network: process.env.REACT_APP_CHAIN_ID,
         strategies: [{ name: 'helix', params: { symbol: 'HELIX', address: tokens.helix.address, decimals: 18 } }],
     }
 }
@@ -104,7 +104,7 @@ export const calculateVoteResults = (votes: Vote[]): { [key: string]: Vote[] } =
 
 export const getTotalFromVotes = (votes: Vote[]) => {
     return votes.reduce((accum, vote) => {
-        let power = parseFloat(vote.metadata?.votingPower)
+        let power = vote.vp
 
         if (!power) {
             power = 0

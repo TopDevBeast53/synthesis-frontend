@@ -34,7 +34,7 @@ const Proposals = ({ filterState, proposalType }: { filterState: ProposalState; 
         {isLoading && <ProposalsLoading />}
         {isFetched &&
           filteredProposals.length > 0 &&
-          filteredProposals.map((proposal) => {
+          filteredProposals.reverse().map((proposal) => {
             return <ProposalRow key={proposal.id} proposal={proposal} />
           })}
         {isFetched && filteredProposals.length === 0 && (

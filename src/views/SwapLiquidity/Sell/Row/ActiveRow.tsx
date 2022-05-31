@@ -4,7 +4,6 @@ import React, { useContext, useState } from 'react'
 import styled from 'styled-components'
 import { AutoRenewIcon, Button, ChevronDownIcon, useDelayedUnmount, useMatchBreakpoints, useModal } from 'uikit'
 import { SwapLiquidityContext } from 'views/SwapLiquidity/context'
-import ArrowCell from 'views/SwapYield/components/Cells/ArrowCell'
 import { StyledCell, StyledCellWithoutPadding, StyledRow } from 'views/SwapYield/components/Cells/StyledCell'
 import TokensCell from 'views/SwapYield/components/Cells/TokensCell'
 import ToolTipCell from 'views/SwapYield/components/Cells/ToolTipCell'
@@ -62,9 +61,6 @@ const ActiveRow = (props) => {
                 <StyledCell>
                     <TokensCell token={swapData?.toBuyerToken} balance={swapData?.amount.toString()}/>
                 </StyledCell>
-                {/* <StyledCellWithoutPadding>
-                    <ArrowCell/>
-                </StyledCellWithoutPadding>                 */}
                 <StyledCell>                    
                     <TokensCell token={swapData?.toSellerToken} balance={swapData?.ask.toString()}/>
                 </StyledCell>
