@@ -223,7 +223,7 @@ const ContributeModal: React.FC<Props> = ({
           </Flex>
           <Text color="textSubtle" fontSize="12px" mb="24px">
             {t(
-              'If you don’t commit enough CAKE, you may not receive any IFO tokens at all and will only receive a full refund of your CAKE.',
+              'If you don’t commit enough HELIX, you may not receive any IFO tokens at all and will only receive a full refund of your HELIX.',
             )}
             <Link
               fontSize="12px"
