@@ -181,7 +181,7 @@ const Vault: React.FC = () => {
           </Flex>
         )}
         {deposits?.length === 0 && !isLoading ? (
-          <Text fontSize="20px" color="failure" pb="32px">
+          <Text fontSize="16px" color="#fff" pb="32px">
             {t('Create a vault to earn higher yield on your staked HELIX')}
           </Text>
         ) : (
