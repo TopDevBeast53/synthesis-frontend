@@ -213,6 +213,9 @@ export default function NftStaking() {
         <Heading as="h1" scale="xxl" color="secondary">
           {t('Stake Your Geobots')}
         </Heading>
+        <Heading scale="lg" color="text" mt="3">
+          Earn Yield by Staking Geobot NFTs
+        </Heading>
       </PageHeader>
       <Page removePadding>
         <NFTDisplayPanel>
