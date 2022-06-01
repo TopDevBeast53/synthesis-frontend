@@ -152,7 +152,7 @@ const CreateProposal = () => {
       <PageMeta />
       <Box mb="40px">
         <Button as={Link} to="/voting" variant="text" startIcon={<ArrowBackIcon color="primary" width="24px" />} px="0">
-          {t('Back to Vote Overview')}
+          {t('Back to Proposals')}
         </Button>
       </Box>
       <form onSubmit={handleSubmit}>
@@ -197,7 +197,7 @@ const CreateProposal = () => {
             <Card>
               <CardHeader>
                 <Heading as="h3" scale="md">
-                  {t('Actions')}
+                  {t('Details')}
                 </Heading>
               </CardHeader>
               <CardBody>
@@ -248,7 +248,7 @@ const CreateProposal = () => {
                       {t('Publish')}
                     </Button>
                     <Button scale="sm" type="button" variant="text" onClick={onPresentVoteDetailsModal} p={0}>
-                      {t('Check voting power')}
+                      {t('Check Your Voting Power')}
                     </Button>
                   </>
                 ) : (

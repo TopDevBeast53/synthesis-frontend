@@ -58,7 +58,7 @@ const Proposal = () => {
       <PageMeta />
       <Box mb="40px">
         <Button as={Link} to="/voting" variant="text" startIcon={<ArrowBackIcon color="primary" width="24px" />} px="0">
-          {t('Back to Vote Overview')}
+          {t('Back to Proposals')}
         </Button>
       </Box>
       <Layout>
