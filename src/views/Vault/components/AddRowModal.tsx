@@ -96,7 +96,7 @@ const AddRowModal: React.FC<ModalProps> = ({ stakingTokenBalance, stakingTokenPr
     setDurationIndex(option.value)
   }
   return (
-    <Modal title={t('Add Item')} onDismiss={onDismiss} headerBackground={theme.colors.gradients.cardHeader}>
+    <Modal title={t('Create Vault')} onDismiss={onDismiss} headerBackground={theme.colors.gradients.cardHeader}>
       <Text>
         {' '}
         {t('Period')} / {t('days')}{' '}

@@ -159,14 +159,14 @@ const CreateProposal = () => {
         <Layout>
           <Box>
             <Box mb="24px">
-              <Label htmlFor="name">{t('Title')}</Label>
+              <Label htmlFor="name">{t('Proposal')}</Label>
               <Input id="name" name="name" value={name} scale="lg" onChange={handleChange} required />
               {formErrors.name && fieldsState.name && <FormErrors errors={formErrors.name} />}
             </Box>
             <Box mb="24px">
-              <Label htmlFor="body">{t('Content')}</Label>
+              <Label htmlFor="body">{t('Description')}</Label>
               <Text color="textSubtle" mb="8px">
-                {t('Tip: write in Markdown!')}
+                {t('')}
               </Text>
               <EasyMde
                 id="body"
