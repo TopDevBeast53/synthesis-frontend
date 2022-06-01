@@ -37,7 +37,9 @@ const NameCell: React.FC<NameCellProps> = ({ pool }) => {
   const earningTokenSymbol = earningToken.symbol
 
   const stakedBalance = userData?.stakedBalance ? new BigNumber(userData.stakedBalance) : BIG_ZERO
-  const isStaked = stakedBalance.gt(0)
+  const pendingReward = userData?.pendingReward ? new BigNumber(userData.pendingReward) : BIG_ZERO
+
+  const isStaked = stakedBalance.gt(0) || pendingReward.gt(0)
   const isManualHelixPool = sousId === 0
 
   const showStakedTag = vaultKey ? hasVaultShares : isStaked

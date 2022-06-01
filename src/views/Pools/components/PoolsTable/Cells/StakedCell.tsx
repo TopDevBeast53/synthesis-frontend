@@ -41,6 +41,7 @@ const StakedCell: React.FC<StakedCellProps> = ({ pool, account, userDataLoaded }
     stakingToken.decimals,
   )
   const stakedBalance = userData?.stakedBalance ? new BigNumber(userData.stakedBalance) : BIG_ZERO
+  const pendingReward = userData?.pendingReward ? new BigNumber(userData.pendingReward) : BIG_ZERO
   const stakedTokenBalance = getBalanceNumber(stakedBalance, stakingToken.decimals)
   const stakedTokenDollarBalance = getBalanceNumber(
     stakedBalance.multipliedBy(stakingTokenPrice),
@@ -49,7 +50,7 @@ const StakedCell: React.FC<StakedCellProps> = ({ pool, account, userDataLoaded }
 
   const labelText = `${pool.stakingToken.symbol} ${t('Staked')}`
 
-  const hasStaked = stakedBalance.gt(0) || isVaultWithShares
+  const hasStaked = stakedBalance.gt(0) || pendingReward.gt(0) || isVaultWithShares
 
   const userDataLoading = pool.vaultKey ? vaultUserDataLoading : !userDataLoaded
 
