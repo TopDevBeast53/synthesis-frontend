@@ -183,7 +183,7 @@ const Vault: React.FC = () => {
             {helixEnabled === HelixEnabledState.ENABLED && (
               <Button onClick={handleAdd} key={buttonScale} variant="secondary" scale={buttonScale} mr="8px">
                 {' '}
-                Add{' '}
+                Add Vault{' '}
               </Button>
             )}
             {helixEnabled === HelixEnabledState.DISABLED && (

@@ -392,7 +392,7 @@ export default function Swap({ history }: RouteComponentProps) {
               <AppBody>
                 <CurrencyInputHeader
                   title={t('Swap')}
-                  subtitle={t('Trade tokens in an instant')}
+                  subtitle={t('Fast ERC20 Swaps with Lower Fees')}
                   // setIsChartDisplayed={setIsChartDisplayed}
                   // isChartDisplayed={isChartDisplayed}
                 />
