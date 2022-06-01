@@ -172,7 +172,7 @@ const Vault: React.FC = () => {
               {t('Locked, Higher Yield Staking for HELIX')}
             </Heading>
             <Heading scale="md" color="text" mt="3">
-              {t('Total staked ')} {totalStake.toFixed(3)}
+              {t('Total HELIX Vaulted: ')} {totalStake.toFixed(3)}
             </Heading>
           </Flex>
         </Flex>
