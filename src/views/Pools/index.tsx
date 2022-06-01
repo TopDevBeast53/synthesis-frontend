@@ -251,11 +251,8 @@ const Pools: React.FC = () => {
             <Heading as="h1" scale="xxl" color="secondary" mb="24px">
               {t('Helix Pools')}
             </Heading>
-            <Heading scale="md" color="text">
-              {t('Just stake some tokens to earn.')}
-            </Heading>
-            <Heading scale="md" color="text">
-              {t('High APR, low risk.')}
+            <Heading scale="lg" color="text">
+              {t('Simple Single-Asset Staking Pools')}
             </Heading>
           </Flex>
         </Flex>
