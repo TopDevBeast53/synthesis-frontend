@@ -72,8 +72,11 @@ const Voting = () => {
   return (
     <>
       <PageHeader background="transparent">
-        <Heading as="h1" scale="xxl" color="secondary">
-          Voting
+        <Heading as="h1" scale="xxl" color="secondary"> 
+          HELIX Voting
+        </Heading>
+        <Heading scale="lg" color="text" mt="4">
+          Suggest Improvements, Vote Using the HELIX Token
         </Heading>
       </PageHeader>
       <Page removePadding>      
@@ -92,9 +95,9 @@ const Voting = () => {
             </Flex>
 
             <GeneralCard style={{ minWidth: '210px', maxWidth:isTablet ? "340px" :"380px", marginTop:"15px" }}>
-              <GeneralCardCaption>Got a suggestion?</GeneralCardCaption>
+              <GeneralCardCaption>What&apos;s your suggestion?</GeneralCardCaption>
               <Button as={Link} to="/voting/proposal/create" style={{ margin: '4px' }}>
-                Make a Proposal
+                Create a Proposal
               </Button>
             </GeneralCard>
           </Flex>
