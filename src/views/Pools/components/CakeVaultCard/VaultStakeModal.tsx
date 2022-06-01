@@ -208,14 +208,6 @@ const VaultStakeModal: React.FC<VaultStakeModalProps> = ({
   const handleDeposit = async (convertedStakeAmount: BigNumber) => {
     setPendingTx(true)
     try {
-      // .toString() being called to fix a BigNumber error in prod
-      // as suggested here https://github.com/ChainSafe/web3.js/issues/2077
-      await callWithGasPrice(
-        tokenContract,
-        'approve',
-        ['0xE9Bf1603aa7648118a1D309BA86c84834C2d8269', convertedStakeAmount.toString()],
-        callOptions,
-      )
       const tx = await callWithGasPrice(vaultPoolContract, 'deposit', [convertedStakeAmount.toString()], callOptions)
       const receipt = await tx.wait()
       if (receipt.status) {

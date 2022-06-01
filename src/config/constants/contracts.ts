@@ -107,7 +107,7 @@ export default {
     helixAutoPool: {
         // AutoPool
         56: '',
-        4: '0x46B358dA1Ce72d92F37485c3f67eD4175422674f',
+        4: '0x597C0E2BE80F8cE7e1A4CdFdbD3BbF7FdA9a8741',
     },
     helixNFT: {
         1: '',
