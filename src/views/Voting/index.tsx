@@ -73,7 +73,7 @@ const Voting = () => {
     <>
       <PageHeader background="transparent">
         <Heading as="h1" scale="xxl" color="secondary"> 
-          HELIX Voting
+          Helix Proposals
         </Heading>
         <Heading scale="lg" color="text" mt="4">
           Suggest Improvements, Vote Using the HELIX Token
