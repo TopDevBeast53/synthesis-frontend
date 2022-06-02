@@ -62,6 +62,13 @@ export const useHelixLockVault = () => {
     },
     [getHelixAutoPoolContract, callWithGasPrice],
   )
+  const compoundReward = useCallback(
+    async (depositId) => {
+      const tx = await callWithGasPrice(getHelixAutoPoolContract(), 'compound', [depositId])
+      return tx.wait()
+    },
+    [getHelixAutoPoolContract, callWithGasPrice],
+  )
 
   const deposit = useCallback(
     async (amount, depositId) => {
@@ -98,6 +105,7 @@ export const useHelixLockVault = () => {
     getDepositIds,
     getDurations,
     claimReward,
+    compoundReward,
     deposit,
     withdraw,
     addNewDeposit,

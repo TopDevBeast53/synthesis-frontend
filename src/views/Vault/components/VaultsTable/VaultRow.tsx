@@ -57,6 +57,17 @@ const VaultRow: React.FC<PoolRowProps> = ({ deposit }) => {
   const updateEarnings = (value) => {
     setEarnings(new BigNumber(value))
   }
+
+  const updateStakedBalance = () => {
+    helixVaultContract.deposits(deposit?.id)
+      .then((value) => {
+        setStakedBalance(new BigNumber(value.amount.toString()))
+      })
+      .catch((err) => {
+        logError(err)
+      })
+  }
+
   const updateStake = (newStaked) => {
     setStakedBalance(newStaked)
     helixVaultContract.pendingReward(deposit?.id)
@@ -71,20 +82,20 @@ const VaultRow: React.FC<PoolRowProps> = ({ deposit }) => {
   return (
     <>
       <StyledRow role="row" onClick={toggleExpanded}>
-      { (isTablet || isDesktop ) && (
-        <>
-          <Container>
-            <CurrencyLogo currency={tokens.helix} size="36px" />
-          </Container>   
-          <StakedCell stakedBalance={stakedBalance}/>
-        </>
-      ) }   
-      <Container>
-        <CurrencyLogo currency={tokens.helix} size="36px" />
-      </Container>   
-      <EarningsCell isLoading={isLoading} earnings={earnings}/>
-      <WithdrawTimeLeft deposit={deposit} />
-      <ExpandActionCell expanded={expanded} isFullLayout={isTablet || isDesktop} />
+        {(isTablet || isDesktop) && (
+          <>
+            <Container>
+              <CurrencyLogo currency={tokens.helix} size="36px" />
+            </Container>
+            <StakedCell stakedBalance={stakedBalance} />
+          </>
+        )}
+        <Container>
+          <CurrencyLogo currency={tokens.helix} size="36px" />
+        </Container>
+        <EarningsCell isLoading={isLoading} earnings={earnings} />
+        <WithdrawTimeLeft deposit={deposit} />
+        <ExpandActionCell expanded={expanded} isFullLayout={isTablet || isDesktop} />
       </StyledRow>
       {shouldRenderActionPanel && (
         <ActionPanel
@@ -95,6 +106,7 @@ const VaultRow: React.FC<PoolRowProps> = ({ deposit }) => {
           stakedBalance={stakedBalance}
           updateEarnings={updateEarnings}
           updateStake={updateStake}
+          updateStakedBalance={updateStakedBalance}
         />
       )}
     </>

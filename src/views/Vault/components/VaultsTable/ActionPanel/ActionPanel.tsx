@@ -62,6 +62,7 @@ interface ActionPanelProps {
   stakedBalance
   updateEarnings?
   updateStake?
+  updateStakedBalance?
 }
 
 const ActionPanel: React.FC<ActionPanelProps> = ({
@@ -72,11 +73,12 @@ const ActionPanel: React.FC<ActionPanelProps> = ({
   stakedBalance,
   updateEarnings,
   updateStake,
+  updateStakedBalance,
 }) => {
   return (
     <StyledActionPanel expanded={expanded}>
       <ActionContainer>
-        <Harvest isLoading={isLoading} earnings={earnings} deposit={deposit} updateEarnings={updateEarnings} />
+        <Harvest isLoading={isLoading} earnings={earnings} deposit={deposit} updateEarnings={updateEarnings} updateStakedBalance={updateStakedBalance} />
         <Stake isLoading={isLoading} deposit={deposit} stakedBalance={stakedBalance} updateStake={updateStake} />
       </ActionContainer>
     </StyledActionPanel>

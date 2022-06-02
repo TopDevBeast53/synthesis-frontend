@@ -16,6 +16,7 @@ interface HarvestActionProps {
   isLoading
   deposit
   updateEarnings?
+  updateStakedBalance?
 }
 
 const HarvestAction: React.FunctionComponent<HarvestActionProps> = ({
@@ -23,12 +24,14 @@ const HarvestAction: React.FunctionComponent<HarvestActionProps> = ({
   earnings,
   deposit,
   updateEarnings,
+  updateStakedBalance,
 }) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
-  const { claimReward } = useHelixLockVault()
+  const { claimReward, compoundReward } = useHelixLockVault()
   const { toastError, toastSuccess } = useToast()
   const [pendingTx, setPendingTx] = useState(false)
+  const [pendingCompoundTx, setPendingCompoundTx] = useState(false)
 
   const cakePrice = usePriceHelixBusd()
   const { decimals, symbol } = tokens.helix
@@ -52,6 +55,23 @@ const HarvestAction: React.FunctionComponent<HarvestActionProps> = ({
       toastError(t('Error'), t('Please try again.'))
     }
     setPendingTx(false)
+  }
+  const onPresentCompound = async () => {
+    setPendingCompoundTx(true)
+    try {
+      const receipt = await compoundReward(deposit?.id)
+      if (receipt.status) {
+        toastSuccess(t('Success'), t('Compounded'))
+        updateEarnings(0)
+        updateStakedBalance()
+      } else {
+        toastError(t('Error'), t('Maybe show transaction hash so they could go there and check the problem.'))
+      }
+    } catch (e) {
+      logError(e)
+      toastError(t('Error'), t('Please try again.'))
+    }
+    setPendingCompoundTx(false)
   }
 
   const actionTitle = (
@@ -121,6 +141,15 @@ const HarvestAction: React.FunctionComponent<HarvestActionProps> = ({
         </Flex>
         <Button
           disabled={!hasEarnings}
+          isLoading={pendingCompoundTx}
+          endIcon={pendingCompoundTx ? <AutoRenewIcon spin color="currentColor" /> : null}
+          onClick={onPresentCompound}
+          marginRight="12px"
+        >
+          {t('Compound')}
+        </Button>
+        <Button
+          disabled={!hasEarnings}
           isLoading={pendingTx}
           endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
           onClick={onPresentCollect}
@@ -128,7 +157,7 @@ const HarvestAction: React.FunctionComponent<HarvestActionProps> = ({
           {t('Collect')}
         </Button>
       </ActionContent>
-    </ActionContainer>
+    </ActionContainer >
   )
 }
 
