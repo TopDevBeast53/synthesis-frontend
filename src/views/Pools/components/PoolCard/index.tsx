@@ -16,7 +16,8 @@ const PoolCard: React.FC<{ pool: DeserializedPool; account: string }> = ({ pool,
   const { sousId, stakingToken, earningToken, isFinished, userData } = pool
   const { t } = useTranslation()
   const stakedBalance = userData?.stakedBalance ? new BigNumber(userData.stakedBalance) : BIG_ZERO
-  const accountHasStakedBalance = stakedBalance.gt(0)
+  const pendingReward = userData?.pendingReward ? new BigNumber(userData.pendingReward) : BIG_ZERO
+  const accountHasStakedBalance = stakedBalance.gt(0) || pendingReward.gt(0)
 
   const isCakePool = earningToken.symbol === 'HELIX' && stakingToken.symbol === 'HELIX'
 
@@ -36,7 +37,7 @@ const PoolCard: React.FC<{ pool: DeserializedPool; account: string }> = ({ pool,
         <AprRow pool={pool} stakedBalance={stakedBalance} />
         <Flex mt="24px" flexDirection="column">
           {account ? (
-            <CardActions pool={pool} stakedBalance={stakedBalance} />
+            <CardActions pool={pool} stakedBalance={stakedBalance} pendingReward={pendingReward}/>
           ) : (
             <>
               <Text mb="10px" textTransform="uppercase" fontSize="12px" color="textSubtle" bold>
