@@ -10,8 +10,8 @@ const GasSettings = () => {
   const [gasPrice, setGasPrice] = useGasPriceManager()
 
   return (
-    <Flex mb="12px" alignItems="center">
-      <Flex flexDirection="column">
+    <Flex flexDirection="column">
+      <Flex mb="12px" alignItems="center">
         <Text>{t('Default Transaction Speed (GWEI)')}</Text>
         <QuestionHelper
           text={t(
