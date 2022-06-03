@@ -170,7 +170,7 @@ const SlippageTabs = () => {
           />
         </Flex>
         <Flex>
-          <Box width="52px" mt="4px">
+          <Box width="55px" mt="4px">
             <Input
               scale="sm"
               inputMode="numeric"
