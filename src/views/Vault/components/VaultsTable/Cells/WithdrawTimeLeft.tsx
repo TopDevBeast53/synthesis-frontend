@@ -20,7 +20,7 @@ const WithdrawTimeLeft: React.FC<TotalStakedCellProps> = ({ deposit }) => {
     const withdrawDate = moment.unix(deposit?.withdrawTimeStamp)
     const today = moment()
     const retData = {
-      withdrawTimeLeft: moment.duration(withdrawDate.diff(today)),
+      withdrawTimeLeft: moment.duration(withdrawDate.diff(today)).as("days"),
       isPast: withdrawDate.isSameOrBefore(today),
     }
     return retData
@@ -31,12 +31,12 @@ const WithdrawTimeLeft: React.FC<TotalStakedCellProps> = ({ deposit }) => {
     <StyledCell role="cell">
       <CellContent>
         <Text fontSize="12px" color="textSubtle" textAlign="left">
-          {t('Withdraw Time Left')}
+          {t('Locked Until')}
         </Text>
         {deposit ? (
           <Flex height="20px" alignItems="center" mt={2}>
             <Text fontSize={balanceFontSize} color={isPast ? 'primary' : 'secondary'}>
-              {isPast ? 'Withdraw is available' : withdrawTimeLeft.humanize()}
+              {isPast ? 'Withdraw is available' : `${Math.ceil(withdrawTimeLeft)} days`}
             </Text>
           </Flex>
         ) : (
