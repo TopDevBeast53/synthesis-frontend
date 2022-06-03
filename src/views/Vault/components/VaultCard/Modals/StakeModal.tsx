@@ -8,6 +8,7 @@ import { Token } from 'sdk'
 import styled from 'styled-components'
 import { AutoRenewIcon, BalanceInput, Button, Flex, Image, Link, Modal, Slider, Text } from 'uikit'
 import { formatNumber, getDecimalAmount, getFullDisplayBalance } from 'utils/formatBalance'
+import { usePriceHelixBusd } from 'state/farms/hooks'
 import { logError } from 'utils/sentry'
 import { useHelixLockVault } from 'views/Vault/hooks/useHelixLockVault'
 import PercentageButton from './PercentageButton'
@@ -42,7 +43,8 @@ const StakeModal: React.FC<StakeModalProps> = ({
   const { toastSuccess, toastError } = useToast()
   const [pendingTx, setPendingTx] = useState(false)
   const [stakeAmount, setStakeAmount] = useState('')
-  const [hasReachedStakeLimit, setHasReachedStakedLimit] = useState(false)
+  // const [hasReachedStakeLimit, setHasReachedStakedLimit] = useState(false)
+  const hasReachedStakeLimit = false
   const [percent, setPercent] = useState(0)
   const { decimals, symbol, address } = tokens.helix
   const fullDecimalStakeAmount = getDecimalAmount(new BigNumber(stakeAmount), decimals)
@@ -53,16 +55,17 @@ const StakeModal: React.FC<StakeModalProps> = ({
   const userNotEnoughToken = isRemovingStake
     ? stakedBalance.lt(fullDecimalStakeAmount)
     : totalBalance.lt(fullDecimalStakeAmount)
-
-  const usdValueStaked = new BigNumber(stakeAmount).times(tokenPrice)
+    const helixPriceBusd = usePriceHelixBusd()
+    const usdValueStaked = new BigNumber(stakeAmount).times(helixPriceBusd)
+  // const usdValueStaked = new BigNumber(stakeAmount).times(tokenPrice)
   const formattedUsdValueStaked = !usdValueStaked.isNaN() && formatNumber(usdValueStaked.toNumber())
   const getTokenLink = stakingToken.address ? `/swap?outputCurrency=${stakingToken.address}` : '/swap'
 
-  useEffect(() => {
-    if (!isRemovingStake) {
-      setHasReachedStakedLimit(fullDecimalStakeAmount.plus(stakedBalance).gt(totalBalance))
-    }
-  }, [totalBalance, stakedBalance, isRemovingStake, setHasReachedStakedLimit, fullDecimalStakeAmount])
+  // useEffect(() => {
+  //   if (!isRemovingStake) {
+  //     setHasReachedStakedLimit(fullDecimalStakeAmount.plus(stakedBalance).gt(totalBalance))
+  //   }
+  // }, [totalBalance, stakedBalance, isRemovingStake, setHasReachedStakedLimit, fullDecimalStakeAmount])
 
   const handleStakeInputChange = (input: string) => {
     if (input) {
@@ -130,12 +133,12 @@ const StakeModal: React.FC<StakeModalProps> = ({
   return (
     <Modal
       minWidth="346px"
-      title={isRemovingStake ? t('Unstake') : t('Stake in Pool')}
+      title={isRemovingStake ? t('Withdraw') : t('Update Vault Amount')}
       onDismiss={onDismiss}
       headerBackground={theme.colors.gradients.cardHeader}
     >
       <Flex alignItems="center" justifyContent="space-between" mb="8px">
-        <Text bold>{isRemovingStake ? t('Unstake') : t('Stake')}:</Text>
+        <Text bold>{isRemovingStake ? t('Amount') : t('Amount')}:</Text>
         <Flex alignItems="center" minWidth="70px">
           <Image src={`/images/tokens/${address}.png`} width={24} height={24} alt={symbol} />
           <Text ml="4px" bold>
