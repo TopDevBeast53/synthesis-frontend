@@ -52,6 +52,9 @@ const defaultOptions: EasyMde.Options = {
   status: false,
   hideIcons: ['guide', 'fullscreen', 'preview', 'side-by-side'],
   spellChecker: false,
+  insertTexts: {
+    link: ["", "(https://)"],
+  },
   styleSelectedText: false,
 }
 

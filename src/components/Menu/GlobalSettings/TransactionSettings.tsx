@@ -162,7 +162,7 @@ const SlippageTabs = () => {
       </Flex>
       <Flex justifyContent="space-between" alignItems="center" mb="24px">
         <Flex alignItems="center">
-          <Text>{t('Tx deadline (mins)')}</Text>
+          <Text>{t('Tx Deadline (mins)')}</Text>
           <QuestionHelper
             text={t('Your transaction will revert if it is left confirming for longer than this time.')}
             placement="top-start"
