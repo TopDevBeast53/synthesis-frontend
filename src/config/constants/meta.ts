@@ -24,6 +24,18 @@ export const getCustomMeta = (path: string, t: ContextApi['t']): PageMeta => {
         basePath = '/nfts/profile'
     } else if (path.startsWith('/pancake-squad')) {
         basePath = '/pancake-squad'
+    } else if (path.startsWith('/vaults')) {
+        basePath = '/vaults'
+    } else if (path.startsWith('/lps-swap')) {
+        basePath = '/lps-swap'
+    } else if (path.startsWith('/yield-swap')) {
+        basePath = '/yield-swap'
+    } else if (path.startsWith('/referrals')) {
+        basePath = '/referrals'
+    } else if (path.startsWith('/geobot-staking')) {
+        basePath = '/geobot-staking'
+    } else if (path.startsWith('/migration')) {
+        basePath = '/migration'
     } else {
         basePath = path
     }
@@ -36,6 +48,30 @@ export const getCustomMeta = (path: string, t: ContextApi['t']): PageMeta => {
         case '/swap':
             return {
                 title: `${t('Exchange')} | ${t('Helix')}`,
+            }
+        case '/vaults':
+            return {
+                title: `${t('Vaults')} | ${t('Helix')}`,
+            }
+        case '/lps-swap':
+            return {
+                title: `${t('LPs Swap')} | ${t('Helix')}`,
+            }
+        case '/yield-swap':
+            return {
+                title: `${t('Yield Swap')} | ${t('Helix')}`,
+            }
+        case '/referrals':
+            return {
+                title: `${t('Referrals')} | ${t('Helix')}`,
+            }
+        case '/geobot-staking':
+            return {
+                title: `${t('Geobot Staking')} | ${t('Helix')}`,
+            }
+        case '/migration':
+            return {
+                title: `${t('Migration')} | ${t('Helix')}`,
             }
         case '/add':
             return {
