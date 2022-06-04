@@ -1,4 +1,3 @@
-import { useWeb3React } from '@web3-react/core'
 import BigNumber from 'bignumber.js'
 import Page from 'components/Layout/Page'
 import Loading from 'components/Loading'
@@ -10,6 +9,7 @@ import { ethers } from 'ethers'
 import { useHelix, useHelixVault } from 'hooks/useContract'
 import useTokenBalance from 'hooks/useTokenBalance'
 import { useFastFresh } from 'hooks/useRefresh'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import React, { useCallback, useEffect, useState } from 'react'
 import { usePriceHelixBusd } from 'state/farms/hooks'
 import { Deposit } from 'state/types'
@@ -18,6 +18,7 @@ import { Button, Flex, Heading, useModal, Text } from 'uikit'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { getBalanceNumber } from 'utils/formatBalance'
 import { logError } from 'utils/sentry'
+import CircleLoader from '../../components/Loader/CircleLoader'
 import AddRowModal from './components/AddRowModal'
 import VaultsTable from './components/VaultsTable/VaultsTable'
 import { helixVaultAddress } from './constants'
@@ -48,7 +49,7 @@ enum HelixEnabledState {
 
 const Vault: React.FC = () => {
   const { t } = useTranslation()
-  const { account } = useWeb3React()
+  const { account } = useActiveWeb3React()
   const helixContract = useHelix()
   const helixVaultContract = useHelixVault()
   const [helixEnabled, setHelixEnabled] = useState(HelixEnabledState.UNKNOWN)
@@ -165,7 +166,7 @@ const Vault: React.FC = () => {
       <PageHeader background="transparent">
         <Flex justifyContent="space-between" flexDirection={['column', null, null, 'row']}>
           <Flex flex="1" flexDirection="column" mr={['8px', 0]}>
-          <Heading as="h1" scale="xxl" color="secondary" mb="24px">
+            <Heading as="h1" scale="xxl" color="secondary" mb="24px">
               {t('Helix Vaults')}
             </Heading>
             <Heading scale="lg" color="text">
@@ -177,36 +178,50 @@ const Vault: React.FC = () => {
           </Flex>
         </Flex>
       </PageHeader>
-      <Page>
-        <TableControls>
-          <Flex justifyContent="start" width={1}>
-            {helixEnabled === HelixEnabledState.ENABLED && (
-              <Button onClick={handleAdd} key={buttonScale} variant="secondary" scale={buttonScale} mr="8px">
-                {' '}
-                Add Vault{' '}
-              </Button>
-            )}
-            {helixEnabled === HelixEnabledState.DISABLED && (
-              <Button onClick={handleEnable} key={buttonScale} variant="secondary" scale={buttonScale} mr="8px">
-                {' '}
-                Enable{' '}
-              </Button>
-            )}
-          </Flex>
-        </TableControls>
-        {isLoading && (
-          <Flex justifyContent="center" mb="4px">
-            <Loading />
-          </Flex>
-        )}
-        {deposits?.length === 0 && !isLoading ? (
-          <Text fontSize="16px" color="#fff" pb="32px">
-            {t('Create your first HELIX Vault')}
-          </Text>
-        ) : (
-          <VaultsTable deposits={deposits} />
-        )}
-      </Page>
+      {(!account) ?
+        (
+          <Page>
+            <Flex justifyContent="center" style={{ paddingBottom: '8px' }}>
+              <Text fontSize="18px" bold>
+                Connect Your Wallet...
+              </Text>
+            </Flex>
+            <Flex justifyContent="center">
+              <CircleLoader size="30px" />;
+            </Flex>
+          </Page>
+        ) : <Page>
+          <TableControls>
+            <Flex justifyContent="start" width={1}>
+              {helixEnabled === HelixEnabledState.ENABLED && (
+                <Button onClick={handleAdd} key={buttonScale} variant="secondary" scale={buttonScale} mr="8px">
+                  {' '}
+                  Add Vault{' '}
+                </Button>
+              )}
+              {helixEnabled === HelixEnabledState.DISABLED && (
+                <Button onClick={handleEnable} key={buttonScale} variant="secondary" scale={buttonScale} mr="8px">
+                  {' '}
+                  Enable{' '}
+                </Button>
+              )}
+            </Flex>
+          </TableControls>
+          {/* {isLoading && (
+            <Flex justifyContent="center" mb="4px">
+              <Loading />
+            </Flex>
+          )} */}
+          {deposits?.length === 0 && !isLoading ? (
+            <Text fontSize="16px" color="#fff" pb="32px">
+              {t('Create your first HELIX Vault')}
+            </Text>
+          ) : (
+            <VaultsTable deposits={deposits} />
+          )}
+        </Page>}
+
+
     </>
   )
 }
