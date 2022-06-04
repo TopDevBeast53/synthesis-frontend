@@ -15,7 +15,7 @@ const GasSettings = () => {
         <Text>{t('Default Transaction Speed (GWEI)')}</Text>
         <QuestionHelper
           text={t(
-            'Adjusts the gas price (transaction fee) for your transaction. Higher GWEI = higher speed = higher fees',
+            'Adjusts the gas price (transaction fee) for your transaction. Higher GWEI = higher speed = higher fees.',
           )}
           placement="top-start"
           ml="4px"
