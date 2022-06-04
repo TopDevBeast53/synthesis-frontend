@@ -12,6 +12,7 @@ import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import tokens from 'config/constants/tokens'
 import CurrencyLogo from 'components/Logo/CurrencyLogo'
 import { getReferralRegisterAddress } from 'utils/addressHelpers'
+import { BASE_URL } from 'config'
 import ConfirmReferral from './components/ConfirmReferral'
 import Page from '../Page'
 import useToast from '../../hooks/useToast'
@@ -80,7 +81,7 @@ const useClaimRewards = () => {
 }
 
 function getReferralLink(address: string): string {
-  return `${window.location.hostname}/referrals?ref=${address}`
+  return `${BASE_URL}/referrals?ref=${address}`
 }
 
 export default function Referrals() {
