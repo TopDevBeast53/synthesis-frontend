@@ -82,7 +82,6 @@ const CreateOrderDialog = (props) => {
       }, [LpSwapContract.address, account, allContracts, tempAllOptions])
 
     const handleConfirm = (toBuyerTokenAddress, toSellerTokenAddress, decimalUAmount, decimalYAmount) => {
-        console.debug('?????', LpSwapContract, toBuyerTokenAddress, toSellerTokenAddress)
         return LpSwapContract.openSwap(
             toBuyerTokenAddress,
             toSellerTokenAddress,
