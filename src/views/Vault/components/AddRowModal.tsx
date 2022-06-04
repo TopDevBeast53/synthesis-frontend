@@ -63,7 +63,7 @@ const AddRowModal: React.FC<ModalProps> = ({ stakingTokenBalance, stakingTokenPr
     try {
       await addNewDeposit(getDecimalAmount(amount, tokenDecimals).toString(), durationIndex)
       if (onAdd) onAdd()
-      toastSuccess(`${t('Success')}!`, t('You Added Item !!! '))
+      toastSuccess(`${t('Success')}!`, t(`You added ${Number.parseFloat(stakeAmount).toFixed(3)} HELIX to the vault!`))
     } catch (err) {
       toastError(t('Error'), t('Please try again. Confirm the transaction and make sure you are paying enough gas!'))
     }
