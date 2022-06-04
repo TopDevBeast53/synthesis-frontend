@@ -11,7 +11,7 @@ export const footerLinks: (t: ContextApi['t']) => FooterLinkType[] = (t) => [
             },
             {
                 label:"Trade LP Tokens",
-                href:"/lps-swaps"
+                href:"/lps-swap"
             },
             {
                 label:"Trade Yield",
