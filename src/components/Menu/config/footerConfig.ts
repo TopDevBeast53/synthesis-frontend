@@ -11,11 +11,11 @@ export const footerLinks: (t: ContextApi['t']) => FooterLinkType[] = (t) => [
             },
             {
                 label:"Trade LP Tokens",
-                href:"/lp-swaps"
+                href:"/lps-swaps"
             },
             {
                 label:"Trade Yield",
-                href:"/yield-swaps"
+                href:"/yield-swap"
             },
             {
                 label:"Add Liquidity",
