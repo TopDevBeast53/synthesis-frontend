@@ -4,8 +4,9 @@ import useToast from 'hooks/useToast'
 import filter from 'lodash/filter'
 import React, { CSSProperties, useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { AutoRenewIcon, Button, ButtonMenu, ButtonMenuItem, Card, CopyIcon, Flex, Heading, IconButton, Text, useMatchBreakpoints } from 'uikit'
+import { AutoRenewIcon, Button, ButtonMenu, ButtonMenuItem, Card, CopyIcon, Flex, Heading, IconButton, Text, useMatchBreakpoints, Skeleton } from 'uikit'
 import { logError } from 'utils/sentry'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import CircleLoader from '../../components/Loader/CircleLoader'
 import Page from '../Page'
 import NftCard from './components/NftCard'
@@ -66,30 +67,31 @@ const Wrapper = styled.div`
   }
 `
 export default function NftStaking() {
+  const { account } = useActiveWeb3React()
   const { t } = useTranslation()
   const { toastError, toastSuccess } = useToast()
   const [tokens, setTokens] = useState([])
   const [pendingReward, setPendingReward] = useState('')
   const [viewStaked, setViewStaked] = useState(false)
-  const [selectedTokenIds, setSelectedTokenIds] = useState<number[]>([])  
+  const [selectedTokenIds, setSelectedTokenIds] = useState<number[]>([])
   const [loading, setLoading] = useState(true)
-  const [loadingStatus, setLoadingStatus] = useState(false)  
+  const [loadingStatus, setLoadingStatus] = useState(false)
   const [loadingPendingReward, setLoadingPendingReward] = useState(true)
   const [enableStakingBtn, setEnableStakingBtn] = useState(false)
-  const { getTokens} = useGetNftInfo()
+  const { getTokens } = useGetNftInfo()
   const { stakingNft, getPendingReward, withdrawReward } = useStakingNft()
-  const {isMobile} = useMatchBreakpoints()
+  const { isMobile } = useMatchBreakpoints()
 
   const filterNft = filter(tokens, (token: any) => token.isStaked === viewStaked)
 
   const handleGetTokens = useCallback(() => {
-    setLoading(true)        
+    setLoading(true)
 
     setLoadingPendingReward(true)
     getPendingReward().then((res) => {
       setPendingReward(res.toString())
       setLoadingPendingReward(false)
-    })    
+    })
     getTokens().then((res) => {
       setTokens(res)
       setLoading(false)
@@ -103,7 +105,7 @@ export default function NftStaking() {
   const handleStaking = useCallback(async () => {
     try {
       setLoadingStatus(true)
-      
+
       const receipt = await stakingNft(selectedTokenIds, !viewStaked)
       if (receipt.status) {
         toastSuccess(t('Success'), t(!viewStaked ? 'Staked!' : 'Unstaked'))
@@ -147,8 +149,8 @@ export default function NftStaking() {
     }
   }, [getPendingReward, withdrawReward, toastSuccess, toastError, t])
 
-    
-  const onhandleCheckbox = useCallback(    
+
+  const onhandleCheckbox = useCallback(
     (tokenId, isChecked) => {
       let _selIds
       if (isChecked) {
@@ -188,7 +190,7 @@ export default function NftStaking() {
               tokenId={token.tokenId}
               infos={[
                 {
-                  type:"level",
+                  type: "level",
                   caption: 'Wrapped NFTs',
                   value: (
                     <span>{token.wrappedNfts}</span>
@@ -217,60 +219,71 @@ export default function NftStaking() {
           Earn Yield by Staking Geobot NFTs
         </Heading>
       </PageHeader>
-      <Page removePadding>
-        <NFTDisplayPanel>
-          <Flex  flexDirection={isMobile?"column":"row"} alignItems="center" justifyContent={isMobile ? "center" : "space-between"} flexWrap="wrap">
-            <Flex flexWrap="wrap" alignItems="center">
-              <GeneralCard>
-                <NFTCardText type={NFTCardTextType.generalCaption} style={{paddingBottom: '7px'}}>
-                  Pending Reward
-                </NFTCardText>
-                <Flex alignItems="center" flexWrap="wrap" justifyContent="space-between"> 
-                  <NFTCardText type={NFTCardTextType.generalValue} style={{ marginRight: '25px' }}>
-                    {loadingPendingReward ? 'loading' : Number.parseFloat(pendingReward).toFixed(3)}
-                  </NFTCardText>
-                  <Button onClick={handleWithdraw} >
-                    Withdraw
-                  </Button>
-                </Flex>
-              </GeneralCard>
-            </Flex>
+      {(!account) ?
+        (<Page>
+          <Flex justifyContent="center" style={{ paddingBottom: '8px' }}>
 
-            <Flex flexDirection="column" justifyContent="start" flexShrink={1} style={{marginTop: isMobile ? '32px' : '0px'}}> 
-              <ShowStackedSwitch />
-              <Button 
-                mt="15px"
-                isLoading={loadingStatus} 
-                endIcon={loadingStatus ? <AutoRenewIcon spin color="currentColor" /> : null}  
-                onClick={handleStaking} 
-                disabled={!enableStakingBtn || selectedTokenIds.length === 0} 
-                >
-                {viewStaked ? `Unstake (${selectedTokenIds.length})` : `Stake (${selectedTokenIds.length})` }
-              </Button>
-            </Flex>
+            <Text fontSize="18px" bold>
+              Connect Your Wallet...
+            </Text>
           </Flex>
-
-          <div style={{ marginTop: isMobile? '32px' :'62px' }}>
-            {loading ? (
-              <Flex position="relative" height="300px" justifyContent="center" py="8px">
-                <Flex justifyContent="center" style={{ paddingBottom: '8px' }}>
-                  <Text fontSize="18px" bold>
-                    Loading...
-                  </Text>
-                </Flex>
-                <Flex justifyContent="center">
-                  <CircleLoader size="30px" />
-                </Flex>
+          <Flex justifyContent="center">
+            <CircleLoader size="30px" />
+          </Flex>
+        </Page>) :
+        (<Page removePadding>
+          <NFTDisplayPanel>
+            <Flex flexDirection={isMobile ? "column" : "row"} alignItems="center" justifyContent={isMobile ? "center" : "space-between"} flexWrap="wrap">
+              <Flex flexWrap="wrap" alignItems="center">
+                <GeneralCard>
+                  <NFTCardText type={NFTCardTextType.generalCaption} style={{ paddingBottom: '7px' }}>
+                    Pending Reward
+                  </NFTCardText>
+                  <Flex alignItems="center" flexWrap="wrap" justifyContent="space-between">
+                    <NFTCardText type={NFTCardTextType.generalValue} style={{ marginRight: '25px' }}>
+                      {loadingPendingReward ? <Skeleton width={120} height={30} /> : Number.parseFloat(pendingReward).toFixed(3)}
+                    </NFTCardText>
+                    <Button onClick={handleWithdraw} >
+                      Withdraw
+                    </Button>
+                  </Flex>
+                </GeneralCard>
               </Flex>
-            ) : tokens.length > 0 ? (
-              tokensUI
-            ) : (
-              <NFTStartCollectPanel />
-            )}
-          </div>
-        </NFTDisplayPanel>
-      </Page>
+
+              <Flex flexDirection="column" justifyContent="start" flexShrink={1} style={{ marginTop: isMobile ? '32px' : '0px' }}>
+                <ShowStackedSwitch />
+                <Button
+                  mt="15px"
+                  isLoading={loadingStatus}
+                  endIcon={loadingStatus ? <AutoRenewIcon spin color="currentColor" /> : null}
+                  onClick={handleStaking}
+                  disabled={!enableStakingBtn || selectedTokenIds.length === 0}
+                >
+                  {viewStaked ? `Unstake (${selectedTokenIds.length})` : `Stake (${selectedTokenIds.length})`}
+                </Button>
+              </Flex>
+            </Flex>
+
+            <div style={{ marginTop: isMobile ? '32px' : '62px' }}>
+              {loading ? (
+                <Flex position="relative" height="300px" justifyContent="center" py="8px">
+                  <Flex justifyContent="center" style={{ paddingBottom: '8px' }}>
+                    <Text fontSize="18px" bold>
+                      Loading...
+                    </Text>
+                  </Flex>
+                  <Flex justifyContent="center">
+                    <CircleLoader size="30px" />
+                  </Flex>
+                </Flex>
+              ) : tokens.length > 0 ? (
+                tokensUI
+              ) : (
+                <NFTStartCollectPanel />
+              )}
+            </div>
+          </NFTDisplayPanel>
+        </Page>)}
     </>
   )
 }
-
