@@ -53,7 +53,7 @@ const NFTStartCollectPanel: React.FC = () => {
         <NFTStartCollectFlex style={{ borderRadius: '12px' }}>
           <StartCollectImageBackground>
             <Flex justifyContent="center" alignItems="center" style={{ height: '50vh' }}>
-              <Button onClick={() => window.open(COLLECT_NFT_LINK, '_blank')}>Start to collect!</Button>
+              <Button onClick={() => window.open(COLLECT_NFT_LINK, '_blank')}>Buy Geobots</Button>
             </Flex>
           </StartCollectImageBackground>
         </NFTStartCollectFlex>
