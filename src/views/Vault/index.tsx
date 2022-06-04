@@ -60,7 +60,7 @@ const Vault: React.FC = () => {
 
   const fastRefresh = useFastFresh()
   const { decimals } = tokens.helix
-  const cakePrice = usePriceHelixBusd()
+  const helixPrice = usePriceHelixBusd()
 
   const { balance: helixBalance, fetchStatus: balanceFetchStatus } = useTokenBalance(tokens.helix.address)
   const stakingTokenBalance = balanceFetchStatus === FetchStatus.Fetched ? helixBalance : BIG_ZERO
@@ -132,7 +132,7 @@ const Vault: React.FC = () => {
   const [handleAdd] = useModal(
     <AddRowModal
       stakingTokenBalance={stakingTokenBalance}
-      stakingTokenPrice={getBalanceNumber(cakePrice, decimals)}
+      stakingTokenPrice={helixPrice.toNumber()}
       onAdd={handleAfterAdded}
     />,
   )
