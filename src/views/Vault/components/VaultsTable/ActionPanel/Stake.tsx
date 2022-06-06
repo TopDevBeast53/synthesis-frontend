@@ -1,13 +1,14 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useCallback } from 'react'
 import moment from 'moment'
 import Balance from 'components/Balance'
+import { BigNumber } from 'bignumber.js'
 import tokens from 'config/constants/tokens'
 import { useTranslation } from 'contexts/Localization'
 import useTokenBalance from 'hooks/useTokenBalance'
 import { usePriceHelixBusd } from 'state/farms/hooks'
 import styled from 'styled-components'
-import { AddIcon, Flex, IconButton, MinusIcon, Skeleton, Text, useModal } from 'uikit'
-import { getBalanceNumber } from 'utils/formatBalance'
+import { AddIcon, Heading, IconButton, MinusIcon, Skeleton, Text, useModal } from 'uikit'
+import { getBalanceNumber, getBalanceAmount } from 'utils/formatBalance'
 import StakeModal from '../../VaultCard/Modals/StakeModal'
 import { ActionContainer, ActionContent, ActionTitles } from './styles'
 
@@ -30,7 +31,6 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({ isLoading, deposi
   const { decimals, symbol } = tokens.helix
 
   const tokenPrice = getBalanceNumber(cakePrice, decimals)
-  const stakedTokenBalance = getBalanceNumber(stakedBalance, decimals)
   const stakedTokenDollarBalance = getBalanceNumber(stakedBalance.multipliedBy(cakePrice), decimals)
 
   const canWithdraw = useMemo(() => {
@@ -38,6 +38,17 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({ isLoading, deposi
     const today = moment()
     return withdrawDate.isSameOrBefore(today)
   }, [deposit])
+
+  const displayBalance = useCallback(() => {
+    const stakedBalanceBigNumber = getBalanceAmount(stakedBalance)
+    if (stakedBalanceBigNumber.gt(0) && stakedBalanceBigNumber.lt(0.00001)) {
+      return '<0.00001'
+    }
+    if (stakedBalanceBigNumber.gt(0)) {
+      return stakedBalanceBigNumber.toFixed(5, BigNumber.ROUND_DOWN)
+    }
+    return stakedBalanceBigNumber.toFixed(3, BigNumber.ROUND_DOWN)
+  }, [stakedBalance])
 
   const [onPresentStake] = useModal(
     <StakeModal
@@ -89,18 +100,20 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({ isLoading, deposi
         </Text>
       </ActionTitles>
       <ActionContent>
-        <Flex flex="1" pt="16px" flexDirection="column" alignSelf="flex-start">
-          <Balance lineHeight="1" bold fontSize="20px" decimals={5} value={stakedTokenBalance} />
-          <Balance
-            fontSize="12px"
-            display="inline"
-            color="textSubtle"
-            decimals={2}
-            value={stakedTokenDollarBalance}
-            unit=" USD"
-            prefix="~"
-          />
-        </Flex>
+        <div>
+          <Heading>{displayBalance()}</Heading>
+          {stakedBalance.gt(0) && (
+            <Balance
+              fontSize="12px"
+              display="inline"
+              color="textSubtle"
+              decimals={2}
+              value={stakedTokenDollarBalance}
+              unit=" USD"
+              prefix="~"
+            />
+          )}
+        </div>
         <IconButtonWrapper>
           <IconButton variant="secondary" onClick={onPresentUnstake} mr="6px" disabled={!canWithdraw}>
             <MinusIcon color={canWithdraw ? 'primary' : 'textDisabled'} width="14px" />
