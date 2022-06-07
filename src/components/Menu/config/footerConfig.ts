@@ -87,15 +87,15 @@ export const footerLinks: (t: ContextApi['t']) => FooterLinkType[] = (t) => [
         ]
     },
     {
-        label:"Legal",
+        label:"Info",
         items:[
             {
-                label:"Privacy policy",
-                href:"/privacy"
+                label:"Github",
+                href:"https://github.com/helixgeometry"
             },
             {
-                label:"Terms & conditions",
-                href:"/terms"
+                label:"Documentation",
+                href:"https://geometry.gitbook.io/helix"
             }            
         ]
     }
