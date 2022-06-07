@@ -126,7 +126,7 @@ export default {
     },
     helixMigrator: {
         56: '',
-        4: '0x582B14BD30221Da1B16f86041c9155B6097c85D0',
+        4: '0x0692c1616743e2D383BA7fB01e56979Ec66287F0',
     },
     referralRegister: {
         56: '',
