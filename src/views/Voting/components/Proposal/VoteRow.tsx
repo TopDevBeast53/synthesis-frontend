@@ -15,12 +15,12 @@ interface VoteRowProps {
 
 const VoteRow: React.FC<VoteRowProps> = ({ vote, isVoter }) => {
   const { t } = useTranslation()
-  const hasVotingPower = !!vote.metadata?.votingPower
+  const hasVotingPower = !!vote.vp
   const votingPower = hasVotingPower
-    ? parseFloat(vote.metadata.votingPower).toLocaleString(undefined, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 3,
-      })
+    ? vote.vp.toLocaleString(undefined, {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 3,
+    })
     : '--'
 
   return (
@@ -42,7 +42,7 @@ const VoteRow: React.FC<VoteRowProps> = ({ vote, isVoter }) => {
       </ChoiceColumn>
       <VotingPowerColumn>
         <Flex alignItems="center" justifyContent="end">
-          <Text title={vote.metadata.votingPower}>{votingPower}</Text>
+          <Text title={vote.vp.toString()}>{votingPower}</Text>
           {hasVotingPower && <LinkExternal href={`${IPFS_GATEWAY}/${vote.id}`} />}
         </Flex>
       </VotingPowerColumn>
