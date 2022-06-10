@@ -36,7 +36,7 @@ import Layout from '../components/Layout'
 import { FormErrors, Label, SecondaryLabel } from './styles'
 import { combineDateAndTime, getFormErrors } from './helpers'
 import { FormState } from './types'
-import { ADMINS, CHOICES_PRESET } from '../config'
+import { ADMINS, CHOICES_PRESET, VOTE_THRESHOLD } from '../config'
 import VoteDetailsModal from '../components/VoteDetailsModal'
 
 const EasyMde = lazy(() => import('components/EasyMde'))
@@ -247,6 +247,9 @@ const CreateProposal = () => {
                     >
                       {t('Publish')}
                     </Button>
+                    <Text color="failure" as="p" mb="4px">
+                      {t('You need at least %count% voting power to publish a proposal.', { count: VOTE_THRESHOLD })}{' '}
+                    </Text>
                     <Button scale="sm" type="button" variant="text" onClick={onPresentVoteDetailsModal} p={0}>
                       {t('Check Your Voting Power')}
                     </Button>

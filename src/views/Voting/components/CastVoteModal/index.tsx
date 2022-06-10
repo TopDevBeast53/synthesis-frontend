@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Box, Modal } from 'uikit'
 import { useWeb3React } from '@web3-react/core'
 import { useTranslation } from 'contexts/Localization'
@@ -12,6 +12,7 @@ import MainView from './MainView'
 import DetailsView from './DetailsView'
 import { generatePayloadData, Message, sendSnapshotData } from '../../helpers'
 import useGetVotingPower from '../../hooks/useGetVotingPower'
+import { useEachVotingPower } from '../../hooks/useEachVotingPower'
 
 const CastVoteModal: React.FC<CastVoteModalProps> = ({ onSuccess, proposalId, vote, onDismiss }) => {
   const [view, setView] = useState<ConfirmVoteView>(ConfirmVoteView.MAIN)
@@ -23,7 +24,26 @@ const CastVoteModal: React.FC<CastVoteModalProps> = ({ onSuccess, proposalId, vo
   const { theme } = useTheme()
 
   const { helixBalance, isLoading } = useGetVotingPower()
-  const total = Number(helixBalance.toString()) / 1e18
+  const { getVaultHelix, getMasterchefHelix, getAutoPoolHelix, getLpHelix } = useEachVotingPower()
+  const [totalHelix, setTotalHelix] = useState('')
+  const [isLoadingHelix, setIsLoadingHelix] = useState(true)
+
+
+  useEffect(() => {
+    async function load() {
+      const vaultHelix = await getVaultHelix()
+      const masterchefHelix = await getMasterchefHelix()
+      const autoPoolHelix = await getAutoPoolHelix()
+      const lpHelix = await getLpHelix()
+      const total = helixBalance.add(vaultHelix).add(masterchefHelix).add(autoPoolHelix).add(lpHelix).toString()
+      setTotalHelix(total)
+      setIsLoadingHelix(false)
+    }
+    load()
+  }, [helixBalance, getVaultHelix, getMasterchefHelix, getAutoPoolHelix, getLpHelix])
+
+  const total = Number(totalHelix) / 1e18
+
 
   const isStartView = view === ConfirmVoteView.MAIN
   const handleBack = isStartView ? null : () => setView(ConfirmVoteView.MAIN)
@@ -82,7 +102,7 @@ const CastVoteModal: React.FC<CastVoteModalProps> = ({ onSuccess, proposalId, vo
         {view === ConfirmVoteView.MAIN && (
           <MainView
             vote={vote}
-            isLoading={isLoading}
+            isLoading={isLoadingHelix}
             isPending={isPending}
             total={total}
             onConfirm={handleConfirmVote}
@@ -90,7 +110,7 @@ const CastVoteModal: React.FC<CastVoteModalProps> = ({ onSuccess, proposalId, vo
             onDismiss={handleDismiss}
           />
         )}
-        {view === ConfirmVoteView.DETAILS && <DetailsView total={total} />}
+        {view === ConfirmVoteView.DETAILS && <DetailsView total={total} isLoading={isLoadingHelix} />}
       </Box>
     </Modal>
   )

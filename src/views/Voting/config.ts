@@ -5,5 +5,5 @@ export const ADMINS = [
 export const IPFS_GATEWAY = 'https://gateway.ipfs.io/ipfs'
 export const SNAPSHOT_VERSION = '0.1.3'
 export const HELIX_SPACE = 'helixgeometry.eth'
-export const VOTE_THRESHOLD = 0
+export const VOTE_THRESHOLD = 100
 export const CHOICES_PRESET = ['In Favor', 'Against']

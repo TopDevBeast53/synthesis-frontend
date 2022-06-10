@@ -222,6 +222,11 @@ export const useVaultPoolContract = (vaultKey: VaultKey): HelixAutoPool | IfoPoo
     }, [library, vaultKey])
 }
 
+export const useHelixAutoPoolContract = () => {
+    const { library } = useActiveWeb3React()
+    return useMemo(() => getHelixAutoPoolContract(library.getSigner()), [library])
+}
+
 export const useCakeVaultContract = () => {
     const { library } = useActiveWeb3React()
     return useMemo(() => getHelixAutoPoolContract(library.getSigner()), [library])
