@@ -18,7 +18,7 @@ import { useHistory } from 'react-router'
 import { Link } from 'react-router-dom'
 import { useWeb3React } from '@web3-react/core'
 import isEmpty from 'lodash/isEmpty'
-import { useInitialBlock } from 'state/block/hooks'
+import { useCurrentBlock } from 'state/block'
 import { SnapshotCommand } from 'state/types'
 import useToast from 'hooks/useToast'
 import useWeb3Provider from 'hooks/useActiveWeb3React'
@@ -53,7 +53,7 @@ const CreateProposal = () => {
   const [fieldsState, setFieldsState] = useState<{ [key: string]: boolean }>({})
   const { t } = useTranslation()
   const { account } = useWeb3React()
-  const initialBlock = useInitialBlock()
+  const currentBlock = useCurrentBlock()
   const { push } = useHistory()
   const { library, connector } = useWeb3Provider()
   const { toastSuccess, toastError } = useToast()
@@ -139,13 +139,13 @@ const CreateProposal = () => {
   }, [account])
 
   useEffect(() => {
-    if (initialBlock > 0) {
+    if (currentBlock > 0) {
       setState((prevState) => ({
         ...prevState,
-        snapshot: initialBlock,
+        snapshot: currentBlock,
       }))
     }
-  }, [initialBlock, setState])
+  }, [currentBlock, setState])
 
   return (
     <Container py="40px">

@@ -33,7 +33,6 @@ const Results: React.FC<ResultsProps> = ({ choices, votes }) => {
   const votingStatus = useGetVotingStateLoadingStatus()
   const { account } = useWeb3React()
   const totalVotes = getTotalFromVotes(votes)
-
   return (
     <Card>
       <CardHeader>

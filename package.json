@@ -40,6 +40,7 @@
     "@reduxjs/toolkit": "^1.5.0",
     "@sentry/react": "^6.15.0",
     "@sentry/tracing": "^6.15.0",
+    "@snapshot-labs/snapshot.js": "^0.3.92",
     "@solana/spl-token": "^0.1.8",
     "@solana/wallet-adapter-base": "0.6.0",
     "@solana/wallet-adapter-react": "0.12.5",

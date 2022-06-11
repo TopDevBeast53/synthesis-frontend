@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { Card, Flex, Heading } from 'uikit'
 import { useTranslation } from 'contexts/Localization'
-import Container from 'components/Layout/Container'
+import orderBy from 'lodash/orderBy'
 import { useAppDispatch } from 'state'
 import { fetchProposals } from 'state/voting'
 import { useGetProposalLoadingStatus, useGetProposals } from 'state/voting/hooks'
@@ -26,7 +26,7 @@ const Proposals = ({ filterState, proposalType }: { filterState: ProposalState; 
     dispatch(fetchProposals({ first: 1000, state: filterState }))
   }, [filterState, dispatch])
 
-  const filteredProposals = filterProposalsByState(filterProposalsByType(proposals, proposalType), filterState)
+  const filteredProposals = orderBy(filterProposalsByState(filterProposalsByType(proposals, proposalType), filterState), ['end'], ['desc'])
 
   return (
     <>
@@ -44,7 +44,6 @@ const Proposals = ({ filterState, proposalType }: { filterState: ProposalState; 
         )}
       </Card>
     </>
-    
   )
 }
 

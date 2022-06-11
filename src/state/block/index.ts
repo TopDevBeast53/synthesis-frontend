@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { BlockState } from '../types'
+import { useSelector } from 'react-redux'
+import { State, BlockState } from '../types'
 
 const initialState: BlockState = { currentBlock: 0, initialBlock: 0 }
 
@@ -19,5 +20,9 @@ export const blockSlice = createSlice({
 
 // Actions
 export const { setBlock } = blockSlice.actions
+
+export const useCurrentBlock = () => {
+    return useSelector((state: State) => state.block.currentBlock)
+}
 
 export default blockSlice.reducer

@@ -16,7 +16,7 @@ interface VotesProps {
 }
 
 const parseVotePower = (incomingVote: Vote) => {
-  let votingPower = parseFloat(incomingVote?.metadata?.votingPower)
+  let votingPower = incomingVote?.vp
   if (!votingPower) votingPower = 0
   return votingPower
 }
