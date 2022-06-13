@@ -84,13 +84,15 @@ const Proposal = () => {
     const voters = votesGraphql.map((vote) => {
       return vote.voter
     })
+    const scoreApiUrl = '/api/scores'
     async function getScore() {
       const vps = await snapshot.utils.getScores(
         proposal.space.id,
         strategies,
         network,
         voters,
-        Number(snapshotId)
+        Number(snapshotId),
+        scoreApiUrl
       )
       const updatedVotes = votesGraphql.map((vote) => {
         return { ...vote, vp: vps[0] && vps[0][vote.voter] }
