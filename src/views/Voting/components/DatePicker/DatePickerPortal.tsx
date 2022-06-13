@@ -8,7 +8,7 @@ const StyledDatePickerPortal = styled.div`
   }
 
   .react-datepicker {
-    background: rgba(16, 20, 17, 0.4);
+    background: rgba(16, 20, 17);
     backdrop-filter: blur(80px);
     border-color: ${({ theme }) => theme.colors.cardBorder};
     color: ${({ theme }) => theme.colors.text};

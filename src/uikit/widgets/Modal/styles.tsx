@@ -57,6 +57,6 @@ export const ModalContainer = styled(Box)<{ minWidth: string }>`
     max-width: 90%;
   }
 
-  background: rgba(39, 38, 44, 0.7);
+  background: rgba(39, 38, 44);
   backdrop-filter: blur(80px);
 `

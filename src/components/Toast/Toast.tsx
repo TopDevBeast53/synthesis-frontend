@@ -18,7 +18,7 @@ const StyledToast = styled.div`
   transition: all 250ms ease-in;
   width: 100%;
 
-  background: rgba(39, 38, 44, 0.7);
+  background: rgba(39, 38, 44);
   backdrop-filter: blur(80px);
   border-radius: 12px;
 
