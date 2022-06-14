@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ArrowBackIcon, Box, Button, Flex, Heading } from 'uikit'
 import { useWeb3React } from '@web3-react/core'
 import { Link, useParams } from 'react-router-dom'
@@ -12,12 +12,14 @@ import {
   useGetProposalLoadingStatus,
 } from 'state/voting/hooks'
 import { fetchProposal, fetchVotes } from 'state/voting'
+import { getAllVotes } from 'state/voting/helpers'
 import { useTranslation } from 'contexts/Localization'
 import Container from 'components/Layout/Container'
 import ReactMarkdown from 'components/ReactMarkdown'
 import PageLoader from 'components/Loader/PageLoader'
 import { FetchStatus } from 'config/constants/types'
-import { useMemoFarms } from 'state/farms/hooks'
+import { useFarms } from 'state/farms/hooks'
+import { useFastFresh } from 'hooks/useRefresh'
 import tokens from 'config/constants/tokens'
 import { getAddress, getMasterChefAddress, getHelixAutoPoolAddress, getHelixVaultAddress } from 'utils/addressHelpers'
 import { isCoreProposal } from '../helpers'
@@ -30,6 +32,7 @@ import Votes from './Votes'
 import { PageMeta } from '../../../components/Layout/Page'
 
 const Proposal = () => {
+  const fastRefresh = useFastFresh()
   const { id }: { id: string } = useParams()
   const proposal = useGetProposal(id)
   const { t } = useTranslation()
@@ -41,20 +44,12 @@ const Proposal = () => {
   const hasAccountVoted = account && votesGraphql.some((vote) => vote.voter.toLowerCase() === account.toLowerCase())
   const { id: proposalId = null, snapshot: snapshotId = null } = proposal ?? {}
   const isPageLoading = voteLoadingStatus === FetchStatus.Fetching || proposalLoadingStatus === FetchStatus.Fetching
-  const { data: farmsLP } = useMemoFarms()
+  const { data: farmsLP } = useFarms()
   const masterChefAddress = getMasterChefAddress()
   const autoHelixAddress = getHelixAutoPoolAddress()
   const vaultAddress = getHelixVaultAddress()
   const network = process.env.REACT_APP_CHAIN_ID
   const [votes, setVotes] = useState([])
-
-  const helixLPs = farmsLP
-    .filter((lp) => lp.pid !== 0)
-    .filter((lp) => lp.lpSymbol.includes('HELIX'))
-    .map((lp) => ({
-      "address": getAddress(lp.lpAddresses),
-      "pid": lp.pid
-    }))
 
   useEffect(() => {
     dispatch(fetchProposal(id))
@@ -67,46 +62,59 @@ const Proposal = () => {
     }
   }, [proposalId, snapshotId, dispatch])
 
+  const helixLPs = farmsLP
+    .filter((lp) => lp.pid !== 0)
+    .filter((lp) => lp.lpSymbol.includes('HELIX'))
+    .map((lp) => ({
+      "address": getAddress(lp.lpAddresses),
+      "pid": lp.pid
+    }))
+
+  const strategies = [{
+    "name": "helix",
+    "params": {
+      "address": `${tokens.helix.address}`,
+      "masterChef": `${masterChefAddress}`,
+      "autoHelix": `${autoHelixAddress}`,
+      "vault": `${vaultAddress}`,
+      "helixLPs": helixLPs,
+      "symbol": "HELIX",
+      "decimals": 18
+    }
+  }]
+
   useEffect(() => {
-    let unmounted = false;
-    const strategies = [{
-      "name": "helix",
-      "params": {
-        "address": `${tokens.helix.address}`,
-        "masterChef": `${masterChefAddress}`,
-        "autoHelix": `${autoHelixAddress}`,
-        "vault": `${vaultAddress}`,
-        "helixLPs": helixLPs,
-        "symbol": "HELIX",
-        "decimals": 18
-      }
-    }]
-    const voters = votesGraphql.map((vote) => {
-      return vote.voter
-    })
-    const scoreApiUrl = '/api/scores'
+    let mounted = true;
+
     async function getScore() {
+      const originalVotes = await getAllVotes(proposal.id, Number(proposal.snapshot))
+      const voters = originalVotes.map((vote) => {
+        return vote.voter
+      })
+
       const vps = await snapshot.utils.getScores(
         proposal.space.id,
         strategies,
         network,
         voters,
-        Number(snapshotId),
-        scoreApiUrl
+        Number(proposal.snapshot)
       )
-      const updatedVotes = votesGraphql.map((vote) => {
+      const updatedVotes = originalVotes.map((vote) => {
         return { ...vote, vp: vps[0] && vps[0][vote.voter] }
       })
-      if (unmounted) return
-      setVotes(updatedVotes)
+      if (mounted) {
+        setVotes(updatedVotes)
+      }
     }
-    if (!!proposal && !!votesGraphql && helixLPs) {
+
+    if (!!proposal && strategies) {
       getScore()
     }
     return () => {
-      unmounted = true
+      mounted = false
     }
-  }, [network, snapshotId, votesGraphql, proposal, vaultAddress, masterChefAddress, autoHelixAddress, helixLPs])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fastRefresh])
 
   if (!proposal || !votes) {
     return <PageLoader />
