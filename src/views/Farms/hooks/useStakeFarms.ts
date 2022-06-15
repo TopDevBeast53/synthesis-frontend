@@ -8,7 +8,6 @@ const useStakeFarms = (pid: number) => {
     const handleStake = useCallback(
         async (amount: string) => {
             const txHash = await stakeFarm(masterChefContract, pid, amount)
-            console.info(txHash)
         },
         [masterChefContract, pid],
     )

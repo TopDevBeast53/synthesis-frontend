@@ -15,8 +15,8 @@ const AnnualRoiContainer = styled(Flex)`
 `
 
 const AnnualRoiDisplay = styled(Text)`
-  width: 72px;
-  max-width: 72px;
+  width: 80px;
+  max-width: 80px;
   overflow: hidden;
   text-align: right;
   text-overflow: ellipsis;
@@ -125,7 +125,7 @@ const DepositModal: React.FC<DepositModalProps> = ({
         <Text mr="8px" color="textSubtle">
           {t('Annual ROI at current rates')}:
         </Text>
-        {Number.isFinite(annualRoi) ? (
+        {Number.isFinite(annualRoi.toNumber()) ? (
           <AnnualRoiContainer
             alignItems="center"
             onClick={() => {
