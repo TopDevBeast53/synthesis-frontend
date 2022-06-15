@@ -66,6 +66,7 @@ function TransactionSubmittedContent({
   chainId: ChainId
   currencyToAdd?: Currency | undefined
 }) {
+  // console.log(onDismiss)
   const { library } = useActiveWeb3React()
 
   const { t } = useTranslation()
@@ -179,7 +180,7 @@ const TransactionConfirmationModal: React.FC<InjectedModalProps & ConfirmationMo
         <TransactionSubmittedContent
           chainId={chainId}
           hash={hash}
-          onDismiss={onDismiss}
+          onDismiss={handleDismiss}
           currencyToAdd={currencyToAdd}
         />
       ) : (
