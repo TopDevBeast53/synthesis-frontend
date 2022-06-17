@@ -62,9 +62,8 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({ pool, userDataLoa
   const isBnbPool = poolCategory === PoolCategory.BINANCE
   const allowance = userData?.allowance ? new BigNumber(userData.allowance) : BIG_ZERO
   const stakedBalance = userData?.stakedBalance ? new BigNumber(userData.stakedBalance) : BIG_ZERO
-  const pendingReward = userData?.pendingReward ? new BigNumber(userData.pendingReward) : BIG_ZERO
  
-  const isNotVaultAndHasStake = !vaultKey && (stakedBalance.gt(0) || pendingReward.gt(0))
+  const isNotVaultAndHasStake = !vaultKey && stakedBalance.gt(0)
 
   const stakingTokenBalance = userData?.stakingTokenBalance ? new BigNumber(userData.stakingTokenBalance) : BIG_ZERO
 

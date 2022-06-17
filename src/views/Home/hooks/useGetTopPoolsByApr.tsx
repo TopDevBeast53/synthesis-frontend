@@ -1,48 +1,21 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect } from 'react'
 import { usePriceHelixBusd } from 'state/farms/hooks'
 import { useAppDispatch } from 'state'
 import { orderBy } from 'lodash'
-import { VaultKey, DeserializedPool } from 'state/types'
+import { DeserializedPool } from 'state/types'
 import { fetchHelixVaultFees, fetchPoolsPublicDataAsync } from 'state/pools'
-import { useHelixVault, usePools } from 'state/pools/hooks'
-import { getAprData } from 'views/Pools/helpers'
+import { useInitialBlock } from 'state/block/hooks'
+import { usePoolsWithVault } from 'state/pools/hooks'
 import { FetchStatus } from 'config/constants/types'
-
-export function usePoolsWithVault() {
-  const { pools: poolsWithoutAutoVault } = usePools()
-  const helixAutoPool = useHelixVault()
-  // const ifoPool = useIfoPoolVault()
-  const pools = useMemo(() => {
-    const activePools = poolsWithoutAutoVault.filter((pool) => !pool.isFinished)
-    const helixPool = activePools.find((pool) => pool.sousId === 0)
-    const helixAutoVault = { ...helixPool, vaultKey: VaultKey.HelixAutoPool }
-    // const ifoPoolVault = { ...helixPool, vaultKey: VaultKey.IfoPool }
-
-    const helixAutoVaultWithApr = {
-      ...helixAutoVault,
-      apr: getAprData(helixAutoVault, helixAutoPool.fees.performanceFeeAsDecimal).apr,
-      rawApr: helixPool.apr,
-    }
-    // const ifoPoolWithApr = {
-    //   ...ifoPoolVault,
-    //   apr: getAprData(ifoPoolVault, ifoPool.fees.performanceFeeAsDecimal).apr,
-    //   rawApr: helixPool.apr,
-    // }
-    // return [ifoPoolWithApr, helixAutoVaultWithApr, ...poolsWithoutAutoVault]
-    return [helixAutoVaultWithApr, ...poolsWithoutAutoVault]
-    // }, [poolsWithoutAutoVault, helixAutoPool.fees.performanceFeeAsDecimal, ifoPool.fees.performanceFeeAsDecimal])
-  }, [poolsWithoutAutoVault, helixAutoPool.fees.performanceFeeAsDecimal])
-
-  return pools
-}
 
 const useGetTopPoolsByApr = (isIntersecting: boolean) => {
   const dispatch = useAppDispatch()
 
   const [fetchStatus, setFetchStatus] = useState(FetchStatus.Idle)
   const [topPools, setTopPools] = useState<DeserializedPool[]>([null, null, null, null, null])
+  const initialBlock = useInitialBlock()
 
-  const pools = usePoolsWithVault()
+  const { pools } = usePoolsWithVault()
 
   const helixPriceBusd = usePriceHelixBusd()
 
@@ -52,7 +25,7 @@ const useGetTopPoolsByApr = (isIntersecting: boolean) => {
 
       try {
         await dispatch(fetchHelixVaultFees())
-        await dispatch(fetchPoolsPublicDataAsync())
+        await dispatch(fetchPoolsPublicDataAsync(initialBlock))
         setFetchStatus(FetchStatus.Fetched)
       } catch (e) {
         console.error(e)
@@ -60,10 +33,10 @@ const useGetTopPoolsByApr = (isIntersecting: boolean) => {
       }
     }
 
-    if (isIntersecting && fetchStatus === FetchStatus.Idle) {
+    if (isIntersecting && fetchStatus === FetchStatus.Idle && initialBlock > 0) {
       fetchPoolsPublicData()
     }
-  }, [dispatch, setFetchStatus, fetchStatus, topPools, isIntersecting])
+  }, [dispatch, setFetchStatus, fetchStatus, topPools, isIntersecting, initialBlock])
 
   useEffect(() => {
     const getTopPoolsByApr = (activePools: DeserializedPool[]) => {

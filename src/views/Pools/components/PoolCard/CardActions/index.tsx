@@ -17,10 +17,9 @@ const InlineText = styled(Text)`
 interface CardActionsProps {
   pool: DeserializedPool
   stakedBalance: BigNumber
-  pendingReward: BigNumber
 }
 
-const CardActions: React.FC<CardActionsProps> = ({ pool, stakedBalance, pendingReward }) => {
+const CardActions: React.FC<CardActionsProps> = ({ pool, stakedBalance }) => {
   const { sousId, stakingToken, earningToken, harvest, poolCategory, userData, earningTokenPrice } = pool
   // Pools using native BNB behave differently than pools using a token
   const isBnbPool = poolCategory === PoolCategory.BINANCE
@@ -29,7 +28,7 @@ const CardActions: React.FC<CardActionsProps> = ({ pool, stakedBalance, pendingR
   const stakingTokenBalance = userData?.stakingTokenBalance ? new BigNumber(userData.stakingTokenBalance) : BIG_ZERO
   const earnings = userData?.pendingReward ? new BigNumber(userData.pendingReward) : BIG_ZERO
   const needsApproval = !allowance.gt(0) && !isBnbPool
-  const isStaked = stakedBalance.gt(0) || pendingReward.gt(0)
+  const isStaked = stakedBalance.gt(0)
   const isLoading = !userData
 
   return (

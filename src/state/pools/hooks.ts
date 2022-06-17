@@ -3,9 +3,10 @@ import BigNumber from 'bignumber.js'
 import { useWeb3React } from '@web3-react/core'
 import { batch, useSelector } from 'react-redux'
 import { useAppDispatch } from 'state'
-import { useFastFresh, useSlowFresh } from 'hooks/useRefresh'
+import { useFastFresh } from 'hooks/useRefresh'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { getAprData } from 'views/Pools/helpers'
+import { useFastRefreshEffect, useSlowRefreshEffect } from 'hooks/useRefreshEffect'
 import {
     fetchPoolsPublicDataAsync,
     fetchPoolsUserDataAsync,
@@ -24,32 +25,84 @@ import { State, DeserializedPool, VaultKey } from '../types'
 import { transformPool } from './helpers'
 import { fetchFarmsPublicDataAsync, nonArchivedFarms } from '../farms'
 
-export const useFetchPublicPoolsData = () => {
+export const usePoolsPageFetch = () => {
+    const { account } = useWeb3React()
     const dispatch = useAppDispatch()
-    const slowRefresh = useSlowFresh()
+    useFetchPublicPoolsData()
+
+    useFastRefreshEffect(() => {
+        batch(() => {
+            dispatch(fetchHelixVaultPublicData())
+            if (account) {
+                dispatch(fetchPoolsUserDataAsync(account))
+                dispatch(fetchHelixVaultUserData({ account }))
+            }
+        })
+    }, [account, dispatch])
 
     useEffect(() => {
-        const fetchPoolsDataWithFarms = async () => {
-            const activeFarms = nonArchivedFarms.filter((farm) => farm.pid !== 0)
-            await dispatch(fetchFarmsPublicDataAsync(activeFarms.map((farm) => farm.pid)))
-            batch(() => {
-                dispatch(fetchPoolsPublicDataAsync())
-                dispatch(fetchPoolsStakingLimitsAsync())
-            })
-        }
+        batch(() => {
+            dispatch(fetchHelixVaultFees())
+        })
+    }, [dispatch])
+}
 
-        fetchPoolsDataWithFarms()
-    }, [dispatch, slowRefresh])
+export function usePoolsWithVault() {
+    const { pools: poolsWithoutAutoVault, userDataLoaded } = usePools()
+    const helixAutoPool = useHelixVault()
+    // const ifoPool = useIfoPoolVault()
+    const pools = useMemo(() => {
+        const activePools = poolsWithoutAutoVault.filter((pool) => !pool.isFinished)
+        const helixPool = activePools.find((pool) => pool.sousId === 0)
+        const helixAutoVault = { ...helixPool, vaultKey: VaultKey.HelixAutoPool }
+        // const ifoPoolVault = { ...helixPool, vaultKey: VaultKey.IfoPool }
+
+        const helixAutoVaultWithApr = {
+            ...helixAutoVault,
+            apr: getAprData(helixAutoVault, helixAutoPool.fees.performanceFeeAsDecimal).apr,
+            rawApr: helixPool.apr,
+        }
+        // const ifoPoolWithApr = {
+        //   ...ifoPoolVault,
+        //   apr: getAprData(ifoPoolVault, ifoPool.fees.performanceFeeAsDecimal).apr,
+        //   rawApr: helixPool.apr,
+        // }
+        // return [ifoPoolWithApr, helixAutoVaultWithApr, ...poolsWithoutAutoVault]
+        return [helixAutoVaultWithApr, ...poolsWithoutAutoVault]
+        // }, [poolsWithoutAutoVault, helixAutoPool.fees.performanceFeeAsDecimal, ifoPool.fees.performanceFeeAsDecimal])
+    }, [poolsWithoutAutoVault, helixAutoPool.fees.performanceFeeAsDecimal])
+
+    return { pools, userDataLoaded }
+}
+
+export const useFetchPublicPoolsData = () => {
+    const dispatch = useAppDispatch()
+
+    useSlowRefreshEffect(
+        (currentBlock) => {
+            const fetchPoolsDataWithFarms = async () => {
+                const activeFarms = nonArchivedFarms.filter((farm) => farm.pid !== 0)
+                await dispatch(fetchFarmsPublicDataAsync(activeFarms.map((farm) => farm.pid)))
+                batch(() => {
+                    dispatch(fetchPoolsPublicDataAsync(currentBlock))
+                    dispatch(fetchPoolsStakingLimitsAsync())
+                })
+            }
+
+            fetchPoolsDataWithFarms()
+        },
+        [dispatch],
+    )
 }
 
 export const useFetchUserPools = (account) => {
-    const fastRefresh = useFastFresh()
     const dispatch = useAppDispatch()
-    useEffect(() => {
+
+    useFastRefreshEffect(() => {
         if (account) {
             dispatch(fetchPoolsUserDataAsync(account))
         }
-    }, [account, dispatch, fastRefresh])
+    }, [account, dispatch])
 }
 
 export const usePools = (): { pools: DeserializedPool[]; userDataLoaded: boolean } => {

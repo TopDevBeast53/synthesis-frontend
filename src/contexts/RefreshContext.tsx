@@ -1,9 +1,7 @@
 import useInterval from 'hooks/useInterval'
 import useIsWindowVisible from 'hooks/useIsWindowVisible'
+import { FAST_INTERVAL, SLOW_INTERVAL } from 'config/constants'
 import React, { useState } from 'react'
-
-export const FAST_INTERVAL = 5000
-export const SLOW_INTERVAL = 60000
 
 const createRefreshContext = (interval: number) => {
   const RefreshContext = React.createContext(0)

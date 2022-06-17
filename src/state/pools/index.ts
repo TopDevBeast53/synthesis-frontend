@@ -114,14 +114,12 @@ export const fetchHelixPoolUserDataAsync = (account: string) => async (dispatch)
     )
 }
 
-export const fetchPoolsPublicDataAsync = () => async (dispatch, getState) => {
-    const blockLimits = await fetchPoolsBlockLimits()
-    const totalStakings = await fetchPoolsTotalStaking()
-    let currentBlock = getState().block?.currentBlock
-
-    if (!currentBlock) {
-        currentBlock = await simpleRpcProvider.getBlockNumber()
-    }
+export const fetchPoolsPublicDataAsync = (currentBlockNumber: number) => async (dispatch, getState) => {
+    const [blockLimits, totalStakings, currentBlock] = await Promise.all([
+        fetchPoolsBlockLimits(),
+        fetchPoolsTotalStaking(),
+        currentBlockNumber ? Promise.resolve(currentBlockNumber) : simpleRpcProvider.getBlockNumber(),
+    ])
 
     const prices = getTokenPricesFromFarm(getState().farms.data)
 
@@ -184,11 +182,12 @@ export const fetchPoolsStakingLimitsAsync = () => async (dispatch, getState) => 
 export const fetchPoolsUserDataAsync =
     (account: string): AppThunk =>
     async (dispatch) => {
-        const allowances = await fetchPoolsAllowance(account)
-        const stakingTokenBalances = await fetchUserBalances(account)
-        const stakedBalances = await fetchUserStakeBalances(account)
-        const pendingRewards = await fetchUserPendingRewards(account)
-
+        const [allowances, stakingTokenBalances, stakedBalances, pendingRewards] = await Promise.all([
+            fetchPoolsAllowance(account),
+            fetchUserBalances(account),
+            fetchUserStakeBalances(account),
+            fetchUserPendingRewards(account),
+        ])
         const userData = poolsConfig.map((pool) => ({
             sousId: pool.sousId,
             allowance: allowances[pool.sousId],

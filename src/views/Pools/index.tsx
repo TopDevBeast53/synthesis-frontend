@@ -10,14 +10,7 @@ import orderBy from 'lodash/orderBy'
 import partition from 'lodash/partition'
 import { useTranslation } from 'contexts/Localization'
 import useIntersectionObserver from 'hooks/useIntersectionObserver'
-import {
-  useFetchPublicPoolsData,
-  usePools,
-  useFetchUserPools,
-  useFetchHelixVault,
-  useFetchIfoPool,
-  useVaultPools,
-} from 'state/pools/hooks'
+import { useVaultPools, usePoolsPageFetch, usePoolsWithVault } from 'state/pools/hooks'
 import { latinise } from 'utils/latinise'
 import FlexLayout from 'components/Layout/Flex'
 import Page from 'components/Layout/Page'
@@ -26,7 +19,6 @@ import SearchInput from 'components/SearchInput'
 import Select, { OptionProps } from 'components/Select/Select'
 import { DeserializedPool } from 'state/types'
 import { useUserPoolStakedOnly, useUserPoolsViewMode } from 'state/user/hooks'
-import { usePoolsWithVault } from 'views/Home/hooks/useGetTopPoolsByApr'
 import { ViewMode } from 'state/user/actions'
 import { BIG_ZERO } from 'utils/bigNumber'
 import Loading from 'components/Loading'
@@ -88,7 +80,7 @@ const Pools: React.FC = () => {
   const location = useLocation()
   const { t } = useTranslation()
   const { account } = useWeb3React()
-  const { userDataLoaded } = usePools()
+  const { pools, userDataLoaded } = usePoolsWithVault()
   const [stakedOnly, setStakedOnly] = useUserPoolStakedOnly()
   const [viewMode, setViewMode] = useUserPoolsViewMode()
   const [numberOfPoolsVisible, setNumberOfPoolsVisible] = useState(NUMBER_OF_POOLS_VISIBLE)
@@ -101,9 +93,6 @@ const Pools: React.FC = () => {
     return total.plus(vault.totalHelixInVault)
   }, BIG_ZERO)
 
-  const pools = usePoolsWithVault()
-
-  // TODO aren't arrays in dep array checked just by reference, i.e. it will rerender every time reference changes?
   const [finishedPools, openPools] = useMemo(() => partition(pools, (pool) => pool.isFinished), [pools])
   const stakedOnlyFinishedPools = useMemo(
     () =>
@@ -127,10 +116,7 @@ const Pools: React.FC = () => {
   )
   const hasStakeInFinishedPools = stakedOnlyFinishedPools.length > 0
 
-  useFetchHelixVault()
-  useFetchIfoPool(true)
-  useFetchPublicPoolsData()
-  useFetchUserPools(account)
+  usePoolsPageFetch()
 
   useEffect(() => {
     if (isIntersecting) {
@@ -167,12 +153,12 @@ const Pools: React.FC = () => {
             }
             return pool.vaultKey
               ? getVaultEarnings(
-                  account,
-                  vaultPools[pool.vaultKey].userData.helixAtLastUserAction,
-                  vaultPools[pool.vaultKey].userData.userShares,
-                  vaultPools[pool.vaultKey].pricePerFullShare,
-                  pool.earningTokenPrice,
-                ).autoUsdToDisplay
+                account,
+                vaultPools[pool.vaultKey].userData.helixAtLastUserAction,
+                vaultPools[pool.vaultKey].userData.userShares,
+                vaultPools[pool.vaultKey].pricePerFullShare,
+                pool.earningTokenPrice,
+              ).autoUsdToDisplay
               : pool.userData.pendingReward.times(pool.earningTokenPrice).toNumber()
           },
           'desc',

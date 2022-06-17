@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useState, useMemo } from 'react'
 import { useWeb3React } from '@web3-react/core'
 import { ethers, Contract } from 'ethers'
 import { useAppDispatch } from 'state'
@@ -6,11 +6,11 @@ import { updateUserAllowance } from 'state/actions'
 import { useTranslation } from 'contexts/Localization'
 import { useHelix, useSousChef, useVaultPoolContract } from 'hooks/useContract'
 import useToast from 'hooks/useToast'
-import useLastUpdated from 'hooks/useLastUpdated'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import { VaultKey } from 'state/types'
 import { logError } from 'utils/sentry'
+import { useSWRContract, UseSWRContractKey } from 'hooks/useSWRContract'
 
 export const useApprovePool = (lpContract: Contract, sousId, earningTokenSymbol) => {
   const [requestedApproval, setRequestedApproval] = useState(false)
@@ -93,23 +93,23 @@ export const useVaultApprove = (vaultKey: VaultKey, setLastUpdated: () => void) 
 }
 
 export const useCheckVaultApprovalStatus = (vaultKey: VaultKey) => {
-  const [isVaultApproved, setIsVaultApproved] = useState(false)
   const { account } = useWeb3React()
   const helixContract = useHelix()
   const vaultPoolContract = useVaultPoolContract(vaultKey)
-  const { lastUpdated, setLastUpdated } = useLastUpdated()
-  useEffect(() => {
-    const checkApprovalStatus = async () => {
-      try {
-        const currentAllowance = await helixContract.allowance(account, vaultPoolContract.address)
-        setIsVaultApproved(currentAllowance.gt(0))
-      } catch (error) {
-        setIsVaultApproved(false)
-      }
-    }
 
-    checkApprovalStatus()
-  }, [account, helixContract, vaultPoolContract, lastUpdated])
+  const key = useMemo<UseSWRContractKey>(
+    () =>
+      account
+        ? {
+          contract: helixContract,
+          methodName: 'allowance',
+          params: [account, vaultPoolContract.address],
+        }
+        : null,
+    [account, helixContract, vaultPoolContract.address],
+  )
 
-  return { isVaultApproved, setLastUpdated }
+  const { data, mutate } = useSWRContract(key)
+
+  return { isVaultApproved: data ? data.gt(0) : false, setLastUpdated: mutate }
 }

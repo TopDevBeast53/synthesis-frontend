@@ -1,27 +1,47 @@
-import { FAST_INTERVAL } from 'contexts/RefreshContext'
-import useInterval from 'hooks/useInterval'
-import useIsWindowVisible from 'hooks/useIsWindowVisible'
+import { FAST_INTERVAL, SLOW_INTERVAL } from 'config/constants'
 import { useSelector } from 'react-redux'
-import { useAppDispatch } from 'state'
 import { simpleRpcProvider } from 'utils/providers'
-import { setBlock } from '.'
+import useSWR, { useSWRConfig } from 'swr'
+import useSWRImmutable from 'swr/immutable'
 import { State } from '../types'
 
-export const usePollBlockNumber = (refreshTime = FAST_INTERVAL) => {
-    const dispatch = useAppDispatch()
-    const isWindowVisible = useIsWindowVisible()
+const REFRESH_BLOCK_INTERVAL = 6000
 
-    useInterval(
-        () => {
-            const fetchBlock = async () => {
-                const blockNumber = await simpleRpcProvider.getBlockNumber()
-                dispatch(setBlock(blockNumber))
+export const usePollBlockNumber = () => {
+    const { cache, mutate } = useSWRConfig()
+
+    const { data } = useSWR(
+        'blockNumber',
+        async () => {
+            const blockNumber = await simpleRpcProvider.getBlockNumber()
+            if (!cache.get('initialBlockNumber')) {
+                mutate('initialBlockNumber', blockNumber)
             }
-
-            fetchBlock()
+            return blockNumber
         },
-        isWindowVisible ? refreshTime : null,
-        true,
+        {
+            refreshInterval: REFRESH_BLOCK_INTERVAL,
+        },
+    )
+
+    useSWR(
+        [FAST_INTERVAL, 'blockNumber'],
+        async () => {
+            return data
+        },
+        {
+            refreshInterval: FAST_INTERVAL,
+        },
+    )
+
+    useSWR(
+        [SLOW_INTERVAL, 'blockNumber'],
+        async () => {
+            return data
+        },
+        {
+            refreshInterval: SLOW_INTERVAL,
+        },
     )
 }
 
@@ -29,6 +49,7 @@ export const useBlock = () => {
     return useSelector((state: State) => state.block)
 }
 
-export const useInitialBlock = () => {
-    return useSelector((state: State) => state.block.initialBlock)
+export const useInitialBlock = (): number => {
+    const { data: initialBlock = 0 } = useSWRImmutable('initialBlockNumber')
+    return initialBlock
 }

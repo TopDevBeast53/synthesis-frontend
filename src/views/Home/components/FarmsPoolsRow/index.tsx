@@ -7,9 +7,9 @@ import useIntersectionObserver from 'hooks/useIntersectionObserver'
 import useGetTopFarmsByApr from 'views/Home/hooks/useGetTopFarmsByApr'
 import useGetTopPoolsByApr from 'views/Home/hooks/useGetTopPoolsByApr'
 import { vaultPoolConfig } from 'config/constants/pools'
+import { FAST_INTERVAL } from 'config/constants'
 import TopFarmPool from './TopFarmPool'
 import RowHeading from './RowHeading'
-import { FAST_INTERVAL } from 'contexts/RefreshContext'
 
 const Grid = styled.div`
   display: grid;

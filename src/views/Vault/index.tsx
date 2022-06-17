@@ -48,6 +48,7 @@ enum HelixEnabledState {
 }
 
 const Vault: React.FC = () => {
+  console.log('hi')
   const { t } = useTranslation()
   const { account } = useActiveWeb3React()
   const helixContract = useHelix()
