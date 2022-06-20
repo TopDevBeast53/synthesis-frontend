@@ -160,7 +160,7 @@ const CreateProposal = () => {
           <Box>
             <Box mb="24px">
               <Label htmlFor="name">{t('Proposal')}</Label>
-              <Input id="name" name="name" value={name} scale="lg" onChange={handleChange} required />
+              <Input id="name" autoComplete='off' name="name" value={name} scale="lg" onChange={handleChange} required />
               {formErrors.name && fieldsState.name && <FormErrors errors={formErrors.name} />}
             </Box>
             <Box mb="24px">
@@ -205,6 +205,7 @@ const CreateProposal = () => {
                   <SecondaryLabel>{t('End Date')}</SecondaryLabel>
                   <DatePicker
                     name="endDate"
+                    autoComplete='off'
                     onChange={handleDateChange('endDate')}
                     selected={endDate}
                     placeholderText="YYYY/MM/DD"
@@ -215,6 +216,7 @@ const CreateProposal = () => {
                   <SecondaryLabel>{t('End Time')}</SecondaryLabel>
                   <TimePicker
                     name="endTime"
+                    autoComplete='off'
                     onChange={handleDateChange('endTime')}
                     selected={endTime}
                     placeholderText="00:00"

@@ -131,7 +131,7 @@ const Proposal = () => {
       <Layout>
         <Box>
           <Box mb="32px">
-            <Flex alignItems="center" mb="8px">
+            <Flex alignItems="center" mb="32px">
               <ProposalStateTag proposalState={proposal.state} />
               <ProposalTypeTag isCoreProposal={isCoreProposal(proposal)} ml="8px" />
             </Flex>
