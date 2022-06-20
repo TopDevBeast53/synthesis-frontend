@@ -1,29 +1,29 @@
 import React from 'react'
-import { StyledRow, StyledCell, StyledCellWithoutPadding } from 'views/SwapYield/components/Cells/StyledCell'
+import { StyledRow, AskingTokenCell, GivingTokenCell, QuestionCell } from 'views/SwapYield/components/Cells/StyledCell'
 import TokensCell from 'views/SwapYield/components/Cells/TokensCell'
 import ToolTipCell from 'views/SwapYield/components/Cells/ToolTipCell'
 
-const FinishedRow=({swapData, seller, buyer})=>{ 
-    return (
-        <>
-            <StyledRow>
-                <StyledCell>
-                    <TokensCell token={swapData?.toBuyerToken} balance={swapData?.amount.toString()}/>
-                </StyledCell>               
-                <StyledCell>
-                    <TokensCell token={swapData?.toSellerToken} balance={swapData?.cost.toString()}/>                   
-                </StyledCell>
-                <StyledCellWithoutPadding>
-                    <ToolTipCell 
-                        seller={seller}             
-                        buyer={buyer} 
-                        askAmount={swapData?.cost.toString()}
-                        isLiquidity
-                    />
-                </StyledCellWithoutPadding>                
-            </StyledRow>
-        </>
-    )
+const FinishedRow = ({ swapData, seller, buyer }) => {
+  return (
+    <>
+      <StyledRow>
+        <GivingTokenCell>
+          <TokensCell token={swapData?.toBuyerToken} balance={swapData?.amount.toString()} />
+        </GivingTokenCell>
+        <AskingTokenCell>
+          <TokensCell token={swapData?.toSellerToken} balance={swapData?.cost.toString()} />
+        </AskingTokenCell>
+        <QuestionCell>
+          <ToolTipCell
+            seller={seller}
+            buyer={buyer}
+            askAmount={swapData?.cost.toString()}
+            isLiquidity
+          />
+        </QuestionCell>
+      </StyledRow>
+    </>
+  )
 }
 
 export default FinishedRow

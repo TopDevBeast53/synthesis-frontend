@@ -1,92 +1,105 @@
 import { useHelixLpSwap } from 'hooks/useContract'
 import useToast from 'hooks/useToast'
 import React, { useContext, useState } from 'react'
-import styled from 'styled-components'
-import { AutoRenewIcon, Button, ChevronDownIcon, useDelayedUnmount, useMatchBreakpoints } from 'uikit'
+import { AutoRenewIcon, Button, useDelayedUnmount, useMatchBreakpoints } from 'uikit'
 import { SwapLiquidityContext } from 'views/SwapLiquidity/context'
-import { StyledCell, StyledCellWithoutPadding, StyledRow } from 'views/SwapYield/components/Cells/StyledCell'
+import { StyledRow, MobileRow, ButtonRow, MobileButtonRow, AskingTokenCell, GivingTokenCell, QuestionCell } from 'views/SwapYield/components/Cells/StyledCell'
 import TokensCell from 'views/SwapYield/components/Cells/TokensCell'
 import ToolTipCell from 'views/SwapYield/components/Cells/ToolTipCell'
+import ExpandActionCell from 'views/SwapYield/components/Cells/ExpandActionCell'
 import CandidateTable from '../CandidateTable'
 
-const ArrowIcon = styled(ChevronDownIcon)<{ toggled: boolean }>`
-  transform: ${({ toggled }) => (toggled ? 'rotate(180deg)' : 'rotate(0)')};
-  height: 24px;
-`
+const AppliedRow = (props) => {
+  const LpSwapContract = useHelixLpSwap()
+  const { tableRefresh, setTableRefresh } = useContext(SwapLiquidityContext)
+  const { toastSuccess, toastError } = useToast()
+  const { swapData, seller, buyer } = props
+  const [expanded, setExpanded] = useState(false)
+  const [pendingTx, setPendingTx] = useState(false)
+  const shouldRenderDetail = useDelayedUnmount(expanded, 300)
+  const { isMobile, isTablet, isDesktop } = useMatchBreakpoints()
+  const handleOnRowClick = () => {
+    setExpanded(!expanded)
+  }
+  const handleAcceptClick = (e) => {
+    e.stopPropagation();
+    setPendingTx(true)
+    LpSwapContract.acceptAsk(swapData?.id).then(async (tx) => {
+      await tx.wait()
+      toastSuccess("Info", "Bid success!")
+      setTableRefresh(tableRefresh + 1)
+      setPendingTx(false)
+    }).catch(err => {
+      if (err.code === 4001) {
+        toastError("Error", err.message)
+      } else {
+        toastError("Error", err.toString())
+      }
+      setPendingTx(false)
+    })
+  }
 
-const AppliedRow=(props)=>{
-    const LpSwapContract = useHelixLpSwap()
-    const {tableRefresh, setTableRefresh} = useContext(SwapLiquidityContext)
-    const { toastSuccess, toastError } = useToast()        
-    const {swapData, seller, buyer} = props
-    const [expanded, setExpanded] = useState(false)
-    const [pendingTx, setPendingTx] = useState(false)
-    const shouldRenderDetail = useDelayedUnmount(expanded, 300)
-    const { isMobile } = useMatchBreakpoints()
-    const handleOnRowClick = () => {
-        setExpanded(!expanded)        
-    }
-    const handleAcceptClick = (e) => {
-        e.stopPropagation();        
-        setPendingTx(true) 
-        LpSwapContract.acceptAsk(swapData?.id).then(async (tx)=>{
-            await tx.wait()
-            toastSuccess("Info", "Bid success!")
-            setTableRefresh(tableRefresh + 1)
-            setPendingTx(false) 
-        }).catch(err=>{
-            if(err.code === 4001){
-                toastError("Error", err.message)    
-            }else{
-                toastError("Error", err.toString())
-            }
-            setPendingTx(false) 
-        })
-    }
-   
-    return (
-        <>
-            <StyledRow onClick={handleOnRowClick}>
-                <StyledCell>
-                    <TokensCell token={swapData?.toBuyerToken} balance={swapData?.amount.toString()}/>
-                </StyledCell>               
-                {/* <StyledCellWithoutPadding>
-                    <ArrowCell back/>
-                </StyledCellWithoutPadding>  */}
-                <StyledCell>
-                    <TokensCell token={swapData?.toSellerToken} balance={swapData?.ask.toString()}/>                   
-                </StyledCell>
-                <StyledCellWithoutPadding ml="8px">
-                    <ToolTipCell 
-                        seller={seller}             
-                        buyer={buyer} 
-                        askAmount={swapData?.ask.toString()}
-                        isLiquidity
-                    />
-                </StyledCellWithoutPadding>
-                <StyledCell style={{zIndex:10}} ml="8px" mr="8px">
-                    <Button 
-                        isLoading={pendingTx}    
-                        endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
-                        color="primary" onClick={handleAcceptClick} scale={isMobile?"sm":"md"} maxWidth="100px"> Accept </Button>
-                </StyledCell>
-                {
-                    !isMobile &&
-                    <StyledCellWithoutPadding>
-                        <ArrowIcon color="primary" toggled={expanded} />
-                    </StyledCellWithoutPadding>
-                }
-                
-            </StyledRow>
-        
-            {shouldRenderDetail && (
-                <div style={{padding:"10px 10px", minHeight:"5em"}}>
-                    <CandidateTable swap={swapData} buyer={buyer}/>
-                </div>
-            )}        
-        
-        </>
-    )
+  return (
+    <>
+      {!isMobile ?
+        <StyledRow onClick={handleOnRowClick}>
+          <GivingTokenCell>
+            <TokensCell token={swapData?.toBuyerToken} balance={swapData?.amount.toString()} />
+          </GivingTokenCell>
+          <AskingTokenCell>
+            <TokensCell token={swapData?.toSellerToken} balance={swapData?.ask.toString()} />
+          </AskingTokenCell>
+          <QuestionCell>
+            <ToolTipCell
+              seller={seller}
+              buyer={buyer}
+              askAmount={swapData?.ask.toString()}
+              isLiquidity
+            />
+          </QuestionCell>
+          <ButtonRow style={{ zIndex: 10 }}>
+            <Button
+              isLoading={pendingTx}
+              endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
+              variant="secondary" width="100%" onClick={handleAcceptClick} scale={isMobile ? "sm" : "md"}> Accept Ask </Button>
+          </ButtonRow>
+          <ExpandActionCell expanded={expanded} isFullLayout={isTablet || isDesktop} />
+        </StyledRow>
+        :
+        <MobileRow>
+          <StyledRow onClick={handleOnRowClick}>
+            <GivingTokenCell>
+              <TokensCell token={swapData?.toBuyerToken} balance={swapData?.amount.toString()} />
+            </GivingTokenCell>
+            <AskingTokenCell>
+              <TokensCell token={swapData?.toSellerToken} balance={swapData?.ask.toString()} />
+            </AskingTokenCell>
+            <QuestionCell>
+              <ToolTipCell
+                seller={seller}
+                buyer={buyer}
+                askAmount={swapData?.ask.toString()}
+                isLiquidity
+              />
+            </QuestionCell>
+            <ExpandActionCell expanded={expanded} isFullLayout={isTablet || isDesktop} />
+          </StyledRow>
+          <MobileButtonRow style={{ zIndex: 10 }}>
+            <Button
+              isLoading={pendingTx}
+              endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
+              variant="secondary" width="100%" onClick={handleAcceptClick} scale={isMobile ? "sm" : "md"}> Accept Ask </Button>
+          </MobileButtonRow>
+        </MobileRow>
+      }
+      {shouldRenderDetail && (
+        <div style={{ padding: "10px", minHeight: "5em" }}>
+          <CandidateTable swap={swapData} buyer={buyer} />
+        </div>
+      )}
+
+    </>
+  )
 }
 
 export default AppliedRow

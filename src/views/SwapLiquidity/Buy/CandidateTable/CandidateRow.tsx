@@ -1,29 +1,13 @@
 import { useWeb3React } from '@web3-react/core'
 import { useHelixLpSwap } from 'hooks/useContract'
 import React, { useContext, useEffect, useState } from 'react'
-import styled from 'styled-components'
 import { Button, Skeleton, Text, useMatchBreakpoints, useModal } from 'uikit'
 import { SwapLiquidityContext } from 'views/SwapLiquidity/context'
-import BaseCell, { CellContent } from 'views/SwapYield/components/Cells/BaseCell'
 import TokensCell from 'views/SwapYield/components/Cells/TokensCell'
+import { StyledRow, ButtonRow, AskingTokenCell, AddressCell, SkeletonCell } from 'views/SwapYield/components/Cells/StyledCell'
 import { SwapState } from '../../types'
 import DiscussOrder from '../Modals/DiscussOrder'
 
-const StyledRow = styled.div`
-  background-color: transparent;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  flex-wrap: wrap;
-`
-const StyledCell = styled(BaseCell)`
-  flex: 4.5;
-  padding-left: 32px;
-
-  ${({ theme }) => theme.mediaQueries.sm} {
-    flex: 1 0 120px;
-  }
-`
 const getEllipsis = (account) => {
   return account ? `${account.substring(0, 5)}...${account.substring(account.length - 5)}` : null
 }
@@ -37,55 +21,46 @@ const CandidateRow = ({ bidId, swapData, buyer }) => {
     setTableRefresh(tableRefresh + 1)
   }
   const [showModal] = useModal(
-    <DiscussOrder bidData={bidData} swapData={swapData} bidId={bidId} sendAsk={onSendAsk} buyer={buyer}/>,
+    <DiscussOrder bidData={bidData} swapData={swapData} bidId={bidId} sendAsk={onSendAsk} buyer={buyer} />,
     false,
   )
   useEffect(() => {
-    let unmounted=false;
+    let unmounted = false;
     LpSwapContract.getBid(bidId).then((res) => {
       if (unmounted) return
       setBidData(res)
     })
-    return ()=>{
-      unmounted=true
-    }    
+    return () => {
+      unmounted = true
+    }
   }, [LpSwapContract, bidId])
   if (!bidData) {
     return (
       <StyledRow>
-        <StyledCell>
-          <CellContent>
-            <Skeleton />
-          </CellContent>
-        </StyledCell>
-        <StyledCell>
-          <CellContent>
-            <Skeleton mt="4px" />
-          </CellContent>
-        </StyledCell>
+        <SkeletonCell>
+          <Skeleton />
+        </SkeletonCell>
+        <SkeletonCell>
+          <Skeleton />
+        </SkeletonCell>
       </StyledRow>
     )
   }
   return (
     <StyledRow>
-      <StyledCell>
-        <CellContent>
-          <Text fontSize={isMobile ? "12px": undefined}>{account === bidData?.bidder ? 'Me' : getEllipsis(bidData?.bidder)}</Text>
-        </CellContent>
-      </StyledCell>
-      <StyledCell>        
-          <TokensCell token={swapData?.toSellerToken} balance={bidData?.amount.toString()} />
-      </StyledCell>
-      {filterState === SwapState.Applied && account === bidData?.bidder && (
-        <StyledCell>
-          <CellContent>
-            <Button width="100px" style={{ zIndex: 20 }} scale={isMobile?"sm":"md"} onClick={showModal}>
-              {' '}
-              Update{' '}
-            </Button>
-          </CellContent>
-        </StyledCell>
-      )}
+      <AddressCell>
+        <Text fontSize={isMobile ? "12px" : undefined}>{account === bidData?.bidder ? 'Me' : getEllipsis(bidData?.bidder)}</Text>
+      </AddressCell>
+      <AskingTokenCell>
+        <TokensCell token={swapData?.toSellerToken} balance={bidData?.amount.toString()} />
+      </AskingTokenCell>
+      <ButtonRow>
+        {filterState === SwapState.Applied && account === bidData?.bidder && (
+          <Button variant="secondary" maxWidth="200px" style={{ zIndex: 20 }} scale={isMobile ? "sm" : "md"} onClick={showModal}>
+            Update Bid
+          </Button>
+        )}
+      </ButtonRow>
     </StyledRow>
   )
 }

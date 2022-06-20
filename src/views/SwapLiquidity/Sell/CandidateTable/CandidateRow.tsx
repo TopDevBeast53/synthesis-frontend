@@ -2,28 +2,11 @@ import { useWeb3React } from '@web3-react/core'
 import { useHelixLpSwap } from 'hooks/useContract'
 import useToast from 'hooks/useToast'
 import React, { useEffect, useState } from 'react'
-import styled from 'styled-components'
 import { AutoRenewIcon, Button, Skeleton, Text, useMatchBreakpoints } from 'uikit'
 import handleError from 'utils/handleError'
-import BaseCell, { CellContent } from 'views/SwapYield/components/Cells/BaseCell'
+import { StyledRow, ButtonRow, AskingTokenCell, AddressCell, SkeletonCell } from 'views/SwapYield/components/Cells/StyledCell'
 import TokensCell from 'views/SwapYield/components/Cells/TokensCell'
 
-const StyledRow = styled.div`
-  background-color: transparent;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  flex-wrap:wrap;
-    
-`
-const StyledCell = styled(BaseCell)`
-  flex: 4.5;
-  padding-left: 32px;
-
-  ${({ theme }) => theme.mediaQueries.sm} {
-    flex: 1 0 120px;
-  }
-`
 const getEllipsis = (account) => {
   return account ? `${account.substring(0, 5)}...${account.substring(account.length - 5)}` : null
 }
@@ -43,7 +26,7 @@ const CandidateRow = ({ bidId, swapData }) => {
         toastSuccess('Success', 'Accepted!')
         setPendingTx(false)
       })
-      .catch((err) => {        
+      .catch((err) => {
         handleError(err, toastError)
         setPendingTx(false)
       })
@@ -56,41 +39,35 @@ const CandidateRow = ({ bidId, swapData }) => {
   if (!bidData) {
     return (
       <StyledRow>
-        <StyledCell>
-          <CellContent>
-            <Skeleton />
-          </CellContent>
-        </StyledCell>
-        <StyledCell>
+        <SkeletonCell>
           <Skeleton />
-        </StyledCell>
+        </SkeletonCell>
+        <SkeletonCell>
+          <Skeleton />
+        </SkeletonCell>
       </StyledRow>
     )
   }
   return (
     <StyledRow>
-      <StyledCell>
-        <CellContent>
-        <Text fontSize={isMobile ? "12px": undefined}>{account === bidData?.bidder ? 'Me' : getEllipsis(bidData?.bidder)}</Text>
-        </CellContent>
-      </StyledCell>
-      <StyledCell>
-        <TokensCell token={swapData?.toSellerToken} balance={bidData?.amount.toString()} />        
-      </StyledCell>
-      <StyledCell>
-        <CellContent>
-          <Button
-            isLoading={pendingTx}
-            endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
-            width="100px"
-            style={{ zIndex: 20 }}
-            onClick={handleAcceptClick}
-          >
-            {' '}
-            Accept{' '}
-          </Button>
-        </CellContent>
-      </StyledCell>
+      <AddressCell style={{ paddingLeft: isMobile && 6, paddingRight: isMobile && 6 }}>
+        <Text fontSize={isMobile ? "12px" : undefined}>{account === bidData?.bidder ? 'Me' : getEllipsis(bidData?.bidder)}</Text>
+      </AddressCell>
+      <AskingTokenCell style={{ paddingLeft: isMobile && 6, paddingRight: isMobile && 6 }}>
+        <TokensCell token={swapData?.toSellerToken} balance={bidData?.amount.toString()} />
+      </AskingTokenCell>
+      <ButtonRow style={{ paddingLeft: isMobile && 6, paddingRight: isMobile && 6 }}>
+        <Button
+          variant="secondary"
+          isLoading={pendingTx}
+          endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
+          maxWidth="200px"
+          style={{ zIndex: 20 }}
+          onClick={handleAcceptClick}
+        >
+          Accept Bid
+        </Button>
+      </ButtonRow>
     </StyledRow>
   )
 }
