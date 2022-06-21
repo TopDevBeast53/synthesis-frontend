@@ -11,41 +11,45 @@ const ReferenceElement = styled.div`
   display: inline-block;
 `
 const Container = styled.div``
-export const getTokenSymbol = (farms, tokens, tokenInfo) => {    
-  if (tokenInfo.isLp){
+export const getTokenSymbol = (farms, tokens, tokenInfo) => {
+  if (tokenInfo.isLp) {
     const lpToken = farms.find((item) => getAddress(item.lpAddresses) === tokenInfo.token)
-    return lpToken? lpToken.lpSymbol  :""
+    return lpToken ? lpToken.lpSymbol : ""
   }
   const token = tokens[tokenInfo.token]
-  return token?  token.symbol : ""  
+  return token ? token.symbol : ""
 }
 
 export const getTokenDecimals = (farms, tokens, tokenInfo) => {
-  if (tokenInfo.isLp){
+  if (tokenInfo.isLp) {
     const lpToken = farms.find((item) => getAddress(item.lpAddresses) === tokenInfo.token)
-    return lpToken? lpToken.token.decimals : 18
+    return lpToken ? lpToken.token.decimals : 18
   }
   const token = tokens[tokenInfo.token]
-  return token?  token.decimals : 18
+  return token ? token.decimals : 18
 }
-const ToolTipCell = ({ seller, buyer, askAmount, isLiquidity=false }) => {
+const ToolTipCell = ({ seller, buyer, askAmount, isLiquidity = false }) => {
   const { data: farms } = useFarms()
   const tokens = useAllTokens()
-  
-  const tooltipText = (seller && buyer) ? 
-                                        ToolTipText(
-                                          getTokenSymbol(farms, tokens, seller), 
-                                          getBalanceNumber(seller.amount.toString(), getTokenDecimals(farms, tokens, seller)).toString(), 
-                                          getTokenSymbol(farms, tokens, buyer), 
-                                          getBalanceNumber(askAmount.toString(), getTokenDecimals(farms, tokens, buyer)).toString(), isLiquidity) 
-                                        :
-                                          ""
+
+  const tooltipText = (seller && buyer) ?
+    ToolTipText(
+      getTokenSymbol(farms, tokens, seller),
+      getBalanceNumber(seller.amount.toString(), getTokenDecimals(farms, tokens, seller)).toString(),
+      seller.isLp,
+      getTokenSymbol(farms, tokens, buyer),
+      getBalanceNumber(askAmount.toString(), getTokenDecimals(farms, tokens, buyer)).toString(),
+      buyer.isLp,
+      isLiquidity
+    )
+    :
+    ""
   const { targetRef, tooltip, tooltipVisible } = useTooltip(tooltipText, {
     placement: 'top-end',
     tooltipOffset: [20, 10],
   })
-  if(!seller || !buyer){
-    return null    
+  if (!seller || !buyer) {
+    return null
   }
 
   return (
