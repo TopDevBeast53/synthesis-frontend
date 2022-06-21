@@ -79,8 +79,7 @@ const DiscussOrder: React.FC<any> = ({onDismiss, onSend,  ...props}) => {
             onClick={handleSendClick}
             width="100%"
           >
-            {' '}
-            Send{' '}
+            Confirm
           </Button>
         </div>
       </ModalBody>

@@ -138,9 +138,9 @@ const DiscussOrder: React.FC<any> = ({onDismiss, ...props}) => {
       setPendingTx(false)
       onDismiss()
       if (bidData) {
-        toastSuccess(`${t('Success')}!`, t('Update Success!'))
+        toastSuccess(`${t('Success')}!`, t('Amount is updated!'))
       } else {
-        toastSuccess(`${t('Success')}!`, t('Bid Success!'))
+        toastSuccess(`${t('Success')}!`, t('Bid Successfully!'))
       }
     } catch (err) {
       setPendingTx(false)

@@ -46,8 +46,7 @@ const EarnedRow = ({ swapData, swapId }) => {
   }
   return (
     <>
-      {isMobile ?
-
+      {!isMobile ?
         <StyledRow>
           <GivingTokenCell>
             <TokenCell tokenInfo={swapData?.seller} amount={swapData?.seller.amount.toString()} />
@@ -80,22 +79,20 @@ const EarnedRow = ({ swapData, swapId }) => {
               askAmount={swapData?.buyer.amount.toString()}
             />
           </QuestionCell>
-          <ButtonRow>
-            <CellContent>
-              {
-                (swapData?.status === OrderState.Completed && !isPast) &&
-                <Button
-                  variant="secondary"
-                  width="100%"
-                  scale={isMobile ? "sm" : "md"}
-                  isLoading={pendingTx}
-                  endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
-                  onClick={handleWithdraw}
-                >
-                  Collect
-                </Button>
-              }
-            </CellContent>
+          <ButtonRow style={{ paddingRight: "32px" }}>
+            {swapData?.status !== OrderState.Withdrawn &&
+              <Button
+                variant={(swapData?.status === OrderState.Completed && !isPast) ? "secondary" : "primary"}
+                width="100%"
+                scale={isMobile ? "sm" : "md"}
+                isLoading={pendingTx}
+                endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
+                onClick={handleWithdraw}
+                disabled={!(swapData?.status === OrderState.Completed && !isPast)}
+              >
+                Collect
+              </Button>
+            }
           </ButtonRow>
         </StyledRow>
         :
@@ -133,21 +130,21 @@ const EarnedRow = ({ swapData, swapId }) => {
               />
             </QuestionCell>
           </StyledRow>
-          <MobileButtonRow>
-            {
-              (swapData?.status === OrderState.Completed && !isPast) &&
+          {swapData?.status !== OrderState.Withdrawn &&
+            <MobileButtonRow>
               <Button
-                variant="secondary"
+                variant={(swapData?.status === OrderState.Completed && !isPast) ? "secondary" : "primary"}
                 width="100%"
                 scale={isMobile ? "sm" : "md"}
                 isLoading={pendingTx}
                 endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
                 onClick={handleWithdraw}
+                disabled={!(swapData?.status === OrderState.Completed && !isPast)}
               >
                 Collect
               </Button>
-            }
-          </MobileButtonRow>
+            </MobileButtonRow>
+          }
         </MobileRow>
       }
     </>

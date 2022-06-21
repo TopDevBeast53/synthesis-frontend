@@ -28,7 +28,7 @@ const ActiveRow = (props) => {
     setPendingTx(true)
     LpSwapContract.closeSwap(swapId).then(async (tx) => {
       await tx.wait()
-      toastSuccess("Info", "You closed the Order")
+      toastSuccess("Info", "Closed the Order")
       setPendingTx(false)
     }).catch(err => {
       if (err.code === 4001) {

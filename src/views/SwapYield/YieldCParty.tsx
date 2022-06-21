@@ -114,10 +114,9 @@ const YieldCParty = () => {
                     <ButtonMenuItem>{t('Active Swaps')}</ButtonMenuItem>
                     <ButtonMenuItem>{t('Completed Swaps')}</ButtonMenuItem>
                   </ButtonMenu>
-                <Button variant="secondary" scale="md" mr="1em" onClick={handleAdd} 
+                <Button variant="secondary" scale={isMobile ? "sm" : "md"} mr="1em" onClick={handleAdd} 
                   style={isMobile ? {marginTop: "32px", textAlign: "center", marginLeft:"auto", marginRight:"auto", display:"block"}: {}}>
-                  {' '}
-                  Create Swap{' '}
+                  Create Swap
                 </Button>
               </Wrapper>
             )

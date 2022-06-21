@@ -230,40 +230,42 @@ const YieldCPartyRow = ({ data, state, loading }) => {
               <ExpandActionCell expanded={expanded} isFullLayout={isTablet || isDesktop} />
             )}
           </StyledRow>
-          <MobileButtonRow style={{ zIndex: 10 }}>
-            {state === SwapState.All && (
-              <Button variant="secondary" width="100%" scale={isMobile ? "sm" : "md"} onClick={handleBid}>
-                Bid
-              </Button>
-            )}
-            {state === SwapState.Applied && (
-              <Button
-                variant="secondary"
-                width="100%"
-                scale={isMobile ? "sm" : "md"}
-                isLoading={pendingTx}
-                endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
-                onClick={handleAcceptAsk}
-              >
-                Accept Ask
-              </Button>
-            )}
+          {state !== SwapState.Finished &&
 
-            {state === SwapState.Pending && !isPast && (
-              <Button
-                variant="secondary"
-                width="100%"
-                scale={isMobile ? "sm" : "md"}
-                isLoading={pendingTx}
-                endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
-                onClick={handleWithdraw}
-              >
-                Collect
-              </Button>
-            )}
-          </MobileButtonRow>
+            <MobileButtonRow style={{ zIndex: 10 }}>
+              {state === SwapState.All && (
+                <Button variant="secondary" width="100%" scale={isMobile ? "sm" : "md"} onClick={handleBid}>
+                  Bid
+                </Button>
+              )}
+              {state === SwapState.Applied && (
+                <Button
+                  variant="secondary"
+                  width="100%"
+                  scale={isMobile ? "sm" : "md"}
+                  isLoading={pendingTx}
+                  endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
+                  onClick={handleAcceptAsk}
+                >
+                  Accept Ask
+                </Button>
+              )}
+
+              {state === SwapState.Pending && !isPast && (
+                <Button
+                  variant="secondary"
+                  width="100%"
+                  scale={isMobile ? "sm" : "md"}
+                  isLoading={pendingTx}
+                  endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
+                  onClick={handleWithdraw}
+                >
+                  Collect
+                </Button>
+              )}
+            </MobileButtonRow>
+          }
         </MobileRow>
-
       }
 
       {shouldRenderDetail && account && (

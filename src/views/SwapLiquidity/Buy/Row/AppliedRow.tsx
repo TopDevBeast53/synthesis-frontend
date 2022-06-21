@@ -26,7 +26,7 @@ const AppliedRow = (props) => {
     setPendingTx(true)
     LpSwapContract.acceptAsk(swapData?.id).then(async (tx) => {
       await tx.wait()
-      toastSuccess("Info", "Bid success!")
+      toastSuccess("Info", "Bid successfully!")
       setTableRefresh(tableRefresh + 1)
       setPendingTx(false)
     }).catch(err => {

@@ -62,11 +62,11 @@ const CandidateRow = ({ bidId, exToken, exAmount }) => {
         {account === bid.bidder && (
           <Button
             variant="secondary"
-            maxWidth="200px"
+            maxWidth="300px"
             scale={isMobile ? 'sm' : 'md'}
             style={{ zIndex: 20 }}
             onClick={showModal}>
-            Update Ask
+            Update Bid
           </Button>
         )}
       </ButtonRow>
