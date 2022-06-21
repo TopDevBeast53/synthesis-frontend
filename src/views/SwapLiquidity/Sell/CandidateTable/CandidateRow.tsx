@@ -4,8 +4,8 @@ import useToast from 'hooks/useToast'
 import React, { useEffect, useState } from 'react'
 import { AutoRenewIcon, Button, Skeleton, Text, useMatchBreakpoints } from 'uikit'
 import handleError from 'utils/handleError'
-import { StyledRow, ButtonRow, AskingTokenCell, AddressCell, SkeletonCell } from 'views/SwapYield/components/Cells/StyledCell'
-import TokensCell from 'views/SwapYield/components/Cells/TokensCell'
+import { StyledRow, ButtonRow, AskingTokenCell, AddressCell, SkeletonCell } from 'views/SwapLiquidity/components/Cells/StyledCell'
+import TokensCell from 'views/SwapLiquidity/components/Cells/TokensCell'
 
 const getEllipsis = (account) => {
   return account ? `${account.substring(0, 5)}...${account.substring(account.length - 5)}` : null

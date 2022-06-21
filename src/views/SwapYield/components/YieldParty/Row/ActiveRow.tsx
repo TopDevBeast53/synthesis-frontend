@@ -2,28 +2,23 @@ import { useHelixYieldSwap } from 'hooks/useContract'
 import useToast from 'hooks/useToast'
 import moment from 'moment'
 import React, { useContext, useMemo, useState } from 'react'
-import styled from 'styled-components'
-import { AutoRenewIcon, Button, ChevronDownIcon, useDelayedUnmount, useMatchBreakpoints, useModal } from 'uikit'
+import { AutoRenewIcon, Button, useDelayedUnmount, useMatchBreakpoints, useModal } from 'uikit'
 import handleError from 'utils/handleError'
 import { YieldPartyContext } from 'views/SwapYield/context'
 import DurationCell from '../../Cells/DurationCells'
-import { StyledCell, StyledCellWithoutPadding, StyledRow } from '../../Cells/StyledCell'
+import { StyledRow, MobileRow, ButtonRow, MobileButtonRow, AskingTokenCell, LeftTimeCell, GivingTokenCell, QuestionCell } from '../../Cells/StyledCell'
 import TokenCell from '../../Cells/TokenCell'
 import ToolTipCell from '../../Cells/ToolTipCell'
+import ExpandActionCell from '../../Cells/ExpandActionCell'
 import CandidateTable from '../CandidateTable'
 import DiscussOrder from '../Modals/DiscussOrder'
-
-const ArrowIcon = styled(ChevronDownIcon)<{ toggled: boolean }>`
-  transform: ${({ toggled }) => (toggled ? 'rotate(180deg)' : 'rotate(0)')};
-  height: 24px;
-`
 
 const ActiveRow = (props) => {
   const YieldSwapContract = useHelixYieldSwap()
   const { toastSuccess, toastError } = useToast()
   const { tableRefresh, setTableRefresh } = useContext(YieldPartyContext)
   const { swapData, swapId } = props
-  const {isMobile} = useMatchBreakpoints()
+  const { isMobile, isTablet, isDesktop } = useMatchBreakpoints()
 
   const [expanded, setExpanded] = useState(false)
   const [pendingTx, setPendingTx] = useState(false)
@@ -56,66 +51,97 @@ const ActiveRow = (props) => {
   const [showDiscussModal] = useModal(<DiscussOrder swapId={swapId} onSend={onSendAsk} swapData={swapData} />, false)
 
   const handleUpdateClick = (e) => {
-    e.stopPropagation()    
+    e.stopPropagation()
     showDiscussModal()
-  }  
+  }
   if (swapData) {
     if (swapData.status !== 0) return null
-  }  
+  }
 
   return (
     <>
-      <StyledRow onClick={handleOnRowClick}>
-        <StyledCell style={{flex:isMobile ? "1": "3 1 10px"}}>
-          <TokenCell tokenInfo={swapData?.seller} amount={swapData?.seller.amount.toString()}/>          
-        </StyledCell>
-        <StyledCell style={{flex:isMobile ? "none": "1 1 70px"}}> 
-          <DurationCell duration={duration} />
-        </StyledCell>
-        {/* <StyledCellWithoutPadding>
-          <ArrowCell />
-        </StyledCellWithoutPadding> */}
-        <StyledCell style={{flex:isMobile ? "1": "3 1 130px"}}>
-          <TokenCell tokenInfo={swapData?.buyer} amount={swapData?.ask.toString()}/>          
-        </StyledCell>
-        <StyledCellWithoutPadding>
-          <ToolTipCell 
-            seller={swapData?.seller}
-            buyer={swapData?.buyer} 
-            askAmount={swapData?.ask.toString()}
-          />
-        </StyledCellWithoutPadding>
+      {!isMobile ?
+        <StyledRow onClick={handleOnRowClick}>
+          <GivingTokenCell>
+            <TokenCell tokenInfo={swapData?.seller} amount={swapData?.seller.amount.toString()} />
+          </GivingTokenCell>
+          <LeftTimeCell>
+            <DurationCell duration={duration} />
+          </LeftTimeCell>
+          <AskingTokenCell>
+            <TokenCell tokenInfo={swapData?.buyer} amount={swapData?.ask.toString()} />
+          </AskingTokenCell>
+          <QuestionCell>
+            <ToolTipCell
+              seller={swapData?.seller}
+              buyer={swapData?.buyer}
+              askAmount={swapData?.ask.toString()}
+            />
+          </QuestionCell>
           {
             swapData &&
-            <StyledCell style={{flexDirection:"row"}}>
-              <Button color="primary" onClick={handleUpdateClick} scale="sm" width="100px" ml="15px">
-                {' '}
-                Update{' '}
+            <ButtonRow style={{ zIndex: 10 }}>
+              <Button variant="secondary" onClick={handleUpdateClick} scale={isMobile ? "sm" : "md"} width="100%" mr="8px">
+                Update Ask
               </Button>
               <Button
                 isLoading={pendingTx}
                 endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
-                color="primary"
+                variant="secondary"
                 onClick={handleCloseClick}
-                scale="sm"
-                width="100px"
-                ml="15px"
+                scale={isMobile ? "sm" : "md"}
+                width="100%"
               >
-                {' '}
-                Close{' '}
+                Close
               </Button>
-            </StyledCell>
+            </ButtonRow>
           }
-        {
-          !isMobile &&
-          <StyledCell>
-            <ArrowIcon color="primary" toggled={expanded} />
-          </StyledCell>
-        }        
-      </StyledRow>
+          <ExpandActionCell expanded={expanded} isFullLayout={isTablet || isDesktop} />
+        </StyledRow>
+        :
+        <MobileRow>
+          <StyledRow onClick={handleOnRowClick}>
+            <GivingTokenCell>
+              <TokenCell tokenInfo={swapData?.seller} amount={swapData?.seller.amount.toString()} />
+            </GivingTokenCell>
+            <LeftTimeCell>
+              <DurationCell duration={duration} />
+            </LeftTimeCell>
+            <AskingTokenCell>
+              <TokenCell tokenInfo={swapData?.buyer} amount={swapData?.ask.toString()} />
+            </AskingTokenCell>
+            <QuestionCell>
+              <ToolTipCell
+                seller={swapData?.seller}
+                buyer={swapData?.buyer}
+                askAmount={swapData?.ask.toString()}
+              />
+            </QuestionCell>
+            <ExpandActionCell expanded={expanded} isFullLayout={isTablet || isDesktop} />
+          </StyledRow>
+          {
+            swapData &&
+            <MobileButtonRow style={{ zIndex: 10 }}>
+              <Button variant="secondary" onClick={handleUpdateClick} scale={isMobile ? "sm" : "md"} width="100%" mr="8px">
+                Update Ask
+              </Button>
+              <Button
+                isLoading={pendingTx}
+                endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
+                variant="secondary"
+                onClick={handleCloseClick}
+                scale={isMobile ? "sm" : "md"}
+                width="100%"
+              >
+                Close
+              </Button>
+            </MobileButtonRow>
+          }
+        </MobileRow>
+      }
 
       {shouldRenderDetail && (
-        <div style={{ padding: '10px 10px', minHeight: '5em' }}>
+        <div style={{ padding: '10px', minHeight: '5em' }}>
           <CandidateTable swap={swapData} />
         </div>
       )}

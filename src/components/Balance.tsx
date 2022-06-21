@@ -29,16 +29,20 @@ const Balance: React.FC<BalanceProps> = ({
   }, [value])
 
   return (
-    <Text color={isDisabled ? 'textDisabled' : color} onClick={onClick} {...props} style={ {wordBreak: isMobile ? "break-word" : "inherit"}}> 
-      <CountUp
-        start={previousValue.current}
-        end={value}
-        prefix={prefix}
-        suffix={unit}
-        decimals={decimals}
-        duration={1}
-        separator=","
-      />
+    <Text color={isDisabled ? 'textDisabled' : color} onClick={onClick} {...props} style={{ wordBreak: isMobile ? "break-word" : "inherit" }}>
+      {value < 1 / (10 ** decimals) ?
+        `< ${(1 / (10 ** decimals)).toString()}`
+        :
+        <CountUp
+          start={previousValue.current}
+          end={value}
+          prefix={prefix}
+          suffix={unit}
+          decimals={decimals}
+          duration={1}
+          separator=","
+        />
+      }
     </Text>
   )
 }

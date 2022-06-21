@@ -1,7 +1,7 @@
 import React from 'react'
-import { StyledRow, AskingTokenCell, GivingTokenCell, QuestionCell } from 'views/SwapYield/components/Cells/StyledCell'
-import TokensCell from 'views/SwapYield/components/Cells/TokensCell'
-import ToolTipCell from 'views/SwapYield/components/Cells/ToolTipCell'
+import { StyledRow, AskingTokenCell, GivingTokenCell, QuestionCell } from 'views/SwapLiquidity/components/Cells/StyledCell'
+import TokensCell from 'views/SwapLiquidity/components/Cells/TokensCell'
+import ToolTipCell from 'views/SwapLiquidity/components/Cells/ToolTipCell'
 
 const FinishedRow = ({ swapData, seller, buyer }) => {
   return (

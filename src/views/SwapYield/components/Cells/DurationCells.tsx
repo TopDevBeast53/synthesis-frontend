@@ -7,8 +7,8 @@ const DurationCell = (props) => {
   if (!duration) {
     return (
       <CellContent>
-        <Text>Duration</Text>
         <Skeleton />
+        <Skeleton mt="4px" />
       </CellContent>
     )
   }

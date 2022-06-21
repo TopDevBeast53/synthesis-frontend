@@ -6,7 +6,7 @@ export const StyledRow = styled.div`
   display: flex;
   cursor: pointer;
   align-items: center;
-`
+  `
 
 export const MobileRow = styled.div`
   background-color: transparent;
@@ -49,13 +49,6 @@ export const GivingTokenCell = styled(BaseCell)`
   }
 `
 
-export const LeftTimeCell = styled(BaseCell)`  
-  flex: 1.5;
-  ${({ theme }) => theme.mediaQueries.sm} {
-    flex: 1.5 0 100px; 
-  }
-`
-
 export const StyledCellWithoutPadding = styled(BaseCell)`
   flex: 1;
   ${({ theme }) => theme.mediaQueries.sm} {
@@ -84,7 +77,7 @@ export const ButtonRow = styled(BaseCell)`
   flex-direction: row;
   ${({ theme }) => theme.mediaQueries.sm} {
     flex-direction: row;
-    flex: 2 0 150px; 
+    flex: 2 0 100px; 
   }
 `
 

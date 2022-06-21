@@ -3,10 +3,10 @@ import useToast from 'hooks/useToast'
 import React, { useContext, useState } from 'react'
 import { AutoRenewIcon, Button, useDelayedUnmount, useMatchBreakpoints, useModal } from 'uikit'
 import { SwapLiquidityContext } from 'views/SwapLiquidity/context'
-import { StyledRow, MobileRow, ButtonRow, MobileButtonColumnCell, AskingTokenCell, GivingTokenCell, QuestionCell } from 'views/SwapYield/components/Cells/StyledCell'
-import TokensCell from 'views/SwapYield/components/Cells/TokensCell'
-import ToolTipCell from 'views/SwapYield/components/Cells/ToolTipCell'
-import ExpandActionCell from 'views/SwapYield/components/Cells/ExpandActionCell'
+import { StyledRow, MobileRow, ButtonRow, MobileButtonRow, AskingTokenCell, GivingTokenCell, QuestionCell } from 'views/SwapLiquidity/components/Cells/StyledCell'
+import TokensCell from 'views/SwapLiquidity/components/Cells/TokensCell'
+import ToolTipCell from 'views/SwapLiquidity/components/Cells/ToolTipCell'
+import ExpandActionCell from 'views/SwapLiquidity/components/Cells/ExpandActionCell'
 import CandidateTable from '../CandidateTable'
 import DiscussOrder from '../Modals/DiscussOrder'
 
@@ -70,7 +70,7 @@ const ActiveRow = (props) => {
           </QuestionCell>
           {
             swapData &&
-            <ButtonRow style={{ zIndex: 10, flexDirection: "row" }}>
+            <ButtonRow style={{ zIndex: 10 }}>
               <Button
                 variant="secondary" onClick={handleUpdateClick} scale={isMobile ? "sm" : "md"} width="100%" mr="8px"> Update Ask </Button>
               <Button
@@ -103,19 +103,25 @@ const ActiveRow = (props) => {
           </StyledRow>
           {
             swapData &&
-            <MobileButtonColumnCell style={{ zIndex: 10 }}>
+            <MobileButtonRow style={{ zIndex: 10 }}>
               <Button
                 variant="secondary" onClick={handleUpdateClick} scale={isMobile ? "sm" : "md"} width="100%" mr="8px"> Update Ask </Button>
               <Button
                 isLoading={pendingTx}
+                width="100%"
                 endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
-                variant="secondary" onClick={handleCloseClick} scale={isMobile ? "sm" : "md"} width="100%"> Close </Button>
-            </MobileButtonColumnCell>
+                variant="secondary"
+                onClick={handleCloseClick}
+                scale={isMobile ? "sm" : "md"}
+              >
+                Close
+              </Button>
+            </MobileButtonRow>
           }
         </MobileRow>
       }
       {shouldRenderDetail && (
-        <div style={{ padding: "10px 10px", minHeight: "5em" }}>
+        <div style={{ padding: "10px", minHeight: "5em" }}>
           <CandidateTable swap={swapData} />
         </div>
       )}

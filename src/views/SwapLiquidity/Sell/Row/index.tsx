@@ -2,7 +2,7 @@ import { useAllTokens } from 'hooks/Tokens'
 import { useHelixLpSwap } from 'hooks/useContract'
 import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { SwapLiquidityContext } from 'views/SwapLiquidity/context'
-import { OrderState } from 'views/SwapYield/types'
+import { OrderState } from 'views/SwapLiquidity/types'
 import ActiveRow from './ActiveRow'
 import EarnedRow from './EarnedRow'
 
