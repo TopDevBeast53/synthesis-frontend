@@ -1,4 +1,5 @@
-import { useHelixLpSwap } from 'hooks/useContract'
+import { useHelixLpSwap, useERC20 } from 'hooks/useContract'
+import { useWeb3React } from '@web3-react/core'
 import useToast from 'hooks/useToast'
 import React, { useContext, useState } from 'react'
 import { AutoRenewIcon, Button, useDelayedUnmount, useMatchBreakpoints } from 'uikit'
@@ -11,6 +12,7 @@ import ExpandActionCell from 'views/SwapLiquidity/components/Cells/ExpandActionC
 import CandidateTable from '../CandidateTable'
 
 const AppliedRow = (props) => {
+  const { account } = useWeb3React()
   const LpSwapContract = useHelixLpSwap()
   const { tableRefresh, setTableRefresh } = useContext(SwapLiquidityContext)
   const { toastSuccess, toastError } = useToast()
@@ -19,12 +21,43 @@ const AppliedRow = (props) => {
   const [pendingTx, setPendingTx] = useState(false)
   const shouldRenderDetail = useDelayedUnmount(expanded, 300)
   const { isMobile, isTablet, isDesktop } = useMatchBreakpoints()
+
   const handleOnRowClick = () => {
     setExpanded(!expanded)
   }
-  const handleAcceptClick = (e) => {
+
+  const sellerTokenContract = useERC20(swapData?.toBuyerToken)
+  const buyerTokenContract = useERC20(swapData?.toSellerToken)
+
+  async function doValidation() {
+    try {
+      const sellerBalance = await sellerTokenContract.balanceOf(swapData?.seller)
+      if (sellerBalance.lt(swapData?.amount)) {
+        toastError('Error', "Creator doesn't have enough offering token amount now")
+        setPendingTx(false)
+        return false
+      }
+
+      const accountBalance = await buyerTokenContract.balanceOf(account)
+      if (accountBalance.lt(swapData?.ask)) {
+        toastError('Error', "You don't have enough amount of token which creator asks")
+        setPendingTx(false)
+        return false
+      }
+    } catch (err) {
+      handleError(err, toastError)
+      setPendingTx(false)
+      return false
+    }
+    return true
+  }
+
+  const handleAcceptClick = async (e) => {
     e.stopPropagation();
     setPendingTx(true)
+
+    if (!(await doValidation())) return
+
     LpSwapContract.acceptAsk(swapData?.id).then(async (tx) => {
       await tx.wait()
       toastSuccess("Success", "Accepted the asking amount!")

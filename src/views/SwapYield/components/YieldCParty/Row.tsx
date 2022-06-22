@@ -1,6 +1,6 @@
 import { useWeb3React } from '@web3-react/core'
 import { useTranslation } from 'contexts/Localization'
-import { useHelixYieldSwap } from 'hooks/useContract'
+import { useHelixYieldSwap, useERC20 } from 'hooks/useContract'
 import useToast from 'hooks/useToast'
 import moment from 'moment'
 import React, { useContext, useMemo, useState } from 'react'
@@ -68,9 +68,38 @@ const YieldCPartyRow = ({ data, state, loading }) => {
     showModal()
   }
 
+  const sellerTokenContract = useERC20(seller?.token)
+  const buyerTokenContract = useERC20(buyer?.token)
+
+  async function doValidation() {
+    try {
+      const sellerBalance = await sellerTokenContract.balanceOf(seller?.party)
+      if (sellerBalance.lt(seller?.amount)) {
+        toastError('Error', "Creator doesn't have enough offering token amount now")
+        setPendingTx(false)
+        return false
+      }
+
+      const accountBalance = await buyerTokenContract.balanceOf(account)
+      if (accountBalance.lt(ask)) {
+        toastError('Error', "You don't have enough amount of token which creator asks")
+        setPendingTx(false)
+        return false
+      }
+    } catch (err) {
+      handleError(err, toastError)
+      setPendingTx(false)
+      return false
+    }
+    return true
+  }
+
   const handleAcceptAsk = async (e) => {
     e.stopPropagation()
     setPendingTx(true)
+
+    if (!(await doValidation())) return
+
     try {
       const tx = await yieldSwapContract.acceptAsk(id)
       await tx.wait()
@@ -92,7 +121,7 @@ const YieldCPartyRow = ({ data, state, loading }) => {
       await tx.wait()
       setPendingTx(false)
       onSendAsk()
-      toastSuccess(`${t('Success')}`, t('Withdraw Success!!! '))
+      toastSuccess(`${t('Success')}`, t('Collected Successfully!'))
     } catch (err) {
       handleError(err, toastError)
       setPendingTx(false)
