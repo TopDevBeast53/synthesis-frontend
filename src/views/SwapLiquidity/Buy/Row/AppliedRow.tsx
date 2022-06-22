@@ -2,6 +2,7 @@ import { useHelixLpSwap } from 'hooks/useContract'
 import useToast from 'hooks/useToast'
 import React, { useContext, useState } from 'react'
 import { AutoRenewIcon, Button, useDelayedUnmount, useMatchBreakpoints } from 'uikit'
+import handleError from 'utils/handleError'
 import { SwapLiquidityContext } from 'views/SwapLiquidity/context'
 import { StyledRow, MobileRow, ButtonRow, MobileButtonRow, AskingTokenCell, GivingTokenCell, QuestionCell } from 'views/SwapLiquidity/components/Cells/StyledCell'
 import TokensCell from 'views/SwapLiquidity/components/Cells/TokensCell'
@@ -26,15 +27,11 @@ const AppliedRow = (props) => {
     setPendingTx(true)
     LpSwapContract.acceptAsk(swapData?.id).then(async (tx) => {
       await tx.wait()
-      toastSuccess("Info", "Bid successfully!")
+      toastSuccess("Success", "Accepted the asking amount!")
       setTableRefresh(tableRefresh + 1)
       setPendingTx(false)
     }).catch(err => {
-      if (err.code === 4001) {
-        toastError("Error", err.message)
-      } else {
-        toastError("Error", err.toString())
-      }
+      handleError(err, toastError)
       setPendingTx(false)
     })
   }

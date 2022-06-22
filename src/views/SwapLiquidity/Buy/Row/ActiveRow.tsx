@@ -26,6 +26,10 @@ const ActiveRow = (props) => {
   }
   const [showModal] = useModal(<DiscussOrder swapData={swapData} sendAsk={onSendAsk} buyer={buyer} />, false)
 
+  const handleBid = (e) => {
+    e.stopPropagation()
+    showModal()
+  }
   return (
     <>
       {!isMobile ?
@@ -48,7 +52,7 @@ const ActiveRow = (props) => {
             account && (
               <ButtonRow style={{ zIndex: 10 }}>
                 <Button
-                  variant="secondary" width="100%" onClick={showModal} scale={isMobile ? "sm" : "md"}> Bid </Button>
+                  variant="secondary" width="100%" onClick={handleBid} scale={isMobile ? "sm" : "md"}> Bid </Button>
               </ButtonRow>
             )
           }
@@ -77,7 +81,7 @@ const ActiveRow = (props) => {
             account && (
               <MobileButtonRow style={{ zIndex: 10 }}>
                 <Button
-                  variant="secondary" width="100%" onClick={showModal} scale={isMobile ? "sm" : "md"}> Bid </Button>
+                  variant="secondary" width="100%" onClick={handleBid} scale={isMobile ? "sm" : "md"}> Bid </Button>
               </MobileButtonRow>
             )
           }

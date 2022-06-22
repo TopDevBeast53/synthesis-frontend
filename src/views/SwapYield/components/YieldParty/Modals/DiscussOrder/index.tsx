@@ -48,7 +48,7 @@ const DiscussOrder: React.FC<any> = ({onDismiss, onSend,  ...props}) => {
     YieldSwapContract.setAsk(swapId, decimalYAmount.toString())
       .then(async (tx) => {
         await tx.wait()
-        toastSuccess('Success!', 'Amount is updated!')
+        toastSuccess('Success', 'Updated asking amount!')
         if (onSend) onSend()
         setPendingTx(false)
         onDismiss()
@@ -63,7 +63,7 @@ const DiscussOrder: React.FC<any> = ({onDismiss, onSend,  ...props}) => {
     <ModalContainer minWidth={minWidth} {...props}>
       <ModalHeader background={getThemeValue(`colors.${headerBackground}`, headerBackground)(theme)}>
         <ModalTitle>
-          <Heading> Update Asking</Heading>
+          <Heading> Update Asking Amount </Heading>
         </ModalTitle>
         <ModalCloseButton onDismiss={onDismiss} />
       </ModalHeader>

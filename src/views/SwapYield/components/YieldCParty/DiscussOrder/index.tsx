@@ -37,11 +37,11 @@ const DiscussOrder: React.FC<any> = ({onDismiss, onSend, ...props}) => {
   const symbol = useTokenSymbol(tokenInfo)
   const decimals = useTokenDecimals(tokenInfo)
   const erc20Contract = useERC20(tokenAddress)
-  const exTokenAmount = amount.toString()
+  const exTokenAmount = bid ? bid?.amount.toString() : amount.toString()
   const [pendingTx, setPendingTx] = useState(false)
   const [allowedValue, setAllowedValue] = useState<BigNumber>()
   const [maxBalance, setMaxBalance] = useState(BIG_ZERO)
-  const [yAmount, setYAmount] = useState('0')
+  const [yAmount, setYAmount] = useState(getBalanceAmount(exTokenAmount, decimals).toString())
   const decimalYAmount = getDecimalAmount(new BigNumber(yAmount), decimals)
 
   const handleYAmountChange = useCallback(
@@ -121,14 +121,14 @@ const DiscussOrder: React.FC<any> = ({onDismiss, onSend, ...props}) => {
         if (onSend) onSend()
         setPendingTx(false);   
         onDismiss()
-        toastSuccess(`${t('Success')}!`,t('Update success!'))
+        toastSuccess(`${t('Success')}!`, t('Updated bid amount!'))
       } else {
         const tx = await yieldSwapContract.makeBid(swapId, decimalYAmount.toString())
         await tx.wait()
         if (onSend) onSend()
         setPendingTx(false);   
         onDismiss()
-        toastSuccess(`${t('Success')}!`,t('Bid added! Please check in My Bids.'))        
+        toastSuccess(`${t('Success')}!`, t('Bid successfully! Please check in My Bids.'))
       }
     } catch (err) {
       setPendingTx(false)
@@ -141,7 +141,7 @@ const DiscussOrder: React.FC<any> = ({onDismiss, onSend, ...props}) => {
     <ModalContainer minWidth={minWidth} {...props}>
       <ModalHeader background={getThemeValue(`colors.${headerBackground}`, headerBackground)(theme)}>
         <ModalTitle>
-          <Heading>Seller is asking : {getBalanceAmount(exTokenAmount, decimals).toString()}</Heading>
+          <Heading>Asking Amount: {getBalanceAmount(amount.toString(), decimals).toString()}</Heading>
         </ModalTitle>
         <ModalCloseButton onDismiss={onDismiss} />
       </ModalHeader>

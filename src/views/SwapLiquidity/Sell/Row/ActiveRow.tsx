@@ -45,7 +45,7 @@ const ActiveRow = (props) => {
   const [showDiscussModal] = useModal(<DiscussOrder swapId={swapId} sendAsk={onSendAsk} swapData={swapData} buyer={buyer} />, false)
   const handleUpdateClick = (e) => {
     e.stopPropagation();
-    showDiscussModal()
+    showDiscussModal();
   }
   if (swapData) {
     if (swapData.isOpen === false) return null

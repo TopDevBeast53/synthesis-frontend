@@ -6,6 +6,7 @@ import moment from 'moment'
 import React, { useContext, useMemo, useState } from 'react'
 import { AutoRenewIcon, Button, Skeleton, Text, useDelayedUnmount, useMatchBreakpoints, useModal } from 'uikit'
 import { YieldCPartyContext } from 'views/SwapYield/context'
+import handleError from 'utils/handleError'
 import { SwapState } from '../../types'
 import { StyledRow, MobileRow, ButtonRow, MobileButtonRow, AskingTokenCell, LeftTimeCell, GivingTokenCell, QuestionCell, SkeletonCell } from '../Cells/StyledCell'
 import ExpandActionCell from '../Cells/ExpandActionCell'
@@ -53,7 +54,7 @@ const YieldCPartyRow = ({ data, state, loading }) => {
   }
 
   const [showModal] = useModal(
-    <DiscussOrder swapId={id} tokenInfo={buyer} amount={data.ask} onSend={onSendAsk} />,
+    <DiscussOrder swapId={id} tokenInfo={buyer} amount={ask} onSend={onSendAsk} />,
     false,
   )
 
@@ -76,9 +77,9 @@ const YieldCPartyRow = ({ data, state, loading }) => {
       updateMenuIndex(SwapState.Pending)
       onSendAsk()
       setPendingTx(false)
-      toastSuccess(`${t('Success')}!`, t('Accepted! '))
+      toastSuccess(`${t('Success')}!`, t('Accepted the asking amount!'))
     } catch (err) {
-      toastError('Error', 'Update bid failed!')
+      handleError(err, toastError)
       setPendingTx(false)
     }
   }
@@ -91,9 +92,9 @@ const YieldCPartyRow = ({ data, state, loading }) => {
       await tx.wait()
       setPendingTx(false)
       onSendAsk()
-      toastSuccess(`${t('Success')}!`, t('Withdraw Success!!! '))
+      toastSuccess(`${t('Success')}`, t('Withdraw Success!!! '))
     } catch (err) {
-      toastError('Error', 'Withdraw locked!')
+      handleError(err, toastError)
       setPendingTx(false)
     }
   }
@@ -117,7 +118,6 @@ const YieldCPartyRow = ({ data, state, loading }) => {
   return (
     <>
       {!isMobile ?
-
         <StyledRow onClick={handleExpand}>
           <GivingTokenCell>
             <TokenCell tokenInfo={seller} amount={seller.amount.toString()} />
@@ -125,7 +125,7 @@ const YieldCPartyRow = ({ data, state, loading }) => {
           {state !== SwapState.Finished && (
             <LeftTimeCell>
               <CellContent>
-                <Text>Left Time</Text>
+                <Text>{(state === SwapState.All || state === SwapState.Applied) ? "Duration" : "Left Time"}</Text>
                 <Text fontSize={isMobile ? "12px" : undefined} mt="4px" color="primary">
                   {!isPast && state === SwapState.Pending ? 'Now available!' : timeInfo}
                 </Text>
@@ -178,6 +178,7 @@ const YieldCPartyRow = ({ data, state, loading }) => {
                 width="100%"
                 scale={isMobile ? "sm" : "md"}
                 isLoading={pendingTx}
+                mr="24px"
                 endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
                 onClick={handleWithdraw}
               >
@@ -198,7 +199,7 @@ const YieldCPartyRow = ({ data, state, loading }) => {
             {state !== SwapState.Finished && (
               <LeftTimeCell>
                 <CellContent>
-                  <Text>Left Time</Text>
+                  <Text>{(state === SwapState.All || state === SwapState.Applied) ? "Duration" : "Left Time"}</Text>
                   <Text fontSize={isMobile ? "12px" : undefined} mt="4px" color="primary">
                     {!isPast && state === SwapState.Pending ? 'Now available!' : timeInfo}
                   </Text>

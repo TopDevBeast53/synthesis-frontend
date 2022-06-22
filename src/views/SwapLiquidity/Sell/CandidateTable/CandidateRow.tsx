@@ -17,13 +17,14 @@ const CandidateRow = ({ bidId, swapData }) => {
   const [pendingTx, setPendingTx] = useState(false)
   const { isMobile } = useMatchBreakpoints()
   const { account } = useWeb3React()
+
   const handleAcceptClick = (e) => {
     e.stopPropagation()
     setPendingTx(true)
     LpSwapContract.acceptBid(bidId)
       .then(async (tx) => {
         await tx.wait()
-        toastSuccess('Success', 'Accepted!')
+        toastSuccess('Success', 'Accepted the bid!')
         setPendingTx(false)
       })
       .catch((err) => {
@@ -31,6 +32,7 @@ const CandidateRow = ({ bidId, swapData }) => {
         setPendingTx(false)
       })
   }
+
   useEffect(() => {
     LpSwapContract.getBid(bidId).then((res) => {
       setBidData(res)

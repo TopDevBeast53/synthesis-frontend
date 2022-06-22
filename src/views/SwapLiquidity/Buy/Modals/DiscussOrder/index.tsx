@@ -138,9 +138,9 @@ const DiscussOrder: React.FC<any> = ({onDismiss, ...props}) => {
       setPendingTx(false)
       onDismiss()
       if (bidData) {
-        toastSuccess(`${t('Success')}!`, t('Amount is updated!'))
+        toastSuccess(`${t('Success')}!`, t('Updated bid amount!'))
       } else {
-        toastSuccess(`${t('Success')}!`, t('Bid Successfully!'))
+        toastSuccess(`${t('Success')}!`, t('Bid successfully! Please check in My Bids.'))
       }
     } catch (err) {
       setPendingTx(false)
@@ -152,7 +152,7 @@ const DiscussOrder: React.FC<any> = ({onDismiss, ...props}) => {
     <ModalContainer minWidth={minWidth} {...props}>
       <ModalHeader background={getThemeValue(`colors.${headerBackground}`, headerBackground)(theme)}>
         <ModalTitle>
-          <Heading>Asking : {getBalanceAmount(exContractAmount, buyerDecimals).toString()}</Heading>
+          <Heading>Asking Amount: {getBalanceAmount(swapData?.ask.toString(), buyerDecimals).toString()}</Heading>
         </ModalTitle>
         <ModalCloseButton onDismiss={onDismiss} />
       </ModalHeader>
@@ -175,7 +175,6 @@ const DiscussOrder: React.FC<any> = ({onDismiss, ...props}) => {
           mt="24px"
           width="100%"
         >
-          {' '}
           {pendingTx
             ? allowedValue.lte(decimalYAmount)
               ? 'Approving'

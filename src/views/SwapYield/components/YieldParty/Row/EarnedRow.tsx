@@ -4,6 +4,7 @@ import moment from 'moment'
 import React, { useMemo, useState } from 'react'
 import { AutoRenewIcon, Button, Skeleton, Text, useMatchBreakpoints } from 'uikit'
 import { OrderState } from 'views/SwapYield/types'
+import handleError from 'utils/handleError'
 import { CellContent } from '../../Cells/BaseCell'
 import { StyledRow, MobileRow, ButtonRow, MobileButtonRow, AskingTokenCell, LeftTimeCell, GivingTokenCell, QuestionCell } from '../../Cells/StyledCell'
 import TokenCell from '../../Cells/TokenCell'
@@ -35,9 +36,9 @@ const EarnedRow = ({ swapData, swapId }) => {
       const tx = await yieldSwapContract.withdraw(swapId)
       await tx.wait()
       setPendingTx(false)
-      toastSuccess('Success!', 'Collect Success!')
+      toastSuccess('Success', 'Collected Successfully!')
     } catch (err) {
-      toastError('Error', 'Withdraw locked!')
+      handleError(err, toastError)
       setPendingTx(false)
     }
   }

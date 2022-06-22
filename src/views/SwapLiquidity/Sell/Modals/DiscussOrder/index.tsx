@@ -55,7 +55,7 @@ const DiscussOrder: React.FC<any> = ({onDismiss, ...props}) => {
     LpSwapContract.setAsk(swapId, decimalYAmount.toString())
       .then(async (tx) => {
         await tx.wait()
-        toastSuccess('Success!', 'Amount is updated!')
+        toastSuccess('Success', 'Updated asking amount!')
         if (sendAsk) sendAsk()
         setPendingTx(false)
         onDismiss()
@@ -69,7 +69,7 @@ const DiscussOrder: React.FC<any> = ({onDismiss, ...props}) => {
     <ModalContainer minWidth={minWidth} {...props}>
       <ModalHeader background={getThemeValue(`colors.${headerBackground}`, headerBackground)(theme)}>
         <ModalTitle>
-          <Heading> Update Asking </Heading>
+          <Heading> Update Asking Amount </Heading>
         </ModalTitle>
         <ModalCloseButton onDismiss={onDismiss} />
       </ModalHeader>
@@ -85,8 +85,7 @@ const DiscussOrder: React.FC<any> = ({onDismiss, ...props}) => {
             onClick={handleSendClick}
             width="100%"
           >
-            {' '}
-            Send{' '}
+            Confirm
           </Button>
         </div>
       </ModalBody>
@@ -95,18 +94,3 @@ const DiscussOrder: React.FC<any> = ({onDismiss, ...props}) => {
 }
 
 export default DiscussOrder
-
-// const DiscussOrder = () => {
-//     return (
-//         <div style={{ padding: "32px", width: "500px" }}>
-//             <Card>
-//                 <CardHeader>
-//                     <Heading size="xl">Card Header</Heading>
-//                 </CardHeader>
-//                 <CardBody>Body</CardBody>
-//                 <CardFooter>Footer</CardFooter>
-//             </Card>
-//         </div>
-//     )
-// }
-// export default DiscussOrder
