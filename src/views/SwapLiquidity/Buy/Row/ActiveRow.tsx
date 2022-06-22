@@ -45,7 +45,6 @@ const ActiveRow = (props) => {
               seller={seller}
               buyer={buyer}
               askAmount={swapData?.ask.toString()}
-              isLiquidity
             />
           </QuestionCell>
           {
@@ -72,7 +71,6 @@ const ActiveRow = (props) => {
                 seller={seller}
                 buyer={buyer}
                 askAmount={swapData?.ask.toString()}
-                isLiquidity
               />
             </QuestionCell>
             <ExpandActionCell expanded={expanded} isFullLayout={isTablet || isDesktop} />

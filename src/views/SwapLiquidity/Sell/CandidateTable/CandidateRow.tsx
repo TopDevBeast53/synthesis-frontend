@@ -1,43 +1,48 @@
 import { useWeb3React } from '@web3-react/core'
 import { useHelixLpSwap } from 'hooks/useContract'
-import useToast from 'hooks/useToast'
-import React, { useEffect, useState } from 'react'
-import { AutoRenewIcon, Button, Skeleton, Text, useMatchBreakpoints } from 'uikit'
-import handleError from 'utils/handleError'
+import React, { useEffect, useState, useMemo } from 'react'
+import { Button, Skeleton, Text, useMatchBreakpoints, useModal } from 'uikit'
+import { useAllTokens } from 'hooks/Tokens'
 import { StyledRow, ButtonRow, AskingTokenCell, AddressCell, SkeletonCell } from 'views/SwapLiquidity/components/Cells/StyledCell'
 import TokensCell from 'views/SwapLiquidity/components/Cells/TokensCell'
+import AcceptBidModal from '../Modals/AcceptBidModal'
 
 const getEllipsis = (account) => {
   return account ? `${account.substring(0, 5)}...${account.substring(account.length - 5)}` : null
 }
 const CandidateRow = ({ bidId, swapData }) => {
   const LpSwapContract = useHelixLpSwap()
-  const { toastSuccess, toastError } = useToast()
   const [bidData, setBidData] = useState<any>()
-  const [pendingTx, setPendingTx] = useState(false)
   const { isMobile } = useMatchBreakpoints()
   const { account } = useWeb3React()
+  const tokens = useAllTokens()
 
-  const handleAcceptClick = (e) => {
-    e.stopPropagation()
-    setPendingTx(true)
-    LpSwapContract.acceptBid(bidId)
-      .then(async (tx) => {
-        await tx.wait()
-        toastSuccess('Success', 'Accepted the bid!')
-        setPendingTx(false)
-      })
-      .catch((err) => {
-        handleError(err, toastError)
-        setPendingTx(false)
-      })
-  }
+  const buyer = useMemo(() => {
+    if (!swapData) return undefined
+    if (tokens[swapData.toSellerToken])
+      return { token: swapData.toSellerToken, isLp: false }
+    return { token: swapData.toSellerToken, isLp: true }
+  }, [swapData, tokens])
+
+  const seller = useMemo(() => {
+    if (!swapData) return undefined
+    if (tokens[swapData.toBuyerToken])
+      return { token: swapData.toBuyerToken, isLp: false, amount: swapData.amount }
+    return { token: swapData.toBuyerToken, isLp: true, amount: swapData.amount }
+  }, [swapData, tokens])
 
   useEffect(() => {
     LpSwapContract.getBid(bidId).then((res) => {
       setBidData(res)
     })
   }, [LpSwapContract, bidId, swapData])
+
+  const [showAcceptBidModal] = useModal(<AcceptBidModal bidId={bidId} swapData={swapData} seller={seller} buyer={buyer} bidData={bidData} />, false)
+  const handleAcceptClick = (e) => {
+    e.stopPropagation()
+    showAcceptBidModal()
+  }
+
   if (!bidData) {
     return (
       <StyledRow>
@@ -52,19 +57,18 @@ const CandidateRow = ({ bidId, swapData }) => {
   }
   return (
     <StyledRow>
-      <AddressCell style={{ paddingLeft: isMobile && 6, paddingRight: isMobile && 6 }}>
+      <AddressCell>
         <Text fontSize={isMobile ? "12px" : undefined}>{account === bidData?.bidder ? 'Me' : getEllipsis(bidData?.bidder)}</Text>
       </AddressCell>
-      <AskingTokenCell style={{ paddingLeft: isMobile && 6, paddingRight: isMobile && 6 }}>
+      <AskingTokenCell>
         <TokensCell token={swapData?.toSellerToken} balance={bidData?.amount.toString()} />
       </AskingTokenCell>
-      <ButtonRow style={{ paddingLeft: isMobile && 6, paddingRight: isMobile && 6 }}>
+      <ButtonRow>
         <Button
           variant="secondary"
-          isLoading={pendingTx}
-          endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
-          maxWidth="200px"
+          maxWidth="300px"
           style={{ zIndex: 20 }}
+          scale={isMobile ? 'sm' : 'md'}
           onClick={handleAcceptClick}
         >
           Accept Bid

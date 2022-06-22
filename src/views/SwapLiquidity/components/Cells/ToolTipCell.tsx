@@ -28,7 +28,7 @@ export const getTokenDecimals = (farms, tokens, tokenInfo) => {
   const token = tokens[tokenInfo.token]
   return token ? token.decimals : 18
 }
-const ToolTipCell = ({ seller, buyer, askAmount, isLiquidity = false }) => {
+const ToolTipCell = ({ seller, buyer, askAmount}) => {
   const { data: farms } = useFarms()
   const tokens = useAllTokens()
 
@@ -39,8 +39,7 @@ const ToolTipCell = ({ seller, buyer, askAmount, isLiquidity = false }) => {
       seller.isLp,
       getTokenSymbol(farms, tokens, buyer),
       getBalanceNumber(askAmount.toString(), getTokenDecimals(farms, tokens, buyer)).toString(),
-      buyer.isLp,
-      isLiquidity
+      buyer.isLp
     )
     :
     ""

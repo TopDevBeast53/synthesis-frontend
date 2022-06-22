@@ -4,7 +4,7 @@ import { useAllTokens } from 'hooks/Tokens'
 import { useFarms } from 'state/farms/hooks'
 import { getAddress } from 'utils/addressHelpers'
 import { HelpIcon, useTooltip } from 'uikit'
-import { ToolTipText } from 'views/SwapLiquidity/constants'
+import { ToolTipText } from 'views/SwapYield/constants'
 import { getBalanceNumber } from 'utils/formatBalance'
 
 const ReferenceElement = styled.div`
@@ -28,7 +28,7 @@ export const getTokenDecimals = (farms, tokens, tokenInfo) => {
   const token = tokens[tokenInfo.token]
   return token ? token.decimals : 18
 }
-const ToolTipCell = ({ seller, buyer, askAmount, isLiquidity = false }) => {
+const ToolTipCell = ({ seller, buyer, askAmount }) => {
   const { data: farms } = useFarms()
   const tokens = useAllTokens()
 
@@ -40,7 +40,6 @@ const ToolTipCell = ({ seller, buyer, askAmount, isLiquidity = false }) => {
       getTokenSymbol(farms, tokens, buyer),
       getBalanceNumber(askAmount.toString(), getTokenDecimals(farms, tokens, buyer)).toString(),
       buyer.isLp,
-      isLiquidity
     )
     :
     ""

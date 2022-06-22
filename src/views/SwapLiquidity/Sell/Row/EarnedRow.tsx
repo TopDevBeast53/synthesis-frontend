@@ -21,7 +21,6 @@ const EarnedRow = ({ swapData, seller, buyer }) => {
             seller={seller}
             buyer={buyer}
             askAmount={swapData?.cost.toString()}
-            isLiquidity
           />
         </QuestionCell>
       </StyledRow>

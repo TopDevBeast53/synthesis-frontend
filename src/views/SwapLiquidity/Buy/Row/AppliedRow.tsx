@@ -84,7 +84,6 @@ const AppliedRow = (props) => {
               seller={seller}
               buyer={buyer}
               askAmount={swapData?.ask.toString()}
-              isLiquidity
             />
           </QuestionCell>
           <ButtonRow style={{ zIndex: 10 }}>
@@ -109,7 +108,6 @@ const AppliedRow = (props) => {
                 seller={seller}
                 buyer={buyer}
                 askAmount={swapData?.ask.toString()}
-                isLiquidity
               />
             </QuestionCell>
             <ExpandActionCell expanded={expanded} isFullLayout={isTablet || isDesktop} />

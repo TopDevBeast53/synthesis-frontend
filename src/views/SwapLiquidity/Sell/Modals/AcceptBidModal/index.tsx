@@ -1,4 +1,4 @@
-import { useHelixYieldSwap } from 'hooks/useContract'
+import { useHelixLpSwap } from 'hooks/useContract'
 import useToast from 'hooks/useToast'
 import React, { useState } from 'react'
 import { useAllTokens } from 'hooks/Tokens'
@@ -6,34 +6,34 @@ import { useFarms } from 'state/farms/hooks'
 import { AutoRenewIcon, Button, Text, Modal, ArrowDownIcon } from 'uikit'
 import { getBalanceNumber } from 'utils/formatBalance'
 import handleError from 'utils/handleError'
-import { ToolTipText } from 'views/SwapYield/constants'
+import { ToolTipText } from 'views/SwapLiquidity/constants'
 import { RowBetween, RowFixed } from 'components/Layout/Row'
 import { AutoColumn } from 'components/Layout/Column'
-import TokenCell from './TokenCell'
+import TokensCell from './TokensCell'
 import { getTokenDecimals, getTokenSymbol } from './helpers'
 
 const AcceptBidModal: React.FC<any> = ({ onDismiss, ...props }) => {
-  const YieldSwapContract = useHelixYieldSwap()
+  const LpSwapContract = useHelixLpSwap()
   const { toastSuccess, toastError } = useToast()
   const [pendingTx, setPendingTx] = useState(false)
-  const { bidId, swapData, bidData } = props
+  const { bidId, swapData, seller, buyer, bidData } = props
   const { data: farms } = useFarms()
   const tokens = useAllTokens()
 
-  const tooltipText = (swapData?.seller && swapData?.buyer) ?
+  const tooltipText = (seller && buyer) ?
     ToolTipText(
-      getTokenSymbol(farms, tokens, swapData?.seller),
-      getBalanceNumber(swapData?.seller.amount.toString(), getTokenDecimals(farms, tokens, swapData?.seller)).toString(),
-      swapData?.seller.isLp,
-      getTokenSymbol(farms, tokens, swapData?.buyer),
-      getBalanceNumber(bidData?.amount.toString(), getTokenDecimals(farms, tokens, swapData?.buyer)).toString(),
-      swapData?.buyer.isLp,
+      getTokenSymbol(farms, tokens, seller),
+      getBalanceNumber(seller?.amount.toString(), getTokenDecimals(farms, tokens, seller)).toString(),
+      seller.isLp,
+      getTokenSymbol(farms, tokens, buyer),
+      getBalanceNumber(bidData?.amount.toString(), getTokenDecimals(farms, tokens, buyer)).toString(),
+      buyer.isLp,
     )
     :
     ""
   const handleSendClick = () => {
     setPendingTx(true)
-    YieldSwapContract.acceptBid(bidId)
+    LpSwapContract.acceptBid(bidId)
       .then(async (tx) => {
         await tx.wait()
         toastSuccess('Success', 'Accepted the Bid!')
@@ -51,11 +51,11 @@ const AcceptBidModal: React.FC<any> = ({ onDismiss, ...props }) => {
       <AutoColumn gap="md">
         <RowBetween align="flex-end">
           <RowFixed gap="0px">
-            <TokenCell tokenInfo={swapData?.seller} amount={swapData?.seller.amount.toString()} />
+            <TokensCell token={swapData?.toBuyerToken} balance={swapData?.amount.toString()} />
           </RowFixed>
           <RowFixed gap="0px">
             <Text fontSize="18px" ml="10px">
-              {getTokenSymbol(farms, tokens, swapData?.seller)}
+              {getTokenSymbol(farms, tokens, seller)}
             </Text>
           </RowFixed>
         </RowBetween>
@@ -64,11 +64,11 @@ const AcceptBidModal: React.FC<any> = ({ onDismiss, ...props }) => {
         </RowFixed>
         <RowBetween align="flex-end">
           <RowFixed gap="0px">
-            <TokenCell tokenInfo={swapData?.buyer} amount={bidData?.amount.toString()} />
+            <TokensCell token={swapData?.toSellerToken} balance={bidData?.amount.toString()} />
           </RowFixed>
           <RowFixed gap="0px">
             <Text fontSize="18px" ml="10px">
-              {getTokenSymbol(farms, tokens, swapData?.buyer)}
+              {getTokenSymbol(farms, tokens, buyer)}
             </Text>
           </RowFixed>
         </RowBetween>
