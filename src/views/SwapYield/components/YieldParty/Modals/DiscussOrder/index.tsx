@@ -88,18 +88,3 @@ const DiscussOrder: React.FC<any> = ({onDismiss, onSend,  ...props}) => {
 }
 
 export default DiscussOrder
-
-// const DiscussOrder = () => {
-//     return (
-//         <div style={{ padding: "32px", width: "500px" }}>
-//             <Card>
-//                 <CardHeader>
-//                     <Heading size="xl">Card Header</Heading>
-//                 </CardHeader>
-//                 <CardBody>Body</CardBody>
-//                 <CardFooter>Footer</CardFooter>
-//             </Card>
-//         </div>
-//     )
-// }
-// export default DiscussOrder
