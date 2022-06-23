@@ -25,7 +25,7 @@ const EarnedRow = ({ swapData, swapId }) => {
     const withdrawDate = moment.unix(swapData.lockUntilTimestamp)
     const today = moment()
     return {
-      timeInfo: moment.duration(today.diff(withdrawDate)).humanize(),
+      timeInfo: (moment.duration(today.diff(withdrawDate)).humanize()).replace(/a /g, '1 '),
       isPast: today.isBefore(withdrawDate),
     }
   }, [swapData])

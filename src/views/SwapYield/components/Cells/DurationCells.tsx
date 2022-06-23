@@ -17,7 +17,7 @@ const DurationCell = (props) => {
       <CellContent>
         <Text>Duration</Text>
         <Text color="primary" mt="4px">
-          {duration.humanize()}
+          {(duration.humanize()).replace(/a /g, '1 ')}
         </Text>
       </CellContent>
     </>

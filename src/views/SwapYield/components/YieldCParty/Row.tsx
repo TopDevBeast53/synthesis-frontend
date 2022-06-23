@@ -32,13 +32,13 @@ const YieldCPartyRow = ({ data, state, loading }) => {
     const today = moment()
     if (state === SwapState.All || state === SwapState.Applied) {
       return {
-        timeInfo: moment.duration(lockDuration.toNumber(), 's').humanize(),
+        timeInfo: (moment.duration(lockDuration.toNumber(), 's').humanize()).replace(/a /g, '1 '),
         isPast: today.isBefore(withdrawDate),
       }
       // eslint-disable-next-line no-else-return
     } else if (state === SwapState.Pending) {
       return {
-        timeInfo: moment.duration(today.diff(withdrawDate)).humanize(),
+        timeInfo: (moment.duration(today.diff(withdrawDate)).humanize()).replace(/a /g, '1 '),
         isPast: today.isBefore(withdrawDate),
       }
     }
