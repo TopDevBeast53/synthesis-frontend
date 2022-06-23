@@ -2,28 +2,30 @@ import React from 'react'
 import { baseColors, darkColors } from '../../theme/colors'
 import { Flex, Box } from '../Box'
 import { Link } from '../Link'
-import { StyledFooter, StyledIconMobileContainer, StyledList, StyledListItem, StyledText } from './styles'
+import { StyledFooter, StyledList, StyledListItem, StyledText } from './styles'
 import SocialLinks from './Components/SocialLinks'
 import { FooterProps } from './types'
 import { HelixByGeometryBlue } from '../Svg'
+import CakePrice from "../CakePrice/CakePrice";
+import { Colors } from "../..";
 
 const MenuItem: React.FC<FooterProps> = ({
   items,
   isDark,
-  // toggleTheme,
-  // currentLang,
-  // langs,
-  // setLang,
-  // cakePriceUsd,
-  // buyCakeLabel,
+  cakePriceUsd,
   ...props
 }) => {
   return (
     <StyledFooter p={['40px 50px 40px 40px', null, '96px 40px 96px 40px']} {...props} justifyContent="center">
       <Flex flexDirection="column" width={['100%', null, '1200px;']}>
-        <StyledIconMobileContainer display={['block', null, 'none']} >
-          <HelixByGeometryBlue isDark={isDark} width="130px" />
-        </StyledIconMobileContainer>
+        <Flex display={['block', null, 'none']} justifyContent="space-between" alignItems="center" mb="24px">
+          <Flex flex={1}>
+            <HelixByGeometryBlue isDark={isDark} width="130px" />
+          </Flex>
+          <Flex flex={1} justifyContent='center'>
+            <CakePrice cakePriceUsd={cakePriceUsd} color={darkColors.textSubtle as keyof Colors} />
+          </Flex>
+        </Flex>
         <Flex
           order={[2, null, 1]}
           flexDirection={['row', null, 'row']}
@@ -32,8 +34,13 @@ const MenuItem: React.FC<FooterProps> = ({
           alignItems="flex-start"
           mb={[null, null, null]}
         >
-          <Box display={['none', null, 'block']} style={{alignSelf:"center", flex:"1.5"}}>
-            <HelixByGeometryBlue isDark width="140px" />
+          <Box display={['none', null, 'block']} style={{ alignSelf: "center", flex: "1.5" }}>
+            <Flex flexDirection="column" alignItems="center">
+              <HelixByGeometryBlue isDark width="140px" />
+              <Box mt="20px">
+                <CakePrice cakePriceUsd={cakePriceUsd} color={darkColors.textSubtle as keyof Colors} />
+              </Box>
+            </Flex>
           </Box>
           {items?.map((item, index) => (
             <StyledList key={item.label}>
@@ -55,11 +62,10 @@ const MenuItem: React.FC<FooterProps> = ({
                   )}
                 </StyledListItem>
               ))}
-              {(index+1 === items.length)&&<SocialLinks mt="15px"/>}
+              {(index + 1 === items.length) && <SocialLinks mt="15px" />}
             </StyledList>
-          ))}          
+          ))}
         </Flex>
-        {/* <SocialLinks order={[2]} pb={['42px', null, '32px']} mb={['0', null, '32px']} /> */}
       </Flex>
     </StyledFooter>
   )

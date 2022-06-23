@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import LogoRound from '../Svg/Icons/LogoRound'
+import { mainnetTokens } from 'config/constants/tokens'
+import Helix from "../Svg/Icons/Helix";
 import Text from '../Text/Text'
 import Skeleton from '../Skeleton/Skeleton'
 import { Colors } from '../../theme'
@@ -24,12 +25,13 @@ const PriceLink = styled.a`
 `
 
 const CakePrice: React.FC<Props> = ({ cakePriceUsd, color = 'textSubtle' }) => {
+  const HELIX = mainnetTokens.helix
   return cakePriceUsd ? (
     <PriceLink
-      href="https://helix.exchange/swap?outputCurrency=0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82"
+      href={`https://helix.finance/swap?outputCurrency=${HELIX.address}`}
       target="_blank"
     >
-      <LogoRound width="24px" mr="8px" />
+      <Helix width="24px" mr="8px" />
       <Text color={color} bold>{`$${cakePriceUsd.toFixed(3)}`}</Text>
     </PriceLink>
   ) : (
