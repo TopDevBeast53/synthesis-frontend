@@ -91,7 +91,7 @@ export const footerLinks: (t: ContextApi['t']) => FooterLinkType[] = (t) => [
         items:[
             {
                 label:"Github",
-                href:"https://github.com/helixgeometry/helix"
+                href:"https://github.com/helixgeometry"
             },
             {
                 label:"Documentation",

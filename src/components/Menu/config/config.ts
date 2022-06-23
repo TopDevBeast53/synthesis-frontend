@@ -9,7 +9,7 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType[] = (t) => [
         label: t('Trade'),
         icon: 'Swap',
         href: '/swap',
-        showItemsOnMobile: false,
+        // showItemsOnMobile: false,
         items: [
             {
                 label: t('Exchange'),
@@ -18,6 +18,11 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType[] = (t) => [
             {
                 label: t('Liquidity'),
                 href: '/liquidity',
+            },
+            {
+                label: 'Migrate',
+                href: '/migration',
+                // icon: 'Earn',
             },
         ],
     },
@@ -146,11 +151,6 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType[] = (t) => [
             //       href: '/ifo',
             //       status: menuStatus.SOON,
             //     },
-            {
-                label: 'Migrate',
-                href: '/migration',
-                icon: 'Earn',
-            },
             {
                 label: 'Docs',
                 href: 'https://geometry.gitbook.io/helix',
