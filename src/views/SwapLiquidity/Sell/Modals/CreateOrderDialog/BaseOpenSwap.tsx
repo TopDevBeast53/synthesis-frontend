@@ -6,23 +6,11 @@ import { useTranslation } from 'contexts/Localization';
 import { ethers } from 'ethers';
 import useToast from 'hooks/useToast';
 import React, { useCallback, useState } from 'react';
-import styled from 'styled-components';
-import { AutoRenewIcon, Button, Input, Skeleton, Text, Flex } from 'uikit';
+import { AutoRenewIcon, Button, Skeleton, Text, Flex } from 'uikit';
 import { BIG_ZERO } from 'utils/bigNumber';
 import { getDecimalAmount } from 'utils/formatBalance';
 import handleError from 'utils/handleError';
 import Group from 'views/SwapYield/components/GroupComponent';
-
-const StyledInput = styled(Input)`
-  ::-webkit-inner-spin-button {
-    -webkit-appearance: auto;
-    margin: 0;
-  }
-  ::-webkit-outer-spin-button {
-    -webkit-appearance: auto;
-    margin: 0;
-  }
-`
 
 const getInitialOption = (options) => {
   if (!options || options.length === 0) return undefined
@@ -30,10 +18,7 @@ const getInitialOption = (options) => {
 }
 export default (props) => {
   const { t } = useTranslation()
-  const { toBuyerTokenOptions, minDuration, maxDuration,
-    toSellerTokenOptions, onDismiss, isToBuyerTokenLp, isToSellerTokenLp,
-    handleConfirm, contractAddress, hidDuration
-  } = props
+  const { toBuyerTokenOptions, toSellerTokenOptions, onDismiss, handleConfirm, contractAddress } = props
   const { toastSuccess, toastError } = useToast()
   const [uAmount, setUAmount] = useState('')
   const [yAmount, setYAmount] = useState('')
@@ -50,7 +35,6 @@ export default (props) => {
     setYAmount(input)
   }
 
-  const [selectedDuration, setSelectedDuration] = useState(1)
   const [selectedToBuyerTokenOption, setSelectedToBuyerTokenOption] = useState<any>(getInitialOption(toBuyerTokenOptions))
   const [selectedToSellerTokenOption, setSelectedToSellerTokenOption] = useState<any>(getInitialOption(toSellerTokenOptions))
 
@@ -68,9 +52,6 @@ export default (props) => {
     setUAmount(maxBalanceOfToBuyerToken.toString())
   }, [maxBalanceOfToBuyerToken, setUAmount])
 
-  const handleDurationChange = (input) => {
-    setSelectedDuration(input.target.value)
-  }
   const decimalUAmount = getDecimalAmount(new BigNumber(uAmount), selectedToBuyerTokenOption?.decimals)
   const decimalYAmount = getDecimalAmount(new BigNumber(yAmount), selectedToSellerTokenOption?.decimals)
 
@@ -101,10 +82,6 @@ export default (props) => {
       toastError('Error', `${selectedToBuyerTokenOption.label} amount is over limit`)
       return false
     }
-    if (selectedDuration > maxDuration || selectedDuration < minDuration) {
-      toastError('Error', `Duration should be in range between ${minDuration} and ${maxDuration}`)
-      return false
-    }
     if (selectedToBuyerTokenOption.address === selectedToSellerTokenOption.address) {
       toastError('Error', `You can't Swap same kind of token`)
       return false
@@ -122,9 +99,7 @@ export default (props) => {
         selectedToBuyerTokenOption.address,
         selectedToSellerTokenOption.address,
         decimalUAmount.toString(),
-        decimalYAmount.toString(),
-        Math.round(3600 * 24 * selectedDuration),
-        isToBuyerTokenLp, isToSellerTokenLp
+        decimalYAmount.toString()
       )
         .then(async (tx) => {
           await tx.wait()
@@ -143,15 +118,15 @@ export default (props) => {
       <Group style={{ margin: '1rem 0', zIndex: "15" }} title="Offer">
         <Flex alignItems="center" mb="18px">
           <Text bold style={{ flex: '3' }}>
-            {isToBuyerTokenLp ? t('LP Token (Offering)') : t('Token (Offering)')}:
+            {t('Token (Offering)')}:
           </Text>
           <Select options={toBuyerTokenOptions} onOptionChange={handleToBuyerTokenOptionChange} style={{ flex: '6' }} />
         </Flex>
 
         {selectedToBuyerTokenOption ? (
           <ModalInput
-            value={uAmount.toString()}
             placeholder="0.00"
+            value={uAmount.toString()}
             onSelectMax={handleSelectMaxOfToBuyerToken}
             onChange={handleUAmountChange}
             max={maxBalanceOfToBuyerToken.toString()}
@@ -162,12 +137,11 @@ export default (props) => {
         ) : (
           <Skeleton />
         )}
-
       </Group>
       <Group title="Ask" style={{ marginBottom: '1rem' }}>
         <Flex alignItems="center" mb="18px">
           <Text bold style={{ flex: '3' }}>
-            {isToSellerTokenLp ? t('LP Token (Asking)') : t('Token (Asking)')}:
+            {t('Token (Asking)')}:
           </Text>
           <Select style={{ flex: '6' }} options={toSellerTokenOptions} onOptionChange={handleToSellerTokenOptionChange} />
         </Flex>
@@ -180,22 +154,6 @@ export default (props) => {
           inputTitle={t('Amount')}
         />
       </Group>
-      {
-        !hidDuration &&
-        <Flex alignItems="center" mb="18px">
-          <Text bold style={{ flex: '3 3 120px' }}>
-            {t('Duration (days)')}:
-          </Text>
-          <StyledInput
-            style={{ flex: '7 7' }}
-            type="number"
-            max={maxDuration}
-            min={minDuration}
-            value={selectedDuration}
-            onChange={handleDurationChange}
-          />
-        </Flex>
-      }
       <Flex alignItems="center" justifyContent="space-between">
         <Button style={{ flex: 1 }} variant="secondary" onClick={onDismiss} mr="24px">
           Cancel
@@ -209,6 +167,7 @@ export default (props) => {
           {pendingTx ? (hasToApprove ? 'Approving' : t('Confirming')) : hasToApprove ? 'Approve' : t('Confirm')}
         </Button>
       </Flex>
+
     </>
 
   )

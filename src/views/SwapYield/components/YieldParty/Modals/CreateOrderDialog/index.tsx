@@ -7,7 +7,7 @@ import useTheme from 'hooks/useTheme'
 import React, { useEffect, useMemo, useState } from 'react'
 import { useMemoFarms } from 'state/farms/hooks'
 import { useAllTokenBalances } from 'state/wallet/hooks'
-import { Button, ButtonMenu, ButtonMenuItem, Modal } from 'uikit'
+import { ButtonMenu, ButtonMenuItem, Modal } from 'uikit'
 import { getAddress } from 'utils/addressHelpers'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { getBalanceAmount } from 'utils/formatBalance'
@@ -130,7 +130,7 @@ const CreateOrderDialog = (props) => {
       handleConfirm
  }
   return (
-    <Modal title={t('Add an Order')} headerBackground={theme.colors.gradients.cardHeader} onDismiss={onDismiss}>
+    <Modal title={t('Create Swap')} headerBackground={theme.colors.gradients.cardHeader} onDismiss={onDismiss}>
       <ButtonMenu activeIndex={swapType} scale="sm" variant="subtle" onItemClick={(index)=>{setSwapType(index)}}>
         <ButtonMenuItem>{t('Yield-Stable')}</ButtonMenuItem>
         <ButtonMenuItem>{t('Stable-Yield')}</ButtonMenuItem>
@@ -156,9 +156,6 @@ const CreateOrderDialog = (props) => {
           isToSellerTokenLp
           />
       }
-      <Button variant="text" onClick={onDismiss} pb="0px">
-        Close Window
-      </Button>
     </Modal>
   )
 }
