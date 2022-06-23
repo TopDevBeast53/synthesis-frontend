@@ -23,7 +23,7 @@ const CastVoteModal: React.FC<CastVoteModalProps> = ({ onSuccess, proposalId, vo
   const { library, connector } = useWeb3Provider()
   const { theme } = useTheme()
 
-  const { helixBalance, isLoading } = useGetVotingPower()
+  const { helixBalance } = useGetVotingPower()
   const { getVaultHelix, getMasterchefHelix, getAutoPoolHelix, getLpHelix } = useEachVotingPower()
   const [totalHelix, setTotalHelix] = useState('')
   const [isLoadingHelix, setIsLoadingHelix] = useState(true)

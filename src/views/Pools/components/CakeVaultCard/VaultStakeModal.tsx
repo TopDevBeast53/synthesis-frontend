@@ -22,7 +22,7 @@ import { useAppDispatch } from 'state'
 import { BIG_TEN } from 'utils/bigNumber'
 import { usePriceHelixBusd } from 'state/farms/hooks'
 import { useIfoPoolCreditBlock, useVaultPoolByKey } from 'state/pools/hooks'
-import { useVaultPoolContract, useTokenContract } from 'hooks/useContract'
+import { useVaultPoolContract } from 'hooks/useContract'
 import useTheme from 'hooks/useTheme'
 import useWithdrawalFeeTimer from 'views/Pools/hooks/useWithdrawalFeeTimer'
 import BigNumber from 'bignumber.js'
@@ -144,8 +144,6 @@ const VaultStakeModal: React.FC<VaultStakeModalProps> = ({
     }
     setPercent(sliderPercent)
   }
-
-  const tokenContract = useTokenContract(stakingToken?.address)
 
   const handleWithdrawal = async (convertedStakeAmount: BigNumber) => {
     setPendingTx(true)

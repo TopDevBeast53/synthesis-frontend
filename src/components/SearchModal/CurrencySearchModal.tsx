@@ -9,7 +9,6 @@ import {
   ModalBody,
   InjectedModalProps,
   Heading,
-  Button,
 } from 'uikit'
 import styled from 'styled-components'
 import usePrevious from 'hooks/usePreviousValue'
@@ -21,6 +20,7 @@ import Manage from './Manage'
 import ImportList from './ImportList'
 import { CurrencyModalView } from './types'
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const Footer = styled.div`
   width: 100%;
   background-color: ${({ theme }) => theme.colors.backgroundAlt};

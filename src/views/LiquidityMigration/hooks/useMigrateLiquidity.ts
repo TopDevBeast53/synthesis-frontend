@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react'
+import { useCallback } from 'react'
 import { getProviderOrSigner } from 'utils'
 import { Contract } from '@ethersproject/contracts'
 import { ethers } from 'ethers'

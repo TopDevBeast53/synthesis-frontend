@@ -40,6 +40,7 @@ export const useEachVotingPower = () => {
   }, [helixVaultContract, account])
 
   const getMasterchefHelix = useCallback(async () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [masterchefHelix, rewardDebt] = await masterChefContract.userInfo('0', account)
     return masterchefHelix
   }, [masterChefContract, account])

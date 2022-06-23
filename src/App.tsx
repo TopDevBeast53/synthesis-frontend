@@ -9,7 +9,7 @@ import { Redirect, Route, Router, Switch } from 'react-router-dom'
 import { usePollBlockNumber } from 'state/block/hooks'
 import { usePollCoreFarmData } from 'state/farms/hooks'
 import { useFetchProfile } from 'state/profile/hooks'
-import { ResetCSS, useMatchBreakpoints } from 'uikit'
+import { ResetCSS } from 'uikit'
 import PageLoader from './components/Loader/PageLoader'
 import Menu from './components/Menu'
 import SuspenseWithChunkError from './components/SuspenseWithChunkError'
@@ -79,7 +79,7 @@ const App: React.FC = () => {
   useInactiveListener()
   useSentryUser()
   
-  const {isMobile} = useMatchBreakpoints()
+  // const {isMobile} = useMatchBreakpoints()
 
   return (
     <Router history={history}>

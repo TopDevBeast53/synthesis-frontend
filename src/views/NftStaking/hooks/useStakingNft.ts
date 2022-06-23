@@ -1,6 +1,5 @@
 import { Contract } from '@ethersproject/contracts'
 import helixChefNFTABI from 'config/abi/HelixChefNFT.json'
-import { ethers } from 'ethers'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { useHelixNFTChef } from 'hooks/useContract'

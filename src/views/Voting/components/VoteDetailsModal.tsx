@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Box, Flex, InjectedModalProps, Modal, Button, Spinner } from 'uikit'
+import { Box, InjectedModalProps, Modal, Button } from 'uikit'
 import { useTranslation } from 'contexts/Localization'
 import useTheme from 'hooks/useTheme'
 import useGetVotingPower from '../hooks/useGetVotingPower'
@@ -8,7 +8,7 @@ import { useEachVotingPower } from '../hooks/useEachVotingPower'
 
 const VoteDetailsModal: React.FC<InjectedModalProps> = ({ onDismiss }) => {
   const { t } = useTranslation()
-  const { helixBalance, isLoading } = useGetVotingPower()
+  const { helixBalance } = useGetVotingPower()
   const { getVaultHelix, getMasterchefHelix, getAutoPoolHelix, getLpHelix } = useEachVotingPower()
   const [totalHelix, setTotalHelix] = useState('')
   const [isLoadingHelix, setIsLoadingHelix] = useState(true)

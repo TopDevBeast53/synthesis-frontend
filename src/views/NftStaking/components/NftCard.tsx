@@ -99,6 +99,7 @@ const NFTImage = styled(Image)`
 `
 
 const NftCard: React.FC<NftCardProps> = ({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   name,
   infos,
   actions,

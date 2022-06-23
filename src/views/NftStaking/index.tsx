@@ -2,9 +2,9 @@ import PageHeader from 'components/PageHeader'
 import { useTranslation } from 'contexts/Localization'
 import useToast from 'hooks/useToast'
 import filter from 'lodash/filter'
-import React, { CSSProperties, useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { AutoRenewIcon, Button, ButtonMenu, ButtonMenuItem, Card, CopyIcon, Flex, Heading, IconButton, Text, useMatchBreakpoints, Skeleton } from 'uikit'
+import { AutoRenewIcon, Button, ButtonMenu, ButtonMenuItem, Card, Flex, Heading, Text, useMatchBreakpoints, Skeleton } from 'uikit'
 import { logError } from 'utils/sentry'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import CircleLoader from '../../components/Loader/CircleLoader'
@@ -14,28 +14,6 @@ import { NFTCardText, NFTCardTextType } from './components/NFTCardText'
 import NFTStartCollectPanel from './components/NFTStartCollectPanel'
 import { useGetNftInfo } from './hooks/useGetNftInfo'
 import { useStakingNft } from './hooks/useStakingNft'
-
-const Tooltip = styled.div<{ isTooltipDisplayed: boolean }>`
-  display: ${({ isTooltipDisplayed }) => (isTooltipDisplayed ? 'inline-block' : 'none')};
-  position: absolute;
-  padding: 8px;
-  top: -28px;
-  right: -20px;
-  text-align: center;
-  background-color: ${({ theme }) => theme.colors.contrast};
-  color: ${({ theme }) => theme.colors.invertedContrast};
-  border-radius: 4px;
-  opacity: 0.7;
-  width: 100px;
-`
-
-const StyledCopyIcon = styled(CopyIcon)`
-  width: 14px;
-  ${({ theme }) => theme.mediaQueries.sm} {
-    width: 18px;
-  }
-`
-
 
 const NFTDisplayPanel = styled(Flex)`
   position: relative;

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useMemo, ReactNode } from 'react'
 import ReactDOM from 'react-dom'
 import * as Sentry from '@sentry/react'

@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import CircleLoader from './Loader/CircleLoader'
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const Loading = styled.div`
   border: 8px solid #f3f3f3;
   border-radius: 50%;

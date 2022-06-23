@@ -15,7 +15,6 @@ import styled from 'styled-components'
 import { useMigrateLiquidity } from './hooks/useMigrateLiquidity'
 import { useLpContract } from './hooks/useLpContract'
 import MigrationHeaderContainer from './components/MigrationCardHeader'
-import { helixMigratorAddress } from './constants'
 import Page from '../Page'
 
 const StyledInput = styled(Input)`

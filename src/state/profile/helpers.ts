@@ -55,6 +55,7 @@ export const getProfileAvatar = async (address: string) => {
         }
 
         const profileResponse = await profileContract.getUserProfile(address)
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { tokenId, collectionAddress, isActive } = transformProfileResponse(profileResponse)
 
         let nft = null
@@ -83,6 +84,7 @@ export const getProfileAvatar = async (address: string) => {
     }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const getProfile = async (address: string): Promise<GetProfileResponse> => {
     return null
     /*

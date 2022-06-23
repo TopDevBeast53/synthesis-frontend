@@ -1,20 +1,13 @@
 import React from 'react'
 
 import styled from 'styled-components'
-import { Card, Flex, Text, Button } from 'uikit'
+import { Card, Flex, Button } from 'uikit'
 
 const NFTStartCollectCard = styled(Card)`
   padding: 25px 25px;
   ${({ theme }) => theme.mediaQueries.sm} {
     padding: 58px 68px 55px 122px;    
   }
-`
-const NFTStartCollectText = styled(Text)`
-  weight: 400;
-  font-size: 70px;
-  line-height: 74px;
-  color: #f9fafa;
-  // margin-right: 85px;
 `
 
 const StartCollectImageBackground = styled.div`

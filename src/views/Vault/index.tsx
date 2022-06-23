@@ -1,6 +1,5 @@
 import BigNumber from 'bignumber.js'
 import Page from 'components/Layout/Page'
-import Loading from 'components/Loading'
 import PageHeader from 'components/PageHeader'
 import tokens from 'config/constants/tokens'
 import { FetchStatus } from 'config/constants/types'
@@ -48,7 +47,6 @@ enum HelixEnabledState {
 }
 
 const Vault: React.FC = () => {
-  console.log('hi')
   const { t } = useTranslation()
   const { account } = useActiveWeb3React()
   const helixContract = useHelix()

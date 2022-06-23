@@ -1,6 +1,7 @@
 import { FooterLinkType } from 'uikit'
 import { ContextApi } from 'contexts/Localization/types'
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const footerLinks: (t: ContextApi['t']) => FooterLinkType[] = (t) => [
     {
         label:"Helix",
