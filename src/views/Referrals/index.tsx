@@ -3,12 +3,13 @@ import { useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 import { ethers } from 'ethers'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
-import { Flex, Button, Card, Text } from 'uikit'
+import { Flex, Button, Card, Text, Box } from 'uikit'
 import { Contract } from '@ethersproject/contracts'
 import ReferralRegisterABI from 'config/abi/HelixReferral.json'
 import { getProviderOrSigner } from 'utils'
 import { formatBigNumber } from 'utils/formatBalance'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import { useFastFresh } from 'hooks/useRefresh'
 import tokens from 'config/constants/tokens'
 import CurrencyLogo from 'components/Logo/CurrencyLogo'
 import { getReferralRegisterAddress } from 'utils/addressHelpers'
@@ -35,6 +36,20 @@ const useGetRef = (account: string | null) => {
   }, [library, account])
 }
 
+const useGetReferees = (account: string | null) => {
+  const { library } = useActiveWeb3React()
+  return useCallback(async () => {
+    const contract = new Contract(
+      HelixReferralRegisterAddress,
+      ReferralRegisterABI,
+      getProviderOrSigner(library, account),
+    )
+    if (!account) return null
+    const result = await contract.getReferees(account)
+    return result
+  }, [library, account])
+}
+
 const useGetBalance = (account: string | null) => {
   const { library } = useActiveWeb3React()
   return useCallback(async () => {
@@ -50,14 +65,14 @@ const useGetBalance = (account: string | null) => {
 }
 
 const BodyWrapper = styled(Card)`
-  border-radius: 30px;
+  border-radius: 12px;
   max-width: 500px;
   width: 100%;
   height: fit-content;
   padding-left: 18px;
   padding-right: 18px;
   padding-top: 32px;
-  padding-bottom: 16px;
+  padding-bottom: 32px;
 `
 
 function AppBody({ children }: { children: React.ReactNode }) {
@@ -86,12 +101,16 @@ function getReferralLink(address: string): string {
 
 export default function Referrals() {
   const { account } = useActiveWeb3React()
+  const fastRefresh = useFastFresh()
   const getRef = useGetRef(account)
+  const getReferees = useGetReferees(account)
   const getBalance = useGetBalance(account)
   const [myReferrer, setMyReferrer] = useState<string | null>(null)
+  const [myReferees, setMyReferees] = useState(null)
   const { toastError, toastSuccess } = useToast()
   const [disabled, setDisabled] = useState(false)
   const [isReferrerLoading, setIsReferrerLoading] = useState(true)
+  const [isRefereesLoading, setIsRefereesLoading] = useState(true)
   const [isBalanceLoading, setIsBalanceLoading] = useState(true)
   const [pendingBalance, setPendingBalance] = useState<string>('0')
   const [reloadBalance, setReloadBalance] = useState(true)
@@ -99,6 +118,7 @@ export default function Referrals() {
   const claimRewardsCb = useClaimRewards()
   const helixToken = tokens.helix
   const { search } = location
+
   useEffect(() => {
     getRef().then((value) => {
       if (value === '0x0000000000000000000000000000000000000000') {
@@ -110,7 +130,21 @@ export default function Referrals() {
         setIsReferrerLoading(false)
       }
     })
-  }, [getRef])
+  }, [getRef, fastRefresh])
+
+  useEffect(() => {
+    getReferees().then((value) => {
+      if (value === '0x0000000000000000000000000000000000000000') {
+        setMyReferees(null)
+      } else {
+        setMyReferees(value)
+      }
+      if (value) {
+        setIsRefereesLoading(false)
+      }
+    })
+  }, [getReferees, fastRefresh])
+
   useEffect(() => {
     if (reloadBalance) {
       getBalance().then((value) => {
@@ -122,7 +156,7 @@ export default function Referrals() {
         setReloadBalance(false)
       })
     }
-  }, [reloadBalance, getBalance])
+  }, [reloadBalance, getBalance, fastRefresh])
 
   if (!account) {
     return (
@@ -148,54 +182,75 @@ export default function Referrals() {
           <Text fontSize="32px" color="white" bold>
             Referrals Hub
           </Text>
-          <Flex flexDirection="column" style={{ paddingTop: '18px' }}>
+          <Flex flexDirection="column" style={{ paddingTop: '24px' }}>
             <Text color="secondary" fontSize="13px" textTransform="uppercase" fontWeight="bold" mb="8px">
               Your Referral Link
             </Text>
-            <CopyAddress account={getReferralLink(account)} mb="24px" />
+            <CopyAddress account={getReferralLink(account)} />
           </Flex>
-          <Flex flexDirection="column">
+          <Flex flexDirection="column" style={{ paddingTop: '24px' }}>
             <Text color="secondary" fontSize="13px" textTransform="uppercase" fontWeight="bold" mb="8px">
               Your Referral Rewards
             </Text>
             <Flex style={{ paddingTop: '4px' }} alignItems="center">
-              <CurrencyLogo size="48px" currency={helixToken} style={{ marginRight: '8px' }} />
-              {isBalanceLoading && <CircleLoader size="30px" style={{ marginLeft: '12px', marginRight: '12px' }} />}
-              {!isBalanceLoading && (
-                <Text bold fontSize="24px" style={{ marginLeft: '12px', marginRight: '14px' }}>
-                  {pendingBalance}
-                </Text>
-              )}
-              <Button
-                onClick={async () => {
-                  setDisabled(true)
-                  try {
-                    await claimRewardsCb()
-                    toastSuccess('Success', 'Rewards have been claimed successfully!')
-                    setDisabled(false)
-                    setReloadBalance(true)
-                  } catch (e: any) {
-                    const message: string = e?.data?.message
-                      ? e?.data?.message
-                      : 'Please try again if you have not been referred before.'
-                    toastError('Error', message)
-                    setDisabled(false)
-                  }
-                }}
-                disabled={disabled || isBalanceLoading || pendingBalance === '0'}
-              >
-                <Text bold color="black">
-                  Claim
-                </Text>
-              </Button>
+              <Flex flex={1.5} alignItems="center">
+                <CurrencyLogo size="48px" currency={helixToken} style={{ marginRight: '8px' }} />
+                {isBalanceLoading && <CircleLoader size="30px" style={{ marginLeft: '12px', marginRight: '12px' }} />}
+                {!isBalanceLoading && (
+                  <Text bold fontSize="24px" style={{ marginLeft: '12px', marginRight: '14px' }}>
+                    {pendingBalance}
+                  </Text>
+                )}
+              </Flex>
+              <Flex flex={1}>
+                <Button
+                  onClick={async () => {
+                    setDisabled(true)
+                    try {
+                      await claimRewardsCb()
+                      toastSuccess('Success', 'Rewards have been claimed successfully!')
+                      setDisabled(false)
+                      setReloadBalance(true)
+                    } catch (e: any) {
+                      const message: string = e?.data?.message
+                        ? e?.data?.message
+                        : 'Please try again if you have not been referred before.'
+                      toastError('Error', message)
+                      setDisabled(false)
+                    }
+                  }}
+                  disabled={disabled || isBalanceLoading || pendingBalance === '0'}
+                  width="100%"
+                >
+                  <Text bold color="black">
+                    Claim
+                  </Text>
+                </Button>
+              </Flex>
             </Flex>
           </Flex>
-          <Flex flexDirection="column" style={{ paddingTop: '18px' }}>
+          <Flex flexDirection="column" style={{ paddingTop: '24px' }}>
             <Text color="secondary" fontSize="13px" textTransform="uppercase" fontWeight="bold" mb="8px">
               Your Referrer Address
             </Text>
-            {!isReferrerLoading && <CopyAddress account={myReferrer || 'None'} mb="24px" />}
+            {!isReferrerLoading && <CopyAddress account={myReferrer || 'None'} />}
             {isReferrerLoading && <CircleLoader size="30px" style={{ marginLeft: '4px' }} />}
+          </Flex>
+          <Flex flexDirection="column" style={{ paddingTop: '24px' }}>
+            <Text color="secondary" fontSize="13px" textTransform="uppercase" fontWeight="bold" mb="8px">
+              Your Referees Addresses
+            </Text>
+            {isRefereesLoading && <CircleLoader size="30px" style={{ marginLeft: '4px' }} />}
+            {!isRefereesLoading && myReferees.length !== 0 ?
+              myReferees.map((referee) => {
+                return (
+                  <Box mb="4px" key={referee}>
+                    <CopyAddress account={referee || 'None'} />
+                  </Box>
+                )
+              })
+              : <CopyAddress account='None' />
+            }
           </Flex>
         </AppBody>
       )}

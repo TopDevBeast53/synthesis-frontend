@@ -130,7 +130,7 @@ export default {
     },
     referralRegister: {
         56: '',
-        4: '0xF8dC9fB2F20c32623a04Ca07B804636f8c30221b',
+        4: '0x390D21414c5C5A56bbC2040c1A72F410430DCb24',
     },
     helixVault: {
         56: '',

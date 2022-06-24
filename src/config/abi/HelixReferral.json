@@ -1,5 +1,78 @@
 [
   {
+    "inputs": [],
+    "name": "CallerIsNotTimelockOwner",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "FeeHandlerNotSet",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "index",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "length",
+        "type": "uint256"
+      }
+    ],
+    "name": "IndexOutOfBounds",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "invalidPercent",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "decimals",
+        "type": "uint256"
+      }
+    ],
+    "name": "InvalidPercent",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NoRewardBalance",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NoSelfReferral",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "caller",
+        "type": "address"
+      }
+    ],
+    "name": "NotRecorder",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "ZeroAddress",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "ZeroTimelockAddress",
+    "type": "error"
+  },
+  {
     "anonymous": false,
     "inputs": [
       {
@@ -16,6 +89,19 @@
       }
     ],
     "name": "AddReferrer",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint8",
+        "name": "version",
+        "type": "uint8"
+      }
+    ],
+    "name": "Initialized",
     "type": "event"
   },
   {
@@ -173,6 +259,25 @@
         "type": "address"
       },
       {
+        "indexed": true,
+        "internalType": "address",
+        "name": "feeMinter",
+        "type": "address"
+      }
+    ],
+    "name": "SetFeeMinter",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "setter",
+        "type": "address"
+      },
+      {
         "indexed": false,
         "internalType": "uint256",
         "name": "lastMintBlock",
@@ -226,17 +331,17 @@
       {
         "indexed": true,
         "internalType": "address",
-        "name": "setter",
+        "name": "previousOwner",
         "type": "address"
       },
       {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "_toMintPerBlock",
-        "type": "uint256"
+        "indexed": true,
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
       }
     ],
-    "name": "SetToMintPerBlock",
+    "name": "TimelockOwnershipTransferred",
     "type": "event"
   },
   {
@@ -355,6 +460,19 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "feeMinter",
+    "outputs": [
+      {
+        "internalType": "contract IFeeMinter",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "uint256",
@@ -430,11 +548,43 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_referrer",
+        "type": "address"
+      }
+    ],
+    "name": "getReferees",
+    "outputs": [
+      {
+        "internalType": "address[]",
+        "name": "",
+        "type": "address[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getToMintPerBlock",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "helixToken",
     "outputs": [
       {
-        "internalType": "contract IHelixToken",
+        "internalType": "address",
         "name": "",
         "type": "address"
       }
@@ -455,6 +605,11 @@
         "type": "address"
       },
       {
+        "internalType": "address",
+        "name": "_feeMinter",
+        "type": "address"
+      },
+      {
         "internalType": "uint256",
         "name": "_stakeRewardPercent",
         "type": "uint256"
@@ -462,11 +617,6 @@
       {
         "internalType": "uint256",
         "name": "_swapRewardPercent",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_toMintPerBlock",
         "type": "uint256"
       },
       {
@@ -564,6 +714,30 @@
         "internalType": "address",
         "name": "",
         "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "referees",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
       }
     ],
     "name": "referrers",
@@ -606,6 +780,13 @@
   {
     "inputs": [],
     "name": "renounceOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "renounceTimelockOwnership",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -694,6 +875,19 @@
   {
     "inputs": [
       {
+        "internalType": "address",
+        "name": "_feeMinter",
+        "type": "address"
+      }
+    ],
+    "name": "setFeeMinter",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "uint256",
         "name": "_lastMintBlock",
         "type": "uint256"
@@ -731,19 +925,6 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_toMintPerBlock",
-        "type": "uint256"
-      }
-    ],
-    "name": "setToMintPerBlock",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
     "inputs": [],
     "name": "stakeRewardPercent",
     "outputs": [
@@ -771,12 +952,12 @@
   },
   {
     "inputs": [],
-    "name": "toMintPerBlock",
+    "name": "timelockOwner",
     "outputs": [
       {
-        "internalType": "uint256",
+        "internalType": "address",
         "name": "",
-        "type": "uint256"
+        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -791,6 +972,19 @@
       }
     ],
     "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "transferTimelockOwnership",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
