@@ -5,7 +5,8 @@ interface LogoProps extends SvgProps {
   isDark: boolean
 }
 
-const Logo: React.FC<LogoProps> = ({ ...props }) => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const Logo: React.FC<LogoProps> = ({ isDark, ...props }) => {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 565 259" fill="none" {...props}>
       <g filter="url(#filter0_d_1849_76)">
