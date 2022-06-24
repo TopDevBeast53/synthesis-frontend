@@ -18,14 +18,16 @@ const MenuItem: React.FC<FooterProps> = ({
   return (
     <StyledFooter p={['40px 50px 40px 40px', null, '96px 40px 96px 40px']} {...props} justifyContent="center">
       <Flex flexDirection="column" width={['100%', null, '1200px;']}>
-        <Flex display={['block', null, 'none']} justifyContent="space-between" alignItems="center" mb="24px">
-          <Flex flex={1}>
-            <HelixByGeometryBlue isDark={isDark} width="130px" />
+        <Box display={['block', null, 'none']} mb="24px">
+          <Flex justifyContent="space-between" alignItems="center">
+            <Flex flex={1}>
+              <HelixByGeometryBlue isDark={isDark} width="130px" />
+            </Flex>
+            <Flex flex={1} justifyContent='center'>
+              <CakePrice cakePriceUsd={cakePriceUsd} color={darkColors.textSubtle as keyof Colors} />
+            </Flex>
           </Flex>
-          <Flex flex={1} justifyContent='center'>
-            <CakePrice cakePriceUsd={cakePriceUsd} color={darkColors.textSubtle as keyof Colors} />
-          </Flex>
-        </Flex>
+        </Box>
         <Flex
           order={[2, null, 1]}
           flexDirection={['row', null, 'row']}
