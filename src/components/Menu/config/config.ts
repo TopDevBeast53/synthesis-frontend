@@ -55,10 +55,10 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType[] = (t) => [
                 label: t('Swap LPs'),
                 href: '/lps-swap',
             },
-            {
-                label: t('Swap Yield'),
-                href: '/yield-swap',
-            },
+            // {
+            //     label: t('Swap Yield'),
+            //     href: '/yield-swap',
+            // },
         ],
     },
     {

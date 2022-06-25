@@ -54,7 +54,7 @@ const Migrator = lazy(() => import('./views/LiquidityMigration'))
 const NftStaking = lazy(() => import('./views/NftStaking'))
 const NftYieldBoosting = lazy(() => import('./views/NftYieldBoosting'))
 const SwapLiquidity = lazy(() => import('./views/SwapLiquidity'))
-const SwapYield = lazy(() => import('./views/SwapYield'))
+// const SwapYield = lazy(() => import('./views/SwapYield'))
 const Referrals = lazy(() => import('./views/Referrals'))
 // const Info = lazy(() => import('./views/Info'))
 // const NftMarket = lazy(() => import('./views/Nft/market'))
@@ -127,9 +127,9 @@ const App: React.FC = () => {
             <Route path="/lps-swap">
               <SwapLiquidity />
             </Route>
-            <Route path="/yield-swap">
+            {/* <Route path="/yield-swap">
               <SwapYield />
-            </Route>
+            </Route> */}
             {/* 
             <Route path="/lottery">
               <Lottery />
