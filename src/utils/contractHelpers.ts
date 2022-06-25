@@ -15,7 +15,6 @@ import {
     getMasterChefAddress,
     getPointCenterIfoAddress,
     getClaimRefundAddress,
-    getTradingCompetitionAddress,
     getEasterNftAddress,
     getHelixAutoPoolAddress,
     getIfoPoolAddress,
@@ -29,7 +28,6 @@ import {
     getNftMarketAddress,
     getNftSaleAddress,
     getPancakeSquadAddress,
-    getTradingCompetitionAddressV2,
     getBunnySpecialXmasAddress,
     getHelixVaultAddress,
     getYieldSwapAddress,
@@ -57,8 +55,6 @@ import sousChef from 'config/abi/sousChef.json'
 import sousChefV2 from 'config/abi/sousChefV2.json'
 import sousChefBnb from 'config/abi/sousChefBnb.json'
 import claimRefundAbi from 'config/abi/claimRefund.json'
-import tradingCompetitionAbi from 'config/abi/tradingCompetition.json'
-import tradingCompetitionV2Abi from 'config/abi/tradingCompetitionV2.json'
 import easterNftAbi from 'config/abi/easterNft.json'
 import helixAutoPoolAbi from 'config/abi/HelixAutoPool.json'
 import ifoPoolAbi from 'config/abi/ifoPool.json'
@@ -103,8 +99,6 @@ import {
     BunnySpecial,
     LpToken,
     ClaimRefund,
-    TradingCompetition,
-    TradingCompetitionV2,
     EasterNft,
     HelixAutoPool,
     Multicall,
@@ -178,13 +172,6 @@ export const getMasterchefContract = (signer?: ethers.Signer | ethers.providers.
 }
 export const getClaimRefundContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
     return getContract(claimRefundAbi, getClaimRefundAddress(), signer) as ClaimRefund
-}
-export const getTradingCompetitionContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
-    return getContract(tradingCompetitionAbi, getTradingCompetitionAddress(), signer) as TradingCompetition
-}
-
-export const getTradingCompetitionContractV2 = (signer?: ethers.Signer | ethers.providers.Provider) => {
-    return getContract(tradingCompetitionV2Abi, getTradingCompetitionAddressV2(), signer) as TradingCompetitionV2
 }
 export const getEasterNftContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
     return getContract(easterNftAbi, getEasterNftAddress(), signer) as EasterNft

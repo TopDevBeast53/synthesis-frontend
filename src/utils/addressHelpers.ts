@@ -35,12 +35,6 @@ export const getPointCenterIfoAddress = () => {
 export const getBunnySpecialAddress = () => {
     return getAddress(addresses.bunnySpecial)
 }
-export const getTradingCompetitionAddress = () => {
-    return getAddress(addresses.tradingCompetition)
-}
-export const getTradingCompetitionAddressV2 = () => {
-    return getAddress(addresses.tradingCompetitionV2)
-}
 export const getEasterNftAddress = () => {
     return getAddress(addresses.easterNft)
 }

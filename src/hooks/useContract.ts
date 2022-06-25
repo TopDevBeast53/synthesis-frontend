@@ -14,8 +14,6 @@ import {
     getPointCenterIfoContract,
     getSouschefContract,
     getClaimRefundContract,
-    getTradingCompetitionContract,
-    getTradingCompetitionContractV2,
     getEasterNftContract,
     getErc721Contract,
     getHelixAutoPoolContract,
@@ -193,19 +191,6 @@ export const useBunnySpecialContract = () => {
 export const useClaimRefundContract = () => {
     const { library } = useActiveWeb3React()
     return useMemo(() => getClaimRefundContract(library.getSigner()), [library])
-}
-
-export const useTradingCompetitionContract = () => {
-    const { library } = useActiveWeb3React()
-    return useMemo(() => getTradingCompetitionContract(library.getSigner()), [library])
-}
-
-export const useTradingCompetitionContractV2 = (withSignerIfPossible = true) => {
-    const { library, account } = useActiveWeb3React()
-    return useMemo(
-        () => getTradingCompetitionContractV2(withSignerIfPossible ? getProviderOrSigner(library, account) : null),
-        [library, withSignerIfPossible, account],
-    )
 }
 
 export const useEasterNftContract = () => {
