@@ -31,7 +31,7 @@ const useGetPublicIfoData = (ifo: Ifo): PublicIfoData => {
     const { address, releaseBlockNumber } = ifo
     const cakePriceUsd = usePriceHelixBusd()
     const lpTokenPriceInUsd = useLpTokenPrice(ifo.currency.symbol)
-    const currencyPriceInUSD = ifo.currency === tokens.cake ? cakePriceUsd : lpTokenPriceInUsd
+    const currencyPriceInUSD = ifo.currency === tokens.helix ? cakePriceUsd : lpTokenPriceInUsd
 
     const [state, setState] = useState({
         isInitialized: false,

@@ -5,7 +5,7 @@ import { mainnetTokens, testnetTokens } from './tokens'
 // Pancake prod router address 0x10ED43C718714eb63d5aA57B78B54704E256024E
 // Helix test net router address 0x9DbA93422D0ce20A755d07258E3bDF6D20d56193
 
-export const ROUTER_ADDRESS = '0x543E2039E95c38E1742534680f681349118c0d0a'
+export const ROUTER_ADDRESS = '0x68533AEE895aD4ff21EBeD34043156C13aF657A6'  // UpdateMe
 
 // a list of tokens by chain
 type ChainTokenList = {
@@ -15,13 +15,9 @@ type ChainTokenList = {
 // used to construct intermediary pairs for trading
 export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
     [ChainId.MAINNET]: [
+        mainnetTokens.helix,
         mainnetTokens.weth,
-        mainnetTokens.cake,
-        mainnetTokens.busd,
         mainnetTokens.usdt,
-        mainnetTokens.btcb,
-        mainnetTokens.ust,
-        mainnetTokens.eth,
         mainnetTokens.usdc,
     ],
     [ChainId.TESTNET]: [testnetTokens.weth, testnetTokens.helix, testnetTokens.usdc],
@@ -46,21 +42,22 @@ export const CUSTOM_BASES: { [chainId in ChainId]?: { [tokenAddress: string]: To
 
 // used for display in the default list when adding liquidity
 export const SUGGESTED_BASES: ChainTokenList = {
-    [ChainId.MAINNET]: [mainnetTokens.busd, mainnetTokens.cake, mainnetTokens.btcb],
+    [ChainId.MAINNET]: [mainnetTokens.weth, mainnetTokens.dai, mainnetTokens.usdt],
     [ChainId.TESTNET]: [testnetTokens.weth, testnetTokens.dai, testnetTokens.usdc],
 }
 
 // used to construct the list of all pairs we consider by default in the frontend
 export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
-    [ChainId.MAINNET]: [mainnetTokens.weth, mainnetTokens.dai, mainnetTokens.busd, mainnetTokens.usdt],
+    [ChainId.MAINNET]: [mainnetTokens.weth, mainnetTokens.dai, mainnetTokens.usdc, mainnetTokens.usdt],
     [ChainId.TESTNET]: [testnetTokens.weth, testnetTokens.dai, testnetTokens.usdc],
 }
 
 export const PINNED_PAIRS: { readonly [chainId in ChainId]?: [Token, Token][] } = {
     [ChainId.MAINNET]: [
-        [mainnetTokens.cake, mainnetTokens.weth],
-        [mainnetTokens.busd, mainnetTokens.usdt],
-        [mainnetTokens.dai, mainnetTokens.usdt],
+        // UpdateMe remove rem
+        // [mainnetTokens.cake, mainnetTokens.weth],
+        // [mainnetTokens.busd, mainnetTokens.usdt],
+        // [mainnetTokens.dai, mainnetTokens.usdt],
     ],
 }
 
