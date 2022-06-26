@@ -1,4 +1,3 @@
-
 export default {
     lotteryV2: {
         4: '0x5790c3534F30437641541a0FA04C992799602998',
@@ -88,52 +87,52 @@ export default {
         3: '',
         4: '0xC3A5dc2D9eC0e8CC6603F81FDc0Fd7aB53E389b3',
     },
+    // update me
     multiCall: {
-        3: '',
+        3: '0x0b48c0637648dD14818C1f37Fdd65E6d7D1d3fd8',
         4: '0x6CfcdedFed8122029d8457Aab73ee855D4B92fC5',
     },
     masterChef: {
-        3: '',
+        3: '0xd0Ab9e57ED6a72c31F36DC82f94539b462455d84',
         4: '0xEa0DDa9B02EAfc1a4863008a74f7C2320795bF6c',
     },
     helixAutoPool: {
-        // AutoPool
-        3: '',
+        3: '0x4d6224Cb75DE6904f760c46c4e84E809E046cB41',
         4: '0x9bE078ce4379c260d16fF58349d48fB09B014Faa',
     },
     helixNFT: {
         1: '',
         4: '0xE54Ae8147af2B800CA0b47036176b37f42a94800',
-        3: '',
+        3: '0xE54Ae8147af2B800CA0b47036176b37f42a94800',
     },
     helixNFTChef: {
         1: '',
         4: '0x05fd4D18e965926A121b479f0E6e77252256838F',
-        3: '',
+        3: '0x6C3f85c7F3979308751EBFba244F6eF5400aA911',
     },
     helixNFTBridge: {
         1: '',
         4: '0x3E9bdCfF21871c0751b8Fb3b17AC883e36aBa23B',
-        3: '',
+        3: '0x3bD1a5865dB1c94e17Fa8E9628102FF72195e8F9',
     },
     helixMigrator: {
-        3: '',
+        3: '0xE44adF0E7aa6D65847E624f8e373428aA8c55CDB',
         4: '0x623135046ed867f454DA0e3B4d6d9B3F617130b0',
     },
     referralRegister: {
-        3: '',
+        3: '0x30a58b7bd76DF485D4E616609d480bf18B566328',
         4: '0x390D21414c5C5A56bbC2040c1A72F410430DCb24',
     },
     helixVault: {
-        3: '',
+        3: '0x9b2E0a33E1c09e3C062c811d269C74B414007fc1',
         4: '0x34C509C2AF0A5447E2174Be6DF344ad9caA226d5',
     },
     helixYieldSwap: {
-        3: '',
+        3: '0x124c90bF3777F0570845Fbdd67e337BC0D5A0e68',
         4: '0x5e901F3b57522d3C8071130cdC5c891Dad03Bb5e',
     },
     helixLPSwap: {
-        3: '',
+        3: '0x30b55f8D2C0A4B31Fa57D4aADE027616CB9FE294',
         4: '0xE7601c288932E407742FaF4266E142aEceA4D916',
     },
 }

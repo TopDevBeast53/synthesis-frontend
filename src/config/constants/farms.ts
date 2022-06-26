@@ -8,66 +8,96 @@ const farms: SerializedFarmConfig[] = [
      * These 3 farms (PID 0, 251, 252) should always be at the top of the file.
      */
 
-    {
+     {
         pid: 0,
         lpSymbol: 'HELIX',
         lpAddresses: {
             4: serializedTokens.helix.address,
-            3: '',
+            3: serializedTokens.helix.address,
         },
         token: serializedTokens.helix,
         quoteToken: serializedTokens.weth,
     },
     {
         pid: 1,
-        lpSymbol: 'HELIX-WETH',
+        lpSymbol: 'HELIX',
         lpAddresses: {
-            4: '0x50687BB28cf31E574F15E5d33Cde669a2cE07a52',
-            3: '',
+            4: serializedTokens.helix.address,
+            3: serializedTokens.helix.address,
         },
         token: serializedTokens.helix,
         quoteToken: serializedTokens.weth,
     },
     {
         pid: 2,
-        lpSymbol: 'DAI-USDC',
+        lpSymbol: 'HELIX',
         lpAddresses: {
-            4: '0x308C01C493196178214Ec8067CFFaf12c9A511Cc',
-            3: '',
+            4: serializedTokens.helix.address,
+            3: serializedTokens.helix.address,
         },
-        token: serializedTokens.dai,
-        quoteToken: serializedTokens.usdc,
-    },
-    {
-        pid: 3,
-        lpSymbol: 'WETH-USDC',
-        lpAddresses: {
-            4: '0x10B7B59d8b26fE3D0C30193F107F937fe48A4c47',
-            3: '',
-        },
-        token: serializedTokens.weth,
-        quoteToken: serializedTokens.usdc,
-    },
-    {
-        pid: 4,
-        lpSymbol: 'DAI-WETH',
-        lpAddresses: {
-            4: '0x75b9427E98E773dF3D88bc0AFa1b3C2cb440eAB1',
-            3: '',
-        },
-        token: serializedTokens.dai,
+        token: serializedTokens.helix,
         quoteToken: serializedTokens.weth,
     },
     {
-        pid: 5,
-        lpSymbol: 'USDC-USDT',
+        pid: 3,
+        lpSymbol: 'HELIX',
         lpAddresses: {
-            4: '0xCB238327b804f59Ea6b915Cc116B54AB4C9F993d',
-            3: '',
+            4: serializedTokens.helix.address,
+            3: serializedTokens.helix.address,
         },
-        token: serializedTokens.usdc,
-        quoteToken: serializedTokens.usdt,
+        token: serializedTokens.helix,
+        quoteToken: serializedTokens.weth,
     },
+    // {
+    //     pid: 1,
+    //     lpSymbol: 'HELIX-WETH',
+    //     lpAddresses: {
+    //         4: '0x50687BB28cf31E574F15E5d33Cde669a2cE07a52',
+    //         3: '',
+    //     },
+    //     token: serializedTokens.helix,
+    //     quoteToken: serializedTokens.weth,
+    // },
+    // {
+    //     pid: 2,
+    //     lpSymbol: 'DAI-USDC',
+    //     lpAddresses: {
+    //         4: '0x308C01C493196178214Ec8067CFFaf12c9A511Cc',
+    //         3: '',
+    //     },
+    //     token: serializedTokens.dai,
+    //     quoteToken: serializedTokens.usdc,
+    // },
+    // {
+    //     pid: 3,
+    //     lpSymbol: 'WETH-USDC',
+    //     lpAddresses: {
+    //         4: '0x10B7B59d8b26fE3D0C30193F107F937fe48A4c47',
+    //         3: '',
+    //     },
+    //     token: serializedTokens.weth,
+    //     quoteToken: serializedTokens.usdc,
+    // },
+    // {
+    //     pid: 4,
+    //     lpSymbol: 'DAI-WETH',
+    //     lpAddresses: {
+    //         4: '0x75b9427E98E773dF3D88bc0AFa1b3C2cb440eAB1',
+    //         3: '',
+    //     },
+    //     token: serializedTokens.dai,
+    //     quoteToken: serializedTokens.weth,
+    // },
+    // {
+    //     pid: 5,
+    //     lpSymbol: 'USDC-USDT',
+    //     lpAddresses: {
+    //         4: '0xCB238327b804f59Ea6b915Cc116B54AB4C9F993d',
+    //         3: '',
+    //     },
+    //     token: serializedTokens.usdc,
+    //     quoteToken: serializedTokens.usdt,
+    // },
     // {
     //   pid: 0,
     //   lpSymbol: 'HELIX',
