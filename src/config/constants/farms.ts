@@ -13,7 +13,7 @@ const farms: SerializedFarmConfig[] = [
         lpSymbol: 'HELIX',
         lpAddresses: {
             4: serializedTokens.helix.address,
-            56: '',
+            3: '',
         },
         token: serializedTokens.helix,
         quoteToken: serializedTokens.weth,
@@ -23,7 +23,7 @@ const farms: SerializedFarmConfig[] = [
         lpSymbol: 'HELIX-WETH',
         lpAddresses: {
             4: '0x50687BB28cf31E574F15E5d33Cde669a2cE07a52',
-            56: '',
+            3: '',
         },
         token: serializedTokens.helix,
         quoteToken: serializedTokens.weth,
@@ -33,7 +33,7 @@ const farms: SerializedFarmConfig[] = [
         lpSymbol: 'DAI-USDC',
         lpAddresses: {
             4: '0x308C01C493196178214Ec8067CFFaf12c9A511Cc',
-            56: '',
+            3: '',
         },
         token: serializedTokens.dai,
         quoteToken: serializedTokens.usdc,
@@ -43,7 +43,7 @@ const farms: SerializedFarmConfig[] = [
         lpSymbol: 'WETH-USDC',
         lpAddresses: {
             4: '0x10B7B59d8b26fE3D0C30193F107F937fe48A4c47',
-            56: '',
+            3: '',
         },
         token: serializedTokens.weth,
         quoteToken: serializedTokens.usdc,
@@ -53,7 +53,7 @@ const farms: SerializedFarmConfig[] = [
         lpSymbol: 'DAI-WETH',
         lpAddresses: {
             4: '0x75b9427E98E773dF3D88bc0AFa1b3C2cb440eAB1',
-            56: '',
+            3: '',
         },
         token: serializedTokens.dai,
         quoteToken: serializedTokens.weth,
@@ -63,7 +63,7 @@ const farms: SerializedFarmConfig[] = [
         lpSymbol: 'USDC-USDT',
         lpAddresses: {
             4: '0xCB238327b804f59Ea6b915Cc116B54AB4C9F993d',
-            56: '',
+            3: '',
         },
         token: serializedTokens.usdc,
         quoteToken: serializedTokens.usdt,
