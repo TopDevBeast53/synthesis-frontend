@@ -4,7 +4,7 @@ import useToast from 'hooks/useToast'
 import filter from 'lodash/filter'
 import React, { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { AutoRenewIcon, Button, ButtonMenu, ButtonMenuItem, Card, Flex, Heading, Text, useMatchBreakpoints, Skeleton } from 'uikit'
+import { AutoRenewIcon, Button, ButtonMenu, ButtonMenuItem, Card, Flex, Heading, Text, useMatchBreakpoints, Skeleton, useTooltip, HelpIcon } from 'uikit'
 import { logError } from 'utils/sentry'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import CircleLoader from '../../components/Loader/CircleLoader'
@@ -44,6 +44,20 @@ const Wrapper = styled.div`
     padding-right: 12px;
   }
 `
+
+const ReferenceElement = styled.div`
+  display: inline-block;
+  margin-right: 1rem;
+  vertical-align: text-top;
+`
+const Container = styled.div``
+
+const ToolTipText = styled.div`
+  display: inline-block;
+  margin-right: 0.5rem;
+  vertical-align: baseline;
+`
+
 export default function NftStaking() {
   const { account } = useActiveWeb3React()
   const { t } = useTranslation()
@@ -171,7 +185,7 @@ export default function NftStaking() {
                   type: "level",
                   caption: 'Wrapped NFTs',
                   value: (
-                    <span>{token.wrappedNfts}</span>
+                    <ToolTipCell toolTipText={token.nftNames.join()} tokenCounts={token.externalTokenIds.length} />
                   ),
                 }
               ]}
@@ -265,3 +279,24 @@ export default function NftStaking() {
     </>
   )
 }
+
+function ToolTipCell({ toolTipText, tokenCounts }) {
+  // eslint-disable-next-line react/destructuring-assignment
+  const { targetRef, tooltip, tooltipVisible } = useTooltip(toolTipText, {
+    placement: 'top-end',
+    tooltipOffset: [20, 10],
+  })
+
+  return (
+    <Container>
+      <ReferenceElement ref={targetRef}>
+        <HelpIcon color="textSubtle" />
+      </ReferenceElement>
+      <ToolTipText>
+        {tokenCounts}
+      </ToolTipText>
+      {tooltipVisible && tooltip}
+    </Container>
+  )
+}
+

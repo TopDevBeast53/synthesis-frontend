@@ -103,7 +103,7 @@ export default {
     },
     helixNFT: {
         1: '',
-        4: '0xE54Ae8147af2B800CA0b47036176b37f42a94800',
+        4: '0x9da7694D1E947BCB320F19FfB9ea39790B3F22fB',
         56: '',
     },
     helixNFTChef: {
@@ -113,7 +113,7 @@ export default {
     },
     helixNFTBridge: {
         1: '',
-        4: '0x3E9bdCfF21871c0751b8Fb3b17AC883e36aBa23B',
+        4: '0x0Fc9a2CbB031F22644334Bcd30efa6ae6F13c82e',
         56: '',
     },
     helixMigrator: {
