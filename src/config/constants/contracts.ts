@@ -89,7 +89,7 @@ export default {
     },
     // update me
     multiCall: {
-        3: '0x0b48c0637648dD14818C1f37Fdd65E6d7D1d3fd8',
+        3: '0x011EB7F8482b9c9f10A42fc6077B53061F44C494',
         4: '0x6CfcdedFed8122029d8457Aab73ee855D4B92fC5',
     },
     masterChef: {
