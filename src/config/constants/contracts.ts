@@ -93,11 +93,11 @@ export default {
         4: '0x6CfcdedFed8122029d8457Aab73ee855D4B92fC5',
     },
     masterChef: {
-        3: '0xd0Ab9e57ED6a72c31F36DC82f94539b462455d84',
+        3: '0x009aCC077E211C1b32c8e928A6bB08e20789f8E7',
         4: '0xEa0DDa9B02EAfc1a4863008a74f7C2320795bF6c',
     },
     helixAutoPool: {
-        3: '0x4d6224Cb75DE6904f760c46c4e84E809E046cB41',
+        3: '0x5eD59f79E34fF2c3B45735AB46B2c348a6537c52',
         4: '0x9bE078ce4379c260d16fF58349d48fB09B014Faa',
     },
     helixNFT: {
