@@ -5,10 +5,95 @@
         "internalType": "contract HelixNFT",
         "name": "_helixNFT",
         "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_admin",
+        "type": "address"
       }
     ],
     "stateMutability": "nonpayable",
     "type": "constructor"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      }
+    ],
+    "name": "AlreadyBridgedEthereumToken",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "bridgeFactoryId",
+        "type": "uint256"
+      }
+    ],
+    "name": "AlreadyBridgedFactory",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "externalTokenID",
+        "type": "string"
+      }
+    ],
+    "name": "AlreadyBridgedToken",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "index",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "length",
+        "type": "uint256"
+      }
+    ],
+    "name": "IndexOutOfBounds",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidArray",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NotArray",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "caller",
+        "type": "address"
+      }
+    ],
+    "name": "NotBridger",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NotOwner",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "ZeroAddress",
+    "type": "error"
   },
   {
     "anonymous": false,
@@ -22,8 +107,14 @@
       {
         "indexed": false,
         "internalType": "string",
-        "name": "externalTokenID",
+        "name": "externalIDs",
         "type": "string"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "newBridgeFactoryId",
+        "type": "uint256"
       }
     ],
     "name": "AddBridger",
@@ -39,13 +130,7 @@
         "type": "address"
       },
       {
-        "indexed": true,
-        "internalType": "address",
-        "name": "owner",
-        "type": "address"
-      },
-      {
-        "indexed": true,
+        "indexed": false,
         "internalType": "string[]",
         "name": "externalTokenIds",
         "type": "string[]"
@@ -64,22 +149,16 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": true,
+        "indexed": false,
         "internalType": "string",
         "name": "externalRecipientAddr",
         "type": "string"
       },
       {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "tokenId",
-        "type": "uint256"
-      },
-      {
         "indexed": false,
-        "internalType": "uint256",
-        "name": "timestamp",
-        "type": "uint256"
+        "internalType": "string[]",
+        "name": "externalTokenIDs",
+        "type": "string[]"
       }
     ],
     "name": "BridgeToSolana",
@@ -147,42 +226,105 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "_bridger",
+        "name": "_user",
         "type": "address"
       },
       {
-        "internalType": "string",
-        "name": "_externalTokenID",
-        "type": "string"
+        "internalType": "string[]",
+        "name": "_externalIDs",
+        "type": "string[]"
+      },
+      {
+        "internalType": "string[]",
+        "name": "_tokenURIs",
+        "type": "string[]"
       }
     ],
-    "name": "addBridger",
+    "name": "addBridgeFactory",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "admin",
     "outputs": [
       {
-        "internalType": "bool",
+        "internalType": "address",
         "name": "",
-        "type": "bool"
+        "type": "address"
       }
     ],
-    "stateMutability": "nonpayable",
+    "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
       {
-        "internalType": "string[]",
-        "name": "_externalTokenIDs",
-        "type": "string[]"
-      },
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "bridgeFactories",
+    "outputs": [
       {
         "internalType": "address",
-        "name": "_owner",
+        "name": "user",
         "type": "address"
       },
       {
-        "internalType": "string",
-        "name": "_uri",
-        "type": "string"
+        "internalType": "enum HelixNFTBridge.BridgeStatus",
+        "name": "bridgeStatus",
+        "type": "uint8"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "bridgeFactoryIDs",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "bridgeFactoryLastId",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_bridgeFactoryId",
+        "type": "uint256"
       }
     ],
     "name": "bridgeToEthereum",
@@ -193,7 +335,7 @@
         "type": "bool"
       }
     ],
-    "stateMutability": "nonpayable",
+    "stateMutability": "payable",
     "type": "function"
   },
   {
@@ -236,6 +378,66 @@
   {
     "inputs": [
       {
+        "internalType": "address",
+        "name": "_user",
+        "type": "address"
+      }
+    ],
+    "name": "getBridgeFactories",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "address",
+            "name": "user",
+            "type": "address"
+          },
+          {
+            "internalType": "string[]",
+            "name": "externalIDs",
+            "type": "string[]"
+          },
+          {
+            "internalType": "string[]",
+            "name": "tokenURIs",
+            "type": "string[]"
+          },
+          {
+            "internalType": "enum HelixNFTBridge.BridgeStatus",
+            "name": "bridgeStatus",
+            "type": "uint8"
+          }
+        ],
+        "internalType": "struct HelixNFTBridge.BridgeFactory[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_user",
+        "type": "address"
+      }
+    ],
+    "name": "getBridgeFactoryIDs",
+    "outputs": [
+      {
+        "internalType": "uint256[]",
+        "name": "",
+        "type": "uint256[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "uint256",
         "name": "_index",
         "type": "uint256"
@@ -260,25 +462,6 @@
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "string",
-        "name": "_externalTokenID",
-        "type": "string"
-      }
-    ],
-    "name": "getPickUpOwner",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
       }
     ],
     "stateMutability": "view",

@@ -81,7 +81,8 @@ export const useGetNftInfo = () => {
             )
             const res = results.map(([tokenOwner,uri, tokenId, token]) => ({
                 tokenId: tokenId.toString(),
-                externalTokenIds: token.externalTokenIDs,
+                externalTokenIds: token.mintTokenIDs,
+                nftNames: token.nftIDs,
                 tokenOwner, 
                 wrappedNfts:token.wrappedNfts.toString(),               
                 isStaked: token.isStaked,
