@@ -30,7 +30,7 @@ const Balance: React.FC<BalanceProps> = ({
 
   return (
     <Text color={isDisabled ? 'textDisabled' : color} onClick={onClick} {...props} style={{ wordBreak: isMobile ? "break-word" : "inherit" }}>
-      {value < 1 / (10 ** decimals) ?
+      {value !== 0 && value < 1 / (10 ** decimals) ?
         `< ${(1 / (10 ** decimals)).toString()}`
         :
         <CountUp
