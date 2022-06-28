@@ -1,5 +1,84 @@
 [
   {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "allowance",
+        "type": "uint256"
+      }
+    ],
+    "name": "AmountExceedsAllowance",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "balance",
+        "type": "uint256"
+      }
+    ],
+    "name": "AmountExceedsBalance",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "CallerIsNotTimelockOwner",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidPoolId",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "token",
+        "type": "address"
+      }
+    ],
+    "name": "TokenNotAdded",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "TransferFailed",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "time",
+        "type": "uint256"
+      }
+    ],
+    "name": "WaitUntilAfter",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "ZeroAddress",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "ZeroTimelockAddress",
+    "type": "error"
+  },
+  {
     "anonymous": false,
     "inputs": [
       {
@@ -265,32 +344,13 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "poolId",
-        "type": "uint256"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "lpToken",
-        "type": "address"
-      }
-    ],
-    "name": "LiquidityMigrated",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
         "indexed": false,
-        "internalType": "address",
-        "name": "migrator",
-        "type": "address"
+        "internalType": "uint8",
+        "name": "version",
+        "type": "uint8"
       }
     ],
-    "name": "MigratorSet",
+    "name": "Initialized",
     "type": "event"
   },
   {
@@ -349,6 +409,44 @@
       }
     ],
     "name": "ReferralRegisterSet",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "setter",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "feeMinter",
+        "type": "address"
+      }
+    ],
+    "name": "SetFeeMinter",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "previousOwner",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "TimelockOwnershipTransferred",
     "type": "event"
   },
   {
@@ -417,19 +515,6 @@
   {
     "inputs": [],
     "name": "BONUS_MULTIPLIER",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "HelixTokenPerBlock",
     "outputs": [
       {
         "internalType": "uint256",
@@ -688,6 +773,19 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "feeMinter",
+    "outputs": [
+      {
+        "internalType": "contract IFeeMinter",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "uint256",
@@ -705,6 +803,19 @@
       {
         "internalType": "uint256",
         "name": "yield",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getDevToMintPerBlock",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
         "type": "uint256"
       }
     ],
@@ -775,6 +886,32 @@
   },
   {
     "inputs": [],
+    "name": "getStakeToMintPerBlock",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getToMintPerBlock",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "helixToken",
     "outputs": [
       {
@@ -799,9 +936,9 @@
         "type": "address"
       },
       {
-        "internalType": "uint256",
-        "name": "_HelixTokenPerBlock",
-        "type": "uint256"
+        "internalType": "address",
+        "name": "_feeMinter",
+        "type": "address"
       },
       {
         "internalType": "uint256",
@@ -860,32 +997,6 @@
     "name": "massUpdatePools",
     "outputs": [],
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_pid",
-        "type": "uint256"
-      }
-    ],
-    "name": "migrate",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "migrator",
-    "outputs": [
-      {
-        "internalType": "contract IMigratorChef",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -1045,6 +1156,13 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "renounceTimelockOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "uint256",
@@ -1083,12 +1201,12 @@
   {
     "inputs": [
       {
-        "internalType": "contract IMigratorChef",
-        "name": "_migrator",
+        "internalType": "address",
+        "name": "_feeMinter",
         "type": "address"
       }
     ],
-    "name": "setMigrator",
+    "name": "setFeeMinter",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -1134,6 +1252,19 @@
   },
   {
     "inputs": [],
+    "name": "timelockOwner",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "totalAllocPoint",
     "outputs": [
       {
@@ -1159,6 +1290,19 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "transferTimelockOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "unpause",
     "outputs": [],
@@ -1179,19 +1323,6 @@
       }
     ],
     "name": "updateBucket",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "newAmount",
-        "type": "uint256"
-      }
-    ],
-    "name": "updateHelixPerBlock",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

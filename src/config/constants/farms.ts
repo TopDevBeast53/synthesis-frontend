@@ -8,22 +8,22 @@ const farms: SerializedFarmConfig[] = [
      * These 3 farms (PID 0, 251, 252) should always be at the top of the file.
      */
 
-    {
+     {
         pid: 0,
         lpSymbol: 'HELIX',
         lpAddresses: {
             4: serializedTokens.helix.address,
-            56: '',
+            3: serializedTokens.helix.address,
         },
         token: serializedTokens.helix,
         quoteToken: serializedTokens.weth,
     },
-    {
+     {
         pid: 1,
         lpSymbol: 'HELIX-WETH',
         lpAddresses: {
             4: '0x50687BB28cf31E574F15E5d33Cde669a2cE07a52',
-            56: '',
+            3: '0x551e4d01e89d3eda77ff5344de8ebb34d6c3f87c',
         },
         token: serializedTokens.helix,
         quoteToken: serializedTokens.weth,
@@ -33,7 +33,7 @@ const farms: SerializedFarmConfig[] = [
         lpSymbol: 'DAI-USDC',
         lpAddresses: {
             4: '0x308C01C493196178214Ec8067CFFaf12c9A511Cc',
-            56: '',
+            3: '0x5072cafb3cf3c6808416d64eee8d06dda11c1410',
         },
         token: serializedTokens.dai,
         quoteToken: serializedTokens.usdc,
@@ -43,7 +43,7 @@ const farms: SerializedFarmConfig[] = [
         lpSymbol: 'WETH-USDC',
         lpAddresses: {
             4: '0x10B7B59d8b26fE3D0C30193F107F937fe48A4c47',
-            56: '',
+            3: '0x388993035c3a4d9712f5f0e82c59b671b3e68917',
         },
         token: serializedTokens.weth,
         quoteToken: serializedTokens.usdc,
@@ -53,7 +53,7 @@ const farms: SerializedFarmConfig[] = [
         lpSymbol: 'DAI-WETH',
         lpAddresses: {
             4: '0x75b9427E98E773dF3D88bc0AFa1b3C2cb440eAB1',
-            56: '',
+            3: '0x119e205a70e6c2eff6fdb403fd08eb52ccbf7799',
         },
         token: serializedTokens.dai,
         quoteToken: serializedTokens.weth,
@@ -63,7 +63,7 @@ const farms: SerializedFarmConfig[] = [
         lpSymbol: 'USDC-USDT',
         lpAddresses: {
             4: '0xCB238327b804f59Ea6b915Cc116B54AB4C9F993d',
-            56: '',
+            3: '0xda5afd92decd1d1f539d67ae7bb15731454d20f1',
         },
         token: serializedTokens.usdc,
         quoteToken: serializedTokens.usdt,

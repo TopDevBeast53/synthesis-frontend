@@ -34,7 +34,7 @@ const multicall = async <T = any>(abi: any[], calls: Call[]): Promise<T> => {
 export const multicallv2 = async <T = any>(
     abi: any[],
     calls: Call[],
-    options: MulticallOptions = { requireSuccess: false },
+    options: MulticallOptions = { requireSuccess: true } // UpdateMe - default to false
 ): Promise<T> => {
     const { requireSuccess } = options
     const multi = getMulticallContract()
