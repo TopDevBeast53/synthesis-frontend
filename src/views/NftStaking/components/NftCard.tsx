@@ -23,10 +23,7 @@ const NFTCard = styled(Card)`
 
 const NFTCardInfoPanel = styled.div`
   border-radius: 0.75rem;
-  padding: 20px 8px 20px 8px;
-  ${({ theme }) => theme.mediaQueries.sm} {
-    padding: 20px 33px 20px 38px;
-  }
+  padding: 0.75rem;
 `
 
 const NFTImageInfoPanel = styled(Card)`
