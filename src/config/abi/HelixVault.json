@@ -32,6 +32,11 @@
     "type": "error"
   },
   {
+    "inputs": [],
+    "name": "CallerIsNotTimelockOwner",
+    "type": "error"
+  },
+  {
     "inputs": [
       {
         "internalType": "uint256",
@@ -112,16 +117,6 @@
     "type": "error"
   },
   {
-    "inputs": [],
-    "name": "NoDepositMade",
-    "type": "error"
-  },
-  {
-    "inputs": [],
-    "name": "Unassigned",
-    "type": "error"
-  },
-  {
     "inputs": [
       {
         "internalType": "uint256",
@@ -129,12 +124,22 @@
         "type": "uint256"
       }
     ],
-    "name": "WaitUntil",
+    "name": "LockedUntil",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NoDepositMade",
     "type": "error"
   },
   {
     "inputs": [],
     "name": "Withdrawn",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "ZeroAddress",
     "type": "error"
   },
   {
@@ -145,6 +150,11 @@
   {
     "inputs": [],
     "name": "ZeroDuration",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "ZeroTimelockAddress",
     "type": "error"
   },
   {
@@ -396,6 +406,25 @@
       }
     ],
     "name": "SetFeeMinter",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "previousOwner",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "TimelockOwnershipTransferred",
     "type": "event"
   },
   {
@@ -1062,6 +1091,13 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "renounceTimelockOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "uint256",
@@ -1138,6 +1174,19 @@
   },
   {
     "inputs": [],
+    "name": "timelockOwner",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "token",
     "outputs": [
       {
@@ -1158,6 +1207,19 @@
       }
     ],
     "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "transferTimelockOwnership",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

@@ -6,7 +6,7 @@ import { multiplyPriceByAmount } from 'utils/prices'
 import { wrappedCurrency } from '../utils/wrappedCurrency'
 import { PairState, usePairs } from './usePairs'
 
-const BUSD_MAINNET = mainnetTokens.busd
+const BUSD_MAINNET = mainnetTokens.usdc
 const { weth: WETH } = tokens
 
 /**

@@ -21,8 +21,8 @@ export const vaultPoolConfig = {
         autoCompoundFrequency: 1,
         gasLimit: 500000,
         tokenImage: {
-            primarySrc: `/images/tokens/${tokens.cake.address}.svg`,
-            secondarySrc: `/images/tokens/${tokens.cake.address}.svg`,
+            primarySrc: `/images/tokens/${tokens.helix.address}.svg`,
+            secondarySrc: `/images/tokens/${tokens.helix.address}.svg`,
         },
     },
 } as const
@@ -34,7 +34,7 @@ const pools: SerializedPoolConfig[] = [
         earningToken: serializedTokens.helix,
         contractAddress: {
             4: '0xEa0DDa9B02EAfc1a4863008a74f7C2320795bF6c',
-            56: '',
+            3: '0x01ebA7647C33d27742e774aB9507B11A153cde39',    // UpdateMe 
         },
         poolCategory: PoolCategory.CORE,
         harvest: true,

@@ -82,7 +82,7 @@ const ContributeModal: React.FC<Props> = ({
   const raisingTokenContract = useERC20(currency.address)
   const { t } = useTranslation()
   const valueWithTokenDecimals = new BigNumber(value).times(DEFAULT_TOKEN_DECIMAL)
-  const label = currency === tokens.cake ? t('Max. HELIXentry') : t('Max. token entry')
+  const label = currency === tokens.helix ? t('Max. HELIXentry') : t('Max. token entry')
 
   const { isApproving, isApproved, isConfirmed, isConfirming, handleApprove, handleConfirm } =
     useApproveConfirmTransaction({
