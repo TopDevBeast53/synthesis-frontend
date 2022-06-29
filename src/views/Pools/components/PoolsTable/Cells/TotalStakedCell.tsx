@@ -36,8 +36,9 @@ const TotalStakedCell: React.FC<TotalStakedCellProps> = ({ pool }) => {
     }
     if (isManualHelixPool) {
       const manualHelixTotalMinusAutoVault = new BigNumber(totalStaked).minus(helixInVaults)
+      const balanceNumber = getBalanceNumber(manualHelixTotalMinusAutoVault, stakingToken.decimals)
 
-      return getBalanceNumber(manualHelixTotalMinusAutoVault, stakingToken.decimals)
+      return balanceNumber < 0 ? 0 : balanceNumber
     }
     return getBalanceNumber(totalStaked, stakingToken.decimals)
   }, [vaultKey, totalHelixInVault, isManualHelixPool, totalStaked, stakingToken.decimals, helixInVaults])

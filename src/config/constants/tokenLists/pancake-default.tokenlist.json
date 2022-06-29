@@ -1,6 +1,5 @@
 {
   "name": "Helix Default List",
-  "_comment": "update me - addresses- now ropsten",
   "timestamp": "2021-05-06T00:00:00Z",
   "version": {
     "major": 3,
@@ -14,8 +13,8 @@
     {
       "name": "Helix",
       "symbol": "HELIX",
-      "address": "0xB3F97C4DbBEf56f3220e9ceFf80b93eB483D0Ef7",
-      "chainId": 3, 
+      "address": "0x79DD2dad8D04F9279F94580DBEd2306A0aE118Bd",
+      "chainId": 4, 
       "decimals": 18,
       "logoURI": "local://images/tokens/0xC232Ce0b83b3B320CdA3ec78c57A0D101A4Ac5cD.png"
     },
@@ -23,31 +22,31 @@
       "name": "Wrapped ETH",
       "symbol": "WETH",
       "address": "0xc778417E063141139Fce010982780140Aa0cD5Ab",
-      "chainId": 3,
+      "chainId": 4,
       "decimals": 18,
       "logoURI": "local://images/tokens/0xae13d989dac2f0debff460ac112a837c89baa7cd.png"
     },
     {
       "name": "DAI",
       "symbol": "DAI",
-      "address": "0xaD6D458402F60fD3Bd25163575031ACDce07538D",
-      "chainId": 3,
+      "address": "0x5592EC0cfb4dbc12D3aB100b257153436a1f0FEa",
+      "chainId": 4,
       "decimals": 18,
       "logoURI": "local://images/tokens/0xf9f93cf501bfadb6494589cb4b4c15de49e85d0e.png"
     },
     {
       "name": "USDC",
       "symbol": "USDC",
-      "address": "0x07865c6e87b9f70255377e024ace6630c1eaa37f",
-      "chainId": 3,
+      "address": "0x4DBCdF9B62e891a7cec5A2568C3F4FAF9E8Abe2b",
+      "chainId": 4,
       "decimals": 6,
       "logoURI": "local://images/tokens/0x78867bbeef44f2326bf8ddd1941a4439382ef2a7.png"
     },
     {
       "name": "USDT",
       "symbol": "USDT",
-      "address": "0x110a13FC3efE6A245B50102D2d79B3E76125Ae83",
-      "chainId": 3,
+      "address": "0x2a4a8B7555bDbBfef4a50E4E5c4Ed42C7A504Ce5",
+      "chainId": 4,
       "decimals": 6,
       "logoURI": "local://images/tokens/0x337610d27c682E347C9cD60BD4b3b107C9d34dDd.png"
     }

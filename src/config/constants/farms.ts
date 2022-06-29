@@ -22,7 +22,7 @@ const farms: SerializedFarmConfig[] = [
         pid: 1,
         lpSymbol: 'HELIX-WETH',
         lpAddresses: {
-            4: '0x50687BB28cf31E574F15E5d33Cde669a2cE07a52',
+            4: '0x53def98794cc10f109029f2c1556f3457c7b2bde',
             3: '0x551e4d01e89d3eda77ff5344de8ebb34d6c3f87c',
         },
         token: serializedTokens.helix,
@@ -32,7 +32,7 @@ const farms: SerializedFarmConfig[] = [
         pid: 2,
         lpSymbol: 'DAI-USDC',
         lpAddresses: {
-            4: '0x308C01C493196178214Ec8067CFFaf12c9A511Cc',
+            4: '0x2D0eD30143862FF5d50953175Df8b3A49cc1801c',
             3: '0x5072cafb3cf3c6808416d64eee8d06dda11c1410',
         },
         token: serializedTokens.dai,
@@ -42,7 +42,7 @@ const farms: SerializedFarmConfig[] = [
         pid: 3,
         lpSymbol: 'WETH-USDC',
         lpAddresses: {
-            4: '0x10B7B59d8b26fE3D0C30193F107F937fe48A4c47',
+            4: '0x082a1840a4ebED21A7eC179DA6bE95cd69F9780d',
             3: '0x388993035c3a4d9712f5f0e82c59b671b3e68917',
         },
         token: serializedTokens.weth,
@@ -52,7 +52,7 @@ const farms: SerializedFarmConfig[] = [
         pid: 4,
         lpSymbol: 'DAI-WETH',
         lpAddresses: {
-            4: '0x75b9427E98E773dF3D88bc0AFa1b3C2cb440eAB1',
+            4: '0xBf67B96814725955e58964cBB9E8bb3F16AA41Ba',
             3: '0x119e205a70e6c2eff6fdb403fd08eb52ccbf7799',
         },
         token: serializedTokens.dai,
@@ -62,7 +62,7 @@ const farms: SerializedFarmConfig[] = [
         pid: 5,
         lpSymbol: 'USDC-USDT',
         lpAddresses: {
-            4: '0xCB238327b804f59Ea6b915Cc116B54AB4C9F993d',
+            4: '0x6279705dF05A47ca42Fbe087377bD1aa129F821e',
             3: '0xda5afd92decd1d1f539d67ae7bb15731454d20f1',
         },
         token: serializedTokens.usdc,
