@@ -22,7 +22,7 @@ const farms: SerializedFarmConfig[] = [
         pid: 1,
         lpSymbol: 'HELIX-WETH',
         lpAddresses: {
-            4: '0x53def98794cc10f109029f2c1556f3457c7b2bde',
+            4: '0x53dEf98794CC10F109029f2C1556F3457c7b2bDe',
             3: '0x551e4d01e89d3eda77ff5344de8ebb34d6c3f87c',
         },
         token: serializedTokens.helix,

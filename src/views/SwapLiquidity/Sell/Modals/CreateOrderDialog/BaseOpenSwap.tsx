@@ -31,9 +31,14 @@ export default (props) => {
     },
     [setUAmount],
   )
-  const handleYAmountChange = (input) => {
-    setYAmount(input)
-  }
+  const handleYAmountChange = useCallback(
+    (e: React.FormEvent<HTMLInputElement>) => {
+      if (e.currentTarget.validity.valid) {
+        setYAmount(e.currentTarget.value.replace(/,/g, '.'))
+      }
+    },
+    [setYAmount],
+  )
 
   const [selectedToBuyerTokenOption, setSelectedToBuyerTokenOption] = useState<any>(getInitialOption(toBuyerTokenOptions))
   const [selectedToSellerTokenOption, setSelectedToSellerTokenOption] = useState<any>(getInitialOption(toSellerTokenOptions))
