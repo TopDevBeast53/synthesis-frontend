@@ -121,7 +121,7 @@ export default {
     },
     referralRegister: {
         3: '0x49B240E9ae6Fa679E1Ff740D37a7A3716988eE61',
-        4: '0x555A63C2ff6B34C72670C61D00C0aB957292dea0',
+        4: '0xb5c8f433625a4e3781B4A3123aa8195f7B065092',
     },
     helixVault: {
         3: '0x355077B820Be6c398770efe2AD18112Ea140aCD4',
