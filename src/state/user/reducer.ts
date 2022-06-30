@@ -151,8 +151,9 @@ export default createReducer(initialState, (builder) =>
             state.userDeadline = action.payload.userDeadline
             state.timestamp = currentTimestamp()
         })
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         .addCase(updateUserSingleHopOnly, (state, action) => {
-            state.userSingleHopOnly = action.payload.userSingleHopOnly
+            state.userSingleHopOnly = false
         })
         .addCase(addSerializedToken, (state, { payload: { serializedToken } }) => {
             if (!state.tokens) {
