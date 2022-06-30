@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 import { ethers } from 'ethers'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
-import { Flex, Button, Card, Text, Box } from 'uikit'
+import { Flex, Button, Card, Text, Box, AutoRenewIcon } from 'uikit'
 import { Contract } from '@ethersproject/contracts'
 import ReferralRegisterABI from 'config/abi/HelixReferral.json'
 import { getProviderOrSigner } from 'utils'
@@ -108,7 +108,7 @@ export default function Referrals() {
   const [myReferrer, setMyReferrer] = useState<string | null>(null)
   const [myReferees, setMyReferees] = useState(null)
   const { toastError, toastSuccess } = useToast()
-  const [disabled, setDisabled] = useState(false)
+  const [pendingTx, setPendingTx] = useState(false)
   const [isReferrerLoading, setIsReferrerLoading] = useState(true)
   const [isRefereesLoading, setIsRefereesLoading] = useState(true)
   const [isBalanceLoading, setIsBalanceLoading] = useState(true)
@@ -119,6 +119,21 @@ export default function Referrals() {
   const helixToken = tokens.helix
   const { search } = location
 
+  const handleClaim = async () => {
+    setPendingTx(true)
+    try {
+      await claimRewardsCb()
+      toastSuccess('Success', 'Rewards have been claimed successfully!')
+      setPendingTx(false)
+      setReloadBalance(true)
+    } catch (e: any) {
+      const message: string = e?.data?.message
+        ? e?.data?.message
+        : 'Please try again if you have not been referred before.'
+      toastError('Error', message)
+      setPendingTx(false)
+    }
+  }
   useEffect(() => {
     getRef().then((value) => {
       if (value === '0x0000000000000000000000000000000000000000') {
@@ -204,27 +219,14 @@ export default function Referrals() {
               </Flex>
               <Flex flex={1}>
                 <Button
-                  onClick={async () => {
-                    setDisabled(true)
-                    try {
-                      await claimRewardsCb()
-                      toastSuccess('Success', 'Rewards have been claimed successfully!')
-                      setDisabled(false)
-                      setReloadBalance(true)
-                    } catch (e: any) {
-                      const message: string = e?.data?.message
-                        ? e?.data?.message
-                        : 'Please try again if you have not been referred before.'
-                      toastError('Error', message)
-                      setDisabled(false)
-                    }
-                  }}
-                  disabled={disabled || isBalanceLoading || pendingBalance === '0'}
+                  variant='primary'
+                  onClick={handleClaim}
+                  disabled={isBalanceLoading || parseFloat(pendingBalance) === 0}
+                  isLoading={pendingTx}
+                  endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
                   width="100%"
                 >
-                  <Text bold color="black">
-                    Claim
-                  </Text>
+                  Claim
                 </Button>
               </Flex>
             </Flex>
