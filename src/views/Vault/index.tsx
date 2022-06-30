@@ -84,7 +84,7 @@ const Vault: React.FC = () => {
       .catch((err) => {
         logError(err)
       })
-  }, [helixContract, account, setHelixEnabled, decimals])
+  }, [helixContract, account, setHelixEnabled, decimals, refresh, fastRefresh])
 
   const txResponseToArray = (tx) => {
     const result = tx.toString()
