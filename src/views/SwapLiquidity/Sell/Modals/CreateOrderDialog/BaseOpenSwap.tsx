@@ -120,7 +120,7 @@ export default (props) => {
   }
   return (
     <>
-      <Group style={{ margin: '1rem 0', zIndex: "15" }} title="Offer">
+      <Group style={{ marginBottom: '1rem', paddingBottom: '1.5rem', paddingTop: '1.5rem', zIndex: '30' }}>
         <Flex alignItems="center" mb="18px">
           <Text bold style={{ flex: '3' }}>
             {t('Token (Offering)')}:
@@ -143,7 +143,7 @@ export default (props) => {
           <Skeleton />
         )}
       </Group>
-      <Group title="Ask" style={{ marginBottom: '1rem' }}>
+      <Group style={{ marginBottom: '1rem', paddingBottom: '1.5rem', paddingTop: '1.5rem' }}>
         <Flex alignItems="center" mb="18px">
           <Text bold style={{ flex: '3' }}>
             {t('Token (Asking)')}:
@@ -159,7 +159,7 @@ export default (props) => {
           inputTitle={t('Amount')}
         />
       </Group>
-      <Flex alignItems="center" justifyContent="space-between">
+      <Flex alignItems="center" justifyContent="space-between" mt="8px">
         <Button style={{ flex: 1 }} variant="secondary" onClick={onDismiss} mr="24px">
           Cancel
         </Button>
