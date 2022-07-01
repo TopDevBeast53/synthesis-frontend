@@ -63,7 +63,7 @@ const NumberInput: React.FC<NumberInputProps> = ({
   return (
     <div style={{ position: 'relative', width: "100%" }}>
       <StyledTokenInput>
-        <Flex justifyContent="space-between" pl="16px">
+        <Flex justifyContent="space-between" pl="16px" pb="8px">
           <Text fontSize="14px">{inputTitle}</Text>
         </Flex>
         <Flex alignItems="center" justifyContent="space-between">
