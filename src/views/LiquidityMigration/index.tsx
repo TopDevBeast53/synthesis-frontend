@@ -143,7 +143,7 @@ export default function Migrator() {
               endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
               onClick={handleClick}
               disabled={allowedValue.eq(BIG_ZERO) && maxBalance.eq(BIG_ZERO)}
-              style={{ marginBottom: '5px' }}>
+              style={{ marginTop: '24px' }}>
               {pendingTx ? (allowedValue.lt(maxBalance) ? 'Approving' : t('Migrating')) : allowedValue.lt(maxBalance) ? 'Approve' : t('Migrate')}
             </Button>
           </AutoColumn>
