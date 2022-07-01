@@ -45,8 +45,8 @@ const farms: SerializedFarmConfig[] = [
             4: '0x8354fA5b6941b2ca5aD014aB56E69646bf4292F5',
             3: '0x388993035c3a4d9712f5f0e82c59b671b3e68917',
         },
-        token: serializedTokens.usdc,
-        quoteToken: serializedTokens.weth,
+        token: serializedTokens.weth,
+        quoteToken: serializedTokens.usdc,
     },
     {
         pid: 4,
