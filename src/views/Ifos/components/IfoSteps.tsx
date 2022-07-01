@@ -145,7 +145,7 @@ const Step1 = ({ hasProfile }: { hasProfile: boolean }) => {
                 </Text>
               </Box>
             </Flex>
-            <Button onClick={onPresentStake}>{t('Stake')} CAKE</Button>
+            <Button onClick={onPresentStake}>{t('Stake')} HELIX</Button>
           </FlexGap>
         </SmallStakePoolCard>
       )}
@@ -158,7 +158,7 @@ const Step2 = ({ hasProfile, isLive, isCommitted }: { hasProfile: boolean; isLiv
   return (
     <CardBody>
       <Heading as="h4" color="secondary" mb="16px">
-        {t('Commit CAKE')}
+        {t('Commit HELIX')}
       </Heading>
       <Text color="textSubtle" small>
         {t('When the IFO sales are live, you can “commit” your HELIXto buy the tokens being sold.')} <br />
@@ -166,7 +166,7 @@ const Step2 = ({ hasProfile, isLive, isCommitted }: { hasProfile: boolean; isLiv
       </Text>
       {hasProfile && isLive && !isCommitted && (
         <Button as="a" href="#current-ifo" mt="16px">
-          {t('Commit CAKE')}
+          {t('Commit HELIX')}
         </Button>
       )}
     </CardBody>

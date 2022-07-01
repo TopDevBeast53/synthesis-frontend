@@ -74,7 +74,7 @@ const PreviousRoundCardFooter: React.FC<{ lotteryNodeData: LotteryRound; lottery
           <Balance
             fontSize="14px"
             color="textSubtle"
-            unit=" CAKE"
+            unit=" HELIX"
             value={getBalanceNumber(lotteryNodeData?.amountCollectedInHelix)}
             decimals={0}
           />

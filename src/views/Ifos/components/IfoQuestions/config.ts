@@ -6,7 +6,7 @@ const config = (t: ContextApi['t']) => {
             title: t('What’s the difference between a Basic Sale and Unlimited Sale?'),
             description: [
                 t(
-                    'In the Basic Sale, every user can commit a maximum of about 100 USD worth of CAKE. We calculate the maximum HELIXamount about 30 minutes before each IFO. The Basic Sale has no participation fee.',
+                    'In the Basic Sale, every user can commit a maximum of about 100 USD worth of HELIX. We calculate the maximum HELIXamount about 30 minutes before each IFO. The Basic Sale has no participation fee.',
                 ),
                 t(
                     'In the Unlimited Sale, there’s no limit to the amount of HELIXyou can commit. However, there’s a fee for participation: see below.',

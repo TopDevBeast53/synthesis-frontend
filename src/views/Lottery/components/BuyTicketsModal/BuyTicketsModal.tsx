@@ -329,7 +329,7 @@ const BuyTicketsModal: React.FC<BuyTicketsModalProps> = ({ onDismiss }) => {
           cakePriceBusd.gt(0) &&
           `~${
             ticketsToBuy ? getFullDisplayBalance(priceTicketInHelix.times(new BigNumber(ticketsToBuy))) : '0.00'
-          } CAKE`
+          } HELIX`
         }
       />
       <Flex alignItems="center" justifyContent="flex-end" mt="4px" mb="12px">
@@ -385,10 +385,10 @@ const BuyTicketsModal: React.FC<BuyTicketsModalProps> = ({ onDismiss }) => {
       <Flex flexDirection="column">
         <Flex mb="8px" justifyContent="space-between">
           <Text color="textSubtle" fontSize="14px">
-            {t('Cost')} (CAKE)
+            {t('Cost')} (HELIX)
           </Text>
           <Text color="textSubtle" fontSize="14px">
-            {priceTicketInHelix && getFullDisplayBalance(priceTicketInHelix.times(ticketsToBuy || 0))} CAKE
+            {priceTicketInHelix && getFullDisplayBalance(priceTicketInHelix.times(ticketsToBuy || 0))} HELIX
           </Text>
         </Flex>
         <Flex mb="8px" justifyContent="space-between">
@@ -404,7 +404,7 @@ const BuyTicketsModal: React.FC<BuyTicketsModalProps> = ({ onDismiss }) => {
             </Flex>
           </Flex>
           <Text fontSize="14px" color="textSubtle">
-            ~{discountValue} CAKE
+            ~{discountValue} HELIX
           </Text>
         </Flex>
         <Flex borderTop={`1px solid ${theme.colors.cardBorder}`} pt="8px" mb="24px" justifyContent="space-between">
@@ -412,7 +412,7 @@ const BuyTicketsModal: React.FC<BuyTicketsModalProps> = ({ onDismiss }) => {
             {t('You pay')}
           </Text>
           <Text fontSize="16px" bold>
-            ~{totalCost} CAKE
+            ~{totalCost} HELIX
           </Text>
         </Flex>
 

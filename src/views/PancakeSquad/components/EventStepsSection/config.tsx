@@ -51,7 +51,7 @@ const stepsConfigBuilder = ({ t, userInfos, eventInfos, userStatus, account, the
         hasProfileActivated,
         eventStatus: [SaleStatusEnum.Pending, SaleStatusEnum.Premint],
       }),
-      title: t('Hold CAKE'),
+      title: t('Hold HELIX'),
       bodyText: [t('Each NFT costs HELIXto mint. Remember you also need BNB to cover transaction fees too!')],
       buttons: (
         <>
@@ -61,7 +61,7 @@ const stepsConfigBuilder = ({ t, userInfos, eventInfos, userStatus, account, the
             target="_blank"
             width="100%"
           >
-            {t('Buy CAKE')}
+            {t('Buy HELIX')}
           </Button>
         </>
       ),

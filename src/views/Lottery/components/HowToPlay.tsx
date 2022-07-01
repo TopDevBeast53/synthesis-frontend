@@ -325,7 +325,7 @@ const HowToPlay: React.FC = () => {
             </li>
           </BulletList>
           <Heading my="16px" scale="md">
-            {t('CAKE Injections')}
+            {t('HELIX Injections')}
           </Heading>
           <BulletList>
             <li>
@@ -334,7 +334,7 @@ const HowToPlay: React.FC = () => {
                   'An average total of 35,000 HELIXfrom the treasury is added to lottery rounds over the course of a week. This HELIXis of course also included in rollovers! Read more in our guide to ',
                 )}
                 <InlineLink href="https://docs.pancakeswap.finance/tokenomics/cake/cake-tokenomics">
-                  {t('CAKE Tokenomics')}
+                  {t('HELIX Tokenomics')}
                 </InlineLink>
               </Text>
             </li>

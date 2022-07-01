@@ -106,7 +106,7 @@ const Mint: React.FC = () => {
   //           {t('Choose wisely: you can only ever make one starter collectible!')}
   //         </Text>
   //         <Text as="p" mb="24px" color="textSubtle">
-  //           {t('Cost: %num% CAKE', { num: formatUnits(MINT_COST) })}
+  //           {t('Cost: %num% HELIX', { num: formatUnits(MINT_COST) })}
   //         </Text>
   //         {starterNfts.map((nft) => {
   //           const handleChange = (value: string) => setSelectedBunnyId(value)

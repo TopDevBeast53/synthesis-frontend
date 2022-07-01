@@ -145,7 +145,7 @@ const PlaceBidModal: React.FC<PlaceBidModalProps> = ({
       <ExistingInfo>
         <Flex justifyContent="space-between">
           <Text>{t('Your existing bid')}</Text>
-          <Text>{t('%num% CAKE', { num: getBalanceNumber(amount).toLocaleString() })}</Text>
+          <Text>{t('%num% HELIX', { num: getBalanceNumber(amount).toLocaleString() })}</Text>
         </Flex>
         <Flex justifyContent="space-between">
           <Text>{t('Your position')}</Text>
@@ -157,7 +157,7 @@ const PlaceBidModal: React.FC<PlaceBidModalProps> = ({
           <Text>{t('Bid a multiple of 10')}</Text>
           <Flex>
             <PancakeRoundIcon width="24px" height="24px" mr="4px" />
-            <Text bold>CAKE</Text>
+            <Text bold>HELIX</Text>
           </Flex>
         </Flex>
         {isFirstBid && (
