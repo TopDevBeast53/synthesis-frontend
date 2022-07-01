@@ -13,7 +13,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { usePriceHelixBusd } from 'state/farms/hooks'
 import { Deposit } from 'state/types'
 import styled from 'styled-components'
-import { Button, Flex, Heading, useModal, Text } from 'uikit'
+import { Button, Flex, Heading, useModal, Text, AutoRenewIcon } from 'uikit'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { getBalanceNumber } from 'utils/formatBalance'
 import { logError } from 'utils/sentry'
@@ -56,6 +56,7 @@ const Vault: React.FC = () => {
   const [deposits, setDeposits] = useState([])
   const [totalStake, setTotalStake] = useState(0)
   const [refresh, setRefresh] = useState(0)
+  const [pendingTx, setPendingTx] = useState(false)
 
   const fastRefresh = useFastFresh()
   const { decimals } = tokens.helix
@@ -65,8 +66,6 @@ const Vault: React.FC = () => {
   const stakingTokenBalance = balanceFetchStatus === FetchStatus.Fetched ? helixBalance : BIG_ZERO
 
   useEffect(() => {
-    if (!account) return
-    setLoading(true)
     helixContract
       .balanceOf(helixVaultAddress)
       .then((value: any) => {
@@ -75,6 +74,10 @@ const Vault: React.FC = () => {
       .catch((err) => {
         logError(err)
       })
+  }, [helixContract, account, setHelixEnabled, decimals, fastRefresh])
+
+  useEffect(() => {
+    if (!account) return
     helixContract
       .allowance(account, helixVaultAddress)
       .then((value) => {
@@ -84,7 +87,7 @@ const Vault: React.FC = () => {
       .catch((err) => {
         logError(err)
       })
-  }, [helixContract, account, setHelixEnabled, decimals, refresh, fastRefresh])
+  }, [helixContract, account, setHelixEnabled, decimals])
 
   const txResponseToArray = (tx) => {
     const result = tx.toString()
@@ -126,7 +129,7 @@ const Vault: React.FC = () => {
   const handleAfterAdded = () => {
     setTimeout(() => {
       setRefresh(refresh + 1)
-    }, 5000)
+    }, 1000)
   }
   const [handleAdd] = useModal(
     <AddRowModal
@@ -136,12 +139,14 @@ const Vault: React.FC = () => {
     />,
   )
   const handleEnable = useCallback(async () => {
+    setPendingTx(true)
     try {
       await helixContract.approve(helixVaultAddress, ethers.constants.MaxUint256)
       setHelixEnabled(HelixEnabledState.ENABLED)
     } catch (e) {
       logError(e)
     }
+    setPendingTx(false)
   }, [helixContract])
   const buttonScale = 'md'
 
@@ -199,9 +204,16 @@ const Vault: React.FC = () => {
                 </Button>
               )}
               {helixEnabled === HelixEnabledState.DISABLED && (
-                <Button onClick={handleEnable} key={buttonScale} variant="secondary" scale={buttonScale} mr="8px">
-                  {' '}
-                  Enable{' '}
+                <Button
+                  isLoading={pendingTx}
+                  endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
+                  onClick={handleEnable}
+                  key={buttonScale}
+                  variant="secondary"
+                  scale={buttonScale}
+                  mr="8px"
+                >
+                  Enable
                 </Button>
               )}
             </Flex>
