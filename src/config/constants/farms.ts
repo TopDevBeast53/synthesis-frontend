@@ -40,13 +40,13 @@ const farms: SerializedFarmConfig[] = [
     },
     {
         pid: 3,
-        lpSymbol: 'WETH-USDC',
+        lpSymbol: 'USDC-WETH',
         lpAddresses: {
             4: '0x8354fA5b6941b2ca5aD014aB56E69646bf4292F5',
             3: '0x388993035c3a4d9712f5f0e82c59b671b3e68917',
         },
-        token: serializedTokens.weth,
-        quoteToken: serializedTokens.usdc,
+        token: serializedTokens.usdc,
+        quoteToken: serializedTokens.weth,
     },
     {
         pid: 4,
@@ -60,13 +60,13 @@ const farms: SerializedFarmConfig[] = [
     },
     {
         pid: 5,
-        lpSymbol: 'USDC-USDT',
+        lpSymbol: 'USDT-USDC',
         lpAddresses: {
             4: '0xd87e648ccca6C944FA1A0aACDb4d0577518323f3',
             3: '0xda5afd92decd1d1f539d67ae7bb15731454d20f1',
         },
-        token: serializedTokens.usdc,
-        quoteToken: serializedTokens.usdt,
+        token: serializedTokens.usdt,
+        quoteToken: serializedTokens.usdc,
     },
     // {
     //   pid: 0,
