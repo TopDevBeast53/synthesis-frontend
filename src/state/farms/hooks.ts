@@ -6,7 +6,7 @@ import BigNumber from 'bignumber.js'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { getBalanceAmount } from 'utils/formatBalance'
 import { farmsConfig } from 'config/constants'
-import { useSlowFresh, useFastFresh } from 'hooks/useRefresh'
+import { useFastFresh, useSlowFresh } from 'hooks/useRefresh'
 import { deserializeToken } from 'state/user/hooks/helpers'
 import { getAddress } from 'utils/addressHelpers'
 import { fetchFarmsPublicDataAsync, fetchFarmUserDataAsync, nonArchivedFarms } from '.'
@@ -58,7 +58,7 @@ export const usePollFarmsPublicData = (includeArchive = false) => {
 
 export const usePollFarmsWithUserData = (includeArchive = false) => {
     const dispatch = useAppDispatch()
-    const slowRefresh = useSlowFresh()
+    const fastRefresh = useFastFresh()
     const { account } = useWeb3React()
 
     useEffect(() => {
@@ -70,7 +70,7 @@ export const usePollFarmsWithUserData = (includeArchive = false) => {
         if (account) {
             dispatch(fetchFarmUserDataAsync({ account, pids }))
         }
-    }, [includeArchive, dispatch, slowRefresh, account])
+    }, [includeArchive, dispatch, fastRefresh, account])
 }
 
 /**
