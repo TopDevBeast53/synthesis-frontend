@@ -82,7 +82,7 @@ const ContributeModal: React.FC<Props> = ({
   const raisingTokenContract = useERC20(currency.address)
   const { t } = useTranslation()
   const valueWithTokenDecimals = new BigNumber(value).times(DEFAULT_TOKEN_DECIMAL)
-  const label = currency === tokens.helix ? t('Max. HELIXentry') : t('Max. token entry')
+  const label = currency === tokens.helix ? t('Max. HELIX entry') : t('Max. token entry')
 
   const { isApproving, isApproved, isConfirmed, isConfirming, handleApprove, handleConfirm } =
     useApproveConfirmTransaction({
@@ -139,10 +139,10 @@ const ContributeModal: React.FC<Props> = ({
   const { targetRef, tooltip, tooltipVisible } = useTooltip(
     poolId === PoolIds.poolBasic
       ? t(
-          'For the basic sale, Max HELIXentry is capped by minimum between your average HELIXbalance in the IFO HELIXpool, or the pool’s hard cap. To increase the max entry, Stake more HELIXinto the IFO HELIXpool',
+          'For the basic sale, Max HELIX entry is capped by minimum between your average HELIX balance in the IFO HELIX pool, or the pool’s hard cap. To increase the max entry, Stake more HELIX into the IFO HELIX pool',
         )
       : t(
-          'For the unlimited sale, Max HELIXentry is capped by your average HELIXbalance in the IFO HELIXpool. To increase the max entry, Stake more HELIXinto the IFO HELIXpool',
+          'For the unlimited sale, Max HELIX entry is capped by your average HELIX balance in the IFO HELIX pool. To increase the max entry, Stake more HELIX into the IFO HELIX pool',
         ),
     {},
   )
@@ -200,7 +200,7 @@ const ContributeModal: React.FC<Props> = ({
             >
               {valueWithTokenDecimals.isGreaterThan(userCurrencyBalance)
                 ? t('Insufficient Balance')
-                : t('Exceeded max HELIXentry')}
+                : t('Exceeded max HELIX entry')}
             </Text>
           )}
           <Text color="textSubtle" textAlign="right" fontSize="12px" mb="16px">

@@ -48,7 +48,7 @@ export const CreditCalcBlock = () => {
       <>
         <Text>
           {t(
-            'The start block of the current calculation period. Your average IFO HELIXPool staking balance is calculated throughout this period.',
+            'The start block of the current calculation period. Your average IFO HELIX Pool staking balance is calculated throughout this period.',
           )}
         </Text>
         <LinkExternal href="https://medium.com/panhelixswap/initial-farm-offering-ifo-3-0-ifo-staking-pool-622d8bd356f1">

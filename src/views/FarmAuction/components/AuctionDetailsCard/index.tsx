@@ -87,7 +87,7 @@ const AuctionDetails: React.FC<AuctionDetailsProps> = ({ auction, connectedBidde
             {t('Place bid')}
           </Button>
           <Text color="textSubtle" small>
-            {t('If your bid is unsuccessful, you’ll be able to reclaim your HELIXafter the auction.')}
+            {t('If your bid is unsuccessful, you’ll be able to reclaim your HELIX after the auction.')}
           </Text>
         </>
       )

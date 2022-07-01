@@ -90,9 +90,9 @@ const PlaceBidModal: React.FC<PlaceBidModalProps> = ({
 
   useEffect(() => {
     if (userNotEnoughCake) {
-      setErrorText(t('Insufficient HELIXbalance'))
+      setErrorText(t('Insufficient HELIX balance'))
     } else if (!isMoreThanInitialBidAmount && isFirstBid) {
-      setErrorText(t('First bid must be %initialBidAmount% HELIXor more.', { initialBidAmount }))
+      setErrorText(t('First bid must be %initialBidAmount% HELIX or more.', { initialBidAmount }))
     } else if (!isMultipleOfTen) {
       setErrorText(t('Bid must be a multiple of 10'))
     } else {
@@ -162,7 +162,7 @@ const PlaceBidModal: React.FC<PlaceBidModalProps> = ({
         </Flex>
         {isFirstBid && (
           <Text pb="8px" small>
-            {t('First bid must be %initialBidAmount% HELIXor more.', { initialBidAmount })}
+            {t('First bid must be %initialBidAmount% HELIX or more.', { initialBidAmount })}
           </Text>
         )}
         <BalanceInput
@@ -252,7 +252,7 @@ const PlaceBidModal: React.FC<PlaceBidModalProps> = ({
           )}
         </Flex>
         <Text color="textSubtle" small mt="24px">
-          {t('If your bid is unsuccessful, you’ll be able to reclaim your HELIXafter the auction.')}
+          {t('If your bid is unsuccessful, you’ll be able to reclaim your HELIX after the auction.')}
         </Text>
       </InnerContent>
     </StyledModal>

@@ -17,7 +17,7 @@ export const vaultPoolConfig = {
     },
     [VaultKey.IfoPool]: {
         name: 'IFO HELIX',
-        description: 'Stake HELIXto participate in IFOs',
+        description: 'Stake HELIX to participate in IFOs',
         autoCompoundFrequency: 1,
         gasLimit: 500000,
         tokenImage: {

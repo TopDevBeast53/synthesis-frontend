@@ -64,7 +64,7 @@ const FAQs = () => {
                 <List>
                   <FaqLi>
                     {t(
-                      'Community Farm qualifiers will be asked to provide the address of the wallet which you’ll use for bidding HELIXin the auction.',
+                      'Community Farm qualifiers will be asked to provide the address of the wallet which you’ll use for bidding  in the auction.',
                     )}
                   </FaqLi>
                   <FaqLi>{t('Core Farm/Pool qualifiers will receive further directions separately.')}</FaqLi>
@@ -79,17 +79,17 @@ const FAQs = () => {
               </Text>
               <Text color="textSubtle">
                 {t(
-                  'You can then commit HELIXto bid during the auction, competing against other project for one of the available farms.',
+                  'You can then commit HELIX to bid during the auction, competing against other project for one of the available farms.',
                 )}
               </Text>
             </FoldableText>
             <FoldableText title={t('Step 4: After the auction')} mt="24px">
               <Text color="textSubtle">
-                {t('If your bid was not successful, you can reclaim your HELIXon this page.')}
+                {t('If your bid was not successful, you can reclaim your HELIX on this page.')}
               </Text>
               <Text color="textSubtle">
                 {t(
-                  'If your bid was successful, your farm will begin at the specified time. The HELIXyou bid will not be returned to you and will be added to our weekly HELIXburn.',
+                  'If your bid was successful, your farm will begin at the specified time. The HELIX you bid will not be returned to you and will be added to our weekly HELIX burn.',
                 )}
               </Text>
               <Text color="textSubtle">
@@ -97,7 +97,7 @@ const FAQs = () => {
               </Text>
               <Text color="textSubtle">
                 {t(
-                  'If two or more projects bid the exact same HELIXamount and are contending for a spot in the winning bidders, their bids may be invalidated.',
+                  'If two or more projects bid the exact same HELIX amount and are contending for a spot in the winning bidders, their bids may be invalidated.',
                 )}
               </Text>
             </FoldableText>

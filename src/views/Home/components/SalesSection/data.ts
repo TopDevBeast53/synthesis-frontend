@@ -43,7 +43,7 @@ export const earnSectionData: SalesSectionProps = {
         attributes: [
             { src: 'pie', alt: 'Pie chart' },
             { src: 'stonks', alt: 'Stocks chart' },
-            { src: 'folder', alt: 'Folder with HELIXtoken' },
+            { src: 'folder', alt: 'Folder with HELIX token' },
         ],
     },
 }
