@@ -46,7 +46,7 @@ const getIcon = (variant: AlertProps['variant'] = variants.INFO) => {
 
 const IconLabel = styled.div<ThemedIconLabel>`
   background-color: ${getThemeColor};
-  border-radius: 12px 0 0 16px;
+  border-radius: 12px 0 0 12px;
   color: #ffffff;
   padding: 12px;
 `
