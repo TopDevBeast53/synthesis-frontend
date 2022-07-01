@@ -95,7 +95,7 @@ const Voting = () => {
             </Flex>
 
             <GeneralCard style={{ minWidth: '210px', maxWidth:isTablet ? "340px" :"380px", marginTop:"15px" }}>
-              <GeneralCardCaption>What&apos;s your suggestion?</GeneralCardCaption>
+              <GeneralCardCaption>What&apos;s your proposal?</GeneralCardCaption>
               <Button as={Link} to="/voting/proposal/create" style={{ margin: '4px' }}>
                 Create a Proposal
               </Button>

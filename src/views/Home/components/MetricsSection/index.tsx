@@ -8,16 +8,16 @@ const Stats = () => {
     <Flex justifyContent="center" alignItems="center" flexDirection="column">
       <Flex flexDirection={['column', null, null, 'row']}>
         <MetricCard leftRounded>
-          <StatCardContent headingText="Beta" bodyText="24-Hr Trade Volume:" />
+          <StatCardContent headingText="Coming Soon" bodyText="24-Hr Trade Volume:" />
         </MetricCard>
         <MetricCard>
-          <StatCardContent headingText="Beta" bodyText="Total Value Locked:" />
+          <StatCardContent headingText="Coming Soon" bodyText="Total Value Locked:" />
         </MetricCard>
         <MetricCard>
-          <StatCardContent headingText="Beta" bodyText="HELIX Marketcap:" />
+          <StatCardContent headingText="Coming Soon" bodyText="HELIX Market Cap:" />
         </MetricCard>
         <MetricCard rightRounded>
-          <StatCardContent headingText="Beta" bodyText="HELIX Rate:" />
+          <StatCardContent headingText="Coming Soon" bodyText="HELIX Rate:" />
         </MetricCard>
       </Flex>
     </Flex>

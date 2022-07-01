@@ -76,7 +76,7 @@ export const darkColors: Colors = {
     gradients: {
         bubblegum: 'linear-gradient(139.73deg, #313D5C 0%, #3D2A54 100%)',
         inverseBubblegum: 'linear-gradient(139.73deg, #3D2A54 0%, #313D5C 100%)',
-        cardHeader: 'linear-gradient(166.77deg, #3B4155 0%, #3A3045 100%)',
+        cardHeader: 'rgba(16, 20, 17, 0.5)',
         blue: 'linear-gradient(180deg, #00707F 0%, #19778C 100%)',
         violet: 'linear-gradient(180deg, #6C4999 0%, #6D4DB2 100%)',
         violetAlt: 'linear-gradient(180deg, #434575 0%, #66578D 100%)',
