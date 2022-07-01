@@ -54,7 +54,7 @@ const Home: React.FC = () => {
                   Trade LP Tokens
                 </Text>
             </Button>
-            <Button width="256px" style={{ background: '#ABBEFF' }} onClick={() =>{handleClick("/yield-swap")}}>
+            <Button width="256px" style={{ background: '#ABBEFF' }} onClick={() =>{handleClick("/lps-swap")}}>
                 <Text style={{ color: '#101411', fontWeight: 500 }}>Trade Yield</Text>
             </Button>
             
