@@ -50,7 +50,7 @@ export const mainnetTokens = defineTokens({
         6,
         'USDC',
         'USDC',
-        'https://www.paxos.com/busd/',
+        'https://www.centre.io/usdc',
     ),
 } as const)
 
@@ -77,7 +77,7 @@ export const testnetTokens = defineTokens({
         6,
         'USDC',
         'USDC',
-        'https://www.paxos.com/busd/',
+        'https://www.centre.io/usdc',
     ),
     usdt: new Token(
         TESTNET,

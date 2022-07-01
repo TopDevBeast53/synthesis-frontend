@@ -119,7 +119,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, displayApr, removed, helixPri
           <DetailsSection
             removed={removed}
             bscScanAddress={getEtherScanLink(lpAddress, 'address')}
-            infoAddress={`/info/pool/${lpAddress}`}
+            // infoAddress={`/info/pool/${lpAddress}`}
             totalValueFormatted={totalValueFormatted}
             lpLabel={lpLabel}
             addLiquidityUrl={addLiquidityUrl}
