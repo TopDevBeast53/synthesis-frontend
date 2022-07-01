@@ -113,7 +113,6 @@ export default function Referrals() {
   const [isRefereesLoading, setIsRefereesLoading] = useState(true)
   const [isBalanceLoading, setIsBalanceLoading] = useState(true)
   const [pendingBalance, setPendingBalance] = useState<string>('0')
-  const [reloadBalance, setReloadBalance] = useState(true)
   const location = useLocation()
   const claimRewardsCb = useClaimRewards()
   const helixToken = tokens.helix
@@ -125,7 +124,6 @@ export default function Referrals() {
       await claimRewardsCb()
       toastSuccess('Success', 'Rewards have been claimed successfully!')
       setPendingTx(false)
-      setReloadBalance(true)
     } catch (e: any) {
       const message: string = e?.data?.message
         ? e?.data?.message
@@ -161,17 +159,15 @@ export default function Referrals() {
   }, [getReferees, fastRefresh])
 
   useEffect(() => {
-    if (reloadBalance) {
-      getBalance().then((value) => {
-        if (value === null) {
-          return
-        }
-        setPendingBalance(formatBigNumber(ethers.BigNumber.from(value), 3))
-        setIsBalanceLoading(false)
-        setReloadBalance(false)
-      })
-    }
-  }, [reloadBalance, getBalance, fastRefresh])
+    getBalance().then((value) => {
+      if (value === null) {
+        return
+      }
+      setPendingBalance(formatBigNumber(ethers.BigNumber.from(value), 3))
+      setIsBalanceLoading(false)
+    })
+
+  }, [getBalance, fastRefresh])
 
   if (!account) {
     return (
