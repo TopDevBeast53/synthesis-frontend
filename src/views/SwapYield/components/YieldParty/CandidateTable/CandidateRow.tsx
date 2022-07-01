@@ -7,7 +7,7 @@ import { StyledRow, AddressCell, ButtonRow, AskingTokenCell, SkeletonCell } from
 import AcceptBidModal from '../Modals/AcceptBidModal'
 
 const getEllipsis = (account) => {
-  return account ? `${account.substring(0, 5)}...${account.substring(account.length - 5)}` : null
+  return account ? `${account.substring(0, 6)}...${account.substring(account.length - 4)}` : null
 }
 const CandidateRow = ({ bidId, swapData }) => {
   const YieldSwapContract = useHelixYieldSwap()

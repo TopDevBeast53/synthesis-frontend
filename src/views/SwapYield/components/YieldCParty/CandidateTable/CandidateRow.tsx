@@ -9,7 +9,7 @@ import { StyledRow, AddressCell, ButtonRow, AskingTokenCell, SkeletonCell } from
 import DiscussOrder from '../DiscussOrder'
 
 const getEllipsis = (account) => {
-  return account ? `${account.substring(0, 5)}...${account.substring(account.length - 5)}` : null
+  return account ? `${account.substring(0, 6)}...${account.substring(account.length - 4)}` : null
 }
 const CandidateRow = ({ bidId, exToken, exAmount }) => {
   const { account } = useWeb3React()

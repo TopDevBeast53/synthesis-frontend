@@ -9,7 +9,7 @@ import { SwapState } from '../../types'
 import DiscussOrder from '../Modals/DiscussOrder'
 
 const getEllipsis = (account) => {
-  return account ? `${account.substring(0, 5)}...${account.substring(account.length - 5)}` : null
+  return account ? `${account.substring(0, 6)}...${account.substring(account.length - 4)}` : null
 }
 const CandidateRow = ({ bidId, swapData, buyer }) => {
   const LpSwapContract = useHelixLpSwap()
