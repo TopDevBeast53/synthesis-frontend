@@ -14,7 +14,7 @@ export const mainnetTokens = defineTokens({
     // Update Me: update svg file name equal to the token address
     helix: new Token(
         MAINNET,
-        '0x79DD2dad8D04F9279F94580DBEd2306A0aE118Bd', // update me 0x231CC03E6d8b7368eC2aBfAfb5f73D216c8af980
+        '0x231CC03E6d8b7368eC2aBfAfb5f73D216c8af980', // update me 0x231CC03E6d8b7368eC2aBfAfb5f73D216c8af980
         18,
         'HELIX',
         'Helix',
@@ -22,7 +22,7 @@ export const mainnetTokens = defineTokens({
     ),
     weth: new Token(
         MAINNET,
-        '0xc778417E063141139Fce010982780140Aa0cD5Ab', // update me
+        '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2', // update me
         18,
         'WETH',
         'Wrapped ETH',
@@ -30,7 +30,7 @@ export const mainnetTokens = defineTokens({
     ),
     dai: new Token(
         MAINNET,
-        '0x5592EC0cfb4dbc12D3aB100b257153436a1f0FEa',
+        '0x6B175474E89094C44Da98b954EedeAC495271d0F',
         18,
         'DAI',
         'Dai Stablecoin',
@@ -38,7 +38,7 @@ export const mainnetTokens = defineTokens({
     ),
     usdt: new Token(
         MAINNET,
-        '0x2a4a8B7555bDbBfef4a50E4E5c4Ed42C7A504Ce5',
+        '0xdAC17F958D2ee523a2206206994597C13D831ec7',
         6,
         'USDT',
         'Tether USD',
@@ -46,7 +46,7 @@ export const mainnetTokens = defineTokens({
     ),
     usdc: new Token(
         MAINNET,
-        '0x4DBCdF9B62e891a7cec5A2568C3F4FAF9E8Abe2b',
+        '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
         6,
         'USDC',
         'USDC',

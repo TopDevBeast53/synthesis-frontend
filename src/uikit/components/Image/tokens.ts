@@ -5,11 +5,11 @@ const tokens = {
     helix: {
         symbol: 'Helix',
         address: {
-            3: '0xB3F97C4DbBEf56f3220e9ceFf80b93eB483D0Ef7',    // UpdateMe
+            1: '0x231CC03E6d8b7368eC2aBfAfb5f73D216c8af980',    // UpdateMe
             4: '0x79DD2dad8D04F9279F94580DBEd2306A0aE118Bd',
         },
         decimals: 18,
-        projectLink: 'https://helix.exchange/',
+        projectLink: 'https://helix.finance/',
     },
     // txl: {
     //     symbol: 'TXL',
