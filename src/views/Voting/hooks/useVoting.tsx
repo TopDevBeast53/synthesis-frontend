@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react'
+import { useCallback } from 'react'
 import { getProviderOrSigner } from 'utils'
 import { Contract } from '@ethersproject/contracts'
 
@@ -9,13 +9,6 @@ import { getVotingAddress } from 'utils/addressHelpers'
 import votingABI from 'config/abi/Voting.json'
 
 export const useVoting = () => {
-  const overrides = useMemo(
-    () => ({
-      gasLimit: 9999999,
-    }),
-    [],
-  )
-
   const votingAddress = getVotingAddress()
   const { library, account } = useActiveWeb3React()
   const { callWithGasPrice } = useCallWithGasPrice()
@@ -40,17 +33,17 @@ export const useVoting = () => {
   const createProposal = useCallback(
     async (proposalName, endTimestamp) => {
       const contract = await getContract()
-      return callWithGasPrice(contract, 'createProposal', [proposalName, endTimestamp], overrides)
+      return callWithGasPrice(contract, 'createProposal', [proposalName, endTimestamp])
     },
-    [getContract, callWithGasPrice, overrides],
+    [getContract, callWithGasPrice],
   )
 
   const vote = useCallback(
     async (proposalId, tokenAmount, decision) => {
       const contract = await getContract()
-      return callWithGasPrice(contract, 'vote', [proposalId, tokenAmount, decision], overrides)
+      return callWithGasPrice(contract, 'vote', [proposalId, tokenAmount, decision])
     },
-    [getContract, callWithGasPrice, overrides],
+    [getContract, callWithGasPrice],
   )
 
   const getProposalResults = useCallback(
@@ -64,9 +57,9 @@ export const useVoting = () => {
   const withdraw = useCallback(
     async (proposalId, amount) => {
       const contract = await getContract()
-      return callWithGasPrice(contract, 'withdraw', [proposalId, amount], overrides)
+      return callWithGasPrice(contract, 'withdraw', [proposalId, amount])
     },
-    [getContract, callWithGasPrice, overrides],
+    [getContract, callWithGasPrice],
   )
 
   const getDecision = useCallback(
@@ -96,17 +89,17 @@ export const useVoting = () => {
   const addCoreMember = useCallback(
     async (coreMember) => {
       const contract = await getContract()
-      return callWithGasPrice(contract, 'addCoreMember', [coreMember], overrides)
+      return callWithGasPrice(contract, 'addCoreMember', [coreMember])
     },
-    [getContract, callWithGasPrice, overrides],
+    [getContract, callWithGasPrice],
   )
 
   const delCoreMember = useCallback(
     async (coreMember) => {
       const contract = await getContract()
-      return callWithGasPrice(contract, 'delCoreMember', [coreMember], overrides)
+      return callWithGasPrice(contract, 'delCoreMember', [coreMember])
     },
-    [getContract, callWithGasPrice, overrides],
+    [getContract, callWithGasPrice],
   )
 
   const getCoreMembersLength = useCallback(async () => {

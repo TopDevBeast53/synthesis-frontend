@@ -37,7 +37,7 @@ export function useCallWithGasPrice() {
 
             const tx = await contractMethod(
                 ...methodArgs,
-                hasManualGasPriceOverride ? { ...overrides } : { ...overrides, gasPrice },
+                hasManualGasPriceOverride ? { ...overrides, gasLimit: 380000 } : { ...overrides, gasPrice, gasLimit: 380000 },
             )
             if (tx) {
                 Sentry.addBreadcrumb({
