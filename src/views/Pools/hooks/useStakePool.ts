@@ -4,13 +4,13 @@ import { useAppDispatch } from 'state'
 import { updateUserStakedBalance, updateUserBalance } from 'state/actions'
 import { stakeFarm } from 'utils/calls'
 import BigNumber from 'bignumber.js'
-import { DEFAULT_TOKEN_DECIMAL, DEFAULT_GAS_LIMIT } from 'config'
+import { DEFAULT_TOKEN_DECIMAL } from 'config'
 import { BIG_TEN } from 'utils/bigNumber'
 import { useMasterchef, useSousChef } from 'hooks/useContract'
 import getGasPrice from 'utils/getGasPrice'
 
 const options = {
-    gasLimit: DEFAULT_GAS_LIMIT,
+    // gasLimit: DEFAULT_GAS_LIMIT,
 }
 
 const sousStake = async (sousChefContract, amount, decimals = 18) => {

@@ -3,7 +3,6 @@ import ethers, { Contract, CallOverrides } from 'ethers'
 import { useGasPrice } from 'state/user/hooks'
 import { get } from 'lodash'
 import * as Sentry from '@sentry/react'
-import { DEFAULT_GAS_LIMIT } from 'config'
 
 export function useCallWithGasPrice() {
     const gasPrice = useGasPrice()
@@ -38,7 +37,7 @@ export function useCallWithGasPrice() {
 
             const tx = await contractMethod(
                 ...methodArgs,
-                hasManualGasPriceOverride ? { ...overrides, gasLimit: DEFAULT_GAS_LIMIT } : { ...overrides, gasPrice, gasLimit: DEFAULT_GAS_LIMIT },
+                hasManualGasPriceOverride ? { ...overrides } : { ...overrides, gasPrice },
             )
             if (tx) {
                 Sentry.addBreadcrumb({
