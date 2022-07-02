@@ -26,10 +26,10 @@ export const useLpContract = () => {
 
     const approve = useCallback(
         async (lpTokenAddress, amount) => {
-            const tx = await callWithGasPrice(lpContract(lpTokenAddress), 'approve', [helixMigratorAddress, amount])
+            const tx = await callWithGasPrice(lpContract(lpTokenAddress), 'approve', [helixMigratorAddress, amount], overrides)
             return tx
         },
-        [lpContract, callWithGasPrice],
+        [lpContract, callWithGasPrice, overrides],
     )
 
     const getAllowance = useCallback(
