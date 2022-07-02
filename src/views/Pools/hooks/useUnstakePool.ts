@@ -5,22 +5,22 @@ import { useAppDispatch } from 'state'
 import { updateUserStakedBalance, updateUserBalance, updateUserPendingReward } from 'state/actions'
 import { unstakeFarm } from 'utils/calls'
 import { useMasterchef, useSousChef } from 'hooks/useContract'
-import getGasPrice from 'utils/getGasPrice'
+// import getGasPrice from 'utils/getGasPrice'
 
 const sousUnstake = async (sousChefContract: any, amount: string, decimals: number) => {
-    const gasPrice = await getGasPrice()
+    // const gasPrice = await getGasPrice()
     const units = parseUnits(amount, decimals)
 
     const tx = await sousChefContract.withdraw(units.toString(), {
-        gasPrice,
+        // gasPrice,
     })
     const receipt = await tx.wait()
     return receipt.status
 }
 
 const sousEmergencyUnstake = async (sousChefContract: any) => {
-    const gasPrice = await getGasPrice()
-    const tx = await sousChefContract.emergencyWithdraw({ gasPrice })
+    // const gasPrice = await getGasPrice()
+    const tx = await sousChefContract.emergencyWithdraw({ })
     const receipt = await tx.wait()
     return receipt.status
 }
