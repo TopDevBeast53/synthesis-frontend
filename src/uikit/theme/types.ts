@@ -58,6 +58,7 @@ export type Colors = {
     inputSecondary: string
     background: string
     backgroundDisabled: string
+    backgroundToggle: string
     backgroundAlt: string
     backgroundAlt2: string
     backgroundCard: string

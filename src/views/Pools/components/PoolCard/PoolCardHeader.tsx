@@ -12,7 +12,7 @@ const PoolCardHeader: React.FC<{
   isFinished?: boolean
   isStaking?: boolean
 }> = ({ isFinished = false, isStaking = false, children }) => {
-  const background = isStaking ? 'bubblegum' : 'cardHeader'
+  const background = isStaking ? 'cardHeader' : 'cardHeader'
 
   return (
     <Wrapper isFinished={isFinished} background={background}>

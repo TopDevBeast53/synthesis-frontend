@@ -4,9 +4,9 @@ import { Text } from 'uikit'
 import styled from 'styled-components'
 import { FixedSizeList } from 'react-window'
 import { wrappedCurrency } from 'utils/wrappedCurrency'
-import { LightGreyCard } from 'components/Card'
-import QuestionHelper from 'components/QuestionHelper'
-import { useTranslation } from 'contexts/Localization'
+// import { LightGreyCard } from 'components/Card'
+// import QuestionHelper from 'components/QuestionHelper'
+// import { useTranslation } from 'contexts/Localization'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useCombinedActiveList } from '../../state/lists/hooks'
 import { useCurrencyBalance } from '../../state/wallet/hooks'
@@ -29,13 +29,13 @@ const StyledBalanceText = styled(Text)`
   text-overflow: ellipsis;
 `
 
-const FixedContentRow = styled.div`
-  padding: 4px 20px;
-  height: 56px;
-  display: grid;
-  grid-gap: 16px;
-  align-items: center;
-`
+// const FixedContentRow = styled.div`
+//   padding: 4px 20px;
+//   height: 56px;
+//   display: grid;
+//   grid-gap: 16px;
+//   align-items: center;
+// `
 
 function Balance({ balance }: { balance: CurrencyAmount }) {
   return <StyledBalanceText title={balance.toExact()}>{balance.toSignificant(4)}</StyledBalanceText>
@@ -131,7 +131,7 @@ export default function CurrencyList({
 
   const { chainId } = useActiveWeb3React()
 
-  const { t } = useTranslation()
+  // const { t } = useTranslation()
 
   const inactiveTokens: {
     [address: string]: Token
@@ -149,21 +149,22 @@ export default function CurrencyList({
       const showImport = inactiveTokens && token && Object.keys(inactiveTokens).includes(token.address)
 
       if (index === breakIndex || !data) {
-        return (
-          <FixedContentRow style={style}>
-            <LightGreyCard padding="8px 12px" borderRadius="8px">
-              <RowBetween>
-                <Text small>{t('Expanded results from inactive Token Lists')}</Text>
-                <QuestionHelper
-                  text={t(
-                    "Tokens from inactive lists. Import specific tokens below or click 'Manage' to activate more lists.",
-                  )}
-                  ml="4px"
-                />
-              </RowBetween>
-            </LightGreyCard>
-          </FixedContentRow>
-        )
+        return null
+        // return (
+        //   <FixedContentRow style={style}>
+        //     <LightGreyCard padding="8px 12px" borderRadius="8px">
+        //       <RowBetween>
+        //         <Text small>{t('Expanded results from inactive Token Lists')}</Text>
+        //         <QuestionHelper
+        //           text={t(
+        //             "Tokens from inactive lists. Import specific tokens below or click 'Manage' to activate more lists.",
+        //           )}
+        //           ml="4px"
+        //         />
+        //       </RowBetween>
+        //     </LightGreyCard>
+        //   </FixedContentRow>
+        // )
       }
 
       if (showImport && token) {
@@ -190,7 +191,7 @@ export default function CurrencyList({
       setImportToken,
       showImportView,
       breakIndex,
-      t,
+      // t,
     ],
   )
 
