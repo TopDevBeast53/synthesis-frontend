@@ -9,11 +9,11 @@ import {
 } from 'state/user/hooks'
 import { useTranslation } from 'contexts/Localization'
 import { useSwapActionHandlers } from 'state/swap/hooks'
-import useTheme from 'hooks/useTheme'
+// import useTheme from 'hooks/useTheme'
 import QuestionHelper from '../../QuestionHelper'
 import TransactionSettings from './TransactionSettings'
 import ExpertModal from './ExpertModal'
-import GasSettings from './GasSettings'
+// import GasSettings from './GasSettings'
 
 const ScrollableContainer = styled(Flex)`
   flex-direction: column;
@@ -32,7 +32,7 @@ const SettingsModal: React.FC<InjectedModalProps> = ({ onDismiss }) => {
   const { onChangeRecipient } = useSwapActionHandlers()
 
   const { t } = useTranslation()
-  const { theme } = useTheme()
+  // const { theme } = useTheme()
 
   if (showConfirmExpertModal) {
     return (
@@ -64,13 +64,13 @@ const SettingsModal: React.FC<InjectedModalProps> = ({ onDismiss }) => {
       style={{ maxWidth: '420px', width: '90%' }}
     >
       <ScrollableContainer>
-        <Flex pb="24px" flexDirection="column">
+        {/* <Flex pb="24px" flexDirection="column">
           <Text bold textTransform="uppercase" fontSize="12px" color="secondary" mb="24px">
             {t('Global')}
           </Text>
           <GasSettings />
-        </Flex>
-        <Flex pt="24px" flexDirection="column" borderTop={`1px ${theme.colors.cardBorder} solid`}>
+        </Flex> */}
+        <Flex pt="16px" flexDirection="column">
           <Text bold textTransform="uppercase" fontSize="12px" color="secondary" mb="24px">
             {t('Swaps & Liquidity')}
           </Text>

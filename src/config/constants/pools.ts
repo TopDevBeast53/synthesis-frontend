@@ -1,4 +1,5 @@
 import { VaultKey } from 'state/types'
+import { DEFAULT_GAS_LIMIT } from 'config'
 import tokens, { serializeTokens } from './tokens'
 import { SerializedPoolConfig, PoolCategory } from './types'
 
@@ -9,7 +10,7 @@ export const vaultPoolConfig = {
         name: 'Auto HELIX',
         description: 'Automatic restaking',
         autoCompoundFrequency: 1,
-        gasLimit: 380000,
+        gasLimit: DEFAULT_GAS_LIMIT,
         tokenImage: {
             primarySrc: `/images/tokens/${tokens.helix.address}.svg`,
             secondarySrc: '/images/tokens/autorenew.svg',
@@ -19,7 +20,7 @@ export const vaultPoolConfig = {
         name: 'IFO HELIX',
         description: 'Stake HELIX to participate in IFOs',
         autoCompoundFrequency: 1,
-        gasLimit: 500000,
+        gasLimit: DEFAULT_GAS_LIMIT,
         tokenImage: {
             primarySrc: `/images/tokens/${tokens.helix.address}.svg`,
             secondarySrc: `/images/tokens/${tokens.helix.address}.svg`,

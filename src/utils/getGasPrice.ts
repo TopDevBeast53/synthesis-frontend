@@ -1,15 +1,15 @@
-import { ChainId } from 'sdk'
-import store from 'state'
-import { GAS_PRICE_GWEI } from 'state/user/hooks/helpers'
+import { ethers } from 'ethers'
 
 /**
  * Function to return gasPrice outwith a react component
  */
-const getGasPrice = (): string => {
+const getGasPrice = async () => {
     const chainId = process.env.REACT_APP_CHAIN_ID
-    const state = store.getState()
-    const userGas = state.user.gasPrice || GAS_PRICE_GWEI.default
-    return chainId === ChainId.MAINNET.toString() ? userGas : GAS_PRICE_GWEI.testnet
+    const apiKey = process.env.REACT_APP_ALCHEMY_API_KEY
+    const provider = new ethers.providers.AlchemyProvider(parseInt(chainId), apiKey)
+    const gasPriceVal = await provider.getGasPrice()
+
+    return gasPriceVal.toString()
 }
 
 export default getGasPrice
