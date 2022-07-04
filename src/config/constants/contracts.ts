@@ -93,7 +93,7 @@ export default {
         4: '0x72Cb0a06D1ED7432F480b176720878c674C673CA',
     },
     masterChef: {
-        1: '0xc84783ea4e1dE17BfC8B06d72d0257f750d73C43',
+        1: '0x212CC6ba467a3591904503A6b0dC58086657b980',
         4: '0xE58b6cB4f216e79b959C37CD681d8483a0B97DA0',
     },
     helixAutoPool: {
