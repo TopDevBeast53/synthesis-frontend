@@ -86,7 +86,7 @@ export default function Pool() {
   return (
     <Page>
       <AppBody>
-        <AppHeader title={t('Your Liquidity')} subtitle={t('Receive Tokens Back by Unwinding LPs')} />
+        <AppHeader title={t('Your Liquidity')} subtitle={t('Receive Tokens Back by Unwinding LPs')} pool/>
         <Body>
           {renderBody()}
           {account && !v2IsLoading && (
