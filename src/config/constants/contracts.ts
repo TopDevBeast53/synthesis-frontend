@@ -89,39 +89,39 @@ export default {
     },
     // update me
     multiCall: {
-        1: '0x4fa323B8d66fD3597d704285d0f12C4bD8D18BD9',
+        1: '0x1B19916FeA44dbFb2bA76F5875191F842CF0B201',
         4: '0x72Cb0a06D1ED7432F480b176720878c674C673CA',
     },
     masterChef: {
-        1: '0x212CC6ba467a3591904503A6b0dC58086657b980',
+        1: '0xa4c1135f0C0123f6683F98A8177F4c51F3179107',
         4: '0xE58b6cB4f216e79b959C37CD681d8483a0B97DA0',
     },
     helixAutoPool: {
-        1: '0x4f0bD19dcdFc9D537af43781417d681a45cC4F46',
+        1: '0xabc7303d27658a277830a1F64B3CA77dFFA10483',
         4: '0xE3157d8338b593d5F7Bf0A5094a7Dd886aDb3bA9',
     },
     helixNFT: {
-        1: '0x376cec95d38316577addf703f805b42110f06ec7',
+        1: '0x8940A899E969cBD90C9678f4C28c53ca8FE47FE2',
         4: '0x3C947b6a4e6CDC2AB6e40870EA6e5587e3Ee0458',
     },
     helixNFTChef: {
-        1: '0x4e8CA0c8aE8e3a29BCa6ee18c36C28DCd2c67E76',
+        1: '0xbFF5672d78E7Ef1eBE7F6B2EBD8Be7A7BbD4E9E1',
         4: '0x7aD6B528eC664bECd70D17389C3f7B5Bbb9A2A4B',
     },
     helixNFTBridge: {
-        1: '0x7CcD4B816892B2b285Cdbaba3FC6ee4081a6143E',
+        1: '0xC28d0CE9cb6CA636De865ed42027140117734Ba5',
         4: '0xeE2c4840963DdF228C0F21bAAE55cbB6E9dAE3B0',
     },
     helixMigrator: {
-        1: '0x0224ae58622e562903e5d83162482573d0Ab3a17',
+        1: '0x559432a801cDD68ef2714c40463F05d0B32C8e18',
         4: '0x9151B9BE983a67aaABD71fAF587342aB17900b84',
     },
     referralRegister: {
-        1: '0x180AD1dF0fF67304d06FED674E2aBB80BC2229C7',
+        1: '0x333F0b40A2DCe9C51AC8744126d9c75f6C4EFb4F',
         4: '0x57370F637BB1aC6e4D667561DDF1AAbF9c7B2590',
     },
     helixVault: {
-        1: '0xd40f6B317Fc5e9bD8342951942f2C1A56Ddf90f7',
+        1: '0x45ee118463cD4dc310bd0A2e8C9e211E815b809a',
         4: '0x7499e22C276CE488C8BC44ee4B884E39cC598EdB',
     },
     helixYieldSwap: {
@@ -129,7 +129,7 @@ export default {
         4: '0x5e901F3b57522d3C8071130cdC5c891Dad03Bb5e',
     },
     helixLPSwap: {
-        1: '0x69F622C25FA38c6d9d515da4c086eC334B96d82c',
+        1: '0xd56670AA77Be67C2bcEe3f440a1849819ae3509c',
         4: '0x607e2ca4dD5A21D46E2aab6DfE182a35029dD1b3',
     },
 }
