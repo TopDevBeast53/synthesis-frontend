@@ -21,6 +21,7 @@ import CircleLoader from '../../components/Loader/CircleLoader'
 import AddRowModal from './components/AddRowModal'
 import VaultsTable from './components/VaultsTable/VaultsTable'
 import { helixVaultAddress } from './constants'
+import NotEnoughTokensModal from './components/VaultCard/Modals/NotEnoughTokensModal'
 
 const TableControls = styled.div`
   display: flex;
@@ -64,6 +65,7 @@ const Vault: React.FC = () => {
 
   const { balance: helixBalance, fetchStatus: balanceFetchStatus } = useTokenBalance(tokens.helix.address)
   const stakingTokenBalance = balanceFetchStatus === FetchStatus.Fetched ? helixBalance : BIG_ZERO
+  const [onPresentTokenRequired] = useModal(<NotEnoughTokensModal tokenSymbol="HELIX" />)
 
   useEffect(() => {
     helixContract
@@ -191,16 +193,15 @@ const Vault: React.FC = () => {
               </Text>
             </Flex>
             <Flex justifyContent="center">
-              <CircleLoader size="30px" />;
+              <CircleLoader size="30px" />
             </Flex>
           </Page>
         ) : <Page>
           <TableControls>
             <Flex justifyContent="start" width={1}>
               {helixEnabled === HelixEnabledState.ENABLED && (
-                <Button onClick={handleAdd} key={buttonScale} variant="secondary" scale={buttonScale} mr="8px">
-                  {' '}
-                  Add Vault{' '}
+                <Button onClick={stakingTokenBalance.gt(0) ? handleAdd : onPresentTokenRequired} key={buttonScale} variant="secondary" scale={buttonScale} mr="8px">
+                  Add Vault
                 </Button>
               )}
               {helixEnabled === HelixEnabledState.DISABLED && (

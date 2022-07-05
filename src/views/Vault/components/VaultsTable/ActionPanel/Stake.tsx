@@ -11,6 +11,7 @@ import { AddIcon, Heading, IconButton, MinusIcon, Skeleton, Text, useModal } fro
 import { getBalanceNumber, getBalanceAmount } from 'utils/formatBalance'
 import StakeModal from '../../VaultCard/Modals/StakeModal'
 import { ActionContainer, ActionContent, ActionTitles } from './styles'
+import NotEnoughTokensModal from '../../VaultCard/Modals/NotEnoughTokensModal'
 
 const IconButtonWrapper = styled.div`
   display: flex;
@@ -49,6 +50,8 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({ isLoading, deposi
     }
     return stakedBalanceBigNumber.toFixed(3, BigNumber.ROUND_DOWN)
   }, [stakedBalance])
+
+  const [onPresentTokenRequired] = useModal(<NotEnoughTokensModal tokenSymbol="HELIX" />)
 
   const [onPresentStake] = useModal(
     <StakeModal
@@ -118,7 +121,7 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({ isLoading, deposi
           <IconButton variant="secondary" onClick={onPresentUnstake} mr="6px" disabled={!canWithdraw}>
             <MinusIcon color={canWithdraw ? 'primary' : 'textDisabled'} width="14px" />
           </IconButton>
-          <IconButton variant="secondary" onClick={onPresentStake}>
+          <IconButton variant="secondary" onClick={helixBalance.gt(0) ? onPresentStake : onPresentTokenRequired}>
             <AddIcon color="primary" width="24px" height="24px" />
           </IconButton>
         </IconButtonWrapper>

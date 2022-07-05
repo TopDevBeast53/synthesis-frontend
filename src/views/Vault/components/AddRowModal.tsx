@@ -156,6 +156,7 @@ const AddRowModal: React.FC<ModalProps> = ({ stakingTokenBalance, stakingTokenPr
 
       <Button
         isLoading={pendingTx}
+        disabled={!stakeAmount || parseFloat(stakeAmount) === 0 || hasReachedStakeLimit || userNotEnoughToken}
         endIcon={pendingTx ? <AutoRenewIcon spin color="currentColor" /> : null}
         onClick={handleDeposit}
         mt="24px"
