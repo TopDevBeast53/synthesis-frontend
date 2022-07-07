@@ -13,7 +13,7 @@ export const getProposals = async (first = 5, skip = 0, state = ProposalState.AC
                     skip: $skip
                     orderBy: "end"
                     orderDirection: desc
-                    where: { space_in: "helixgeometry.eth", state: $state }
+                    where: { space_in: "silverstardev.eth", state: $state }
                 ) {
                     id
                     title
