@@ -70,7 +70,7 @@ const CastVoteModal: React.FC<CastVoteModalProps> = ({ onSuccess, proposalId, sp
       )
       setIsLoadingHelix(false)
       if (mounted) {
-        setTotalVp(vp[0][account])
+        setTotalVp(vp[0][account] ? vp[0][account] : '')
       }
     }
 

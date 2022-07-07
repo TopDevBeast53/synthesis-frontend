@@ -14,16 +14,25 @@ const VoteDetailsModal: React.FC<InjectedModalProps> = ({ onDismiss }) => {
   const [isLoadingHelix, setIsLoadingHelix] = useState(true)
 
   useEffect(() => {
+    let mounted = true;
+
     async function load() {
       const vaultHelix = await getVaultHelix()
       const masterchefHelix = await getMasterchefHelix()
       const autoPoolHelix = await getAutoPoolHelix()
       const lpHelix = await getLpHelix()
       const total = helixBalance.add(vaultHelix).add(masterchefHelix).add(autoPoolHelix).add(lpHelix).toString()
-      setTotalHelix(total)
-      setIsLoadingHelix(false)
+      if (mounted) {
+        setTotalHelix(total)
+        setIsLoadingHelix(false)
+      }
     }
+
     load()
+
+    return () => {
+      mounted = false
+    }
   }, [helixBalance, getVaultHelix, getMasterchefHelix, getAutoPoolHelix, getLpHelix])
 
   const total = Number(totalHelix) / 1e18
