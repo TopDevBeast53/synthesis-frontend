@@ -13,4 +13,5 @@ export interface CastVoteModalProps extends InjectedModalProps {
         value: number
     }
     block?: number
+    spaceId?: string
 }

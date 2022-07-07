@@ -51,7 +51,7 @@ const Vote: React.FC<VoteProps> = ({ proposal, ...props }) => {
   }
 
   const [presentCastVoteModal] = useModal(
-    <CastVoteModal onSuccess={handleSuccess} proposalId={proposal.id} vote={vote} block={Number(proposal.snapshot)} />,
+    <CastVoteModal onSuccess={handleSuccess} proposalId={proposal.id} spaceId={proposal.space.id} vote={vote} block={Number(proposal.snapshot)} />,
   )
 
   return (
