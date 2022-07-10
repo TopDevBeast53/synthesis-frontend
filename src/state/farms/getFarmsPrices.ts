@@ -38,7 +38,7 @@ const getFarmBaseTokenPrice = (
     }
 
 
-    // We can only calculate profits without a quoteTokenFarm for BUSD/BNB farms
+    // We can only calculate rewards without a quoteTokenFarm for BUSD/BNB farms
     if (!quoteTokenFarm) {
         return BIG_ZERO
     }

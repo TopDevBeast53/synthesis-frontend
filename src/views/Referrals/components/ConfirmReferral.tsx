@@ -100,7 +100,7 @@ export default function ConfirmReferral(props: Props) {
               <Text fontSize="16px">
                 Whenever you are exchanging tokens or receiving staking rewards, Helix Treasury will give 5% of that
                 amount to {displayAddress}. For example, if you have claimed 200 HELIX rewards from staking, Helix
-                Treasury will mint 10 HELIX to {displayAddress} and 1 HELIX will go to you, making your profits equal to
+                Treasury will mint 10 HELIX to {displayAddress} and 1 HELIX will go to you, making your rewards equal to
                 201 HELIX.
               </Text>
             }

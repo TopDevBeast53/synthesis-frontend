@@ -41,7 +41,7 @@ const AutoEarningsCell: React.FC<AutoEarningsCellProps> = ({ pool, account }) =>
     earningTokenPrice,
   )
 
-  const labelText = t('Recent HELIX profit')
+  const labelText = t('Recent HELIX rewards')
   const earningTokenBalance = autoHelixToDisplay
   const hasEarnings = hasAutoEarnings
   const earningTokenDollarBalance = autoUsdToDisplay
