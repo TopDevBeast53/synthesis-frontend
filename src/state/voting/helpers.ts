@@ -2,18 +2,22 @@ import request, { gql } from 'graphql-request'
 import { SNAPSHOT_API, SNAPSHOT_VOTING_API } from 'config/constants/endpoints'
 import { Proposal, ProposalState, Vote, VoteWhere } from 'state/types'
 import { simpleRpcProvider } from 'utils/providers'
+import { ChainId } from 'sdk'
 
 export const getProposals = async (first = 5, skip = 0, state = ProposalState.ACTIVE): Promise<Proposal[]> => {
+    const chainId = process.env.REACT_APP_CHAIN_ID
+    const space = Number(chainId) === ChainId.MAINNET ? "helixgeometry.eth" : "silverstardev.eth"
+
     const response: { proposals: Proposal[] } = await request(
         SNAPSHOT_API,
         gql`
-            query getProposals($first: Int!, $skip: Int!, $state: String!) {
+            query getProposals($first: Int!, $skip: Int!, $state: String!, $space: String!) {
                 proposals(
                     first: $first
                     skip: $skip
                     orderBy: "end"
                     orderDirection: desc
-                    where: { space_in: "helixgeometry.eth", state: $state }
+                    where: { space_in: [$space], state: $state }
                 ) {
                     id
                     title
@@ -31,7 +35,7 @@ export const getProposals = async (first = 5, skip = 0, state = ProposalState.AC
                 }
             }
         `,
-        { first, skip, state },
+        { first, skip, state, space },
     )
     return response.proposals
 }

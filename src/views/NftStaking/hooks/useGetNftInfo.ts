@@ -1,6 +1,7 @@
 import { Contract } from '@ethersproject/contracts'
 import helixNFTABI from 'config/abi/HelixNFT.json'
 import { ethers } from 'ethers'
+import axios from 'axios';
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { useHelixNFT } from 'hooks/useContract'
@@ -76,20 +77,22 @@ export const useGetNftInfo = () => {
         }
         
         if (ids.length > 0) {
-            const results = await Promise.all(
-                ids.map((id: any) => helixNFTContract.getToken(id))
-            )
-            const res = results.map(([tokenOwner,uri, tokenId, token]) => ({
-                tokenId: tokenId.toString(),
-                externalTokenIds: token.mintTokenIDs,
-                nftNames: token.nftIDs,
-                tokenOwner, 
-                wrappedNfts:token.wrappedNfts.toString(),               
-                isStaked: token.isStaked,
-                uri,
-                disabled: false,
-            }))
-            return res
+            const tokens = (await Promise.all(ids.map(async (id: any) => {
+                const resTokenInfo = await helixNFTContract.getToken(id);
+                const [tokenOwner,uri, tokenId, token] = resTokenInfo;
+                const {data: {image}} = await axios.get(uri);
+                return {
+                    tokenId: tokenId.toString(),
+                    externalTokenIds: token.mintTokenIDs,
+                    nftNames: token.nftIDs,
+                    tokenOwner, 
+                    wrappedNfts:token.wrappedNfts.toString(),               
+                    isStaked: token.isStaked,
+                    uri: image,
+                    disabled: false,
+                }
+              })))
+              return tokens;
         }
         return []
     }, [helixNFTContract, account])
