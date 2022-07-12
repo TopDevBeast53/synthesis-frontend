@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux'
 import { DEFAULT_LIST_OF_LISTS } from 'config/constants/lists'
 import { AppState } from '../index'
 import DEFAULT_TOKEN_LIST from '../../config/constants/tokenLists/pancake-default.tokenlist.json'
+import DEFAULT_TOKEN_LIST_TESTNET from '../../config/constants/tokenLists/pancake-default.tokenlist-testnet.json'
 import { UNSUPPORTED_LIST_URLS } from '../../config/constants/lists'
 import UNSUPPORTED_TOKEN_LIST from '../../config/constants/tokenLists/pancake-unsupported.tokenlist.json'
 
@@ -150,9 +151,11 @@ export function useInactiveListUrls(): string[] {
 
 // get all the tokens from active lists, combine with local default tokens
 export function useCombinedActiveList(): TokenAddressMap {
+    const chainId = process.env.REACT_APP_CHAIN_ID
+
     const activeListUrls = useActiveListUrls()
     const activeTokens = useCombinedTokenMapFromUrls(activeListUrls)
-    const defaultTokenMap = listToTokenMap(DEFAULT_TOKEN_LIST)
+    const defaultTokenMap = listToTokenMap(ChainId.MAINNET === Number(chainId) ? DEFAULT_TOKEN_LIST : DEFAULT_TOKEN_LIST_TESTNET)
     return combineMaps(activeTokens, defaultTokenMap)
 }
 

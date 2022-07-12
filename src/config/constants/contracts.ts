@@ -102,7 +102,7 @@ export default {
     },
     helixNFT: {
         1: '0x8940A899E969cBD90C9678f4C28c53ca8FE47FE2',
-        4: '0x3C947b6a4e6CDC2AB6e40870EA6e5587e3Ee0458',
+        4: '0xdD62271F8a54446032bfF3cEC93861D4F8100F4b',
     },
     helixNFTChef: {
         1: '0xbFF5672d78E7Ef1eBE7F6B2EBD8Be7A7BbD4E9E1',
