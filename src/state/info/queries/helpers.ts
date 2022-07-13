@@ -1,8 +1,8 @@
-import { ONE_DAY_UNIX, PCS_V2_START } from 'config/constants/info'
+import { ONE_DAY_UNIX, HELIX_START } from 'config/constants/info'
 import { getUnixTime } from 'date-fns'
 import { TransactionType } from 'state/info/types'
 import { ChartEntry } from '../types'
-import { MintResponse, SwapResponse, BurnResponse, TokenDayData, PairDayData, PancakeDayData } from './types'
+import { MintResponse, SwapResponse, BurnResponse, TokenDayData, PairDayData, HelixDayData } from './types'
 
 export const mapMints = (mint: MintResponse) => {
     return {
@@ -52,7 +52,7 @@ export const mapSwaps = (swap: SwapResponse) => {
     }
 }
 
-export const mapDayData = (tokenDayData: TokenDayData | PancakeDayData): ChartEntry => ({
+export const mapDayData = (tokenDayData: TokenDayData | HelixDayData): ChartEntry => ({
     date: tokenDayData.date,
     volumeUSD: parseFloat(tokenDayData.dailyVolumeUSD),
     liquidityUSD: parseFloat(tokenDayData.totalLiquidityUSD),
@@ -108,7 +108,7 @@ export const fetchChartData = async (
 
     const firstAvailableDayData = formattedDayDatas[availableDays[0]]
     // fill in empty days ( there will be no day datas if no trades made that day )
-    let timestamp = firstAvailableDayData?.date ?? PCS_V2_START
+    let timestamp = firstAvailableDayData?.date ?? HELIX_START
     let latestLiquidityUSD = firstAvailableDayData?.liquidityUSD ?? 0
     const endTimestamp = getUnixTime(new Date())
     while (timestamp < endTimestamp - ONE_DAY_UNIX) {

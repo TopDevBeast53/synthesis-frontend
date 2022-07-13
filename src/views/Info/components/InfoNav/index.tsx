@@ -19,8 +19,8 @@ const NavWrapper = styled(Flex)`
 
 const InfoNav = () => {
   const { t } = useTranslation()
-  const isPools = useRouteMatch(['/info/pools', '/info/pool', '/info/pair'])
-  const isTokens = useRouteMatch(['/info/tokens', '/info/token'])
+  const isPools = useRouteMatch(['/data/pools', '/data/pool', '/data/pair'])
+  const isTokens = useRouteMatch(['/data/tokens', '/data/token'])
   let activeIndex = 0
   if (isPools) {
     activeIndex = 1
@@ -32,13 +32,13 @@ const InfoNav = () => {
     <NavWrapper>
       <Box>
         <ButtonMenu activeIndex={activeIndex} scale="sm" variant="subtle">
-          <ButtonMenuItem as={Link} to="/info">
+          <ButtonMenuItem as={Link} to="/data">
             {t('Overview')}
           </ButtonMenuItem>
-          <ButtonMenuItem as={Link} to="/info/pools">
+          <ButtonMenuItem as={Link} to="/data/pools">
             {t('Pools')}
           </ButtonMenuItem>
-          <ButtonMenuItem as={Link} to="/info/tokens">
+          <ButtonMenuItem as={Link} to="/data/tokens">
             {t('Tokens')}
           </ButtonMenuItem>
         </ButtonMenu>

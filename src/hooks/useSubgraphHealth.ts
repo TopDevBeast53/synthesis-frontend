@@ -39,7 +39,7 @@ const useSubgraphHealth = () => {
                     GRAPH_HEALTH,
                     gql`
                         query getNftMarketSubgraphHealth {
-                            indexingStatusForCurrentVersion(subgraphName: "pancakeswap/nft-market") {
+                            indexingStatusForCurrentVersion(subgraphName: "qiangkaiwen/helix") {
                                 synced
                                 health
                                 chains {

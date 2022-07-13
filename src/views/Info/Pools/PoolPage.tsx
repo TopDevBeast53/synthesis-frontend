@@ -94,10 +94,10 @@ const PoolPage: React.FC<RouteComponentProps<{ address: string }>> = ({
         <>
           <Flex justifyContent="space-between" mb="16px" flexDirection={['column', 'column', 'row']}>
             <Breadcrumbs mb="32px">
-              <Link to="/info">
-                <Text color="primary">{t('Info')}</Text>
+              <Link to="/data">
+                <Text color="primary">{t('Data')}</Text>
               </Link>
-              <Link to="/info/pools">
+              <Link to="/data/pools">
                 <Text color="primary">{t('Pools')}</Text>
               </Link>
               <Flex>
@@ -123,7 +123,7 @@ const PoolPage: React.FC<RouteComponentProps<{ address: string }>> = ({
             </Flex>
             <Flex justifyContent="space-between" flexDirection={['column', 'column', 'column', 'row']}>
               <Flex flexDirection={['column', 'column', 'row']} mb={['8px', '8px', null]}>
-                <Link to={`/info/token/${poolData.token0.address}`}>
+                <Link to={`/data/token/${poolData.token0.address}`}>
                   <TokenButton>
                     <CurrencyLogo address={poolData.token0.address} size="24px" />
                     <Text fontSize="16px" ml="4px" style={{ whiteSpace: 'nowrap' }} width="fit-content">
@@ -135,7 +135,7 @@ const PoolPage: React.FC<RouteComponentProps<{ address: string }>> = ({
                     </Text>
                   </TokenButton>
                 </Link>
-                <Link to={`/info/token/${poolData.token1.address}`}>
+                <Link to={`/data/token/${poolData.token1.address}`}>
                   <TokenButton ml={[null, null, '10px']}>
                     <CurrencyLogo address={poolData.token1.address} size="24px" />
                     <Text fontSize="16px" ml="4px" style={{ whiteSpace: 'nowrap' }} width="fit-content">

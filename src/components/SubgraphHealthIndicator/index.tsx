@@ -73,8 +73,8 @@ export interface BlockResponse {
 
 const SubgraphHealthIndicator = () => {
   const { pathname } = useLocation()
-  const isOnNftPages = pathname.includes('nfts')
-  return isOnNftPages ? <SubgraphHealth /> : null
+  const isOnDataPages = pathname.includes('data')
+  return isOnDataPages ? <SubgraphHealth /> : null
 }
 
 const SubgraphHealth = () => {

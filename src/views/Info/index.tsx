@@ -15,17 +15,17 @@ const Info: React.FC = () => {
       <PoolUpdater />
       <TokenUpdater />
       <InfoNav />
-      <Route path="/info" exact>
+      <Route path="/data" exact>
         <Overview />
       </Route>
-      <Route path="/info/pools" exact>
+      <Route path="/data/pools" exact>
         <Pools />
       </Route>
-      <Route path="/info/tokens" exact>
+      <Route path="/data/tokens" exact>
         <Tokens />
       </Route>
-      <Route exact path={['/info/tokens/:address', '/info/token/:address']} component={RedirectInvalidToken} />
-      <Route exact path={['/info/pools/:address', '/info/pool/:address', '/info/pair/:address']} component={PoolPage} />
+      <Route exact path={['/data/tokens/:address', '/data/token/:address']} component={RedirectInvalidToken} />
+      <Route exact path={['/data/pools/:address', '/data/pool/:address', '/data/pair/:address']} component={PoolPage} />
     </>
   )
 }

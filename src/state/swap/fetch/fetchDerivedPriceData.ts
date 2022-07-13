@@ -7,7 +7,7 @@ import { multiQuery } from 'views/Info/utils/infoQueryHelpers'
 import { getDerivedPrices, getDerivedPricesQueryConstructor } from '../queries/getDerivedPrices'
 import { PairDataTimeWindowEnum } from '../types'
 
-const getTokenDerivedBnbPrices = async (tokenAddress: string, blocks: Block[]) => {
+const getTokenDerivedEthPrices = async (tokenAddress: string, blocks: Block[]) => {
     const prices: any | undefined = await multiQuery(
         getDerivedPricesQueryConstructor,
         getDerivedPrices(tokenAddress, blocks),
@@ -20,21 +20,21 @@ const getTokenDerivedBnbPrices = async (tokenAddress: string, blocks: Block[]) =
         return null
     }
 
-    // format token BNB price results
+    // format token ETH price results
     const tokenPrices: {
         tokenAddress: string
         timestamp: string
-        derivedBNB: number
+        derivedETH: number
     }[] = []
 
-    // Get Token prices in BNB
+    // Get Token prices in ETH
     Object.keys(prices).forEach((priceKey) => {
         const timestamp = priceKey.split('t')[1]
         if (timestamp) {
             tokenPrices.push({
                 tokenAddress,
                 timestamp,
-                derivedBNB: prices[priceKey]?.derivedBNB ? parseFloat(prices[priceKey].derivedBNB) : 0,
+                derivedETH: prices[priceKey]?.derivedETH ? parseFloat(prices[priceKey].derivedETH) : 0,
             })
         }
     })
@@ -74,7 +74,7 @@ const getSkipDaysToStart = (timeWindow: PairDataTimeWindowEnum) => {
     }
 }
 
-// Fetches derivedBnb values for tokens to calculate derived price
+// Fetches derivedEth values for tokens to calculate derived price
 // Used when no direct pool is available
 const fetchDerivedPriceData = async (
     token0Address: string,
@@ -98,9 +98,9 @@ const fetchDerivedPriceData = async (
             return null
         }
 
-        const token0DerivedBnb = await getTokenDerivedBnbPrices(token0Address, blocks)
-        const token1DerivedBnb = await getTokenDerivedBnbPrices(token1Address, blocks)
-        return { token0DerivedBnb, token1DerivedBnb }
+        const token0DerivedEth = await getTokenDerivedEthPrices(token0Address, blocks)
+        const token1DerivedEth = await getTokenDerivedEthPrices(token1Address, blocks)
+        return { token0DerivedEth, token1DerivedEth }
     } catch (error) {
         console.error('Failed to fetched derived price data for chart', error)
         return null
