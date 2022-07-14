@@ -4,79 +4,79 @@ import { useState, useEffect } from 'react'
 import { request, gql } from 'graphql-request'
 import { INFO_CLIENT } from 'config/constants/endpoints'
 
-export interface BnbPrices {
+export interface EthPrices {
     current: number
     oneDay: number
     twoDay: number
     week: number
 }
 
-const BNB_PRICES = gql`
+const ETH_PRICES = gql`
     query prices($block24: Int!, $block48: Int!, $blockWeek: Int!) {
         current: bundle(id: "1") {
-            bnbPrice
+            ethPrice
         }
         oneDay: bundle(id: "1", block: { number: $block24 }) {
-            bnbPrice
+            ethPrice
         }
         twoDay: bundle(id: "1", block: { number: $block48 }) {
-            bnbPrice
+            ethPrice
         }
         oneWeek: bundle(id: "1", block: { number: $blockWeek }) {
-            bnbPrice
+            ethPrice
         }
     }
 `
 
 interface PricesResponse {
     current: {
-        bnbPrice: string
+        ethPrice: string
     }
     oneDay: {
-        bnbPrice: string
+        ethPrice: string
     }
     twoDay: {
-        bnbPrice: string
+        ethPrice: string
     }
     oneWeek: {
-        bnbPrice: string
+        ethPrice: string
     }
 }
 
-const fetchBnbPrices = async (
+const fetchEthPrices = async (
     block24: number,
     block48: number,
     blockWeek: number,
-): Promise<{ bnbPrices: BnbPrices | undefined; error: boolean }> => {
+): Promise<{ ethPrices: EthPrices | undefined; error: boolean }> => {
     try {
-        const data = await request<PricesResponse>(INFO_CLIENT, BNB_PRICES, {
+        const data = await request<PricesResponse>(INFO_CLIENT, ETH_PRICES, {
             block24,
             block48,
             blockWeek,
         })
         return {
             error: false,
-            bnbPrices: {
-                current: parseFloat(data.current?.bnbPrice ?? '0'),
-                oneDay: parseFloat(data.oneDay?.bnbPrice ?? '0'),
-                twoDay: parseFloat(data.twoDay?.bnbPrice ?? '0'),
-                week: parseFloat(data.oneWeek?.bnbPrice ?? '0'),
+            ethPrices: {
+                current: parseFloat(data.current?.ethPrice ?? '0'),
+                oneDay: parseFloat(data.oneDay?.ethPrice ?? '0'),
+                twoDay: parseFloat(data.twoDay?.ethPrice ?? '0'),
+                week: parseFloat(data.oneWeek?.ethPrice ?? '0'),
             },
         }
     } catch (error) {
-        console.error('Failed to fetch BNB prices', error)
+        console.error('Failed to fetch ETH prices', error)
         return {
             error: true,
-            bnbPrices: undefined,
+            ethPrices: undefined,
         }
     }
 }
 
 /**
- * Returns BNB prices at current, 24h, 48h, and 7d intervals
+ * Returns ETH prices at current, 24h, 48h, and 7d intervals
  */
-export const useBnbPrices = (): BnbPrices | undefined => {
-    const [prices, setPrices] = useState<BnbPrices | undefined>()
+export const useEthPrices = (): EthPrices | undefined => {
+    const [prices, setPrices] = useState<EthPrices | undefined>()
     const [error, setError] = useState(false)
 
     const [t24, t48, tWeek] = getDeltaTimestamps()
@@ -85,7 +85,7 @@ export const useBnbPrices = (): BnbPrices | undefined => {
     useEffect(() => {
         const fetch = async () => {
             const [block24, block48, blockWeek] = blocks
-            const { bnbPrices, error: fetchError } = await fetchBnbPrices(
+            const { ethPrices, error: fetchError } = await fetchEthPrices(
                 block24.number,
                 block48.number,
                 blockWeek.number,
@@ -93,7 +93,7 @@ export const useBnbPrices = (): BnbPrices | undefined => {
             if (fetchError) {
                 setError(true)
             } else {
-                setPrices(bnbPrices)
+                setPrices(ethPrices)
             }
         }
         if (!prices && !error && blocks && !blockError) {

@@ -20,7 +20,7 @@ const fetchTopPools = async (timestamp24hAgo: number): Promise<string[]> => {
                 pairDayDatas(
                     first: 30
                     where: {
-                        dailyTxns_gt: 300
+                        dailyTxns_gt: 0
                         token0_not_in: $blacklist
                         token1_not_in: $blacklist
                         date_gt: $timestamp24hAgo

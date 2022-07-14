@@ -44,7 +44,8 @@ const HoverUpdater = ({ locale, payload, setHoverValue, setHoverDate }) => {
   return null
 }
 
-const Chart = ({ data, setHoverValue, setHoverDate }: LineChartProps) => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const Chart = ({ data, setHoverValue, setHoverDate, chartHeight }: LineChartProps) => {
   const {
     currentLanguage: { locale },
   } = useTranslation()
@@ -73,6 +74,7 @@ const Chart = ({ data, setHoverValue, setHoverDate }: LineChartProps) => {
           tickLine={false}
           tickFormatter={(time) => time.toLocaleDateString(undefined, { day: '2-digit' })}
           minTickGap={10}
+          tick={{ fill: theme.colors.textSubtle }}
         />
         <YAxis
           dataKey="value"

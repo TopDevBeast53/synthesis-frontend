@@ -16,13 +16,18 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType[] = (t) => [
                 href: '/swap',
             },
             {
+                type: DropdownMenuItemType.DIVIDER,
+            },
+            {
                 label: t('Liquidity'),
                 href: '/liquidity',
             },
             {
+                type: DropdownMenuItemType.DIVIDER,
+            },
+            {
                 label: 'Migrate',
                 href: '/migration',
-                // icon: 'Earn',
             },
         ],
     },
@@ -36,8 +41,14 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType[] = (t) => [
                 href: '/farms',
             },
             {
+                type: DropdownMenuItemType.DIVIDER,
+            },
+            {
                 label: t('Pools'),
                 href: '/pools',
+            },
+            {
+                type: DropdownMenuItemType.DIVIDER,
             },
             {
                 label: t('Vaults'),
@@ -55,6 +66,9 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType[] = (t) => [
                 label: t('Swap LPs'),
                 href: '/lps-swap',
             },
+            // {
+            //     type: DropdownMenuItemType.DIVIDER,
+            // },
             // {
             //     label: t('Swap Yield'),
             //     href: '/yield-swap',
@@ -77,10 +91,6 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType[] = (t) => [
                 label: 'Geobot Staking',
                 href: '/geobot-staking',
             },
-            // {
-            //     label: 'Yield Boosting',
-            //     href: '/geobot-yield-boosting',
-            // },
             {
                 type: DropdownMenuItemType.DIVIDER,
             },
@@ -142,10 +152,13 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType[] = (t) => [
         icon: 'More',
         hideSubNav: true,
         items: [
-            //     {
-            //       label: t('Info'),
-            //       href: '/info',
-            //     },
+            {
+                label: t('Data'),
+                href: '/data',
+            },
+            {
+                type: DropdownMenuItemType.DIVIDER,
+            },
             //     {
             //       label: t('IFO'),
             //       href: '/ifo',

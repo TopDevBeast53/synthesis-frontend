@@ -126,10 +126,10 @@ const TokenPage: React.FC<RouteComponentProps<{ address: string }>> = ({
             {/* Stuff on top */}
             <Flex justifyContent="space-between" mb="24px" flexDirection={['column', 'column', 'row']}>
               <Breadcrumbs mb="32px">
-                <Link to="/info">
-                  <Text color="primary">{t('Info')}</Text>
+                <Link to="/data">
+                  <Text color="primary">{t('Data')}</Text>
                 </Link>
-                <Link to="/info/tokens">
+                <Link to="/data/tokens">
                   <Text color="primary">{t('Tokens')}</Text>
                 </Link>
                 <Flex>

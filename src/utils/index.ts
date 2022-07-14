@@ -7,7 +7,7 @@ import { BigNumber } from '@ethersproject/bignumber'
 import { abi as IUniswapV2Router02ABI } from '@uniswap/v2-periphery/build/IUniswapV2Router02.json'
 import { ChainId, JSBI, Percent, Token, CurrencyAmount, Currency, ETHER } from 'sdk'
 import { ROUTER_ADDRESS } from '../config/constants'
-import { BASE_BSC_SCAN_URLS, BASE_SOLANA_SCAN_URLS, BASE_ETH_SCAN_URLS } from '../config'
+import { BASE_SOLANA_SCAN_URLS, BASE_ETH_SCAN_URLS } from '../config'
 import { TokenAddressMap } from '../state/lists/hooks'
 import { simpleRpcProvider } from './providers'
 
@@ -67,7 +67,7 @@ export function getEtherScanLinkForNft(
     tokenId: string,
     chainId: ChainId = process.env.REACT_APP_CHAIN_ID === ChainId.MAINNET.toString() ? ChainId.MAINNET : ChainId.TESTNET,
 ): string {
-    return `${BASE_BSC_SCAN_URLS[chainId]}/token/${collectionAddress}?a=${tokenId}`
+    return `${BASE_ETH_SCAN_URLS[chainId]}/token/${collectionAddress}?a=${tokenId}`
 }
 
 // add 10%

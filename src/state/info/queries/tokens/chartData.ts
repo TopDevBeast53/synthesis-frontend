@@ -1,7 +1,7 @@
 import { request, gql } from 'graphql-request'
 import { INFO_CLIENT } from 'config/constants/endpoints'
 import { ChartEntry } from 'state/info/types'
-import { PCS_V2_START } from 'config/constants/info'
+import { HELIX_START } from 'config/constants/info'
 import { TokenDayDatasResponse } from '../types'
 import { mapDayData, fetchChartData } from '../helpers'
 
@@ -23,7 +23,7 @@ const getTokenChartData = async (skip: number, address: string): Promise<{ data?
             }
         `
         const { tokenDayDatas } = await request<TokenDayDatasResponse>(INFO_CLIENT, query, {
-            startTime: PCS_V2_START,
+            startTime: HELIX_START,
             skip,
             address,
         })

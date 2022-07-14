@@ -37,7 +37,7 @@ export const ScrollableRow = styled.div`
 
 const DataCard = ({ tokenData }: { tokenData: TokenData }) => {
   return (
-    <CardWrapper to={`/info/token/${tokenData.address}`}>
+    <CardWrapper to={`/data/token/${tokenData.address}`}>
       <TopMoverCard>
         <Flex>
           <Box width="32px" height="32px">

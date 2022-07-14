@@ -52,6 +52,7 @@ export const getDeltaTimestamps = (): [number, number, number, number] => {
     const t24h = getUnixTime(startOfMinute(subDays(utcCurrentTime, 1)))
     const t48h = getUnixTime(startOfMinute(subDays(utcCurrentTime, 2)))
     const t7d = getUnixTime(startOfMinute(subWeeks(utcCurrentTime, 1)))
-    const t14d = getUnixTime(startOfMinute(subWeeks(utcCurrentTime, 2)))
+    const t14d = getUnixTime(startOfMinute(subDays(utcCurrentTime, 8))) // update me
+    // const t14d = getUnixTime(startOfMinute(subWeeks(utcCurrentTime, 2)))
     return [t24h, t48h, t7d, t14d]
 }
