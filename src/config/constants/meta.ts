@@ -137,19 +137,19 @@ export const getCustomMeta = (path: string, t: ContextApi['t']): PageMeta => {
             return {
                 title: `${t('Make a Proposal')} | ${t('Helix')}`,
             }
-        case '/info':
+        case '/data':
             return {
-                title: `${t('Overview')} | ${t('Helix Info & Analytics')}`,
+                title: `${t('Overview')} | ${t('Helix data & Analytics')}`,
                 description: 'View statistics for Helix exchanges.',
             }
-        case '/info/pools':
+        case '/data/pools':
             return {
-                title: `${t('Pools')} | ${t('Helix Info & Analytics')}`,
+                title: `${t('Pools')} | ${t('Helix data & Analytics')}`,
                 description: 'View statistics for Pancakeswap exchanges.',
             }
-        case '/info/tokens':
+        case '/data/tokens':
             return {
-                title: `${t('Tokens')} | ${t('Helix Info & Analytics')}`,
+                title: `${t('Tokens')} | ${t('Helix data & Analytics')}`,
                 description: 'View statistics for Helix exchanges.',
             }
         case '/nfts':

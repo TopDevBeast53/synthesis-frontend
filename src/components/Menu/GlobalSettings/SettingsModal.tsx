@@ -106,7 +106,7 @@ const SettingsModal: React.FC<InjectedModalProps> = ({ onDismiss }) => {
             <Text>{t('Subgraph Health Indicator')}</Text>
             <QuestionHelper
               text={t(
-                'Turn on NFT market subgraph health indicator all the time. Default is to show the indicator only when the network is delayed.',
+                'Turn on Data page subgraph health indicator all the time. Default is to show the indicator only when the network is delayed.',
               )}
               placement="top-start"
               ml="4px"

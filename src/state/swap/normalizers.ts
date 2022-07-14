@@ -31,24 +31,24 @@ export const normalizeChartData = (
 }
 
 export const normalizeDerivedChartData = (data: any) => {
-    if (!data?.token0DerivedBnb || data?.token0DerivedBnb.length === 0) {
+    if (!data?.token0DerivedEth || data?.token0DerivedEth.length === 0) {
         return []
     }
-    return data?.token0DerivedBnb.reduce((acc, token0DerivedBnbEntry) => {
-        const token1DerivedBnbEntry = data?.token1DerivedBnb?.find(
-            (entry) => entry.timestamp === token0DerivedBnbEntry.timestamp,
+    return data?.token0DerivedEth.reduce((acc, token0DerivedEthEntry) => {
+        const token1DerivedEthEntry = data?.token1DerivedEth?.find(
+            (entry) => entry.timestamp === token0DerivedEthEntry.timestamp,
         )
-        if (!token1DerivedBnbEntry) {
+        if (!token1DerivedEthEntry) {
             return acc
         }
         return [
             ...acc,
             {
-                time: parseInt(token0DerivedBnbEntry.timestamp, 10),
-                token0Id: token0DerivedBnbEntry.tokenAddress,
-                token1Id: token1DerivedBnbEntry.tokenAddress,
-                token0DerivedBNB: token0DerivedBnbEntry.derivedBNB,
-                token1DerivedBNB: token1DerivedBnbEntry.derivedBNB,
+                time: parseInt(token0DerivedEthEntry.timestamp, 10),
+                token0Id: token0DerivedEthEntry.tokenAddress,
+                token1Id: token1DerivedEthEntry.tokenAddress,
+                token0DerivedETH: token0DerivedEthEntry.derivedETH,
+                token1DerivedETH: token1DerivedEthEntry.derivedETH,
             },
         ]
     }, [])
@@ -86,6 +86,6 @@ export const normalizeDerivedPairDataByActiveToken = ({
         time: fromUnixTime(pairPrice.time),
         value:
             activeToken === pairPrice?.token0Id
-                ? pairPrice.token0DerivedBNB / pairPrice.token1DerivedBNB
-                : pairPrice.token1DerivedBNB / pairPrice.token0DerivedBNB,
+                ? pairPrice.token0DerivedETH / pairPrice.token1DerivedETH
+                : pairPrice.token1DerivedETH / pairPrice.token0DerivedETH,
     }))

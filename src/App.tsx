@@ -56,7 +56,7 @@ const NftYieldBoosting = lazy(() => import('./views/NftYieldBoosting'))
 const SwapLiquidity = lazy(() => import('./views/SwapLiquidity'))
 // const SwapYield = lazy(() => import('./views/SwapYield'))
 const Referrals = lazy(() => import('./views/Referrals'))
-// const Info = lazy(() => import('./views/Info'))
+const Info = lazy(() => import('./views/Info'))
 // const NftMarket = lazy(() => import('./views/Nft/market'))
 // const ProfileCreation = lazy(() => import('./views/ProfileCreation'))
 // const PancakeSquad = lazy(() => import('./views/PancakeSquad'))
@@ -176,9 +176,9 @@ const App: React.FC = () => {
             </Route> */}
 
             {/* Info pages */}
-            {/* <Route path="/info">
+            <Route path="/data">
               <Info />
-            </Route> */}
+            </Route>
 
             {/* Using this format because these components use routes injected props. We need to rework them with hooks */}
             <Route exact strict path="/swap" component={Swap} />

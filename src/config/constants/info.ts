@@ -1,13 +1,17 @@
+import { ChainId } from 'sdk'
+
+const chainId = process.env.REACT_APP_CHAIN_ID
+
 export const MINIMUM_SEARCH_CHARACTERS = 2
 
 export const WEEKS_IN_YEAR = 52.1429
 
-export const TOTAL_FEE = 0.0025
-export const LP_HOLDERS_FEE = 0.0017
-export const TREASURY_FEE = 0.0003
-export const BUYBACK_FEE = 0.0005
+export const TOTAL_FEE = 0.001
+export const LP_HOLDERS_FEE = 0.001
+export const TREASURY_FEE = 0
+export const BUYBACK_FEE = 0
 
-export const PCS_V2_START = 1619136000 // April 23, 2021, 12:00:00 AM
+export const HELIX_START = Number(chainId) === ChainId.MAINNET ? 1656971517 : 1656628275 // Jul-04-2022 09:51:57 PM +UTC : Jun-30-2022 10:31:15 PM +UTC
 export const ONE_DAY_UNIX = 86400 // 24h * 60m * 60s
 export const ONE_HOUR_SECONDS = 3600
 

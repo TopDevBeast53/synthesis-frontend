@@ -85,7 +85,7 @@ const TableLoader: React.FC = () => (
 
 const DataRow = ({ poolData, index }: { poolData: PoolData; index: number }) => {
   return (
-    <LinkWrapper to={`/info/pool/${poolData.address}`}>
+    <LinkWrapper to={`/data/pool/${poolData.address}`}>
       <ResponsiveGrid>
         <Text>{index + 1}</Text>
         <Flex>

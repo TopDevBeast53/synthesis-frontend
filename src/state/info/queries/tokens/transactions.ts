@@ -9,7 +9,7 @@ import { mapMints, mapBurns, mapSwaps } from 'state/info/queries/helpers'
  */
 const TOKEN_TRANSACTIONS = gql`
     query tokenTransactions($address: Bytes!) {
-        mintsAs0: mints(first: 10, orderBy: timestamp, orderDirection: desc, where: { token0: $address }) {
+        mintsAs0: mints(first: 10, orderBy: timestamp, orderDirection: desc, where: { pair_: {token0: $address }}) {
             id
             timestamp
             pair {
@@ -27,7 +27,7 @@ const TOKEN_TRANSACTIONS = gql`
             amount1
             amountUSD
         }
-        mintsAs1: mints(first: 10, orderBy: timestamp, orderDirection: desc, where: { token0: $address }) {
+        mintsAs1: mints(first: 10, orderBy: timestamp, orderDirection: desc, where: { pair_: {token1: $address }}) {
             id
             timestamp
             pair {
@@ -45,7 +45,7 @@ const TOKEN_TRANSACTIONS = gql`
             amount1
             amountUSD
         }
-        swapsAs0: swaps(first: 10, orderBy: timestamp, orderDirection: desc, where: { token0: $address }) {
+        swapsAs0: swaps(first: 10, orderBy: timestamp, orderDirection: desc, where: { pair_: {token0: $address }}) {
             id
             timestamp
             pair {
@@ -65,7 +65,7 @@ const TOKEN_TRANSACTIONS = gql`
             amount1Out
             amountUSD
         }
-        swapsAs1: swaps(first: 10, orderBy: timestamp, orderDirection: desc, where: { token1: $address }) {
+        swapsAs1: swaps(first: 10, orderBy: timestamp, orderDirection: desc, where: { pair_: {token1: $address }}) {
             id
             timestamp
             pair {
@@ -85,7 +85,7 @@ const TOKEN_TRANSACTIONS = gql`
             amount1Out
             amountUSD
         }
-        burnsAs0: burns(first: 10, orderBy: timestamp, orderDirection: desc, where: { token0: $address }) {
+        burnsAs0: burns(first: 10, orderBy: timestamp, orderDirection: desc, where:{ pair_: {token0: $address }}) {
             id
             timestamp
             pair {
@@ -103,7 +103,7 @@ const TOKEN_TRANSACTIONS = gql`
             amount1
             amountUSD
         }
-        burnsAs1: burns(first: 10, orderBy: timestamp, orderDirection: desc, where: { token1: $address }) {
+        burnsAs1: burns(first: 10, orderBy: timestamp, orderDirection: desc, where: { pair_: {token1: $address }}) {
             id
             timestamp
             pair {
