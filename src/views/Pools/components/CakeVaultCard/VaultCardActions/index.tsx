@@ -45,7 +45,7 @@ export const IfoVaultCardAvgBalance = () => {
               </Text>
               <Text>
                 {t(
-                  'Please note: even the pool is auto compounding. Amount of profits will not be included during IFO credit calculations.',
+                  'Please note: even the pool is auto compounding. Amount of rewards will not be included during IFO credit calculations.',
                 )}
               </Text>
             </>

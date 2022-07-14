@@ -30,7 +30,7 @@ const RecentHelixProfitCountdownRow = ({ vaultKey }: { vaultKey: VaultKey }) => 
 
   return (
     <Flex alignItems="center" justifyContent="space-between">
-      <Text fontSize="14px">{`${t('Recent HELIX profit')}:`}</Text>
+      <Text fontSize="14px">{`${t('Recent HELIX rewards')}:`}</Text>
       {hasAutoEarnings && (
         <RecentHelixProfitBalance
           helixToDisplay={autoHelixToDisplay}
