@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { request, gql } from 'graphql-request'
 import { GRAPH_HEALTH } from 'config/constants/endpoints'
 import { simpleRpcProvider } from 'utils/providers'
+import { ChainId } from 'sdk'
 import { useSlowFresh } from './useRefresh'
 
 export enum SubgraphStatus {
@@ -38,8 +39,8 @@ const useSubgraphHealth = () => {
                 const { indexingStatusForCurrentVersion } = await request(
                     GRAPH_HEALTH,
                     gql`
-                        query getNftMarketSubgraphHealth {
-                            indexingStatusForCurrentVersion(subgraphName: "qiangkaiwen/helix") {
+                        query getNftMarketSubgraphHealth ($subgraph: String!) {
+                            indexingStatusForCurrentVersion(subgraphName: $subgraph) {
                                 synced
                                 health
                                 chains {
@@ -53,6 +54,9 @@ const useSubgraphHealth = () => {
                             }
                         }
                     `,
+                    {
+                        subgraph: Number(process.env.REACT_APP_CHAIN_ID) === ChainId.MAINNET ? "qiangkaiwen/helix" : "qiangkaiwen/helix-rinkeby",
+                    }
                 )
 
                 const currentBlock = await simpleRpcProvider.getBlockNumber()
@@ -97,7 +101,7 @@ const useSubgraphHealth = () => {
                     })
                 }
             } catch (error) {
-                console.error('Failed to perform health check for NFT Market subgraph', error)
+                console.error('Failed to perform health check for Data Analytics subgraph', error)
             }
         }
         getSubgraphHealth()

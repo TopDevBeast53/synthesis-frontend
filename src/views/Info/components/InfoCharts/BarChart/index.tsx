@@ -44,6 +44,7 @@ const HoverUpdater = ({ locale, payload, setHoverValue, setHoverDate }) => {
   return null
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const Chart = ({ data, setHoverValue, setHoverDate, chartHeight }: LineChartProps) => {
   const {
     currentLanguage: { locale },
