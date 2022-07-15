@@ -69,30 +69,41 @@ export const useGetNftInfo = () => {
     )
 
     const getTokens = useCallback(async () => {
-        let ids=[]
+        let ids = []
         try {
             ids = await helixNFTContract.getTokenIdsOfOwner(account)
         } catch (e) {
             return []
         }
-        
+
         if (ids.length > 0) {
             const tokens = (await Promise.all(ids.map(async (id: any) => {
-                const resTokenInfo = await helixNFTContract.getToken(id);
-                const [tokenOwner,uri, tokenId, token] = resTokenInfo;
-                const {data: {image}} = await axios.get(uri);
+                let resTokenInfo;
+                try {
+                    resTokenInfo = await helixNFTContract.getToken(id);
+                } catch (error) {
+                    return null;
+                }
+                const [tokenOwner, uri, tokenId, token] = resTokenInfo;
+                let image = '/images/invalid.jpeg';
+                try {
+                    const { data: { image: imageUrl } } = await axios.get(uri);
+                    image = imageUrl;
+                } catch (error) {
+                    image = '/images/invalid.jpeg';
+                }
                 return {
                     tokenId: tokenId.toString(),
                     externalTokenIds: token.mintTokenIDs,
                     nftNames: token.nftIDs,
-                    tokenOwner, 
-                    wrappedNfts:token.wrappedNfts.toString(),               
+                    tokenOwner,
+                    wrappedNfts: token.wrappedNfts.toString(),
                     isStaked: token.isStaked,
                     uri: image,
                     disabled: false,
                 }
-              })))
-              return tokens;
+            }))).filter(token => token);
+            return tokens;
         }
         return []
     }, [helixNFTContract, account])
