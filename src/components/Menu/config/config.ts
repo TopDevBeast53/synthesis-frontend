@@ -56,12 +56,6 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType[] = (t) => [
             },
         ],
     },
-    {
-        label: t('Data'),
-        href: '/data',
-        icon: 'Chart',
-        showItemsOnMobile:false,
-    },
     // {
     //     label: t('Yield Swaps'),
     //     href: '/lps-swap',
@@ -112,6 +106,12 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType[] = (t) => [
         label: t('Voting'),
         href: '/voting',
         icon:'Vote1',
+        showItemsOnMobile:false,
+    },
+    {
+        label: t('Data'),
+        href: '/data',
+        icon: 'Chart',
         showItemsOnMobile:false,
     },
     // {
