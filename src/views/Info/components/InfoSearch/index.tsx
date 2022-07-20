@@ -366,7 +366,7 @@ const Search = () => {
           {poolForList.slice(0, poolsShown).map((p, i) => {
             return (
               // eslint-disable-next-line react/no-array-index-key
-              <HoverRowLink onClick={() => handleItemClick(`/data/pool/${p.address}`)} key={i}>
+              <HoverRowLink onClick={() => handleItemClick(`/data/trading-pool/${p.address}`)} key={i}>
                 <ResponsiveGrid>
                   <Flex>
                     <DoubleCurrencyLogo address0={p.token0.address} address1={p.token1.address} />
