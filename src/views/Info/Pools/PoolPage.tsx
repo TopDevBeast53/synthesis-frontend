@@ -97,8 +97,8 @@ const PoolPage: React.FC<RouteComponentProps<{ address: string }>> = ({
               <Link to="/data">
                 <Text color="primary">{t('Data')}</Text>
               </Link>
-              <Link to="/data/pools">
-                <Text color="primary">{t('Pools')}</Text>
+              <Link to="/data/trading-pools">
+                <Text color="primary">{t('Trading Pools')}</Text>
               </Link>
               <Flex>
                 <Text mr="8px">{`${poolData.token0.symbol} / ${poolData.token1.symbol}`}</Text>
