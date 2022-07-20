@@ -12,11 +12,11 @@ export const footerLinks: (t: ContextApi['t']) => FooterLinkType[] = (t) => [
             },
             {
                 label:"Trade LP Tokens",
-                href:"/lps-swap"
+                href:"https://geometry.gitbook.io/helix/core-products/yield-swaps/lp-swaps"
             },
             {
                 label:"Trade Yield",
-                href:"/lps-swap"
+                href:"https://geometry.gitbook.io/helix/core-products/yield-swaps/yield-swaps"
             },
             {
                 label:"Add Liquidity",
