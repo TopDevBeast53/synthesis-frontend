@@ -18,14 +18,14 @@ const Info: React.FC = () => {
       <Route path="/data" exact>
         <Overview />
       </Route>
-      <Route path="/data/pools" exact>
+      <Route path="/data/trading-pools" exact>
         <Pools />
       </Route>
       <Route path="/data/tokens" exact>
         <Tokens />
       </Route>
       <Route exact path={['/data/tokens/:address', '/data/token/:address']} component={RedirectInvalidToken} />
-      <Route exact path={['/data/pools/:address', '/data/pool/:address', '/data/pair/:address']} component={PoolPage} />
+      <Route exact path={['/data/trading-pools/:address', '/data/trading-pool/:address', '/data/pair/:address']} component={PoolPage} />
     </>
   )
 }

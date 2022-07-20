@@ -30,12 +30,12 @@ const PoolsOverview: React.FC = () => {
           <PoolTable poolDatas={watchlistPools} />
         ) : (
           <Text px="24px" py="16px">
-            {t('Saved pools will appear here')}
+            {t('Saved trading pools will appear here')}
           </Text>
         )}
       </Card>
       <Heading scale="lg" mt="40px" mb="16px" id="info-pools-title">
-        {t('All Pools')}
+        {t('All Trading Pools')}
       </Heading>
       <PoolTable poolDatas={poolDatas} />
     </Page>

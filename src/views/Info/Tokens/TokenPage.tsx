@@ -114,7 +114,7 @@ const TokenPage: React.FC<RouteComponentProps<{ address: string }>> = ({
           <Card>
             <Box p="16px">
               <Text>
-                {t('No pool has been created with this token yet. Create one')}
+                {t('No trading pool has been created with this token yet. Create one')}
                 <Link style={{ display: 'inline', marginLeft: '6px' }} to={`/add/${address}`}>
                   {t('here.')}
                 </Link>
@@ -231,7 +231,7 @@ const TokenPage: React.FC<RouteComponentProps<{ address: string }>> = ({
 
             {/* pools and transaction tables */}
             <Heading scale="lg" mb="16px" mt="40px">
-              {t('Pools')}
+              {t('Trading Pools')}
             </Heading>
 
             <PoolTable poolDatas={poolDatas} />

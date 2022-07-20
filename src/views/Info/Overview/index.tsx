@@ -157,7 +157,7 @@ const Overview: React.FC = () => {
       </Heading>
       <TokenTable tokenDatas={formattedTokens} />
       <Heading scale="lg" mt="40px" mb="16px">
-        {t('Top Pools')}
+        {t('Top Trading Pools')}
       </Heading>
       <PoolTable poolDatas={poolDatas} loading={somePoolsAreLoading} />
       <Heading scale="lg" mt="40px" mb="16px">
