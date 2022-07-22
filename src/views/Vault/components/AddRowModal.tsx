@@ -1,5 +1,9 @@
-import React, { useEffect, useState } from 'react'
-import { Modal, Text, Button, Flex, AutoRenewIcon, BalanceInput, Slider } from 'uikit'
+import React, { useEffect, useMemo, useState } from 'react'
+import {
+  Modal, Text, Button, Flex, AutoRenewIcon, BalanceInput, Slider, Image, CalculateIcon,
+  IconButton, Skeleton
+} from 'uikit'
+import styled from 'styled-components'
 import Select from 'components/Select/Select'
 import { useTranslation } from 'contexts/Localization'
 import { useHelixVault } from 'hooks/useContract'
@@ -10,17 +14,38 @@ import BigNumber from 'bignumber.js'
 import { logError } from 'utils/sentry'
 import { DurationStructOutput } from 'config/abi/types/HelixVault'
 import { getFullDisplayBalance, formatNumber, getDecimalAmount } from 'utils/formatBalance'
+import { getVaultApr } from 'utils/apr'
+import { getInterestBreakdown } from 'utils/compoundApyHelpers'
+import RoiCalculatorModal from 'components/RoiCalculatorModal'
 import PercentageButton from './VaultCard/Modals/PercentageButton'
 import { useHelixLockVault } from '../hooks/useHelixLockVault'
 
 interface ModalProps {
   stakingTokenBalance: BigNumber
   stakingTokenPrice: number
+  tokenPerBlock: number
+  totalStakedVault: number
   onAdd?: () => void
   onDismiss?: () => void
 }
 
-const AddRowModal: React.FC<ModalProps> = ({ stakingTokenBalance, stakingTokenPrice, onAdd, onDismiss }) => {
+type Duration = DurationStructOutput & {
+  apr: number
+}
+
+const AnnualRoiContainer = styled(Flex)`
+  cursor: pointer;
+`
+
+const AnnualRoiDisplay = styled(Text)`
+  width: 72px;
+  max-width: 72px;
+  overflow: hidden;
+  text-align: right;
+  text-overflow: ellipsis;
+`
+
+const AddRowModal: React.FC<ModalProps> = ({ stakingTokenBalance, stakingTokenPrice, totalStakedVault, tokenPerBlock, onAdd, onDismiss }) => {
   const { t } = useTranslation()
   const { theme } = useTheme()
   const tokenDecimals = tokens.helix.decimals
@@ -36,6 +61,29 @@ const AddRowModal: React.FC<ModalProps> = ({ stakingTokenBalance, stakingTokenPr
   const { toastSuccess, toastError } = useToast()
   const [durationOptions, setDurationOptions] = useState([])
   const [durationIndex, setDurationIndex] = useState(0)
+  const [durations, setDurations] = useState<Duration[]>([]);
+  const [showRoiCalculator, setShowRoiCalculator] = useState(false)
+
+  const getTokenLink = `/swap?outputCurrency=${tokens.helix.address}`
+
+  const currentAPR = useMemo(() => {
+    if (durations.length === 0) return 0;
+    return durations[durationIndex].apr;
+  }, [durations, durationIndex]);
+
+  const { annualRoi, formattedAnnualRoi } = useMemo(() => {
+    const interestBreakdown = getInterestBreakdown({
+      principalInUSD: !usdValueStaked.isNaN() ? usdValueStaked.toNumber() : 0,
+      apr: currentAPR,
+      earningTokenPrice: stakingTokenPrice,
+    })
+    const annualRoi_ = interestBreakdown[3] * stakingTokenPrice
+    const formattedAnnualRoi_ = formatNumber(annualRoi_, annualRoi_ > 10000 ? 0 : 2, annualRoi_ > 10000 ? 0 : 2)
+    return {
+      annualRoi: annualRoi_,
+      formattedAnnualRoi: formattedAnnualRoi_
+    }
+  }, [stakingTokenPrice, usdValueStaked, currentAPR]);
 
   const { getDurations, addNewDeposit } = useHelixLockVault()
   const helixVaultContract = useHelixVault()
@@ -52,11 +100,18 @@ const AddRowModal: React.FC<ModalProps> = ({ stakingTokenBalance, stakingTokenPr
           }
         }, [])
         setDurationOptions(options)
+
+        const durations_ = res.map((item: DurationStructOutput) => ({
+          ...item,
+          apr: getVaultApr(totalStakedVault, tokenPerBlock, Number(item.weight.toString()))
+        }))
+        setDurations(durations_);
       } catch (err) {
         logError(err)
       }
     }
-  }, [getDurations, helixVaultContract])
+  }, [getDurations, helixVaultContract, totalStakedVault, tokenPerBlock])
+
   const handleDeposit = async () => {
     setPendingTx(true)
     const amount = new BigNumber(stakeAmount)
@@ -95,17 +150,38 @@ const AddRowModal: React.FC<ModalProps> = ({ stakingTokenBalance, stakingTokenPr
   const handleOptionChange = (option) => {
     setDurationIndex(option.value)
   }
+
+  if (showRoiCalculator) {
+    return (
+      <RoiCalculatorModal
+        earningTokenPrice={stakingTokenPrice}
+        stakingTokenPrice={stakingTokenPrice}
+        apr={currentAPR}
+        linkLabel={t('Get %symbol%', { symbol: "HELIX" })}
+        linkHref={getTokenLink}
+        stakingTokenBalance={stakingTokenBalance}
+        stakingTokenSymbol="HELIX"
+        earningTokenSymbol="HELIX"
+        onBack={() => setShowRoiCalculator(false)}
+        initialValue={stakeAmount}
+      />
+    )
+  }
+
   return (
     <Modal title={t('Create Vault')} onDismiss={onDismiss} headerBackground={theme.colors.gradients.cardHeader}>
       <Text>
         {' '}
         {t('Period')} / {t('days')}{' '}
       </Text>
-      {durationOptions.length !== 0 && <Select options={durationOptions} onOptionChange={handleOptionChange} />}
+      {durationOptions.length !== 0 && <Select options={durationOptions}
+        defaultOptionIndex={durationIndex}
+        onOptionChange={handleOptionChange} />}
 
       <Flex alignItems="center" justifyContent="space-between" mb="8px" mt={4}>
         <Text bold>{t('Amount')}:</Text>
         <Flex alignItems="center" minWidth="70px">
+          <Image src={`/images/tokens/${tokens.helix.address}.png`} width={24} height={24} alt="HELIX" />
           <Text ml="4px" bold>
             {t('Helix')}
           </Text>
@@ -152,6 +228,27 @@ const AddRowModal: React.FC<ModalProps> = ({ stakingTokenBalance, stakingTokenPr
         <PercentageButton onClick={() => handleChangePercent(50)}>50%</PercentageButton>
         <PercentageButton onClick={() => handleChangePercent(75)}>75%</PercentageButton>
         <PercentageButton onClick={() => handleChangePercent(100)}>{t('Max')}</PercentageButton>
+      </Flex>
+
+      <Flex mt="24px" alignItems="center" justifyContent="space-between">
+        <Text mr="8px" color="textSubtle">
+          {t('Annual ROI at current rates')}:
+        </Text>
+        {Number.isFinite(annualRoi) ? (
+          <AnnualRoiContainer
+            alignItems="center"
+            onClick={() => {
+              setShowRoiCalculator(true)
+            }}
+          >
+            <AnnualRoiDisplay>${formattedAnnualRoi}</AnnualRoiDisplay>
+            <IconButton variant="text" scale="sm">
+              <CalculateIcon color="textSubtle" width="18px" />
+            </IconButton>
+          </AnnualRoiContainer>
+        ) : (
+          <Skeleton width={60} />
+        )}
       </Flex>
 
       <Button

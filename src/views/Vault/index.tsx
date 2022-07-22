@@ -9,14 +9,15 @@ import { useHelix, useHelixVault } from 'hooks/useContract'
 import useTokenBalance from 'hooks/useTokenBalance'
 import { useFastFresh } from 'hooks/useRefresh'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { usePriceHelixBusd } from 'state/farms/hooks'
 import { Deposit } from 'state/types'
 import styled from 'styled-components'
 import { Button, Flex, Heading, useModal, Text, AutoRenewIcon } from 'uikit'
 import { BIG_ZERO } from 'utils/bigNumber'
-import { getBalanceNumber } from 'utils/formatBalance'
+import { formatNumber, getBalanceNumber } from 'utils/formatBalance'
 import { logError } from 'utils/sentry'
+import { getVaultApr } from 'utils/apr'
 import CircleLoader from '../../components/Loader/CircleLoader'
 import AddRowModal from './components/AddRowModal'
 import VaultsTable from './components/VaultsTable/VaultsTable'
@@ -54,10 +55,12 @@ const Vault: React.FC = () => {
   const helixVaultContract = useHelixVault()
   const [helixEnabled, setHelixEnabled] = useState(HelixEnabledState.UNKNOWN)
   const [isLoading, setLoading] = useState(true)
-  const [deposits, setDeposits] = useState([])
+  const [deposits, setDeposits] = useState<Deposit[]>([])
   const [totalStake, setTotalStake] = useState(0)
   const [refresh, setRefresh] = useState(0)
   const [pendingTx, setPendingTx] = useState(false)
+  const [tokenPerBlock, setTokenPerBlock] = useState(0)
+  const [totalStakedVault, setTotalStakedVault] = useState(0)
 
   const fastRefresh = useFastFresh()
   const { decimals } = tokens.helix
@@ -67,16 +70,29 @@ const Vault: React.FC = () => {
   const stakingTokenBalance = balanceFetchStatus === FetchStatus.Fetched ? helixBalance : BIG_ZERO
   const [onPresentTokenRequired] = useModal(<NotEnoughTokensModal tokenSymbol="HELIX" />)
 
+  const totalStakeUSD = useMemo(() => {
+    const total = helixPrice.multipliedBy(totalStake).toNumber();
+    return Number.isNaN(total) ? '0.000' : total.toLocaleString('en');
+  }, [helixPrice, totalStake])
+
   useEffect(() => {
     helixContract
       .balanceOf(helixVaultAddress)
       .then((value: any) => {
         setTotalStake(getBalanceNumber(value.toString(), decimals))
+        setTotalStakedVault(Number(value.toString()))
       })
       .catch((err) => {
         logError(err)
       })
   }, [helixContract, account, setHelixEnabled, decimals, fastRefresh])
+
+  useEffect(() => {
+    helixVaultContract.getToMintPerBlock()
+      .then((value: any) => {
+        setTokenPerBlock(Number(value.toString()))
+      })
+  }, [helixVaultContract])
 
   useEffect(() => {
     if (!account) return
@@ -104,7 +120,7 @@ const Vault: React.FC = () => {
     async function load() {
       const idList = await helixVaultContract.getDepositIds(account)
 
-      let results = await Promise.all(idList.map(id => {
+      const deposits_ = (await Promise.all(idList.map(id => {
         return helixVaultContract.deposits(id).then((res) => {
           const resArr = txResponseToArray(res)
           const deposit: Deposit = {
@@ -112,19 +128,19 @@ const Vault: React.FC = () => {
             amount: new BigNumber(resArr[1]),
             withdrawTimeStamp: Number(resArr[4]),
             withdrawn: resArr[6] === 'true',
+            weight: Number(res.weight.toString())
           }
-
           return deposit
         })
-      }))
-      results = results.reduce((prev, item: Deposit) => {
-        if (item.withdrawn === false) prev.push(item)
-        return prev
-      }, [])
-      setDeposits(results)
+      }))).filter(item => item.withdrawn === false);
+
+      setDeposits(deposits_.map(deposit => ({
+        ...deposit,
+        apr: getVaultApr(totalStakedVault, tokenPerBlock, deposit.weight)
+      })))
       setLoading(false)
     }
-  }, [helixVaultContract, account, helixEnabled, refresh, fastRefresh])
+  }, [helixVaultContract, account, helixEnabled, refresh, fastRefresh, tokenPerBlock, totalStakedVault])
 
   // TODO aren't arrays in dep array checked just by reference, i.e. it will rerender every time reference changes?
 
@@ -137,6 +153,8 @@ const Vault: React.FC = () => {
     <AddRowModal
       stakingTokenBalance={stakingTokenBalance}
       stakingTokenPrice={helixPrice.toNumber()}
+      tokenPerBlock={tokenPerBlock}
+      totalStakedVault={totalStakedVault}
       onAdd={handleAfterAdded}
     />,
   )
@@ -179,7 +197,7 @@ const Vault: React.FC = () => {
               {t('Locked, Higher Yield Staking for HELIX')}
             </Heading>
             <Heading scale="md" color="text" mt="3">
-              {t('Total HELIX Vaulted: ')} {totalStake.toFixed(3)}
+              {t('Total HELIX Vaulted: ')} {formatNumber(totalStake)} (${totalStakeUSD})
             </Heading>
           </Flex>
         </Flex>

@@ -22,6 +22,17 @@ export const getPoolApr = (
     return apr.isNaN() || !apr.isFinite() ? null : apr.toNumber()
 }
 
+export const getVaultApr = (
+    totalStaked: number,
+    tokenPerBlock: number,
+    weight: number,
+): number => {
+    const totalRewardPricePerYear = new BigNumber(tokenPerBlock).times(BLOCKS_PER_YEAR)
+    const totalStakingTokenInPool = new BigNumber(totalStaked)
+    const apr = totalRewardPricePerYear.div(totalStakingTokenInPool).times(weight)
+    return apr.isNaN() || !apr.isFinite() ? null : apr.toNumber()
+}
+
 /**
  * Get farm APR value in %
  * @param poolWeight allocationPoint / totalAllocationPoint
