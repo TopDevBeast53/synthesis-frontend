@@ -1,11 +1,12 @@
 import { useTranslation } from 'contexts/Localization'
 import React, { useRef } from 'react'
+import { Deposit } from 'state/types'
 import styled from 'styled-components'
 import { Button, ChevronUpIcon } from 'uikit'
 import VaultRow from './VaultRow'
 
 interface PoolsTableProps {
-  deposits
+  deposits: Deposit[]
 }
 
 const StyledTable = styled.div`

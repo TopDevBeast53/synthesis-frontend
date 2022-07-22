@@ -159,6 +159,8 @@ export interface Deposit {
     amount: BigNumber // staked Amount
     withdrawTimeStamp: number
     withdrawn: boolean
+    weight: number
+    apr?: number
 }
 export interface IfoHelixVault extends Omit<HelixAutoPool, 'userData'> {
     userData?: IfoVaultUser
