@@ -41,6 +41,7 @@ export const useHelixLockVault = () => {
         amount: new BigNumber(resArr[1]),
         withdrawTimeStamp: Number(resArr[4]),
         withdrawn: resArr[6] === 'true',
+        weight: Number(resArr[2])
       }
       return deposit
     },

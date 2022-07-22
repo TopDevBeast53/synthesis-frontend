@@ -1,12 +1,13 @@
 import { useTranslation } from 'contexts/Localization'
 import moment from 'moment'
 import React, { useMemo } from 'react'
+import { Deposit } from 'state/types'
 import styled from 'styled-components'
 import { Flex, Skeleton, Text, useMatchBreakpoints } from 'uikit'
 import BaseCell, { CellContent } from './BaseCell'
 
 interface TotalStakedCellProps {
-  deposit?
+  deposit: Deposit
 }
 
 const StyledCell = styled(BaseCell)`

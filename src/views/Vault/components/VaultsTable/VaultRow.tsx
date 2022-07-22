@@ -13,9 +13,10 @@ import EarningsCell from './Cells/EarningsCell'
 import ExpandActionCell from './Cells/ExpandActionCell'
 import StakedCell from './Cells/StakedCell'
 import WithdrawTimeLeft from './Cells/WithdrawTimeLeft'
+import AprCell from './Cells/AprCell'
 
 interface PoolRowProps {
-  deposit?
+  deposit: any
 }
 
 const Container = styled.div`
@@ -40,7 +41,7 @@ const VaultRow: React.FC<PoolRowProps> = ({ deposit }) => {
   const shouldRenderActionPanel = useDelayedUnmount(expanded, 300)
   const [isLoading, setLoading] = useState(true)
   const [earnings, setEarnings] = useState(BIG_ZERO)
-  const [stakedBalance, setStakedBalance] = useState(deposit?.amount ? deposit.amount : BIG_ZERO)
+  const [stakedBalance, setStakedBalance] = useState<BigNumber>(deposit?.amount ? deposit.amount : BIG_ZERO)
   const toggleExpanded = () => {
     setExpanded((prev) => !prev)
   }
@@ -94,6 +95,7 @@ const VaultRow: React.FC<PoolRowProps> = ({ deposit }) => {
           <CurrencyLogo currency={tokens.helix} size="36px" />
         </Container>
         <EarningsCell isLoading={isLoading} earnings={earnings} />
+        <AprCell stakedBalance={stakedBalance} apr={deposit.apr} />
         <WithdrawTimeLeft deposit={deposit} />
         <ExpandActionCell expanded={expanded} isFullLayout={isTablet || isDesktop} />
       </StyledRow>
