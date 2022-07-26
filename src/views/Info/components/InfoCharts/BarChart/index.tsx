@@ -73,7 +73,7 @@ const Chart = ({ data, setHoverValue, setHoverDate, chartHeight }: LineChartProp
           axisLine={false}
           tickLine={false}
           tickFormatter={(time) => time.toLocaleDateString(undefined, { day: '2-digit' })}
-          minTickGap={10}
+          // minTickGap={10}
           tick={{ fill: theme.colors.textSubtle }}
         />
         <YAxis

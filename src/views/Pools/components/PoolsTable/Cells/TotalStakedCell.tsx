@@ -2,12 +2,13 @@ import React, { useMemo } from 'react'
 import { Flex, Skeleton, Text } from 'uikit'
 import styled from 'styled-components'
 import { useTranslation } from 'contexts/Localization'
-import BigNumber from 'bignumber.js'
+// import BigNumber from 'bignumber.js'
 import Balance from 'components/Balance'
 import { DeserializedPool } from 'state/types'
-import { useVaultPoolByKey, useVaultPools } from 'state/pools/hooks'
+import { useVaultPoolByKey } from 'state/pools/hooks'
+// import { useVaultPoolByKey, useVaultPools } from 'state/pools/hooks'
 import { getBalanceNumber } from 'utils/formatBalance'
-import { BIG_ZERO } from 'utils/bigNumber'
+// import { BIG_ZERO } from 'utils/bigNumber'
 import BaseCell, { CellContent } from './BaseCell'
 
 interface TotalStakedCellProps {
@@ -22,11 +23,11 @@ const TotalStakedCell: React.FC<TotalStakedCellProps> = ({ pool }) => {
   const { t } = useTranslation()
   const { sousId, stakingToken, totalStaked, vaultKey } = pool
   const { totalHelixInVault } = useVaultPoolByKey(vaultKey)
-  const vaultPools = useVaultPools()
+  // const vaultPools = useVaultPools()
 
-  const helixInVaults = Object.values(vaultPools).reduce((total, vault) => {
-    return total.plus(vault.totalHelixInVault)
-  }, BIG_ZERO)
+  // const helixInVaults = Object.values(vaultPools).reduce((total, vault) => {
+  //   return total.plus(vault.totalHelixInVault)
+  // }, BIG_ZERO)
 
   const isManualHelixPool = sousId === 0
 
@@ -35,13 +36,13 @@ const TotalStakedCell: React.FC<TotalStakedCellProps> = ({ pool }) => {
       return getBalanceNumber(totalHelixInVault, stakingToken.decimals)
     }
     if (isManualHelixPool) {
-      const manualHelixTotalMinusAutoVault = new BigNumber(totalStaked).minus(helixInVaults)
-      const balanceNumber = getBalanceNumber(manualHelixTotalMinusAutoVault, stakingToken.decimals)
+      // const manualHelixTotalMinusAutoVault = new BigNumber(totalStaked).minus(helixInVaults)
+      const balanceNumber = getBalanceNumber(totalStaked, stakingToken.decimals)
 
       return balanceNumber < 0 ? 0 : balanceNumber
     }
     return getBalanceNumber(totalStaked, stakingToken.decimals)
-  }, [vaultKey, totalHelixInVault, isManualHelixPool, totalStaked, stakingToken.decimals, helixInVaults])
+  }, [vaultKey, totalHelixInVault, isManualHelixPool, totalStaked, stakingToken.decimals])
 
   return (
     <StyledCell role="cell">

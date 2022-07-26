@@ -61,13 +61,13 @@ const LineChart = ({ data, setHoverValue, setHoverDate }: LineChartProps) => {
           axisLine={false}
           tickLine={false}
           tickFormatter={(time) => time.toLocaleDateString(undefined, { day: '2-digit' })}
-          minTickGap={10}
+          // minTickGap={10}
           tick={{ fill: theme.colors.textSubtle }}
         />
         <YAxis
           dataKey="value"
           tickCount={6}
-          scale="linear"
+          // scale="linear"
           axisLine={false}
           tickLine={false}
           fontSize="12px"
