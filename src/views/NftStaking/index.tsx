@@ -64,7 +64,7 @@ export default function NftStaking() {
   const { toastError, toastSuccess } = useToast()
   const [tokens, setTokens] = useState([])
   const [pendingReward, setPendingReward] = useState('')
-  const [viewStaked, setViewStaked] = useState(false)
+  const [viewStaked, setViewStaked] = useState(true)
   const [selectedTokenIds, setSelectedTokenIds] = useState<number[]>([])
   const [loading, setLoading] = useState(true)
   const [loadingStatus, setLoadingStatus] = useState(false)

@@ -56,25 +56,25 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType[] = (t) => [
             },
         ],
     },
-    {
-        label: t('Yield Swaps'),
-        href: '/lps-swap',
-        mobileLabel:"YS",
-        icon: 'YieldSwap',
-        items: [
-            {
-                label: t('Swap LPs'),
-                href: '/lps-swap',
-            },
-            // {
-            //     type: DropdownMenuItemType.DIVIDER,
-            // },
-            // {
-            //     label: t('Swap Yield'),
-            //     href: '/yield-swap',
-            // },
-        ],
-    },
+    // {
+    //     label: t('Yield Swaps'),
+    //     href: '/lps-swap',
+    //     mobileLabel:"YS",
+    //     icon: 'YieldSwap',
+    //     items: [
+    //         {
+    //             label: t('Swap LPs'),
+    //             href: '/lps-swap',
+    //         },
+    //         // {
+    //         //     type: DropdownMenuItemType.DIVIDER,
+    //         // },
+    //         // {
+    //         //     label: t('Swap Yield'),
+    //         //     href: '/yield-swap',
+    //         // },
+    //     ],
+    // },
     {
         label: t('Referrals'),
         href: '/referrals',
@@ -106,6 +106,12 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType[] = (t) => [
         label: t('Voting'),
         href: '/voting',
         icon:'Vote1',
+        showItemsOnMobile:false,
+    },
+    {
+        label: t('Data'),
+        href: '/data',
+        icon: 'Chart',
         showItemsOnMobile:false,
     },
     // {
@@ -152,13 +158,10 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType[] = (t) => [
         icon: 'More',
         hideSubNav: true,
         items: [
-            {
-                label: t('Data'),
-                href: '/data',
-            },
-            {
-                type: DropdownMenuItemType.DIVIDER,
-            },
+            
+            // {
+            //     type: DropdownMenuItemType.DIVIDER,
+            // },
             //     {
             //       label: t('IFO'),
             //       href: '/ifo',

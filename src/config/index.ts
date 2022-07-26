@@ -23,7 +23,7 @@ export const BASE_SOLANA_SCAN_URLS = 'https://explorer.solana.com/'
 // 9 HELIXper block goes to Yield farms and lottery
 // HELIX_PER_BLOCK in config/index.ts = 40 as we only change the amount sent to the burn pool which is effectively a farm.
 // CAKE/Block in src/views/Home/components/CakeDataRow.tsx = 15 (40 - Amount sent to burn pool)
-export const HELIX_PER_BLOCK = 5
+export const HELIX_PER_BLOCK = 4.5
 export const BLOCKS_PER_YEAR = (60 / BSC_BLOCK_TIME) * 60 * 24 * 365 // 10512000
 export const HELIX_PER_YEAR = HELIX_PER_BLOCK * BLOCKS_PER_YEAR
 export const BASE_URL = 'https://helix.finance'

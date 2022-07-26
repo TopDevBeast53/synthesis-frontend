@@ -16,7 +16,9 @@ const Home: React.FC = () => {
   const handleClick = (src) => {
     history.push(src)
   }
-
+  const gotoLink = (src) => {
+    window.location.href = src; 
+  }
   return (
     <>
       <PageMeta />
@@ -49,12 +51,12 @@ const Home: React.FC = () => {
             <Button mr="12px" width="256px" onClick={() =>{handleClick("/swap")}}>
                 <Text style={{ color: '#101411', fontWeight: 500 }}>Trade Crypto</Text>
             </Button>
-            <Button mr="12px" width="300px" style={{ background: '#101411', border: '2px solid #ABBEFF' }} onClick={() =>{handleClick("/lps-swap")}}>
+            <Button mr="12px" width="300px" style={{ background: '#101411', border: '2px solid #ABBEFF' }} onClick={() =>{gotoLink("https://geometry.gitbook.io/helix/core-products/yield-swaps/lp-swaps")}}>
                 <Text style={{ color: '#ABBEFF', fontWeight: 500 }}>
                   Trade LP Tokens
                 </Text>
             </Button>
-            <Button width="256px" style={{ background: '#ABBEFF' }} onClick={() =>{handleClick("/lps-swap")}}>
+            <Button width="256px" style={{ background: '#ABBEFF' }} onClick={() =>{gotoLink("https://geometry.gitbook.io/helix/core-products/yield-swaps/yield-swaps")}}>
                 <Text style={{ color: '#101411', fontWeight: 500 }}>Trade Yield</Text>
             </Button>
             
