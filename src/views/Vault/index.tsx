@@ -194,9 +194,9 @@ const Vault: React.FC = () => {
             <Heading as="h1" scale="xxl" color="secondary" mb="24px">
               {t('Helix Vaults')}
             </Heading>
-            {/* <Heading scale="lg" color="text">
+            <Heading scale="lg" color="text">
               {t('Locked, Higher Yield Staking for HELIX')}
-            </Heading> */}
+            </Heading>
             <Heading scale="md" color="text" mt="3">
               {t('Total HELIX Vaulted: ')} {formatNumber(totalStake)} (${totalStakeUSD})
             </Heading>
