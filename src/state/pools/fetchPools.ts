@@ -4,8 +4,9 @@ import sousChefABI from 'config/abi/sousChef.json'
 import helixABI from 'config/abi/Helix.json'
 import wbnbABI from 'config/abi/weth.json'
 import multicall from 'utils/multicall'
-import { getAddress } from 'utils/addressHelpers'
+import { getAddress, getHelixAutoPoolAddress } from 'utils/addressHelpers'
 import tokens from 'config/constants/tokens'
+import { getMasterchefContract } from 'utils/contractHelpers'
 
 export const fetchPoolsBlockLimits = async () => {
     const poolsWithEnd = poolsConfig.filter((p) => p.sousId !== 0)
@@ -48,7 +49,8 @@ export const fetchPoolsBlockLimits = async () => {
 }
 
 export const fetchPoolsTotalStaking = async () => {
-    const nonBnbPools = poolsConfig.filter((p) => p.stakingToken.symbol !== 'ETH')
+    const helixPools = poolsConfig.filter((p) => p.stakingToken.symbol !== 'ETH' && p.sousId === 0)
+    const nonBnbPools = poolsConfig.filter((p) => p.stakingToken.symbol !== 'ETH' && p.sousId !== 0)
     const bnbPool = poolsConfig.filter((p) => p.stakingToken.symbol === 'ETH')
 
     const callsNonBnbPools = nonBnbPools.map((poolConfig) => {
@@ -70,7 +72,16 @@ export const fetchPoolsTotalStaking = async () => {
     const nonBnbPoolsTotalStaked = await multicall(helixABI, callsNonBnbPools)
     const bnbPoolsTotalStaked = await multicall(wbnbABI, callsBnbPools)
 
+    const masterChefContract = getMasterchefContract()
+    const [totalDepositedHelix, autoHelixDeposit] = await Promise.all([
+        masterChefContract.depositedHelix(),
+        masterChefContract.userInfo(0, getHelixAutoPoolAddress())
+    ])
     return [
+        ...helixPools.map(p => ({
+            sousId: p.sousId,
+            totalStaked: new BigNumber(totalDepositedHelix.sub(autoHelixDeposit.amount).toString()).toJSON(),
+        })),
         ...nonBnbPools.map((p, index) => ({
             sousId: p.sousId,
             totalStaked: new BigNumber(nonBnbPoolsTotalStaked[index]).toJSON(),
