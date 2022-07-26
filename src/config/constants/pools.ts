@@ -39,10 +39,12 @@ const pools: SerializedPoolConfig[] = [
         },
         poolCategory: PoolCategory.CORE,
         harvest: true,
-        tokenPerBlock: '0.002278481012658228',
+        tokenPerBlock: '0.02278481012658228',
         sortOrder: 1,
         isFinished: false,
     },
+    // 2.278481012658228
+    //
     // {
     //   sousId: 1,
     //   stakingToken: serializedTokens.helix,
