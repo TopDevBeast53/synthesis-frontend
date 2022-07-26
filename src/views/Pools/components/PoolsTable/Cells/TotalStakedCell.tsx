@@ -21,7 +21,7 @@ const StyledCell = styled(BaseCell)`
 
 const TotalStakedCell: React.FC<TotalStakedCellProps> = ({ pool }) => {
   const { t } = useTranslation()
-  const { sousId, stakingToken, totalStaked, vaultKey } = pool
+  const { sousId, stakingToken, totalStaked, vaultKey, manualStaked } = pool
   const { totalHelixInVault } = useVaultPoolByKey(vaultKey)
   // const vaultPools = useVaultPools()
 
@@ -37,12 +37,12 @@ const TotalStakedCell: React.FC<TotalStakedCellProps> = ({ pool }) => {
     }
     if (isManualHelixPool) {
       // const manualHelixTotalMinusAutoVault = new BigNumber(totalStaked).minus(helixInVaults)
-      const balanceNumber = getBalanceNumber(totalStaked, stakingToken.decimals)
+      const balanceNumber = getBalanceNumber(manualStaked, stakingToken.decimals)
 
       return balanceNumber < 0 ? 0 : balanceNumber
     }
     return getBalanceNumber(totalStaked, stakingToken.decimals)
-  }, [vaultKey, totalHelixInVault, isManualHelixPool, totalStaked, stakingToken.decimals])
+  }, [vaultKey, totalHelixInVault, isManualHelixPool, totalStaked, manualStaked, stakingToken.decimals])
 
   return (
     <StyledCell role="cell">
