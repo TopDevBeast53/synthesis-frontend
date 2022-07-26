@@ -80,7 +80,8 @@ export const fetchPoolsTotalStaking = async () => {
     return [
         ...helixPools.map(p => ({
             sousId: p.sousId,
-            totalStaked: new BigNumber(totalDepositedHelix.sub(autoHelixDeposit.amount).toString()).toJSON(),
+            totalStaked: new BigNumber(totalDepositedHelix.toString()).toJSON(),
+            manualStaked: new BigNumber(totalDepositedHelix.sub(autoHelixDeposit.amount).toString()).toJSON(),
         })),
         ...nonBnbPools.map((p, index) => ({
             sousId: p.sousId,
