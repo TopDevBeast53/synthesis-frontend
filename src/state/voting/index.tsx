@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { FetchStatus } from 'config/constants/types'
 import { merge } from 'lodash'
 import { Proposal, ProposalState, VotingState, Vote, State } from 'state/types'
-import { getAllVotes, getProposal, getProposals, getVoteVerificationStatuses } from './helpers'
+import { getAllVotes, getProposal, getProposals } from './helpers'
 
 const initialState: VotingState = {
   proposalLoadingStatus: FetchStatus.Idle,
@@ -35,9 +35,9 @@ export const fetchVotes = createAsyncThunk<
 
 export const verifyVotes = createAsyncThunk<
   { results: { [key: string]: boolean }; proposalId: string },
-  { proposalId: string; snapshot?: string },
+  { proposalId: string; snapshot?: string, getVoteVerificationStatuses: any },
   { state: State }
->('voting/verifyVotes', async ({ proposalId, snapshot }, { getState }) => {
+>('voting/verifyVotes', async ({ proposalId, snapshot, getVoteVerificationStatuses }, { getState }) => {
   const state = getState()
   const proposalVotes = state.voting.votes[proposalId]
   const response = await getVoteVerificationStatuses(proposalVotes, Number(snapshot))
