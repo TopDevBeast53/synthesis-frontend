@@ -78,6 +78,16 @@ const farms: SerializedFarmConfig[] = [
         token: serializedTokens.wbtc,
         quoteToken: serializedTokens.weth,
     },
+    {
+        pid: 7,
+        lpSymbol: 'FEI-TRIBE',
+        lpAddresses: {
+            1: '0x54427EaCC21A1C96a239cf65C33be61CF616EdBF',
+            4: '',
+        },
+        token: serializedTokens.fei,
+        quoteToken: serializedTokens.tribe,
+    },
     // {
     //   pid: 0,
     //   lpSymbol: 'HELIX',
