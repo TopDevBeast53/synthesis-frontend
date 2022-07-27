@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { useWeb3React } from '@web3-react/core'
 import { useAppDispatch } from 'state'
-import { useGetCurrentEpoch, useGetEarliestEpoch, useGetPredictionsStatus } from 'state/predictions/hooks'
+import { useGetClaimStatuses, useGetCurrentEpoch, useGetEarliestEpoch, useGetLedgerData, useGetPredictionData, useGetPredictionsStatus, useGetRoundsData } from 'state/predictions/hooks'
 import { fetchClaimableStatuses, fetchLedgerData, fetchMarketData, fetchRounds } from 'state/predictions'
 import { PredictionStatus } from 'state/types'
 import { range } from 'lodash'
@@ -15,6 +15,10 @@ const usePollPredictions = () => {
     const currentEpoch = useGetCurrentEpoch()
     const earliestEpoch = useGetEarliestEpoch()
     const status = useGetPredictionsStatus()
+    const getRoundsData = useGetRoundsData()
+    const getClaimStatuses = useGetClaimStatuses()
+    const getLedgerData = useGetLedgerData()
+    const getPredictionData = useGetPredictionData()
 
     useEffect(() => {
         // Clear old timer
@@ -26,13 +30,13 @@ const usePollPredictions = () => {
             timer.current = setInterval(async () => {
                 const liveCurrentAndRecent = [currentEpoch, currentEpoch - 1, currentEpoch - 2]
 
-                dispatch(fetchRounds(liveCurrentAndRecent))
-                dispatch(fetchMarketData())
+                dispatch(fetchRounds({ epochs: liveCurrentAndRecent, getRoundsData }))
+                dispatch(fetchMarketData({ getPredictionData }))
 
                 if (account) {
                     const epochRange = range(earliestEpoch, currentEpoch + 1)
-                    dispatch(fetchLedgerData({ account, epochs: epochRange }))
-                    dispatch(fetchClaimableStatuses({ account, epochs: epochRange }))
+                    dispatch(fetchLedgerData({ account, epochs: epochRange, getLedgerData }))
+                    dispatch(fetchClaimableStatuses({ account, epochs: epochRange, getClaimStatuses }))
                 }
             }, POLL_TIME_IN_SECONDS * 1000)
         }
@@ -42,7 +46,7 @@ const usePollPredictions = () => {
                 clearInterval(timer.current)
             }
         }
-    }, [timer, account, status, currentEpoch, earliestEpoch, dispatch])
+    }, [timer, account, status, currentEpoch, earliestEpoch, dispatch, getRoundsData, getClaimStatuses, getLedgerData, getPredictionData])
 }
 
 export default usePollPredictions

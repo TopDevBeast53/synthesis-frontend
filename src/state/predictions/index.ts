@@ -30,13 +30,9 @@ import {
     transformBetResponse,
     makeFutureRoundResponse,
     makeRoundData,
-    getRoundsData,
-    getPredictionData,
     MarketData,
-    getLedgerData,
     makeLedgerData,
     serializePredictionsRoundsResponse,
-    getClaimStatuses,
     fetchUsersRoundsLength,
     fetchUserRounds,
     getPredictionUsers,
@@ -91,9 +87,12 @@ type PredictionInitialization = Pick<
     | 'claimableStatuses'
     | 'bufferSeconds'
 >
-export const initializePredictions = createAsyncThunk<PredictionInitialization, string>(
+export const initializePredictions = createAsyncThunk<
+    PredictionInitialization,
+    { account: string, getRoundsData: any, getClaimStatuses: any, getLedgerData: any, getPredictionData: any }
+>(
     'predictions/initialize',
-    async (account = null) => {
+    async ({ account = null, getRoundsData, getClaimStatuses, getLedgerData, getPredictionData }) => {
         // Static values
         const marketData = await getPredictionData()
         const epochs =
@@ -143,9 +142,9 @@ export const initializePredictions = createAsyncThunk<PredictionInitialization, 
 //     return serializePredictionsRoundsResponse(response)
 // })
 
-export const fetchRounds = createAsyncThunk<{ [key: string]: ReduxNodeRound }, number[]>(
+export const fetchRounds = createAsyncThunk<{ [key: string]: ReduxNodeRound }, { epochs: number[], getRoundsData: any }>(
     'predictions/fetchRounds',
-    async (epochs) => {
+    async ({ epochs, getRoundsData }) => {
         const rounds = await getRoundsData(epochs)
         return rounds.reduce((accum, round) => {
             if (!round) {
@@ -162,14 +161,14 @@ export const fetchRounds = createAsyncThunk<{ [key: string]: ReduxNodeRound }, n
     },
 )
 
-export const fetchMarketData = createAsyncThunk<MarketData>('predictions/fetchMarketData', async () => {
+export const fetchMarketData = createAsyncThunk<MarketData, { getPredictionData: any }>('predictions/fetchMarketData', async ({ getPredictionData }) => {
     const marketData = await getPredictionData()
     return marketData
 })
 
-export const fetchLedgerData = createAsyncThunk<LedgerData, { account: string; epochs: number[] }>(
+export const fetchLedgerData = createAsyncThunk<LedgerData, { account: string; epochs: number[], getLedgerData: any }>(
     'predictions/fetchLedgerData',
-    async ({ account, epochs }) => {
+    async ({ account, epochs, getLedgerData }) => {
         const ledgers = await getLedgerData(account, epochs)
         return makeLedgerData(account, ledgers, epochs)
     },
@@ -177,8 +176,8 @@ export const fetchLedgerData = createAsyncThunk<LedgerData, { account: string; e
 
 export const fetchClaimableStatuses = createAsyncThunk<
     PredictionsState['claimableStatuses'],
-    { account: string; epochs: number[] }
->('predictions/fetchClaimableStatuses', async ({ account, epochs }) => {
+    { account: string; epochs: number[], getClaimStatuses: any }
+>('predictions/fetchClaimableStatuses', async ({ account, epochs, getClaimStatuses }) => {
     const ledgers = await getClaimStatuses(account, epochs)
     return ledgers
 })
@@ -198,8 +197,8 @@ export const fetchHistory = createAsyncThunk<{ account: string; bets: Bet[] }, {
 
 export const fetchNodeHistory = createAsyncThunk<
     { bets: Bet[]; claimableStatuses: PredictionsState['claimableStatuses']; page?: number; totalHistory: number },
-    { account: string; page?: number }
->('predictions/fetchNodeHistory', async ({ account, page = 1 }) => {
+    { account: string; page?: number, getRoundsData: any, getClaimStatuses: any }
+>('predictions/fetchNodeHistory', async ({ account, page = 1, getRoundsData, getClaimStatuses }) => {
     const userRoundsLength = await fetchUsersRoundsLength(account)
     const emptyResult = { bets: [], claimableStatuses: {}, totalHistory: userRoundsLength.toNumber() }
     const maxPages = userRoundsLength.lte(ROUNDS_PER_PAGE)
@@ -220,8 +219,8 @@ export const fetchNodeHistory = createAsyncThunk<
     const size =
         maxPages === page
             ? userRoundsLength
-                  .sub(ROUNDS_PER_PAGE * (page - 1)) // Previous page's cursor
-                  .toNumber()
+                .sub(ROUNDS_PER_PAGE * (page - 1)) // Previous page's cursor
+                .toNumber()
             : ROUNDS_PER_PAGE
     const userRounds = await fetchUserRounds(account, cursor.lt(0) ? 0 : cursor.toNumber(), size)
 

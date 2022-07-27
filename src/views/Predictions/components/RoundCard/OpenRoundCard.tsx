@@ -9,6 +9,7 @@ import { ROUND_BUFFER } from 'state/predictions/config'
 import useToast from 'hooks/useToast'
 import useTheme from 'hooks/useTheme'
 import { ToastDescriptionWithTx } from 'components/Toast'
+import { useGetLedgerData } from 'state/predictions/hooks'
 import CardFlip from '../CardFlip'
 import { formatBnbv2 } from '../../helpers'
 import { RoundResultBox, PrizePoolRow } from '../RoundResult'
@@ -54,6 +55,7 @@ const OpenRoundCard: React.FC<OpenRoundCardProps> = ({
     <div style={{ whiteSpace: 'nowrap' }}>{`${formatBnbv2(betAmount)} BNB`}</div>,
     { placement: 'top' },
   )
+  const getLedgerData = useGetLedgerData()
 
   const getHasEnteredPosition = () => {
     if (hasEnteredUp || hasEnteredDown) {
@@ -91,7 +93,7 @@ const OpenRoundCard: React.FC<OpenRoundCardProps> = ({
   }
 
   const handleSuccess = async (hash: string) => {
-    await dispatch(fetchLedgerData({ account, epochs: [round.epoch] }))
+    await dispatch(fetchLedgerData({ account, epochs: [round.epoch], getLedgerData }))
 
     handleBack()
 

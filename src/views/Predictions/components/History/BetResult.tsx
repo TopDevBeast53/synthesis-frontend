@@ -8,7 +8,7 @@ import { REWARD_RATE } from 'state/predictions/config'
 import { Bet, BetPosition } from 'state/types'
 import { fetchLedgerData, markAsCollected } from 'state/predictions'
 import { Result } from 'state/predictions/helpers'
-import { useGetIsClaimable } from 'state/predictions/hooks'
+import { useGetIsClaimable, useGetLedgerData } from 'state/predictions/hooks'
 import { useBNBBusdPrice } from 'hooks/useBUSDPrice'
 import { getEtherScanLink } from 'utils'
 import { multiplyPriceByAmount } from 'utils/prices'
@@ -45,6 +45,7 @@ const BetResult: React.FC<BetResultProps> = ({ bet, result }) => {
     <Text as="p">{t('Includes your original position and your winnings, minus the %fee% fee.', { fee: '3%' })}</Text>,
     { placement: 'auto' },
   )
+  const getLedgerData = useGetLedgerData()
 
   const isWinner = result === Result.WIN
 
@@ -111,7 +112,7 @@ const BetResult: React.FC<BetResultProps> = ({ bet, result }) => {
   const handleSuccess = async () => {
     // We have to mark the bet as claimed immediately because it does not update fast enough
     dispatch(markAsCollected({ [bet.round.epoch]: true }))
-    dispatch(fetchLedgerData({ account, epochs: [bet.round.epoch] }))
+    dispatch(fetchLedgerData({ account, epochs: [bet.round.epoch], getLedgerData }))
   }
 
   return (

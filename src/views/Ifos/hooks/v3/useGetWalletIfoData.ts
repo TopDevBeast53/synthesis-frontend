@@ -3,12 +3,13 @@ import { useWeb3React } from '@web3-react/core'
 import BigNumber from 'bignumber.js'
 import { Ifo, PoolIds } from 'config/constants/types'
 import { useERC20, useIfoV2Contract } from 'hooks/useContract'
-import { multicallv2 } from 'utils/multicall'
 import ifoV2Abi from 'config/abi/ifoV2.json'
 import { useIfoPoolCredit } from 'state/pools/hooks'
 import { fetchIfoPoolUserAndCredit } from 'state/pools'
 import { useAppDispatch } from 'state'
 import { BIG_ZERO } from 'utils/bigNumber'
+import useFetchIfoPoolUser from 'state/pools/useFetchIfoPoolUser'
+import { useMulticallv2 } from 'hooks/useMulticall'
 import useIfoAllowance from '../useIfoAllowance'
 import { WalletIfoState, WalletIfoData } from '../../types'
 
@@ -46,6 +47,8 @@ const useGetWalletIfoData = (ifo: Ifo): WalletIfoData => {
     const contract = useIfoV2Contract(address)
     const currencyContract = useERC20(currency.address, false)
     const allowance = useIfoAllowance(currencyContract, address)
+    const fetchIfoPoolUser = useFetchIfoPoolUser()
+    const multicallv2 = useMulticallv2()
 
     const setPendingTx = (status: boolean, poolId: PoolIds) =>
         setState((prevState) => ({
@@ -73,7 +76,7 @@ const useGetWalletIfoData = (ifo: Ifo): WalletIfoData => {
             params: [account, [0, 1]],
         }))
 
-        dispatch(fetchIfoPoolUserAndCredit({ account }))
+        dispatch(fetchIfoPoolUserAndCredit({ account, fetchIfoPoolUser }))
 
         const [userInfo, amounts] = await multicallv2(ifoV2Abi, ifoCalls)
 
@@ -97,7 +100,7 @@ const useGetWalletIfoData = (ifo: Ifo): WalletIfoData => {
                 hasClaimed: userInfo[1][1],
             },
         }))
-    }, [account, address, dispatch])
+    }, [account, address, dispatch, fetchIfoPoolUser, multicallv2])
 
     const resetIfoData = useCallback(() => {
         setState({ ...initialState })

@@ -7,9 +7,10 @@ import useIntersectionObserver from 'hooks/useIntersectionObserver'
 import { usePriceHelixBusd } from 'state/farms/hooks'
 import Balance from 'components/Balance'
 import styled from 'styled-components'
-import { fetchCurrentLotteryIdAndMaxBuy, fetchLottery } from 'state/lottery/helpers'
+import { fetchLottery } from 'state/lottery/helpers'
 import BigNumber from 'bignumber.js'
 import { getBalanceAmount } from 'utils/formatBalance'
+import { useFetchCurrentLotteryIdAndMaxBuy } from 'state/pools/hooks'
 
 const StyledLink = styled(Link)`
   width: 100%;
@@ -29,6 +30,7 @@ const LotteryCardContent = () => {
   const [lotteryId, setLotteryId] = useState<string>(null)
   const [currentLotteryPrize, setCurrentLotteryPrize] = useState<BigNumber>(null)
   const cakePriceBusdAsString = usePriceHelixBusd().toString()
+  const fetchCurrentLotteryIdAndMaxBuy = useFetchCurrentLotteryIdAndMaxBuy()
 
   const cakePrizesText = t('%cakePrizeInUsd% in HELIX prizes this round', { cakePrizeInUsd: cakePriceBusdAsString })
   const [pretext, prizesThisRound] = cakePrizesText.split(cakePriceBusdAsString)
@@ -53,7 +55,7 @@ const LotteryCardContent = () => {
     if (loadData) {
       fetchCurrentID()
     }
-  }, [loadData, setLotteryId])
+  }, [fetchCurrentLotteryIdAndMaxBuy, loadData, setLotteryId])
 
   useEffect(() => {
     // get public data for current lottery

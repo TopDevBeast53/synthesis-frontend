@@ -11,6 +11,7 @@ import { deserializeToken } from 'state/user/hooks/helpers'
 import { getAddress } from 'utils/addressHelpers'
 import { fetchFarmsPublicDataAsync, fetchFarmUserDataAsync, nonArchivedFarms } from '.'
 import { State, SerializedFarm, DeserializedFarmUserData, DeserializedFarm, DeserializedFarmsState } from '../types'
+import useFetchFarms from './useFetchFarms'
 
 const deserializeFarmUserData = (farm: SerializedFarm): DeserializedFarmUserData => {
     return {
@@ -47,30 +48,32 @@ const deserializeFarm = (farm: SerializedFarm): DeserializedFarm => {
 export const usePollFarmsPublicData = (includeArchive = false) => {
     const dispatch = useAppDispatch()
     const slowRefresh = useSlowFresh()
+    const fetchFarms = useFetchFarms()
 
     useEffect(() => {
         const farmsToFetch = includeArchive ? farmsConfig : nonArchivedFarms
         const pids = farmsToFetch.map((farmToFetch) => farmToFetch.pid)
 
-        dispatch(fetchFarmsPublicDataAsync(pids))
-    }, [includeArchive, dispatch, slowRefresh])
+        dispatch(fetchFarmsPublicDataAsync({ pids, fetchFarms }))
+    }, [includeArchive, dispatch, slowRefresh, fetchFarms])
 }
 
 export const usePollFarmsWithUserData = (includeArchive = false) => {
     const dispatch = useAppDispatch()
     const fastRefresh = useFastFresh()
     const { account } = useWeb3React()
+    const fetchFarms = useFetchFarms()
 
     useEffect(() => {
         const farmsToFetch = includeArchive ? farmsConfig : nonArchivedFarms
         const pids = farmsToFetch.map((farmToFetch) => farmToFetch.pid)
 
-        dispatch(fetchFarmsPublicDataAsync(pids))
+        dispatch(fetchFarmsPublicDataAsync({ pids, fetchFarms }))
 
         if (account) {
             dispatch(fetchFarmUserDataAsync({ account, pids }))
         }
-    }, [includeArchive, dispatch, fastRefresh, account])
+    }, [includeArchive, dispatch, fastRefresh, account, fetchFarms])
 }
 
 /**
@@ -81,10 +84,11 @@ export const usePollFarmsWithUserData = (includeArchive = false) => {
 export const usePollCoreFarmData = () => {
     const dispatch = useAppDispatch()
     const fastRefresh = useFastFresh()
+    const fetchFarms = useFetchFarms()
 
     useEffect(() => {
-        dispatch(fetchFarmsPublicDataAsync([1, 3]))
-    }, [dispatch, fastRefresh])
+        dispatch(fetchFarmsPublicDataAsync({ pids: [1, 3], fetchFarms }))
+    }, [dispatch, fastRefresh, fetchFarms])
 }
 
 export const useFarms = (): DeserializedFarmsState => {

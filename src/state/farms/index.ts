@@ -10,7 +10,6 @@ import farmsConfig from 'config/constants/farms'
 import isArchivedPid from 'utils/farmHelpers'
 import type { AppState } from 'state'
 import priceHelperLpsConfig from 'config/constants/priceHelperLps'
-import fetchFarms from './fetchFarms'
 import getFarmsPrices from './getFarmsPrices'
 import {
     fetchFarmUserEarnings,
@@ -42,13 +41,13 @@ export const nonArchivedFarms = farmsConfig.filter(({ pid }) => !isArchivedPid(p
 // Async thunks
 export const fetchFarmsPublicDataAsync = createAsyncThunk<
     SerializedFarm[],
-    number[],
+    { pids: number[], fetchFarms: any },
     {
         state: AppState
     }
 >(
     'farms/fetchFarmsPublicDataAsync',
-    async (pids) => {
+    async ({ pids, fetchFarms }) => {
         const farmsToFetch = farmsConfig.filter((farmConfig) => pids.includes(farmConfig.pid))
 
         // Add price helper farms

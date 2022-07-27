@@ -11,13 +11,10 @@ import {
     VaultUser,
 } from 'state/types'
 import { BIG_ZERO } from 'utils/bigNumber'
-import { fetchIfoPoolFeesData, fetchPublicIfoPoolData } from './fetchIfoPoolPublic'
-import fetchIfoPoolUserData from './fetchIfoPoolUser'
 import {
     fetchPoolsAllowance,
 } from './fetchPoolsUser'
-import { fetchPublicVaultData, fetchVaultFees } from './fetchVaultPublic'
-import fetchVaultUser from './fetchVaultUser'
+// import fetchVaultUser from './fetchVaultUser'
 
 export const initialPoolVaultState = Object.freeze({
     totalShares: null,
@@ -84,38 +81,42 @@ export const updateUserBalance =
             dispatch(updatePoolsUserData({ sousId, field: 'stakingTokenBalance', value: tokenBalances[sousId] }))
         }
 
-export const fetchHelixVaultPublicData = createAsyncThunk<HelixAutoPool>('helixAutoPool/fetchPublicData', async () => {
-    const publicVaultInfo = await fetchPublicVaultData()
-    return publicVaultInfo
-})
+export const fetchHelixVaultPublicData = createAsyncThunk<HelixAutoPool, { fetchPublicVaultData: any }>
+    ('helixAutoPool/fetchPublicData', async ({ fetchPublicVaultData }) => {
+        const publicVaultInfo = await fetchPublicVaultData()
+        return publicVaultInfo
+    })
 
-export const fetchHelixVaultFees = createAsyncThunk<VaultFees>('helixAutoPool/fetchFees', async () => {
-    const vaultFees = await fetchVaultFees()
-    return vaultFees
-})
+export const fetchHelixVaultFees = createAsyncThunk<VaultFees, { fetchVaultFees: any }>
+    ('helixAutoPool/fetchFees', async ({ fetchVaultFees }) => {
+        const vaultFees = await fetchVaultFees()
+        return vaultFees
+    })
 
-export const fetchHelixVaultUserData = createAsyncThunk<VaultUser, { account: string }>(
+export const fetchHelixVaultUserData = createAsyncThunk<VaultUser, { account: string, fetchVaultUser: any }>(
     'helixAutoPool/fetchUser',
-    async ({ account }) => {
+    async ({ account, fetchVaultUser }) => {
         const userData = await fetchVaultUser(account)
         return userData
     },
 )
 
-export const fetchIfoPoolPublicData = createAsyncThunk<IfoHelixVault>('ifoPool/fetchPublicData', async () => {
-    const publicVaultInfo = await fetchPublicIfoPoolData()
-    return publicVaultInfo
-})
+export const fetchIfoPoolPublicData = createAsyncThunk<IfoHelixVault, { fetchPublicIfoPoolData: any }>
+    ('ifoPool/fetchPublicData', async ({ fetchPublicIfoPoolData }) => {
+        const publicVaultInfo = await fetchPublicIfoPoolData()
+        return publicVaultInfo
+    })
 
-export const fetchIfoPoolFees = createAsyncThunk<VaultFees>('ifoPool/fetchFees', async () => {
-    const vaultFees = await fetchIfoPoolFeesData()
-    return vaultFees
-})
+export const fetchIfoPoolFees = createAsyncThunk<VaultFees, { fetchIfoPoolFeesData: any }>
+    ('ifoPool/fetchFees', async ({ fetchIfoPoolFeesData }) => {
+        const vaultFees = await fetchIfoPoolFeesData()
+        return vaultFees
+    })
 
-export const fetchIfoPoolUserAndCredit = createAsyncThunk<IfoVaultUser, { account: string }>(
+export const fetchIfoPoolUserAndCredit = createAsyncThunk<IfoVaultUser, { account: string, fetchIfoPoolUser: any }>(
     'ifoPool/fetchUser',
-    async ({ account }) => {
-        const userData = await fetchIfoPoolUserData(account)
+    async ({ account, fetchIfoPoolUser }) => {
+        const userData = await fetchIfoPoolUser(account)
         return userData
     },
 )

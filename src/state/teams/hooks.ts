@@ -4,11 +4,11 @@ import { useAppDispatch } from 'state'
 import merge from 'lodash/merge'
 import teamsList from 'config/constants/teams'
 import { Team } from 'config/constants/types'
-import { multicallv2 } from 'utils/multicall'
 import { TeamsById } from 'state/types'
 import profileABI from 'config/abi/pancakeProfile.json'
 import { getPancakeProfileAddress } from 'utils/addressHelpers'
 import { useProfile } from 'hooks/useContract'
+import { useMulticallv2 } from 'hooks/useMulticall'
 import { State, TeamsState } from '../types'
 import { fetchFailed, fetchStart, teamFetchSucceeded, teamsFetchSucceeded } from '.'
 
@@ -67,6 +67,8 @@ export const useGetTeam = () => {
  */
 export const useGetTeams = () => {
     const profileContract = useProfile()
+    const multicallv2 = useMulticallv2()
+
     return useCallback(async (): Promise<TeamsById> => {
         try {
             const teamsById = teamsList.reduce((accum, team) => {
@@ -105,7 +107,7 @@ export const useGetTeams = () => {
         } catch (error) {
             return null
         }
-    }, [profileContract])
+    }, [multicallv2, profileContract])
 }
 
 

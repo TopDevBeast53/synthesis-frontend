@@ -1,22 +1,28 @@
 import { useCallback, useEffect, useMemo } from 'react'
 import BigNumber from 'bignumber.js'
 import { useWeb3React } from '@web3-react/core'
+import { ethers } from 'ethers'
 import { batch, useSelector } from 'react-redux'
 import { useAppDispatch } from 'state'
 import { useFastFresh } from 'hooks/useRefresh'
 import { BIG_ZERO } from 'utils/bigNumber'
-import { getAprData } from 'views/Pools/helpers'
+import { convertSharesToHelix, getAprData } from 'views/Pools/helpers'
 import useFetchUserBalances from 'hooks/useFetchUserBalances'
 import { useFastRefreshEffect } from 'hooks/useRefreshEffect'
 import useSWR from 'swr'
+import { useMulticallv2 } from 'hooks/useMulticall'
 import useFetchPoolsPublicDataAsync from 'hooks/useFetchPoolsPublicDataAsync'
 import { poolsConfig, SLOW_INTERVAL } from 'config/constants'
-import { getAddress } from 'utils/addressHelpers'
+import { getAddress, getHelixAutoPoolAddress, getIfoPoolAddress, getLotteryV2Address } from 'utils/addressHelpers'
 import { useHelix, useMasterchef } from 'hooks/useContract'
 import { getPoolApr } from 'utils/apr'
 import { getBalanceNumber } from 'utils/formatBalance'
 import sousChefABI from 'config/abi/sousChef.json'
+import helixAutoPoolAbi from 'config/abi/HelixAutoPool.json'
+import ifoPoolAbi from 'config/abi/ifoPool.json'
+import lotteryV2Abi from 'config/abi/lotteryV2.json'
 import multicall from 'utils/multicall'
+import useFetchFarms from 'state/farms/useFetchFarms'
 import {
     fetchHelixVaultPublicData,
     fetchHelixVaultUserData,
@@ -35,6 +41,9 @@ import { State, DeserializedPool, VaultKey } from '../types'
 import { getTokenPricesFromFarm, transformPool } from './helpers'
 import { fetchFarmsPublicDataAsync, nonArchivedFarms } from '../farms'
 import { fetchPoolsAllowance } from './fetchPoolsUser'
+import useFetchVaultUser from './useFetchVaultUser'
+import useFetchPublicVaultData from './useFetchPublicVaultData'
+import useFetchIfoPoolUser from './useFetchIfoPoolUser'
 
 export const usePoolsPageFetch = () => {
     const { account } = useWeb3React()
@@ -42,22 +51,25 @@ export const usePoolsPageFetch = () => {
     useFetchPublicPoolsData()
     const fetchUserBalances = useFetchUserBalances()
     const fetchPoolsUserDataAsync = useFetchPoolsUserDataAsync(account, fetchUserBalances)
+    const fetchVaultUser = useFetchVaultUser()
+    const fetchVaultFees = useFetchVaultFees()
+    const fetchPublicVaultData = useFetchPublicVaultData()
 
     useFastRefreshEffect(() => {
         batch(() => {
-            dispatch(fetchHelixVaultPublicData())
+            dispatch(fetchHelixVaultPublicData({ fetchPublicVaultData }))
             if (account) {
                 dispatch(fetchPoolsUserDataAsync)
-                dispatch(fetchHelixVaultUserData({ account }))
+                dispatch(fetchHelixVaultUserData({ account, fetchVaultUser }))
             }
         })
-    }, [account, dispatch])
+    }, [account, dispatch, fetchVaultUser, fetchPublicVaultData])
 
     useEffect(() => {
         batch(() => {
-            dispatch(fetchHelixVaultFees())
+            dispatch(fetchHelixVaultFees({ fetchVaultFees }))
         })
-    }, [dispatch])
+    }, [dispatch, fetchVaultFees])
 }
 
 export function usePoolsWithVault() {
@@ -93,11 +105,12 @@ export const useFetchPublicPoolsData = () => {
 
     const { data = 0 } = useSWR([SLOW_INTERVAL, 'blockNumber'])
     const fetchPoolsPublicDataAsync = useFetchPoolsPublicDataAsync(data)
+    const fetchFarms = useFetchFarms()
 
     useEffect(() => {
         const fetchPoolsDataWithFarms = async () => {
             const activeFarms = nonArchivedFarms.filter((farm) => farm.pid !== 0)
-            await dispatch(fetchFarmsPublicDataAsync(activeFarms.map((farm) => farm.pid)))
+            await dispatch(fetchFarmsPublicDataAsync({ pids: activeFarms.map((farm) => farm.pid), fetchFarms }))
             batch(() => {
                 dispatch(fetchPoolsPublicDataAsync)
                 dispatch(fetchPoolsStakingLimitsAsync())
@@ -105,7 +118,7 @@ export const useFetchPublicPoolsData = () => {
         }
 
         fetchPoolsDataWithFarms()
-    }, [data, dispatch, fetchPoolsPublicDataAsync])
+    }, [data, dispatch, fetchFarms, fetchPoolsPublicDataAsync])
 
     // useSlowRefreshEffect(
     //     (currentBlock) => {
@@ -156,18 +169,21 @@ export const useFetchHelixVault = () => {
     const { account } = useWeb3React()
     const fastRefresh = useFastFresh()
     const dispatch = useAppDispatch()
+    const fetchVaultUser = useFetchVaultUser()
+    const fetchVaultFees = useFetchVaultFees()
+    const fetchPublicVaultData = useFetchPublicVaultData()
 
     useEffect(() => {
-        dispatch(fetchHelixVaultPublicData())
-    }, [dispatch, fastRefresh])
+        dispatch(fetchHelixVaultPublicData({ fetchPublicVaultData }))
+    }, [dispatch, fastRefresh, fetchPublicVaultData])
 
     useEffect(() => {
-        dispatch(fetchHelixVaultUserData({ account }))
-    }, [dispatch, fastRefresh, account])
+        dispatch(fetchHelixVaultUserData({ account, fetchVaultUser }))
+    }, [dispatch, fastRefresh, account, fetchVaultUser])
 
     useEffect(() => {
-        dispatch(fetchHelixVaultFees())
-    }, [dispatch])
+        dispatch(fetchHelixVaultFees({ fetchVaultFees }))
+    }, [dispatch, fetchVaultFees])
 }
 
 export const useFetchIfoPool = (fetchHelixPool = true) => {
@@ -176,30 +192,33 @@ export const useFetchIfoPool = (fetchHelixPool = true) => {
     const dispatch = useAppDispatch()
     const fetchHelixPoolPublicDataAsync = useFetchHelixPoolPublicDataAsync()
     const fetchHelixPoolUserDataAsync = useFetchHelixPoolUserDataAsync(account)
+    const fetchIfoPoolUser = useFetchIfoPoolUser()
+    const fetchIfoPoolFeesData = useFetchIfoPoolFeesData()
+    const fetchPublicIfoPoolData = useFetchPublicIfoPoolData()
 
     useEffect(() => {
         batch(() => {
             if (fetchHelixPool) {
                 dispatch(fetchHelixPoolPublicDataAsync)
             }
-            dispatch(fetchIfoPoolPublicData())
+            dispatch(fetchIfoPoolPublicData({ fetchPublicIfoPoolData }))
         })
-    }, [dispatch, fastRefresh, fetchHelixPool, fetchHelixPoolPublicDataAsync])
+    }, [dispatch, fastRefresh, fetchHelixPool, fetchHelixPoolPublicDataAsync, fetchPublicIfoPoolData])
 
     useEffect(() => {
         if (account) {
             batch(() => {
-                dispatch(fetchIfoPoolUserAndCredit({ account }))
+                dispatch(fetchIfoPoolUserAndCredit({ account, fetchIfoPoolUser }))
                 if (fetchHelixPool) {
                     dispatch(fetchHelixPoolUserDataAsync)
                 }
             })
         }
-    }, [dispatch, fastRefresh, account, fetchHelixPool, fetchHelixPoolUserDataAsync])
+    }, [dispatch, fastRefresh, account, fetchHelixPool, fetchHelixPoolUserDataAsync, fetchIfoPoolUser])
 
     useEffect(() => {
-        dispatch(fetchIfoPoolFees())
-    }, [dispatch])
+        dispatch(fetchIfoPoolFees({ fetchIfoPoolFeesData }))
+    }, [dispatch, fetchIfoPoolFeesData])
 }
 
 export const useHelixVault = () => {
@@ -466,4 +485,143 @@ export const useFetchUserPendingRewards = () => {
 
         return { ...pendingRewards, 0: new BigNumber(pendingReward.toString()).toJSON() }
     }, [masterChefContract])
+}
+
+export const useFetchVaultFees = () => {
+    const multicallv2 = useMulticallv2()
+    return useCallback(async () => {
+        try {
+            const calls = ['performanceFee', 'callFee', 'withdrawFee', 'withdrawFeePeriod'].map((method) => ({
+                address: getHelixAutoPoolAddress(),
+                name: method,
+            }))
+
+            const [[performanceFee], [callFee], [withdrawalFee], [withdrawalFeePeriod]] = await multicallv2(
+                helixAutoPoolAbi,
+                calls,
+            )
+
+            return {
+                performanceFee: performanceFee.toNumber(),
+                callFee: callFee.toNumber(),
+                withdrawalFee: withdrawalFee.toNumber(),
+                withdrawalFeePeriod: withdrawalFeePeriod.toNumber(),
+            }
+        } catch (error) {
+            return {
+                performanceFee: null,
+                callFee: null,
+                withdrawalFee: null,
+                withdrawalFeePeriod: null,
+            }
+        }
+    }, [multicallv2])
+}
+
+export const useFetchPublicIfoPoolData = () => {
+    const multicallv2 = useMulticallv2()
+    return useCallback(async () => {
+        try {
+            const calls = [
+                'getPricePerFullShare',
+                'totalShares',
+                'calculateHarvestHelixRewards',
+                'calculateTotalPendingHelixRewards',
+                'startBlock',
+                'endBlock',
+            ].map((method) => ({
+                address: getIfoPoolAddress(),
+                name: method,
+            }))
+
+            const [
+                [sharePrice],
+                [shares],
+                [estimatedHelixBountyReward],
+                [totalPendingHelixHarvest],
+                [startBlock],
+                [endBlock],
+            ] = await multicallv2(ifoPoolAbi, calls)
+
+            const totalSharesAsBigNumber = shares ? new BigNumber(shares.toString()) : BIG_ZERO
+            const sharePriceAsBigNumber = sharePrice ? new BigNumber(sharePrice.toString()) : BIG_ZERO
+            const totalHelixInVaultEstimate = convertSharesToHelix(totalSharesAsBigNumber, sharePriceAsBigNumber)
+            return {
+                totalShares: totalSharesAsBigNumber.toJSON(),
+                pricePerFullShare: sharePriceAsBigNumber.toJSON(),
+                totalHelixInVault: totalHelixInVaultEstimate.helixAsBigNumber.toJSON(),
+                estimatedHelixBountyReward: new BigNumber(estimatedHelixBountyReward.toString()).toJSON(),
+                totalPendingHelixHarvest: new BigNumber(totalPendingHelixHarvest.toString()).toJSON(),
+                creditStartBlock: startBlock.toNumber(),
+                creditEndBlock: endBlock.toNumber(),
+            }
+        } catch (error) {
+            return {
+                totalShares: null,
+                pricePerFullShare: null,
+                totalHelixInVault: null,
+                estimatedHelixBountyReward: null,
+                totalPendingHelixHarvest: null,
+            }
+        }
+    }, [multicallv2])
+}
+
+export const useFetchIfoPoolFeesData = () => {
+    const multicallv2 = useMulticallv2()
+    return useCallback(async () => {
+        try {
+            const calls = ['performanceFee', 'callFee', 'withdrawFee', 'withdrawFeePeriod'].map((method) => ({
+                address: getIfoPoolAddress(),
+                name: method,
+            }))
+
+            const [[performanceFee], [callFee], [withdrawalFee], [withdrawalFeePeriod]] = await multicallv2(
+                ifoPoolAbi,
+                calls,
+            )
+
+            return {
+                performanceFee: performanceFee.toNumber(),
+                callFee: callFee.toNumber(),
+                withdrawalFee: withdrawalFee.toNumber(),
+                withdrawalFeePeriod: withdrawalFeePeriod.toNumber(),
+            }
+        } catch (error) {
+            return {
+                performanceFee: null,
+                callFee: null,
+                withdrawalFee: null,
+                withdrawalFeePeriod: null,
+            }
+        }
+    }, [multicallv2])
+}
+
+export const useFetchCurrentLotteryIdAndMaxBuy = () => {
+    const multicallv2 = useMulticallv2()
+    return useCallback(async () => {
+        try {
+            const calls = ['currentLotteryId', 'maxNumberTicketsPerBuyOrClaim'].map((method) => ({
+                address: getLotteryV2Address(),
+                name: method,
+            }))
+            const [[currentLotteryId], [maxNumberTicketsPerBuyOrClaim]] = (await multicallv2(
+                lotteryV2Abi,
+                calls,
+            )) as ethers.BigNumber[][]
+
+            return {
+                currentLotteryId: currentLotteryId ? currentLotteryId.toString() : null,
+                maxNumberTicketsPerBuyOrClaim: maxNumberTicketsPerBuyOrClaim
+                    ? maxNumberTicketsPerBuyOrClaim.toString()
+                    : null,
+            }
+        } catch (error) {
+            return {
+                currentLotteryId: null,
+                maxNumberTicketsPerBuyOrClaim: null,
+            }
+        }
+    }, [multicallv2])
 }

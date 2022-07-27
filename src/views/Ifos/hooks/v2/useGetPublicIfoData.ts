@@ -6,8 +6,8 @@ import tokens from 'config/constants/tokens'
 import { Ifo, IfoStatus } from 'config/constants/types'
 import { ethers } from 'ethers'
 import { useLpTokenPrice, usePriceHelixBusd } from 'state/farms/hooks'
+import { useMulticallv2 } from 'hooks/useMulticall'
 import { BIG_ZERO } from 'utils/bigNumber'
-import { multicallv2 } from 'utils/multicall'
 import { PublicIfoData } from '../../types'
 import { getStatus } from '../helpers'
 
@@ -32,6 +32,7 @@ const useGetPublicIfoData = (ifo: Ifo): PublicIfoData => {
     const cakePriceUsd = usePriceHelixBusd()
     const lpTokenPriceInUsd = useLpTokenPrice(ifo.currency.symbol)
     const currencyPriceInUSD = ifo.currency === tokens.helix ? cakePriceUsd : lpTokenPriceInUsd
+    const multicallv2 = useMulticallv2()
 
     const [state, setState] = useState({
         isInitialized: false,
@@ -134,7 +135,7 @@ const useGetPublicIfoData = (ifo: Ifo): PublicIfoData => {
                 numberPoints: numberPoints ? numberPoints[0].toNumber() : 0,
             }))
         },
-        [releaseBlockNumber, address],
+        [multicallv2, address, releaseBlockNumber],
     )
 
     return { ...state, currencyPriceInUSD, fetchIfoData }

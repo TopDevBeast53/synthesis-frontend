@@ -27,7 +27,7 @@ import useToast from 'hooks/useToast'
 import { usePredictionsContract } from 'hooks/useContract'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { ToastDescriptionWithTx } from 'components/Toast'
-import { useGetHistory, useGetIsFetchingHistory } from 'state/predictions/hooks'
+import { useGetClaimStatuses, useGetHistory, useGetIsFetchingHistory, useGetRoundsData } from 'state/predictions/hooks'
 import { multiplyPriceByAmount } from 'utils/prices'
 import { formatNumber } from 'utils/formatBalance'
 import { logError } from 'utils/sentry'
@@ -87,6 +87,8 @@ const CollectRoundWinningsModal: React.FC<CollectRoundWinningsModalProps> = ({ o
   const dispatch = useAppDispatch()
   const isLoadingHistory = useGetIsFetchingHistory()
   const history = useGetHistory()
+  const getRoundsData = useGetRoundsData()
+  const getClaimStatuses = useGetClaimStatuses()
 
   const { epochs, total } = calculateClaimableRounds(history)
   const totalBnb = multiplyPriceByAmount(bnbBusdPrice, total)
@@ -94,9 +96,9 @@ const CollectRoundWinningsModal: React.FC<CollectRoundWinningsModalProps> = ({ o
   useEffect(() => {
     // Fetch history if they have not opened the history pane yet
     if (history.length === 0) {
-      dispatch(fetchNodeHistory({ account }))
+      dispatch(fetchNodeHistory({ account, getRoundsData, getClaimStatuses }))
     }
-  }, [account, history, dispatch])
+  }, [account, history, dispatch, getRoundsData, getClaimStatuses])
 
   const handleClick = async () => {
     try {
@@ -131,7 +133,7 @@ const CollectRoundWinningsModal: React.FC<CollectRoundWinningsModalProps> = ({ o
       toastError(
         t('Error'),
         (error as any)?.data?.message ||
-          t('Please try again. Confirm the transaction and make sure you are paying enough gas!'),
+        t('Please try again. Confirm the transaction and make sure you are paying enough gas!'),
       )
     } finally {
       setIsPendingTx(false)

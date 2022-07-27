@@ -8,6 +8,7 @@ import { orderBy } from 'lodash'
 import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'
 import { DeserializedFarm } from 'state/types'
 import { FetchStatus } from 'config/constants/types'
+import useFetchFarms from 'state/farms/useFetchFarms'
 
 const useGetTopFarmsByApr = (isIntersecting: boolean) => {
   const dispatch = useAppDispatch()
@@ -15,13 +16,14 @@ const useGetTopFarmsByApr = (isIntersecting: boolean) => {
   const [fetchStatus, setFetchStatus] = useState(FetchStatus.Idle)
   const [topFarms, setTopFarms] = useState<FarmWithStakedValue[]>([null, null, null, null, null])
   const helixPriceBusd = usePriceHelixBusd()
+  const fetchFarms = useFetchFarms()
 
   useEffect(() => {
     const fetchFarmData = async () => {
       setFetchStatus(FetchStatus.Fetching)
       const activeFarms = nonArchivedFarms.filter((farm) => farm.pid !== 0)
       try {
-        await dispatch(fetchFarmsPublicDataAsync(activeFarms.map((farm) => farm.pid)))
+        await dispatch(fetchFarmsPublicDataAsync({ pids: activeFarms.map((farm) => farm.pid), fetchFarms }))
         setFetchStatus(FetchStatus.Fetched)
       } catch (e) {
         console.error(e)
@@ -32,7 +34,7 @@ const useGetTopFarmsByApr = (isIntersecting: boolean) => {
     if (isIntersecting && fetchStatus === FetchStatus.Idle) {
       fetchFarmData()
     }
-  }, [dispatch, setFetchStatus, fetchStatus, topFarms, isIntersecting])
+  }, [dispatch, setFetchStatus, fetchStatus, topFarms, isIntersecting, fetchFarms])
 
   useEffect(() => {
     const getTopFarmsByApr = (farmsState: DeserializedFarm[]) => {

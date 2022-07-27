@@ -1,9 +1,9 @@
-import { multicallv2 } from 'utils/multicall'
 import lpSwapABI from 'config/abi/HelixLpSwap.json'
+import { useMulticallv2 } from 'hooks/useMulticall'
 import { lpSwapAddress } from '../constants'
 
 export const useLpSwap = () => {
-  
+    const multicallv2 = useMulticallv2()
     const fetchSwapData = async (): Promise<any[]> => {
         const swapCalls = [{
             address: lpSwapAddress,
