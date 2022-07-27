@@ -1,11 +1,18 @@
 import React, { useCallback, useState, useEffect } from 'react'
 import { useTranslation } from 'contexts/Localization'
 import { useWeb3React } from '@web3-react/core'
-// import { SUPPORTED_NETWORKS } from 'config/constants/networks'
-import { SupportedChainId } from 'config/constants/chains'
+import { SupportedChainId, CHAIN_IDS_TO_NAMES, SUPPORTED_NETWORKS } from 'config/constants/networks'
 import { usePopper } from 'react-popper'
 import { Flex, Image } from 'uikit'
 import styled from 'styled-components/macro'
+import { useHistory } from 'react-router-dom'
+import usePreviousValue from 'hooks/usePreviousValue'
+import useParsedQueryString from 'hooks/useParsedQueryString'
+import { ParsedQs } from 'qs'
+import { replaceURLParam } from 'utils/routes'
+import useGetChainDetail from 'hooks/useGetChainDetail'
+
+// import { isChainAllowed, switchChain } from 'utils/switchChain'
 
 const ActiveRowWrapper = styled.div`
   background-color: ${({ theme }) => theme.colors.background};
@@ -100,50 +107,6 @@ const SubNetworkIcon = styled(Image)`
   }
 `
 
-const SUPPORTED_NETWORKS: Record<
-  number,
-  {
-    chainId: string
-    chainName: string
-    nativeCurrency: {
-      name: string
-      symbol: string
-      decimals: number
-    }
-    rpcUrls: string[]
-    blockExplorerUrls: string[]
-    logoUrl: string
-    label: string
-  }
-> = {
-  1: {
-    chainId: '0x1',
-    chainName: 'Ethereum',
-    nativeCurrency: {
-      name: 'Ethereum',
-      symbol: 'ETH',
-      decimals: 18,
-    },
-    rpcUrls: ['https://mainnet.infura.io/v3'],
-    blockExplorerUrls: ['https://etherscan.com'],
-    logoUrl: '/images/networks/mainnet-network.jpg',
-    label: 'Ethereum',
-  },
-  4: {
-    chainId: '0x4',
-    chainName: 'Rinkeby',
-    nativeCurrency: {
-      name: 'Ethereum',
-      symbol: 'ETH',
-      decimals: 18,
-    },
-    rpcUrls: ['https://rinkeby.infura.io/v3'],
-    blockExplorerUrls: ['https://rinkeby.etherscan.com'],
-    logoUrl: '/images/networks/rsk-network.jpg',
-    label: 'RSK',
-  },
-}
-
 function Row({
   targetChain,
   onSelectChain,
@@ -151,8 +114,9 @@ function Row({
   targetChain: SupportedChainId
   onSelectChain: (targetChain: number) => void
 }) {
-  const { library, chainId } = useWeb3React()
-  if (!library || !chainId) {
+  const chainFromUrl = useGetChainDetail()
+  const chainId = chainFromUrl.CHAIN_ID
+  if (!chainId) {
     return null
   }
   const active = chainId === targetChain
@@ -182,11 +146,34 @@ function Row({
 
 const NETWORK_SELECTOR_CHAINS = [
   SupportedChainId.MAINNET,
-  SupportedChainId.RINKEBY,
+  SupportedChainId.RSK_MAINNET,
 ]
 
-export default function NetworkSelector() {
+const getParsedChainId = (parsedQs?: ParsedQs) => {
+  const chain = parsedQs?.chain
+  if (!chain || typeof chain !== 'string') return { urlChain: undefined, urlChainId: undefined }
 
+  return { urlChain: chain.toLowerCase(), urlChainId: getChainIdFromName(chain) }
+}
+
+const getChainIdFromName = (name: string) => {
+  const entry = Object.entries(CHAIN_IDS_TO_NAMES).find(([_, n]) => n === name)
+  const chainId = entry?.[0]
+  return chainId ? parseInt(chainId) : undefined
+}
+
+const getChainNameFromId = (id: string | number) => {
+  // casting here may not be right but fine to return undefined if it's not a supported chain ID
+  return CHAIN_IDS_TO_NAMES[id as SupportedChainId] || ''
+}
+
+export default function NetworkSelector() {
+  const chainFromUrl = useGetChainDetail()
+  const chainId = chainFromUrl.CHAIN_ID
+  const previousChainId = usePreviousValue(chainId)
+  const parsedQs = useParsedQueryString()
+  const { urlChain, urlChainId } = getParsedChainId(parsedQs)
+  const previousUrlChainId = usePreviousValue(urlChainId)
   const { t } = useTranslation()
   const [isOpen, setIsOpen] = useState(false)
   const [targetRef, setTargetRef] = useState<HTMLDivElement | null>(null)
@@ -198,20 +185,44 @@ export default function NetworkSelector() {
     modifiers: [{ name: 'offset', options: { offset: [0, 0] } }],
   })
 
+  const history = useHistory()
 
-  const info = process.env.REACT_APP_CHAIN_ID ? SUPPORTED_NETWORKS[process.env.REACT_APP_CHAIN_ID] : undefined
-  // console.log(chainId)
+  const info = chainId ? SUPPORTED_NETWORKS[chainId] : undefined
 
   const onSelectChain = useCallback(
-    async () => {
+    async (targetChain: number, skipToggle?: boolean) => {
       try {
         // await switchChain(connector, targetChain)
+        history.replace({ search: replaceURLParam(history.location.search, 'chain', getChainNameFromId(targetChain)) })
       } catch (error) {
         console.error('Failed to switch networks', error)
       }
     },
-    []
+    [history]
   )
+
+  useEffect(() => {
+    if (!chainId || !previousChainId) return
+
+    // when network change originates from wallet or dropdown selector, just update URL
+    if (chainId !== previousChainId && chainId !== urlChainId) {
+      history.replace({ search: replaceURLParam(history.location.search, 'chain', getChainNameFromId(chainId)) })
+      // otherwise assume network change originates from URL
+    } else if (urlChainId && urlChainId !== previousUrlChainId && urlChainId !== chainId) {
+      onSelectChain(urlChainId, true).catch(() => {
+        // we want app network <-> chainId param to be in sync, so if user changes the network by changing the URL
+        // but the request fails, revert the URL back to current chainId
+        history.replace({ search: replaceURLParam(history.location.search, 'chain', getChainNameFromId(chainId)) })
+      })
+    }
+  }, [chainId, urlChainId, previousChainId, previousUrlChainId, onSelectChain, history])
+
+  // set chain parameter on initial load if not there
+  useEffect(() => {
+    if (chainId && !urlChainId) {
+      history.replace({ search: replaceURLParam(history.location.search, 'chain', getChainNameFromId(chainId)) })
+    }
+  }, [chainId, history, urlChainId, urlChain])
 
   useEffect(() => {
     const showDropdownMenu = () => {
@@ -235,6 +246,10 @@ export default function NetworkSelector() {
     }
   }, [targetRef, tooltipRef, setIsOpen])
 
+  if (!info) {
+    return null
+  }
+
   return (
     <Flex alignItems="center" height="100%" ref={setTargetRef}>
       <SelectorControls
@@ -250,7 +265,9 @@ export default function NetworkSelector() {
               {t('Select a network')}
             </FlyoutHeader>
             {NETWORK_SELECTOR_CHAINS.map((chain: SupportedChainId) =>
+              // isChainAllowed(connector, chainId) ? (
               <Row onSelectChain={onSelectChain} targetChain={chain} key={chain} />
+              // ) : null
             )}
           </FlyoutMenuContents>
         </FlyoutMenu>
