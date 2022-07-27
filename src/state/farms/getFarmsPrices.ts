@@ -83,10 +83,13 @@ const getFarmQuoteTokenPrice = (
         return BIG_ONE
     }
 
+    if (farm.quoteToken.symbol === 'FEI') {
+        return BIG_ONE
+    }
+
     if (farm.quoteToken.symbol === 'WETH') {
         return bnbPriceBusd
     }
-
 
     if (!quoteTokenFarm) {
         return BIG_ZERO
@@ -105,6 +108,10 @@ const getFarmQuoteTokenPrice = (
     }
 
     if (quoteTokenFarm.quoteToken.symbol === 'DAI') {
+        return quoteTokenFarm.tokenPriceVsQuote ? new BigNumber(quoteTokenFarm.tokenPriceVsQuote) : BIG_ZERO
+    }
+
+    if (quoteTokenFarm.quoteToken.symbol === 'FEI') {
         return quoteTokenFarm.tokenPriceVsQuote ? new BigNumber(quoteTokenFarm.tokenPriceVsQuote) : BIG_ZERO
     }
 

@@ -57,6 +57,22 @@
       "chainId": 1,
       "decimals": 8,
       "logoURI": "local://images/tokens/0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599.png"
+    },
+    {
+      "name": "FEI",
+      "symbol": "FEI",
+      "address": "0x956F47F50A910163D8BF957Cf5846D573E7f87CA",
+      "chainId": 1,
+      "decimals": 18,
+      "logoURI": "local://images/tokens/0x956F47F50A910163D8BF957Cf5846D573E7f87CA.png"
+    },
+    {
+      "name": "TRIBE",
+      "symbol": "TRIBE",
+      "address": "0xc7283b66Eb1EB5FB86327f08e1B5816b0720212B",
+      "chainId": 1,
+      "decimals": 18,
+      "logoURI": "local://images/tokens/0xc7283b66Eb1EB5FB86327f08e1B5816b0720212B.png"
     }
   ]
 }
