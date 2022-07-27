@@ -60,22 +60,6 @@ export const mainnetTokens = defineTokens({
         'WBTC',
         'https://www.wbtc.network/',
     ),
-    fei: new Token(
-        MAINNET,
-        '0x956F47F50A910163D8BF957Cf5846D573E7f87CA',
-        18,
-        'FEI',
-        'FEI',
-        'https://fei.money/',
-    ),
-    tribe: new Token(
-        MAINNET,
-        '0xc7283b66Eb1EB5FB86327f08e1B5816b0720212B',
-        18,
-        'TRIBE',
-        'TRIBE',
-        'https://fei.money/',
-    ),
 } as const)
 
 export const testnetTokens = defineTokens({
