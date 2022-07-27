@@ -12,12 +12,12 @@ import useSWR from 'swr'
 import useFetchPoolsPublicDataAsync from 'hooks/useFetchPoolsPublicDataAsync'
 import { poolsConfig, SLOW_INTERVAL } from 'config/constants'
 import { getAddress } from 'utils/addressHelpers'
-import { useHelix } from 'hooks/useContract'
+import { useHelix, useMasterchef } from 'hooks/useContract'
 import { getPoolApr } from 'utils/apr'
 import { getBalanceNumber } from 'utils/formatBalance'
-import { getMasterchefContract } from 'utils/contractHelpers'
+import sousChefABI from 'config/abi/sousChef.json'
+import multicall from 'utils/multicall'
 import {
-    fetchPoolsUserDataAsync,
     fetchHelixVaultPublicData,
     fetchHelixVaultUserData,
     fetchHelixVaultFees,
@@ -28,22 +28,26 @@ import {
     initialPoolVaultState,
     setPoolPublicData,
     setPoolUserData,
+    setPoolsUserData,
+    updatePoolsUserData,
 } from '.'
 import { State, DeserializedPool, VaultKey } from '../types'
 import { getTokenPricesFromFarm, transformPool } from './helpers'
 import { fetchFarmsPublicDataAsync, nonArchivedFarms } from '../farms'
+import { fetchPoolsAllowance } from './fetchPoolsUser'
 
 export const usePoolsPageFetch = () => {
     const { account } = useWeb3React()
     const dispatch = useAppDispatch()
     useFetchPublicPoolsData()
     const fetchUserBalances = useFetchUserBalances()
+    const fetchPoolsUserDataAsync = useFetchPoolsUserDataAsync(account, fetchUserBalances)
 
     useFastRefreshEffect(() => {
         batch(() => {
             dispatch(fetchHelixVaultPublicData())
             if (account) {
-                dispatch(fetchPoolsUserDataAsync(account, fetchUserBalances))
+                dispatch(fetchPoolsUserDataAsync)
                 dispatch(fetchHelixVaultUserData({ account }))
             }
         })
@@ -123,10 +127,11 @@ export const useFetchPublicPoolsData = () => {
 export const useFetchUserPools = (account) => {
     const dispatch = useAppDispatch()
     const fetchUserBalances = useFetchUserBalances()
+    const fetchPoolsUserDataAsync = useFetchPoolsUserDataAsync(account, fetchUserBalances)
 
     useFastRefreshEffect(() => {
         if (account) {
-            dispatch(fetchPoolsUserDataAsync(account, fetchUserBalances))
+            dispatch(fetchPoolsUserDataAsync)
         }
     }, [account, dispatch])
 }
@@ -355,10 +360,10 @@ export const useFetchHelixPoolPublicDataAsync = () => {
 
 export const useFetchHelixPoolUserDataAsync = (account: string) => {
     const helixContract = useHelix()
+    const masterChefContract = useMasterchef()
     return useCallback(async (dispatch) => {
         const allowance = await helixContract.allowance(account, helixPoolAddress)
         const stakingTokenBalance = await helixContract.balanceOf(account)
-        const masterChefContract = getMasterchefContract()
         const pendingReward = await masterChefContract.pendingHelixToken('0', account)
         const { amount: masterPoolAmount } = await masterChefContract.userInfo('0', account)
 
@@ -373,5 +378,92 @@ export const useFetchHelixPoolUserDataAsync = (account: string) => {
                 },
             }),
         )
-    }, [account, helixContract])
+    }, [account, helixContract, masterChefContract])
+}
+
+export const useFetchPoolsUserDataAsync = (account: string, fetchUserBalances: any) => {
+    const fetchUserStakeBalances = useFetchUserStakeBalances()
+    const fetchUserPendingRewards = useFetchUserPendingRewards()
+    return useCallback(async (dispatch) => {
+        const [allowances, stakingTokenBalances, stakedBalances, pendingRewards] = await Promise.all([
+            fetchPoolsAllowance(account),
+            fetchUserBalances(account),
+            fetchUserStakeBalances(account),
+            fetchUserPendingRewards(account),
+        ])
+        const userData = poolsConfig.map((pool) => ({
+            sousId: pool.sousId,
+            allowance: allowances[pool.sousId],
+            stakingTokenBalance: stakingTokenBalances[pool.sousId],
+            stakedBalance: stakedBalances[pool.sousId],
+            pendingReward: pendingRewards[pool.sousId],
+        }))
+
+        dispatch(setPoolsUserData(userData))
+    }, [account, fetchUserBalances, fetchUserPendingRewards, fetchUserStakeBalances])
+}
+
+export const useUpdateUserStakedBalance = (sousId: number, account: string) => {
+    const fetchUserStakeBalances = useFetchUserStakeBalances()
+    return useCallback(async (dispatch) => {
+        const stakedBalances = await fetchUserStakeBalances(account)
+        dispatch(updatePoolsUserData({ sousId, field: 'stakedBalance', value: stakedBalances[sousId] }))
+    }, [fetchUserStakeBalances, account, sousId])
+}
+
+const nonMasterPools = poolsConfig.filter((pool) => pool.sousId !== 0)
+export const useFetchUserStakeBalances = () => {
+    const masterChefContract = useMasterchef()
+    return useCallback(async (account) => {
+        const calls = nonMasterPools.map((p) => ({
+            address: getAddress(p.contractAddress),
+            name: 'userInfo',
+            params: [account],
+        }))
+        const userInfo = await multicall(sousChefABI, calls)
+        const stakedBalances = nonMasterPools.reduce(
+            (acc, pool, index) => ({
+                ...acc,
+                [pool.sousId]: new BigNumber(userInfo[index].amount._hex).toJSON(),
+            }),
+            {},
+        )
+
+        // HELIX/ HELIXpool
+        const { amount: masterPoolAmount } = await masterChefContract.userInfo('0', account)
+
+        return { ...stakedBalances, 0: new BigNumber(masterPoolAmount.toString()).toJSON() }
+    }, [masterChefContract])
+}
+
+export const useUpdateUserPendingReward = (sousId: number, account: string) => {
+    const fetchUserPendingRewards = useFetchUserPendingRewards()
+    return useCallback(async (dispatch) => {
+        const pendingRewards = await fetchUserPendingRewards(account)
+        dispatch(updatePoolsUserData({ sousId, field: 'pendingReward', value: pendingRewards[sousId] }))
+    }, [fetchUserPendingRewards, account, sousId])
+}
+
+export const useFetchUserPendingRewards = () => {
+    const masterChefContract = useMasterchef()
+    return useCallback(async (account) => {
+        const calls = nonMasterPools.map((p) => ({
+            address: getAddress(p.contractAddress),
+            name: 'pendingReward',
+            params: [account],
+        }))
+        const res = await multicall(sousChefABI, calls)
+        const pendingRewards = nonMasterPools.reduce(
+            (acc, pool, index) => ({
+                ...acc,
+                [pool.sousId]: new BigNumber(res[index]).toJSON(),
+            }),
+            {},
+        )
+
+        // Helix / Helix pool
+        const pendingReward = await masterChefContract.pendingHelixToken('0', account)
+
+        return { ...pendingRewards, 0: new BigNumber(pendingReward.toString()).toJSON() }
+    }, [masterChefContract])
 }

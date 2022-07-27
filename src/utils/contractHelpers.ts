@@ -3,7 +3,6 @@ import { simpleRpcProvider } from 'utils/providers'
 
 // Addresses
 import {
-    getLotteryV2Address,
     getMasterChefAddress,
     getPredictionsAddress,
     getMulticallAddress,
@@ -11,7 +10,6 @@ import {
 } from 'utils/addressHelpers'
 
 // ABI
-import lotteryV2Abi from 'config/abi/lotteryV2.json'
 import masterChef from 'config/abi/masterchef.json'
 import predictionsAbi from 'config/abi/predictions.json'
 import MultiCallAbi from 'config/abi/Multicall.json'
@@ -19,7 +17,6 @@ import helixAutoPoolAbi from 'config/abi/HelixAutoPool.json'
 // Types
 import {
     Predictions,
-    LotteryV2,
     Masterchef,
     HelixAutoPool,
     Multicall
@@ -30,9 +27,7 @@ const getContract = (abi: any, address: string, signer?: ethers.Signer | ethers.
     return new ethers.Contract(address, abi, signerOrProvider)
 }
 
-export const getLotteryV2Contract = (signer?: ethers.Signer | ethers.providers.Provider) => {
-    return getContract(lotteryV2Abi, getLotteryV2Address(), signer) as LotteryV2
-}
+
 export const getMasterchefContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
     return getContract(masterChef, getMasterChefAddress(), signer) as Masterchef
 }

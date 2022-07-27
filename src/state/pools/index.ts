@@ -15,8 +15,6 @@ import { fetchIfoPoolFeesData, fetchPublicIfoPoolData } from './fetchIfoPoolPubl
 import fetchIfoPoolUserData from './fetchIfoPoolUser'
 import {
     fetchPoolsAllowance,
-    fetchUserPendingRewards,
-    fetchUserStakeBalances,
 } from './fetchPoolsUser'
 import { fetchPublicVaultData, fetchVaultFees } from './fetchVaultPublic'
 import fetchVaultUser from './fetchVaultUser'
@@ -72,26 +70,6 @@ export const fetchPoolsStakingLimitsAsync = () => async (dispatch, getState) => 
     dispatch(setPoolsPublicData(stakingLimitData))
 }
 
-export const fetchPoolsUserDataAsync =
-    (account: string, fetchUserBalances: any): AppThunk =>
-        async (dispatch) => {
-            const [allowances, stakingTokenBalances, stakedBalances, pendingRewards] = await Promise.all([
-                fetchPoolsAllowance(account),
-                fetchUserBalances(account),
-                fetchUserStakeBalances(account),
-                fetchUserPendingRewards(account),
-            ])
-            const userData = poolsConfig.map((pool) => ({
-                sousId: pool.sousId,
-                allowance: allowances[pool.sousId],
-                stakingTokenBalance: stakingTokenBalances[pool.sousId],
-                stakedBalance: stakedBalances[pool.sousId],
-                pendingReward: pendingRewards[pool.sousId],
-            }))
-
-            dispatch(setPoolsUserData(userData))
-        }
-
 export const updateUserAllowance =
     (sousId: number, account: string): AppThunk =>
         async (dispatch) => {
@@ -104,20 +82,6 @@ export const updateUserBalance =
         async (dispatch) => {
             const tokenBalances = await fetchUserBalances(account)
             dispatch(updatePoolsUserData({ sousId, field: 'stakingTokenBalance', value: tokenBalances[sousId] }))
-        }
-
-export const updateUserStakedBalance =
-    (sousId: number, account: string): AppThunk =>
-        async (dispatch) => {
-            const stakedBalances = await fetchUserStakeBalances(account)
-            dispatch(updatePoolsUserData({ sousId, field: 'stakedBalance', value: stakedBalances[sousId] }))
-        }
-
-export const updateUserPendingReward =
-    (sousId: number, account: string): AppThunk =>
-        async (dispatch) => {
-            const pendingRewards = await fetchUserPendingRewards(account)
-            dispatch(updatePoolsUserData({ sousId, field: 'pendingReward', value: pendingRewards[sousId] }))
         }
 
 export const fetchHelixVaultPublicData = createAsyncThunk<HelixAutoPool>('helixAutoPool/fetchPublicData', async () => {

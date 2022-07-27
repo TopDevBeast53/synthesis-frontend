@@ -1,7 +1,8 @@
 import { useCallback } from 'react'
 import { useWeb3React } from '@web3-react/core'
 import { useAppDispatch } from 'state'
-import { updateUserStakedBalance, updateUserBalance } from 'state/actions'
+import { updateUserBalance } from 'state/actions'
+import { useUpdateUserStakedBalance } from 'state/pools/hooks'
 import { stakeFarm } from 'utils/calls'
 import BigNumber from 'bignumber.js'
 import { DEFAULT_TOKEN_DECIMAL } from 'config'
@@ -39,6 +40,7 @@ const useStakePool = (sousId: number, isUsingBnb = false) => {
     const masterChefContract = useMasterchef()
     const sousChefContract = useSousChef(sousId)
     const fetchUserBalances = useFetchUserBalances()
+    const updateUserStakedBalance = useUpdateUserStakedBalance(sousId, account)
 
     const handleStake = useCallback(
         async (amount: string, decimals: number) => {
@@ -49,10 +51,10 @@ const useStakePool = (sousId: number, isUsingBnb = false) => {
             } else {
                 await sousStake(sousChefContract, amount, decimals)
             }
-            dispatch(updateUserStakedBalance(sousId, account))
+            dispatch(updateUserStakedBalance)
             dispatch(updateUserBalance(sousId, account, fetchUserBalances))
         },
-        [account, dispatch, isUsingBnb, masterChefContract, sousChefContract, sousId, fetchUserBalances],
+        [account, dispatch, isUsingBnb, masterChefContract, sousChefContract, sousId, fetchUserBalances, updateUserStakedBalance],
     )
 
     return { onStake: handleStake }
