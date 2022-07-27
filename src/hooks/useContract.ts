@@ -1,19 +1,7 @@
 import { useMemo } from 'react'
 import { AddressZero } from '@ethersproject/constants'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import {
-    getNftSaleContract,
-    getPancakeSquadContract,
-    getErc721CollectionContract,
-    getHelixVaultContract,
-    getHelixYieldSwapContract,
-    getHelixLPSwapContract,
-    getHelixNFTContract,
-    getHelixChefNFTContract,
-    getHelixNFTBridgeContract,
-
-} from 'utils/contractHelpers'
-import { getAddress, getAnniversaryAchievement, getBunnyFactoryAddress, getBunnySpecialAddress, getBunnySpecialLotteryAddress, getBunnySpecialPredictionAddress, getBunnySpecialXmasAddress, getChainlinkOracleAddress, getClaimRefundAddress, getEasterNftAddress, getFarmAuctionAddress, getHelixAutoPoolAddress, getIfoPoolAddress, getLotteryV2Address, getMasterChefAddress, getMulticallAddress, getNftMarketAddress, getPancakeProfileAddress, getPancakeRabbitsAddress, getPointCenterIfoAddress, getPredictionsAddress } from 'utils/addressHelpers'
+import { getAddress, getAnniversaryAchievement, getBunnyFactoryAddress, getBunnySpecialAddress, getBunnySpecialLotteryAddress, getBunnySpecialPredictionAddress, getBunnySpecialXmasAddress, getChainlinkOracleAddress, getClaimRefundAddress, getEasterNftAddress, getFarmAuctionAddress, getHelixAutoPoolAddress, getHelixChefNftAddress, getHelixLPSwapAddress, getHelixNftAddress, getHelixNftBridgeAddress, getHelixVaultAddress, getIfoPoolAddress, getLotteryV2Address, getMasterChefAddress, getMulticallAddress, getNftMarketAddress, getNftSaleAddress, getPancakeProfileAddress, getPancakeRabbitsAddress, getPancakeSquadAddress, getPointCenterIfoAddress, getPredictionsAddress, getYieldSwapAddress } from 'utils/addressHelpers'
 import { VaultKey } from 'state/types'
 import { poolsConfig } from 'config/constants'
 import { PoolCategory } from 'config/constants/types'
@@ -45,16 +33,16 @@ import {
     BunnySpecialPrediction,
     BunnySpecialLottery,
     NftMarket,
-    // NftSale,
-    // PancakeSquad,
-    // Erc721collection,
+    NftSale,
+    PancakeSquad,
+    Erc721collection,
     PointCenterIfo,
-    // HelixVault,
-    // HelixYieldSwap,
-    // HelixLpSwap,
-    // HelixChefNFT,
-    // HelixNFT,
-    // HelixNFTBridge,
+    HelixVault,
+    HelixYieldSwap,
+    HelixLpSwap,
+    HelixChefNFT,
+    HelixNFT,
+    HelixNFTBridge,
     Weth,
     EnsRegistrar,
     EnsPublicResolver
@@ -95,15 +83,15 @@ import bunnySpecialXmasAbi from 'config/abi/bunnySpecialXmas.json'
 import farmAuctionAbi from 'config/abi/farmAuction.json'
 import anniversaryAchievementAbi from 'config/abi/anniversaryAchievement.json'
 import nftMarketAbi from 'config/abi/nftMarket.json'
-// import nftSaleAbi from 'config/abi/nftSale.json'
-// import pancakeSquadAbi from 'config/abi/pancakeSquad.json'
-// import erc721CollectionAbi from 'config/abi/erc721collection.json'
-// import helixVaultAbi from 'config/abi/HelixVault.json'
-// import yieldSwapAbi from 'config/abi/HelixYieldSwap.json'
-// import lpSwapAbi from 'config/abi/HelixLpSwap.json'
-// import NFTAbi from 'config/abi/HelixNFT.json'
-// import cheftNFTAbi from 'config/abi/HelixChefNFT.json'
-// import bridgeNFTAbi from 'config/abi/HelixNFTBridge.json'
+import nftSaleAbi from 'config/abi/nftSale.json'
+import pancakeSquadAbi from 'config/abi/pancakeSquad.json'
+import erc721CollectionAbi from 'config/abi/erc721collection.json'
+import helixVaultAbi from 'config/abi/HelixVault.json'
+import yieldSwapAbi from 'config/abi/HelixYieldSwap.json'
+import lpSwapAbi from 'config/abi/HelixLpSwap.json'
+import NFTAbi from 'config/abi/HelixNFT.json'
+import cheftNFTAbi from 'config/abi/HelixChefNFT.json'
+import bridgeNFTAbi from 'config/abi/HelixNFTBridge.json'
 import ENS_PUBLIC_RESOLVER_ABI from '../config/abi/ens-public-resolver.json'
 import ENS_ABI from '../config/abi/ens-registrar.json'
 import { ERC20_BYTES32_ABI } from '../config/abi/erc20'
@@ -176,29 +164,41 @@ export const useHelix = () => {
 
 export const useHelixVault = () => {
     const { library } = useActiveWeb3React()
-    return useMemo(() => getHelixVaultContract(library.getSigner()), [library])
+    const getContract = useGetContract()
+    return useMemo(() => getContract(helixVaultAbi, getHelixVaultAddress(), library.getSigner()) as HelixVault,
+        [getContract, library])
 }
 
 export const useHelixYieldSwap = () => {
     const { library } = useActiveWeb3React()
-    return useMemo(() => getHelixYieldSwapContract(library.getSigner()), [library])
+    const getContract = useGetContract()
+    return useMemo(() => getContract(yieldSwapAbi, getYieldSwapAddress(), library.getSigner()) as HelixYieldSwap,
+        [getContract, library])
 }
 
 export const useHelixLpSwap = () => {
     const { library } = useActiveWeb3React()
-    return useMemo(() => getHelixLPSwapContract(library.getSigner()), [library])
+    const getContract = useGetContract()
+    return useMemo(() => getContract(lpSwapAbi, getHelixLPSwapAddress(), library.getSigner()) as HelixLpSwap,
+        [getContract, library])
 }
 export const useHelixNFT = () => {
     const { library } = useActiveWeb3React()
-    return useMemo(() => getHelixNFTContract(library.getSigner()), [library])
+    const getContract = useGetContract()
+    return useMemo(() => getContract(NFTAbi, getHelixNftAddress(), library.getSigner()) as HelixNFT,
+        [getContract, library])
 }
 export const useHelixNFTChef = () => {
     const { library } = useActiveWeb3React()
-    return useMemo(() => getHelixChefNFTContract(library.getSigner()), [library])
+    const getContract = useGetContract()
+    return useMemo(() => getContract(cheftNFTAbi, getHelixChefNftAddress(), library.getSigner()) as HelixChefNFT,
+        [getContract, library])
 }
 export const useHelixNFTBridge = () => {
     const { library } = useActiveWeb3React()
-    return useMemo(() => getHelixNFTBridgeContract(library.getSigner()), [library])
+    const getContract = useGetContract()
+    return useMemo(() => getContract(bridgeNFTAbi, getHelixNftBridgeAddress(), library.getSigner()) as HelixNFTBridge,
+        [getContract, library])
 }
 export const useBunnyFactory = () => {
     const { library } = useActiveWeb3React()
@@ -358,14 +358,16 @@ export const useAnniversaryAchievementContract = () => {
 
 export const useNftSaleContract = () => {
     const { library } = useActiveWeb3React()
-    // const getContract = useGetContract()
-    return useMemo(() => getNftSaleContract(library.getSigner()), [library])
+    const getContract = useGetContract()
+    return useMemo(() => getContract(nftSaleAbi, getNftSaleAddress(), library.getSigner()) as NftSale,
+        [getContract, library])
 }
 
 export const usePancakeSquadContract = () => {
     const { library } = useActiveWeb3React()
-    // const getContract = useGetContract()
-    return useMemo(() => getPancakeSquadContract(library.getSigner()), [library])
+    const getContract = useGetContract()
+    return useMemo(() => getContract(pancakeSquadAbi, getPancakeSquadAddress(), library.getSigner()) as PancakeSquad,
+        [getContract, library])
 }
 
 export const useFarmAuctionContract = () => {
@@ -395,12 +397,9 @@ export const useNftMarketContract = () => {
 
 export const useErc721CollectionContract = (collectionAddress: string, withSignerIfPossible = true) => {
     const { library, account } = useActiveWeb3React()
-    return useMemo(() => {
-        return getErc721CollectionContract(
-            withSignerIfPossible ? getProviderOrSigner(library, account) : null,
-            collectionAddress,
-        )
-    }, [account, library, collectionAddress, withSignerIfPossible])
+    const getContract = useGetContract()
+    return useMemo(() => getContract(erc721CollectionAbi, collectionAddress, withSignerIfPossible ? getProviderOrSigner(library, account) : null) as Erc721collection
+        , [withSignerIfPossible, library, account, collectionAddress, getContract])
 }
 
 // Code below migrated from Exchange useContract.ts
