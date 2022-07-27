@@ -17,7 +17,6 @@ import {
     LeaderboardFilter,
     State,
 } from 'state/types'
-import { getPredictionsContract } from 'utils/contractHelpers'
 import { FetchStatus } from 'config/constants/types'
 import {
     FUTURE_ROUND_COUNT,
@@ -137,11 +136,12 @@ export const initializePredictions = createAsyncThunk<PredictionInitialization, 
     },
 )
 
-export const fetchRound = createAsyncThunk<ReduxNodeRound, number>('predictions/fetchRound', async (epoch) => {
-    const predictionContract = getPredictionsContract()
-    const response = await predictionContract.rounds(epoch)
-    return serializePredictionsRoundsResponse(response)
-})
+// [White tempcode]
+// export const fetchRound = createAsyncThunk<ReduxNodeRound, number>('predictions/fetchRound', async (epoch) => {
+//     const predictionContract = getPredictionsContract()
+//     const response = await predictionContract.rounds(epoch)
+//     return serializePredictionsRoundsResponse(response)
+// })
 
 export const fetchRounds = createAsyncThunk<{ [key: string]: ReduxNodeRound }, number[]>(
     'predictions/fetchRounds',
@@ -497,11 +497,11 @@ export const predictionsSlice = createSlice({
         })
 
         // Get single round
-        builder.addCase(fetchRound.fulfilled, (state, action) => {
-            state.rounds = merge({}, state.rounds, {
-                [action.payload.epoch.toString()]: action.payload,
-            })
-        })
+        // builder.addCase(fetchRound.fulfilled, (state, action) => {
+        //     state.rounds = merge({}, state.rounds, {
+        //         [action.payload.epoch.toString()]: action.payload,
+        //     })
+        // })
 
         // Get multiple rounds
         builder.addCase(fetchRounds.fulfilled, (state, action) => {
