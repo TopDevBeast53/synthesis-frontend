@@ -52,6 +52,14 @@ export const mainnetTokens = defineTokens({
         'USDC',
         'https://www.centre.io/usdc',
     ),
+    wbtc: new Token(
+        MAINNET,
+        '0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599',
+        8,
+        'WBTC',
+        'WBTC',
+        'https://www.wbtc.network/',
+    ),
 } as const)
 
 export const testnetTokens = defineTokens({

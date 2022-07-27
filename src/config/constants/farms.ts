@@ -68,6 +68,16 @@ const farms: SerializedFarmConfig[] = [
         token: serializedTokens.usdt,
         quoteToken: serializedTokens.usdc,
     },
+    {
+        pid: 6,
+        lpSymbol: 'WBTC-WETH',
+        lpAddresses: {
+            1: '0x8265A7745D0501915DEBC1fF72e049Bd989CaF7f',
+            4: '',
+        },
+        token: serializedTokens.wbtc,
+        quoteToken: serializedTokens.weth,
+    },
     // {
     //   pid: 0,
     //   lpSymbol: 'HELIX',
