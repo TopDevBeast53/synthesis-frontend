@@ -5,12 +5,12 @@ import lotteryV2Abi from 'config/abi/lotteryV2.json'
 import { getLotteryV2Address } from 'utils/addressHelpers'
 import { multicallv2 } from 'utils/multicall'
 import { LotteryRound, LotteryRoundUserTickets, LotteryResponse } from 'state/types'
-import { getLotteryV2Contract } from 'utils/contractHelpers'
+// import { getLotteryV2Contract } from 'utils/contractHelpers'
 import { useMemo } from 'react'
 import { ethersToSerializedBigNumber } from 'utils/bigNumber'
 import { NUM_ROUNDS_TO_FETCH_FROM_NODES } from 'config/constants/lottery'
 
-const lotteryContract = getLotteryV2Contract()
+// const lotteryContract = getLotteryV2Contract()
 
 const processViewLotterySuccessResponse = (response, lotteryId: string): LotteryResponse => {
     const {
@@ -79,8 +79,9 @@ const processViewLotteryErrorResponse = (lotteryId: string): LotteryResponse => 
 
 export const fetchLottery = async (lotteryId: string): Promise<LotteryResponse> => {
     try {
-        const lotteryData = await lotteryContract.viewLottery(lotteryId)
-        return processViewLotterySuccessResponse(lotteryData, lotteryId)
+        // const lotteryData = await lotteryContract.viewLottery(lotteryId)
+        // return processViewLotterySuccessResponse(lotteryData, lotteryId)
+        return processViewLotteryErrorResponse(lotteryId)
     } catch (error) {
         return processViewLotteryErrorResponse(lotteryId)
     }
