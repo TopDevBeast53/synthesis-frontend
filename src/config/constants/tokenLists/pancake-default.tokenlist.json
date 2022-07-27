@@ -73,6 +73,22 @@
       "chainId": 1,
       "decimals": 18,
       "logoURI": "local://images/tokens/0xc7283b66Eb1EB5FB86327f08e1B5816b0720212B.png"
+    },
+    {
+      "name": "Frax Share",
+      "symbol": "FXS",
+      "address": "0x3432B6A60D23Ca0dFCa7761B7ab56459D9C964D0",
+      "chainId": 1,
+      "decimals": 18,
+      "logoURI": "local://images/tokens/0x3432B6A60D23Ca0dFCa7761B7ab56459D9C964D0.png"
+    },
+    {
+      "name": "Frax",
+      "symbol": "FRAX",
+      "address": "0x853d955aCEf822Db058eb8505911ED77F175b99e",
+      "chainId": 1,
+      "decimals": 18,
+      "logoURI": "local://images/tokens/0x853d955aCEf822Db058eb8505911ED77F175b99e.png"
     }
   ]
 }

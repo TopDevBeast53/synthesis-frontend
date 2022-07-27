@@ -76,6 +76,22 @@ export const mainnetTokens = defineTokens({
         'TRIBE',
         'https://fei.money/',
     ),
+    fxs: new Token(
+        MAINNET,
+        '0x3432B6A60D23Ca0dFCa7761B7ab56459D9C964D0',
+        18,
+        'FXS',
+        'FXS',
+        'https://frax.finance/',
+    ),
+    frax: new Token(
+        MAINNET,
+        '0x853d955aCEf822Db058eb8505911ED77F175b99e',
+        18,
+        'FRAX',
+        'FRAX',
+        'https://frax.finance',
+    ),
 } as const)
 
 export const testnetTokens = defineTokens({

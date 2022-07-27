@@ -88,6 +88,16 @@ const farms: SerializedFarmConfig[] = [
         token: serializedTokens.tribe,
         quoteToken: serializedTokens.fei,
     },
+    {
+        pid: 8,
+        lpSymbol: 'FXS-FRAX',
+        lpAddresses: {
+            1: '0x4E467fB2E874A5A6C826Dcf0A4707c5Ce431f336',
+            4: '',
+        },
+        token: serializedTokens.fxs,
+        quoteToken: serializedTokens.frax,
+    },
     // {
     //   pid: 0,
     //   lpSymbol: 'HELIX',

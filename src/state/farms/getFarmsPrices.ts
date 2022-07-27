@@ -83,6 +83,10 @@ const getFarmQuoteTokenPrice = (
         return BIG_ONE
     }
 
+    if (farm.quoteToken.symbol === 'FRAX') {
+        return BIG_ONE
+    }
+
     if (farm.quoteToken.symbol === 'FEI') {
         return BIG_ONE
     }
@@ -108,6 +112,10 @@ const getFarmQuoteTokenPrice = (
     }
 
     if (quoteTokenFarm.quoteToken.symbol === 'DAI') {
+        return quoteTokenFarm.tokenPriceVsQuote ? new BigNumber(quoteTokenFarm.tokenPriceVsQuote) : BIG_ZERO
+    }
+
+    if (quoteTokenFarm.quoteToken.symbol === 'FRAX') {
         return quoteTokenFarm.tokenPriceVsQuote ? new BigNumber(quoteTokenFarm.tokenPriceVsQuote) : BIG_ZERO
     }
 
