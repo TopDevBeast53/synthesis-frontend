@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { request, gql } from 'graphql-request'
 import { GRAPH_HEALTH } from 'config/constants/endpoints'
-import { simpleRpcProvider } from 'utils/providers'
+import useProviders from 'hooks/useProviders'
 import { ChainId } from 'sdk'
 import { useSlowFresh } from './useRefresh'
 
@@ -33,6 +33,8 @@ const useSubgraphHealth = () => {
     })
 
     const slowRefresh = useSlowFresh()
+    const rpcProvider = useProviders()
+
     useEffect(() => {
         const getSubgraphHealth = async () => {
             try {
@@ -59,14 +61,14 @@ const useSubgraphHealth = () => {
                     }
                 )
 
-                const currentBlock = await simpleRpcProvider.getBlockNumber()
+                const currentBlock = await rpcProvider.getBlockNumber()
 
                 const isHealthy = indexingStatusForCurrentVersion.health === 'healthy'
                 const chainHeadBlock = parseInt(indexingStatusForCurrentVersion.chains[0].chainHeadBlock.number)
                 const latestBlock = parseInt(indexingStatusForCurrentVersion.chains[0].latestBlock.number)
                 const blockDifference = currentBlock - latestBlock
                 // Sometimes subgraph might report old block as chainHeadBlock, so its important to compare
-                // it with block retrieved from simpleRpcProvider.getBlockNumber()
+                // it with block retrieved from rpcProvider.getBlockNumber()
                 const chainHeadBlockDifference = currentBlock - chainHeadBlock
                 if (
                     !isHealthy ||
@@ -105,7 +107,7 @@ const useSubgraphHealth = () => {
             }
         }
         getSubgraphHealth()
-    }, [slowRefresh])
+    }, [slowRefresh, rpcProvider])
 
     return sgHealth
 }

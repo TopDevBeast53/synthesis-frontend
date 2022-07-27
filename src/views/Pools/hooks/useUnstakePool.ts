@@ -5,6 +5,7 @@ import { useAppDispatch } from 'state'
 import { updateUserStakedBalance, updateUserBalance, updateUserPendingReward } from 'state/actions'
 import { unstakeFarm } from 'utils/calls'
 import { useMasterchef, useSousChef } from 'hooks/useContract'
+import useFetchUserBalances from 'hooks/useFetchUserBalances'
 // import getGasPrice from 'utils/getGasPrice'
 
 const sousUnstake = async (sousChefContract: any, amount: string, decimals: number) => {
@@ -20,7 +21,7 @@ const sousUnstake = async (sousChefContract: any, amount: string, decimals: numb
 
 const sousEmergencyUnstake = async (sousChefContract: any) => {
     // const gasPrice = await getGasPrice()
-    const tx = await sousChefContract.emergencyWithdraw({ })
+    const tx = await sousChefContract.emergencyWithdraw({})
     const receipt = await tx.wait()
     return receipt.status
 }
@@ -30,6 +31,7 @@ const useUnstakePool = (sousId: number, enableEmergencyWithdraw = false) => {
     const { account } = useWeb3React()
     const masterChefContract = useMasterchef()
     const sousChefContract = useSousChef(sousId)
+    const fetchUserBalances = useFetchUserBalances()
 
     const handleUnstake = useCallback(
         async (amount: string, decimals: number) => {
@@ -41,10 +43,10 @@ const useUnstakePool = (sousId: number, enableEmergencyWithdraw = false) => {
                 await sousUnstake(sousChefContract, amount, decimals)
             }
             dispatch(updateUserStakedBalance(sousId, account))
-            dispatch(updateUserBalance(sousId, account))
+            dispatch(updateUserBalance(sousId, account, fetchUserBalances))
             dispatch(updateUserPendingReward(sousId, account))
         },
-        [account, dispatch, enableEmergencyWithdraw, masterChefContract, sousChefContract, sousId],
+        [account, dispatch, enableEmergencyWithdraw, masterChefContract, sousChefContract, sousId, fetchUserBalances],
     )
 
     return { onUnstake: handleUnstake }

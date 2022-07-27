@@ -1,7 +1,8 @@
-import { SNAPSHOT_HUB_API, SNAPSHOT_VOTING_API } from 'config/constants/endpoints'
+// import { SNAPSHOT_HUB_API, SNAPSHOT_VOTING_API } from 'config/constants/endpoints'
+import { SNAPSHOT_HUB_API } from 'config/constants/endpoints'
 import tokens from 'config/constants/tokens'
 import { Proposal, ProposalState, ProposalType, Vote } from 'state/types'
-import { simpleRpcProvider } from 'utils/providers'
+// import { simpleRpcProvider } from 'hooks/useProviders'
 import { ADMINS, HELIX_SPACE, SNAPSHOT_VERSION } from './config'
 
 export const isCoreProposal = (proposal: Proposal) => {
@@ -74,22 +75,22 @@ export const sendSnapshotData = async (message: Message) => {
     return data
 }
 
-export const getVotingPower = async (account: string, poolAddresses: string[], block?: number) => {
-    const blockNumber = block || (await simpleRpcProvider.getBlockNumber())
-    const response = await fetch(`${SNAPSHOT_VOTING_API}/power`, {
-        method: 'post',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            address: account,
-            block: blockNumber,
-            poolAddresses,
-        }),
-    })
-    const data = await response.json()
-    return data.data
-}
+// export const getVotingPower = async (account: string, poolAddresses: string[], block?: number) => {
+//     const blockNumber = block || (await simpleRpcProvider.getBlockNumber())
+//     const response = await fetch(`${SNAPSHOT_VOTING_API}/power`, {
+//         method: 'post',
+//         headers: {
+//             'Content-Type': 'application/json',
+//         },
+//         body: JSON.stringify({
+//             address: account,
+//             block: blockNumber,
+//             poolAddresses,
+//         }),
+//     })
+//     const data = await response.json()
+//     return data.data
+// }
 
 export const calculateVoteResults = (votes: Vote[]): { [key: string]: Vote[] } => {
     return votes.reduce((accum, vote) => {

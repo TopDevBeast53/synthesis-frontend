@@ -10,18 +10,20 @@ import {
     WalletConnectConnector,
 } from '@web3-react/walletconnect-connector'
 import { ConnectorNames, connectorLocalStorageKey } from 'uikit'
-import { connectorsByName } from 'utils/web3React'
 import { setupNetwork } from 'utils/wallet'
 import useToast from 'hooks/useToast'
 import { useAppDispatch } from 'state'
 import { useTranslation } from 'contexts/Localization'
-import { clearUserStates } from '../utils/clearUserStates'
+import useClearUserStates from './useClearUserStates'
+import useWalletConnect from './useWalletConnect'
 
 const useAuth = () => {
     const { t } = useTranslation()
     const dispatch = useAppDispatch()
     const { chainId, activate, deactivate } = useWeb3React()
     const { toastError } = useToast()
+    const connectorsByName = useWalletConnect()
+    const clearUserStates = useClearUserStates()
 
     const login = useCallback(
         (connectorID: ConnectorNames) => {
@@ -55,13 +57,13 @@ const useAuth = () => {
                 toastError(t('Unable to find connector'), t('The connector config is wrong'))
             }
         },
-        [t, activate, toastError],
+        [t, activate, toastError, connectorsByName],
     )
 
     const logout = useCallback(() => {
         deactivate()
         clearUserStates(dispatch, chainId)
-    }, [deactivate, dispatch, chainId])
+    }, [deactivate, dispatch, chainId, clearUserStates])
 
     return { login, logout }
 }

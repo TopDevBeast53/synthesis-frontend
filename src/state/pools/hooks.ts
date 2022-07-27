@@ -6,9 +6,12 @@ import { useAppDispatch } from 'state'
 import { useFastFresh } from 'hooks/useRefresh'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { getAprData } from 'views/Pools/helpers'
-import { useFastRefreshEffect, useSlowRefreshEffect } from 'hooks/useRefreshEffect'
+import useFetchUserBalances from 'hooks/useFetchUserBalances'
+import { useFastRefreshEffect } from 'hooks/useRefreshEffect'
+import useSWR from 'swr'
+import useFetchPoolsPublicDataAsync from 'hooks/useFetchPoolsPublicDataAsync'
+import { SLOW_INTERVAL } from 'config/constants'
 import {
-    fetchPoolsPublicDataAsync,
     fetchPoolsUserDataAsync,
     fetchHelixVaultPublicData,
     fetchHelixVaultUserData,
@@ -29,12 +32,13 @@ export const usePoolsPageFetch = () => {
     const { account } = useWeb3React()
     const dispatch = useAppDispatch()
     useFetchPublicPoolsData()
+    const fetchUserBalances = useFetchUserBalances()
 
     useFastRefreshEffect(() => {
         batch(() => {
             dispatch(fetchHelixVaultPublicData())
             if (account) {
-                dispatch(fetchPoolsUserDataAsync(account))
+                dispatch(fetchPoolsUserDataAsync(account, fetchUserBalances))
                 dispatch(fetchHelixVaultUserData({ account }))
             }
         })
@@ -78,29 +82,46 @@ export function usePoolsWithVault() {
 export const useFetchPublicPoolsData = () => {
     const dispatch = useAppDispatch()
 
-    useSlowRefreshEffect(
-        (currentBlock) => {
-            const fetchPoolsDataWithFarms = async () => {
-                const activeFarms = nonArchivedFarms.filter((farm) => farm.pid !== 0)
-                await dispatch(fetchFarmsPublicDataAsync(activeFarms.map((farm) => farm.pid)))
-                batch(() => {
-                    dispatch(fetchPoolsPublicDataAsync(currentBlock))
-                    dispatch(fetchPoolsStakingLimitsAsync())
-                })
-            }
+    const { data = 0 } = useSWR([SLOW_INTERVAL, 'blockNumber'])
+    const fetchPoolsPublicDataAsync = useFetchPoolsPublicDataAsync(data)
 
-            fetchPoolsDataWithFarms()
-        },
-        [dispatch],
-    )
+    useEffect(() => {
+        const fetchPoolsDataWithFarms = async () => {
+            const activeFarms = nonArchivedFarms.filter((farm) => farm.pid !== 0)
+            await dispatch(fetchFarmsPublicDataAsync(activeFarms.map((farm) => farm.pid)))
+            batch(() => {
+                dispatch(fetchPoolsPublicDataAsync)
+                dispatch(fetchPoolsStakingLimitsAsync())
+            })
+        }
+
+        fetchPoolsDataWithFarms()
+    }, [data, dispatch, fetchPoolsPublicDataAsync])
+
+    // useSlowRefreshEffect(
+    //     (currentBlock) => {
+    //         const fetchPoolsDataWithFarms = async () => {
+    //             const activeFarms = nonArchivedFarms.filter((farm) => farm.pid !== 0)
+    //             await dispatch(fetchFarmsPublicDataAsync(activeFarms.map((farm) => farm.pid)))
+    //             batch(() => {
+    //                 dispatch(fetchPoolsPublicDataAsync(currentBlock))
+    //                 dispatch(fetchPoolsStakingLimitsAsync())
+    //             })
+    //         }
+
+    //         fetchPoolsDataWithFarms()
+    //     },
+    //     [dispatch],
+    // )
 }
 
 export const useFetchUserPools = (account) => {
     const dispatch = useAppDispatch()
+    const fetchUserBalances = useFetchUserBalances()
 
     useFastRefreshEffect(() => {
         if (account) {
-            dispatch(fetchPoolsUserDataAsync(account))
+            dispatch(fetchPoolsUserDataAsync(account, fetchUserBalances))
         }
     }, [account, dispatch])
 }

@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from 'react'
 import { useModal } from 'uikit'
 import { useWeb3React } from '@web3-react/core'
-import { getBunnySpecialXmasContract } from 'utils/contractHelpers'
-import { simpleRpcProvider } from 'utils/providers'
 import ClaimNftModal from 'components/ClaimNftModal/ClaimNftModal'
 import noop from 'lodash/noop'
+import { useBunnySpecialXmasContract } from './useContract'
 
 const useNftClaimStatusCheck = () => {
   const [hasDisplayedModal, setHasDisplayedModal] = useState(false)
   const { account } = useWeb3React()
   const [onPresentNftClaimModal] = useModal(<ClaimNftModal />)
+  const bunnySpecialContract = useBunnySpecialXmasContract()
 
   useEffect(() => {
     const checkClaimStatus = async () => {
       try {
-        const canClaim = await getBunnySpecialXmasContract(simpleRpcProvider).canClaim(account)
+        const canClaim = await bunnySpecialContract.canClaim(account)
         if (canClaim) {
           onPresentNftClaimModal()
           setHasDisplayedModal(true)
@@ -27,7 +27,7 @@ const useNftClaimStatusCheck = () => {
     if (account && !hasDisplayedModal) {
       checkClaimStatus()
     }
-  }, [account, hasDisplayedModal, onPresentNftClaimModal])
+  }, [account, bunnySpecialContract, hasDisplayedModal, onPresentNftClaimModal])
 
   // Reset when account changes
   useEffect(() => {

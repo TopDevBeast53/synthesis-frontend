@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react'
 import { useWeb3React } from '@web3-react/core'
 import { Auction, AuctionStatus, Bidder } from 'config/constants/types'
 import { useFarmAuctionContract } from 'hooks/useContract'
-import { processAuctionData, sortAuctionBidders } from '../helpers'
+import useProcessAuctionData from 'hooks/useProcessAuctionData'
+import { sortAuctionBidders } from '../helpers'
 
 interface WonAuction {
   auction: Auction
@@ -15,6 +16,7 @@ const useCongratulateAuctionWinner = (currentAuction: Auction, bidders: Bidder[]
   const { account } = useWeb3React()
 
   const farmAuctionContract = useFarmAuctionContract()
+  const processAuctionData = useProcessAuctionData()
 
   useEffect(() => {
     const checkIfWonPreviousAuction = async (previousAuctionId: number) => {
@@ -48,7 +50,7 @@ const useCongratulateAuctionWinner = (currentAuction: Auction, bidders: Bidder[]
     } else if (previousAuctionId > 0) {
       checkIfWonPreviousAuction(previousAuctionId)
     }
-  }, [currentAuction, bidders, account, farmAuctionContract])
+  }, [currentAuction, bidders, account, farmAuctionContract, processAuctionData])
 
   return wonAuction
 }

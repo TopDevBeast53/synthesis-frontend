@@ -7,10 +7,11 @@ import { useGasPrice } from 'state/user/hooks'
 import truncateHash from 'utils/truncateHash'
 import { BIPS_BASE, INITIAL_ALLOWED_SLIPPAGE } from '../config/constants'
 import { useTransactionAdder } from '../state/transactions/hooks'
-import { calculateGasMargin, getRouterContract, isAddress } from '../utils'
+import { calculateGasMargin, isAddress } from '../utils'
 import isZero from '../utils/isZero'
 import useTransactionDeadline from './useTransactionDeadline'
 import useENS from './ENS/useENS'
+import useGetRouterContract from './useGetRouterContract'
 
 export enum SwapCallbackState {
     INVALID,
@@ -51,6 +52,7 @@ function useSwapCallArguments(
     const { address: recipientAddress } = useENS(recipientAddressOrName)
     const recipient = recipientAddressOrName === null ? account : recipientAddress
     const deadline = useTransactionDeadline()
+    const getRouterContract = useGetRouterContract()
 
     return useMemo(() => {
         if (!trade || !recipient || !library || !account || !chainId || !deadline) return []
@@ -83,7 +85,7 @@ function useSwapCallArguments(
         }
 
         return swapMethods.map((parameters) => ({ parameters, contract }))
-    }, [account, allowedSlippage, chainId, deadline, library, recipient, trade])
+    }, [account, allowedSlippage, chainId, deadline, getRouterContract, library, recipient, trade])
 }
 
 // returns a function that will execute a swap, if the parameters are all valid
@@ -154,9 +156,8 @@ export function useSwapCallback(
                                         console.error('Call threw error', call, callError)
                                         const reason: string =
                                             callError.reason || callError.data?.message || callError.message
-                                        const errorMessage = `The transaction cannot succeed due to error: ${
-                                            reason ?? 'Unknown error, check the logs'
-                                        }.`
+                                        const errorMessage = `The transaction cannot succeed due to error: ${reason ?? 'Unknown error, check the logs'
+                                            }.`
 
                                         return { call, error: new Error(errorMessage) }
                                     })
@@ -199,11 +200,10 @@ export function useSwapCallback(
                         const withRecipient =
                             recipient === account
                                 ? base
-                                : `${base} to ${
-                                      recipientAddressOrName && isAddress(recipientAddressOrName)
-                                          ? truncateHash(recipientAddressOrName)
-                                          : recipientAddressOrName
-                                  }`
+                                : `${base} to ${recipientAddressOrName && isAddress(recipientAddressOrName)
+                                    ? truncateHash(recipientAddressOrName)
+                                    : recipientAddressOrName
+                                }`
 
                         addTransaction(response, {
                             summary: withRecipient,

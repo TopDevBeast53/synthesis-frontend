@@ -6,6 +6,7 @@ import { harvestFarm } from 'utils/calls'
 import { BIG_ZERO } from 'utils/bigNumber'
 // import getGasPrice from 'utils/getGasPrice'
 import { useMasterchef, useSousChef } from 'hooks/useContract'
+import useFetchUserBalances from 'hooks/useFetchUserBalances'
 // import { DEFAULT_GAS_LIMIT } from 'config'
 
 const options = {
@@ -31,6 +32,7 @@ const useHarvestPool = (sousId, isUsingBnb = false) => {
     const { account } = useWeb3React()
     const sousChefContract = useSousChef(sousId)
     const masterChefContract = useMasterchef()
+    const fetchUserBalances = useFetchUserBalances()
 
     const handleHarvest = useCallback(async () => {
         if (sousId === 0) {
@@ -41,8 +43,8 @@ const useHarvestPool = (sousId, isUsingBnb = false) => {
             await harvestPool(sousChefContract)
         }
         dispatch(updateUserPendingReward(sousId, account))
-        dispatch(updateUserBalance(sousId, account))
-    }, [account, dispatch, isUsingBnb, masterChefContract, sousChefContract, sousId])
+        dispatch(updateUserBalance(sousId, account, fetchUserBalances))
+    }, [account, dispatch, isUsingBnb, masterChefContract, sousChefContract, sousId, fetchUserBalances])
 
     return { onReward: handleHarvest }
 }

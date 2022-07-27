@@ -7,7 +7,8 @@ import useLastUpdated from 'hooks/useLastUpdated'
 import { useFastFresh } from 'hooks/useRefresh'
 import { AUCTION_BIDDERS_TO_FETCH } from 'config'
 import { BIG_ZERO } from 'utils/bigNumber'
-import { sortAuctionBidders, processAuctionData } from '../helpers'
+import useProcessAuctionData from 'hooks/useProcessAuctionData'
+import { sortAuctionBidders } from '../helpers'
 
 export const useCurrentFarmAuction = (account: string) => {
     const [currentAuction, setCurrentAuction] = useState<Auction | null>(null)
@@ -19,6 +20,7 @@ export const useCurrentFarmAuction = (account: string) => {
     const fastRefresh = useFastFresh()
 
     const farmAuctionContract = useFarmAuctionContract()
+    const processAuctionData = useProcessAuctionData()
 
     // Get latest auction id and its data
     useEffect(() => {
@@ -33,7 +35,7 @@ export const useCurrentFarmAuction = (account: string) => {
             }
         }
         fetchCurrentAuction()
-    }, [farmAuctionContract, fastRefresh])
+    }, [farmAuctionContract, fastRefresh, processAuctionData])
 
     // Fetch bidders for current auction
     useEffect(() => {

@@ -75,3 +75,8 @@ export interface FarmAuctionContract extends Omit<FarmAuction, 'auctions'> {
     auctions: ContractFunction<AuctionsResponse>
     getWhitelistedAddresses: ContractFunction<GetWhitelistedAddressesResponse>
 }
+
+export type CHAIN_CONFIG = {
+    CHAIN_ID: number,
+    NODE_URL: string,
+}

@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react'
 import { useFarmAuctionContract } from 'hooks/useContract'
 import { Auction, Bidder } from 'config/constants/types'
 import { AUCTION_BIDDERS_TO_FETCH } from 'config'
-import { processAuctionData, sortAuctionBidders } from '../helpers'
+import useProcessAuctionData from 'hooks/useProcessAuctionData'
+import { sortAuctionBidders } from '../helpers'
 
 interface AuctionHistoryMap {
   [key: number]: {
@@ -15,6 +16,7 @@ const useAuctionHistory = (auctionId: number) => {
   const [auctionHistory, setAuctionHistory] = useState<AuctionHistoryMap>({})
 
   const farmAuctionContract = useFarmAuctionContract()
+  const processAuctionData = useProcessAuctionData()
 
   // Get past auction data
   useEffect(() => {
@@ -36,7 +38,7 @@ const useAuctionHistory = (auctionId: number) => {
     if (!auctionHistory[auctionId] && auctionId > 0) {
       fetchAuction()
     }
-  }, [farmAuctionContract, auctionHistory, auctionId])
+  }, [farmAuctionContract, auctionHistory, auctionId, processAuctionData])
 
   return auctionHistory
 }

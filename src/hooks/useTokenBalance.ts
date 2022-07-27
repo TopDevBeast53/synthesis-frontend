@@ -5,7 +5,7 @@ import { FAST_INTERVAL, SLOW_INTERVAL } from 'config/constants'
 import { ethers } from 'ethers'
 import useSWR from 'swr'
 import { BIG_ZERO } from 'utils/bigNumber'
-import { simpleRpcProvider } from 'utils/providers'
+import useProviders from 'hooks/useProviders'
 import { useHelix, useTokenContract } from './useContract'
 import { useSWRContract } from './useSWRContract'
 
@@ -53,8 +53,9 @@ export const useBurnedBalance = (tokenAddress: string) => {
 
 export const useGetBnbBalance = () => {
     const { account } = useWeb3React()
+    const rpcProvider = useProviders()
     const { status, data, mutate } = useSWR([account, 'bnbBalance'], async () => {
-        return simpleRpcProvider.getBalance(account)
+        return rpcProvider.getBalance(account)
     })
 
     return { balance: data || ethers.constants.Zero, fetchStatus: status, refresh: mutate }

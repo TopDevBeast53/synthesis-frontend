@@ -7,6 +7,7 @@ import BigNumber from 'bignumber.js'
 import { DEFAULT_TOKEN_DECIMAL } from 'config'
 import { BIG_TEN } from 'utils/bigNumber'
 import { useMasterchef, useSousChef } from 'hooks/useContract'
+import useFetchUserBalances from 'hooks/useFetchUserBalances'
 // import getGasPrice from 'utils/getGasPrice'
 
 const options = {
@@ -37,6 +38,7 @@ const useStakePool = (sousId: number, isUsingBnb = false) => {
     const { account } = useWeb3React()
     const masterChefContract = useMasterchef()
     const sousChefContract = useSousChef(sousId)
+    const fetchUserBalances = useFetchUserBalances()
 
     const handleStake = useCallback(
         async (amount: string, decimals: number) => {
@@ -48,9 +50,9 @@ const useStakePool = (sousId: number, isUsingBnb = false) => {
                 await sousStake(sousChefContract, amount, decimals)
             }
             dispatch(updateUserStakedBalance(sousId, account))
-            dispatch(updateUserBalance(sousId, account))
+            dispatch(updateUserBalance(sousId, account, fetchUserBalances))
         },
-        [account, dispatch, isUsingBnb, masterChefContract, sousChefContract, sousId],
+        [account, dispatch, isUsingBnb, masterChefContract, sousChefContract, sousId, fetchUserBalances],
     )
 
     return { onStake: handleStake }

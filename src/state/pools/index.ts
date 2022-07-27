@@ -16,13 +16,10 @@ import { getPoolApr } from 'utils/apr'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { getHelixContract, getMasterchefContract } from 'utils/contractHelpers'
 import { getBalanceNumber } from 'utils/formatBalance'
-import { simpleRpcProvider } from 'utils/providers'
 import { fetchIfoPoolFeesData, fetchPublicIfoPoolData } from './fetchIfoPoolPublic'
 import fetchIfoPoolUserData from './fetchIfoPoolUser'
-import { fetchPoolsBlockLimits, fetchPoolsTotalStaking } from './fetchPools'
 import {
     fetchPoolsAllowance,
-    fetchUserBalances,
     fetchUserPendingRewards,
     fetchUserStakeBalances,
 } from './fetchPoolsUser'
@@ -114,50 +111,6 @@ export const fetchHelixPoolUserDataAsync = (account: string) => async (dispatch)
     )
 }
 
-export const fetchPoolsPublicDataAsync = (currentBlockNumber: number) => async (dispatch, getState) => {
-    const [blockLimits, totalStakings, currentBlock] = await Promise.all([
-        fetchPoolsBlockLimits(),
-        fetchPoolsTotalStaking(),
-        currentBlockNumber ? Promise.resolve(currentBlockNumber) : simpleRpcProvider.getBlockNumber(),
-    ])
-
-    const prices = getTokenPricesFromFarm(getState().farms.data)
-
-    const liveData = poolsConfig.map((pool) => {
-        const blockLimit = blockLimits.find((entry) => entry.sousId === pool.sousId)
-        const totalStaking = totalStakings.find((entry) => entry.sousId === pool.sousId)
-        const isPoolEndBlockExceeded =
-            currentBlock > 0 && blockLimit ? currentBlock > Number(blockLimit.endBlock) : false
-        const isPoolFinished = pool.isFinished || isPoolEndBlockExceeded
-
-        const stakingTokenAddress = pool.stakingToken.address ? pool.stakingToken.address.toLowerCase() : null
-        const stakingTokenPrice = stakingTokenAddress ? prices[stakingTokenAddress] : 0
-
-        const earningTokenAddress = pool.earningToken.address ? pool.earningToken.address.toLowerCase() : null
-        const earningTokenPrice = earningTokenAddress ? prices[earningTokenAddress] : 0
-
-        const apr = !isPoolFinished
-            ? getPoolApr(
-                  stakingTokenPrice,
-                  earningTokenPrice,
-                  getBalanceNumber(new BigNumber(totalStaking.totalStaked), pool.stakingToken.decimals),
-                  parseFloat(pool.tokenPerBlock),
-              )
-            : 0
-
-        return {
-            ...blockLimit,
-            ...totalStaking,
-            stakingTokenPrice,
-            earningTokenPrice,
-            apr,
-            isFinished: isPoolFinished,
-        }
-    })
-
-    dispatch(setPoolsPublicData(liveData))
-}
-
 export const fetchPoolsStakingLimitsAsync = () => async (dispatch, getState) => {
     const poolsWithStakingLimit = getState()
         .pools.data.filter(({ stakingLimit }) => stakingLimit !== null && stakingLimit !== undefined)
@@ -180,52 +133,52 @@ export const fetchPoolsStakingLimitsAsync = () => async (dispatch, getState) => 
 }
 
 export const fetchPoolsUserDataAsync =
-    (account: string): AppThunk =>
-    async (dispatch) => {
-        const [allowances, stakingTokenBalances, stakedBalances, pendingRewards] = await Promise.all([
-            fetchPoolsAllowance(account),
-            fetchUserBalances(account),
-            fetchUserStakeBalances(account),
-            fetchUserPendingRewards(account),
-        ])
-        const userData = poolsConfig.map((pool) => ({
-            sousId: pool.sousId,
-            allowance: allowances[pool.sousId],
-            stakingTokenBalance: stakingTokenBalances[pool.sousId],
-            stakedBalance: stakedBalances[pool.sousId],
-            pendingReward: pendingRewards[pool.sousId],
-        }))
+    (account: string, fetchUserBalances: any): AppThunk =>
+        async (dispatch) => {
+            const [allowances, stakingTokenBalances, stakedBalances, pendingRewards] = await Promise.all([
+                fetchPoolsAllowance(account),
+                fetchUserBalances(account),
+                fetchUserStakeBalances(account),
+                fetchUserPendingRewards(account),
+            ])
+            const userData = poolsConfig.map((pool) => ({
+                sousId: pool.sousId,
+                allowance: allowances[pool.sousId],
+                stakingTokenBalance: stakingTokenBalances[pool.sousId],
+                stakedBalance: stakedBalances[pool.sousId],
+                pendingReward: pendingRewards[pool.sousId],
+            }))
 
-        dispatch(setPoolsUserData(userData))
-    }
+            dispatch(setPoolsUserData(userData))
+        }
 
 export const updateUserAllowance =
     (sousId: number, account: string): AppThunk =>
-    async (dispatch) => {
-        const allowances = await fetchPoolsAllowance(account)
-        dispatch(updatePoolsUserData({ sousId, field: 'allowance', value: allowances[sousId] }))
-    }
+        async (dispatch) => {
+            const allowances = await fetchPoolsAllowance(account)
+            dispatch(updatePoolsUserData({ sousId, field: 'allowance', value: allowances[sousId] }))
+        }
 
 export const updateUserBalance =
-    (sousId: number, account: string): AppThunk =>
-    async (dispatch) => {
-        const tokenBalances = await fetchUserBalances(account)
-        dispatch(updatePoolsUserData({ sousId, field: 'stakingTokenBalance', value: tokenBalances[sousId] }))
-    }
+    (sousId: number, account: string, fetchUserBalances: any): AppThunk =>
+        async (dispatch) => {
+            const tokenBalances = await fetchUserBalances(account)
+            dispatch(updatePoolsUserData({ sousId, field: 'stakingTokenBalance', value: tokenBalances[sousId] }))
+        }
 
 export const updateUserStakedBalance =
     (sousId: number, account: string): AppThunk =>
-    async (dispatch) => {
-        const stakedBalances = await fetchUserStakeBalances(account)
-        dispatch(updatePoolsUserData({ sousId, field: 'stakedBalance', value: stakedBalances[sousId] }))
-    }
+        async (dispatch) => {
+            const stakedBalances = await fetchUserStakeBalances(account)
+            dispatch(updatePoolsUserData({ sousId, field: 'stakedBalance', value: stakedBalances[sousId] }))
+        }
 
 export const updateUserPendingReward =
     (sousId: number, account: string): AppThunk =>
-    async (dispatch) => {
-        const pendingRewards = await fetchUserPendingRewards(account)
-        dispatch(updatePoolsUserData({ sousId, field: 'pendingReward', value: pendingRewards[sousId] }))
-    }
+        async (dispatch) => {
+            const pendingRewards = await fetchUserPendingRewards(account)
+            dispatch(updatePoolsUserData({ sousId, field: 'pendingReward', value: pendingRewards[sousId] }))
+        }
 
 export const fetchHelixVaultPublicData = createAsyncThunk<HelixAutoPool>('helixAutoPool/fetchPublicData', async () => {
     const publicVaultInfo = await fetchPublicVaultData()

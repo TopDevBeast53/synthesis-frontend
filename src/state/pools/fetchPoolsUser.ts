@@ -4,13 +4,11 @@ import erc20ABI from 'config/abi/erc20.json'
 import multicall from 'utils/multicall'
 import { getMasterchefContract } from 'utils/contractHelpers'
 import { getAddress } from 'utils/addressHelpers'
-import { simpleRpcProvider } from 'utils/providers'
 import BigNumber from 'bignumber.js'
 
 // Pool 0, HELIX/ HELIXis a different kind of contract (master chef)
 // BNB pools use the native BNB token (wrapping ? unwrapping is done at the contract level)
 const nonBnbPools = poolsConfig.filter((pool) => pool.stakingToken.symbol !== 'ETH')
-const bnbPools = poolsConfig.filter((pool) => pool.stakingToken.symbol === 'ETH')
 const nonMasterPools = poolsConfig.filter((pool) => pool.sousId !== 0)
 const masterChefContract = getMasterchefContract()
 
@@ -26,29 +24,6 @@ export const fetchPoolsAllowance = async (account) => {
         (acc, pool, index) => ({ ...acc, [pool.sousId]: new BigNumber(allowances[index]).toJSON() }),
         {},
     )
-}
-
-export const fetchUserBalances = async (account) => {
-    // Non BNB pools
-    const calls = nonBnbPools.map((pool) => ({
-        address: pool.stakingToken.address,
-        name: 'balanceOf',
-        params: [account],
-    }))
-    const tokenBalancesRaw = await multicall(erc20ABI, calls)
-    const tokenBalances = nonBnbPools.reduce(
-        (acc, pool, index) => ({ ...acc, [pool.sousId]: new BigNumber(tokenBalancesRaw[index]).toJSON() }),
-        {},
-    )
-
-    // BNB pools
-    const bnbBalance = await simpleRpcProvider.getBalance(account)
-    const bnbBalances = bnbPools.reduce(
-        (acc, pool) => ({ ...acc, [pool.sousId]: new BigNumber(bnbBalance.toString()).toJSON() }),
-        {},
-    )
-
-    return { ...tokenBalances, ...bnbBalances }
 }
 
 export const fetchUserStakeBalances = async (account) => {
