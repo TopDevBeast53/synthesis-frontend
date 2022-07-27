@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import { useAppDispatch } from 'state'
 import { useWeb3React } from '@web3-react/core'
@@ -8,7 +8,11 @@ import { getBalanceAmount } from 'utils/formatBalance'
 import { farmsConfig } from 'config/constants'
 import { useFastFresh, useSlowFresh } from 'hooks/useRefresh'
 import { deserializeToken } from 'state/user/hooks/helpers'
-import { getAddress } from 'utils/addressHelpers'
+import { getAddress, getMasterChefAddress } from 'utils/addressHelpers'
+import { SerializedFarmConfig } from 'config/constants/types'
+import useMulticall from 'hooks/useMulticall'
+import erc20ABI from 'config/abi/erc20.json'
+import masterchefABI from 'config/abi/masterchef.json'
 import { fetchFarmsPublicDataAsync, fetchFarmUserDataAsync, nonArchivedFarms } from '.'
 import { State, SerializedFarm, DeserializedFarmUserData, DeserializedFarm, DeserializedFarmsState } from '../types'
 import useFetchFarms from './useFetchFarms'
@@ -63,6 +67,10 @@ export const usePollFarmsWithUserData = (includeArchive = false) => {
     const fastRefresh = useFastFresh()
     const { account } = useWeb3React()
     const fetchFarms = useFetchFarms()
+    const fetchFarmUserAllowances = useFetchFarmUserAllowances()
+    const fetchFarmUserTokenBalances = useFetchFarmUserTokenBalances()
+    const fetchFarmUserStakedBalances = useFetchFarmUserStakedBalances()
+    const fetchFarmUserEarnings = useFetchFarmUserEarnings()
 
     useEffect(() => {
         const farmsToFetch = includeArchive ? farmsConfig : nonArchivedFarms
@@ -71,9 +79,12 @@ export const usePollFarmsWithUserData = (includeArchive = false) => {
         dispatch(fetchFarmsPublicDataAsync({ pids, fetchFarms }))
 
         if (account) {
-            dispatch(fetchFarmUserDataAsync({ account, pids }))
+            dispatch(fetchFarmUserDataAsync({
+                account, pids, fetchFarmUserAllowances,
+                fetchFarmUserTokenBalances, fetchFarmUserStakedBalances, fetchFarmUserEarnings
+            }))
         }
-    }, [includeArchive, dispatch, fastRefresh, account, fetchFarms])
+    }, [includeArchive, dispatch, fastRefresh, account, fetchFarms, fetchFarmUserAllowances, fetchFarmUserTokenBalances, fetchFarmUserStakedBalances, fetchFarmUserEarnings])
 }
 
 /**
@@ -179,4 +190,86 @@ export const usePriceHelixBusd = (): BigNumber => {
     }, [helixPriceBusdAsString])
 
     return helixPriceBusd
+}
+
+export const useFetchFarmUserAllowances = () => {
+    const multicall = useMulticall()
+    return useCallback(async (account: string, farmsToFetch: SerializedFarmConfig[]) => {
+        const masterChefAddress = getMasterChefAddress()
+
+        const calls = farmsToFetch.map((farm) => {
+            const lpContractAddress = getAddress(farm.lpAddresses)
+            return { address: lpContractAddress, name: 'allowance', params: [account, masterChefAddress] }
+        })
+
+        const rawLpAllowances = await multicall<BigNumber[]>(erc20ABI, calls)
+        const parsedLpAllowances = rawLpAllowances.map((lpBalance) => {
+            return new BigNumber(lpBalance).toJSON()
+        })
+        return parsedLpAllowances
+    }, [multicall])
+}
+
+export const useFetchFarmUserTokenBalances = () => {
+    const multicall = useMulticall()
+    return useCallback(async (account: string, farmsToFetch: SerializedFarmConfig[]) => {
+        const calls = farmsToFetch.map((farm) => {
+            const lpContractAddress = getAddress(farm.lpAddresses)
+            return {
+                address: lpContractAddress,
+                name: 'balanceOf',
+                params: [account],
+            }
+        })
+
+        const rawTokenBalances = await multicall(erc20ABI, calls)
+        const parsedTokenBalances = rawTokenBalances.map((tokenBalance) => {
+            return new BigNumber(tokenBalance).toJSON()
+        })
+        return parsedTokenBalances
+    }, [multicall])
+}
+
+
+
+export const useFetchFarmUserStakedBalances = () => {
+    const multicall = useMulticall()
+    return useCallback(async (account: string, farmsToFetch: SerializedFarmConfig[]) => {
+        const masterChefAddress = getMasterChefAddress()
+
+        const calls = farmsToFetch.map((farm) => {
+            return {
+                address: masterChefAddress,
+                name: 'userInfo',
+                params: [farm.pid, account],
+            }
+        })
+
+        const rawStakedBalances = await multicall(masterchefABI, calls)
+        const parsedStakedBalances = rawStakedBalances.map((stakedBalance) => {
+            return new BigNumber(stakedBalance[0]._hex).toJSON()
+        })
+        return parsedStakedBalances
+    }, [multicall])
+}
+
+export const useFetchFarmUserEarnings = () => {
+    const multicall = useMulticall()
+    return useCallback(async (account: string, farmsToFetch: SerializedFarmConfig[]) => {
+        const masterChefAddress = getMasterChefAddress()
+
+        const calls = farmsToFetch.map((farm) => {
+            return {
+                address: masterChefAddress,
+                name: 'pendingHelixToken',
+                params: [farm.pid, account],
+            }
+        })
+
+        const rawEarnings = await multicall(masterchefABI, calls)
+        const parsedEarnings = rawEarnings.map((earnings) => {
+            return new BigNumber(earnings).toJSON()
+        })
+        return parsedEarnings
+    }, [multicall])
 }

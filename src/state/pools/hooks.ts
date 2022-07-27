@@ -10,7 +10,7 @@ import { convertSharesToHelix, getAprData } from 'views/Pools/helpers'
 import useFetchUserBalances from 'hooks/useFetchUserBalances'
 import { useFastRefreshEffect } from 'hooks/useRefreshEffect'
 import useSWR from 'swr'
-import { useMulticallv2 } from 'hooks/useMulticall'
+import useMulticall, { useMulticallv2 } from 'hooks/useMulticall'
 import useFetchPoolsPublicDataAsync from 'hooks/useFetchPoolsPublicDataAsync'
 import { poolsConfig, SLOW_INTERVAL } from 'config/constants'
 import { getAddress, getHelixAutoPoolAddress, getIfoPoolAddress, getLotteryV2Address } from 'utils/addressHelpers'
@@ -21,8 +21,8 @@ import sousChefABI from 'config/abi/sousChef.json'
 import helixAutoPoolAbi from 'config/abi/HelixAutoPool.json'
 import ifoPoolAbi from 'config/abi/ifoPool.json'
 import lotteryV2Abi from 'config/abi/lotteryV2.json'
-import multicall from 'utils/multicall'
 import useFetchFarms from 'state/farms/useFetchFarms'
+import erc20ABI from 'config/abi/erc20.json'
 import {
     fetchHelixVaultPublicData,
     fetchHelixVaultUserData,
@@ -40,10 +40,10 @@ import {
 import { State, DeserializedPool, VaultKey } from '../types'
 import { getTokenPricesFromFarm, transformPool } from './helpers'
 import { fetchFarmsPublicDataAsync, nonArchivedFarms } from '../farms'
-import { fetchPoolsAllowance } from './fetchPoolsUser'
 import useFetchVaultUser from './useFetchVaultUser'
 import useFetchPublicVaultData from './useFetchPublicVaultData'
 import useFetchIfoPoolUser from './useFetchIfoPoolUser'
+
 
 export const usePoolsPageFetch = () => {
     const { account } = useWeb3React()
@@ -403,6 +403,7 @@ export const useFetchHelixPoolUserDataAsync = (account: string) => {
 export const useFetchPoolsUserDataAsync = (account: string, fetchUserBalances: any) => {
     const fetchUserStakeBalances = useFetchUserStakeBalances()
     const fetchUserPendingRewards = useFetchUserPendingRewards()
+    const fetchPoolsAllowance = useFetchPoolsAllowance()
     return useCallback(async (dispatch) => {
         const [allowances, stakingTokenBalances, stakedBalances, pendingRewards] = await Promise.all([
             fetchPoolsAllowance(account),
@@ -419,7 +420,7 @@ export const useFetchPoolsUserDataAsync = (account: string, fetchUserBalances: a
         }))
 
         dispatch(setPoolsUserData(userData))
-    }, [account, fetchUserBalances, fetchUserPendingRewards, fetchUserStakeBalances])
+    }, [account, fetchPoolsAllowance, fetchUserBalances, fetchUserPendingRewards, fetchUserStakeBalances])
 }
 
 export const useUpdateUserStakedBalance = (sousId: number, account: string) => {
@@ -433,6 +434,7 @@ export const useUpdateUserStakedBalance = (sousId: number, account: string) => {
 const nonMasterPools = poolsConfig.filter((pool) => pool.sousId !== 0)
 export const useFetchUserStakeBalances = () => {
     const masterChefContract = useMasterchef()
+    const multicall = useMulticall()
     return useCallback(async (account) => {
         const calls = nonMasterPools.map((p) => ({
             address: getAddress(p.contractAddress),
@@ -452,7 +454,7 @@ export const useFetchUserStakeBalances = () => {
         const { amount: masterPoolAmount } = await masterChefContract.userInfo('0', account)
 
         return { ...stakedBalances, 0: new BigNumber(masterPoolAmount.toString()).toJSON() }
-    }, [masterChefContract])
+    }, [masterChefContract, multicall])
 }
 
 export const useUpdateUserPendingReward = (sousId: number, account: string) => {
@@ -465,6 +467,7 @@ export const useUpdateUserPendingReward = (sousId: number, account: string) => {
 
 export const useFetchUserPendingRewards = () => {
     const masterChefContract = useMasterchef()
+    const multicall = useMulticall()
     return useCallback(async (account) => {
         const calls = nonMasterPools.map((p) => ({
             address: getAddress(p.contractAddress),
@@ -484,7 +487,7 @@ export const useFetchUserPendingRewards = () => {
         const pendingReward = await masterChefContract.pendingHelixToken('0', account)
 
         return { ...pendingRewards, 0: new BigNumber(pendingReward.toString()).toJSON() }
-    }, [masterChefContract])
+    }, [masterChefContract, multicall])
 }
 
 export const useFetchVaultFees = () => {
@@ -624,4 +627,65 @@ export const useFetchCurrentLotteryIdAndMaxBuy = () => {
             }
         }
     }, [multicallv2])
+}
+
+const nonBnbPools = poolsConfig.filter((pool) => pool.stakingToken.symbol !== 'ETH')
+export const useFetchPoolsAllowance = () => {
+    const multicall = useMulticall()
+    return useCallback(async (account) => {
+        const calls = nonBnbPools.map((pool) => ({
+            address: pool.stakingToken.address,
+            name: 'allowance',
+            params: [account, getAddress(pool.contractAddress)],
+        }))
+
+        const allowances = await multicall(erc20ABI, calls)
+        return nonBnbPools.reduce(
+            (acc, pool, index) => ({ ...acc, [pool.sousId]: new BigNumber(allowances[index]).toJSON() }),
+            {},
+        )
+    }, [multicall])
+}
+
+export const useFetchPoolsBlockLimits = () => {
+    const multicall = useMulticall()
+    return useCallback(async () => {
+        const poolsWithEnd = poolsConfig.filter((p) => p.sousId !== 0)
+        const startEndBlockCalls = poolsWithEnd.flatMap((poolConfig) => {
+            return [
+                {
+                    address: getAddress(poolConfig.contractAddress),
+                    name: 'startBlock',
+                },
+                {
+                    address: getAddress(poolConfig.contractAddress),
+                    name: 'bonusEndBlock',
+                },
+            ]
+        })
+
+        const startEndBlockRaw = await multicall(sousChefABI, startEndBlockCalls)
+
+        const startEndBlockResult = startEndBlockRaw.reduce((resultArray, item, index) => {
+            const chunkIndex = Math.floor(index / 2)
+
+            if (!resultArray[chunkIndex]) {
+                // eslint-disable-next-line no-param-reassign
+                resultArray[chunkIndex] = [] // start a new chunk
+            }
+
+            resultArray[chunkIndex].push(item)
+
+            return resultArray
+        }, [])
+
+        return poolsWithEnd.map((cakePoolConfig, index) => {
+            const [startBlock, endBlock] = startEndBlockResult[index]
+            return {
+                sousId: cakePoolConfig.sousId,
+                startBlock: new BigNumber(startBlock).toJSON(),
+                endBlock: new BigNumber(endBlock).toJSON(),
+            }
+        })
+    }, [multicall])
 }

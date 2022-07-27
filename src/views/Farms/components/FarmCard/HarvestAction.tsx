@@ -7,7 +7,7 @@ import useToast from 'hooks/useToast'
 import React, { useState } from 'react'
 import { useAppDispatch } from 'state'
 import { fetchFarmUserDataAsync } from 'state/farms'
-import { usePriceHelixBusd } from 'state/farms/hooks'
+import { useFetchFarmUserAllowances, useFetchFarmUserEarnings, useFetchFarmUserStakedBalances, useFetchFarmUserTokenBalances, usePriceHelixBusd } from 'state/farms/hooks'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { getBalanceAmount } from 'utils/formatBalance'
 import { logError } from 'utils/sentry'
@@ -29,6 +29,10 @@ const HarvestAction: React.FC<FarmCardActionsProps> = ({ earnings, pid }) => {
   const rawEarningsBalance = account ? getBalanceAmount(earnings) : BIG_ZERO
   const displayBalance = rawEarningsBalance.toFixed(3, BigNumber.ROUND_DOWN)
   const earningsBusd = rawEarningsBalance ? rawEarningsBalance.multipliedBy(helixPrice).toNumber() : 0
+  const fetchFarmUserAllowances = useFetchFarmUserAllowances()
+  const fetchFarmUserTokenBalances = useFetchFarmUserTokenBalances()
+  const fetchFarmUserStakedBalances = useFetchFarmUserStakedBalances()
+  const fetchFarmUserEarnings = useFetchFarmUserEarnings()
 
   return (
     <Flex mb="8px" justifyContent="space-between" alignItems="center">
@@ -57,7 +61,10 @@ const HarvestAction: React.FC<FarmCardActionsProps> = ({ earnings, pid }) => {
           } finally {
             setPendingTx(false)
           }
-          dispatch(fetchFarmUserDataAsync({ account, pids: [pid] }))
+          dispatch(fetchFarmUserDataAsync({
+            account, pids: [pid], fetchFarmUserAllowances,
+            fetchFarmUserEarnings, fetchFarmUserStakedBalances, fetchFarmUserTokenBalances
+          }))
         }}
       >
         {pendingTx ? t('Harvesting') : t('Harvest')}

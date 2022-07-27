@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
 import BigNumber from 'bignumber.js'
 import { useWeb3React } from '@web3-react/core'
-import multicall from 'utils/multicall'
 import { getMasterChefAddress } from 'utils/addressHelpers'
 import masterChefABI from 'config/abi/masterchef.json'
 import { farmsConfig } from 'config/constants'
 import { SerializedFarmConfig } from 'config/constants/types'
 import { useFastFresh } from 'hooks/useRefresh'
 import { DEFAULT_TOKEN_DECIMAL } from 'config'
+import useMulticall from 'hooks/useMulticall'
 
 export interface FarmWithBalance extends SerializedFarmConfig {
   balance: BigNumber
@@ -18,6 +18,7 @@ const useFarmsWithBalance = () => {
   const [earningsSum, setEarningsSum] = useState<number>(null)
   const { account } = useWeb3React()
   const fastRefresh = useFastFresh()
+  const multicall = useMulticall()
 
   useEffect(() => {
     const fetchBalances = async () => {
@@ -45,7 +46,7 @@ const useFarmsWithBalance = () => {
     if (account) {
       fetchBalances()
     }
-  }, [account, fastRefresh])
+  }, [account, fastRefresh, multicall])
 
   return { farmsWithStakedBalance, earningsSum }
 }

@@ -11,12 +11,6 @@ import isArchivedPid from 'utils/farmHelpers'
 import type { AppState } from 'state'
 import priceHelperLpsConfig from 'config/constants/priceHelperLps'
 import getFarmsPrices from './getFarmsPrices'
-import {
-    fetchFarmUserEarnings,
-    fetchFarmUserAllowances,
-    fetchFarmUserTokenBalances,
-    fetchFarmUserStakedBalances,
-} from './fetchFarmUser'
 import { SerializedFarmsState, SerializedFarm } from '../types'
 
 const noAccountFarmConfig = farmsConfig.map((farm) => ({
@@ -85,13 +79,20 @@ interface FarmUserDataResponse {
 
 export const fetchFarmUserDataAsync = createAsyncThunk<
     FarmUserDataResponse[],
-    { account: string; pids: number[] },
+    {
+        account: string; pids: number[],
+        fetchFarmUserAllowances: any,
+        fetchFarmUserTokenBalances: any,
+        fetchFarmUserStakedBalances: any,
+        fetchFarmUserEarnings: any
+    },
     {
         state: AppState
     }
 >(
     'farms/fetchFarmUserDataAsync',
-    async ({ account, pids }) => {
+    async ({ account, pids, fetchFarmUserAllowances,
+        fetchFarmUserTokenBalances, fetchFarmUserStakedBalances, fetchFarmUserEarnings }) => {
         const farmsToFetch = farmsConfig.filter((farmConfig) => pids.includes(farmConfig.pid))
         const userFarmAllowances = await fetchFarmUserAllowances(account, farmsToFetch)
         const userFarmTokenBalances = await fetchFarmUserTokenBalances(account, farmsToFetch)

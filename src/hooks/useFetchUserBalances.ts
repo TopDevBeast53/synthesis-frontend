@@ -1,14 +1,15 @@
 import { poolsConfig } from "config/constants"
 import erc20ABI from 'config/abi/erc20.json'
 import { useCallback } from "react"
-import multicall from "utils/multicall"
 import BigNumber from 'bignumber.js'
 import useProviders from "./useProviders"
+import useMulticall from "./useMulticall"
 
 const useFetchUserBalances = () => {
     const nonBnbPools = poolsConfig.filter((pool) => pool.stakingToken.symbol !== 'ETH')
     const bnbPools = poolsConfig.filter((pool) => pool.stakingToken.symbol === 'ETH')
     const rpcProvider = useProviders()
+    const multicall = useMulticall()
     // Non BNB pools
     return useCallback(async (account: string) => {
         const calls = nonBnbPools.map((pool) => ({
@@ -30,7 +31,7 @@ const useFetchUserBalances = () => {
         )
 
         return { ...tokenBalances, ...bnbBalances }
-    }, [rpcProvider, nonBnbPools, bnbPools])
+    }, [nonBnbPools, multicall, rpcProvider, bnbPools])
 }
 
 export default useFetchUserBalances

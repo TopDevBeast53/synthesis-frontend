@@ -11,9 +11,6 @@ import {
     VaultUser,
 } from 'state/types'
 import { BIG_ZERO } from 'utils/bigNumber'
-import {
-    fetchPoolsAllowance,
-} from './fetchPoolsUser'
 // import fetchVaultUser from './fetchVaultUser'
 
 export const initialPoolVaultState = Object.freeze({
@@ -68,7 +65,7 @@ export const fetchPoolsStakingLimitsAsync = () => async (dispatch, getState) => 
 }
 
 export const updateUserAllowance =
-    (sousId: number, account: string): AppThunk =>
+    (sousId: number, account: string, fetchPoolsAllowance: any): AppThunk =>
         async (dispatch) => {
             const allowances = await fetchPoolsAllowance(account)
             dispatch(updatePoolsUserData({ sousId, field: 'allowance', value: allowances[sousId] }))

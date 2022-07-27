@@ -11,7 +11,7 @@ import React, { useCallback, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useAppDispatch } from 'state'
 import { fetchFarmUserDataAsync } from 'state/farms'
-import { useFarmUser, useLpTokenPrice, usePriceHelixBusd } from 'state/farms/hooks'
+import { useFarmUser, useFetchFarmUserAllowances, useFetchFarmUserEarnings, useFetchFarmUserStakedBalances, useFetchFarmUserTokenBalances, useLpTokenPrice, usePriceHelixBusd } from 'state/farms/hooks'
 import styled from 'styled-components'
 import { getAddress } from 'utils/addressHelpers'
 import { getBalanceAmount, getBalanceNumber } from 'utils/formatBalance'
@@ -57,6 +57,10 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
   const location = useLocation()
   const lpPrice = useLpTokenPrice(lpSymbol)
   const helixPrice = usePriceHelixBusd()
+  const fetchFarmUserAllowances = useFetchFarmUserAllowances()
+  const fetchFarmUserTokenBalances = useFetchFarmUserTokenBalances()
+  const fetchFarmUserStakedBalances = useFetchFarmUserStakedBalances()
+  const fetchFarmUserEarnings = useFetchFarmUserEarnings()
 
   const isApproved = account && allowance && allowance.isGreaterThan(0)
 
@@ -69,12 +73,18 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
 
   const handleStake = async (amount: string) => {
     await onStake(amount)
-    dispatch(fetchFarmUserDataAsync({ account, pids: [pid] }))
+    dispatch(fetchFarmUserDataAsync({
+      account, pids: [pid], fetchFarmUserAllowances,
+      fetchFarmUserEarnings, fetchFarmUserStakedBalances, fetchFarmUserTokenBalances
+    }))
   }
 
   const handleUnstake = async (amount: string) => {
     await onUnstake(amount)
-    dispatch(fetchFarmUserDataAsync({ account, pids: [pid] }))
+    dispatch(fetchFarmUserDataAsync({
+      account, pids: [pid], fetchFarmUserAllowances,
+      fetchFarmUserEarnings, fetchFarmUserStakedBalances, fetchFarmUserTokenBalances
+    }))
   }
 
   const displayBalance = useCallback(() => {
@@ -114,14 +124,17 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
     try {
       setRequestedApproval(true)
       await onApprove()
-      dispatch(fetchFarmUserDataAsync({ account, pids: [pid] }))
+      dispatch(fetchFarmUserDataAsync({
+        account, pids: [pid], fetchFarmUserAllowances,
+        fetchFarmUserEarnings, fetchFarmUserStakedBalances, fetchFarmUserTokenBalances
+      }))
     } catch (e) {
       toastError(t('Error'), t('Please try again. Confirm the transaction and make sure you are paying enough gas!'))
       logError(e)
     } finally {
       setRequestedApproval(false)
     }
-  }, [onApprove, dispatch, account, pid, t, toastError])
+  }, [onApprove, dispatch, account, pid, fetchFarmUserAllowances, fetchFarmUserEarnings, fetchFarmUserStakedBalances, fetchFarmUserTokenBalances, toastError, t])
 
   if (!account) {
     return (

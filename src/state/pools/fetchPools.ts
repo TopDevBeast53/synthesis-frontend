@@ -1,49 +1,4 @@
 import BigNumber from 'bignumber.js'
-import poolsConfig from 'config/constants/pools'
-import sousChefABI from 'config/abi/sousChef.json'
-import multicall from 'utils/multicall'
-import { getAddress } from 'utils/addressHelpers'
-
-export const fetchPoolsBlockLimits = async () => {
-    const poolsWithEnd = poolsConfig.filter((p) => p.sousId !== 0)
-    const startEndBlockCalls = poolsWithEnd.flatMap((poolConfig) => {
-        return [
-            {
-                address: getAddress(poolConfig.contractAddress),
-                name: 'startBlock',
-            },
-            {
-                address: getAddress(poolConfig.contractAddress),
-                name: 'bonusEndBlock',
-            },
-        ]
-    })
-
-    const startEndBlockRaw = await multicall(sousChefABI, startEndBlockCalls)
-
-    const startEndBlockResult = startEndBlockRaw.reduce((resultArray, item, index) => {
-        const chunkIndex = Math.floor(index / 2)
-
-        if (!resultArray[chunkIndex]) {
-            // eslint-disable-next-line no-param-reassign
-            resultArray[chunkIndex] = [] // start a new chunk
-        }
-
-        resultArray[chunkIndex].push(item)
-
-        return resultArray
-    }, [])
-
-    return poolsWithEnd.map((cakePoolConfig, index) => {
-        const [startBlock, endBlock] = startEndBlockResult[index]
-        return {
-            sousId: cakePoolConfig.sousId,
-            startBlock: new BigNumber(startBlock).toJSON(),
-            endBlock: new BigNumber(endBlock).toJSON(),
-        }
-    })
-}
-
 
 export const fetchPoolStakingLimit = async (): Promise<BigNumber> => {
     return new BigNumber('100000000000000000000')
