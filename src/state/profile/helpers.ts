@@ -1,15 +1,12 @@
 import { PancakeProfile } from 'config/abi/types/PancakeProfile'
 import { Profile } from 'state/types'
-import { getProfileContract } from 'utils/contractHelpers'
-// import { NftToken } from 'state/nftMarket/types'
-// import { getNftApi } from 'state/nftMarket/helpers'
 
 export interface GetProfileResponse {
     hasRegistered: boolean
     profile?: Profile
 }
 
-const transformProfileResponse = (
+export const transformProfileResponse = (
     profileResponse: Awaited<ReturnType<PancakeProfile['getUserProfile']>>,
 ): Partial<Profile> => {
     const { 0: userId, 1: numberPoints, 2: teamId, 3: collectionAddress, 4: tokenId, 5: isActive } = profileResponse
@@ -24,7 +21,6 @@ const transformProfileResponse = (
     }
 }
 
-const profileContract = getProfileContract()
 const profileApi = process.env.REACT_APP_API_PROFILE
 
 export const getUsername = async (address: string): Promise<string> => {
@@ -43,46 +39,7 @@ export const getUsername = async (address: string): Promise<string> => {
     }
 }
 
-/**
- * Intended to be used for getting a profile avatar
- */
-export const getProfileAvatar = async (address: string) => {
-    try {        
-        const hasRegistered = await profileContract.hasRegistered(address)
 
-        if (!hasRegistered) {
-            return null
-        }
-
-        const profileResponse = await profileContract.getUserProfile(address)
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const { tokenId, collectionAddress, isActive } = transformProfileResponse(profileResponse)
-
-        let nft = null
-        if (isActive) {
-            const apiRes = null // await getNftApi(collectionAddress, tokenId.toString())
-
-            nft = {
-                tokenId: apiRes.tokenId,
-                name: apiRes.name,
-                collectionName: apiRes.collection.name,
-                collectionAddress,
-                description: apiRes.description,
-                attributes: apiRes.attributes,
-                createdAt: apiRes.createdAt,
-                updatedAt: apiRes.updatedAt,
-                image: {
-                    original: apiRes.image?.original,
-                    thumbnail: apiRes.image?.thumbnail,
-                },
-            }
-        }
-
-        return { nft, hasRegistered }
-    } catch {
-        return { nft: null, hasRegistered: false }
-    }
-}
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const getProfile = async (address: string): Promise<GetProfileResponse> => {
