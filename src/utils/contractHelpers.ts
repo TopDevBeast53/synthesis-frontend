@@ -1,6 +1,5 @@
 import { ethers } from 'ethers'
 import { simpleRpcProvider } from 'utils/providers'
-import tokens from 'config/constants/tokens'
 
 // Addresses
 import {
@@ -18,12 +17,10 @@ import lotteryV2Abi from 'config/abi/lotteryV2.json'
 import masterChef from 'config/abi/masterchef.json'
 import predictionsAbi from 'config/abi/predictions.json'
 import MultiCallAbi from 'config/abi/Multicall.json'
-import helixAbi from 'config/abi/Helix.json'
 import helixAutoPoolAbi from 'config/abi/HelixAutoPool.json'
 // Types
 import {
     Predictions,
-    Helix,
     PancakeProfile,
     LotteryV2,
     Masterchef,
