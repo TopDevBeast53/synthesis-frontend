@@ -2,7 +2,6 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import teamsList from 'config/constants/teams'
 import { Team } from 'config/constants/types'
 import { TeamsById, TeamsState } from '../types'
-import { getTeam, getTeams } from './helpers'
 
 const teamsById: TeamsById = teamsList.reduce((accum, team) => {
   return {
@@ -44,25 +43,5 @@ export const teamsSlice = createSlice({
 // Actions
 export const { fetchStart, teamFetchSucceeded, fetchFailed, teamsFetchSucceeded } = teamsSlice.actions
 
-// Thunks
-export const fetchTeam = (teamId: number) => async (dispatch) => {
-  try {
-    dispatch(fetchStart())
-    const team = await getTeam(teamId)
-    dispatch(teamFetchSucceeded(team))
-  } catch (error) {
-    dispatch(fetchFailed())
-  }
-}
-
-export const fetchTeams = () => async (dispatch) => {
-  try {
-    dispatch(fetchStart())
-    const teams = await getTeams()
-    dispatch(teamsFetchSucceeded(teams))
-  } catch (error) {
-    dispatch(fetchFailed())
-  }
-}
 
 export default teamsSlice.reducer
