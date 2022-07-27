@@ -80,7 +80,7 @@ const farms: SerializedFarmConfig[] = [
     },
     {
         pid: 7,
-        lpSymbol: 'FEI-TRIBE',
+        lpSymbol: 'TRIBE-FEI',
         lpAddresses: {
             1: '0x54427EaCC21A1C96a239cf65C33be61CF616EdBF',
             4: '',
