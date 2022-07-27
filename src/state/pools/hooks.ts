@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import BigNumber from 'bignumber.js'
 import { useWeb3React } from '@web3-react/core'
 import { batch, useSelector } from 'react-redux'
@@ -10,7 +10,12 @@ import useFetchUserBalances from 'hooks/useFetchUserBalances'
 import { useFastRefreshEffect } from 'hooks/useRefreshEffect'
 import useSWR from 'swr'
 import useFetchPoolsPublicDataAsync from 'hooks/useFetchPoolsPublicDataAsync'
-import { SLOW_INTERVAL } from 'config/constants'
+import { poolsConfig, SLOW_INTERVAL } from 'config/constants'
+import { getAddress } from 'utils/addressHelpers'
+import { useHelix } from 'hooks/useContract'
+import { getPoolApr } from 'utils/apr'
+import { getBalanceNumber } from 'utils/formatBalance'
+import { getMasterchefContract } from 'utils/contractHelpers'
 import {
     fetchPoolsUserDataAsync,
     fetchHelixVaultPublicData,
@@ -21,11 +26,11 @@ import {
     fetchIfoPoolPublicData,
     fetchIfoPoolUserAndCredit,
     initialPoolVaultState,
-    fetchHelixPoolPublicDataAsync,
-    fetchHelixPoolUserDataAsync,
+    setPoolPublicData,
+    setPoolUserData,
 } from '.'
 import { State, DeserializedPool, VaultKey } from '../types'
-import { transformPool } from './helpers'
+import { getTokenPricesFromFarm, transformPool } from './helpers'
 import { fetchFarmsPublicDataAsync, nonArchivedFarms } from '../farms'
 
 export const usePoolsPageFetch = () => {
@@ -164,26 +169,28 @@ export const useFetchIfoPool = (fetchHelixPool = true) => {
     const { account } = useWeb3React()
     const fastRefresh = useFastFresh()
     const dispatch = useAppDispatch()
+    const fetchHelixPoolPublicDataAsync = useFetchHelixPoolPublicDataAsync()
+    const fetchHelixPoolUserDataAsync = useFetchHelixPoolUserDataAsync(account)
 
     useEffect(() => {
         batch(() => {
             if (fetchHelixPool) {
-                dispatch(fetchHelixPoolPublicDataAsync())
+                dispatch(fetchHelixPoolPublicDataAsync)
             }
             dispatch(fetchIfoPoolPublicData())
         })
-    }, [dispatch, fastRefresh, fetchHelixPool])
+    }, [dispatch, fastRefresh, fetchHelixPool, fetchHelixPoolPublicDataAsync])
 
     useEffect(() => {
         if (account) {
             batch(() => {
                 dispatch(fetchIfoPoolUserAndCredit({ account }))
                 if (fetchHelixPool) {
-                    dispatch(fetchHelixPoolUserDataAsync(account))
+                    dispatch(fetchHelixPoolUserDataAsync)
                 }
             })
         }
-    }, [dispatch, fastRefresh, account, fetchHelixPool])
+    }, [dispatch, fastRefresh, account, fetchHelixPool, fetchHelixPoolUserDataAsync])
 
     useEffect(() => {
         dispatch(fetchIfoPoolFees())
@@ -310,4 +317,61 @@ export const useIfoWithApr = () => {
         pool: ifoPoolWithApr,
         userDataLoaded,
     }
+}
+
+const helixPool = poolsConfig.find((pool) => pool.sousId === 0)
+const helixPoolAddress = getAddress(helixPool.contractAddress)
+export const useFetchHelixPoolPublicDataAsync = () => {
+    const helixContract = useHelix()
+    return useCallback(async (dispatch, getState) => {
+        const prices = getTokenPricesFromFarm(getState().farms.data)
+        const stakingTokenAddress = helixPool.stakingToken.address ? helixPool.stakingToken.address.toLowerCase() : null
+        const stakingTokenPrice = stakingTokenAddress ? prices[stakingTokenAddress] : 0
+        const earningTokenAddress = helixPool.earningToken.address ? helixPool.earningToken.address.toLowerCase() : null
+        const earningTokenPrice = earningTokenAddress ? prices[earningTokenAddress] : 0
+
+        const totalStaking = await helixContract.balanceOf(helixPoolAddress)
+
+        const apr = getPoolApr(
+            stakingTokenPrice,
+            earningTokenPrice,
+            getBalanceNumber(new BigNumber(totalStaking ? totalStaking.toString() : 0), helixPool.stakingToken.decimals),
+            parseFloat(helixPool.tokenPerBlock),
+        )
+
+        dispatch(
+            setPoolPublicData({
+                sousId: 0,
+                data: {
+                    totalStaked: new BigNumber(totalStaking.toString()).toJSON(),
+                    stakingTokenPrice,
+                    earningTokenPrice,
+                    apr,
+                },
+            }),
+        )
+    }, [helixContract])
+}
+
+export const useFetchHelixPoolUserDataAsync = (account: string) => {
+    const helixContract = useHelix()
+    return useCallback(async (dispatch) => {
+        const allowance = await helixContract.allowance(account, helixPoolAddress)
+        const stakingTokenBalance = await helixContract.balanceOf(account)
+        const masterChefContract = getMasterchefContract()
+        const pendingReward = await masterChefContract.pendingHelixToken('0', account)
+        const { amount: masterPoolAmount } = await masterChefContract.userInfo('0', account)
+
+        dispatch(
+            setPoolUserData({
+                sousId: 0,
+                data: {
+                    allowance: new BigNumber(allowance.toString()).toJSON(),
+                    stakingTokenBalance: new BigNumber(stakingTokenBalance.toString()).toJSON(),
+                    pendingReward: new BigNumber(pendingReward.toString()).toJSON(),
+                    stakedBalances: new BigNumber(masterPoolAmount.toString()).toJSON(),
+                },
+            }),
+        )
+    }, [account, helixContract])
 }

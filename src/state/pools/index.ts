@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
-import BigNumber from 'bignumber.js'
 import poolsConfig from 'config/constants/pools'
 import {
     AppThunk,
@@ -11,11 +10,7 @@ import {
     VaultFees,
     VaultUser,
 } from 'state/types'
-import { getAddress } from 'utils/addressHelpers'
-import { getPoolApr } from 'utils/apr'
 import { BIG_ZERO } from 'utils/bigNumber'
-import { getHelixContract, getMasterchefContract } from 'utils/contractHelpers'
-import { getBalanceNumber } from 'utils/formatBalance'
 import { fetchIfoPoolFeesData, fetchPublicIfoPoolData } from './fetchIfoPoolPublic'
 import fetchIfoPoolUserData from './fetchIfoPoolUser'
 import {
@@ -25,7 +20,6 @@ import {
 } from './fetchPoolsUser'
 import { fetchPublicVaultData, fetchVaultFees } from './fetchVaultPublic'
 import fetchVaultUser from './fetchVaultUser'
-import { getTokenPricesFromFarm } from './helpers'
 
 export const initialPoolVaultState = Object.freeze({
     totalShares: null,
@@ -55,60 +49,6 @@ const initialState: PoolsState = {
     userDataLoaded: false,
     helixAutoPool: initialPoolVaultState,
     ifoPool: initialPoolVaultState,
-}
-
-// Thunks
-const helixPool = poolsConfig.find((pool) => pool.sousId === 0)
-const helixPoolAddress = getAddress(helixPool.contractAddress)
-const helixContract = getHelixContract()
-
-export const fetchHelixPoolPublicDataAsync = () => async (dispatch, getState) => {
-    const prices = getTokenPricesFromFarm(getState().farms.data)
-    const stakingTokenAddress = helixPool.stakingToken.address ? helixPool.stakingToken.address.toLowerCase() : null
-    const stakingTokenPrice = stakingTokenAddress ? prices[stakingTokenAddress] : 0
-    const earningTokenAddress = helixPool.earningToken.address ? helixPool.earningToken.address.toLowerCase() : null
-    const earningTokenPrice = earningTokenAddress ? prices[earningTokenAddress] : 0
-
-    const totalStaking = await helixContract.balanceOf(helixPoolAddress)
-
-    const apr = getPoolApr(
-        stakingTokenPrice,
-        earningTokenPrice,
-        getBalanceNumber(new BigNumber(totalStaking ? totalStaking.toString() : 0), helixPool.stakingToken.decimals),
-        parseFloat(helixPool.tokenPerBlock),
-    )
-
-    dispatch(
-        setPoolPublicData({
-            sousId: 0,
-            data: {
-                totalStaked: new BigNumber(totalStaking.toString()).toJSON(),
-                stakingTokenPrice,
-                earningTokenPrice,
-                apr,
-            },
-        }),
-    )
-}
-
-export const fetchHelixPoolUserDataAsync = (account: string) => async (dispatch) => {
-    const allowance = await helixContract.allowance(account, helixPoolAddress)
-    const stakingTokenBalance = await helixContract.balanceOf(account)
-    const masterChefContract = getMasterchefContract()
-    const pendingReward = await masterChefContract.pendingHelixToken('0', account)
-    const { amount: masterPoolAmount } = await masterChefContract.userInfo('0', account)
-
-    dispatch(
-        setPoolUserData({
-            sousId: 0,
-            data: {
-                allowance: new BigNumber(allowance.toString()).toJSON(),
-                stakingTokenBalance: new BigNumber(stakingTokenBalance.toString()).toJSON(),
-                pendingReward: new BigNumber(pendingReward.toString()).toJSON(),
-                stakedBalances: new BigNumber(masterPoolAmount.toString()).toJSON(),
-            },
-        }),
-    )
 }
 
 export const fetchPoolsStakingLimitsAsync = () => async (dispatch, getState) => {

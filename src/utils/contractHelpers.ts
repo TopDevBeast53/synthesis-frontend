@@ -36,9 +36,6 @@ const getContract = (abi: any, address: string, signer?: ethers.Signer | ethers.
     return new ethers.Contract(address, abi, signerOrProvider)
 }
 
-export const getHelixContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
-    return getContract(helixAbi, tokens.helix.address, signer) as Helix
-}
 export const getProfileContract = (signer?: ethers.Signer | ethers.providers.Provider) => {
     return getContract(profileABI, getPancakeProfileAddress(), signer) as PancakeProfile
 }
