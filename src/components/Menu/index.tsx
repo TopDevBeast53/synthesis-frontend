@@ -8,6 +8,7 @@ import useTheme from 'hooks/useTheme'
 import { usePriceHelixBusd } from 'state/farms/hooks'
 import config from './config/config'
 import UserMenu from './UserMenu'
+import NetworkSelector from './NetworkSelector'
 import GlobalSettings from './GlobalSettings'
 import { getActiveMenuItem, getActiveSubMenuItem } from './utils'
 import { footerLinks } from './config/footerConfig'
@@ -26,6 +27,7 @@ const Menu = (props) => {
       linkComponent={(link) => <Link to={link.href} {...link} />}
       userMenu={<UserMenu />}
       globalMenu={<GlobalSettings />}
+      networkSelector={<NetworkSelector />}
       isDark={isDark}
       toggleTheme={toggleTheme}
       currentLang={currentLanguage.code}
