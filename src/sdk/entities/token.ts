@@ -89,3 +89,22 @@ export const WETH = {
         'https://www.ethereum.org/',
     ),
 }
+
+// export const WRBTC = {
+//     [ChainId.RSK_MAINNET]: new Token(
+//         ChainId.RSK_MAINNET,
+//         '0x967f8799aF07DF1534d48A95a5C9FEBE92c53ae0', // update me
+//         18,
+//         'WRBTC',
+//         'Wrapped RBTC',
+//         'https://www.rsk.co/',
+//     ),
+//     [ChainId.RSK_TESTNET]: new Token(
+//         ChainId.RSK_TESTNET,
+//         '0xc778417E063141139Fce010982780140Aa0cD5Ab',
+//         18,
+//         'tWRBTC',
+//         'Wrapped uWBTC',
+//         'https://www.rsk.org/',
+//     ),
+// }

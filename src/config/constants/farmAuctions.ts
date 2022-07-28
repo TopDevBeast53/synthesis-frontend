@@ -1,6 +1,6 @@
 import { ChainId } from 'sdk'
-import getLpAddress from 'utils/getLpAddress'
 import getTokens from './tokens'
+// import getLpAddress from 'utils/getLpAddress'
 import { FarmAuctionBidderConfig } from './types'
 
 export const whitelistedBidders: FarmAuctionBidderConfig[] = [
@@ -550,7 +550,7 @@ export const whitelistedBidders: FarmAuctionBidderConfig[] = [
     // },
 ].map((bidderConfig) => ({
     ...bidderConfig,
-    lpAddress: getLpAddress(bidderConfig.tokenAddress, bidderConfig.quoteToken),
+    // lpAddress: getLpAddress(bidderConfig.tokenAddress, bidderConfig.quoteToken),
 }))
 
 

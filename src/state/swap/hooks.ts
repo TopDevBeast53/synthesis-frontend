@@ -462,7 +462,7 @@ export const useFetchPairPrices = ({
     useEffect(() => {
         const updatePairId = () => {
             try {
-                const pairAddress = getLpAddress(token0Address, token1Address)?.toLowerCase()
+                const pairAddress = getLpAddress(token0Address, token1Address, chainId)?.toLowerCase()
                 if (pairAddress !== pairId) {
                     setPairId(pairAddress)
                 }
@@ -472,7 +472,7 @@ export const useFetchPairPrices = ({
         }
 
         updatePairId()
-    }, [token0Address, token1Address, pairId])
+    }, [token0Address, token1Address, pairId, chainId])
 
     const normalizedPairData = useMemo(
         () => normalizePairDataByActiveToken({ activeToken: token0Address, pairData }),

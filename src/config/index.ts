@@ -11,7 +11,9 @@ export const BSC_BLOCK_TIME = 13.4
 
 export const BASE_ETH_SCAN_URLS = {
     [ChainId.MAINNET]: 'https://etherscan.io',  // UpdateMe https://etherscan.io
-    [ChainId.TESTNET]: 'https://rinkeby.etherscan.io/',
+    [ChainId.TESTNET]: 'https://rinkeby.etherscan.io',
+    [ChainId.RSK_MAINNET]: 'https://explorer.rsk.co',
+    [ChainId.RSK_TESTNET]: 'https://explorer.testnet.rsk.co',
 }
 
 export const BASE_SOLANA_SCAN_URLS = 'https://explorer.solana.com/'

@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useEffect } from 'react'
 import { useTranslation } from 'contexts/Localization'
-import { SupportedChainId, CHAIN_IDS_TO_NAMES, SUPPORTED_NETWORKS } from 'config/constants/networks'
+import { CHAIN_IDS_TO_NAMES, SUPPORTED_NETWORKS } from 'config/constants/networks'
 import { usePopper } from 'react-popper'
 import { Flex, Image } from 'uikit'
 import styled from 'styled-components/macro'
@@ -10,6 +10,7 @@ import useParsedQueryString from 'hooks/useParsedQueryString'
 import { ParsedQs } from 'qs'
 import { replaceURLParam } from 'utils/routes'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import { ChainId } from 'sdk'
 
 // import { isChainAllowed, switchChain } from 'utils/switchChain'
 
@@ -110,7 +111,7 @@ function Row({
   targetChain,
   onSelectChain,
 }: {
-  targetChain: SupportedChainId
+  targetChain: ChainId
   onSelectChain: (targetChain: number) => void
 }) {
   const { chainId } = useActiveWeb3React()
@@ -143,8 +144,10 @@ function Row({
 }
 
 const NETWORK_SELECTOR_CHAINS = [
-  SupportedChainId.MAINNET,
-  SupportedChainId.RSK_MAINNET,
+  ChainId.MAINNET,
+  ChainId.TESTNET,
+  ChainId.RSK_MAINNET,
+  ChainId.RSK_TESTNET,
 ]
 
 const getParsedChainId = (parsedQs?: ParsedQs) => {
@@ -163,7 +166,7 @@ const getChainIdFromName = (name: string) => {
 
 const getChainNameFromId = (id: string | number) => {
   // casting here may not be right but fine to return undefined if it's not a supported chain ID
-  return CHAIN_IDS_TO_NAMES[id as SupportedChainId] || ''
+  return CHAIN_IDS_TO_NAMES[id as ChainId] || ''
 }
 
 export default function NetworkSelector() {
@@ -263,7 +266,7 @@ export default function NetworkSelector() {
             <FlyoutHeader>
               {t('Select a network')}
             </FlyoutHeader>
-            {NETWORK_SELECTOR_CHAINS.map((chain: SupportedChainId) =>
+            {NETWORK_SELECTOR_CHAINS.map((chain: ChainId) =>
               // isChainAllowed(connector, chainId) ? (
               <Row onSelectChain={onSelectChain} targetChain={chain} key={chain} />
               // ) : null

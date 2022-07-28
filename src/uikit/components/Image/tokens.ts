@@ -7,6 +7,8 @@ const tokens = {
         address: {
             1: '0x231CC03E6d8b7368eC2aBfAfb5f73D216c8af980',    // UpdateMe
             4: '0x79DD2dad8D04F9279F94580DBEd2306A0aE118Bd',
+            30: '',
+            31: ''
         },
         decimals: 18,
         projectLink: 'https://helix.finance/',
