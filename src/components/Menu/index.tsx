@@ -17,14 +17,14 @@ const Menu = (props) => {
   const { isDark, toggleTheme } = useTheme()
   const cakePriceUsd = usePriceHelixBusd()
   const { currentLanguage, setLanguage, t } = useTranslation()
-  const { pathname } = useLocation()
+  const { pathname, search } = useLocation()
 
   const activeMenuItem = getActiveMenuItem({ menuConfig: config(t), pathname })
   const activeSubMenuItem = getActiveSubMenuItem({ menuItem: activeMenuItem, pathname })
 
   return (
     <UikitMenu
-      linkComponent={(link) => <Link to={link.href} {...link} />}
+      linkComponent={(link) => <Link to={{ pathname: link.href, search }} {...link} />}
       userMenu={<UserMenu />}
       globalMenu={<GlobalSettings />}
       networkSelector={<NetworkSelector />}

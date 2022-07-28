@@ -23,11 +23,13 @@ const useWalletConnect = () => {
         return new BscConnector({ supportedChainIds: [chain.CHAIN_ID] })
     }, [chain])
 
-    const connectorsByName: { [connectorName in ConnectorNames]: any } = {
-        [ConnectorNames.Injected]: injected,
-        [ConnectorNames.WalletConnect]: walletconnect,
-        [ConnectorNames.BSC]: bscConnector,
-    }
+    const connectorsByName = useMemo((): { [connectorName in ConnectorNames]: any } => {
+        return {
+            [ConnectorNames.Injected]: injected,
+            [ConnectorNames.WalletConnect]: walletconnect,
+            [ConnectorNames.BSC]: bscConnector,
+        }
+    }, [bscConnector, injected, walletconnect])
 
     return connectorsByName
 }
