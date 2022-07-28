@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import styled from 'styled-components'
 import ApyButton from 'views/Farms/components/FarmCard/ApyButton'
 import BigNumber from 'bignumber.js'
 import { BASE_ADD_LIQUIDITY_URL } from 'config'
 import getLiquidityUrlPathParts from 'utils/getLiquidityUrlPathParts'
 import { Skeleton } from 'uikit'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 export interface AprProps {
   value: string
@@ -53,7 +54,10 @@ const Apr: React.FC<AprProps> = ({
   originalValue,
   hideButton = false,
 }) => {
-  const liquidityUrlPathParts = getLiquidityUrlPathParts({ quoteTokenAddress, tokenAddress })
+  const { chainId } = useActiveWeb3React()
+  const liquidityUrlPathParts = useMemo(() => getLiquidityUrlPathParts({ quoteTokenAddress, tokenAddress, chainId }),
+    [chainId, quoteTokenAddress, tokenAddress])
+
   const addLiquidityUrl = `${BASE_ADD_LIQUIDITY_URL}/${liquidityUrlPathParts}`
 
   return originalValue !== 0 ? (

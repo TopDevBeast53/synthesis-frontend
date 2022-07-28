@@ -3,6 +3,7 @@ import { useFarmAuctionContract } from 'hooks/useContract'
 import { Auction, Bidder } from 'config/constants/types'
 import { AUCTION_BIDDERS_TO_FETCH } from 'config'
 import useProcessAuctionData from 'hooks/useProcessAuctionData'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { sortAuctionBidders } from '../helpers'
 
 interface AuctionHistoryMap {
@@ -17,6 +18,7 @@ const useAuctionHistory = (auctionId: number) => {
 
   const farmAuctionContract = useFarmAuctionContract()
   const processAuctionData = useProcessAuctionData()
+  const { chainId } = useActiveWeb3React()
 
   // Get past auction data
   useEffect(() => {
@@ -26,7 +28,7 @@ const useAuctionHistory = (auctionId: number) => {
         const processedAuctionData = await processAuctionData(auctionId, auctionData)
 
         const [auctionBidders] = await farmAuctionContract.viewBidsPerAuction(auctionId, 0, AUCTION_BIDDERS_TO_FETCH)
-        const sortedBidders = sortAuctionBidders(auctionBidders, processedAuctionData)
+        const sortedBidders = sortAuctionBidders(chainId, auctionBidders, processedAuctionData)
         setAuctionHistory((prev) => ({
           ...prev,
           [auctionId]: { auction: processedAuctionData, bidders: sortedBidders },
@@ -38,7 +40,7 @@ const useAuctionHistory = (auctionId: number) => {
     if (!auctionHistory[auctionId] && auctionId > 0) {
       fetchAuction()
     }
-  }, [farmAuctionContract, auctionHistory, auctionId, processAuctionData])
+  }, [farmAuctionContract, auctionHistory, auctionId, processAuctionData, chainId])
 
   return auctionHistory
 }

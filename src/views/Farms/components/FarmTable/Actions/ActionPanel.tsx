@@ -149,6 +149,7 @@ const ActionPanel: React.FunctionComponent<ActionPanelProps> = ({
   const liquidityUrlPathParts = getLiquidityUrlPathParts({
     quoteTokenAddress: quoteToken.address,
     tokenAddress: token.address,
+    chainId
   })
   const lpAddress = getAddress(chainId, farm.lpAddresses)
   const bsc = getEtherScanLink(lpAddress, 'address', chainId)
