@@ -19,7 +19,8 @@ const getFarmBaseTokenPrice = (
     chainId: ChainId,
     farm: SerializedFarm,
     quoteTokenFarm: SerializedFarm,
-    bnbPriceBusd: BigNumber,
+    wethPriceUSDC: BigNumber,
+    helixPriceUSDC: BigNumber,
 ): BigNumber => {
     const hasTokenPriceVsQuote = Boolean(farm.tokenPriceVsQuote)
 
@@ -35,10 +36,21 @@ const getFarmBaseTokenPrice = (
         return hasTokenPriceVsQuote ? new BigNumber(farm.tokenPriceVsQuote) : BIG_ZERO
     }
 
-    if (farm.quoteToken.symbol === getTokens(chainId).weth.symbol) {
-        return hasTokenPriceVsQuote ? bnbPriceBusd.times(farm.tokenPriceVsQuote) : BIG_ZERO
+    if (farm.quoteToken.symbol === getTokens(chainId).fei.symbol) {
+        return hasTokenPriceVsQuote ? new BigNumber(farm.tokenPriceVsQuote) : BIG_ZERO
     }
 
+    if (farm.quoteToken.symbol === getTokens(chainId).frax.symbol) {
+        return hasTokenPriceVsQuote ? new BigNumber(farm.tokenPriceVsQuote) : BIG_ZERO
+    }
+
+    if (farm.quoteToken.symbol === getTokens(chainId).weth.symbol) {
+        return hasTokenPriceVsQuote ? wethPriceUSDC.times(farm.tokenPriceVsQuote) : BIG_ZERO
+    }
+
+    if (farm.quoteToken.symbol === getTokens(chainId).helix.symbol) {
+        return hasTokenPriceVsQuote ? helixPriceUSDC.times(farm.tokenPriceVsQuote) : BIG_ZERO
+    }
 
     // We can only calculate rewards without a quoteTokenFarm for BUSD/BNB farms
     if (!quoteTokenFarm) {
@@ -51,7 +63,7 @@ const getFarmBaseTokenPrice = (
     // i.e. for farm PNT - pBTC we use the pBTC farm's quote token - BNB, (pBTC - BNB)
     // from the BNB - pBTC price, we can calculate the PNT - BUSD price
     if (quoteTokenFarm.quoteToken.symbol === getTokens(chainId).weth.symbol) {
-        const quoteTokenInBusd = bnbPriceBusd.times(quoteTokenFarm.tokenPriceVsQuote)
+        const quoteTokenInBusd = wethPriceUSDC.times(quoteTokenFarm.tokenPriceVsQuote)
         return hasTokenPriceVsQuote && quoteTokenInBusd
             ? new BigNumber(farm.tokenPriceVsQuote).times(quoteTokenInBusd)
             : BIG_ZERO
@@ -71,7 +83,8 @@ const getFarmBaseTokenPrice = (
 const getFarmQuoteTokenPrice = (
     farm: SerializedFarm,
     quoteTokenFarm: SerializedFarm,
-    bnbPriceBusd: BigNumber,
+    wethPriceUSDC: BigNumber,
+    helixPriceUSDC: BigNumber,
 ): BigNumber => {
     if (farm.quoteToken.symbol === 'USDC') {
         return BIG_ONE
@@ -85,17 +98,32 @@ const getFarmQuoteTokenPrice = (
         return BIG_ONE
     }
 
-    if (farm.quoteToken.symbol === 'WETH') {
-        return bnbPriceBusd
+    if (farm.quoteToken.symbol === 'FRAX') {
+        return BIG_ONE
     }
 
+    if (farm.quoteToken.symbol === 'FEI') {
+        return BIG_ONE
+    }
+
+    if (farm.quoteToken.symbol === 'WETH') {
+        return wethPriceUSDC
+    }
+
+    if (farm.quoteToken.symbol === 'HELIX') {
+        return helixPriceUSDC
+    }
 
     if (!quoteTokenFarm) {
         return BIG_ZERO
     }
 
     if (quoteTokenFarm.quoteToken.symbol === 'WETH') {
-        return quoteTokenFarm.tokenPriceVsQuote ? bnbPriceBusd.times(quoteTokenFarm.tokenPriceVsQuote) : BIG_ZERO
+        return quoteTokenFarm.tokenPriceVsQuote ? wethPriceUSDC.times(quoteTokenFarm.tokenPriceVsQuote) : BIG_ZERO
+    }
+
+    if (quoteTokenFarm.quoteToken.symbol === 'HELIX') {
+        return quoteTokenFarm.tokenPriceVsQuote ? helixPriceUSDC.times(quoteTokenFarm.tokenPriceVsQuote) : BIG_ZERO
     }
 
     if (quoteTokenFarm.quoteToken.symbol === 'USDC') {
@@ -110,24 +138,32 @@ const getFarmQuoteTokenPrice = (
         return quoteTokenFarm.tokenPriceVsQuote ? new BigNumber(quoteTokenFarm.tokenPriceVsQuote) : BIG_ZERO
     }
 
+    if (quoteTokenFarm.quoteToken.symbol === 'FRAX') {
+        return quoteTokenFarm.tokenPriceVsQuote ? new BigNumber(quoteTokenFarm.tokenPriceVsQuote) : BIG_ZERO
+    }
+
+    if (quoteTokenFarm.quoteToken.symbol === 'FEI') {
+        return quoteTokenFarm.tokenPriceVsQuote ? new BigNumber(quoteTokenFarm.tokenPriceVsQuote) : BIG_ZERO
+    }
+
     return BIG_ZERO
 }
 
 const getFarmsPrices = (chainId: ChainId, farms: SerializedFarm[]) => {
-    const bnbBusdFarm = farms.find((farm) => farm.pid === 3)
-    const bnbPriceBusd = bnbBusdFarm.tokenPriceVsQuote ? BIG_ONE.times(bnbBusdFarm.tokenPriceVsQuote) : BIG_ZERO
+    const wethUSDCFarm = farms.find((farm) => farm.pid === 3)
+    const wethPriceUSDC = wethUSDCFarm.tokenPriceVsQuote ? BIG_ONE.times(wethUSDCFarm.tokenPriceVsQuote) : BIG_ZERO
+    const helixWETHFarm = farms.find((farm) => farm.pid === 1)
+    const helixPriceUSDC = helixWETHFarm.tokenPriceVsQuote ? wethPriceUSDC.times(helixWETHFarm.tokenPriceVsQuote) : BIG_ZERO
     const farmsWithPrices = farms.map((farm) => {
         const quoteTokenFarm = getFarmFromTokenSymbol(farms, farm.quoteToken.symbol)
-        const tokenPriceBusd = getFarmBaseTokenPrice(chainId, farm, quoteTokenFarm, bnbPriceBusd)
-        const quoteTokenPriceBusd = getFarmQuoteTokenPrice(farm, quoteTokenFarm, bnbPriceBusd)
-
+        const tokenPriceBusd = getFarmBaseTokenPrice(chainId, farm, quoteTokenFarm, wethPriceUSDC, helixPriceUSDC)
+        const quoteTokenPriceBusd = getFarmQuoteTokenPrice(farm, quoteTokenFarm, wethPriceUSDC, helixPriceUSDC)
         return {
             ...farm,
             tokenPriceBusd: tokenPriceBusd.toJSON(),
             quoteTokenPriceBusd: quoteTokenPriceBusd.toJSON(),
         }
     })
-
     return farmsWithPrices
 }
 

@@ -26,6 +26,16 @@ const getFarmsfarms = (chainId: ChainId): SerializedFarmConfig[] => {
             quoteToken: serializedTokens.weth,
         },
         {
+            pid: 11,
+            lpSymbol: 'HELIX-USDC',
+            lpAddresses: {
+                1: '0x5442eaa8b522e1A4eee64d441c5a6243baF83f0C',
+                4: '',
+            },
+            token: serializedTokens.helix,
+            quoteToken: serializedTokens.usdc,
+        },
+        {
             pid: 2,
             lpSymbol: 'DAI-USDC',
             lpAddresses: {
@@ -64,6 +74,86 @@ const getFarmsfarms = (chainId: ChainId): SerializedFarmConfig[] => {
             },
             token: serializedTokens.usdt,
             quoteToken: serializedTokens.usdc,
+        },
+        {
+            pid: 6,
+            lpSymbol: 'WBTC-WETH',
+            lpAddresses: {
+                1: '0x8265A7745D0501915DEBC1fF72e049Bd989CaF7f',
+                4: '',
+            },
+            token: serializedTokens.wbtc,
+            quoteToken: serializedTokens.weth,
+        },
+        {
+            pid: 7,
+            lpSymbol: 'TRIBE-FEI',
+            lpAddresses: {
+                1: '0x54427EaCC21A1C96a239cf65C33be61CF616EdBF',
+                4: '',
+            },
+            token: serializedTokens.tribe,
+            quoteToken: serializedTokens.fei,
+        },
+        {
+            pid: 8,
+            lpSymbol: 'FXS-FRAX',
+            lpAddresses: {
+                1: '0x4E467fB2E874A5A6C826Dcf0A4707c5Ce431f336',
+                4: '',
+            },
+            token: serializedTokens.fxs,
+            quoteToken: serializedTokens.frax,
+        },
+        {
+            pid: 9,
+            lpSymbol: 'BADGER-HELIX',
+            lpAddresses: {
+                1: '0x57818FF3e6eCcE616095B0F3D513FeB8C6C81Fe7',
+                4: '',
+            },
+            token: serializedTokens.badger,
+            quoteToken: serializedTokens.helix,
+        },
+        {
+            pid: 10,
+            lpSymbol: 'APE-HELIX',
+            lpAddresses: {
+                1: '0x7b19B5725Bcc0d88101616a1484a087DbA7c17B4',
+                4: '',
+            },
+            token: serializedTokens.ape,
+            quoteToken: serializedTokens.helix,
+        },
+        {
+            pid: 12,
+            lpSymbol: 'CULT-WETH',
+            lpAddresses: {
+                1: '0x200e1e20eb37Fcd175A96A432292bf2AbA71B1e4',
+                4: '',
+            },
+            token: serializedTokens.cult,
+            quoteToken: serializedTokens.weth,
+        },
+        {
+            pid: 13,
+            lpSymbol: 'BOND-USDC',
+            lpAddresses: {
+                1: '0x7565756FEaec1cBf51dFE71E04720b13F1C5104D',
+                4: '',
+            },
+            token: serializedTokens.bond,
+            quoteToken: serializedTokens.usdc,
+        },
+        {
+            pid: 14,
+            lpSymbol: 'BAL-HELIX',
+            lpAddresses: {
+                1: '0x6d940051f0fD76B4dE73fAc9DB8336b47F967bb1',
+                4: '',
+            },
+            token: serializedTokens.bal,
+            quoteToken: serializedTokens.helix,
         },
         // {
         //   pid: 0,
