@@ -1,21 +1,8 @@
 import { useMemo } from 'react'
 import { AddressZero } from '@ethersproject/constants'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import {
-    getNftSaleContract,
-    getPancakeSquadContract,
-    getErc721CollectionContract,
-    getHelixVaultContract,
-    getHelixYieldSwapContract,
-    getHelixLPSwapContract,
-    getHelixNFTContract,
-    getHelixChefNFTContract,
-    getHelixNFTBridgeContract,
-
-} from 'utils/contractHelpers'
-import { getAddress, getAnniversaryAchievement, getBunnyFactoryAddress, getBunnySpecialAddress, getBunnySpecialLotteryAddress, getBunnySpecialPredictionAddress, getBunnySpecialXmasAddress, getChainlinkOracleAddress, getClaimRefundAddress, getEasterNftAddress, getFarmAuctionAddress, getHelixAutoPoolAddress, getIfoPoolAddress, getLotteryV2Address, getMasterChefAddress, getMulticallAddress, getNftMarketAddress, getPancakeProfileAddress, getPancakeRabbitsAddress, getPointCenterIfoAddress, getPredictionsAddress } from 'utils/addressHelpers'
+import { getAddress, getAnniversaryAchievement, getBunnyFactoryAddress, getBunnySpecialAddress, getBunnySpecialLotteryAddress, getBunnySpecialPredictionAddress, getBunnySpecialXmasAddress, getChainlinkOracleAddress, getClaimRefundAddress, getEasterNftAddress, getFarmAuctionAddress, getHelixAutoPoolAddress, getHelixChefNftAddress, getHelixLPSwapAddress, getHelixNftAddress, getHelixNftBridgeAddress, getHelixVaultAddress, getIfoPoolAddress, getLotteryV2Address, getMasterChefAddress, getMulticallAddress, getNftMarketAddress, getNftSaleAddress, getPancakeProfileAddress, getPancakeRabbitsAddress, getPancakeSquadAddress, getPointCenterIfoAddress, getPredictionsAddress, getYieldSwapAddress } from 'utils/addressHelpers'
 import { VaultKey } from 'state/types'
-import { poolsConfig } from 'config/constants'
 import { PoolCategory } from 'config/constants/types'
 import {
     Erc20,
@@ -45,16 +32,16 @@ import {
     BunnySpecialPrediction,
     BunnySpecialLottery,
     NftMarket,
-    // NftSale,
-    // PancakeSquad,
-    // Erc721collection,
+    NftSale,
+    PancakeSquad,
+    Erc721collection,
     PointCenterIfo,
-    // HelixVault,
-    // HelixYieldSwap,
-    // HelixLpSwap,
-    // HelixChefNFT,
-    // HelixNFT,
-    // HelixNFTBridge,
+    HelixVault,
+    HelixYieldSwap,
+    HelixLpSwap,
+    HelixChefNFT,
+    HelixNFT,
+    HelixNFTBridge,
     Weth,
     EnsRegistrar,
     EnsPublicResolver
@@ -64,7 +51,6 @@ import {
 import { Contract } from '@ethersproject/contracts'
 import { ChainId, WETH } from 'sdk'
 import { abi as IUniswapV2PairABI } from '@uniswap/v2-core/build/IUniswapV2Pair.json'
-import tokens from 'config/constants/tokens'
 // ABI
 import profileABI from 'config/abi/pancakeProfile.json'
 import pancakeRabbitsAbi from 'config/abi/pancakeRabbits.json'
@@ -95,23 +81,25 @@ import bunnySpecialXmasAbi from 'config/abi/bunnySpecialXmas.json'
 import farmAuctionAbi from 'config/abi/farmAuction.json'
 import anniversaryAchievementAbi from 'config/abi/anniversaryAchievement.json'
 import nftMarketAbi from 'config/abi/nftMarket.json'
-// import nftSaleAbi from 'config/abi/nftSale.json'
-// import pancakeSquadAbi from 'config/abi/pancakeSquad.json'
-// import erc721CollectionAbi from 'config/abi/erc721collection.json'
-// import helixVaultAbi from 'config/abi/HelixVault.json'
-// import yieldSwapAbi from 'config/abi/HelixYieldSwap.json'
-// import lpSwapAbi from 'config/abi/HelixLpSwap.json'
-// import NFTAbi from 'config/abi/HelixNFT.json'
-// import cheftNFTAbi from 'config/abi/HelixChefNFT.json'
-// import bridgeNFTAbi from 'config/abi/HelixNFTBridge.json'
-import ENS_PUBLIC_RESOLVER_ABI from '../config/abi/ens-public-resolver.json'
-import ENS_ABI from '../config/abi/ens-registrar.json'
-import { ERC20_BYTES32_ABI } from '../config/abi/erc20'
-import WETH_ABI from '../config/abi/weth.json'
+import nftSaleAbi from 'config/abi/nftSale.json'
+import pancakeSquadAbi from 'config/abi/pancakeSquad.json'
+import erc721CollectionAbi from 'config/abi/erc721collection.json'
+import helixVaultAbi from 'config/abi/HelixVault.json'
+import yieldSwapAbi from 'config/abi/HelixYieldSwap.json'
+import lpSwapAbi from 'config/abi/HelixLpSwap.json'
+import NFTAbi from 'config/abi/HelixNFT.json'
+import cheftNFTAbi from 'config/abi/HelixChefNFT.json'
+import bridgeNFTAbi from 'config/abi/HelixNFTBridge.json'
+import { useGetPools } from 'state/pools/useGetPools'
+import ENS_PUBLIC_RESOLVER_ABI from 'config/abi/ens-public-resolver.json'
+import ENS_ABI from 'config/abi/ens-registrar.json'
+import { ERC20_BYTES32_ABI } from 'config/abi/erc20'
+import WETH_ABI from 'config/abi/weth.json'
 
 import { getProviderOrSigner, isAddress } from '../utils'
 import useProviders from './useProviders'
 import useGetContract from './useGetContract'
+import { useGetTokens } from './useGetTokens'
 
 /**
  * Helper hooks to get specific contracts (by ABI)
@@ -170,117 +158,132 @@ export const useERC721 = (address: string) => {
 export const useHelix = () => {
     const { library } = useActiveWeb3React()
     const getContract = useGetContract()
+    const tokens = useGetTokens()
     return useMemo(() => getContract(helixAbi, tokens.helix.address, library.getSigner()) as Helix,
-        [getContract, library])
+        [getContract, library, tokens.helix.address])
 }
 
 export const useHelixVault = () => {
-    const { library } = useActiveWeb3React()
-    return useMemo(() => getHelixVaultContract(library.getSigner()), [library])
+    const { library, chainId } = useActiveWeb3React()
+    const getContract = useGetContract()
+    return useMemo(() => getContract(helixVaultAbi, getHelixVaultAddress(chainId), library.getSigner()) as HelixVault,
+        [chainId, getContract, library])
 }
 
 export const useHelixYieldSwap = () => {
-    const { library } = useActiveWeb3React()
-    return useMemo(() => getHelixYieldSwapContract(library.getSigner()), [library])
+    const { library, chainId } = useActiveWeb3React()
+    const getContract = useGetContract()
+    return useMemo(() => getContract(yieldSwapAbi, getYieldSwapAddress(chainId), library.getSigner()) as HelixYieldSwap,
+        [chainId, getContract, library])
 }
 
 export const useHelixLpSwap = () => {
-    const { library } = useActiveWeb3React()
-    return useMemo(() => getHelixLPSwapContract(library.getSigner()), [library])
+    const { library, chainId } = useActiveWeb3React()
+    const getContract = useGetContract()
+    return useMemo(() => getContract(lpSwapAbi, getHelixLPSwapAddress(chainId), library.getSigner()) as HelixLpSwap,
+        [getContract, library, chainId])
 }
 export const useHelixNFT = () => {
-    const { library } = useActiveWeb3React()
-    return useMemo(() => getHelixNFTContract(library.getSigner()), [library])
+    const { library, chainId } = useActiveWeb3React()
+    const getContract = useGetContract()
+    return useMemo(() => getContract(NFTAbi, getHelixNftAddress(chainId), library.getSigner()) as HelixNFT,
+        [getContract, library, chainId])
 }
 export const useHelixNFTChef = () => {
-    const { library } = useActiveWeb3React()
-    return useMemo(() => getHelixChefNFTContract(library.getSigner()), [library])
+    const { library, chainId } = useActiveWeb3React()
+    const getContract = useGetContract()
+    return useMemo(() => getContract(cheftNFTAbi, getHelixChefNftAddress(chainId), library.getSigner()) as HelixChefNFT,
+        [getContract, library, chainId])
 }
 export const useHelixNFTBridge = () => {
-    const { library } = useActiveWeb3React()
-    return useMemo(() => getHelixNFTBridgeContract(library.getSigner()), [library])
+    const { library, chainId } = useActiveWeb3React()
+    const getContract = useGetContract()
+    return useMemo(() => getContract(bridgeNFTAbi, getHelixNftBridgeAddress(chainId), library.getSigner()) as HelixNFTBridge,
+        [getContract, library, chainId])
 }
 export const useBunnyFactory = () => {
-    const { library } = useActiveWeb3React()
+    const { library, chainId } = useActiveWeb3React()
     const getContract = useGetContract()
-    return useMemo(() => getContract(bunnyFactoryAbi, getBunnyFactoryAddress(), library.getSigner()) as BunnyFactory,
-        [library, getContract])
+    return useMemo(() => getContract(bunnyFactoryAbi, getBunnyFactoryAddress(chainId), library.getSigner()) as BunnyFactory,
+        [library, getContract, chainId])
 }
 
 export const usePancakeRabbits = () => {
-    const { library } = useActiveWeb3React()
+    const { library, chainId } = useActiveWeb3React()
     const getContract = useGetContract()
-    return useMemo(() => getContract(pancakeRabbitsAbi, getPancakeRabbitsAddress(), library.getSigner()) as PancakeRabbits,
-        [getContract, library])
+    return useMemo(() => getContract(pancakeRabbitsAbi, getPancakeRabbitsAddress(chainId), library.getSigner()) as PancakeRabbits,
+        [getContract, library, chainId])
 }
 
 export const useProfile = () => {
-    const { library } = useActiveWeb3React()
+    const { library, chainId } = useActiveWeb3React()
     const getContract = useGetContract()
-    return useMemo(() => getContract(profileABI, getPancakeProfileAddress(), library.getSigner()) as PancakeProfile,
-        [getContract, library])
+    return useMemo(() => getContract(profileABI, getPancakeProfileAddress(chainId), library.getSigner()) as PancakeProfile,
+        [getContract, library, chainId])
 }
 
 export const useLotteryV2Contract = () => {
-    const { library } = useActiveWeb3React()
+    const { library, chainId } = useActiveWeb3React()
     const getContract = useGetContract()
-    return useMemo(() => getContract(lotteryV2Abi, getLotteryV2Address(), library.getSigner()) as LotteryV2,
-        [library, getContract])
+    return useMemo(() => getContract(lotteryV2Abi, getLotteryV2Address(chainId), library.getSigner()) as LotteryV2,
+        [library, getContract, chainId])
 }
 
 export const useMasterchef = () => {
-    const { library } = useActiveWeb3React()
+    const { library, chainId } = useActiveWeb3React()
     const getContract = useGetContract()
-    return useMemo(() => getContract(masterChef, getMasterChefAddress(), library.getSigner()) as Masterchef,
-        [getContract, library])
+    return useMemo(() => getContract(masterChef, getMasterChefAddress(chainId), library.getSigner()) as Masterchef,
+        [getContract, library, chainId])
 }
 
 export const useSousChef = (id) => {
-    const { library } = useActiveWeb3React()
+    const { library, chainId } = useActiveWeb3React()
     const getContract = useGetContract()
+    const pools = useGetPools()
     return useMemo(() => {
-        const config = poolsConfig.find((pool) => pool.sousId === id)
+        const config = pools.find((pool) => pool.sousId === id)
         const abi = config.poolCategory === PoolCategory.BINANCE ? sousChefBnb : sousChef
-        return getContract(abi, getAddress(config.contractAddress), library.getSigner()) as SousChef
-    }, [getContract, id, library])
+        return getContract(abi, getAddress(chainId, config.contractAddress), library.getSigner()) as SousChef
+    }, [chainId, getContract, id, library, pools])
 }
 
 export const useSousChefV2 = (id) => {
-    const { library } = useActiveWeb3React()
+    const { library, chainId } = useActiveWeb3React()
     const getContract = useGetContract()
+    const pools = useGetPools()
     return useMemo(() => {
-        const config = poolsConfig.find((pool) => pool.sousId === id)
-        return getContract(sousChefV2, getAddress(config.contractAddress), library.getSigner()) as SousChefV2
-    }, [id, library, getContract])
+        const config = pools.find((pool) => pool.sousId === id)
+        return getContract(sousChefV2, getAddress(chainId, config.contractAddress), library.getSigner()) as SousChefV2
+    }, [pools, getContract, chainId, library, id])
 }
 
 export const usePointCenterIfoContract = () => {
-    const { library } = useActiveWeb3React()
+    const { library, chainId } = useActiveWeb3React()
     const getContract = useGetContract()
 
-    return useMemo(() => getContract(pointCenterIfo, getPointCenterIfoAddress(), library.getSigner()) as PointCenterIfo,
-        [getContract, library])
+    return useMemo(() => getContract(pointCenterIfo, getPointCenterIfoAddress(chainId), library.getSigner()) as PointCenterIfo,
+        [getContract, library, chainId])
 }
 
 export const useBunnySpecialContract = () => {
-    const { library } = useActiveWeb3React()
+    const { library, chainId } = useActiveWeb3React()
     const getContract = useGetContract()
-    return useMemo(() => getContract(bunnySpecialAbi, getBunnySpecialAddress(), library.getSigner()) as BunnySpecial,
-        [library, getContract])
+    return useMemo(() => getContract(bunnySpecialAbi, getBunnySpecialAddress(chainId), library.getSigner()) as BunnySpecial,
+        [library, getContract, chainId])
 }
 
 export const useClaimRefundContract = () => {
-    const { library } = useActiveWeb3React()
+    const { library, chainId } = useActiveWeb3React()
     const getContract = useGetContract()
-    return useMemo(() => getContract(claimRefundAbi, getClaimRefundAddress(), library.getSigner()) as ClaimRefund,
-        [getContract, library])
+    return useMemo(() => getContract(claimRefundAbi, getClaimRefundAddress(chainId), library.getSigner()) as ClaimRefund,
+        [getContract, library, chainId])
 }
 
 export const useEasterNftContract = () => {
-    const { library } = useActiveWeb3React()
+    const { library, chainId } = useActiveWeb3React()
     const getContract = useGetContract()
-    return useMemo(() => getContract(easterNftAbi, getEasterNftAddress(), library.getSigner()) as EasterNft,
-        [getContract, library])
+    return useMemo(() => getContract(easterNftAbi, getEasterNftAddress(chainId), library.getSigner()) as EasterNft,
+        [getContract, library, chainId])
 }
 
 export const useVaultPoolContract = (vaultKey: VaultKey): HelixAutoPool | IfoPool => {
@@ -294,82 +297,84 @@ export const useVaultPoolContract = (vaultKey: VaultKey): HelixAutoPool | IfoPoo
 }
 
 export const useHelixAutoPoolContract = () => {
-    const { library } = useActiveWeb3React()
+    const { library, chainId } = useActiveWeb3React()
     const getContract = useGetContract()
-    return useMemo(() => getContract(helixAutoPoolAbi, getHelixAutoPoolAddress(), library.getSigner()) as HelixAutoPool,
-        [getContract, library])
+    return useMemo(() => getContract(helixAutoPoolAbi, getHelixAutoPoolAddress(chainId), library.getSigner()) as HelixAutoPool,
+        [getContract, library, chainId])
 }
 
 export const useCakeVaultContract = () => {
-    const { library } = useActiveWeb3React()
+    const { library, chainId } = useActiveWeb3React()
     const getContract = useGetContract()
-    return useMemo(() => getContract(helixAutoPoolAbi, getHelixAutoPoolAddress(), library.getSigner()) as HelixAutoPool,
-        [getContract, library])
+    return useMemo(() => getContract(helixAutoPoolAbi, getHelixAutoPoolAddress(chainId), library.getSigner()) as HelixAutoPool,
+        [getContract, library, chainId])
 }
 
 export const useIfoPoolContract = () => {
-    const { library } = useActiveWeb3React()
+    const { library, chainId } = useActiveWeb3React()
     const getContract = useGetContract()
-    return useMemo(() => getContract(ifoPoolAbi, getIfoPoolAddress(), library.getSigner()) as IfoPool,
-        [getContract, library])
+    return useMemo(() => getContract(ifoPoolAbi, getIfoPoolAddress(chainId), library.getSigner()) as IfoPool,
+        [getContract, library, chainId])
 }
 
 export const usePredictionsContract = () => {
-    const { library } = useActiveWeb3React()
+    const { library, chainId } = useActiveWeb3React()
     const getContract = useGetContract()
-    return useMemo(() => getContract(predictionsAbi, getPredictionsAddress(), library.getSigner()) as Predictions,
-        [getContract, library])
+    return useMemo(() => getContract(predictionsAbi, getPredictionsAddress(chainId), library.getSigner()) as Predictions,
+        [getContract, library, chainId])
 }
 
 export const useChainlinkOracleContract = () => {
-    const { library } = useActiveWeb3React()
+    const { library, chainId } = useActiveWeb3React()
     const getContract = useGetContract()
-    return useMemo(() => getContract(chainlinkOracleAbi, getChainlinkOracleAddress(), library.getSigner()) as ChainlinkOracle,
-        [getContract, library])
+    return useMemo(() => getContract(chainlinkOracleAbi, getChainlinkOracleAddress(chainId), library.getSigner()) as ChainlinkOracle,
+        [getContract, library, chainId])
 }
 
 export const useSpecialBunnyPredictionContract = () => {
-    const { library } = useActiveWeb3React()
+    const { library, chainId } = useActiveWeb3React()
     const getContract = useGetContract()
-    return useMemo(() => getContract(bunnySpecialPredictionAbi, getBunnySpecialPredictionAddress(), library.getSigner()) as BunnySpecialPrediction,
-        [getContract, library])
+    return useMemo(() => getContract(bunnySpecialPredictionAbi, getBunnySpecialPredictionAddress(chainId), library.getSigner()) as BunnySpecialPrediction,
+        [getContract, library, chainId])
 }
 
 export const useBunnySpecialLotteryContract = () => {
-    const { library } = useActiveWeb3React()
+    const { library, chainId } = useActiveWeb3React()
     const getContract = useGetContract()
-    return useMemo(() => getContract(bunnySpecialLotteryAbi, getBunnySpecialLotteryAddress(), library.getSigner()) as BunnySpecialLottery,
-        [getContract, library])
+    return useMemo(() => getContract(bunnySpecialLotteryAbi, getBunnySpecialLotteryAddress(chainId), library.getSigner()) as BunnySpecialLottery,
+        [getContract, library, chainId])
 }
 
 export const useBunnySpecialXmasContract = () => {
-    const { library } = useActiveWeb3React()
+    const { library, chainId } = useActiveWeb3React()
     const getContract = useGetContract()
-    return useMemo(() => getContract(bunnySpecialXmasAbi, getBunnySpecialXmasAddress(), library.getSigner()),
-        [getContract, library])
+    return useMemo(() => getContract(bunnySpecialXmasAbi, getBunnySpecialXmasAddress(chainId), library.getSigner()),
+        [getContract, library, chainId])
 }
 
 export const useAnniversaryAchievementContract = () => {
-    const { library } = useActiveWeb3React()
+    const { library, chainId } = useActiveWeb3React()
     const getContract = useGetContract()
-    return useMemo(() => getContract(anniversaryAchievementAbi, getAnniversaryAchievement(), library.getSigner()) as AnniversaryAchievement,
-        [getContract, library])
+    return useMemo(() => getContract(anniversaryAchievementAbi, getAnniversaryAchievement(chainId), library.getSigner()) as AnniversaryAchievement,
+        [getContract, library, chainId])
 }
 
 export const useNftSaleContract = () => {
-    const { library } = useActiveWeb3React()
-    // const getContract = useGetContract()
-    return useMemo(() => getNftSaleContract(library.getSigner()), [library])
+    const { library, chainId } = useActiveWeb3React()
+    const getContract = useGetContract()
+    return useMemo(() => getContract(nftSaleAbi, getNftSaleAddress(chainId), library.getSigner()) as NftSale,
+        [getContract, library, chainId])
 }
 
 export const usePancakeSquadContract = () => {
-    const { library } = useActiveWeb3React()
-    // const getContract = useGetContract()
-    return useMemo(() => getPancakeSquadContract(library.getSigner()), [library])
+    const { library, chainId } = useActiveWeb3React()
+    const getContract = useGetContract()
+    return useMemo(() => getContract(pancakeSquadAbi, getPancakeSquadAddress(chainId), library.getSigner()) as PancakeSquad,
+        [getContract, library, chainId])
 }
 
 export const useFarmAuctionContract = () => {
-    const { account, library } = useActiveWeb3React()
+    const { account, library, chainId } = useActiveWeb3React()
     const getContract = useGetContract()
     // This hook is slightly different from others
     // Calls were failing if unconnected user goes to farm auction page
@@ -382,25 +387,22 @@ export const useFarmAuctionContract = () => {
     //     the functionality of the page is not affected, data is loading fine and you can interact with the contract
     //
     // Similar behavior was also noticed on Trading Competition page.
-    return useMemo(() => getContract(farmAuctionAbi, getFarmAuctionAddress(), account ? library.getSigner() : library) as FarmAuction,
-        [getContract, account, library])
+    return useMemo(() => getContract(farmAuctionAbi, getFarmAuctionAddress(chainId), account ? library.getSigner() : library) as FarmAuction,
+        [getContract, account, library, chainId])
 }
 
 export const useNftMarketContract = () => {
-    const { library } = useActiveWeb3React()
+    const { library, chainId } = useActiveWeb3React()
     const getContract = useGetContract()
-    return useMemo(() => getContract(nftMarketAbi, getNftMarketAddress(), library.getSigner()) as NftMarket,
-        [getContract, library])
+    return useMemo(() => getContract(nftMarketAbi, getNftMarketAddress(chainId), library.getSigner()) as NftMarket,
+        [getContract, library, chainId])
 }
 
 export const useErc721CollectionContract = (collectionAddress: string, withSignerIfPossible = true) => {
     const { library, account } = useActiveWeb3React()
-    return useMemo(() => {
-        return getErc721CollectionContract(
-            withSignerIfPossible ? getProviderOrSigner(library, account) : null,
-            collectionAddress,
-        )
-    }, [account, library, collectionAddress, withSignerIfPossible])
+    const getContract = useGetContract()
+    return useMemo(() => getContract(erc721CollectionAbi, collectionAddress, withSignerIfPossible ? getProviderOrSigner(library, account) : null) as Erc721collection
+        , [withSignerIfPossible, library, account, collectionAddress, getContract])
 }
 
 // Code below migrated from Exchange useContract.ts
@@ -466,5 +468,7 @@ export function usePairContract(pairAddress?: string, withSignerIfPossible?: boo
 }
 
 export function useMulticallContract() {
-    return useContract<Multicall>(getMulticallAddress(), MultiCallAbi, false)
+    const { chainId } = useActiveWeb3React()
+
+    return useContract<Multicall>(getMulticallAddress(chainId), MultiCallAbi, false)
 }

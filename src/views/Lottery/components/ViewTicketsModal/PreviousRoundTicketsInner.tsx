@@ -16,7 +16,7 @@ import styled from 'styled-components'
 import { useWeb3React } from '@web3-react/core'
 import { LotteryTicket, LotteryTicketClaimData } from 'config/constants/types'
 import { fetchLottery } from 'state/lottery/helpers'
-import { getWinningTickets } from 'state/lottery/fetchUnclaimedUserRewards'
+import { useGetWinningTickets } from 'state/lottery/useFetchUnclaimedUserRewards'
 import { fetchUserTicketsForOneRound } from 'state/lottery/getUserTicketsData'
 import { LotteryRound } from 'state/types'
 import { useGetUserLotteryGraphRoundById } from 'state/lottery/hooks'
@@ -66,6 +66,7 @@ const PreviousRoundTicketsInner: React.FC<{ roundId: string }> = ({ roundId }) =
   const { account } = useWeb3React()
   const { totalTickets } = useGetUserLotteryGraphRoundById(roundId)
   const [onPresentClaimModal] = useModal(<ClaimPrizesModal roundsToClaim={[userWinningTickets.claimData]} />, false)
+  const getWinningTickets = useGetWinningTickets()
 
   const TooltipComponent = () => (
     <>
@@ -140,7 +141,7 @@ const PreviousRoundTicketsInner: React.FC<{ roundId: string }> = ({ roundId }) =
     }
 
     fetchData()
-  }, [roundId, account, totalTickets])
+  }, [roundId, account, totalTickets, getWinningTickets])
 
   const getFooter = () => {
     if (userWinningTickets?.ticketsWithUnclaimedRewards?.length > 0) {

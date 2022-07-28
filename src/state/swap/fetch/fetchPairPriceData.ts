@@ -18,8 +18,8 @@ import pairDayDatas from '../queries/pairDayDatas'
 import pairHourDatasByIds from '../queries/pairHourDatasByIds'
 import lastPairHourId from '../queries/lastPairHourId'
 
-const fetchPairPriceData = async ({ pairId, timeWindow }: fetchPairDataParams) => {
-    const client = new GraphQLClient(INFO_CLIENT, { headers: getHeaders(INFO_CLIENT) })
+const fetchPairPriceData = async ({ chainId, pairId, timeWindow }: fetchPairDataParams) => {
+    const client = new GraphQLClient(INFO_CLIENT[chainId], { headers: getHeaders(INFO_CLIENT[chainId]) })
 
     try {
         switch (timeWindow) {

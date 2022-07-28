@@ -8,6 +8,7 @@ import { getProviderOrSigner, isAddress } from "utils";
 import { ROUTER_ADDRESS } from '../config/constants'
 
 import useProviders from './useProviders'
+import useActiveWeb3React from "./useActiveWeb3React";
 
 const useGetContract = () => {
     const rpcProvider = useProviders()
@@ -22,10 +23,11 @@ const useGetContract = () => {
 
 const useGetRouterContract = () => {
     const getContract = useGetContract()
+    const { chainId } = useActiveWeb3React()
 
     return useCallback((_: number, library: Web3Provider, account?: string) => {
-        return getContract(ROUTER_ADDRESS, IUniswapV2Router02ABI, getProviderOrSigner(library, account))
-    }, [getContract])
+        return getContract(ROUTER_ADDRESS[chainId], IUniswapV2Router02ABI, getProviderOrSigner(library, account))
+    }, [chainId, getContract])
 }
 
 export default useGetRouterContract;

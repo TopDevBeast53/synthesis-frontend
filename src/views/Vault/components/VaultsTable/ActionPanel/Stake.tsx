@@ -2,7 +2,7 @@ import React, { useMemo, useCallback } from 'react'
 import moment from 'moment'
 import Balance from 'components/Balance'
 import { BigNumber } from 'bignumber.js'
-import tokens from 'config/constants/tokens'
+import { useGetTokens } from 'hooks/useGetTokens'
 import { useTranslation } from 'contexts/Localization'
 import useTokenBalance from 'hooks/useTokenBalance'
 import { usePriceHelixBusd } from 'state/farms/hooks'
@@ -26,6 +26,7 @@ interface StackedActionProps {
 
 const Staked: React.FunctionComponent<StackedActionProps> = ({ isLoading, deposit, stakedBalance, updateStake }) => {
   const { t } = useTranslation()
+  const tokens = useGetTokens()
   const { balance: helixBalance } = useTokenBalance(tokens.helix.address)
 
   const cakePrice = usePriceHelixBusd()

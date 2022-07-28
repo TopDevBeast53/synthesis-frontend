@@ -64,12 +64,13 @@ export const mapPairDayData = (pairDayData: PairDayData): ChartEntry => ({
     liquidityUSD: parseFloat(pairDayData.reserveUSD),
 })
 
-type PoolOrTokenFetchFn = (skip: number, address: string) => Promise<{ data?: ChartEntry[]; error: boolean }>
-type OverviewFetchFn = (skip: number) => Promise<{ data?: ChartEntry[]; error: boolean }>
+type PoolOrTokenFetchFn = (chainId: number, skip: number, address: string) => Promise<{ data?: ChartEntry[]; error: boolean }>
+type OverviewFetchFn = (chainId: number, skip: number) => Promise<{ data?: ChartEntry[]; error: boolean }>
 
 // Common helper function to retrieve chart data
 // Used for both Pool and Token charts
 export const fetchChartData = async (
+    chainId: number,
     getEntityDayDatas: PoolOrTokenFetchFn | OverviewFetchFn,
     address?: string,
 ): Promise<{ data?: ChartEntry[]; error: boolean }> => {
@@ -80,7 +81,7 @@ export const fetchChartData = async (
 
     while (!allFound) {
         // eslint-disable-next-line no-await-in-loop
-        const { data, error: fetchError } = await getEntityDayDatas(skip, address)
+        const { data, error: fetchError } = await getEntityDayDatas(chainId, skip, address)
         skip += 1000
         allFound = data.length < 1000
         error = fetchError
@@ -108,7 +109,7 @@ export const fetchChartData = async (
 
     const firstAvailableDayData = formattedDayDatas[availableDays[0]]
     // fill in empty days ( there will be no day datas if no trades made that day )
-    let timestamp = firstAvailableDayData?.date ?? HELIX_START
+    let timestamp = firstAvailableDayData?.date ?? HELIX_START[chainId]
     let latestLiquidityUSD = firstAvailableDayData?.liquidityUSD ?? 0
     const endTimestamp = getUnixTime(new Date())
     while (timestamp < endTimestamp - ONE_DAY_UNIX) {

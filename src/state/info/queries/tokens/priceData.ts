@@ -4,6 +4,7 @@ import { getBlocksFromTimestamps } from 'views/Info/hooks/useBlocksFromTimestamp
 import { multiQuery } from 'views/Info/utils/infoQueryHelpers'
 import { PriceChartEntry } from 'state/info/types'
 import { INFO_CLIENT } from 'config/constants/endpoints'
+import { ChainId } from 'sdk'
 
 const getPriceSubqueries = (tokenAddress: string, blocks: any) =>
     blocks.map(
@@ -29,6 +30,7 @@ const priceQueryConstructor = (subqueries: string[]) => {
 }
 
 const fetchTokenPriceData = async (
+    chainId: ChainId,
     address: string,
     interval: number,
     startTimestamp: number,
@@ -45,7 +47,7 @@ const fetchTokenPriceData = async (
         time += interval
     }
     try {
-        const blocks = await getBlocksFromTimestamps(timestamps, 'asc', 500)
+        const blocks = await getBlocksFromTimestamps(chainId, timestamps, 'asc', 500)
         if (!blocks || blocks.length === 0) {
             console.error('Error fetching blocks for timestamps', timestamps)
             return {
@@ -56,10 +58,10 @@ const fetchTokenPriceData = async (
         const prices: any | undefined = await multiQuery(
             priceQueryConstructor,
             getPriceSubqueries(address, blocks),
-            INFO_CLIENT,
+            INFO_CLIENT[chainId],
             200,
         )
-            
+
         if (!prices) {
             console.error('Price data failed to load')
             return {

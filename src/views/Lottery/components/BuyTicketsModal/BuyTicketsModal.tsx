@@ -16,12 +16,12 @@ import {
 } from 'uikit'
 import { useTranslation } from 'contexts/Localization'
 import { useWeb3React } from '@web3-react/core'
-import tokens from 'config/constants/tokens'
+import { useGetTokens } from 'hooks/useGetTokens'
 import { getFullDisplayBalance } from 'utils/formatBalance'
 import { BIG_ZERO, ethersToBigNumber } from 'utils/bigNumber'
 import { useAppDispatch } from 'state'
 import { usePriceHelixBusd } from 'state/farms/hooks'
-import { useLottery } from 'state/lottery/hooks'
+import { useGetUserLotteryData, useLottery } from 'state/lottery/hooks'
 import { fetchUserTicketsAndLotteries } from 'state/lottery'
 import useTheme from 'hooks/useTheme'
 import useTokenBalance from 'hooks/useTokenBalance'
@@ -42,7 +42,7 @@ const StyledModal = styled(Modal)`
   max-width: 320px;
 `
 
-const ShortcutButtonsWrapper = styled(Flex)<{ isVisible: boolean }>`
+const ShortcutButtonsWrapper = styled(Flex) <{ isVisible: boolean }>`
   justify-content: space-between;
   margin-top: 8px;
   margin-bottom: 24px;
@@ -61,6 +61,7 @@ enum BuyingStage {
 const BuyTicketsModal: React.FC<BuyTicketsModalProps> = ({ onDismiss }) => {
   const { account } = useWeb3React()
   const { t } = useTranslation()
+  const tokens = useGetTokens()
   const { theme } = useTheme()
   const {
     maxNumberTicketsPerBuyOrClaim,
@@ -239,6 +240,8 @@ const BuyTicketsModal: React.FC<BuyTicketsModalProps> = ({ onDismiss }) => {
     userCurrentTickets,
   )
 
+  const getUserLotteryData = useGetUserLotteryData()
+
   const { isApproving, isApproved, isConfirmed, isConfirming, handleApprove, handleConfirm } =
     useApproveConfirmTransaction({
       onRequiresApproval: async () => {
@@ -265,7 +268,7 @@ const BuyTicketsModal: React.FC<BuyTicketsModalProps> = ({ onDismiss }) => {
       },
       onSuccess: async ({ receipt }) => {
         onDismiss()
-        dispatch(fetchUserTicketsAndLotteries({ account, currentLotteryId }))
+        dispatch(fetchUserTicketsAndLotteries({ account, currentLotteryId, getUserLotteryData }))
         toastSuccess(t('Lottery tickets purchased!'), <ToastDescriptionWithTx txHash={receipt.transactionHash} />)
       },
     })
@@ -327,8 +330,7 @@ const BuyTicketsModal: React.FC<BuyTicketsModalProps> = ({ onDismiss }) => {
         onUserInput={handleInputChange}
         currencyValue={
           cakePriceBusd.gt(0) &&
-          `~${
-            ticketsToBuy ? getFullDisplayBalance(priceTicketInHelix.times(new BigNumber(ticketsToBuy))) : '0.00'
+          `~${ticketsToBuy ? getFullDisplayBalance(priceTicketInHelix.times(new BigNumber(ticketsToBuy))) : '0.00'
           } HELIX`
         }
       />

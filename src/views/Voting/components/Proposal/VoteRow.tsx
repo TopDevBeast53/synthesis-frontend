@@ -4,6 +4,7 @@ import truncateHash from 'utils/truncateHash'
 import { getEtherScanLink } from 'utils'
 import { useTranslation } from 'contexts/Localization'
 import { Vote } from 'state/types'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { IPFS_GATEWAY } from '../../config'
 import TextEllipsis from '../TextEllipsis'
 import Row, { AddressColumn, ChoiceColumn, VotingPowerColumn } from './Row'
@@ -14,6 +15,7 @@ interface VoteRowProps {
 }
 
 const VoteRow: React.FC<VoteRowProps> = ({ vote, isVoter }) => {
+  const { chainId } = useActiveWeb3React()
   const { t } = useTranslation()
   const hasVotingPower = !!vote.vp
   const votingPower = hasVotingPower
@@ -27,7 +29,7 @@ const VoteRow: React.FC<VoteRowProps> = ({ vote, isVoter }) => {
     <Row>
       <AddressColumn>
         <Flex alignItems="center">
-          <LinkExternal href={getEtherScanLink(vote.voter, 'address')}>{truncateHash(vote.voter)}</LinkExternal>
+          <LinkExternal href={getEtherScanLink(vote.voter, 'address', chainId)}>{truncateHash(vote.voter)}</LinkExternal>
           {isVoter && (
             <Tag variant="success" outline ml="8px">
               <CheckmarkCircleIcon mr="4px" /> {t('Voted')}

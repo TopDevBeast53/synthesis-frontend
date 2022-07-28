@@ -39,6 +39,7 @@ import { useWatchlistTokens } from 'state/user/hooks'
 import { ONE_HOUR_SECONDS } from 'config/constants/info'
 import { useTranslation } from 'contexts/Localization'
 import ChartCard from 'views/Info/components/InfoCharts/ChartCard'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 const ContentLayout = styled.div`
   margin-top: 16px;
@@ -106,6 +107,7 @@ const TokenPage: React.FC<RouteComponentProps<{ address: string }>> = ({
   }, [priceData, tokenData])
 
   const [watchlistTokens, addWatchlistToken] = useWatchlistTokens()
+  const { chainId } = useActiveWeb3React()
 
   return (
     <Page symbol={tokenData?.symbol}>
@@ -138,7 +140,7 @@ const TokenPage: React.FC<RouteComponentProps<{ address: string }>> = ({
                 </Flex>
               </Breadcrumbs>
               <Flex justifyContent={[null, null, 'flex-end']} mt={['8px', '8px', 0]}>
-                <LinkExternal mr="8px" color="primary" href={getEtherScanLink(address, 'address')}>
+                <LinkExternal mr="8px" color="primary" href={getEtherScanLink(address, 'address', chainId)}>
                   {t('View on EtherScan')}
                 </LinkExternal>
                 {cmcLink && (

@@ -3,12 +3,13 @@ import { useState, useEffect } from 'react'
 import { multiQuery } from 'views/Info/utils/infoQueryHelpers'
 import { BLOCKS_CLIENT } from 'config/constants/endpoints'
 import { Block } from 'state/info/types'
+import { ChainId } from 'sdk'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 const getBlockSubqueries = (timestamps: number[]) =>
     timestamps.map((timestamp) => {
-        return `t${timestamp}:blocks(first: 1, orderBy: timestamp, orderDirection: desc, where: { timestamp_gt: ${timestamp}, timestamp_lt: ${
-            timestamp + 600
-        } }) {
+        return `t${timestamp}:blocks(first: 1, orderBy: timestamp, orderDirection: desc, where: { timestamp_gt: ${timestamp}, timestamp_lt: ${timestamp + 600
+            } }) {
       number
     }`
     })
@@ -24,6 +25,7 @@ const blocksQueryConstructor = (subqueries: string[]) => {
  * @param {Array} timestamps
  */
 export const getBlocksFromTimestamps = async (
+    chainId: ChainId,
     timestamps: number[],
     sortDirection: 'asc' | 'desc' = 'desc',
     skipCount = 500,
@@ -35,7 +37,7 @@ export const getBlocksFromTimestamps = async (
     const fetchedData: any = await multiQuery(
         blocksQueryConstructor,
         getBlockSubqueries(timestamps),
-        BLOCKS_CLIENT,
+        BLOCKS_CLIENT[chainId],
         skipCount,
     )
 
@@ -77,14 +79,14 @@ export const useBlocksFromTimestamps = (
 } => {
     const [blocks, setBlocks] = useState<Block[]>()
     const [error, setError] = useState(false)
-
+    const { chainId } = useActiveWeb3React()
     const timestampsString = JSON.stringify(timestamps)
     const blocksString = blocks ? JSON.stringify(blocks) : undefined
 
     useEffect(() => {
         const fetchData = async () => {
             const timestampsArray = JSON.parse(timestampsString)
-            const result = await getBlocksFromTimestamps(timestampsArray, sortDirection, skipCount)
+            const result = await getBlocksFromTimestamps(chainId, timestampsArray, sortDirection, skipCount)
             if (result.length === 0) {
                 setError(true)
             } else {
@@ -95,7 +97,7 @@ export const useBlocksFromTimestamps = (
         if (!blocksArray && !error) {
             fetchData()
         }
-    }, [blocksString, error, skipCount, sortDirection, timestampsString])
+    }, [blocksString, chainId, error, skipCount, sortDirection, timestampsString])
 
     return {
         blocks,

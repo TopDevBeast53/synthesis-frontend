@@ -4,6 +4,7 @@ import { GRAPH_HEALTH } from 'config/constants/endpoints'
 import useProviders from 'hooks/useProviders'
 import { ChainId } from 'sdk'
 import { useSlowFresh } from './useRefresh'
+import useActiveWeb3React from './useActiveWeb3React'
 
 export enum SubgraphStatus {
     OK,
@@ -23,6 +24,11 @@ export type SubgraphHealthState = {
 const NOT_OK_BLOCK_DIFFERENCE = 200 // ~15 minutes delay
 const WARNING_BLOCK_DIFFERENCE = 50 // ~2.5 minute delay
 
+const SUBGRAPH_PATH = {
+    [ChainId.MAINNET]: "qiangkaiwen/helix",
+    [ChainId.TESTNET]: "qiangkaiwen/helix-rinkeby"
+}
+
 const useSubgraphHealth = () => {
     const [sgHealth, setSgHealth] = useState<SubgraphHealthState>({
         status: SubgraphStatus.UNKNOWN,
@@ -34,6 +40,7 @@ const useSubgraphHealth = () => {
 
     const slowRefresh = useSlowFresh()
     const rpcProvider = useProviders()
+    const { chainId } = useActiveWeb3React()
 
     useEffect(() => {
         const getSubgraphHealth = async () => {
@@ -56,9 +63,7 @@ const useSubgraphHealth = () => {
                             }
                         }
                     `,
-                    {
-                        subgraph: Number(process.env.REACT_APP_CHAIN_ID) === ChainId.MAINNET ? "qiangkaiwen/helix" : "qiangkaiwen/helix-rinkeby",
-                    }
+                    { subgraph: SUBGRAPH_PATH[chainId] }
                 )
 
                 const currentBlock = await rpcProvider.getBlockNumber()
@@ -107,7 +112,7 @@ const useSubgraphHealth = () => {
             }
         }
         getSubgraphHealth()
-    }, [slowRefresh, rpcProvider])
+    }, [slowRefresh, rpcProvider, chainId])
 
     return sgHealth
 }

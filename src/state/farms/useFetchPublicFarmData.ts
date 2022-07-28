@@ -1,13 +1,16 @@
+import { useCallback } from 'react'
 import erc20 from 'config/abi/erc20.json'
 import { chunk } from 'lodash'
 import { getAddress, getMasterChefAddress } from 'utils/addressHelpers'
-import { multicallv2 } from 'utils/multicall'
+import { useMulticallv2 } from 'hooks/useMulticall'
+import { ChainId } from 'sdk'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { SerializedFarm } from '../types'
 import { SerializedFarmConfig } from '../../config/constants/types'
 
-const fetchFarmCalls = (farm: SerializedFarm) => {
+const fetchFarmCalls = (chainId: ChainId, farm: SerializedFarm) => {
     const { lpAddresses, token, quoteToken } = farm
-    const lpAddress = getAddress(lpAddresses)
+    const lpAddress = getAddress(chainId, lpAddresses)
     return [
         // Balance of token in the LP contract
         {
@@ -25,7 +28,7 @@ const fetchFarmCalls = (farm: SerializedFarm) => {
         {
             address: lpAddress,
             name: 'balanceOf',
-            params: [getMasterChefAddress()],
+            params: [getMasterChefAddress(chainId)],
         },
         // Total supply of LP tokens
         {
@@ -45,9 +48,13 @@ const fetchFarmCalls = (farm: SerializedFarm) => {
     ]
 }
 
-export const fetchPublicFarmsData = async (farms: SerializedFarmConfig[]): Promise<any[]> => {
-    const farmCalls = farms.flatMap((farm) => fetchFarmCalls(farm))
-    const chunkSize = farmCalls.length / farms.length
-    const farmMultiCallResult = await multicallv2(erc20, farmCalls)
-    return chunk(farmMultiCallResult, chunkSize)
+export const useFetchPublicFarmsData = () => {
+    const multicallv2 = useMulticallv2()
+    const { chainId } = useActiveWeb3React()
+    return useCallback(async (farms: SerializedFarmConfig[]): Promise<any[]> => {
+        const farmCalls = farms.flatMap((farm) => fetchFarmCalls(chainId, farm))
+        const chunkSize = farmCalls.length / farms.length
+        const farmMultiCallResult = await multicallv2(erc20, farmCalls)
+        return chunk(farmMultiCallResult, chunkSize)
+    }, [chainId, multicallv2])
 }

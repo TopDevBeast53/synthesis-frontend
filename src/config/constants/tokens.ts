@@ -97,24 +97,23 @@ export const testnetTokens = defineTokens({
     ),
 } as const)
 
-const tokens = () => {
-    const chainId = process.env.REACT_APP_CHAIN_ID
+type UnserializedToken = typeof testnetTokens & typeof mainnetTokens
+const getTokens = (chainId: ChainId) => {
 
     // If testnet - return list comprised of testnetTokens wherever they exist, and mainnetTokens where they don't
-    if (parseInt(chainId, 10) === ChainId.TESTNET) {
+    if (chainId === ChainId.TESTNET) {
         return Object.keys(mainnetTokens).reduce((accum, key) => {
             return { ...accum, [key]: testnetTokens[key] || mainnetTokens[key] }
-        }, {} as typeof testnetTokens & typeof mainnetTokens)
+        }, {} as UnserializedToken)
     }
 
     return mainnetTokens
 }
 
-const unserializedTokens = tokens()
+type SerializedTokenList = Record<keyof UnserializedToken, SerializedToken>
 
-type SerializedTokenList = Record<keyof typeof unserializedTokens, SerializedToken>
-
-export const serializeTokens = () => {
+export const serializeTokens = (chainId: ChainId) => {
+    const unserializedTokens = getTokens(chainId)
     const serializedTokens = Object.keys(unserializedTokens).reduce((accum, key) => {
         return { ...accum, [key]: serializeToken(unserializedTokens[key]) }
     }, {} as SerializedTokenList)
@@ -122,4 +121,4 @@ export const serializeTokens = () => {
     return serializedTokens
 }
 
-export default unserializedTokens
+export default getTokens

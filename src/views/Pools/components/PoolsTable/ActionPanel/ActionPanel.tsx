@@ -26,7 +26,8 @@ import { BIG_ZERO } from 'utils/bigNumber'
 import { registerToken } from 'utils/wallet'
 import { getBalanceNumber, getFullDisplayBalance } from 'utils/formatBalance'
 import { convertSharesToHelix, getPoolBlockInfo } from 'views/Pools/helpers'
-import { vaultPoolConfig } from 'config/constants/pools'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import { useGetVaultPoolConfig } from 'views/Pools/hooks/useGetVaultPoolConfig'
 import Harvest from './Harvest'
 import Stake from './Stake'
 import Apr from '../Apr'
@@ -126,8 +127,9 @@ const ActionPanel: React.FC<ActionPanelProps> = ({ account, pool, userDataLoaded
     vaultKey,
   } = pool
   const { t } = useTranslation()
-  const poolContractAddress = getAddress(contractAddress)
-  const vaultContractAddress = getVaultPoolAddress(vaultKey)
+  const { chainId } = useActiveWeb3React()
+  const poolContractAddress = getAddress(chainId, contractAddress)
+  const vaultContractAddress = getVaultPoolAddress(chainId, vaultKey)
   const { currentBlock } = useBlock()
   const { isXs, isSm, isMd } = breakpoints
   const showSubtitle = (isXs || isSm) && sousId === 0
@@ -144,6 +146,7 @@ const ActionPanel: React.FC<ActionPanelProps> = ({ account, pool, userDataLoaded
     fees: { performanceFeeAsDecimal },
     pricePerFullShare,
   } = useVaultPoolByKey(vaultKey)
+  const vaultPoolConfig = useGetVaultPoolConfig()
 
   const vaultPools = useVaultPools()
   const helixInVaults = Object.values(vaultPools).reduce((total, vault) => {
@@ -203,7 +206,7 @@ const ActionPanel: React.FC<ActionPanelProps> = ({ account, pool, userDataLoaded
       <Flex mb="8px" justifyContent="space-between">
         <Text>{hasPoolStarted ? t('Ends in') : t('Starts in')}:</Text>
         <Flex>
-          <Link external href={getEtherScanLink(hasPoolStarted ? endBlock : startBlock, 'countdown')}>
+          <Link external href={getEtherScanLink(hasPoolStarted ? endBlock : startBlock, 'countdown', chainId)}>
             <Balance fontSize="16px" value={blocksToDisplay} decimals={0} color="primary" />
             <Text ml="4px" color="primary" textTransform="lowercase">
               {t('Blocks')}
@@ -267,7 +270,7 @@ const ActionPanel: React.FC<ActionPanelProps> = ({ account, pool, userDataLoaded
         {poolContractAddress && (
           <Flex mb="8px" justifyContent={['flex-end', 'flex-end', 'flex-start']}>
             <LinkExternal
-              href={getEtherScanLink(vaultKey ? vaultContractAddress : poolContractAddress, 'address')}
+              href={getEtherScanLink(vaultKey ? vaultContractAddress : poolContractAddress, 'address', chainId)}
               bold={false}
             >
               {t('View Contract')}

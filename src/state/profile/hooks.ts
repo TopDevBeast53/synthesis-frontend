@@ -1,14 +1,15 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useWeb3React } from '@web3-react/core'
 import { useSelector } from 'react-redux'
 import { isAddress } from 'utils'
 import { useAppDispatch } from 'state'
 import usePreviousValue from 'hooks/usePreviousValue'
+import { useProfile as useProfileContract } from 'hooks/useContract'
 import { getAchievements } from 'state/achievements/helpers'
 import { FetchStatus } from 'config/constants/types'
 import { State, ProfileState, Achievement } from '../types'
 import { fetchProfile, fetchProfileAvatar, fetchProfileUsername } from '.'
-import { getProfile, GetProfileResponse } from './helpers'
+import { getProfile, GetProfileResponse, transformProfileResponse } from './helpers'
 
 export const useFetchProfile = () => {
     const { account } = useWeb3React()
@@ -112,4 +113,48 @@ export const useGetProfileAvatar = (account: string) => {
     }, [account, nft, username, hasRegistered, avatarFetchStatus, usernameFetchStatus, dispatch])
 
     return { username, nft, usernameFetchStatus, avatarFetchStatus }
+}
+
+/**
+ * Intended to be used for getting a profile avatar
+ */
+export const useGetProfileAvatarFromContract = () => {
+    const profileContract = useProfileContract()
+    return useCallback(async (address: string) => {
+        try {
+            const hasRegistered = await profileContract.hasRegistered(address)
+
+            if (!hasRegistered) {
+                return null
+            }
+
+            const profileResponse = await profileContract.getUserProfile(address)
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const { tokenId, collectionAddress, isActive } = transformProfileResponse(profileResponse)
+
+            let nft = null
+            if (isActive) {
+                const apiRes = null // await getNftApi(collectionAddress, tokenId.toString())
+
+                nft = {
+                    tokenId: apiRes.tokenId,
+                    name: apiRes.name,
+                    collectionName: apiRes.collection.name,
+                    collectionAddress,
+                    description: apiRes.description,
+                    attributes: apiRes.attributes,
+                    createdAt: apiRes.createdAt,
+                    updatedAt: apiRes.updatedAt,
+                    image: {
+                        original: apiRes.image?.original,
+                        thumbnail: apiRes.image?.thumbnail,
+                    },
+                }
+            }
+
+            return { nft, hasRegistered }
+        } catch {
+            return { nft: null, hasRegistered: false }
+        }
+    }, [profileContract])
 }

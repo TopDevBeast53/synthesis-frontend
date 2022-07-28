@@ -1,9 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Flex, Skeleton, UserMenuItem } from 'uikit'
-import { useWeb3React } from '@web3-react/core'
 import { useTranslation } from 'contexts/Localization'
 import history from 'routerHistory'
+// import useActiveWeb3React from 'hooks/useActiveWeb3React'
 // import { nftsBaseUrl } from 'views/Nft/market/constants'
 
 interface ProfileUserMenuItemProps {
@@ -19,7 +19,7 @@ const Dot = styled.div`
 `
 
 const ProfileUserMenuItem: React.FC<ProfileUserMenuItemProps> = ({ isLoading, hasProfile }) => {
-  const { account } = useWeb3React()
+  // const { account } = useActiveWeb3React()
   const { t } = useTranslation()
 
   const handleClick = () => {

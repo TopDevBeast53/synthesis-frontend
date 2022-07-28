@@ -6,6 +6,7 @@ import { getDeltaTimestamps } from 'views/Info/utils/infoQueryHelpers'
 import { useBlocksFromTimestamps } from 'views/Info/hooks/useBlocksFromTimestamps'
 import { PoolData } from 'state/info/types'
 import { getChangeForPeriod, getLpFeesAndApr, getPercentChange } from 'views/Info/utils/infoDataHelpers'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 interface PoolFields {
     id: string
@@ -80,6 +81,7 @@ const POOL_AT_BLOCK = (block: number | null, pools: string[]) => {
 }
 
 const fetchPoolData = async (
+    chainId: number,
     block24h: number,
     block48h: number,
     block7d: number,
@@ -96,7 +98,7 @@ const fetchPoolData = async (
         twoWeeksAgo: ${POOL_AT_BLOCK(block14d, poolAddresses)}
       }
     `
-        const data = await request<PoolsQueryResponse>(INFO_CLIENT, query)
+        const data = await request<PoolsQueryResponse>(INFO_CLIENT[chainId], query)
         return { data, error: false }
     } catch (error) {
         console.error('Failed to fetch pool data', error)
@@ -139,10 +141,12 @@ const usePoolDatas = (poolAddresses: string[]): PoolDatas => {
     const [t24h, t48h, t7d, t14d] = getDeltaTimestamps()
     const { blocks, error: blockError } = useBlocksFromTimestamps([t24h, t48h, t7d, t14d])
     const [block24h, block48h, block7d, block14d] = blocks ?? []
+    const { chainId } = useActiveWeb3React()
 
     useEffect(() => {
         const fetch = async () => {
             const { error, data } = await fetchPoolData(
+                chainId,
                 block24h.number,
                 block48h.number,
                 block7d.number,
@@ -232,7 +236,7 @@ const usePoolDatas = (poolAddresses: string[]): PoolDatas => {
         if (poolAddresses.length > 0 && allBlocksAvailable && !blockError) {
             fetch()
         }
-    }, [poolAddresses, block24h, block48h, block7d, block14d, blockError])
+    }, [poolAddresses, block24h, block48h, block7d, block14d, blockError, chainId])
 
     return fetchState
 }

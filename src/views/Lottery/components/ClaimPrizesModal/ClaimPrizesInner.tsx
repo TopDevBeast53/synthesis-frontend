@@ -6,7 +6,7 @@ import { LotteryTicket, LotteryTicketClaimData } from 'config/constants/types'
 import { getBalanceAmount } from 'utils/formatBalance'
 import { callWithEstimateGas } from 'utils/calls'
 import { usePriceHelixBusd } from 'state/farms/hooks'
-import { useLottery } from 'state/lottery/hooks'
+import { useGetUserLotteryData, useLottery } from 'state/lottery/hooks'
 import { fetchUserLotteries } from 'state/lottery'
 import { useGasPrice } from 'state/user/hooks'
 import { useAppDispatch } from 'state'
@@ -42,6 +42,7 @@ const ClaimInnerContainer: React.FC<ClaimInnerProps> = ({ onSuccess, roundsToCla
   const dollarReward = cakeReward.times(cakePriceBusd)
   const rewardAsBalance = getBalanceAmount(cakeReward).toNumber()
   const dollarRewardAsBalance = getBalanceAmount(dollarReward).toNumber()
+  const getUserLotteryData = useGetUserLotteryData()
 
   const parseUnclaimedTicketDataForClaimCall = (ticketsWithUnclaimedRewards: LotteryTicket[], lotteryId: string) => {
     const ticketIds = ticketsWithUnclaimedRewards.map((ticket) => {
@@ -64,7 +65,7 @@ const ClaimInnerContainer: React.FC<ClaimInnerProps> = ({ onSuccess, roundsToCla
     if (roundsToClaim.length > activeClaimIndex + 1) {
       // If there are still rounds to claim, move onto the next claim
       setActiveClaimIndex(activeClaimIndex + 1)
-      dispatch(fetchUserLotteries({ account, currentLotteryId }))
+      dispatch(fetchUserLotteries({ account, currentLotteryId, getUserLotteryData }))
     } else {
       onSuccess()
     }

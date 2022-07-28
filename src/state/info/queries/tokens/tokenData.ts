@@ -7,6 +7,8 @@ import { useBlocksFromTimestamps } from 'views/Info/hooks/useBlocksFromTimestamp
 import { getPercentChange, getChangeForPeriod, getAmountChange } from 'views/Info/utils/infoDataHelpers'
 import { TokenData } from 'state/info/types'
 import { useEthPrices } from 'views/Info/hooks/useEthPrices'
+import { ChainId } from 'sdk'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 interface TokenFields {
     id: string
@@ -61,6 +63,7 @@ const TOKEN_AT_BLOCK = (block: number | undefined, tokens: string[]) => {
 }
 
 const fetchTokenData = async (
+    chainId: ChainId,
     block24h: number,
     block48h: number,
     block7d: number,
@@ -77,7 +80,7 @@ const fetchTokenData = async (
         twoWeeksAgo: ${TOKEN_AT_BLOCK(block14d, tokenAddresses)}
       }
     `
-        const data = await request<TokenQueryResponse>(INFO_CLIENT, query)
+        const data = await request<TokenQueryResponse>(INFO_CLIENT[chainId], query)
         return { data, error: false }
     } catch (error) {
         console.error('Failed to fetch token data', error)
@@ -120,10 +123,12 @@ const useFetchedTokenDatas = (tokenAddresses: string[]): TokenDatas => {
     const { blocks, error: blockError } = useBlocksFromTimestamps([t24h, t48h, t7d, t14d])
     const [block24h, block48h, block7d, block14d] = blocks ?? []
     const ethPrices = useEthPrices()
+    const { chainId } = useActiveWeb3React()
 
     useEffect(() => {
         const fetch = async () => {
             const { error, data } = await fetchTokenData(
+                chainId,
                 block24h.number,
                 block48h.number,
                 block7d.number,
@@ -195,7 +200,7 @@ const useFetchedTokenDatas = (tokenAddresses: string[]): TokenDatas => {
         if (tokenAddresses.length > 0 && allBlocksAvailable && !blockError && ethPrices) {
             fetch()
         }
-    }, [tokenAddresses, block24h, block48h, block7d, block14d, blockError, ethPrices])
+    }, [tokenAddresses, block24h, block48h, block7d, block14d, blockError, ethPrices, chainId])
 
     return fetchState
 }

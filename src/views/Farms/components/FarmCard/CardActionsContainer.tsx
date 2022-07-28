@@ -11,6 +11,8 @@ import { DeserializedFarm } from 'state/types'
 import styled from 'styled-components'
 import { getAddress } from 'utils/addressHelpers'
 import { logError } from 'utils/sentry'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import { useFetchFarmUserAllowances, useFetchFarmUserEarnings, useFetchFarmUserStakedBalances, useFetchFarmUserTokenBalances } from 'state/farms/hooks'
 import useApproveFarm from '../../hooks/useApproveFarm'
 import HarvestAction from './HarvestAction'
 import StakeAction from './StakeAction'
@@ -34,11 +36,16 @@ const CardActions: React.FC<FarmCardActionsProps> = ({ farm, account, addLiquidi
   const { t } = useTranslation()
   const { toastError } = useToast()
   const [requestedApproval, setRequestedApproval] = useState(false)
+  const { chainId } = useActiveWeb3React()
   const { pid, lpAddresses } = farm
   const { allowance, tokenBalance, stakedBalance, earnings } = farm.userData || {}
-  const lpAddress = getAddress(lpAddresses)
+  const lpAddress = getAddress(chainId, lpAddresses)
   const isApproved = account && allowance && allowance.isGreaterThan(0)
   const dispatch = useAppDispatch()
+  const fetchFarmUserAllowances = useFetchFarmUserAllowances()
+  const fetchFarmUserTokenBalances = useFetchFarmUserTokenBalances()
+  const fetchFarmUserStakedBalances = useFetchFarmUserStakedBalances()
+  const fetchFarmUserEarnings = useFetchFarmUserEarnings()
 
   const lpContract = useERC20(lpAddress)
 
@@ -48,14 +55,17 @@ const CardActions: React.FC<FarmCardActionsProps> = ({ farm, account, addLiquidi
     try {
       setRequestedApproval(true)
       await onApprove()
-      dispatch(fetchFarmUserDataAsync({ account, pids: [pid] }))
+      dispatch(fetchFarmUserDataAsync({
+        account, pids: [pid], chainId, fetchFarmUserAllowances,
+        fetchFarmUserEarnings, fetchFarmUserStakedBalances, fetchFarmUserTokenBalances
+      }))
     } catch (e) {
       logError(e)
       toastError(t('Error'), t('Please try again. Confirm the transaction and make sure you are paying enough gas!'))
     } finally {
       setRequestedApproval(false)
     }
-  }, [onApprove, dispatch, account, pid, t, toastError])
+  }, [onApprove, dispatch, account, pid, chainId, fetchFarmUserAllowances, fetchFarmUserEarnings, fetchFarmUserStakedBalances, fetchFarmUserTokenBalances, toastError, t])
 
   const renderApprovalOrStakeButton = () => {
     return isApproved ? (

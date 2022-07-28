@@ -29,6 +29,7 @@ import TransactionTable from 'views/Info/components/InfoTables/TransactionsTable
 import { useWatchlistPools } from 'state/user/hooks'
 import { useTranslation } from 'contexts/Localization'
 import ChartCard from 'views/Info/components/InfoCharts/ChartCard'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 const ContentLayout = styled.div`
   display: grid;
@@ -87,6 +88,7 @@ const PoolPage: React.FC<RouteComponentProps<{ address: string }>> = ({
   const transactions = usePoolTransactions(address)
 
   const [watchlistPools, addPoolToWatchlist] = useWatchlistPools()
+  const { chainId } = useActiveWeb3React()
 
   return (
     <Page symbol={poolData ? `${poolData?.token0.symbol} / ${poolData?.token1.symbol}` : null}>
@@ -105,7 +107,7 @@ const PoolPage: React.FC<RouteComponentProps<{ address: string }>> = ({
               </Flex>
             </Breadcrumbs>
             <Flex justifyContent={[null, null, 'flex-end']} mt={['8px', '8px', 0]}>
-              <LinkExternal mr="8px" href={getEtherScanLink(address, 'address')}>
+              <LinkExternal mr="8px" href={getEtherScanLink(address, 'address', chainId)}>
                 {t('View on EtherScan')}
               </LinkExternal>
               <SaveIcon fill={watchlistPools.includes(address)} onClick={() => addPoolToWatchlist(address)} />

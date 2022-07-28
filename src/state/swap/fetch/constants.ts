@@ -1,4 +1,3 @@
-// import { INFO_CLIENT } from 'config/constants/endpoints'
 import { PairDataTimeWindowEnum } from '../types'
 
 // Specifies the amount of data points to query for specific time window

@@ -2,7 +2,7 @@ import { useWeb3React } from '@web3-react/core'
 import { useState } from 'react'
 import { useAppDispatch } from 'state'
 import { fetchAdditionalUserLotteries } from 'state/lottery'
-import { MAX_USER_LOTTERIES_REQUEST_SIZE } from 'state/lottery/getUserLotteryData'
+import { MAX_USER_LOTTERIES_REQUEST_SIZE } from 'state/lottery/helpers'
 
 const useShowMoreUserRounds = () => {
     const { account } = useWeb3React()

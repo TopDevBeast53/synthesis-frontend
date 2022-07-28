@@ -7,7 +7,7 @@ import styled from 'styled-components'
 import Select from 'components/Select/Select'
 import { useTranslation } from 'contexts/Localization'
 import { useHelixVault } from 'hooks/useContract'
-import tokens from 'config/constants/tokens'
+import { useGetTokens } from 'hooks/useGetTokens'
 import useTheme from 'hooks/useTheme'
 import useToast from 'hooks/useToast'
 import BigNumber from 'bignumber.js'
@@ -47,6 +47,7 @@ const AnnualRoiDisplay = styled(Text)`
 
 const AddRowModal: React.FC<ModalProps> = ({ stakingTokenBalance, stakingTokenPrice, totalStakedVault, tokenPerBlock, onAdd, onDismiss }) => {
   const { t } = useTranslation()
+  const tokens = useGetTokens()
   const { theme } = useTheme()
   const tokenDecimals = tokens.helix.decimals
   const tokenSymbol = tokens.helix.symbol

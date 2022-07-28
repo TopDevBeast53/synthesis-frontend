@@ -6,6 +6,7 @@ import useTopPoolAddresses from 'state/info/queries/pools/topPools'
 import usePoolDatas from 'state/info/queries/pools/poolData'
 import useFetchedTokenDatas from 'state/info/queries/tokens/tokenData'
 import useTopTokenAddresses from 'state/info/queries/tokens/topTokens'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import {
     useProtocolData,
     useProtocolChartData,
@@ -26,6 +27,7 @@ export const ProtocolUpdater: React.FC = () => {
     const { data: fetchedChartData, error: chartError } = useFetchGlobalChartData()
 
     const [transactions, updateTransactions] = useProtocolTransactions()
+    const { chainId } = useActiveWeb3React()
 
     // update overview data if available and not set
     useEffect(() => {
@@ -43,7 +45,7 @@ export const ProtocolUpdater: React.FC = () => {
 
     useEffect(() => {
         const fetch = async () => {
-            const data = await fetchTopTransactions()
+            const data = await fetchTopTransactions(chainId)
             if (data) {
                 updateTransactions(data)
             }
@@ -51,7 +53,7 @@ export const ProtocolUpdater: React.FC = () => {
         if (!transactions) {
             fetch()
         }
-    }, [transactions, updateTransactions])
+    }, [chainId, transactions, updateTransactions])
 
     return null
 }

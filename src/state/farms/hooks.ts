@@ -1,16 +1,21 @@
-import { useEffect, useMemo } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import { useAppDispatch } from 'state'
-import { useWeb3React } from '@web3-react/core'
 import BigNumber from 'bignumber.js'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { getBalanceAmount } from 'utils/formatBalance'
-import { farmsConfig } from 'config/constants'
+import { getFarms } from 'config/constants'
 import { useFastFresh, useSlowFresh } from 'hooks/useRefresh'
 import { deserializeToken } from 'state/user/hooks/helpers'
-import { getAddress } from 'utils/addressHelpers'
-import { fetchFarmsPublicDataAsync, fetchFarmUserDataAsync, nonArchivedFarms } from '.'
+import { getAddress, getMasterChefAddress } from 'utils/addressHelpers'
+import { SerializedFarmConfig } from 'config/constants/types'
+import useMulticall from 'hooks/useMulticall'
+import erc20ABI from 'config/abi/erc20.json'
+import masterchefABI from 'config/abi/masterchef.json'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import { fetchFarmsPublicDataAsync, fetchFarmUserDataAsync, getNonArchivedFarms } from '.'
 import { State, SerializedFarm, DeserializedFarmUserData, DeserializedFarm, DeserializedFarmsState } from '../types'
+import useFetchFarms from './useFetchFarms'
 
 const deserializeFarmUserData = (farm: SerializedFarm): DeserializedFarmUserData => {
     return {
@@ -47,30 +52,46 @@ const deserializeFarm = (farm: SerializedFarm): DeserializedFarm => {
 export const usePollFarmsPublicData = (includeArchive = false) => {
     const dispatch = useAppDispatch()
     const slowRefresh = useSlowFresh()
+    const fetchFarms = useFetchFarms()
+    const { chainId } = useActiveWeb3React()
+
+    const farmsConfig = useMemo(() => getFarms(chainId), [chainId])
+    const nonArchivedFarms = useMemo(() => getNonArchivedFarms(chainId), [chainId])
 
     useEffect(() => {
         const farmsToFetch = includeArchive ? farmsConfig : nonArchivedFarms
         const pids = farmsToFetch.map((farmToFetch) => farmToFetch.pid)
 
-        dispatch(fetchFarmsPublicDataAsync(pids))
-    }, [includeArchive, dispatch, slowRefresh])
+        dispatch(fetchFarmsPublicDataAsync({ pids, fetchFarms, chainId }))
+    }, [includeArchive, dispatch, slowRefresh, fetchFarms, farmsConfig, nonArchivedFarms, chainId])
 }
 
 export const usePollFarmsWithUserData = (includeArchive = false) => {
     const dispatch = useAppDispatch()
     const fastRefresh = useFastFresh()
-    const { account } = useWeb3React()
+    const fetchFarms = useFetchFarms()
+    const fetchFarmUserAllowances = useFetchFarmUserAllowances()
+    const fetchFarmUserTokenBalances = useFetchFarmUserTokenBalances()
+    const fetchFarmUserStakedBalances = useFetchFarmUserStakedBalances()
+    const fetchFarmUserEarnings = useFetchFarmUserEarnings()
+    const { chainId, account } = useActiveWeb3React()
+
+    const farmsConfig = useMemo(() => getFarms(chainId), [chainId])
+    const nonArchivedFarms = useMemo(() => getNonArchivedFarms(chainId), [chainId])
 
     useEffect(() => {
         const farmsToFetch = includeArchive ? farmsConfig : nonArchivedFarms
         const pids = farmsToFetch.map((farmToFetch) => farmToFetch.pid)
 
-        dispatch(fetchFarmsPublicDataAsync(pids))
+        dispatch(fetchFarmsPublicDataAsync({ pids, fetchFarms, chainId }))
 
         if (account) {
-            dispatch(fetchFarmUserDataAsync({ account, pids }))
+            dispatch(fetchFarmUserDataAsync({
+                account, pids, chainId, fetchFarmUserAllowances,
+                fetchFarmUserTokenBalances, fetchFarmUserStakedBalances, fetchFarmUserEarnings
+            }))
         }
-    }, [includeArchive, dispatch, fastRefresh, account])
+    }, [includeArchive, dispatch, fastRefresh, account, fetchFarms, fetchFarmUserAllowances, fetchFarmUserTokenBalances, fetchFarmUserStakedBalances, fetchFarmUserEarnings, farmsConfig, nonArchivedFarms, chainId])
 }
 
 /**
@@ -81,10 +102,12 @@ export const usePollFarmsWithUserData = (includeArchive = false) => {
 export const usePollCoreFarmData = () => {
     const dispatch = useAppDispatch()
     const fastRefresh = useFastFresh()
+    const fetchFarms = useFetchFarms()
+    const { chainId } = useActiveWeb3React()
 
     useEffect(() => {
-        dispatch(fetchFarmsPublicDataAsync([1, 3]))
-    }, [dispatch, fastRefresh])
+        dispatch(fetchFarmsPublicDataAsync({ pids: [1, 3], fetchFarms, chainId }))
+    }, [chainId, dispatch, fastRefresh, fetchFarms])
 }
 
 export const useFarms = (): DeserializedFarmsState => {
@@ -123,7 +146,8 @@ export const useFarmFromLpSymbol = (lpSymbol: string): DeserializedFarm => {
 }
 
 export const useFarmFromLpAddress = (lpAddress: string): DeserializedFarm => {
-    const farm = useSelector((state: State) => state.farms.data.find((f) => getAddress(f.lpAddresses) === lpAddress))
+    const { chainId } = useActiveWeb3React()
+    const farm = useSelector((state: State) => state.farms.data.find((f) => getAddress(chainId, f.lpAddresses) === lpAddress))
     return deserializeFarm(farm)
 }
 
@@ -175,4 +199,90 @@ export const usePriceHelixBusd = (): BigNumber => {
     }, [helixPriceBusdAsString])
 
     return helixPriceBusd
+}
+
+export const useFetchFarmUserAllowances = () => {
+    const multicall = useMulticall()
+    const { chainId } = useActiveWeb3React()
+    return useCallback(async (account: string, farmsToFetch: SerializedFarmConfig[]) => {
+        const masterChefAddress = getMasterChefAddress(chainId)
+
+        const calls = farmsToFetch.map((farm) => {
+            const lpContractAddress = getAddress(chainId, farm.lpAddresses)
+            return { address: lpContractAddress, name: 'allowance', params: [account, masterChefAddress] }
+        })
+
+        const rawLpAllowances = await multicall<BigNumber[]>(erc20ABI, calls)
+        const parsedLpAllowances = rawLpAllowances.map((lpBalance) => {
+            return new BigNumber(lpBalance).toJSON()
+        })
+        return parsedLpAllowances
+    }, [chainId, multicall])
+}
+
+export const useFetchFarmUserTokenBalances = () => {
+    const multicall = useMulticall()
+    const { chainId } = useActiveWeb3React()
+    return useCallback(async (account: string, farmsToFetch: SerializedFarmConfig[]) => {
+        const calls = farmsToFetch.map((farm) => {
+            const lpContractAddress = getAddress(chainId, farm.lpAddresses)
+            return {
+                address: lpContractAddress,
+                name: 'balanceOf',
+                params: [account],
+            }
+        })
+
+        const rawTokenBalances = await multicall(erc20ABI, calls)
+        const parsedTokenBalances = rawTokenBalances.map((tokenBalance) => {
+            return new BigNumber(tokenBalance).toJSON()
+        })
+        return parsedTokenBalances
+    }, [chainId, multicall])
+}
+
+
+
+export const useFetchFarmUserStakedBalances = () => {
+    const multicall = useMulticall()
+    const { chainId } = useActiveWeb3React()
+    return useCallback(async (account: string, farmsToFetch: SerializedFarmConfig[]) => {
+        const masterChefAddress = getMasterChefAddress(chainId)
+
+        const calls = farmsToFetch.map((farm) => {
+            return {
+                address: masterChefAddress,
+                name: 'userInfo',
+                params: [farm.pid, account],
+            }
+        })
+
+        const rawStakedBalances = await multicall(masterchefABI, calls)
+        const parsedStakedBalances = rawStakedBalances.map((stakedBalance) => {
+            return new BigNumber(stakedBalance[0]._hex).toJSON()
+        })
+        return parsedStakedBalances
+    }, [chainId, multicall])
+}
+
+export const useFetchFarmUserEarnings = () => {
+    const multicall = useMulticall()
+    const { chainId } = useActiveWeb3React()
+    return useCallback(async (account: string, farmsToFetch: SerializedFarmConfig[]) => {
+        const masterChefAddress = getMasterChefAddress(chainId)
+
+        const calls = farmsToFetch.map((farm) => {
+            return {
+                address: masterChefAddress,
+                name: 'pendingHelixToken',
+                params: [farm.pid, account],
+            }
+        })
+
+        const rawEarnings = await multicall(masterchefABI, calls)
+        const parsedEarnings = rawEarnings.map((earnings) => {
+            return new BigNumber(earnings).toJSON()
+        })
+        return parsedEarnings
+    }, [chainId, multicall])
 }

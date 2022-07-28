@@ -20,8 +20,9 @@ import PageLoader from 'components/Loader/PageLoader'
 import { FetchStatus } from 'config/constants/types'
 import { useFarms } from 'state/farms/hooks'
 import { useFastFresh } from 'hooks/useRefresh'
-import tokens from 'config/constants/tokens'
+import { useGetTokens } from 'hooks/useGetTokens'
 import { getAddress, getMasterChefAddress, getHelixAutoPoolAddress, getHelixVaultAddress } from 'utils/addressHelpers'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { isCoreProposal } from '../helpers'
 import { ProposalStateTag, ProposalTypeTag } from '../components/Proposals/tags'
 import Layout from '../components/Layout'
@@ -33,6 +34,7 @@ import { PageMeta } from '../../../components/Layout/Page'
 
 const Proposal = () => {
   const fastRefresh = useFastFresh()
+  const tokens = useGetTokens()
   const { id }: { id: string } = useParams()
   const proposal = useGetProposal(id)
   const { t } = useTranslation()
@@ -45,11 +47,12 @@ const Proposal = () => {
   const { id: proposalId = null, snapshot: snapshotId = null } = proposal ?? {}
   const isPageLoading = voteLoadingStatus === FetchStatus.Fetching || proposalLoadingStatus === FetchStatus.Fetching
   const { data: farmsLP } = useFarms()
-  const masterChefAddress = getMasterChefAddress()
-  const autoHelixAddress = getHelixAutoPoolAddress()
-  const vaultAddress = getHelixVaultAddress()
-  const network = process.env.REACT_APP_CHAIN_ID
+  const { chainId } = useActiveWeb3React()
   const [votes, setVotes] = useState([])
+
+  const masterChefAddress = getMasterChefAddress(chainId)
+  const autoHelixAddress = getHelixAutoPoolAddress(chainId)
+  const vaultAddress = getHelixVaultAddress(chainId)
 
   useEffect(() => {
     dispatch(fetchProposal(id))
@@ -66,7 +69,7 @@ const Proposal = () => {
     .filter((lp) => lp.pid !== 0)
     .filter((lp) => lp.lpSymbol.includes('HELIX'))
     .map((lp) => ({
-      "address": getAddress(lp.lpAddresses),
+      "address": getAddress(chainId, lp.lpAddresses),
       "pid": lp.pid
     }))
 
@@ -95,7 +98,7 @@ const Proposal = () => {
       const vps = await snapshot.utils.getScores(
         proposal.space.id,
         strategies,
-        network,
+        chainId.toString(),
         voters,
         Number(proposal.snapshot)
       )
@@ -114,7 +117,7 @@ const Proposal = () => {
       mounted = false
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fastRefresh])
+  }, [fastRefresh, chainId])
 
   if (!proposal || !votes) {
     return <PageLoader />

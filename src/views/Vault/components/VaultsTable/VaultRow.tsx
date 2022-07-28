@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { useMatchBreakpoints } from 'uikit'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { logError } from 'utils/sentry'
-import tokens from 'config/constants/tokens'
+import { useGetTokens } from 'hooks/useGetTokens'
 import { useHelixVault } from 'hooks/useContract'
 import { CurrencyLogo } from 'components/Logo'
 import ActionPanel from './ActionPanel/ActionPanel'
@@ -37,6 +37,7 @@ const StyledRow = styled.div`
 const VaultRow: React.FC<PoolRowProps> = ({ deposit }) => {
   const { isTablet, isDesktop } = useMatchBreakpoints()
   const helixVaultContract = useHelixVault()
+  const tokens = useGetTokens()
   const [expanded, setExpanded] = useState(false)
   const shouldRenderActionPanel = useDelayedUnmount(expanded, 300)
   const [isLoading, setLoading] = useState(true)

@@ -1,5 +1,4 @@
 import { Button, Heading, Skeleton, Text } from 'uikit'
-import { useWeb3React } from '@web3-react/core'
 import BigNumber from 'bignumber.js'
 import Balance from 'components/Balance'
 import { useTranslation } from 'contexts/Localization'
@@ -7,11 +6,12 @@ import useToast from 'hooks/useToast'
 import React, { useState } from 'react'
 import { useAppDispatch } from 'state'
 import { fetchFarmUserDataAsync } from 'state/farms'
-import { usePriceHelixBusd } from 'state/farms/hooks'
+import { useFetchFarmUserAllowances, useFetchFarmUserEarnings, useFetchFarmUserStakedBalances, useFetchFarmUserTokenBalances, usePriceHelixBusd } from 'state/farms/hooks'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { getBalanceAmount } from 'utils/formatBalance'
 import { logError } from 'utils/sentry'
 import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import useHarvestFarm from '../../../hooks/useHarvestFarm'
 import { ActionContainer, ActionContent, ActionTitles } from './styles'
 
@@ -38,7 +38,11 @@ const HarvestAction: React.FunctionComponent<HarvestActionProps> = ({ pid, userD
   const { onReward } = useHarvestFarm(pid)
   const { t } = useTranslation()
   const dispatch = useAppDispatch()
-  const { account } = useWeb3React()
+  const { account, chainId } = useActiveWeb3React()
+  const fetchFarmUserAllowances = useFetchFarmUserAllowances()
+  const fetchFarmUserTokenBalances = useFetchFarmUserTokenBalances()
+  const fetchFarmUserStakedBalances = useFetchFarmUserStakedBalances()
+  const fetchFarmUserEarnings = useFetchFarmUserEarnings()
 
   return (
     <ActionContainer>
@@ -76,7 +80,10 @@ const HarvestAction: React.FunctionComponent<HarvestActionProps> = ({ pid, userD
             } finally {
               setPendingTx(false)
             }
-            dispatch(fetchFarmUserDataAsync({ account, pids: [pid] }))
+            dispatch(fetchFarmUserDataAsync({
+              account, pids: [pid], chainId, fetchFarmUserAllowances,
+              fetchFarmUserEarnings, fetchFarmUserStakedBalances, fetchFarmUserTokenBalances
+            }))
           }}
           ml="4px"
         >

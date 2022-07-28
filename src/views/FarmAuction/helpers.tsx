@@ -3,6 +3,7 @@ import { BidsPerAuction } from 'utils/types'
 import { Auction, Bidder, BidderAuction } from 'config/constants/types'
 import { ethersToBigNumber } from 'utils/bigNumber'
 import { FarmAuction } from 'config/abi/types'
+import { ChainId } from 'sdk'
 
 export const FORM_ADDRESS =
   'https://docs.google.com/forms/d/e/1FAIpQLScUkwbsMWwg7L5jjGjEcmv6RsoCNhFDkV3xEpRu2KcJrr47Sw/viewform'
@@ -10,7 +11,7 @@ export const FORM_ADDRESS =
 // Sorts bidders received from smart contract by bid amount in descending order (biggest -> smallest)
 // Also amends bidder information with getBidderInfo
 // auction is required if data will be used for table display, hence in reclaim and congratulations card its omitted
-export const sortAuctionBidders = (bidders: BidsPerAuction[], auction?: Auction): Bidder[] => {
+export const sortAuctionBidders = (chainId: ChainId, bidders: BidsPerAuction[], auction?: Auction): Bidder[] => {
   const sortedBidders = [...bidders]
     .sort((a, b) => {
       if (a.amount.lt(b.amount)) {
@@ -22,7 +23,7 @@ export const sortAuctionBidders = (bidders: BidsPerAuction[], auction?: Auction)
       return 0
     })
     .map((bidder, index) => {
-      const bidderInfo = getBidderInfo(bidder.account)
+      const bidderInfo = getBidderInfo(bidder.account, chainId)
       return {
         ...bidderInfo,
         position: index + 1,

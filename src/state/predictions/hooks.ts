@@ -1,11 +1,16 @@
-import { useEffect, useMemo } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import { ethers } from 'ethers'
 import { minBy, orderBy } from 'lodash'
 import { isAddress } from 'utils'
 import { useAppDispatch } from 'state'
-import { State, NodeRound, ReduxNodeLedger, NodeLedger, ReduxNodeRound } from '../types'
-import { parseBigNumberObj } from './helpers'
+import { getPredictionsAddress } from 'utils/addressHelpers'
+import { PredictionsClaimableResponse, PredictionsLedgerResponse, PredictionsRoundsResponse } from 'utils/types'
+import { useMulticallv2 } from 'hooks/useMulticall'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import predictionsAbi from 'config/abi/predictions.json'
+import { State, NodeRound, ReduxNodeLedger, NodeLedger, ReduxNodeRound, PredictionsState, PredictionStatus } from '../types'
+import { MarketData, parseBigNumberObj } from './helpers'
 import { fetchAddressResult } from '.'
 
 export const useGetRounds = () => {
@@ -176,4 +181,87 @@ export const useGetOrFetchLeaderboardAddressResult = (account: string) => {
 
 export const useGetSelectedAddress = () => {
     return useSelector((state: State) => state.predictions.leaderboard.selectedAddress)
+}
+
+export const useGetRoundsData = () => {
+    const { chainId } = useActiveWeb3React()
+    const multicallv2 = useMulticallv2()
+    return useCallback(async (epochs: number[]): Promise<PredictionsRoundsResponse[]> => {
+        const address = getPredictionsAddress(chainId)
+        const calls = epochs.map((epoch) => ({
+            address,
+            name: 'rounds',
+            params: [epoch],
+        }))
+        const response = await multicallv2<PredictionsRoundsResponse[]>(predictionsAbi, calls)
+        return response
+    }, [multicallv2, chainId])
+}
+
+export const useGetClaimStatuses = () => {
+    const { chainId } = useActiveWeb3React()
+    const multicallv2 = useMulticallv2()
+    return useCallback(async (
+        account: string,
+        epochs: number[],
+    ): Promise<PredictionsState['claimableStatuses']> => {
+        const address = getPredictionsAddress(chainId)
+        const claimableCalls = epochs.map((epoch) => ({
+            address,
+            name: 'claimable',
+            params: [epoch, account],
+        }))
+        const claimableResponses = await multicallv2<[PredictionsClaimableResponse][]>(predictionsAbi, claimableCalls)
+
+        return claimableResponses.reduce((accum, claimableResponse, index) => {
+            const epoch = epochs[index]
+            const [claimable] = claimableResponse
+
+            return {
+                ...accum,
+                [epoch]: claimable,
+            }
+        }, {})
+    }, [multicallv2, chainId])
+}
+
+export const useGetLedgerData = () => {
+    const { chainId } = useActiveWeb3React()
+    const multicallv2 = useMulticallv2()
+    return useCallback(async (account: string, epochs: number[]) => {
+        const address = getPredictionsAddress(chainId)
+        const ledgerCalls = epochs.map((epoch) => ({
+            address,
+            name: 'ledger',
+            params: [epoch, account],
+        }))
+        const response = await multicallv2<PredictionsLedgerResponse[]>(predictionsAbi, ledgerCalls)
+        return response
+    }, [multicallv2, chainId])
+}
+
+export const useGetPredictionData = () => {
+    const { chainId } = useActiveWeb3React()
+    const multicallv2 = useMulticallv2()
+    return useCallback(async (): Promise<MarketData> => {
+        const address = getPredictionsAddress(chainId)
+        const staticCalls = ['currentEpoch', 'intervalSeconds', 'minBetAmount', 'paused', 'bufferSeconds'].map(
+            (method) => ({
+                address,
+                name: method,
+            }),
+        )
+        const [[currentEpoch], [intervalSeconds], [minBetAmount], [paused], [bufferSeconds]] = await multicallv2(
+            predictionsAbi,
+            staticCalls,
+        )
+
+        return {
+            status: paused ? PredictionStatus.PAUSED : PredictionStatus.LIVE,
+            currentEpoch: currentEpoch.toNumber(),
+            intervalSeconds: intervalSeconds.toNumber(),
+            minBetAmount: minBetAmount.toString(),
+            bufferSeconds: bufferSeconds.toNumber(),
+        }
+    }, [multicallv2, chainId])
 }

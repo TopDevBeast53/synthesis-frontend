@@ -21,7 +21,6 @@ import isEmpty from 'lodash/isEmpty'
 import { useCurrentBlock } from 'state/block'
 import { SnapshotCommand } from 'state/types'
 import useToast from 'hooks/useToast'
-import useWeb3Provider from 'hooks/useActiveWeb3React'
 import { getEtherScanLink } from 'utils'
 import truncateHash from 'utils/truncateHash'
 import { signMessage } from 'utils/web3React'
@@ -31,6 +30,7 @@ import { DatePicker, TimePicker, DatePickerPortal } from 'views/Voting/component
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import ReactMarkdown from 'components/ReactMarkdown'
 import { PageMeta } from 'components/Layout/Page'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { sendSnapshotData, Message, generateMetaData, generatePayloadData } from '../helpers'
 import Layout from '../components/Layout'
 import { FormErrors, Label, SecondaryLabel } from './styles'
@@ -55,7 +55,7 @@ const CreateProposal = () => {
   const { account } = useWeb3React()
   const currentBlock = useCurrentBlock()
   const { push } = useHistory()
-  const { library, connector } = useWeb3Provider()
+  const { library, connector, chainId } = useActiveWeb3React()
   const { toastSuccess, toastError } = useToast()
   const [onPresentVoteDetailsModal] = useModal(<VoteDetailsModal />)
   const { name, body, endDate, endTime, snapshot } = state
@@ -76,7 +76,7 @@ const CreateProposal = () => {
           start: combineDateAndTime(new Date(), new Date()),
           end: combineDateAndTime(endDate, endTime),
           choices: CHOICES_PRESET,
-          metadata: generateMetaData(),
+          metadata: generateMetaData(chainId),
           type: 'single-choice',
         },
       })
@@ -228,14 +228,14 @@ const CreateProposal = () => {
                     <Text color="textSubtle" mr="16px">
                       {t('Creator')}
                     </Text>
-                    <LinkExternal href={getEtherScanLink(account, 'address')}>{truncateHash(account)}</LinkExternal>
+                    <LinkExternal href={getEtherScanLink(account, 'address', chainId)}>{truncateHash(account)}</LinkExternal>
                   </Flex>
                 )}
                 <Flex alignItems="center" mb="16px">
                   <Text color="textSubtle" mr="16px">
                     {t('Snapshot')}
                   </Text>
-                  <LinkExternal href={getEtherScanLink(snapshot, 'block')}>{snapshot}</LinkExternal>
+                  <LinkExternal href={getEtherScanLink(snapshot, 'block', chainId)}>{snapshot}</LinkExternal>
                 </Flex>
                 {account ? (
                   <>

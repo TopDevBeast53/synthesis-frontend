@@ -1,7 +1,7 @@
 import React from 'react'
 import Balance from 'components/Balance'
 import { useTranslation } from 'contexts/Localization'
-import tokens from 'config/constants/tokens'
+import { useGetTokens } from 'hooks/useGetTokens'
 import { usePriceHelixBusd } from 'state/farms/hooks'
 import styled from 'styled-components'
 import { Box, Flex, Skeleton, Text, useMatchBreakpoints } from 'uikit'
@@ -19,6 +19,7 @@ const StyledCell = styled(BaseCell)`
 
 const EarningsCell: React.FC<EarningsCellProps> = ({ isLoading, earnings }) => {
   const { t } = useTranslation()
+  const tokens = useGetTokens()
   const { isMobile } = useMatchBreakpoints()
 
   const cakePrice = usePriceHelixBusd()

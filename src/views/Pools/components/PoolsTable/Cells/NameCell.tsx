@@ -6,8 +6,8 @@ import { useTranslation } from 'contexts/Localization'
 import { useVaultPoolByKey } from 'state/pools/hooks'
 import { DeserializedPool } from 'state/types'
 import { BIG_ZERO } from 'utils/bigNumber'
-import { vaultPoolConfig } from 'config/constants/pools'
 import { TokenPairImage } from 'components/TokenImage'
+import { useGetVaultPoolConfig } from 'views/Pools/hooks/useGetVaultPoolConfig'
 import BaseCell, { CellContent } from './BaseCell'
 
 interface NameCellProps {
@@ -31,6 +31,8 @@ const NameCell: React.FC<NameCellProps> = ({ pool }) => {
   const {
     userData: { userShares },
   } = useVaultPoolByKey(pool.vaultKey)
+  const vaultPoolConfig = useGetVaultPoolConfig()
+
   const hasVaultShares = userShares && userShares.gt(0)
 
   const stakingTokenSymbol = stakingToken.symbol

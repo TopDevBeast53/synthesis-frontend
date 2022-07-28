@@ -8,11 +8,13 @@ import { fetchNodeHistory } from 'state/predictions'
 import { getFilteredBets } from 'state/predictions/helpers'
 import { useAppDispatch } from 'state'
 import {
+  useGetClaimStatuses,
   useGetCurrentEpoch,
   useGetCurrentHistoryPage,
   useGetHistory,
   useGetHistoryFilter,
   useGetIsFetchingHistory,
+  useGetRoundsData,
   useIsHistoryPaneOpen,
 } from 'state/predictions/hooks'
 import { Header, HistoryTabs } from './components/History'
@@ -56,12 +58,14 @@ const History = () => {
   const { t } = useTranslation()
   const bets = useGetHistory()
   const [activeTab, setActiveTab] = useState(HistoryTabs.ROUNDS)
+  const getRoundsData = useGetRoundsData()
+  const getClaimStatuses = useGetClaimStatuses()
 
   useEffect(() => {
     if (account && isHistoryPaneOpen) {
-      dispatch(fetchNodeHistory({ account }))
+      dispatch(fetchNodeHistory({ account, getRoundsData, getClaimStatuses }))
     }
-  }, [account, currentEpoch, isHistoryPaneOpen, dispatch])
+  }, [account, currentEpoch, isHistoryPaneOpen, dispatch, getRoundsData, getClaimStatuses])
 
   const results = getFilteredBets(bets, historyFilter)
   const hasBetHistory = results && results.length > 0

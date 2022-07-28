@@ -36,9 +36,9 @@ import {
 } from './normalizers'
 import { PairDataTimeWindowEnum } from './types'
 import { derivedPairByDataIdSelector, pairByDataIdSelector } from './selectors'
-import { DEFAULT_INPUT_CURRENCY, DEFAULT_OUTPUT_CURRENCY } from './constants'
 import fetchDerivedPriceData from './fetch/fetchDerivedPriceData'
 import { pairHasEnoughLiquidity } from './fetch/utils'
+import { DEFAULT_INPUT_CURRENCY, DEFAULT_OUTPUT_CURRENCY } from './constants'
 
 export function useSwapState(): AppState['swap'] {
     return useSelector<AppState, AppState['swap']>((state) => state.swap)
@@ -322,9 +322,9 @@ function validatedRecipient(recipient: any): string | null {
     return null
 }
 
-export function queryParametersToSwapState(parsedQs: ParsedQs): SwapState {
-    let inputCurrency = parseCurrencyFromURLParameter(parsedQs.inputCurrency) || DEFAULT_INPUT_CURRENCY
-    let outputCurrency = parseCurrencyFromURLParameter(parsedQs.outputCurrency) || DEFAULT_OUTPUT_CURRENCY
+export function queryParametersToSwapState(parsedQs: ParsedQs, defaultInputCurrency, defaultOutputCurrency): SwapState {
+    let inputCurrency = parseCurrencyFromURLParameter(parsedQs.inputCurrency) || defaultInputCurrency
+    let outputCurrency = parseCurrencyFromURLParameter(parsedQs.outputCurrency) || defaultOutputCurrency
     if (inputCurrency === outputCurrency) {
         if (typeof parsedQs.outputCurrency === 'string') {
             inputCurrency = ''
@@ -363,7 +363,7 @@ export function useDefaultsFromURLSearch():
 
     useEffect(() => {
         if (!chainId) return
-        const parsed = queryParametersToSwapState(parsedQs)
+        const parsed = queryParametersToSwapState(parsedQs, DEFAULT_INPUT_CURRENCY[chainId], DEFAULT_OUTPUT_CURRENCY[chainId])
 
         dispatch(
             replaceSwapState({
@@ -405,6 +405,7 @@ export const useFetchPairPrices = ({
     const pairData = useSelector(pairByDataIdSelector({ pairId, timeWindow }))
     const derivedPairData = useSelector(derivedPairByDataIdSelector({ pairId, timeWindow }))
     const dispatch = useDispatch()
+    const { chainId } = useActiveWeb3React()
 
     useEffect(() => {
         const fetchDerivedData = async () => {
@@ -415,7 +416,7 @@ export const useFetchPairPrices = ({
                 // Try to get at least derived data for chart
                 // This is used when there is no direct data for pool
                 // i.e. when multihops are necessary
-                const derivedData = await fetchDerivedPriceData(token0Address, token1Address, timeWindow)
+                const derivedData = await fetchDerivedPriceData(chainId, token0Address, token1Address, timeWindow)
                 if (derivedData) {
                     const normalizedDerivedData = normalizeDerivedChartData(derivedData)
                     dispatch(updateDerivedPairData({ pairData: normalizedDerivedData, pairId, timeWindow }))
@@ -432,7 +433,7 @@ export const useFetchPairPrices = ({
 
         const fetchAndUpdatePairPrice = async () => {
             setIsLoading(true)
-            const { data } = await fetchPairPriceData({ pairId, timeWindow })
+            const { data } = await fetchPairPriceData({ chainId, pairId, timeWindow })
             if (data) {
                 // Find out if Liquidity Pool has enough liquidity
                 // low liquidity pool might mean that the price is incorrect
@@ -456,17 +457,7 @@ export const useFetchPairPrices = ({
         if (!pairData && !derivedPairData && pairId && !isLoading) {
             fetchAndUpdatePairPrice()
         }
-    }, [
-        pairId,
-        timeWindow,
-        pairData,
-        currentSwapPrice,
-        token0Address,
-        token1Address,
-        derivedPairData,
-        dispatch,
-        isLoading,
-    ])
+    }, [pairId, timeWindow, pairData, currentSwapPrice, token0Address, token1Address, derivedPairData, dispatch, isLoading, chainId])
 
     useEffect(() => {
         const updatePairId = () => {

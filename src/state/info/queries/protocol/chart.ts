@@ -4,6 +4,8 @@ import { request, gql } from 'graphql-request'
 import { INFO_CLIENT } from 'config/constants/endpoints'
 import { HELIX_START } from 'config/constants/info'
 import { ChartEntry } from 'state/info/types'
+import { ChainId } from 'sdk'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { helixDayDatasResponse } from '../types'
 import { fetchChartData, mapDayData } from '../helpers'
 
@@ -20,10 +22,10 @@ const HELIX_DAY_DATAS = gql`
     }
 `
 
-const getOverviewChartData = async (skip: number): Promise<{ data?: ChartEntry[]; error: boolean }> => {
+const getOverviewChartData = async (chainId: ChainId, skip: number): Promise<{ data?: ChartEntry[]; error: boolean }> => {
     try {
-        const { helixDayDatas } = await request<helixDayDatasResponse>(INFO_CLIENT, HELIX_DAY_DATAS, {
-            startTime: HELIX_START,
+        const { helixDayDatas } = await request<helixDayDatasResponse>(INFO_CLIENT[chainId], HELIX_DAY_DATAS, {
+            startTime: HELIX_START[chainId],
             skip,
         })
         const data = helixDayDatas.map(mapDayData)
@@ -43,10 +45,11 @@ const useFetchGlobalChartData = (): {
 } => {
     const [overviewChartData, setOverviewChartData] = useState<ChartEntry[] | undefined>()
     const [error, setError] = useState(false)
+    const { chainId } = useActiveWeb3React()
 
     useEffect(() => {
         const fetch = async () => {
-            const { data } = await fetchChartData(getOverviewChartData)
+            const { data } = await fetchChartData(chainId, getOverviewChartData)
             if (data) {
                 setOverviewChartData(data)
             } else {
@@ -56,7 +59,7 @@ const useFetchGlobalChartData = (): {
         if (!overviewChartData && !error) {
             fetch()
         }
-    }, [overviewChartData, error])
+    }, [overviewChartData, error, chainId])
 
     return {
         error,

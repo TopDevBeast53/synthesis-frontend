@@ -1,15 +1,26 @@
 import BigNumber from 'bignumber.js'
-import poolsConfig from 'config/constants/pools'
 import { useCallback } from 'react'
 import { setPoolsPublicData } from 'state/pools'
-import { fetchPoolsBlockLimits, fetchPoolsTotalStaking } from 'state/pools/fetchPools'
 import { getTokenPricesFromFarm } from 'state/pools/helpers'
 import { getPoolApr } from 'utils/apr'
 import { getBalanceNumber } from 'utils/formatBalance'
+import { getAddress, getHelixAutoPoolAddress } from 'utils/addressHelpers'
+import helixABI from 'config/abi/Helix.json'
+import wbnbABI from 'config/abi/weth.json'
+import { useFetchPoolsBlockLimits } from 'state/pools/hooks'
+import { useGetPools } from 'state/pools/useGetPools'
 import useProviders from './useProviders'
+import { useMasterchef } from './useContract'
+import useMulticall from './useMulticall'
+import useActiveWeb3React from './useActiveWeb3React'
+import { useGetTokens } from './useGetTokens'
 
 const useFetchPoolsPublicDataAsync = (currentBlockNumber: number) => {
   const rpcProvider = useProviders();
+  const fetchPoolsTotalStaking = useFetchPoolsTotalStaking()
+  const fetchPoolsBlockLimits = useFetchPoolsBlockLimits()
+  const pools = useGetPools()
+
   return useCallback(async (dispatch, getState) => {
     const [blockLimits, totalStakings, currentBlock] = await Promise.all([
       fetchPoolsBlockLimits(),
@@ -19,7 +30,7 @@ const useFetchPoolsPublicDataAsync = (currentBlockNumber: number) => {
 
     const prices = getTokenPricesFromFarm(getState().farms.data)
 
-    const liveData = poolsConfig.map((pool) => {
+    const liveData = pools.map((pool) => {
       const blockLimit = blockLimits.find((entry) => entry.sousId === pool.sousId)
       const totalStaking = totalStakings.find((entry) => entry.sousId === pool.sousId)
       const isPoolEndBlockExceeded =
@@ -52,7 +63,60 @@ const useFetchPoolsPublicDataAsync = (currentBlockNumber: number) => {
     })
 
     dispatch(setPoolsPublicData(liveData))
-  }, [currentBlockNumber, rpcProvider])
+  }, [currentBlockNumber, fetchPoolsBlockLimits, fetchPoolsTotalStaking, pools, rpcProvider])
+}
+
+const useFetchPoolsTotalStaking = () => {
+  const masterChefContract = useMasterchef()
+  const multicall = useMulticall()
+  const { chainId } = useActiveWeb3React()
+  const tokens = useGetTokens()
+  const pools = useGetPools()
+
+  return useCallback(async () => {
+    const helixPools = pools.filter((p) => p.stakingToken.symbol !== 'ETH' && p.sousId === 0)
+    const nonBnbPools = pools.filter((p) => p.stakingToken.symbol !== 'ETH' && p.sousId !== 0)
+    const bnbPool = pools.filter((p) => p.stakingToken.symbol === 'ETH')
+
+    const callsNonBnbPools = nonBnbPools.map((poolConfig) => {
+      return {
+        address: poolConfig.stakingToken.address,
+        name: 'balanceOf',
+        params: [getAddress(chainId, poolConfig.contractAddress)],
+      }
+    })
+
+    const callsBnbPools = bnbPool.map((poolConfig) => {
+      return {
+        address: tokens.weth.address,
+        name: 'balanceOf',
+        params: [getAddress(chainId, poolConfig.contractAddress)],
+      }
+    })
+
+    const nonBnbPoolsTotalStaked = await multicall(helixABI, callsNonBnbPools)
+    const bnbPoolsTotalStaked = await multicall(wbnbABI, callsBnbPools)
+
+    const [totalDepositedHelix, autoHelixDeposit] = await Promise.all([
+      masterChefContract.depositedHelix(),
+      masterChefContract.userInfo(0, getHelixAutoPoolAddress(chainId))
+    ])
+    return [
+      ...helixPools.map(p => ({
+        sousId: p.sousId,
+        totalStaked: new BigNumber(totalDepositedHelix.toString()).toJSON(),
+        manualStaked: new BigNumber(totalDepositedHelix.sub(autoHelixDeposit.amount).toString()).toJSON(),
+      })),
+      ...nonBnbPools.map((p, index) => ({
+        sousId: p.sousId,
+        totalStaked: new BigNumber(nonBnbPoolsTotalStaked[index]).toJSON(),
+      })),
+      ...bnbPool.map((p, index) => ({
+        sousId: p.sousId,
+        totalStaked: new BigNumber(bnbPoolsTotalStaked[index]).toJSON(),
+      })),
+    ]
+  }, [chainId, masterChefContract, multicall, pools, tokens.weth.address])
 }
 
 export default useFetchPoolsPublicDataAsync

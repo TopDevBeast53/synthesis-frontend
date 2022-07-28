@@ -5,24 +5,25 @@ import {
   TokenImage as UIKitTokenImage,
   ImageProps,
 } from 'uikit'
-import tokens from 'config/constants/tokens'
 import { Token } from 'sdk'
+import { useGetTokens } from 'hooks/useGetTokens'
 
 interface TokenPairImageProps extends Omit<UIKitTokenPairImageProps, 'primarySrc' | 'secondarySrc'> {
   primaryToken: Token
   secondaryToken: Token
 }
 
-const getImageUrlFromToken = (token: Token) => {
+const getImageUrlFromToken = (tokens: any, token: Token) => {
   const address = token.symbol === 'ETH' ? tokens.weth.address : token.address
   return `/images/tokens/${address}.svg`
 }
 
 export const TokenPairImage: React.FC<TokenPairImageProps> = ({ primaryToken, secondaryToken, ...props }) => {
+  const tokens = useGetTokens()
   return (
     <UIKitTokenPairImage
-      primarySrc={getImageUrlFromToken(primaryToken)}
-      secondarySrc={getImageUrlFromToken(secondaryToken)}
+      primarySrc={getImageUrlFromToken(tokens, primaryToken)}
+      secondarySrc={getImageUrlFromToken(tokens, secondaryToken)}
       {...props}
     />
   )
@@ -33,5 +34,6 @@ interface TokenImageProps extends ImageProps {
 }
 
 export const TokenImage: React.FC<TokenImageProps> = ({ token, ...props }) => {
-  return <UIKitTokenImage src={getImageUrlFromToken(token)} {...props} />
+  const tokens = useGetTokens()
+  return <UIKitTokenImage src={getImageUrlFromToken(tokens, token)} {...props} />
 }

@@ -4,7 +4,7 @@ import { BSC_BLOCK_TIME } from 'config'
 import { Ifo, IfoStatus, PoolIds } from 'config/constants/types'
 import { useLpTokenPrice } from 'state/farms/hooks'
 import { BIG_ZERO } from 'utils/bigNumber'
-import { multicallv2 } from 'utils/multicall'
+import { useMulticallv2 } from 'hooks/useMulticall'
 import ifoV1Abi from 'config/abi/ifoV1.json'
 import { PublicIfoData } from '../../types'
 import { getStatus } from '../helpers'
@@ -35,6 +35,8 @@ const useGetPublicIfoData = (ifo: Ifo): PublicIfoData => {
             sumTaxesOverflow: BIG_ZERO, //  Not used
         },
     })
+    const multicallv2 = useMulticallv2()
+
     const fetchIfoData = useCallback(
         async (currentBlock: number) => {
             const ifoCalls = ['startBlock', 'endBlock', 'raisingAmount', 'totalAmount'].map((method) => ({
@@ -74,7 +76,7 @@ const useGetPublicIfoData = (ifo: Ifo): PublicIfoData => {
                 },
             }))
         },
-        [address, releaseBlockNumber],
+        [address, multicallv2, releaseBlockNumber],
     )
 
     return { ...state, currencyPriceInUSD: lpTokenPriceInUsd, fetchIfoData }

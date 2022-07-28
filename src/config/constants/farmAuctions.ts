@@ -1,5 +1,6 @@
+import { ChainId } from 'sdk'
 import getLpAddress from 'utils/getLpAddress'
-import tokens from './tokens'
+import getTokens from './tokens'
 import { FarmAuctionBidderConfig } from './types'
 
 export const whitelistedBidders: FarmAuctionBidderConfig[] = [
@@ -552,15 +553,15 @@ export const whitelistedBidders: FarmAuctionBidderConfig[] = [
     lpAddress: getLpAddress(bidderConfig.tokenAddress, bidderConfig.quoteToken),
 }))
 
-const UNKNOWN_BIDDER: FarmAuctionBidderConfig = {
-    account: '',
-    tokenAddress: '',
-    quoteToken: tokens.weth,
-    farmName: 'Unknown',
-    tokenName: 'Unknown',
-}
 
-export const getBidderInfo = (account: string): FarmAuctionBidderConfig => {
+export const getBidderInfo = (account: string, chainId: ChainId): FarmAuctionBidderConfig => {
+    const UNKNOWN_BIDDER: FarmAuctionBidderConfig = {
+        account: '',
+        tokenAddress: '',
+        quoteToken: getTokens(chainId).weth,
+        farmName: 'Unknown',
+        tokenName: 'Unknown',
+    }
     const matchingBidder = whitelistedBidders.find((bidder) => bidder.account.toLowerCase() === account.toLowerCase())
     if (matchingBidder) {
         return matchingBidder

@@ -16,7 +16,7 @@ import styled from 'styled-components'
 import { useAppDispatch } from 'state'
 import { Bet, PredictionStatus } from 'state/types'
 import { REWARD_RATE } from 'state/predictions/config'
-import { useGetCurrentEpoch, useGetIsClaimable, useGetPredictionsStatus } from 'state/predictions/hooks'
+import { useGetCurrentEpoch, useGetIsClaimable, useGetLedgerData, useGetPredictionsStatus } from 'state/predictions/hooks'
 import { fetchLedgerData, markAsCollected } from 'state/predictions'
 import { getRoundResult, Result } from 'state/predictions/helpers'
 import { useTranslation } from 'contexts/Localization'
@@ -62,6 +62,7 @@ const HistoricalBet: React.FC<BetProps> = ({ bet }) => {
   const canClaim = useGetIsClaimable(bet.round.epoch)
   const dispatch = useAppDispatch()
   const { account } = useWeb3React()
+  const getLedgerData = useGetLedgerData()
 
   const toggleOpen = () => setIsOpen(!isOpen)
 
@@ -151,7 +152,7 @@ const HistoricalBet: React.FC<BetProps> = ({ bet }) => {
   const handleSuccess = async () => {
     // We have to mark the bet as claimed immediately because it does not update fast enough
     dispatch(markAsCollected({ [bet.round.epoch]: true }))
-    dispatch(fetchLedgerData({ account, epochs: [bet.round.epoch] }))
+    dispatch(fetchLedgerData({ account, epochs: [bet.round.epoch], getLedgerData }))
   }
 
   return (

@@ -9,7 +9,7 @@ import useWeb3Provider from 'hooks/useActiveWeb3React'
 import useTheme from 'hooks/useTheme'
 import snapshot from '@snapshot-labs/snapshot.js'
 import { useFarms } from 'state/farms/hooks'
-import tokens from 'config/constants/tokens'
+import { useGetTokens } from 'hooks/useGetTokens'
 import { useFastFresh } from 'hooks/useRefresh'
 import { getAddress, getMasterChefAddress, getHelixAutoPoolAddress, getHelixVaultAddress } from 'utils/addressHelpers'
 import { CastVoteModalProps, ConfirmVoteView } from './types'
@@ -22,8 +22,9 @@ const CastVoteModal: React.FC<CastVoteModalProps> = ({ onSuccess, proposalId, sp
   const [isPending, setIsPending] = useState(false)
   const { account } = useWeb3React()
   const { t } = useTranslation()
+  const tokens = useGetTokens()
   const { toastError } = useToast()
-  const { library, connector } = useWeb3Provider()
+  const { library, connector, chainId } = useWeb3Provider()
   const { theme } = useTheme()
 
   const [totalVp, setTotalVp] = useState('')
@@ -31,16 +32,15 @@ const CastVoteModal: React.FC<CastVoteModalProps> = ({ onSuccess, proposalId, sp
 
   const fastRefresh = useFastFresh()
   const { data: farmsLP } = useFarms()
-  const masterChefAddress = getMasterChefAddress()
-  const autoHelixAddress = getHelixAutoPoolAddress()
-  const vaultAddress = getHelixVaultAddress()
-  const network = process.env.REACT_APP_CHAIN_ID
+  const masterChefAddress = getMasterChefAddress(chainId)
+  const autoHelixAddress = getHelixAutoPoolAddress(chainId)
+  const vaultAddress = getHelixVaultAddress(chainId)
 
   const helixLPs = farmsLP
     .filter((lp) => lp.pid !== 0)
     .filter((lp) => lp.lpSymbol.includes('HELIX'))
     .map((lp) => ({
-      "address": getAddress(lp.lpAddresses),
+      "address": getAddress(chainId, lp.lpAddresses),
       "pid": lp.pid
     }))
 
@@ -64,7 +64,7 @@ const CastVoteModal: React.FC<CastVoteModalProps> = ({ onSuccess, proposalId, sp
       const vp = await snapshot.utils.getScores(
         spaceId,
         strategies,
-        network,
+        chainId.toString(),
         [account],
         block
       )
@@ -81,7 +81,7 @@ const CastVoteModal: React.FC<CastVoteModalProps> = ({ onSuccess, proposalId, sp
       mounted = false
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fastRefresh, account])
+  }, [fastRefresh, account, chainId])
 
   const isStartView = view === ConfirmVoteView.MAIN
   const handleBack = isStartView ? null : () => setView(ConfirmVoteView.MAIN)

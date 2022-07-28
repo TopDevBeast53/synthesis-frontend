@@ -1,6 +1,5 @@
 import React, { useCallback, useState, useEffect } from 'react'
 import { useTranslation } from 'contexts/Localization'
-import { useWeb3React } from '@web3-react/core'
 import { SupportedChainId, CHAIN_IDS_TO_NAMES, SUPPORTED_NETWORKS } from 'config/constants/networks'
 import { usePopper } from 'react-popper'
 import { Flex, Image } from 'uikit'
@@ -10,7 +9,7 @@ import usePreviousValue from 'hooks/usePreviousValue'
 import useParsedQueryString from 'hooks/useParsedQueryString'
 import { ParsedQs } from 'qs'
 import { replaceURLParam } from 'utils/routes'
-import useGetChainDetail from 'hooks/useGetChainDetail'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 // import { isChainAllowed, switchChain } from 'utils/switchChain'
 
@@ -114,8 +113,7 @@ function Row({
   targetChain: SupportedChainId
   onSelectChain: (targetChain: number) => void
 }) {
-  const chainFromUrl = useGetChainDetail()
-  const chainId = chainFromUrl.CHAIN_ID
+  const { chainId } = useActiveWeb3React()
   if (!chainId) {
     return null
   }
@@ -157,6 +155,7 @@ const getParsedChainId = (parsedQs?: ParsedQs) => {
 }
 
 const getChainIdFromName = (name: string) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const entry = Object.entries(CHAIN_IDS_TO_NAMES).find(([_, n]) => n === name)
   const chainId = entry?.[0]
   return chainId ? parseInt(chainId) : undefined
@@ -168,8 +167,7 @@ const getChainNameFromId = (id: string | number) => {
 }
 
 export default function NetworkSelector() {
-  const chainFromUrl = useGetChainDetail()
-  const chainId = chainFromUrl.CHAIN_ID
+  const { chainId } = useActiveWeb3React()
   const previousChainId = usePreviousValue(chainId)
   const parsedQs = useParsedQueryString()
   const { urlChain, urlChainId } = getParsedChainId(parsedQs)
@@ -190,6 +188,7 @@ export default function NetworkSelector() {
   const info = chainId ? SUPPORTED_NETWORKS[chainId] : undefined
 
   const onSelectChain = useCallback(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async (targetChain: number, skipToggle?: boolean) => {
       try {
         // await switchChain(connector, targetChain)

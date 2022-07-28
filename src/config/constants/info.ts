@@ -1,7 +1,5 @@
 import { ChainId } from 'sdk'
 
-const chainId = process.env.REACT_APP_CHAIN_ID
-
 export const MINIMUM_SEARCH_CHARACTERS = 2
 
 export const WEEKS_IN_YEAR = 52.1429
@@ -11,7 +9,10 @@ export const LP_HOLDERS_FEE = 0.001
 export const TREASURY_FEE = 0
 export const BUYBACK_FEE = 0
 
-export const HELIX_START = Number(chainId) === ChainId.MAINNET ? 1656971517 : 1656628275 // Jul-04-2022 09:51:57 PM +UTC : Jun-30-2022 10:31:15 PM +UTC
+export const HELIX_START = {
+    [ChainId.MAINNET]: 1656971517, // Jul-04-2022 09:51:57 PM +UTC
+    [ChainId.TESTNET]: 1656628275, // Jun-30-2022 10:31:15 PM +UTC
+}
 export const ONE_DAY_UNIX = 86400 // 24h * 60m * 60s
 export const ONE_HOUR_SECONDS = 3600
 

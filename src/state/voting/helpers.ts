@@ -1,12 +1,10 @@
 import request, { gql } from 'graphql-request'
-import { SNAPSHOT_API, SNAPSHOT_VOTING_API } from 'config/constants/endpoints'
+import { SNAPSHOT_API } from 'config/constants/endpoints'
 import { Proposal, ProposalState, Vote, VoteWhere } from 'state/types'
-import { simpleRpcProvider } from 'utils/providers'
 import { ChainId } from 'sdk'
 
-export const getProposals = async (first = 5, skip = 0, state = ProposalState.ACTIVE): Promise<Proposal[]> => {
-    const chainId = process.env.REACT_APP_CHAIN_ID
-    const space = Number(chainId) === ChainId.MAINNET ? "helixgeometry.eth" : "silverstardev.eth"
+export const getProposals = async (chainId: number, first = 5, skip = 0, state = ProposalState.ACTIVE): Promise<Proposal[]> => {
+    const space = chainId === ChainId.MAINNET ? "helixgeometry.eth" : "silverstardev.eth"
 
     const response: { proposals: Proposal[] } = await request(
         SNAPSHOT_API,
@@ -92,41 +90,6 @@ export const getVotes = async (first: number, skip: number, where: VoteWhere): P
         { first, skip, where },
     )
     return response.votes
-}
-
-export const getVoteVerificationStatuses = async (
-    votes: Vote[],
-    block?: number,
-): Promise<{ [key: string]: boolean }> => {
-    const blockNumber = block || (await simpleRpcProvider.getBlockNumber())
-
-    const votesToVerify = votes.map((vote) => ({
-        address: vote.voter,
-        verificationHash: vote.metadata?.verificationHash,
-        total: vote.metadata?.votingPower,
-    }))
-    const response = await fetch(`${SNAPSHOT_VOTING_API}/verify`, {
-        method: 'post',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            block: blockNumber,
-            votes: votesToVerify,
-        }),
-    })
-
-    if (!response.ok) {
-        throw new Error(response.statusText)
-    }
-
-    const data = await response.json()
-    return votes.reduce((accum, vote) => {
-        return {
-            ...accum,
-            [vote.id]: data.data[vote.voter.toLowerCase()]?.isValid === true,
-        }
-    }, {})
 }
 
 export const getAllVotes = async (proposalId: string, block?: number, votesPerChunk = 1000): Promise<Vote[]> => {

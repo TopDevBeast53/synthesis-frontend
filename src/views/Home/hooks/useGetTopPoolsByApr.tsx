@@ -5,7 +5,7 @@ import { orderBy } from 'lodash'
 import { DeserializedPool } from 'state/types'
 import { fetchHelixVaultFees } from 'state/pools'
 import { useInitialBlock } from 'state/block/hooks'
-import { usePoolsWithVault } from 'state/pools/hooks'
+import { useFetchVaultFees, usePoolsWithVault } from 'state/pools/hooks'
 import { FetchStatus } from 'config/constants/types'
 import useFetchPoolsPublicDataAsync from 'hooks/useFetchPoolsPublicDataAsync'
 
@@ -16,9 +16,8 @@ const useGetTopPoolsByApr = (isIntersecting: boolean) => {
   const [topPools, setTopPools] = useState<DeserializedPool[]>([null, null, null, null, null])
   const initialBlock = useInitialBlock()
   const fetchPoolsPublicDataAsync = useFetchPoolsPublicDataAsync(initialBlock)
-
+  const fetchVaultFees = useFetchVaultFees()
   const { pools } = usePoolsWithVault()
-
   const helixPriceBusd = usePriceHelixBusd()
 
   useEffect(() => {
@@ -26,7 +25,7 @@ const useGetTopPoolsByApr = (isIntersecting: boolean) => {
       setFetchStatus(FetchStatus.Fetching)
 
       try {
-        await dispatch(fetchHelixVaultFees())
+        await dispatch(fetchHelixVaultFees({ fetchVaultFees }))
         await dispatch(fetchPoolsPublicDataAsync)
         setFetchStatus(FetchStatus.Fetched)
       } catch (e) {
@@ -38,7 +37,7 @@ const useGetTopPoolsByApr = (isIntersecting: boolean) => {
     if (isIntersecting && fetchStatus === FetchStatus.Idle && initialBlock > 0) {
       fetchPoolsPublicData()
     }
-  }, [dispatch, setFetchStatus, fetchStatus, topPools, isIntersecting, initialBlock, fetchPoolsPublicDataAsync])
+  }, [dispatch, setFetchStatus, fetchStatus, topPools, isIntersecting, initialBlock, fetchPoolsPublicDataAsync, fetchVaultFees])
 
   useEffect(() => {
     const getTopPoolsByApr = (activePools: DeserializedPool[]) => {
