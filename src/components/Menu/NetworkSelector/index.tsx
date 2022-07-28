@@ -79,12 +79,12 @@ const NetworkLabel = styled.div`
 const SelectorControls = styled(Flex)`
   align-items: center;
   background-color: ${({ theme }) => theme.colors.tertiary};
-  height: 32px;
-  border-radius: 12px;
+  height: 20px;
+  border-radius: 50px;
   cursor: pointer;
   display: inline-flex;
-  padding-left: 40px;
-  margin-right: 8px;
+  padding-left: 30px;
+  margin-right: 16px;
   position: relative;
 `
 
@@ -256,7 +256,7 @@ export default function NetworkSelector() {
         onTouchStart={() => {
           setIsOpen((s) => !s)
         }}>
-        <NetworkIcon src={info.logoUrl} height={40} width={40} />
+        <NetworkIcon src={info.logoUrl} height={30} width={30} />
       </SelectorControls>
       {isOpen && (
         <FlyoutMenu style={styles.popper} {...attributes.popper} ref={setTooltipRef}>
