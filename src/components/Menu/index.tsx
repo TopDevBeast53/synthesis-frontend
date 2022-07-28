@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { useLocation } from 'react-router'
 import { Menu as UikitMenu } from 'uikit'
@@ -6,6 +6,7 @@ import { languageList } from 'config/localization/languages'
 import { useTranslation } from 'contexts/Localization'
 import useTheme from 'hooks/useTheme'
 import { usePriceHelixBusd } from 'state/farms/hooks'
+import useGetChainDetail from 'hooks/useGetChainDetail'
 import config from './config/config'
 import UserMenu from './UserMenu'
 import NetworkSelector from './NetworkSelector'
@@ -18,8 +19,13 @@ const Menu = (props) => {
   const cakePriceUsd = usePriceHelixBusd()
   const { currentLanguage, setLanguage, t } = useTranslation()
   const { pathname, search } = useLocation()
+  const network = useGetChainDetail()
 
-  const activeMenuItem = getActiveMenuItem({ menuConfig: config(t), pathname })
+  const menuConfig = useMemo(() => {
+    return config(t).filter((menu) => network.SHOW_ONLY_TRADE ? menu.isTrade === true : true)
+  }, [network.SHOW_ONLY_TRADE, t])
+
+  const activeMenuItem = getActiveMenuItem({ menuConfig, pathname })
   const activeSubMenuItem = getActiveSubMenuItem({ menuItem: activeMenuItem, pathname })
 
   return (
@@ -34,7 +40,7 @@ const Menu = (props) => {
       langs={languageList}
       setLang={setLanguage}
       cakePriceUsd={cakePriceUsd}
-      links={config(t)}
+      links={menuConfig}
       subLinks={activeMenuItem?.hideSubNav ? [] : activeMenuItem?.items}
       footerLinks={footerLinks(t)}
       footerLings={{}}
