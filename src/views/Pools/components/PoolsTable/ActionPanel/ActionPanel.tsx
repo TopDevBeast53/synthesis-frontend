@@ -26,8 +26,8 @@ import { BIG_ZERO } from 'utils/bigNumber'
 import { registerToken } from 'utils/wallet'
 import { getBalanceNumber, getFullDisplayBalance } from 'utils/formatBalance'
 import { convertSharesToHelix, getPoolBlockInfo } from 'views/Pools/helpers'
-import { vaultPoolConfig } from 'config/constants/pools'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import { useGetVaultPoolConfig } from 'views/Pools/hooks/useGetVaultPoolConfig'
 import Harvest from './Harvest'
 import Stake from './Stake'
 import Apr from '../Apr'
@@ -146,6 +146,7 @@ const ActionPanel: React.FC<ActionPanelProps> = ({ account, pool, userDataLoaded
     fees: { performanceFeeAsDecimal },
     pricePerFullShare,
   } = useVaultPoolByKey(vaultKey)
+  const vaultPoolConfig = useGetVaultPoolConfig()
 
   const vaultPools = useVaultPools()
   const helixInVaults = Object.values(vaultPools).reduce((total, vault) => {

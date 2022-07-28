@@ -3,7 +3,6 @@ import { AddressZero } from '@ethersproject/constants'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { getAddress, getAnniversaryAchievement, getBunnyFactoryAddress, getBunnySpecialAddress, getBunnySpecialLotteryAddress, getBunnySpecialPredictionAddress, getBunnySpecialXmasAddress, getChainlinkOracleAddress, getClaimRefundAddress, getEasterNftAddress, getFarmAuctionAddress, getHelixAutoPoolAddress, getHelixChefNftAddress, getHelixLPSwapAddress, getHelixNftAddress, getHelixNftBridgeAddress, getHelixVaultAddress, getIfoPoolAddress, getLotteryV2Address, getMasterChefAddress, getMulticallAddress, getNftMarketAddress, getNftSaleAddress, getPancakeProfileAddress, getPancakeRabbitsAddress, getPancakeSquadAddress, getPointCenterIfoAddress, getPredictionsAddress, getYieldSwapAddress } from 'utils/addressHelpers'
 import { VaultKey } from 'state/types'
-import { poolsConfig } from 'config/constants'
 import { PoolCategory } from 'config/constants/types'
 import {
     Erc20,
@@ -91,10 +90,11 @@ import lpSwapAbi from 'config/abi/HelixLpSwap.json'
 import NFTAbi from 'config/abi/HelixNFT.json'
 import cheftNFTAbi from 'config/abi/HelixChefNFT.json'
 import bridgeNFTAbi from 'config/abi/HelixNFTBridge.json'
-import ENS_PUBLIC_RESOLVER_ABI from '../config/abi/ens-public-resolver.json'
-import ENS_ABI from '../config/abi/ens-registrar.json'
-import { ERC20_BYTES32_ABI } from '../config/abi/erc20'
-import WETH_ABI from '../config/abi/weth.json'
+import { useGetPools } from 'state/pools/useGetPools'
+import ENS_PUBLIC_RESOLVER_ABI from 'config/abi/ens-public-resolver.json'
+import ENS_ABI from 'config/abi/ens-registrar.json'
+import { ERC20_BYTES32_ABI } from 'config/abi/erc20'
+import WETH_ABI from 'config/abi/weth.json'
 
 import { getProviderOrSigner, isAddress } from '../utils'
 import useProviders from './useProviders'
@@ -239,20 +239,22 @@ export const useMasterchef = () => {
 export const useSousChef = (id) => {
     const { library, chainId } = useActiveWeb3React()
     const getContract = useGetContract()
+    const pools = useGetPools()
     return useMemo(() => {
-        const config = poolsConfig.find((pool) => pool.sousId === id)
+        const config = pools.find((pool) => pool.sousId === id)
         const abi = config.poolCategory === PoolCategory.BINANCE ? sousChefBnb : sousChef
         return getContract(abi, getAddress(chainId, config.contractAddress), library.getSigner()) as SousChef
-    }, [chainId, getContract, id, library])
+    }, [chainId, getContract, id, library, pools])
 }
 
 export const useSousChefV2 = (id) => {
     const { library, chainId } = useActiveWeb3React()
     const getContract = useGetContract()
+    const pools = useGetPools()
     return useMemo(() => {
-        const config = poolsConfig.find((pool) => pool.sousId === id)
+        const config = pools.find((pool) => pool.sousId === id)
         return getContract(sousChefV2, getAddress(chainId, config.contractAddress), library.getSigner()) as SousChefV2
-    }, [getContract, chainId, library, id])
+    }, [pools, getContract, chainId, library, id])
 }
 
 export const usePointCenterIfoContract = () => {

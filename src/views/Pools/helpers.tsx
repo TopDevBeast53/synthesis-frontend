@@ -1,5 +1,6 @@
 import BigNumber from 'bignumber.js'
-import { vaultPoolConfig } from 'config/constants/pools'
+import { getVaultPoolConfig } from 'config/constants/pools'
+import { ChainId } from 'sdk'
 import { DeserializedPool } from 'state/types'
 import { getApy } from 'utils/compoundApyHelpers'
 import { getBalanceNumber, getFullDisplayBalance, getDecimalAmount } from 'utils/formatBalance'
@@ -34,9 +35,9 @@ export const convertHelixToShares = (
 
 const MANUAL_POOL_AUTO_COMPOUND_FREQUENCY = 0
 
-export const getAprData = (pool: DeserializedPool, performanceFee: number) => {
+export const getAprData = (chainId: ChainId, pool: DeserializedPool, performanceFee: number) => {
   const { vaultKey, apr } = pool
-
+  const vaultPoolConfig = getVaultPoolConfig(chainId)
   //   Estimate & manual for now. 288 = once every 5 mins. We can change once we have a better sense of this
   const autoCompoundFrequency = vaultKey
     ? vaultPoolConfig[vaultKey].autoCompoundFrequency

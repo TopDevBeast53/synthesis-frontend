@@ -8,9 +8,9 @@ import { useIfoPoolCreditBlock, useVaultPoolByKey } from 'state/pools/hooks'
 import { DeserializedPool, VaultKey } from 'state/types'
 import { convertSharesToHelix } from 'views/Pools/helpers'
 import { FlexGap } from 'components/Layout/Flex'
-import { vaultPoolConfig } from 'config/constants/pools'
 import { getEtherScanLink } from 'utils'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import { useGetVaultPoolConfig } from 'views/Pools/hooks/useGetVaultPoolConfig'
 import AprRow from '../PoolCard/AprRow'
 import { StyledCard } from '../PoolCard/StyledCard'
 import CardFooter from '../PoolCard/CardFooter'
@@ -91,6 +91,7 @@ const HelixVaultCard: React.FC<HelixVaultProps> = ({ pool, showStakedOnly, defau
     fees: { performanceFeeAsDecimal },
     pricePerFullShare,
   } = useVaultPoolByKey(pool.vaultKey)
+  const vaultPoolConfig = useGetVaultPoolConfig()
 
   const { helixAsBigNumber } = convertSharesToHelix(userShares, pricePerFullShare)
 

@@ -6,8 +6,8 @@ import { DeserializedPool } from 'state/types'
 import useIntersectionObserver from 'hooks/useIntersectionObserver'
 import useGetTopFarmsByApr from 'views/Home/hooks/useGetTopFarmsByApr'
 import useGetTopPoolsByApr from 'views/Home/hooks/useGetTopPoolsByApr'
-import { vaultPoolConfig } from 'config/constants/pools'
 import { FAST_INTERVAL } from 'config/constants'
+import { useGetVaultPoolConfig } from 'views/Pools/hooks/useGetVaultPoolConfig'
 import TopFarmPool from './TopFarmPool'
 import RowHeading from './RowHeading'
 
@@ -31,6 +31,8 @@ const FarmsPoolsRow = () => {
   const { observerRef, isIntersecting } = useIntersectionObserver()
   const { topFarms } = useGetTopFarmsByApr(isIntersecting)
   const { topPools } = useGetTopPoolsByApr(isIntersecting)
+
+  const vaultPoolConfig = useGetVaultPoolConfig()
 
   const timer = useRef<ReturnType<typeof setTimeout>>(null)
   const isLoaded = topFarms[0] && topPools[0]

@@ -105,5 +105,5 @@ export const FAST_INTERVAL = 10000
 export const SLOW_INTERVAL = 60000
 
 export { default as getFarms } from './farms'
-export { default as poolsConfig } from './pools'
+export { default as getPools } from './pools'
 export { default as ifosConfig } from './ifo'

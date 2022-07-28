@@ -12,7 +12,7 @@ import { useFastRefreshEffect } from 'hooks/useRefreshEffect'
 import useSWR from 'swr'
 import useMulticall, { useMulticallv2 } from 'hooks/useMulticall'
 import useFetchPoolsPublicDataAsync from 'hooks/useFetchPoolsPublicDataAsync'
-import { poolsConfig, SLOW_INTERVAL } from 'config/constants'
+import { SLOW_INTERVAL } from 'config/constants'
 import { getAddress, getHelixAutoPoolAddress, getIfoPoolAddress, getLotteryV2Address } from 'utils/addressHelpers'
 import { useHelix, useMasterchef } from 'hooks/useContract'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
@@ -44,6 +44,7 @@ import { fetchFarmsPublicDataAsync, getNonArchivedFarms } from '../farms'
 import useFetchVaultUser from './useFetchVaultUser'
 import useFetchPublicVaultData from './useFetchPublicVaultData'
 import useFetchIfoPoolUser from './useFetchIfoPoolUser'
+import { useGetPools } from './useGetPools'
 
 
 export const usePoolsPageFetch = () => {
@@ -76,6 +77,7 @@ export const usePoolsPageFetch = () => {
 export function usePoolsWithVault() {
     const { pools: poolsWithoutAutoVault, userDataLoaded } = usePools()
     const helixAutoPool = useHelixVault()
+    const { chainId } = useActiveWeb3React()
     // const ifoPool = useIfoPoolVault()
     const pools = useMemo(() => {
         const activePools = poolsWithoutAutoVault.filter((pool) => !pool.isFinished)
@@ -85,7 +87,7 @@ export function usePoolsWithVault() {
 
         const helixAutoVaultWithApr = {
             ...helixAutoVault,
-            apr: getAprData(helixAutoVault, helixAutoPool.fees.performanceFeeAsDecimal).apr,
+            apr: getAprData(chainId, helixAutoVault, helixAutoPool.fees.performanceFeeAsDecimal).apr,
             rawApr: helixPool.apr,
         }
         // const ifoPoolWithApr = {
@@ -96,7 +98,7 @@ export function usePoolsWithVault() {
         // return [ifoPoolWithApr, helixAutoVaultWithApr, ...poolsWithoutAutoVault]
         return [helixAutoVaultWithApr, ...poolsWithoutAutoVault]
         // }, [poolsWithoutAutoVault, helixAutoPool.fees.performanceFeeAsDecimal, ifoPool.fees.performanceFeeAsDecimal])
-    }, [poolsWithoutAutoVault, helixAutoPool.fees.performanceFeeAsDecimal])
+    }, [poolsWithoutAutoVault, chainId, helixAutoPool.fees.performanceFeeAsDecimal])
 
     return { pools, userDataLoaded }
 }
@@ -332,14 +334,15 @@ export const useIfoWithApr = () => {
         fees: { performanceFeeAsDecimal },
     } = useIfoPoolVault()
     const { pool: poolZero, userDataLoaded } = usePool(0)
+    const { chainId } = useActiveWeb3React()
 
     const ifoPoolWithApr = useMemo(() => {
         const ifoPool = { ...poolZero }
         ifoPool.vaultKey = VaultKey.IfoPool
-        ifoPool.apr = getAprData(ifoPool, performanceFeeAsDecimal).apr
+        ifoPool.apr = getAprData(chainId, ifoPool, performanceFeeAsDecimal).apr
         ifoPool.rawApr = poolZero.apr
         return ifoPool
-    }, [performanceFeeAsDecimal, poolZero])
+    }, [performanceFeeAsDecimal, poolZero, chainId])
 
     return {
         pool: ifoPoolWithApr,
@@ -347,11 +350,13 @@ export const useIfoWithApr = () => {
     }
 }
 
-const helixPool = poolsConfig.find((pool) => pool.sousId === 0)
 export const useFetchHelixPoolPublicDataAsync = () => {
     const helixContract = useHelix()
     const { chainId } = useActiveWeb3React()
+    const pools = useGetPools()
+    const helixPool = pools.find((pool) => pool.sousId === 0)
     const helixPoolAddress = getAddress(chainId, helixPool.contractAddress)
+
     return useCallback(async (dispatch, getState) => {
         const prices = getTokenPricesFromFarm(getState().farms.data)
         const stakingTokenAddress = helixPool.stakingToken.address ? helixPool.stakingToken.address.toLowerCase() : null
@@ -379,13 +384,15 @@ export const useFetchHelixPoolPublicDataAsync = () => {
                 },
             }),
         )
-    }, [helixContract, helixPoolAddress])
+    }, [helixContract, helixPool.earningToken.address, helixPool.stakingToken.address, helixPool.stakingToken.decimals, helixPool.tokenPerBlock, helixPoolAddress])
 }
 
 export const useFetchHelixPoolUserDataAsync = (account: string) => {
     const helixContract = useHelix()
     const masterChefContract = useMasterchef()
     const { chainId } = useActiveWeb3React()
+    const pools = useGetPools()
+    const helixPool = pools.find((pool) => pool.sousId === 0)
     const helixPoolAddress = getAddress(chainId, helixPool.contractAddress)
     return useCallback(async (dispatch) => {
         const allowance = await helixContract.allowance(account, helixPoolAddress)
@@ -411,6 +418,7 @@ export const useFetchPoolsUserDataAsync = (account: string, fetchUserBalances: a
     const fetchUserStakeBalances = useFetchUserStakeBalances()
     const fetchUserPendingRewards = useFetchUserPendingRewards()
     const fetchPoolsAllowance = useFetchPoolsAllowance()
+    const pools = useGetPools()
     return useCallback(async (dispatch) => {
         const [allowances, stakingTokenBalances, stakedBalances, pendingRewards] = await Promise.all([
             fetchPoolsAllowance(account),
@@ -418,7 +426,7 @@ export const useFetchPoolsUserDataAsync = (account: string, fetchUserBalances: a
             fetchUserStakeBalances(account),
             fetchUserPendingRewards(account),
         ])
-        const userData = poolsConfig.map((pool) => ({
+        const userData = pools.map((pool) => ({
             sousId: pool.sousId,
             allowance: allowances[pool.sousId],
             stakingTokenBalance: stakingTokenBalances[pool.sousId],
@@ -427,7 +435,7 @@ export const useFetchPoolsUserDataAsync = (account: string, fetchUserBalances: a
         }))
 
         dispatch(setPoolsUserData(userData))
-    }, [account, fetchPoolsAllowance, fetchUserBalances, fetchUserPendingRewards, fetchUserStakeBalances])
+    }, [account, fetchPoolsAllowance, fetchUserBalances, fetchUserPendingRewards, fetchUserStakeBalances, pools])
 }
 
 export const useUpdateUserStakedBalance = (sousId: number, account: string) => {
@@ -438,11 +446,12 @@ export const useUpdateUserStakedBalance = (sousId: number, account: string) => {
     }, [fetchUserStakeBalances, account, sousId])
 }
 
-const nonMasterPools = poolsConfig.filter((pool) => pool.sousId !== 0)
 export const useFetchUserStakeBalances = () => {
     const masterChefContract = useMasterchef()
     const multicall = useMulticall()
     const { chainId } = useActiveWeb3React()
+    const pools = useGetPools()
+    const nonMasterPools = pools.filter((pool) => pool.sousId !== 0)
 
     return useCallback(async (account) => {
         const calls = nonMasterPools.map((p) => ({
@@ -463,7 +472,7 @@ export const useFetchUserStakeBalances = () => {
         const { amount: masterPoolAmount } = await masterChefContract.userInfo('0', account)
 
         return { ...stakedBalances, 0: new BigNumber(masterPoolAmount.toString()).toJSON() }
-    }, [chainId, masterChefContract, multicall])
+    }, [chainId, masterChefContract, multicall, nonMasterPools])
 }
 
 export const useUpdateUserPendingReward = (sousId: number, account: string) => {
@@ -478,6 +487,9 @@ export const useFetchUserPendingRewards = () => {
     const masterChefContract = useMasterchef()
     const multicall = useMulticall()
     const { chainId } = useActiveWeb3React()
+    const pools = useGetPools()
+    const nonMasterPools = pools.filter((pool) => pool.sousId !== 0)
+
     return useCallback(async (account) => {
         const calls = nonMasterPools.map((p) => ({
             address: getAddress(chainId, p.contractAddress),
@@ -497,7 +509,7 @@ export const useFetchUserPendingRewards = () => {
         const pendingReward = await masterChefContract.pendingHelixToken('0', account)
 
         return { ...pendingRewards, 0: new BigNumber(pendingReward.toString()).toJSON() }
-    }, [chainId, masterChefContract, multicall])
+    }, [chainId, masterChefContract, multicall, nonMasterPools])
 }
 
 export const useFetchVaultFees = () => {
@@ -646,10 +658,11 @@ export const useFetchCurrentLotteryIdAndMaxBuy = () => {
     }, [chainId, multicallv2])
 }
 
-const nonBnbPools = poolsConfig.filter((pool) => pool.stakingToken.symbol !== 'ETH')
 export const useFetchPoolsAllowance = () => {
     const multicall = useMulticall()
     const { chainId } = useActiveWeb3React()
+    const pools = useGetPools()
+    const nonBnbPools = pools.filter((pool) => pool.stakingToken.symbol !== 'ETH')
     return useCallback(async (account) => {
         const calls = nonBnbPools.map((pool) => ({
             address: pool.stakingToken.address,
@@ -662,14 +675,15 @@ export const useFetchPoolsAllowance = () => {
             (acc, pool, index) => ({ ...acc, [pool.sousId]: new BigNumber(allowances[index]).toJSON() }),
             {},
         )
-    }, [chainId, multicall])
+    }, [chainId, multicall, nonBnbPools])
 }
 
 export const useFetchPoolsBlockLimits = () => {
     const multicall = useMulticall()
     const { chainId } = useActiveWeb3React()
+    const pools = useGetPools()
     return useCallback(async () => {
-        const poolsWithEnd = poolsConfig.filter((p) => p.sousId !== 0)
+        const poolsWithEnd = pools.filter((p) => p.sousId !== 0)
         const startEndBlockCalls = poolsWithEnd.flatMap((poolConfig) => {
             return [
                 {
@@ -706,5 +720,5 @@ export const useFetchPoolsBlockLimits = () => {
                 endBlock: new BigNumber(endBlock).toJSON(),
             }
         })
-    }, [multicall, chainId])
+    }, [pools, multicall, chainId])
 }
