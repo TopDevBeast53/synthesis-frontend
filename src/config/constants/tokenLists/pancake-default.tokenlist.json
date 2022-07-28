@@ -89,6 +89,14 @@
       "chainId": 1,
       "decimals": 18,
       "logoURI": "local://images/tokens/0x853d955aCEf822Db058eb8505911ED77F175b99e.png"
+    },
+    {
+      "name": "ApeCoin",
+      "symbol": "APE",
+      "address": "0x4d224452801ACEd8B2F0aebE155379bb5D594381",
+      "chainId": 1,
+      "decimals": 18,
+      "logoURI": "local://images/tokens/0x4d224452801ACEd8B2F0aebE155379bb5D594381.png"
     }
   ]
 }

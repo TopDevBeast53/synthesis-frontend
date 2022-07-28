@@ -92,6 +92,14 @@ export const mainnetTokens = defineTokens({
         'FRAX',
         'https://frax.finance',
     ),
+    ape: new Token(
+        MAINNET,
+        '0x4d224452801ACEd8B2F0aebE155379bb5D594381',
+        18,
+        'APE',
+        'ApeCoin',
+        'https://apecoin.com/',
+    ),
 } as const)
 
 export const testnetTokens = defineTokens({
