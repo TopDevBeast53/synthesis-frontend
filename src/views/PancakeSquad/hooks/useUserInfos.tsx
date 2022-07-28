@@ -3,14 +3,16 @@ import { getNftSaleAddress } from 'utils/addressHelpers'
 import { usePancakeSquadContract } from 'hooks/useContract'
 import nftSaleAbi from 'config/abi/nftSale.json'
 import { useMulticallv2 } from 'hooks/useMulticall'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 const useUserInfos = ({ account, refreshCounter, setCallback }) => {
+  const { chainId } = useActiveWeb3React()
   const multicallv2 = useMulticallv2()
   const pancakeSquadContract = usePancakeSquadContract()
   useEffect(() => {
     const fetchUserInfos = async () => {
       try {
-        const nftSaleAddress = getNftSaleAddress()
+        const nftSaleAddress = getNftSaleAddress(chainId)
 
         if (account) {
           const calls = [
@@ -51,7 +53,7 @@ const useUserInfos = ({ account, refreshCounter, setCallback }) => {
     if (nftSaleAbi.length > 0) {
       fetchUserInfos()
     }
-  }, [account, multicallv2, pancakeSquadContract, refreshCounter, setCallback])
+  }, [account, multicallv2, pancakeSquadContract, refreshCounter, setCallback, chainId])
 }
 
 export default useUserInfos

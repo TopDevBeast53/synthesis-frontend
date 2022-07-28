@@ -11,7 +11,7 @@ export const getTokenSymbol = (chainId: ChainId, farms, tokens, tokenInfo) => {
   return token ? token.symbol : ""
 }
 
-export const getTokenDecimals = (farms, tokens, tokenInfo) => {
+export const getTokenDecimals = (chainId: ChainId, farms, tokens, tokenInfo) => {
   if (tokenInfo.isLp) {
     const lpToken = farms.find((item) => getAddress(chainId, item.lpAddresses) === tokenInfo.token)
     return lpToken ? lpToken.token.decimals : 18

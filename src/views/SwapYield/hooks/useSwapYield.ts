@@ -1,13 +1,15 @@
 import { useMulticallv2 } from 'hooks/useMulticall'
 import yieldSwapABI from 'config/abi/HelixYieldSwap.json'
-import { yieldSwapAddress } from '../constants'
+import { getYieldSwapAddress } from 'utils/addressHelpers'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 export const useYieldSwap = () => {
+    const { chainId } = useActiveWeb3React()
     const multicallv2 = useMulticallv2()
 
     const fetchSwapData = async (): Promise<any[]> => {
         const swapCalls = [{
-            address: yieldSwapAddress,
+            address: getYieldSwapAddress(chainId),
             name: 'getSwaps'
         }]
         const swapMulticallResult = await multicallv2(yieldSwapABI, swapCalls)
@@ -17,7 +19,7 @@ export const useYieldSwap = () => {
     const fetchBids = async (bids) => {
         const bidCalls = bids.map(bid => {
             return {
-                address: yieldSwapAddress,
+                address: getYieldSwapAddress(chainId),
                 name: 'bids',
                 params: [bid]
             }

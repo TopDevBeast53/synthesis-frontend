@@ -7,6 +7,7 @@ import { useAppDispatch } from 'state'
 import { getPredictionsAddress } from 'utils/addressHelpers'
 import { PredictionsClaimableResponse, PredictionsLedgerResponse, PredictionsRoundsResponse } from 'utils/types'
 import { useMulticallv2 } from 'hooks/useMulticall'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import predictionsAbi from 'config/abi/predictions.json'
 import { State, NodeRound, ReduxNodeLedger, NodeLedger, ReduxNodeRound, PredictionsState, PredictionStatus } from '../types'
 import { MarketData, parseBigNumberObj } from './helpers'
@@ -183,9 +184,10 @@ export const useGetSelectedAddress = () => {
 }
 
 export const useGetRoundsData = () => {
+    const { chainId } = useActiveWeb3React()
     const multicallv2 = useMulticallv2()
     return useCallback(async (epochs: number[]): Promise<PredictionsRoundsResponse[]> => {
-        const address = getPredictionsAddress()
+        const address = getPredictionsAddress(chainId)
         const calls = epochs.map((epoch) => ({
             address,
             name: 'rounds',
@@ -193,16 +195,17 @@ export const useGetRoundsData = () => {
         }))
         const response = await multicallv2<PredictionsRoundsResponse[]>(predictionsAbi, calls)
         return response
-    }, [multicallv2])
+    }, [multicallv2, chainId])
 }
 
 export const useGetClaimStatuses = () => {
+    const { chainId } = useActiveWeb3React()
     const multicallv2 = useMulticallv2()
     return useCallback(async (
         account: string,
         epochs: number[],
     ): Promise<PredictionsState['claimableStatuses']> => {
-        const address = getPredictionsAddress()
+        const address = getPredictionsAddress(chainId)
         const claimableCalls = epochs.map((epoch) => ({
             address,
             name: 'claimable',
@@ -219,13 +222,14 @@ export const useGetClaimStatuses = () => {
                 [epoch]: claimable,
             }
         }, {})
-    }, [multicallv2])
+    }, [multicallv2, chainId])
 }
 
 export const useGetLedgerData = () => {
+    const { chainId } = useActiveWeb3React()
     const multicallv2 = useMulticallv2()
     return useCallback(async (account: string, epochs: number[]) => {
-        const address = getPredictionsAddress()
+        const address = getPredictionsAddress(chainId)
         const ledgerCalls = epochs.map((epoch) => ({
             address,
             name: 'ledger',
@@ -233,13 +237,14 @@ export const useGetLedgerData = () => {
         }))
         const response = await multicallv2<PredictionsLedgerResponse[]>(predictionsAbi, ledgerCalls)
         return response
-    }, [multicallv2])
+    }, [multicallv2, chainId])
 }
 
 export const useGetPredictionData = () => {
+    const { chainId } = useActiveWeb3React()
     const multicallv2 = useMulticallv2()
     return useCallback(async (): Promise<MarketData> => {
-        const address = getPredictionsAddress()
+        const address = getPredictionsAddress(chainId)
         const staticCalls = ['currentEpoch', 'intervalSeconds', 'minBetAmount', 'paused', 'bufferSeconds'].map(
             (method) => ({
                 address,
@@ -258,5 +263,5 @@ export const useGetPredictionData = () => {
             minBetAmount: minBetAmount.toString(),
             bufferSeconds: bufferSeconds.toNumber(),
         }
-    }, [multicallv2])
+    }, [multicallv2, chainId])
 }

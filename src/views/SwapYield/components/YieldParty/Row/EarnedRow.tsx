@@ -1,4 +1,5 @@
 import { useHelixYieldSwap } from 'hooks/useContract'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import useToast from 'hooks/useToast'
 import moment from 'moment'
 import React, { useMemo, useState } from 'react'
@@ -11,6 +12,7 @@ import TokenCell from '../../Cells/TokenCell'
 import ToolTipCell from '../../Cells/ToolTipCell'
 
 const EarnedRow = ({ swapData, swapId }) => {
+  const { chainId } = useActiveWeb3React()
   const { isMobile } = useMatchBreakpoints()
   const yieldSwapContract = useHelixYieldSwap()
   const { toastSuccess, toastError } = useToast()
@@ -75,6 +77,7 @@ const EarnedRow = ({ swapData, swapId }) => {
           </AskingTokenCell>
           <QuestionCell>
             <ToolTipCell
+              chainId={chainId}
               seller={swapData?.seller}
               buyer={swapData?.buyer}
               askAmount={swapData?.buyer.amount.toString()}
@@ -125,6 +128,7 @@ const EarnedRow = ({ swapData, swapId }) => {
             </AskingTokenCell>
             <QuestionCell>
               <ToolTipCell
+                chainId={chainId}
                 seller={swapData?.seller}
                 buyer={swapData?.buyer}
                 askAmount={swapData?.buyer.amount.toString()}

@@ -8,12 +8,14 @@ import { SerializedFarmConfig } from 'config/constants/types'
 import { useFastFresh } from 'hooks/useRefresh'
 import { DEFAULT_TOKEN_DECIMAL } from 'config'
 import useMulticall from 'hooks/useMulticall'
+import useActiveWeb3React from 'hooks/useActiveWeb3React';
 
 export interface FarmWithBalance extends SerializedFarmConfig {
   balance: BigNumber
 }
 
 const useFarmsWithBalance = () => {
+  const { chainId } = useActiveWeb3React()
   const [farmsWithStakedBalance, setFarmsWithStakedBalance] = useState<FarmWithBalance[]>([])
   const [earningsSum, setEarningsSum] = useState<number>(null)
   const { account } = useWeb3React()
@@ -23,7 +25,7 @@ const useFarmsWithBalance = () => {
   useEffect(() => {
     const fetchBalances = async () => {
       const calls = farmsConfig.map((farm) => ({
-        address: getMasterChefAddress(),
+        address: getMasterChefAddress(chainId),
         name: 'pendingCake',
         params: [farm.pid, account],
       }))
@@ -46,7 +48,7 @@ const useFarmsWithBalance = () => {
     if (account) {
       fetchBalances()
     }
-  }, [account, fastRefresh, multicall])
+  }, [account, fastRefresh, multicall, chainId])
 
   return { farmsWithStakedBalance, earningsSum }
 }

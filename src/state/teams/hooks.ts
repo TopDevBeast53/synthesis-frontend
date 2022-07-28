@@ -9,6 +9,7 @@ import profileABI from 'config/abi/pancakeProfile.json'
 import { getPancakeProfileAddress } from 'utils/addressHelpers'
 import { useProfile } from 'hooks/useContract'
 import { useMulticallv2 } from 'hooks/useMulticall'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { State, TeamsState } from '../types'
 import { fetchFailed, fetchStart, teamFetchSucceeded, teamsFetchSucceeded } from '.'
 
@@ -66,6 +67,7 @@ export const useGetTeam = () => {
  * Gets on-chain data and merges it with the existing static list of teams
  */
 export const useGetTeams = () => {
+    const { chainId } = useActiveWeb3React()
     const profileContract = useProfile()
     const multicallv2 = useMulticallv2()
 
@@ -82,7 +84,7 @@ export const useGetTeams = () => {
             const calls = []
             for (let i = 1; i <= nbTeams.toNumber(); i++) {
                 calls.push({
-                    address: getPancakeProfileAddress(),
+                    address: getPancakeProfileAddress(chainId),
                     name: 'getTeamProfile',
                     params: [i],
                 })
@@ -107,7 +109,7 @@ export const useGetTeams = () => {
         } catch (error) {
             return null
         }
-    }, [multicallv2, profileContract])
+    }, [multicallv2, profileContract, chainId])
 }
 
 

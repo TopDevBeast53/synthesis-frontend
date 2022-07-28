@@ -6,7 +6,7 @@ import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { useCallback } from 'react'
 import { Deposit } from 'state/types'
 import { getProviderOrSigner } from 'utils'
-import { helixVaultAddress } from '../constants'
+import { getHelixVaultAddress } from 'utils/addressHelpers'
 
 const txResponseToArray = (tx) => {
   const result = tx.toString()
@@ -14,12 +14,12 @@ const txResponseToArray = (tx) => {
   return result.split(',')
 }
 export const useHelixLockVault = () => {
-  const { library, account } = useActiveWeb3React()
+  const { library, account, chainId } = useActiveWeb3React()
   const { callWithGasPrice } = useCallWithGasPrice()
 
   const getHelixAutoPoolContract = useCallback(() => {
-    return new Contract(helixVaultAddress, helixVault, getProviderOrSigner(library, account))
-  }, [library, account])
+    return new Contract(getHelixVaultAddress(chainId), helixVault, getProviderOrSigner(library, account))
+  }, [library, account, chainId])
 
   // deposit(uint amount, uint index, uint id)
   // withdraw(uint amount, uint id)

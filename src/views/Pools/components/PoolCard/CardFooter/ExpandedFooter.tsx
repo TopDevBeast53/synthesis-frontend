@@ -70,7 +70,7 @@ const ExpandedFooter: React.FC<ExpandedFooterProps> = ({ pool, account }) => {
 
   const tokenAddress = earningToken.address || ''
   const poolContractAddress = getAddress(chainId, contractAddress)
-  const cakeVaultContractAddress = getVaultPoolAddress(vaultKey)
+  const cakeVaultContractAddress = getVaultPoolAddress(chainId, vaultKey)
   const isMetaMaskInScope = !!window.ethereum?.isMetaMask
   const isManualCakePool = sousId === 0
 
