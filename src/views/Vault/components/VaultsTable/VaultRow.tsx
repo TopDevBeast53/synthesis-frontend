@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { useMatchBreakpoints } from 'uikit'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { logError } from 'utils/sentry'
-import getTokens from 'config/constants/tokens'
+import { useGetTokens } from 'hooks/useGetTokens'
 import { useHelixVault } from 'hooks/useContract'
 import { CurrencyLogo } from 'components/Logo'
 import ActionPanel from './ActionPanel/ActionPanel'
@@ -37,6 +37,7 @@ const StyledRow = styled.div`
 const VaultRow: React.FC<PoolRowProps> = ({ deposit }) => {
   const { isTablet, isDesktop } = useMatchBreakpoints()
   const helixVaultContract = useHelixVault()
+  const tokens = useGetTokens()
   const [expanded, setExpanded] = useState(false)
   const shouldRenderActionPanel = useDelayedUnmount(expanded, 300)
   const [isLoading, setLoading] = useState(true)
@@ -86,13 +87,13 @@ const VaultRow: React.FC<PoolRowProps> = ({ deposit }) => {
         {(isTablet || isDesktop) && (
           <>
             <Container>
-              <CurrencyLogo currency={getTokens.helix} size="36px" />
+              <CurrencyLogo currency={tokens.helix} size="36px" />
             </Container>
             <StakedCell stakedBalance={stakedBalance} />
           </>
         )}
         <Container>
-          <CurrencyLogo currency={getTokens.helix} size="36px" />
+          <CurrencyLogo currency={tokens.helix} size="36px" />
         </Container>
         <EarningsCell isLoading={isLoading} earnings={earnings} />
         <AprCell stakedBalance={stakedBalance} apr={deposit.apr} />

@@ -1,7 +1,7 @@
 import React from 'react'
 import Balance from 'components/Balance'
 import { useTranslation } from 'contexts/Localization'
-import getTokens from 'config/constants/tokens'
+import { useGetTokens } from 'hooks/useGetTokens'
 import { usePriceHelixBusd } from 'state/farms/hooks'
 import styled from 'styled-components'
 import { Box, Flex, Text, useMatchBreakpoints } from 'uikit'
@@ -22,10 +22,11 @@ const StyledCell = styled(BaseCell)`
 
 const StakedCell: React.FC<StakedCellProps> = ({ stakedBalance }) => {
   const { t } = useTranslation()
+  const tokens = useGetTokens()
   const { isMobile } = useMatchBreakpoints()
 
   const cakePrice = usePriceHelixBusd()
-  const { decimals, symbol } = getTokens.helix
+  const { decimals, symbol } = tokens.helix
 
   const stakedTokenBalance = getBalanceNumber(stakedBalance, decimals)
   const stakedTokenDollarBalance = getBalanceNumber(stakedBalance.multipliedBy(cakePrice), decimals)

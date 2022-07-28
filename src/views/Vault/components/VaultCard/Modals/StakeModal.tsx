@@ -3,7 +3,7 @@ import { useTranslation } from 'contexts/Localization'
 import useTheme from 'hooks/useTheme'
 import useToast from 'hooks/useToast'
 import React, { useState } from 'react'
-import getTokens from 'config/constants/tokens'
+import { useGetTokens } from 'hooks/useGetTokens'
 import { Token } from 'sdk'
 import styled from 'styled-components'
 import { AutoRenewIcon, BalanceInput, Button, Flex, Image, Link, Modal, Slider, Text } from 'uikit'
@@ -39,6 +39,7 @@ const StakeModal: React.FC<StakeModalProps> = ({
   onDismiss,
 }) => {
   const { t } = useTranslation()
+  const tokens = useGetTokens()
   const { theme } = useTheme()
   const { toastSuccess, toastError } = useToast()
   const [pendingTx, setPendingTx] = useState(false)
@@ -46,7 +47,7 @@ const StakeModal: React.FC<StakeModalProps> = ({
   // const [hasReachedStakeLimit, setHasReachedStakedLimit] = useState(false)
   const hasReachedStakeLimit = false
   const [percent, setPercent] = useState(0)
-  const { decimals, symbol, address } = getTokens.helix
+  const { decimals, symbol, address } = tokens.helix
   const fullDecimalStakeAmount = getDecimalAmount(new BigNumber(stakeAmount), decimals)
   const getCalculatedStakingLimit = () => {
     if (isRemovingStake) return stakedBalance

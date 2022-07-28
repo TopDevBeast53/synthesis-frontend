@@ -4,10 +4,11 @@ import { useHelixVault, useMasterchef, useHelixAutoPoolContract, useERC20s, useE
 import { ethers, BigNumber } from 'ethers'
 import { useMemoFarms } from 'state/farms/hooks'
 import { getAddress } from 'utils/addressHelpers'
-import getTokens from 'config/constants/tokens'
+import { useGetTokens } from 'hooks/useGetTokens'
 
 export const useEachVotingPower = () => {
   const { account } = useActiveWeb3React()
+  const tokens = useGetTokens()
   const helixVaultContract = useHelixVault()
   const masterChefContract = useMasterchef()
   const helixAutoPoolContract = useHelixAutoPoolContract()
@@ -32,7 +33,7 @@ export const useEachVotingPower = () => {
   }, [chainId, farmsLP])
 
   const lpContracts = useERC20s(lpAddressList)
-  const helixTokenContract = useERC20(getTokens.helix.address)
+  const helixTokenContract = useERC20(tokens.helix.address)
 
 
   const getVaultHelix = useCallback(async () => {

@@ -21,7 +21,7 @@ import { FetchStatus } from 'config/constants/types'
 import { useFarms } from 'state/farms/hooks'
 import { useFastFresh } from 'hooks/useRefresh'
 import useGetChainDetail from 'hooks/useGetChainDetail'
-import getTokens from 'config/constants/tokens'
+import { useGetTokens } from 'hooks/useGetTokens'
 import { getAddress, getMasterChefAddress, getHelixAutoPoolAddress, getHelixVaultAddress } from 'utils/addressHelpers'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { isCoreProposal } from '../helpers'
@@ -35,6 +35,7 @@ import { PageMeta } from '../../../components/Layout/Page'
 
 const Proposal = () => {
   const fastRefresh = useFastFresh()
+  const tokens = useGetTokens()
   const { id }: { id: string } = useParams()
   const proposal = useGetProposal(id)
   const { t } = useTranslation()
@@ -77,7 +78,7 @@ const Proposal = () => {
   const strategies = [{
     "name": "helix",
     "params": {
-      "address": `${getTokens.helix.address}`,
+      "address": `${tokens.helix.address}`,
       "masterChef": `${masterChefAddress}`,
       "autoHelix": `${autoHelixAddress}`,
       "vault": `${vaultAddress}`,

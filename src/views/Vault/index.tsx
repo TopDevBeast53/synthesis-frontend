@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js'
 import Page from 'components/Layout/Page'
 import PageHeader from 'components/PageHeader'
-import getTokens from 'config/constants/tokens'
+import { useGetTokens } from 'hooks/useGetTokens'
 import { FetchStatus } from 'config/constants/types'
 import { useTranslation } from 'contexts/Localization'
 import { ethers } from 'ethers'
@@ -51,6 +51,7 @@ enum HelixEnabledState {
 
 const Vault: React.FC = () => {
   const { t } = useTranslation()
+  const tokens = useGetTokens()
   const { account, chainId } = useActiveWeb3React()
   const helixContract = useHelix()
   const helixVaultContract = useHelixVault()
@@ -64,10 +65,10 @@ const Vault: React.FC = () => {
   const [totalStakedVault, setTotalStakedVault] = useState(0)
 
   const fastRefresh = useFastFresh()
-  const { decimals } = getTokens.helix
+  const { decimals } = tokens.helix
   const helixPrice = usePriceHelixBusd()
 
-  const { balance: helixBalance, fetchStatus: balanceFetchStatus } = useTokenBalance(getTokens.helix.address)
+  const { balance: helixBalance, fetchStatus: balanceFetchStatus } = useTokenBalance(tokens.helix.address)
   const stakingTokenBalance = balanceFetchStatus === FetchStatus.Fetched ? helixBalance : BIG_ZERO
   const [onPresentTokenRequired] = useModal(<NotEnoughTokensModal tokenSymbol="HELIX" />)
 

@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react'
-import getTokens from 'config/constants/tokens'
+import { useGetTokens } from 'hooks/useGetTokens'
 import { Text, Flex, Box, Skeleton, TooltipText, useTooltip } from 'uikit'
 import { PublicIfoData, WalletIfoData } from 'views/Ifos/types'
 import { useTranslation } from 'contexts/Localization'
@@ -39,7 +39,8 @@ const FooterEntry: React.FC<FooterEntryProps> = ({ label, value }) => {
 }
 
 const MaxTokenEntry = ({ maxToken, ifo, poolId }: { maxToken: number; ifo: Ifo; poolId: PoolIds }) => {
-  const isCurrencyCake = ifo.currency === getTokens.helix
+  const tokens = useGetTokens()
+  const isCurrencyCake = ifo.currency === tokens.helix
   const isV3 = ifo.version === 3
   const { t } = useTranslation()
 
