@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { BASES_TO_TRACK_LIQUIDITY_FOR, PINNED_PAIRS } from 'config/constants'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useAllTokens } from 'hooks/Tokens'
-import useGetChainDetail from 'hooks/useGetChainDetail'
 import { ethers } from 'ethers'
 import { AppDispatch, AppState } from '../../index'
 import {
@@ -340,8 +339,7 @@ export function useRemoveUserAddedToken(): (chainId: number, address: string) =>
 }
 
 export function useGasPrice(): string {
-  const network = useGetChainDetail()
-  const chainId = network.CHAIN_ID
+  const { chainId } = useActiveWeb3React()
   const dispatch = useDispatch()
   const provider = new ethers.providers.AlchemyProvider(chainId, process.env.REACT_APP_ALCHEMY_API_KEY)
   const getPriceGwei = async () => {

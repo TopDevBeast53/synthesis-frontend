@@ -9,7 +9,7 @@ import usePreviousValue from 'hooks/usePreviousValue'
 import useParsedQueryString from 'hooks/useParsedQueryString'
 import { ParsedQs } from 'qs'
 import { replaceURLParam } from 'utils/routes'
-import useGetChainDetail from 'hooks/useGetChainDetail'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 // import { isChainAllowed, switchChain } from 'utils/switchChain'
 
@@ -113,8 +113,7 @@ function Row({
   targetChain: SupportedChainId
   onSelectChain: (targetChain: number) => void
 }) {
-  const chainFromUrl = useGetChainDetail()
-  const chainId = chainFromUrl.CHAIN_ID
+  const { chainId } = useActiveWeb3React()
   if (!chainId) {
     return null
   }
@@ -168,8 +167,7 @@ const getChainNameFromId = (id: string | number) => {
 }
 
 export default function NetworkSelector() {
-  const chainFromUrl = useGetChainDetail()
-  const chainId = chainFromUrl.CHAIN_ID
+  const { chainId } = useActiveWeb3React()
   const previousChainId = usePreviousValue(chainId)
   const parsedQs = useParsedQueryString()
   const { urlChain, urlChainId } = getParsedChainId(parsedQs)

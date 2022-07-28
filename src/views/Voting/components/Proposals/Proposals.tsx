@@ -7,7 +7,7 @@ import { fetchProposals } from 'state/voting'
 import { useGetProposalLoadingStatus, useGetProposals } from 'state/voting/hooks'
 import { ProposalState, ProposalType } from 'state/types'
 import { FetchStatus } from 'config/constants/types'
-import useGetChainDetail from 'hooks/useGetChainDetail'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { filterProposalsByState, filterProposalsByType } from '../../helpers'
 import ProposalsLoading from './ProposalsLoading'
 
@@ -15,7 +15,7 @@ import ProposalRow from './ProposalRow'
 
 const Proposals = ({ filterState, proposalType }: { filterState: ProposalState; proposalType: ProposalType }) => {
   const { t } = useTranslation()
-  const network = useGetChainDetail()
+  const { chainId } = useActiveWeb3React()
   const proposalStatus = useGetProposalLoadingStatus()
   const proposals = useGetProposals()
   const dispatch = useAppDispatch()
@@ -24,8 +24,8 @@ const Proposals = ({ filterState, proposalType }: { filterState: ProposalState; 
   const isFetched = proposalStatus === FetchStatus.Fetched
 
   useEffect(() => {
-    dispatch(fetchProposals({ chainId: network.CHAIN_ID, first: 1000, state: filterState }))
-  }, [filterState, dispatch, network.CHAIN_ID])
+    dispatch(fetchProposals({ chainId, first: 1000, state: filterState }))
+  }, [filterState, dispatch, chainId])
 
   const filteredProposals = orderBy(filterProposalsByState(filterProposalsByType(proposals, proposalType), filterState), ['end'], ['desc'])
 

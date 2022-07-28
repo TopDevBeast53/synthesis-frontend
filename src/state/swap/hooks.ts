@@ -13,7 +13,6 @@ import { isAddress } from 'utils'
 import { computeSlippageAdjustedAmounts } from 'utils/prices'
 import getLpAddress from 'utils/getLpAddress'
 import { getTokenAddress } from 'views/Swap/components/Chart/utils'
-import useGetChainDetail from 'hooks/useGetChainDetail'
 import { AppDispatch, AppState } from '../index'
 import { useCurrencyBalances } from '../wallet/hooks'
 import {
@@ -361,11 +360,10 @@ export function useDefaultsFromURLSearch():
     const [result, setResult] = useState<
         { inputCurrencyId: string | undefined; outputCurrencyId: string | undefined } | undefined
     >()
-    const network = useGetChainDetail()
 
     useEffect(() => {
         if (!chainId) return
-        const parsed = queryParametersToSwapState(parsedQs, DEFAULT_INPUT_CURRENCY[network.CHAIN_ID], DEFAULT_OUTPUT_CURRENCY[network.CHAIN_ID])
+        const parsed = queryParametersToSwapState(parsedQs, DEFAULT_INPUT_CURRENCY[chainId], DEFAULT_OUTPUT_CURRENCY[chainId])
 
         dispatch(
             replaceSwapState({

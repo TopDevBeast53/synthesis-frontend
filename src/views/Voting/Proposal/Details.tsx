@@ -5,7 +5,7 @@ import { format } from 'date-fns'
 import { Proposal } from 'state/types'
 import { useTranslation } from 'contexts/Localization'
 import { getEtherScanLink } from 'utils'
-import useGetChainDetail from 'hooks/useGetChainDetail'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import truncateHash from 'utils/truncateHash'
 import { IPFS_GATEWAY } from '../config'
 import { ProposalStateTag } from '../components/Proposals/tags'
@@ -22,7 +22,7 @@ const DetailBox = styled(Box)`
 
 const Details: React.FC<DetailsProps> = ({ proposal }) => {
   const { t } = useTranslation()
-  const network = useGetChainDetail()
+  const { chainId } = useActiveWeb3React()
   const startDate = new Date(proposal.start * 1000)
   const endDate = new Date(proposal.end * 1000)
 
@@ -42,13 +42,13 @@ const Details: React.FC<DetailsProps> = ({ proposal }) => {
         </Flex>
         <Flex alignItems="center" mb="8px">
           <Text color="textSubtle">{t('Creator')}</Text>
-          <LinkExternal href={getEtherScanLink(proposal.author, 'address', network.CHAIN_ID)} ml="8px">
+          <LinkExternal href={getEtherScanLink(proposal.author, 'address', chainId)} ml="8px">
             {truncateHash(proposal.author)}
           </LinkExternal>
         </Flex>
         <Flex alignItems="center" mb="16px">
           <Text color="textSubtle">{t('Snapshot')}</Text>
-          <LinkExternal href={getEtherScanLink(proposal.snapshot, 'block', network.CHAIN_ID)} ml="8px">
+          <LinkExternal href={getEtherScanLink(proposal.snapshot, 'block', chainId)} ml="8px">
             {proposal.snapshot}
           </LinkExternal>
         </Flex>

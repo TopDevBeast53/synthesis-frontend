@@ -20,7 +20,6 @@ import PageLoader from 'components/Loader/PageLoader'
 import { FetchStatus } from 'config/constants/types'
 import { useFarms } from 'state/farms/hooks'
 import { useFastFresh } from 'hooks/useRefresh'
-import useGetChainDetail from 'hooks/useGetChainDetail'
 import { useGetTokens } from 'hooks/useGetTokens'
 import { getAddress, getMasterChefAddress, getHelixAutoPoolAddress, getHelixVaultAddress } from 'utils/addressHelpers'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
@@ -49,7 +48,6 @@ const Proposal = () => {
   const isPageLoading = voteLoadingStatus === FetchStatus.Fetching || proposalLoadingStatus === FetchStatus.Fetching
   const { data: farmsLP } = useFarms()
   const { chainId } = useActiveWeb3React()
-  const network = useGetChainDetail()
   const [votes, setVotes] = useState([])
 
   const masterChefAddress = getMasterChefAddress(chainId)
@@ -100,7 +98,7 @@ const Proposal = () => {
       const vps = await snapshot.utils.getScores(
         proposal.space.id,
         strategies,
-        network.CHAIN_ID.toString(),
+        chainId.toString(),
         voters,
         Number(proposal.snapshot)
       )
@@ -119,7 +117,7 @@ const Proposal = () => {
       mounted = false
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fastRefresh, network])
+  }, [fastRefresh, chainId])
 
   if (!proposal || !votes) {
     return <PageLoader />

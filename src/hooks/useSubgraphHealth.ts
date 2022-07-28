@@ -4,7 +4,7 @@ import { GRAPH_HEALTH } from 'config/constants/endpoints'
 import useProviders from 'hooks/useProviders'
 import { ChainId } from 'sdk'
 import { useSlowFresh } from './useRefresh'
-import useGetChainDetail from './useGetChainDetail'
+import useActiveWeb3React from './useActiveWeb3React'
 
 export enum SubgraphStatus {
     OK,
@@ -40,7 +40,7 @@ const useSubgraphHealth = () => {
 
     const slowRefresh = useSlowFresh()
     const rpcProvider = useProviders()
-    const network = useGetChainDetail()
+    const { chainId } = useActiveWeb3React()
 
     useEffect(() => {
         const getSubgraphHealth = async () => {
@@ -63,7 +63,7 @@ const useSubgraphHealth = () => {
                             }
                         }
                     `,
-                    { subgraph: SUBGRAPH_PATH[network.CHAIN_ID] }
+                    { subgraph: SUBGRAPH_PATH[chainId] }
                 )
 
                 const currentBlock = await rpcProvider.getBlockNumber()
@@ -112,7 +112,7 @@ const useSubgraphHealth = () => {
             }
         }
         getSubgraphHealth()
-    }, [slowRefresh, rpcProvider, network.CHAIN_ID])
+    }, [slowRefresh, rpcProvider, chainId])
 
     return sgHealth
 }

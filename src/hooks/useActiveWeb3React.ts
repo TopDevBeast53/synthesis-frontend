@@ -1,4 +1,4 @@
-import { useRef, useMemo } from 'react'
+import { useMemo } from 'react'
 import { useWeb3React } from '@web3-react/core'
 import { Web3Provider } from '@ethersproject/providers'
 import useProviders from 'hooks/useProviders'
@@ -13,13 +13,9 @@ import useGetChainDetail from './useGetChainDetail'
 const useActiveWeb3React = (): Web3ReactContextInterface<Web3Provider> => {
     const { library, chainId, ...web3React } = useWeb3React()
     const rpcProvider = useProviders()
-    const refEth = useRef(library)
     const chain = useGetChainDetail();
 
     return useMemo(() => {
-        if (library !== refEth.current) {
-            refEth.current = library
-        }
         return { library: (library || rpcProvider), chainId: chainId ?? chain.CHAIN_ID, ...web3React }
     }, [library, rpcProvider, chainId, chain, web3React])
 

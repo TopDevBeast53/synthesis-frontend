@@ -3,7 +3,7 @@ import { Tags, TokenInfo, TokenList } from '@uniswap/token-lists'
 import { useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import { DEFAULT_LIST_OF_LISTS } from 'config/constants/lists'
-import useGetChainDetail from 'hooks/useGetChainDetail'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { AppState } from '../index'
 import DEFAULT_TOKEN_LIST from '../../config/constants/tokenLists/pancake-default.tokenlist.json'
 import DEFAULT_TOKEN_LIST_TESTNET from '../../config/constants/tokenLists/pancake-default.tokenlist-testnet.json'
@@ -152,10 +152,10 @@ export function useInactiveListUrls(): string[] {
 
 // get all the tokens from active lists, combine with local default tokens
 export function useCombinedActiveList(): TokenAddressMap {
-    const network = useGetChainDetail()
+    const { chainId } = useActiveWeb3React()
     const activeListUrls = useActiveListUrls()
     const activeTokens = useCombinedTokenMapFromUrls(activeListUrls)
-    const defaultTokenMap = listToTokenMap(ChainId.MAINNET === network.CHAIN_ID ? DEFAULT_TOKEN_LIST : DEFAULT_TOKEN_LIST_TESTNET)
+    const defaultTokenMap = listToTokenMap(ChainId.MAINNET === chainId ? DEFAULT_TOKEN_LIST : DEFAULT_TOKEN_LIST_TESTNET)
     return combineMaps(activeTokens, defaultTokenMap)
 }
 
