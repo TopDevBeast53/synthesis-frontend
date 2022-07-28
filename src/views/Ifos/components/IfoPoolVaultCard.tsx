@@ -14,7 +14,7 @@ import BigNumber from 'bignumber.js'
 import Balance from 'components/Balance'
 import { CompoundingPoolTag } from 'components/Tags'
 import { TokenPairImage } from 'components/TokenImage'
-import getTokens from 'config/constants/tokens'
+import { useGetTokens } from 'hooks/useGetTokens'
 import { useTranslation } from 'contexts/Localization'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useBUSDHelixAmount } from 'hooks/useBUSDPrice'
@@ -64,6 +64,7 @@ const StyledCardBody = styled(CardBody)`
 const IfoPoolVaultCardMobile: React.FC = () => {
   const { pool, userDataLoaded } = useIfoWithApr()
   const { account } = useActiveWeb3React()
+  const tokens = useGetTokens()
   const { t } = useTranslation()
   const credit = useIfoPoolCredit()
   const {
@@ -85,7 +86,7 @@ const IfoPoolVaultCardMobile: React.FC = () => {
       <CardHeader p="16px">
         <Flex justifyContent="space-between" alignItems="center">
           <StyledTokenContent alignItems="center" flex={1}>
-            <TokenPairImage width={24} height={24} primaryToken={getTokens.helix} secondaryToken={getTokens.helix} />
+            <TokenPairImage width={24} height={24} primaryToken={tokens.helix} secondaryToken={tokens.helix} />
             <Box ml="8px">
               <Text fontSize="12px" bold color="secondary" textTransform="uppercase">
                 {t('Staked')}

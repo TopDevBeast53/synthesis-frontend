@@ -13,7 +13,7 @@ import {
   Link,
   TelegramIcon,
 } from 'uikit'
-import getTokens from 'config/constants/tokens'
+import { useGetTokens } from 'hooks/useGetTokens'
 import { useTranslation } from 'contexts/Localization'
 import { PublicIfoData } from 'views/Ifos/types'
 import { Ifo } from 'config/constants/types'
@@ -69,6 +69,7 @@ const InlinePrize = styled(Flex)`
 const IfoAchievement: React.FC<Props> = ({ ifo, publicIfoData }) => {
   const { chainId } = useActiveWeb3React()
   const { t } = useTranslation()
+  const tokens = useGetTokens()
   const tokenName = ifo.token.symbol?.toLowerCase()
   const campaignTitle = ifo.name
   const minLpForAchievement = publicIfoData.thresholdPoints
@@ -98,7 +99,7 @@ const IfoAchievement: React.FC<Props> = ({ ifo, publicIfoData }) => {
             <Text color="textSubtle" fontSize="12px">
               {t('Commit ~%amount% %symbol% in total to earn!', {
                 amount: minLpForAchievement,
-                symbol: ifo.currency === getTokens.helix ? 'HELIX' : 'LP',
+                symbol: ifo.currency === tokens.helix ? 'HELIX' : 'LP',
               })}
             </Text>
           ) : (

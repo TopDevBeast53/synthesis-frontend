@@ -10,7 +10,7 @@ import { getProviderOrSigner } from 'utils'
 import { formatBigNumber } from 'utils/formatBalance'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useFastFresh } from 'hooks/useRefresh'
-import getTokens from 'config/constants/tokens'
+import { useGetTokens } from 'hooks/useGetTokens'
 import CurrencyLogo from 'components/Logo/CurrencyLogo'
 import { getReferralRegisterAddress } from 'utils/addressHelpers'
 import { BASE_URL } from 'config'
@@ -99,6 +99,7 @@ function getReferralLink(address: string): string {
 
 export default function Referrals() {
   const { account } = useActiveWeb3React()
+  const tokens = useGetTokens()
   const fastRefresh = useFastFresh()
   const getRef = useGetRef(account)
   const getReferees = useGetReferees(account)
@@ -113,7 +114,7 @@ export default function Referrals() {
   const [pendingBalance, setPendingBalance] = useState<string>('0')
   const location = useLocation()
   const claimRewardsCb = useClaimRewards()
-  const helixToken = getTokens.helix
+  const helixToken = tokens.helix
   const { search } = location
 
   const handleClaim = async () => {

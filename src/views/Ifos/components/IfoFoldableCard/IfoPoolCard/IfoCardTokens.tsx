@@ -20,7 +20,7 @@ import styled from 'styled-components'
 import { useWeb3React } from '@web3-react/core'
 import { Token } from 'sdk'
 import { Ifo, PoolIds } from 'config/constants/types'
-import getTokens from 'config/constants/tokens'
+import { useGetTokens } from 'hooks/useGetTokens'
 import { getCakeBnbLpToken } from 'config/constants/ifo'
 import { PublicIfoData, WalletIfoData } from 'views/Ifos/types'
 import { useTranslation } from 'contexts/Localization'
@@ -71,9 +71,10 @@ const TokenSection: React.FC<TokenSectionProps> = ({ primaryToken, secondaryToke
 
 const CommitTokenSection: React.FC<TokenSectionProps & { commitToken: Token }> = ({ commitToken, ...props }) => {
   const { chainId } = useActiveWeb3React()
+  const tokens = useGetTokens()
   const cakeBnbLpToken = useMemo(() => getCakeBnbLpToken(chainId), [chainId])
   if (commitToken.equals(cakeBnbLpToken)) {
-    return <TokenSection primaryToken={getTokens.helix} secondaryToken={getTokens.weth} {...props} />
+    return <TokenSection primaryToken={tokens.helix} secondaryToken={tokens.weth} {...props} />
   }
   return <TokenSection primaryToken={commitToken} {...props} />
 }
