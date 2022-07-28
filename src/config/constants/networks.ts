@@ -36,8 +36,8 @@ export const SUPPORTED_NETWORKS: { [key: number]: CHAIN_CONFIG } = {
         blockExplorerUrls: ['https://rinkeby.etherscan.io/'],
         logoUrl: '/images/networks/rinkeby-network.jpg',
         label: 'Rinkeby',
-        showOnlyTrade: false,
-        isTestChain: false
+        showOnlyTrade: true,
+        isTestChain: true
     },
     [ChainId.RSK_MAINNET]: {
         chainId: 30,
@@ -51,7 +51,7 @@ export const SUPPORTED_NETWORKS: { [key: number]: CHAIN_CONFIG } = {
         blockExplorerUrls: ['https://explorer.rsk.co'],
         logoUrl: '/images/networks/rsk-network.jpg',
         label: 'RSK Mainnet',
-        showOnlyTrade: false,
+        showOnlyTrade: true,
         isTestChain: false
     },
     [ChainId.RSK_TESTNET]: {
@@ -66,7 +66,7 @@ export const SUPPORTED_NETWORKS: { [key: number]: CHAIN_CONFIG } = {
         blockExplorerUrls: ['https://explorer.testnet.rsk.co'],
         logoUrl: '/images/networks/rsk-network.jpg',
         label: 'RSK Testnet',
-        showOnlyTrade: false,
-        isTestChain: false
+        showOnlyTrade: true,
+        isTestChain: true
     },
 }
