@@ -8,6 +8,7 @@ import { useFetchCurrentLotteryIdAndMaxBuy } from 'state/pools/hooks'
 import { useMulticallv2 } from 'hooks/useMulticall'
 import { getLotteryV2Address } from 'utils/addressHelpers'
 import lotteryV2Abi from 'config/abi/lotteryV2.json'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { LotteryResponse, LotteryRoundGraphEntity, LotteryUserGraphEntity, State } from '../types'
 import { fetchCurrentLotteryId, fetchCurrentLottery, fetchUserTicketsAndLotteries, fetchPublicLotteries } from '.'
 import { applyNodeDataToLotteriesGraphResponse, applyNodeDataToUserGraphResponse, getGraphLotteries, getGraphLotteryUser, getRoundIdsArray, processViewLotteryErrorResponse, processViewLotterySuccessResponse, useProcessLotteryResponse } from './helpers'
@@ -95,10 +96,11 @@ export const useLottery = () => {
 
 export const useFetchMultipleLotteries = () => {
     const multicallv2 = useMulticallv2()
+    const { chainId } = useActiveWeb3React()
     return useCallback(async (lotteryIds: string[]): Promise<LotteryResponse[]> => {
         const calls = lotteryIds.map((id) => ({
             name: 'viewLottery',
-            address: getLotteryV2Address(),
+            address: getLotteryV2Address(chainId),
             params: [id],
         }))
         try {
@@ -111,7 +113,7 @@ export const useFetchMultipleLotteries = () => {
             console.error(error)
             return calls.map((call, index) => processViewLotteryErrorResponse(lotteryIds[index]))
         }
-    }, [multicallv2])
+    }, [chainId, multicallv2])
 }
 
 export const useGetLotteriesData = () => {

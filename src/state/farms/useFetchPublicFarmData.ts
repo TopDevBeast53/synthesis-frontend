@@ -4,6 +4,7 @@ import { chunk } from 'lodash'
 import { getAddress, getMasterChefAddress } from 'utils/addressHelpers'
 import { useMulticallv2 } from 'hooks/useMulticall'
 import { ChainId } from 'sdk'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { SerializedFarm } from '../types'
 import { SerializedFarmConfig } from '../../config/constants/types'
 
@@ -27,7 +28,7 @@ const fetchFarmCalls = (chainId: ChainId, farm: SerializedFarm) => {
         {
             address: lpAddress,
             name: 'balanceOf',
-            params: [getMasterChefAddress()],
+            params: [getMasterChefAddress(chainId)],
         },
         // Total supply of LP tokens
         {
@@ -49,11 +50,11 @@ const fetchFarmCalls = (chainId: ChainId, farm: SerializedFarm) => {
 
 export const useFetchPublicFarmsData = () => {
     const multicallv2 = useMulticallv2()
-
+    const { chainId } = useActiveWeb3React()
     return useCallback(async (farms: SerializedFarmConfig[]): Promise<any[]> => {
-        const farmCalls = farms.flatMap((farm) => fetchFarmCalls(farm))
+        const farmCalls = farms.flatMap((farm) => fetchFarmCalls(chainId, farm))
         const chunkSize = farmCalls.length / farms.length
         const farmMultiCallResult = await multicallv2(erc20, farmCalls)
         return chunk(farmMultiCallResult, chunkSize)
-    }, [multicallv2])
+    }, [chainId, multicallv2])
 }

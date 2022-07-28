@@ -7,6 +7,7 @@ import lotteryV2Abi from 'config/abi/lotteryV2.json'
 import { NUM_ROUNDS_TO_CHECK_FOR_REWARDS } from 'config/constants/lottery'
 import { getLotteryV2Address } from 'utils/addressHelpers'
 import { BIG_ZERO } from 'utils/bigNumber'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useMulticallv2 } from 'hooks/useMulticall'
 import { fetchUserTicketsForMultipleRounds } from './getUserTicketsData'
 import { MAX_LOTTERIES_REQUEST_SIZE } from './helpers'
@@ -17,10 +18,11 @@ interface RoundDataAndUserTickets {
     finalNumber: string
 }
 
-const lotteryAddress = getLotteryV2Address()
 
 const useFetchCakeRewardsForTickets = () => {
     const multicallv2 = useMulticallv2()
+    const { chainId } = useActiveWeb3React()
+    const lotteryAddress = getLotteryV2Address(chainId)
     return useCallback(async (
         winningTickets: LotteryTicket[],
     ): Promise<{ ticketsWithUnclaimedRewards: LotteryTicket[]; cakeTotal: BigNumber }> => {
@@ -48,7 +50,7 @@ const useFetchCakeRewardsForTickets = () => {
             console.error(error)
             return { ticketsWithUnclaimedRewards: null, cakeTotal: null }
         }
-    }, [multicallv2])
+    }, [lotteryAddress, multicallv2])
 }
 
 const getRewardBracketByNumber = (ticketNumber: string, finalNumber: string): number => {

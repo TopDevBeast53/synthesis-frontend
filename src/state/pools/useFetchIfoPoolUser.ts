@@ -1,15 +1,17 @@
 import BigNumber from 'bignumber.js'
 import ifoPoolAbi from 'config/abi/ifoPool.json'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useMulticallv2 } from 'hooks/useMulticall'
 import { useCallback } from 'react'
 import { getIfoPoolAddress } from 'utils/addressHelpers'
 
 const useFetchIfoPoolUser = () => {
     const multicallv2 = useMulticallv2()
+    const { chainId } = useActiveWeb3React()
     return useCallback(async (account: string) => {
         try {
             const calls = ['userInfo', 'getUserCredit'].map((method) => ({
-                address: getIfoPoolAddress(),
+                address: getIfoPoolAddress(chainId),
                 name: method,
                 params: [account],
             }))
@@ -33,7 +35,7 @@ const useFetchIfoPoolUser = () => {
                 credit: null,
             }
         }
-    }, [multicallv2])
+    }, [chainId, multicallv2])
 }
 
 export default useFetchIfoPoolUser

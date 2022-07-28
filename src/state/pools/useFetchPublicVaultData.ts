@@ -5,9 +5,11 @@ import { getHelixAutoPoolAddress } from 'utils/addressHelpers'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { useCallback } from 'react'
 import { useMulticallv2 } from 'hooks/useMulticall'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 const useFetchPublicVaultData = () => {
     const multicallv2 = useMulticallv2()
+    const { chainId } = useActiveWeb3React()
     return useCallback(async () => {
         try {
             const calls = [
@@ -16,7 +18,7 @@ const useFetchPublicVaultData = () => {
                 'calculateHarvestHelixRewards',
                 'calculateTotalPendingHelixRewards',
             ].map((method) => ({
-                address: getHelixAutoPoolAddress(),
+                address: getHelixAutoPoolAddress(chainId),
                 name: method,
             }))
 
@@ -44,7 +46,7 @@ const useFetchPublicVaultData = () => {
                 totalPendingHelixHarvest: null,
             }
         }
-    }, [multicallv2])
+    }, [chainId, multicallv2])
 }
 
 export default useFetchPublicVaultData

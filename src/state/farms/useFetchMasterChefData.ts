@@ -2,21 +2,23 @@ import masterchefABI from 'config/abi/masterchef.json'
 import { chunk } from 'lodash'
 import { useCallback } from 'react'
 import { useMulticallv2 } from 'hooks/useMulticall'
+import { ChainId } from 'sdk'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { SerializedFarmConfig } from '../../config/constants/types'
 import { SerializedFarm } from '../types'
 import { getMasterChefAddress } from '../../utils/addressHelpers'
 
-const fetchMasterChefFarmCalls = (farm: SerializedFarm) => {
+const fetchMasterChefFarmCalls = (chainId: ChainId, farm: SerializedFarm) => {
     const { pid } = farm
     return pid || pid === 0
         ? [
             {
-                address: getMasterChefAddress(),
+                address: getMasterChefAddress(chainId),
                 name: 'poolInfo',
                 params: [pid],
             },
             {
-                address: getMasterChefAddress(),
+                address: getMasterChefAddress(chainId),
                 name: 'totalAllocPoint',
             },
         ]
@@ -25,8 +27,9 @@ const fetchMasterChefFarmCalls = (farm: SerializedFarm) => {
 
 export const useFetchMasterChefData = () => {
     const multicallv2 = useMulticallv2()
+    const { chainId } = useActiveWeb3React()
     return useCallback(async (farms: SerializedFarmConfig[]): Promise<any[]> => {
-        const masterChefCalls = farms.map((farm) => fetchMasterChefFarmCalls(farm))
+        const masterChefCalls = farms.map((farm) => fetchMasterChefFarmCalls(chainId, farm))
         const chunkSize = masterChefCalls.flatMap((masterChefCall) => masterChefCall).length / farms.length
         const masterChefAggregatedCalls = masterChefCalls
             .filter((masterChefCall) => {
@@ -44,5 +47,5 @@ export const useFetchMasterChefData = () => {
             masterChefChunkedResultCounter++
             return data
         })
-    }, [multicallv2])
+    }, [chainId, multicallv2])
 }
