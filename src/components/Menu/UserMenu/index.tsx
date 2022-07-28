@@ -1,5 +1,4 @@
 import React from 'react'
-import { useWeb3React } from '@web3-react/core'
 import { Flex, LogoutIcon, useModal, UserMenu as UIKitUserMenu, UserMenuDivider, UserMenuItem } from 'uikit'
 // import history from 'routerHistory'
 import useAuth from 'hooks/useAuth'
@@ -8,13 +7,14 @@ import ConnectWalletButton from 'components/ConnectWalletButton'
 import { useGetBnbBalance } from 'hooks/useTokenBalance'
 import { useTranslation } from 'contexts/Localization'
 import { FetchStatus } from 'config/constants/types'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import WalletModal, { WalletView, LOW_BNB_BALANCE } from './WalletModal'
 // import ProfileUserMenuItem from './ProfileUserMenutItem'
 import WalletUserMenuItem from './WalletUserMenuItem'
 
 const UserMenu = () => {
   const { t } = useTranslation()
-  const { account } = useWeb3React()
+  const { account } = useActiveWeb3React()
   const { logout } = useAuth()
   const { balance, fetchStatus } = useGetBnbBalance()
   const { /* isInitialized, isLoading, */ profile } = useProfile()
