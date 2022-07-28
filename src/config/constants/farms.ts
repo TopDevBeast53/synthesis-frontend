@@ -128,16 +128,16 @@ const farms: SerializedFarmConfig[] = [
         token: serializedTokens.ape,
         quoteToken: serializedTokens.helix,
     },
-    {
-        pid: 12,
-        lpSymbol: 'CULT-HELIX',
-        lpAddresses: {
-            1: '0x200e1e20eb37Fcd175A96A432292bf2AbA71B1e4',
-            4: '',
-        },
-        token: serializedTokens.cult,
-        quoteToken: serializedTokens.helix,
-    },
+    // {
+    //     pid: 12,
+    //     lpSymbol: 'CULT-HELIX',
+    //     lpAddresses: {
+    //         1: '0x200e1e20eb37Fcd175A96A432292bf2AbA71B1e4',
+    //         4: '',
+    //     },
+    //     token: serializedTokens.cult,
+    //     quoteToken: serializedTokens.helix,
+    // },
     // {
     //   pid: 0,
     //   lpSymbol: 'HELIX',
