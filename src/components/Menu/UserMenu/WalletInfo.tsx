@@ -1,6 +1,4 @@
 import { Box, Button, Flex, InjectedModalProps, LinkExternal, Message, Skeleton, Text } from 'uikit'
-import { useWeb3React } from '@web3-react/core'
-import tokens from 'config/constants/tokens'
 import { FetchStatus } from 'config/constants/types'
 import { useTranslation } from 'contexts/Localization'
 import useAuth from 'hooks/useAuth'
@@ -8,6 +6,7 @@ import useTokenBalance, { useGetBnbBalance } from 'hooks/useTokenBalance'
 import React from 'react'
 import { getEtherScanLink } from 'utils'
 import { formatBigNumber, getFullDisplayBalance } from 'utils/formatBalance'
+import { useGetTokens } from 'hooks/useGetTokens'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import CopyAddress from './CopyAddress'
 
@@ -18,11 +17,11 @@ interface WalletInfoProps {
 
 const WalletInfo: React.FC<WalletInfoProps> = ({ hasLowBnbBalance, onDismiss }) => {
   const { t } = useTranslation()
-  const { account } = useWeb3React()
   const { balance, fetchStatus } = useGetBnbBalance()
-  const { balance: helixBalance, fetchStatus: helixFetchStatus } = useTokenBalance(tokens.helix.address)
   const { logout } = useAuth()
-  const { chainId } = useActiveWeb3React()
+  const { chainId, account } = useActiveWeb3React()
+  const tokens = useGetTokens()
+  const { balance: helixBalance, fetchStatus: helixFetchStatus } = useTokenBalance(tokens.helix.address)
 
   const handleLogout = () => {
     onDismiss()

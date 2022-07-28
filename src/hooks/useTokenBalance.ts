@@ -1,6 +1,5 @@
 import { useWeb3React } from '@web3-react/core'
 import BigNumber from 'bignumber.js'
-import tokens from 'config/constants/tokens'
 import { FAST_INTERVAL, SLOW_INTERVAL } from 'config/constants'
 import { ethers } from 'ethers'
 import useSWR from 'swr'
@@ -8,6 +7,7 @@ import { BIG_ZERO } from 'utils/bigNumber'
 import useProviders from 'hooks/useProviders'
 import { useHelix, useTokenContract } from './useContract'
 import { useSWRContract } from './useSWRContract'
+import { useGetTokens } from './useGetTokens'
 
 const useTokenBalance = (tokenAddress: string) => {
     const { account } = useWeb3React()
@@ -16,10 +16,10 @@ const useTokenBalance = (tokenAddress: string) => {
     const { data, status, ...rest } = useSWRContract(
         account
             ? {
-                  contract,
-                  methodName: 'balanceOf',
-                  params: [account],
-              }
+                contract,
+                methodName: 'balanceOf',
+                params: [account],
+            }
             : null,
         {
             refreshInterval: FAST_INTERVAL,
@@ -62,6 +62,7 @@ export const useGetBnbBalance = () => {
 }
 
 export const useGetCakeBalance = () => {
+    const tokens = useGetTokens()
     const { balance, fetchStatus } = useTokenBalance(tokens.helix.address)
 
     // TODO: Remove ethers conversion once useTokenBalance is converted to ethers.BigNumber
@@ -69,6 +70,7 @@ export const useGetCakeBalance = () => {
 }
 
 export const useGetHelixBalance = () => {
+    const tokens = useGetTokens()
     const { balance, fetchStatus } = useTokenBalance(tokens.helix.address)
 
     // TODO: Remove ethers conversion once useTokenBalance is converted to ethers.BigNumber

@@ -1,19 +1,21 @@
 import { ChainId, Currency, currencyEquals, JSBI, Price } from 'sdk'
-import tokens, { mainnetTokens } from 'config/constants/tokens'
+import { mainnetTokens } from 'config/constants/tokens'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useMemo } from 'react'
 import { multiplyPriceByAmount } from 'utils/prices'
 import { wrappedCurrency } from '../utils/wrappedCurrency'
 import { PairState, usePairs } from './usePairs'
+import { useGetTokens } from './useGetTokens'
 
 const BUSD_MAINNET = mainnetTokens.usdc
-const { weth: WETH } = tokens
+
 
 /**
  * Returns the price in BUSD of the input currency
  * @param currency currency to compute the BUSD price of
  */
 export default function useBUSDPrice(currency?: Currency): Price | undefined {
+    const { weth: WETH } = useGetTokens()
     const { chainId } = useActiveWeb3React()
     const wrapped = wrappedCurrency(currency, chainId)
     const tokenPairs: [Currency | undefined, Currency | undefined][] = useMemo(
@@ -25,7 +27,7 @@ export default function useBUSDPrice(currency?: Currency): Price | undefined {
             ],
             [chainId ? WETH : undefined, chainId === ChainId.MAINNET ? BUSD_MAINNET : undefined],
         ],
-        [chainId, currency, wrapped],
+        [WETH, chainId, currency, wrapped],
     )
     const [[ethPairState, ethPair], [busdPairState, busdPair], [busdEthPairState, busdEthPair]] = usePairs(tokenPairs)
 
@@ -70,10 +72,11 @@ export default function useBUSDPrice(currency?: Currency): Price | undefined {
         }
 
         return undefined
-    }, [chainId, currency, ethPair, ethPairState, busdEthPair, busdEthPairState, busdPair, busdPairState, wrapped])
+    }, [currency, wrapped, chainId, WETH, ethPair, busdEthPair, busdPairState, busdPair, ethPairState, busdEthPairState])
 }
 
 export const useHelixBusdPrice = (): Price | undefined => {
+    const tokens = useGetTokens()
     const helixBusdPrice = useBUSDPrice(tokens.helix)
     return helixBusdPrice
 }
@@ -97,6 +100,7 @@ export const useBUSDHelixAmount = (amount: number): number | undefined => {
 }
 
 export const useBNBBusdPrice = (): Price | undefined => {
+    const tokens = useGetTokens()
     const bnbBusdPrice = useBUSDPrice(tokens.weth)
     return bnbBusdPrice
 }

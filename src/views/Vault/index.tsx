@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js'
 import Page from 'components/Layout/Page'
 import PageHeader from 'components/PageHeader'
-import tokens from 'config/constants/tokens'
+import getTokens from 'config/constants/tokens'
 import { FetchStatus } from 'config/constants/types'
 import { useTranslation } from 'contexts/Localization'
 import { ethers } from 'ethers'
@@ -64,10 +64,10 @@ const Vault: React.FC = () => {
   const [totalStakedVault, setTotalStakedVault] = useState(0)
 
   const fastRefresh = useFastFresh()
-  const { decimals } = tokens.helix
+  const { decimals } = getTokens.helix
   const helixPrice = usePriceHelixBusd()
 
-  const { balance: helixBalance, fetchStatus: balanceFetchStatus } = useTokenBalance(tokens.helix.address)
+  const { balance: helixBalance, fetchStatus: balanceFetchStatus } = useTokenBalance(getTokens.helix.address)
   const stakingTokenBalance = balanceFetchStatus === FetchStatus.Fetched ? helixBalance : BIG_ZERO
   const [onPresentTokenRequired] = useModal(<NotEnoughTokensModal tokenSymbol="HELIX" />)
 

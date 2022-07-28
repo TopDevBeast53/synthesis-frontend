@@ -2,7 +2,7 @@ import BigNumber from 'bignumber.js'
 import { useState, useCallback } from 'react'
 import { BSC_BLOCK_TIME } from 'config'
 import ifoV2Abi from 'config/abi/ifoV2.json'
-import tokens from 'config/constants/tokens'
+import getTokens from 'config/constants/tokens'
 import { Ifo, IfoStatus } from 'config/constants/types'
 import { ethers } from 'ethers'
 import { useLpTokenPrice, usePriceHelixBusd } from 'state/farms/hooks'
@@ -31,7 +31,7 @@ const useGetPublicIfoData = (ifo: Ifo): PublicIfoData => {
     const { address, releaseBlockNumber } = ifo
     const cakePriceUsd = usePriceHelixBusd()
     const lpTokenPriceInUsd = useLpTokenPrice(ifo.currency.symbol)
-    const currencyPriceInUSD = ifo.currency === tokens.helix ? cakePriceUsd : lpTokenPriceInUsd
+    const currencyPriceInUSD = ifo.currency === getTokens.helix ? cakePriceUsd : lpTokenPriceInUsd
     const multicallv2 = useMulticallv2()
 
     const [state, setState] = useState({

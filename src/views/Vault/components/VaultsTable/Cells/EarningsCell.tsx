@@ -1,7 +1,7 @@
 import React from 'react'
 import Balance from 'components/Balance'
 import { useTranslation } from 'contexts/Localization'
-import tokens from 'config/constants/tokens'
+import getTokens from 'config/constants/tokens'
 import { usePriceHelixBusd } from 'state/farms/hooks'
 import styled from 'styled-components'
 import { Box, Flex, Skeleton, Text, useMatchBreakpoints } from 'uikit'
@@ -22,7 +22,7 @@ const EarningsCell: React.FC<EarningsCellProps> = ({ isLoading, earnings }) => {
   const { isMobile } = useMatchBreakpoints()
 
   const cakePrice = usePriceHelixBusd()
-  const { decimals, symbol } = tokens.helix
+  const { decimals, symbol } = getTokens.helix
 
   const earningTokenBalance = getBalanceNumber(earnings, decimals)
   const earningTokenDollarBalance = getBalanceNumber(earnings.multipliedBy(cakePrice), decimals)

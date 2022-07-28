@@ -1,5 +1,4 @@
 import { AddIcon, Button, Heading, IconButton, MinusIcon, Skeleton, Text, useModal } from 'uikit'
-import { useWeb3React } from '@web3-react/core'
 import { BigNumber } from 'bignumber.js'
 import Balance from 'components/Balance'
 import ConnectWalletButton from 'components/ConnectWalletButton'
@@ -50,7 +49,6 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
 }) => {
   const { t } = useTranslation()
   const { toastError } = useToast()
-  const { account } = useWeb3React()
   const [requestedApproval, setRequestedApproval] = useState(false)
   const { allowance, tokenBalance, stakedBalance } = useFarmUser(pid)
   const { onStake } = useStakeFarms(pid)
@@ -62,7 +60,7 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
   const fetchFarmUserTokenBalances = useFetchFarmUserTokenBalances()
   const fetchFarmUserStakedBalances = useFetchFarmUserStakedBalances()
   const fetchFarmUserEarnings = useFetchFarmUserEarnings()
-  const { chainId } = useActiveWeb3React()
+  const { chainId, account } = useActiveWeb3React()
 
   const isApproved = account && allowance && allowance.isGreaterThan(0)
 
@@ -76,7 +74,7 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
   const handleStake = async (amount: string) => {
     await onStake(amount)
     dispatch(fetchFarmUserDataAsync({
-      account, pids: [pid], fetchFarmUserAllowances,
+      account, pids: [pid], chainId, fetchFarmUserAllowances,
       fetchFarmUserEarnings, fetchFarmUserStakedBalances, fetchFarmUserTokenBalances
     }))
   }
@@ -84,7 +82,7 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
   const handleUnstake = async (amount: string) => {
     await onUnstake(amount)
     dispatch(fetchFarmUserDataAsync({
-      account, pids: [pid], fetchFarmUserAllowances,
+      account, pids: [pid], chainId, fetchFarmUserAllowances,
       fetchFarmUserEarnings, fetchFarmUserStakedBalances, fetchFarmUserTokenBalances
     }))
   }
@@ -127,7 +125,7 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
       setRequestedApproval(true)
       await onApprove()
       dispatch(fetchFarmUserDataAsync({
-        account, pids: [pid], fetchFarmUserAllowances,
+        account, pids: [pid], chainId, fetchFarmUserAllowances,
         fetchFarmUserEarnings, fetchFarmUserStakedBalances, fetchFarmUserTokenBalances
       }))
     } catch (e) {
@@ -136,7 +134,7 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
     } finally {
       setRequestedApproval(false)
     }
-  }, [onApprove, dispatch, account, pid, fetchFarmUserAllowances, fetchFarmUserEarnings, fetchFarmUserStakedBalances, fetchFarmUserTokenBalances, toastError, t])
+  }, [onApprove, dispatch, account, pid, chainId, fetchFarmUserAllowances, fetchFarmUserEarnings, fetchFarmUserStakedBalances, fetchFarmUserTokenBalances, toastError, t])
 
   if (!account) {
     return (

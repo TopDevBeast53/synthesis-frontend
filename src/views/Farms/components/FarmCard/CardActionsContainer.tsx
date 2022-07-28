@@ -56,7 +56,7 @@ const CardActions: React.FC<FarmCardActionsProps> = ({ farm, account, addLiquidi
       setRequestedApproval(true)
       await onApprove()
       dispatch(fetchFarmUserDataAsync({
-        account, pids: [pid], fetchFarmUserAllowances,
+        account, pids: [pid], chainId, fetchFarmUserAllowances,
         fetchFarmUserEarnings, fetchFarmUserStakedBalances, fetchFarmUserTokenBalances
       }))
     } catch (e) {
@@ -65,7 +65,7 @@ const CardActions: React.FC<FarmCardActionsProps> = ({ farm, account, addLiquidi
     } finally {
       setRequestedApproval(false)
     }
-  }, [onApprove, dispatch, account, pid, fetchFarmUserAllowances, fetchFarmUserEarnings, fetchFarmUserStakedBalances, fetchFarmUserTokenBalances, toastError, t])
+  }, [onApprove, dispatch, account, pid, chainId, fetchFarmUserAllowances, fetchFarmUserEarnings, fetchFarmUserStakedBalances, fetchFarmUserTokenBalances, toastError, t])
 
   const renderApprovalOrStakeButton = () => {
     return isApproved ? (

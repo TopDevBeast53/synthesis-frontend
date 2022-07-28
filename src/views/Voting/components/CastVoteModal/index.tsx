@@ -9,7 +9,7 @@ import useWeb3Provider from 'hooks/useActiveWeb3React'
 import useTheme from 'hooks/useTheme'
 import snapshot from '@snapshot-labs/snapshot.js'
 import { useFarms } from 'state/farms/hooks'
-import tokens from 'config/constants/tokens'
+import getTokens from 'config/constants/tokens'
 import { useFastFresh } from 'hooks/useRefresh'
 import { getAddress, getMasterChefAddress, getHelixAutoPoolAddress, getHelixVaultAddress } from 'utils/addressHelpers'
 import { CastVoteModalProps, ConfirmVoteView } from './types'
@@ -46,7 +46,7 @@ const CastVoteModal: React.FC<CastVoteModalProps> = ({ onSuccess, proposalId, sp
   const strategies = [{
     "name": "helix",
     "params": {
-      "address": `${tokens.helix.address}`,
+      "address": `${getTokens.helix.address}`,
       "masterChef": `${masterChefAddress}`,
       "autoHelix": `${autoHelixAddress}`,
       "vault": `${vaultAddress}`,

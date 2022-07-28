@@ -2,7 +2,7 @@ import React, { useMemo, useCallback } from 'react'
 import moment from 'moment'
 import Balance from 'components/Balance'
 import { BigNumber } from 'bignumber.js'
-import tokens from 'config/constants/tokens'
+import getTokens from 'config/constants/tokens'
 import { useTranslation } from 'contexts/Localization'
 import useTokenBalance from 'hooks/useTokenBalance'
 import { usePriceHelixBusd } from 'state/farms/hooks'
@@ -26,10 +26,10 @@ interface StackedActionProps {
 
 const Staked: React.FunctionComponent<StackedActionProps> = ({ isLoading, deposit, stakedBalance, updateStake }) => {
   const { t } = useTranslation()
-  const { balance: helixBalance } = useTokenBalance(tokens.helix.address)
+  const { balance: helixBalance } = useTokenBalance(getTokens.helix.address)
 
   const cakePrice = usePriceHelixBusd()
-  const { decimals, symbol } = tokens.helix
+  const { decimals, symbol } = getTokens.helix
 
   const tokenPrice = getBalanceNumber(cakePrice, decimals)
   const stakedTokenDollarBalance = getBalanceNumber(stakedBalance.multipliedBy(cakePrice), decimals)
@@ -58,7 +58,7 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({ isLoading, deposi
       totalBalance={helixBalance}
       stakedBalance={stakedBalance}
       tokenPrice={tokenPrice}
-      stakingToken={tokens.helix}
+      stakingToken={getTokens.helix}
       depositId={deposit.id}
       updateStake={updateStake}
     />,
@@ -69,7 +69,7 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({ isLoading, deposi
       totalBalance={helixBalance}
       stakedBalance={stakedBalance}
       tokenPrice={tokenPrice}
-      stakingToken={tokens.helix}
+      stakingToken={getTokens.helix}
       depositId={deposit.id}
       isRemovingStake
       updateStake={updateStake}

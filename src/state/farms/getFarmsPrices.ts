@@ -2,7 +2,8 @@ import BigNumber from 'bignumber.js'
 import { BIG_ONE, BIG_ZERO } from 'utils/bigNumber'
 import { filterFarmsByQuoteToken } from 'utils/farmsPriceHelpers'
 import { SerializedFarm } from 'state/types'
-import tokens from 'config/constants/tokens'
+import getTokens from 'config/constants/tokens'
+import { ChainId } from 'sdk'
 
 const getFarmFromTokenSymbol = (
     farms: SerializedFarm[],
@@ -15,25 +16,26 @@ const getFarmFromTokenSymbol = (
 }
 
 const getFarmBaseTokenPrice = (
+    chainId: ChainId,
     farm: SerializedFarm,
     quoteTokenFarm: SerializedFarm,
     bnbPriceBusd: BigNumber,
 ): BigNumber => {
     const hasTokenPriceVsQuote = Boolean(farm.tokenPriceVsQuote)
 
-    if (farm.quoteToken.symbol === tokens.usdc.symbol) {
+    if (farm.quoteToken.symbol === getTokens(chainId).usdc.symbol) {
         return hasTokenPriceVsQuote ? new BigNumber(farm.tokenPriceVsQuote) : BIG_ZERO
     }
 
-    if (farm.quoteToken.symbol === tokens.usdt.symbol) {
+    if (farm.quoteToken.symbol === getTokens(chainId).usdt.symbol) {
         return hasTokenPriceVsQuote ? new BigNumber(farm.tokenPriceVsQuote) : BIG_ZERO
     }
     
-    if (farm.quoteToken.symbol === tokens.dai.symbol) {
+    if (farm.quoteToken.symbol === getTokens(chainId).dai.symbol) {
         return hasTokenPriceVsQuote ? new BigNumber(farm.tokenPriceVsQuote) : BIG_ZERO
     }
 
-    if (farm.quoteToken.symbol === tokens.weth.symbol) {
+    if (farm.quoteToken.symbol === getTokens(chainId).weth.symbol) {
         return hasTokenPriceVsQuote ? bnbPriceBusd.times(farm.tokenPriceVsQuote) : BIG_ZERO
     }
 
@@ -48,14 +50,14 @@ const getFarmBaseTokenPrice = (
     // If the farm's quote token isn't BUSD or WBNB, we then use the quote token, of the original farm's quote token
     // i.e. for farm PNT - pBTC we use the pBTC farm's quote token - BNB, (pBTC - BNB)
     // from the BNB - pBTC price, we can calculate the PNT - BUSD price
-    if (quoteTokenFarm.quoteToken.symbol === tokens.weth.symbol) {
+    if (quoteTokenFarm.quoteToken.symbol === getTokens(chainId).weth.symbol) {
         const quoteTokenInBusd = bnbPriceBusd.times(quoteTokenFarm.tokenPriceVsQuote)
         return hasTokenPriceVsQuote && quoteTokenInBusd
             ? new BigNumber(farm.tokenPriceVsQuote).times(quoteTokenInBusd)
             : BIG_ZERO
     }
 
-    if (quoteTokenFarm.quoteToken.symbol === tokens.usdc.symbol) {
+    if (quoteTokenFarm.quoteToken.symbol === getTokens(chainId).usdc.symbol) {
         const quoteTokenInBusd = quoteTokenFarm.tokenPriceVsQuote
         return hasTokenPriceVsQuote && quoteTokenInBusd
             ? new BigNumber(farm.tokenPriceVsQuote).times(quoteTokenInBusd)
@@ -111,12 +113,12 @@ const getFarmQuoteTokenPrice = (
     return BIG_ZERO
 }
 
-const getFarmsPrices = (farms: SerializedFarm[]) => {
+const getFarmsPrices = (chainId: ChainId, farms: SerializedFarm[]) => {
     const bnbBusdFarm = farms.find((farm) => farm.pid === 3)
     const bnbPriceBusd = bnbBusdFarm.tokenPriceVsQuote ? BIG_ONE.times(bnbBusdFarm.tokenPriceVsQuote) : BIG_ZERO
     const farmsWithPrices = farms.map((farm) => {
         const quoteTokenFarm = getFarmFromTokenSymbol(farms, farm.quoteToken.symbol)
-        const tokenPriceBusd = getFarmBaseTokenPrice(farm, quoteTokenFarm, bnbPriceBusd)
+        const tokenPriceBusd = getFarmBaseTokenPrice(chainId, farm, quoteTokenFarm, bnbPriceBusd)
         const quoteTokenPriceBusd = getFarmQuoteTokenPrice(farm, quoteTokenFarm, bnbPriceBusd)
 
         return {

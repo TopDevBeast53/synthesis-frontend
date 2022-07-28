@@ -6,7 +6,7 @@ import { usePriceHelixBusd } from 'state/farms/hooks'
 import { Flex, Text, Heading, Skeleton } from 'uikit'
 import { useTranslation } from 'contexts/Localization'
 import Balance from 'components/Balance'
-import tokens from 'config/constants/tokens'
+import getTokens from 'config/constants/tokens'
 
 const StyledColumn = styled(Flex)<{ noMobileBorder?: boolean }>`
   flex-direction: column;
@@ -46,7 +46,7 @@ const emissionsPerBlock = 14.25
 const CakeDataRow = () => {
   const { t } = useTranslation()
   const totalSupply = useTotalSupply()
-  const burnedBalance = getBalanceNumber(useBurnedBalance(tokens.helix.address))
+  const burnedBalance = getBalanceNumber(useBurnedBalance(getTokens.helix.address))
   const cakeSupply = totalSupply ? getBalanceNumber(totalSupply) - burnedBalance : 0
   const cakePriceBusd = usePriceHelixBusd()
   const mcap = cakePriceBusd.times(cakeSupply)

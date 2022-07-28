@@ -1,21 +1,21 @@
-import farms from 'config/constants/farms'
+import getFarmsfarms from 'config/constants/farms'
 import { SerializedFarm } from 'state/types'
 import { getLpContract } from 'utils/contractHelpers'
 
 // Test only against the last 10 farms, for performance concern
-const farmsToTest: [number, SerializedFarm][] = farms
+const farmsToTest: [number, SerializedFarm][] = getFarmsfarms
     .filter((farm) => farm.pid !== 0)
     .slice(0, 10)
     .map((farm) => [farm.pid, farm])
 
 describe('Config farms', () => {
     it.each(farmsToTest)('Farm #%d has an unique pid', (pid) => {
-        const duplicates = farms.filter((f) => pid === f.pid)
+        const duplicates = getFarmsfarms.filter((f) => pid === f.pid)
         expect(duplicates).toHaveLength(1)
     })
 
     it.each(farmsToTest)('Farm #%d has an unique address', (pid, farm) => {
-        const duplicates = farms.filter((f) => farm.lpAddresses[56] === f.lpAddresses[56])
+        const duplicates = getFarmsfarms.filter((f) => farm.lpAddresses[56] === f.lpAddresses[56])
         expect(duplicates).toHaveLength(1)
     })
 

@@ -1,6 +1,6 @@
 import { VaultKey } from 'state/types'
 import { DEFAULT_GAS_LIMIT } from 'config'
-import tokens, { serializeTokens } from './tokens'
+import getTokens, { serializeTokens } from './tokens'
 import { SerializedPoolConfig, PoolCategory } from './types'
 
 const serializedTokens = serializeTokens()
@@ -12,7 +12,7 @@ export const vaultPoolConfig = {
         autoCompoundFrequency: 1,
         gasLimit: DEFAULT_GAS_LIMIT,
         tokenImage: {
-            primarySrc: `/images/tokens/${tokens.helix.address}.svg`,
+            primarySrc: `/images/tokens/${getTokens.helix.address}.svg`,
             secondarySrc: '/images/tokens/autorenew.svg',
         },
     },
@@ -22,8 +22,8 @@ export const vaultPoolConfig = {
         autoCompoundFrequency: 1,
         gasLimit: DEFAULT_GAS_LIMIT,
         tokenImage: {
-            primarySrc: `/images/tokens/${tokens.helix.address}.svg`,
-            secondarySrc: `/images/tokens/${tokens.helix.address}.svg`,
+            primarySrc: `/images/tokens/${getTokens.helix.address}.svg`,
+            secondarySrc: `/images/tokens/${getTokens.helix.address}.svg`,
         },
     },
 } as const

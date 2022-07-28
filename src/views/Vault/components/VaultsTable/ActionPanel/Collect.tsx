@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useWeb3React } from '@web3-react/core'
 import Balance from 'components/Balance'
-import tokens from 'config/constants/tokens'
+import getTokens from 'config/constants/tokens'
 import { useTranslation } from 'contexts/Localization'
 import useToast from 'hooks/useToast'
 import { usePriceHelixBusd } from 'state/farms/hooks'
@@ -34,7 +34,7 @@ const HarvestAction: React.FunctionComponent<HarvestActionProps> = ({
   const [pendingCompoundTx, setPendingCompoundTx] = useState(false)
 
   const cakePrice = usePriceHelixBusd()
-  const { decimals, symbol } = tokens.helix
+  const { decimals, symbol } = getTokens.helix
 
   const hasEarnings = !isLoading && earnings.gt(0)
   const earningTokenBalance = getBalanceNumber(earnings, decimals)

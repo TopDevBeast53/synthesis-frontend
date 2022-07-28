@@ -40,7 +40,7 @@ import {
 } from '.'
 import { State, DeserializedPool, VaultKey } from '../types'
 import { getTokenPricesFromFarm, transformPool } from './helpers'
-import { fetchFarmsPublicDataAsync, nonArchivedFarms } from '../farms'
+import { fetchFarmsPublicDataAsync, getNonArchivedFarms } from '../farms'
 import useFetchVaultUser from './useFetchVaultUser'
 import useFetchPublicVaultData from './useFetchPublicVaultData'
 import useFetchIfoPoolUser from './useFetchIfoPoolUser'
@@ -107,11 +107,14 @@ export const useFetchPublicPoolsData = () => {
     const { data = 0 } = useSWR([SLOW_INTERVAL, 'blockNumber'])
     const fetchPoolsPublicDataAsync = useFetchPoolsPublicDataAsync(data)
     const fetchFarms = useFetchFarms()
+    const { chainId } = useActiveWeb3React()
+
+    const nonArchivedFarms = useMemo(() => getNonArchivedFarms(chainId), [chainId])
 
     useEffect(() => {
         const fetchPoolsDataWithFarms = async () => {
             const activeFarms = nonArchivedFarms.filter((farm) => farm.pid !== 0)
-            await dispatch(fetchFarmsPublicDataAsync({ pids: activeFarms.map((farm) => farm.pid), fetchFarms }))
+            await dispatch(fetchFarmsPublicDataAsync({ pids: activeFarms.map((farm) => farm.pid), fetchFarms, chainId }))
             batch(() => {
                 dispatch(fetchPoolsPublicDataAsync)
                 dispatch(fetchPoolsStakingLimitsAsync())
@@ -119,7 +122,7 @@ export const useFetchPublicPoolsData = () => {
         }
 
         fetchPoolsDataWithFarms()
-    }, [data, dispatch, fetchFarms, fetchPoolsPublicDataAsync])
+    }, [chainId, data, dispatch, fetchFarms, fetchPoolsPublicDataAsync, nonArchivedFarms])
 
     // useSlowRefreshEffect(
     //     (currentBlock) => {

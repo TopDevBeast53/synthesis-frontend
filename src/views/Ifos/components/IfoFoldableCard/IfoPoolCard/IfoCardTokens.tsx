@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import BigNumber from 'bignumber.js'
 import {
   Text,
@@ -20,8 +20,8 @@ import styled from 'styled-components'
 import { useWeb3React } from '@web3-react/core'
 import { Token } from 'sdk'
 import { Ifo, PoolIds } from 'config/constants/types'
-import tokens from 'config/constants/tokens'
-import { cakeBnbLpToken } from 'config/constants/ifo'
+import getTokens from 'config/constants/tokens'
+import { getCakeBnbLpToken } from 'config/constants/ifo'
 import { PublicIfoData, WalletIfoData } from 'views/Ifos/types'
 import { useTranslation } from 'contexts/Localization'
 import { getBalanceNumber } from 'utils/formatBalance'
@@ -29,6 +29,7 @@ import { TokenImage, TokenPairImage } from 'components/TokenImage'
 import VaultStakeModal from 'views/Pools/components/CakeVaultCard/VaultStakeModal'
 import { useIfoPoolVault, useIfoPoolCredit, useIfoWithApr } from 'state/pools/hooks'
 import { BIG_ZERO } from 'utils/bigNumber'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { EnableStatus } from '../types'
 import PercentageOfTotal from './PercentageOfTotal'
 import { SkeletonCardTokens } from './Skeletons'
@@ -69,8 +70,10 @@ const TokenSection: React.FC<TokenSectionProps> = ({ primaryToken, secondaryToke
 }
 
 const CommitTokenSection: React.FC<TokenSectionProps & { commitToken: Token }> = ({ commitToken, ...props }) => {
+  const { chainId } = useActiveWeb3React()
+  const cakeBnbLpToken = useMemo(() => getCakeBnbLpToken(chainId), [chainId])
   if (commitToken.equals(cakeBnbLpToken)) {
-    return <TokenSection primaryToken={tokens.helix} secondaryToken={tokens.weth} {...props} />
+    return <TokenSection primaryToken={getTokens.helix} secondaryToken={getTokens.weth} {...props} />
   }
   return <TokenSection primaryToken={commitToken} {...props} />
 }

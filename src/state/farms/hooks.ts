@@ -1,11 +1,10 @@
 import { useCallback, useEffect, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import { useAppDispatch } from 'state'
-import { useWeb3React } from '@web3-react/core'
 import BigNumber from 'bignumber.js'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { getBalanceAmount } from 'utils/formatBalance'
-import { farmsConfig } from 'config/constants'
+import { getFarms } from 'config/constants'
 import { useFastFresh, useSlowFresh } from 'hooks/useRefresh'
 import { deserializeToken } from 'state/user/hooks/helpers'
 import { getAddress, getMasterChefAddress } from 'utils/addressHelpers'
@@ -14,7 +13,7 @@ import useMulticall from 'hooks/useMulticall'
 import erc20ABI from 'config/abi/erc20.json'
 import masterchefABI from 'config/abi/masterchef.json'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import { fetchFarmsPublicDataAsync, fetchFarmUserDataAsync, nonArchivedFarms } from '.'
+import { fetchFarmsPublicDataAsync, fetchFarmUserDataAsync, getNonArchivedFarms } from '.'
 import { State, SerializedFarm, DeserializedFarmUserData, DeserializedFarm, DeserializedFarmsState } from '../types'
 import useFetchFarms from './useFetchFarms'
 
@@ -54,38 +53,45 @@ export const usePollFarmsPublicData = (includeArchive = false) => {
     const dispatch = useAppDispatch()
     const slowRefresh = useSlowFresh()
     const fetchFarms = useFetchFarms()
+    const { chainId } = useActiveWeb3React()
+
+    const farmsConfig = useMemo(() => getFarms(chainId), [chainId])
+    const nonArchivedFarms = useMemo(() => getNonArchivedFarms(chainId), [chainId])
 
     useEffect(() => {
         const farmsToFetch = includeArchive ? farmsConfig : nonArchivedFarms
         const pids = farmsToFetch.map((farmToFetch) => farmToFetch.pid)
 
-        dispatch(fetchFarmsPublicDataAsync({ pids, fetchFarms }))
-    }, [includeArchive, dispatch, slowRefresh, fetchFarms])
+        dispatch(fetchFarmsPublicDataAsync({ pids, fetchFarms, chainId }))
+    }, [includeArchive, dispatch, slowRefresh, fetchFarms, farmsConfig, nonArchivedFarms, chainId])
 }
 
 export const usePollFarmsWithUserData = (includeArchive = false) => {
     const dispatch = useAppDispatch()
     const fastRefresh = useFastFresh()
-    const { account } = useWeb3React()
     const fetchFarms = useFetchFarms()
     const fetchFarmUserAllowances = useFetchFarmUserAllowances()
     const fetchFarmUserTokenBalances = useFetchFarmUserTokenBalances()
     const fetchFarmUserStakedBalances = useFetchFarmUserStakedBalances()
     const fetchFarmUserEarnings = useFetchFarmUserEarnings()
+    const { chainId, account } = useActiveWeb3React()
+
+    const farmsConfig = useMemo(() => getFarms(chainId), [chainId])
+    const nonArchivedFarms = useMemo(() => getNonArchivedFarms(chainId), [chainId])
 
     useEffect(() => {
         const farmsToFetch = includeArchive ? farmsConfig : nonArchivedFarms
         const pids = farmsToFetch.map((farmToFetch) => farmToFetch.pid)
 
-        dispatch(fetchFarmsPublicDataAsync({ pids, fetchFarms }))
+        dispatch(fetchFarmsPublicDataAsync({ pids, fetchFarms, chainId }))
 
         if (account) {
             dispatch(fetchFarmUserDataAsync({
-                account, pids, fetchFarmUserAllowances,
+                account, pids, chainId, fetchFarmUserAllowances,
                 fetchFarmUserTokenBalances, fetchFarmUserStakedBalances, fetchFarmUserEarnings
             }))
         }
-    }, [includeArchive, dispatch, fastRefresh, account, fetchFarms, fetchFarmUserAllowances, fetchFarmUserTokenBalances, fetchFarmUserStakedBalances, fetchFarmUserEarnings])
+    }, [includeArchive, dispatch, fastRefresh, account, fetchFarms, fetchFarmUserAllowances, fetchFarmUserTokenBalances, fetchFarmUserStakedBalances, fetchFarmUserEarnings, farmsConfig, nonArchivedFarms, chainId])
 }
 
 /**
@@ -97,10 +103,11 @@ export const usePollCoreFarmData = () => {
     const dispatch = useAppDispatch()
     const fastRefresh = useFastFresh()
     const fetchFarms = useFetchFarms()
+    const { chainId } = useActiveWeb3React()
 
     useEffect(() => {
-        dispatch(fetchFarmsPublicDataAsync({ pids: [1, 3], fetchFarms }))
-    }, [dispatch, fastRefresh, fetchFarms])
+        dispatch(fetchFarmsPublicDataAsync({ pids: [1, 3], fetchFarms, chainId }))
+    }, [chainId, dispatch, fastRefresh, fetchFarms])
 }
 
 export const useFarms = (): DeserializedFarmsState => {

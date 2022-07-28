@@ -10,6 +10,7 @@ import { useAppDispatch } from 'state'
 import { fetchFarmUserDataAsync } from 'state/farms'
 import { useFetchFarmUserAllowances, useFetchFarmUserEarnings, useFetchFarmUserStakedBalances, useFetchFarmUserTokenBalances, useLpTokenPrice } from 'state/farms/hooks'
 import { getBalanceAmount, getBalanceNumber } from 'utils/formatBalance'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import DepositModal from '../DepositModal'
 import WithdrawModal from '../WithdrawModal'
 import useUnstakeFarms from '../../hooks/useUnstakeFarms'
@@ -58,11 +59,12 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({
   const fetchFarmUserTokenBalances = useFetchFarmUserTokenBalances()
   const fetchFarmUserStakedBalances = useFetchFarmUserStakedBalances()
   const fetchFarmUserEarnings = useFetchFarmUserEarnings()
+  const { chainId } = useActiveWeb3React()
 
   const handleStake = async (amount: string) => {
     await onStake(amount)
     dispatch(fetchFarmUserDataAsync({
-      account, pids: [pid], fetchFarmUserAllowances,
+      account, pids: [pid], chainId, fetchFarmUserAllowances,
       fetchFarmUserEarnings, fetchFarmUserStakedBalances, fetchFarmUserTokenBalances
     }))
   }
@@ -70,7 +72,7 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({
   const handleUnstake = async (amount: string) => {
     await onUnstake(amount)
     dispatch(fetchFarmUserDataAsync({
-      account, pids: [pid], fetchFarmUserAllowances,
+      account, pids: [pid], chainId, fetchFarmUserAllowances,
       fetchFarmUserEarnings, fetchFarmUserStakedBalances, fetchFarmUserTokenBalances
     }))
   }

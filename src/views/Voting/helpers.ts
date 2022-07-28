@@ -1,6 +1,6 @@
 // import { SNAPSHOT_HUB_API, SNAPSHOT_VOTING_API } from 'config/constants/endpoints'
 import { SNAPSHOT_HUB_API } from 'config/constants/endpoints'
-import tokens from 'config/constants/tokens'
+import getTokens from 'config/constants/tokens'
 import { Proposal, ProposalState, ProposalType, Vote } from 'state/types'
 // import { simpleRpcProvider } from 'hooks/useProviders'
 import { ADMINS, HELIX_SPACE, SNAPSHOT_VERSION } from './config'
@@ -38,7 +38,7 @@ export const generateMetaData = (chainId: number) => {
     return {
         plugins: {},
         network: chainId,
-        strategies: [{ name: 'helix', params: { symbol: 'HELIX', address: tokens.helix.address, decimals: 18 } }],
+        strategies: [{ name: 'helix', params: { symbol: 'HELIX', address: getTokens(chainId).helix.address, decimals: 18 } }],
     }
 }
 

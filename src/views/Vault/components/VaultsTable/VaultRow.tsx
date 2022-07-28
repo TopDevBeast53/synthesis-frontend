@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { useMatchBreakpoints } from 'uikit'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { logError } from 'utils/sentry'
-import tokens from 'config/constants/tokens'
+import getTokens from 'config/constants/tokens'
 import { useHelixVault } from 'hooks/useContract'
 import { CurrencyLogo } from 'components/Logo'
 import ActionPanel from './ActionPanel/ActionPanel'
@@ -86,13 +86,13 @@ const VaultRow: React.FC<PoolRowProps> = ({ deposit }) => {
         {(isTablet || isDesktop) && (
           <>
             <Container>
-              <CurrencyLogo currency={tokens.helix} size="36px" />
+              <CurrencyLogo currency={getTokens.helix} size="36px" />
             </Container>
             <StakedCell stakedBalance={stakedBalance} />
           </>
         )}
         <Container>
-          <CurrencyLogo currency={tokens.helix} size="36px" />
+          <CurrencyLogo currency={getTokens.helix} size="36px" />
         </Container>
         <EarningsCell isLoading={isLoading} earnings={earnings} />
         <AprCell stakedBalance={stakedBalance} apr={deposit.apr} />

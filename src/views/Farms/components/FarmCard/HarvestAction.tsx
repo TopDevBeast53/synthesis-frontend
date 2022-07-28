@@ -11,6 +11,7 @@ import { useFetchFarmUserAllowances, useFetchFarmUserEarnings, useFetchFarmUserS
 import { BIG_ZERO } from 'utils/bigNumber'
 import { getBalanceAmount } from 'utils/formatBalance'
 import { logError } from 'utils/sentry'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import useHarvestFarm from '../../hooks/useHarvestFarm'
 
 interface FarmCardActionsProps {
@@ -33,6 +34,7 @@ const HarvestAction: React.FC<FarmCardActionsProps> = ({ earnings, pid }) => {
   const fetchFarmUserTokenBalances = useFetchFarmUserTokenBalances()
   const fetchFarmUserStakedBalances = useFetchFarmUserStakedBalances()
   const fetchFarmUserEarnings = useFetchFarmUserEarnings()
+  const { chainId } = useActiveWeb3React()
 
   return (
     <Flex mb="8px" justifyContent="space-between" alignItems="center">
@@ -62,7 +64,7 @@ const HarvestAction: React.FC<FarmCardActionsProps> = ({ earnings, pid }) => {
             setPendingTx(false)
           }
           dispatch(fetchFarmUserDataAsync({
-            account, pids: [pid], fetchFarmUserAllowances,
+            account, pids: [pid], chainId, fetchFarmUserAllowances,
             fetchFarmUserEarnings, fetchFarmUserStakedBalances, fetchFarmUserTokenBalances
           }))
         }}

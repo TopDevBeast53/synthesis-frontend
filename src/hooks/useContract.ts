@@ -52,7 +52,6 @@ import {
 import { Contract } from '@ethersproject/contracts'
 import { ChainId, WETH } from 'sdk'
 import { abi as IUniswapV2PairABI } from '@uniswap/v2-core/build/IUniswapV2Pair.json'
-import tokens from 'config/constants/tokens'
 // ABI
 import profileABI from 'config/abi/pancakeProfile.json'
 import pancakeRabbitsAbi from 'config/abi/pancakeRabbits.json'
@@ -100,6 +99,7 @@ import WETH_ABI from '../config/abi/weth.json'
 import { getProviderOrSigner, isAddress } from '../utils'
 import useProviders from './useProviders'
 import useGetContract from './useGetContract'
+import { useGetTokens } from './useGetTokens'
 
 /**
  * Helper hooks to get specific contracts (by ABI)
@@ -158,8 +158,9 @@ export const useERC721 = (address: string) => {
 export const useHelix = () => {
     const { library } = useActiveWeb3React()
     const getContract = useGetContract()
+    const tokens = useGetTokens()
     return useMemo(() => getContract(helixAbi, tokens.helix.address, library.getSigner()) as Helix,
-        [getContract, library])
+        [getContract, library, tokens.helix.address])
 }
 
 export const useHelixVault = () => {

@@ -6,14 +6,15 @@ import type {
 } from '@reduxjs/toolkit/dist/matchers'
 import { createAsyncThunk, createSlice, isPending, isFulfilled, isRejected } from '@reduxjs/toolkit'
 import stringify from 'fast-json-stable-stringify'
-import farmsConfig from 'config/constants/farms'
+import getFarms from 'config/constants/farms'
 import isArchivedPid from 'utils/farmHelpers'
 import type { AppState } from 'state'
 import priceHelperLpsConfig from 'config/constants/priceHelperLps'
+import { ChainId } from 'sdk'
 import getFarmsPrices from './getFarmsPrices'
 import { SerializedFarmsState, SerializedFarm } from '../types'
 
-const noAccountFarmConfig = farmsConfig.map((farm) => ({
+const noAccountFarmConfig = getFarms(ChainId.MAINNET).map((farm) => ({
     ...farm,
     userData: {
         allowance: '0',
@@ -30,19 +31,19 @@ const initialState: SerializedFarmsState = {
     loadingKeys: {},
 }
 
-export const nonArchivedFarms = farmsConfig.filter(({ pid }) => !isArchivedPid(pid))
+export const getNonArchivedFarms = (chainId: ChainId) => getFarms(chainId).filter(({ pid }) => !isArchivedPid(pid))
 
 // Async thunks
 export const fetchFarmsPublicDataAsync = createAsyncThunk<
     SerializedFarm[],
-    { pids: number[], fetchFarms: any },
+    { pids: number[], fetchFarms: any, chainId: ChainId },
     {
         state: AppState
     }
 >(
     'farms/fetchFarmsPublicDataAsync',
-    async ({ pids, fetchFarms }) => {
-        const farmsToFetch = farmsConfig.filter((farmConfig) => pids.includes(farmConfig.pid))
+    async ({ pids, fetchFarms, chainId }) => {
+        const farmsToFetch = getFarms(chainId).filter((farmConfig) => pids.includes(farmConfig.pid))
 
         // Add price helper farms
         const farmsWithPriceHelpers = farmsToFetch.concat(priceHelperLpsConfig)
@@ -84,16 +85,17 @@ export const fetchFarmUserDataAsync = createAsyncThunk<
         fetchFarmUserAllowances: any,
         fetchFarmUserTokenBalances: any,
         fetchFarmUserStakedBalances: any,
-        fetchFarmUserEarnings: any
+        fetchFarmUserEarnings: any,
+        chainId: ChainId
     },
     {
         state: AppState
     }
 >(
     'farms/fetchFarmUserDataAsync',
-    async ({ account, pids, fetchFarmUserAllowances,
+    async ({ account, pids, chainId, fetchFarmUserAllowances,
         fetchFarmUserTokenBalances, fetchFarmUserStakedBalances, fetchFarmUserEarnings }) => {
-        const farmsToFetch = farmsConfig.filter((farmConfig) => pids.includes(farmConfig.pid))
+        const farmsToFetch = getFarms(chainId).filter((farmConfig) => pids.includes(farmConfig.pid))
         const userFarmAllowances = await fetchFarmUserAllowances(account, farmsToFetch)
         const userFarmTokenBalances = await fetchFarmUserTokenBalances(account, farmsToFetch)
         const userStakedBalances = await fetchFarmUserStakedBalances(account, farmsToFetch)

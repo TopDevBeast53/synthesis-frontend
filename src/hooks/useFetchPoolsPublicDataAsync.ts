@@ -6,7 +6,6 @@ import { getTokenPricesFromFarm } from 'state/pools/helpers'
 import { getPoolApr } from 'utils/apr'
 import { getBalanceNumber } from 'utils/formatBalance'
 import { getAddress, getHelixAutoPoolAddress } from 'utils/addressHelpers'
-import tokens from 'config/constants/tokens'
 import helixABI from 'config/abi/Helix.json'
 import wbnbABI from 'config/abi/weth.json'
 import { useFetchPoolsBlockLimits } from 'state/pools/hooks'
@@ -14,6 +13,7 @@ import useProviders from './useProviders'
 import { useMasterchef } from './useContract'
 import useMulticall from './useMulticall'
 import useActiveWeb3React from './useActiveWeb3React'
+import { useGetTokens } from './useGetTokens'
 
 const useFetchPoolsPublicDataAsync = (currentBlockNumber: number) => {
   const rpcProvider = useProviders();
@@ -69,6 +69,7 @@ const useFetchPoolsTotalStaking = () => {
   const masterChefContract = useMasterchef()
   const multicall = useMulticall()
   const { chainId } = useActiveWeb3React()
+  const tokens = useGetTokens()
   return useCallback(async () => {
     const helixPools = poolsConfig.filter((p) => p.stakingToken.symbol !== 'ETH' && p.sousId === 0)
     const nonBnbPools = poolsConfig.filter((p) => p.stakingToken.symbol !== 'ETH' && p.sousId !== 0)
@@ -112,7 +113,7 @@ const useFetchPoolsTotalStaking = () => {
         totalStaked: new BigNumber(bnbPoolsTotalStaked[index]).toJSON(),
       })),
     ]
-  }, [chainId, masterChefContract, multicall])
+  }, [chainId, masterChefContract, multicall, tokens.weth.address])
 }
 
 export default useFetchPoolsPublicDataAsync

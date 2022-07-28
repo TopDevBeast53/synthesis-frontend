@@ -7,7 +7,7 @@ import styled from 'styled-components'
 import Select from 'components/Select/Select'
 import { useTranslation } from 'contexts/Localization'
 import { useHelixVault } from 'hooks/useContract'
-import tokens from 'config/constants/tokens'
+import getTokens from 'config/constants/tokens'
 import useTheme from 'hooks/useTheme'
 import useToast from 'hooks/useToast'
 import BigNumber from 'bignumber.js'
@@ -48,8 +48,8 @@ const AnnualRoiDisplay = styled(Text)`
 const AddRowModal: React.FC<ModalProps> = ({ stakingTokenBalance, stakingTokenPrice, totalStakedVault, tokenPerBlock, onAdd, onDismiss }) => {
   const { t } = useTranslation()
   const { theme } = useTheme()
-  const tokenDecimals = tokens.helix.decimals
-  const tokenSymbol = tokens.helix.symbol
+  const tokenDecimals = getTokens.helix.decimals
+  const tokenSymbol = getTokens.helix.symbol
   const [pendingTx, setPendingTx] = useState(false)
   const [stakeAmount, setStakeAmount] = useState('')
   const [hasReachedStakeLimit] = useState(false)
@@ -64,7 +64,7 @@ const AddRowModal: React.FC<ModalProps> = ({ stakingTokenBalance, stakingTokenPr
   const [durations, setDurations] = useState<Duration[]>([]);
   const [showRoiCalculator, setShowRoiCalculator] = useState(false)
 
-  const getTokenLink = `/swap?outputCurrency=${tokens.helix.address}`
+  const getTokenLink = `/swap?outputCurrency=${getTokens.helix.address}`
 
   const currentAPR = useMemo(() => {
     if (durations.length === 0) return 0;
@@ -181,7 +181,7 @@ const AddRowModal: React.FC<ModalProps> = ({ stakingTokenBalance, stakingTokenPr
       <Flex alignItems="center" justifyContent="space-between" mb="8px" mt={4}>
         <Text bold>{t('Amount')}:</Text>
         <Flex alignItems="center" minWidth="70px">
-          <Image src={`/images/tokens/${tokens.helix.address}.png`} width={24} height={24} alt="HELIX" />
+          <Image src={`/images/tokens/${getTokens.helix.address}.png`} width={24} height={24} alt="HELIX" />
           <Text ml="4px" bold>
             {t('Helix')}
           </Text>

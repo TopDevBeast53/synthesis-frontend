@@ -19,7 +19,7 @@ import { ConnectedBidder, FetchStatus } from 'config/constants/types'
 import { usePriceHelixBusd } from 'state/farms/hooks'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { ToastDescriptionWithTx } from 'components/Toast'
-import tokens from 'config/constants/tokens'
+import getTokens from 'config/constants/tokens'
 
 const StyledModal = styled(Modal)`
   min-width: 280px;
@@ -64,7 +64,7 @@ const PlaceBidModal: React.FC<PlaceBidModalProps> = ({
   const [userNotEnoughCake, setUserNotEnoughCake] = useState(false)
   const [errorText, setErrorText] = useState(null)
 
-  const { balance: userCake, fetchStatus } = useTokenBalance(tokens.helix.address)
+  const { balance: userCake, fetchStatus } = useTokenBalance(getTokens.helix.address)
   const userCakeBalance = getBalanceAmount(userCake)
 
   const cakePriceBusd = usePriceHelixBusd()
