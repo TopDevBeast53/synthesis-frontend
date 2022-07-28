@@ -119,7 +119,7 @@ export const useFetchPublicPoolsData = () => {
             await dispatch(fetchFarmsPublicDataAsync({ pids: activeFarms.map((farm) => farm.pid), fetchFarms, chainId }))
             batch(() => {
                 dispatch(fetchPoolsPublicDataAsync)
-                dispatch(fetchPoolsStakingLimitsAsync())
+                dispatch(fetchPoolsStakingLimitsAsync(chainId))
             })
         }
 

@@ -1,5 +1,4 @@
 import BigNumber from 'bignumber.js'
-import poolsConfig from 'config/constants/pools'
 import { useCallback } from 'react'
 import { setPoolsPublicData } from 'state/pools'
 import { getTokenPricesFromFarm } from 'state/pools/helpers'
@@ -9,6 +8,7 @@ import { getAddress, getHelixAutoPoolAddress } from 'utils/addressHelpers'
 import helixABI from 'config/abi/Helix.json'
 import wbnbABI from 'config/abi/weth.json'
 import { useFetchPoolsBlockLimits } from 'state/pools/hooks'
+import { useGetPools } from 'state/pools/useGetPools'
 import useProviders from './useProviders'
 import { useMasterchef } from './useContract'
 import useMulticall from './useMulticall'
@@ -19,6 +19,7 @@ const useFetchPoolsPublicDataAsync = (currentBlockNumber: number) => {
   const rpcProvider = useProviders();
   const fetchPoolsTotalStaking = useFetchPoolsTotalStaking()
   const fetchPoolsBlockLimits = useFetchPoolsBlockLimits()
+  const pools = useGetPools()
 
   return useCallback(async (dispatch, getState) => {
     const [blockLimits, totalStakings, currentBlock] = await Promise.all([
@@ -29,7 +30,7 @@ const useFetchPoolsPublicDataAsync = (currentBlockNumber: number) => {
 
     const prices = getTokenPricesFromFarm(getState().farms.data)
 
-    const liveData = poolsConfig.map((pool) => {
+    const liveData = pools.map((pool) => {
       const blockLimit = blockLimits.find((entry) => entry.sousId === pool.sousId)
       const totalStaking = totalStakings.find((entry) => entry.sousId === pool.sousId)
       const isPoolEndBlockExceeded =
@@ -62,7 +63,7 @@ const useFetchPoolsPublicDataAsync = (currentBlockNumber: number) => {
     })
 
     dispatch(setPoolsPublicData(liveData))
-  }, [currentBlockNumber, fetchPoolsBlockLimits, fetchPoolsTotalStaking, rpcProvider])
+  }, [currentBlockNumber, fetchPoolsBlockLimits, fetchPoolsTotalStaking, pools, rpcProvider])
 }
 
 const useFetchPoolsTotalStaking = () => {
@@ -70,10 +71,12 @@ const useFetchPoolsTotalStaking = () => {
   const multicall = useMulticall()
   const { chainId } = useActiveWeb3React()
   const tokens = useGetTokens()
+  const pools = useGetPools()
+
   return useCallback(async () => {
-    const helixPools = poolsConfig.filter((p) => p.stakingToken.symbol !== 'ETH' && p.sousId === 0)
-    const nonBnbPools = poolsConfig.filter((p) => p.stakingToken.symbol !== 'ETH' && p.sousId !== 0)
-    const bnbPool = poolsConfig.filter((p) => p.stakingToken.symbol === 'ETH')
+    const helixPools = pools.filter((p) => p.stakingToken.symbol !== 'ETH' && p.sousId === 0)
+    const nonBnbPools = pools.filter((p) => p.stakingToken.symbol !== 'ETH' && p.sousId !== 0)
+    const bnbPool = pools.filter((p) => p.stakingToken.symbol === 'ETH')
 
     const callsNonBnbPools = nonBnbPools.map((poolConfig) => {
       return {
@@ -113,7 +116,7 @@ const useFetchPoolsTotalStaking = () => {
         totalStaked: new BigNumber(bnbPoolsTotalStaked[index]).toJSON(),
       })),
     ]
-  }, [chainId, masterChefContract, multicall, tokens.weth.address])
+  }, [chainId, masterChefContract, multicall, pools, tokens.weth.address])
 }
 
 export default useFetchPoolsPublicDataAsync

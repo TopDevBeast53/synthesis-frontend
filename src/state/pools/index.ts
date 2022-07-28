@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
-import poolsConfig from 'config/constants/pools'
+import getPools from 'config/constants/pools'
+import { ChainId } from 'sdk'
 import {
     AppThunk,
     HelixAutoPool,
@@ -37,20 +38,20 @@ export const initialPoolVaultState = Object.freeze({
 })
 
 const initialState: PoolsState = {
-    data: [...poolsConfig],
+    data: [...getPools(ChainId.MAINNET)],
     userDataLoaded: false,
     helixAutoPool: initialPoolVaultState,
     ifoPool: initialPoolVaultState,
 }
 
-export const fetchPoolsStakingLimitsAsync = () => async (dispatch, getState) => {
+export const fetchPoolsStakingLimitsAsync = (chainId: ChainId) => async (dispatch, getState) => {
     const poolsWithStakingLimit = getState()
         .pools.data.filter(({ stakingLimit }) => stakingLimit !== null && stakingLimit !== undefined)
         .map((pool) => pool.sousId)
 
     const stakingLimits = {} // For unlimit it : await fetchPoolsStakingLimits(poolsWithStakingLimit)
 
-    const stakingLimitData = poolsConfig.map((pool) => {
+    const stakingLimitData = getPools(chainId).map((pool) => {
         if (poolsWithStakingLimit.includes(pool.sousId)) {
             return { sousId: pool.sousId }
         }
