@@ -5,6 +5,7 @@ import { getAddress } from 'utils/addressHelpers'
 import { getBalanceNumber } from 'utils/formatBalance'
 import { useMatchBreakpoints } from 'uikit'
 import { TokenPairImage } from 'components/TokenImage'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import BaseTokenCell from './BaseTokenCell'
 
 const Container = styled.div`
@@ -13,18 +14,19 @@ const Container = styled.div`
 `
 const LPTokenCell = (props) => {
   const { lpTokenAddress, balance } = props
-  const { data: farms } = useFarms()  
-  const lpToken = farms.find((item) => getAddress(item.lpAddresses) === lpTokenAddress)
+  const { data: farms } = useFarms()
+  const { chainId } = useActiveWeb3React()
+  const lpToken = farms.find((item) => getAddress(chainId, item.lpAddresses) === lpTokenAddress)
   const amount = getBalanceNumber(balance, lpToken.token.decimals)
-  const {isMobile} = useMatchBreakpoints()
-  return(
+  const { isMobile } = useMatchBreakpoints()
+  return (
     <>
       <Container>
         {!isMobile && <TokenPairImage primaryToken={lpToken?.token} secondaryToken={lpToken?.quoteToken} width={32} height={32} />}
         <BaseTokenCell tokenSymbol={lpToken?.lpSymbol} balance={amount} />
       </Container>
     </>
-  ) 
+  )
 }
 
 export default LPTokenCell

@@ -12,10 +12,10 @@ const initialState: VotingState = {
 }
 
 // Thunks
-export const fetchProposals = createAsyncThunk<Proposal[], { first?: number; skip?: number; state?: ProposalState }>(
+export const fetchProposals = createAsyncThunk<Proposal[], { chainId: number; first?: number; skip?: number; state?: ProposalState }>(
   'voting/fetchProposals',
-  async ({ first, skip = 0, state = ProposalState.ACTIVE }) => {
-    const response = await getProposals(first, skip, state)
+  async ({ chainId, first, skip = 0, state = ProposalState.ACTIVE }) => {
+    const response = await getProposals(chainId, first, skip, state)
     return response
   },
 )

@@ -5,7 +5,7 @@ import { HELIX_START } from 'config/constants/info'
 import { PairDayDatasResponse } from '../types'
 import { mapPairDayData, fetchChartData } from '../helpers'
 
-const getPoolChartData = async (skip: number, address: string): Promise<{ data?: ChartEntry[]; error: boolean }> => {
+const getPoolChartData = async (chainId: number, skip: number, address: string): Promise<{ data?: ChartEntry[]; error: boolean }> => {
     try {
         const query = gql`
             query pairDayDatas($startTime: Int!, $skip: Int!, $address: Bytes!) {
@@ -22,8 +22,8 @@ const getPoolChartData = async (skip: number, address: string): Promise<{ data?:
                 }
             }
         `
-        const { pairDayDatas } = await request<PairDayDatasResponse>(INFO_CLIENT, query, {
-            startTime: HELIX_START,
+        const { pairDayDatas } = await request<PairDayDatasResponse>(INFO_CLIENT[chainId], query, {
+            startTime: HELIX_START[chainId],
             skip,
             address,
         })
@@ -35,8 +35,8 @@ const getPoolChartData = async (skip: number, address: string): Promise<{ data?:
     }
 }
 
-const fetchPoolChartData = async (address: string): Promise<{ data?: ChartEntry[]; error: boolean }> => {
-    return fetchChartData(getPoolChartData, address)
+const fetchPoolChartData = async (chainId: number, address: string): Promise<{ data?: ChartEntry[]; error: boolean }> => {
+    return fetchChartData(chainId, getPoolChartData, address)
 }
 
 export default fetchPoolChartData

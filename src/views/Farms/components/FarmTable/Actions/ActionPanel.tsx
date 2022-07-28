@@ -7,6 +7,7 @@ import getLiquidityUrlPathParts from 'utils/getLiquidityUrlPathParts'
 import { getAddress } from 'utils/addressHelpers'
 import { getEtherScanLink } from 'utils'
 import { CommunityTag, CoreTag, DualTag } from 'components/Tags'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 import HarvestAction from './HarvestAction'
 import StakedAction from './StakedAction'
@@ -141,6 +142,7 @@ const ActionPanel: React.FunctionComponent<ActionPanelProps> = ({
   const farm = details
 
   const { t } = useTranslation()
+  const { chainId } = useActiveWeb3React()
   const isActive = farm.multiplier !== '0X'
   const { quoteToken, token, dual } = farm
   const lpLabel = farm.lpSymbol && farm.lpSymbol.toUpperCase().replace('PANCAKE', '')
@@ -148,8 +150,8 @@ const ActionPanel: React.FunctionComponent<ActionPanelProps> = ({
     quoteTokenAddress: quoteToken.address,
     tokenAddress: token.address,
   })
-  const lpAddress = getAddress(farm.lpAddresses)
-  const bsc = getEtherScanLink(lpAddress, 'address')
+  const lpAddress = getAddress(chainId, farm.lpAddresses)
+  const bsc = getEtherScanLink(lpAddress, 'address', chainId)
   // const info = `/info/pool/${lpAddress}`
 
   return (

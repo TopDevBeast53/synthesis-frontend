@@ -20,6 +20,7 @@ import { getBalanceNumber } from 'utils/formatBalance'
 import { useTranslation } from 'contexts/Localization'
 import { usePriceHelixBusd } from 'state/farms/hooks'
 import { Bidder } from 'config/constants/types'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import WhitelistedBiddersModal from '../WhitelistedBiddersModal'
 
 const LeaderboardContainer = styled.div`
@@ -30,7 +31,7 @@ const LeaderboardContainer = styled.div`
   }
 `
 
-const GridCell = styled(Flex)<{ isTopPosition: boolean }>`
+const GridCell = styled(Flex) <{ isTopPosition: boolean }>`
   height: 65px;
   align-items: center;
   border-bottom: 1px solid ${({ theme }) => theme.colors.cardBorder};
@@ -46,6 +47,7 @@ interface LeaderboardRowProps {
 
 const LeaderboardRow: React.FC<LeaderboardRowProps> = ({ bidder, cakePriceBusd, isMobile }) => {
   const { t } = useTranslation()
+  const { chainId } = useActiveWeb3React()
   const { isTopPosition, position, samePositionAsAbove, farmName, tokenName, amount, projectSite, lpAddress, account } =
     bidder
   return (
@@ -99,7 +101,7 @@ const LeaderboardRow: React.FC<LeaderboardRowProps> = ({ bidder, cakePriceBusd, 
             </SubMenuItem>
           )}
           {account && (
-            <SubMenuItem as={LinkExternal} href={getEtherScanLink(account, 'address')} bold={false} color="text">
+            <SubMenuItem as={LinkExternal} href={getEtherScanLink(account, 'address', chainId)} bold={false} color="text">
               {t('Bidder Address')}
             </SubMenuItem>
           )}

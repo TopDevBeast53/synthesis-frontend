@@ -1,6 +1,5 @@
 import React, { useCallback, useState, useEffect } from 'react'
 import { useTranslation } from 'contexts/Localization'
-import { useWeb3React } from '@web3-react/core'
 import { SupportedChainId, CHAIN_IDS_TO_NAMES, SUPPORTED_NETWORKS } from 'config/constants/networks'
 import { usePopper } from 'react-popper'
 import { Flex, Image } from 'uikit'
@@ -157,6 +156,7 @@ const getParsedChainId = (parsedQs?: ParsedQs) => {
 }
 
 const getChainIdFromName = (name: string) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const entry = Object.entries(CHAIN_IDS_TO_NAMES).find(([_, n]) => n === name)
   const chainId = entry?.[0]
   return chainId ? parseInt(chainId) : undefined
@@ -190,6 +190,7 @@ export default function NetworkSelector() {
   const info = chainId ? SUPPORTED_NETWORKS[chainId] : undefined
 
   const onSelectChain = useCallback(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async (targetChain: number, skipToggle?: boolean) => {
       try {
         // await switchChain(connector, targetChain)

@@ -1,17 +1,18 @@
 import { INFO_CLIENT } from 'config/constants/endpoints'
 import { ONE_DAY_UNIX, ONE_HOUR_SECONDS } from 'config/constants/info'
 import { getUnixTime, startOfHour, sub } from 'date-fns'
+import { ChainId } from 'sdk'
 import { Block } from 'state/info/types'
 import { getBlocksFromTimestamps } from 'views/Info/hooks/useBlocksFromTimestamps'
 import { multiQuery } from 'views/Info/utils/infoQueryHelpers'
 import { getDerivedPrices, getDerivedPricesQueryConstructor } from '../queries/getDerivedPrices'
 import { PairDataTimeWindowEnum } from '../types'
 
-const getTokenDerivedEthPrices = async (tokenAddress: string, blocks: Block[]) => {
+const getTokenDerivedEthPrices = async (chainId: ChainId, tokenAddress: string, blocks: Block[]) => {
     const prices: any | undefined = await multiQuery(
         getDerivedPricesQueryConstructor,
         getDerivedPrices(tokenAddress, blocks),
-        INFO_CLIENT,
+        INFO_CLIENT[chainId],
         200,
     )
 
@@ -77,6 +78,7 @@ const getSkipDaysToStart = (timeWindow: PairDataTimeWindowEnum) => {
 // Fetches derivedEth values for tokens to calculate derived price
 // Used when no direct pool is available
 const fetchDerivedPriceData = async (
+    chainId: ChainId,
     token0Address: string,
     token1Address: string,
     timeWindow: PairDataTimeWindowEnum,
@@ -92,14 +94,14 @@ const fetchDerivedPriceData = async (
     }
 
     try {
-        const blocks = await getBlocksFromTimestamps(timestamps, 'asc', 500)
+        const blocks = await getBlocksFromTimestamps(chainId, timestamps, 'asc', 500)
         if (!blocks || blocks.length === 0) {
             console.error('Error fetching blocks for timestamps', timestamps)
             return null
         }
 
-        const token0DerivedEth = await getTokenDerivedEthPrices(token0Address, blocks)
-        const token1DerivedEth = await getTokenDerivedEthPrices(token1Address, blocks)
+        const token0DerivedEth = await getTokenDerivedEthPrices(chainId, token0Address, blocks)
+        const token1DerivedEth = await getTokenDerivedEthPrices(chainId, token1Address, blocks)
         return { token0DerivedEth, token1DerivedEth }
     } catch (error) {
         console.error('Failed to fetched derived price data for chart', error)

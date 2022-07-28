@@ -34,10 +34,10 @@ export interface Message {
 /**
  * Generates metadata required by snapshot to validate payload
  */
-export const generateMetaData = () => {
+export const generateMetaData = (chainId: number) => {
     return {
         plugins: {},
-        network: process.env.REACT_APP_CHAIN_ID,
+        network: chainId,
         strategies: [{ name: 'helix', params: { symbol: 'HELIX', address: tokens.helix.address, decimals: 18 } }],
     }
 }

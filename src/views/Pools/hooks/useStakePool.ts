@@ -9,27 +9,19 @@ import { DEFAULT_TOKEN_DECIMAL } from 'config'
 import { BIG_TEN } from 'utils/bigNumber'
 import { useMasterchef, useSousChef } from 'hooks/useContract'
 import useFetchUserBalances from 'hooks/useFetchUserBalances'
-// import getGasPrice from 'utils/getGasPrice'
 
 const options = {
     // gasLimit: DEFAULT_GAS_LIMIT,
 }
 
 const sousStake = async (sousChefContract, amount, decimals = 18) => {
-    // const gasPrice = await getGasPrice()
-    const tx = await sousChefContract.deposit(new BigNumber(amount).times(BIG_TEN.pow(decimals)).toString(), {
-        ...options,
-    })
+    const tx = await sousChefContract.deposit(new BigNumber(amount).times(BIG_TEN.pow(decimals)).toString(), options)
     const receipt = await tx.wait()
     return receipt.status
 }
 
 const sousStakeBnb = async (sousChefContract, amount) => {
-    // const gasPrice = await getGasPrice()
-    const tx = await sousChefContract.deposit(new BigNumber(amount).times(DEFAULT_TOKEN_DECIMAL).toString(), {
-        ...options,
-        // gasPrice,
-    })
+    const tx = await sousChefContract.deposit(new BigNumber(amount).times(DEFAULT_TOKEN_DECIMAL).toString(), options)
     const receipt = await tx.wait()
     return receipt.status
 }

@@ -16,6 +16,7 @@ import { useAppDispatch } from 'state'
 import { useTranslation } from 'contexts/Localization'
 import useClearUserStates from './useClearUserStates'
 import useWalletConnect from './useWalletConnect'
+import useGetChainDetail from './useGetChainDetail'
 
 const useAuth = () => {
     const { t } = useTranslation()
@@ -24,6 +25,7 @@ const useAuth = () => {
     const { toastError } = useToast()
     const connectorsByName = useWalletConnect()
     const clearUserStates = useClearUserStates()
+    const network = useGetChainDetail()
 
     const login = useCallback(
         (connectorID: ConnectorNames) => {
@@ -31,7 +33,7 @@ const useAuth = () => {
             if (connector) {
                 activate(connector, async (error: Error) => {
                     if (error instanceof UnsupportedChainIdError) {
-                        const hasSetup = await setupNetwork()
+                        const hasSetup = await setupNetwork(network.CHAIN_ID)
                         if (hasSetup) {
                             activate(connector)
                         }
@@ -57,7 +59,7 @@ const useAuth = () => {
                 toastError(t('Unable to find connector'), t('The connector config is wrong'))
             }
         },
-        [t, activate, toastError, connectorsByName],
+        [connectorsByName, activate, network.CHAIN_ID, toastError, t],
     )
 
     const logout = useCallback(() => {

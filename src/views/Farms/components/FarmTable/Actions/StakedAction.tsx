@@ -17,6 +17,7 @@ import { getAddress } from 'utils/addressHelpers'
 import { getBalanceAmount, getBalanceNumber } from 'utils/formatBalance'
 import getLiquidityUrlPathParts from 'utils/getLiquidityUrlPathParts'
 import { logError } from 'utils/sentry'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'
 import useApproveFarm from '../../../hooks/useApproveFarm'
 import useStakeFarms from '../../../hooks/useStakeFarms'
@@ -61,10 +62,11 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
   const fetchFarmUserTokenBalances = useFetchFarmUserTokenBalances()
   const fetchFarmUserStakedBalances = useFetchFarmUserStakedBalances()
   const fetchFarmUserEarnings = useFetchFarmUserEarnings()
+  const { chainId } = useActiveWeb3React()
 
   const isApproved = account && allowance && allowance.isGreaterThan(0)
 
-  const lpAddress = getAddress(lpAddresses)
+  const lpAddress = getAddress(chainId, lpAddresses)
   const liquidityUrlPathParts = getLiquidityUrlPathParts({
     quoteTokenAddress: quoteToken.address,
     tokenAddress: token.address,

@@ -25,6 +25,7 @@ import { registerToken } from 'utils/wallet'
 import { getEtherScanLink } from 'utils'
 import Balance from 'components/Balance'
 import { getPoolBlockInfo } from 'views/Pools/helpers'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 // import { BIG_ZERO } from 'utils/bigNumber'
 
 interface ExpandedFooterProps {
@@ -42,6 +43,7 @@ const ExpandedWrapper = styled(Flex)`
 const ExpandedFooter: React.FC<ExpandedFooterProps> = ({ pool, account }) => {
   const { t } = useTranslation()
   const { currentBlock } = useBlock()
+  const { chainId } = useActiveWeb3React()
 
   const {
     stakingToken,
@@ -67,7 +69,7 @@ const ExpandedFooter: React.FC<ExpandedFooterProps> = ({ pool, account }) => {
   // }, BIG_ZERO)
 
   const tokenAddress = earningToken.address || ''
-  const poolContractAddress = getAddress(contractAddress)
+  const poolContractAddress = getAddress(chainId, contractAddress)
   const cakeVaultContractAddress = getVaultPoolAddress(vaultKey)
   const isMetaMaskInScope = !!window.ethereum?.isMetaMask
   const isManualCakePool = sousId === 0
@@ -128,7 +130,7 @@ const ExpandedFooter: React.FC<ExpandedFooterProps> = ({ pool, account }) => {
           <Text small>{hasPoolStarted ? t('Ends in') : t('Starts in')}:</Text>
           {blocksRemaining || blocksUntilStart ? (
             <Flex alignItems="center">
-              <Link external href={getEtherScanLink(hasPoolStarted ? endBlock : startBlock, 'countdown')}>
+              <Link external href={getEtherScanLink(hasPoolStarted ? endBlock : startBlock, 'countdown', chainId)}>
                 <Balance small value={blocksToDisplay} decimals={0} color="primary" />
                 <Text small ml="4px" color="primary" textTransform="lowercase">
                   {t('Blocks')}
@@ -171,7 +173,7 @@ const ExpandedFooter: React.FC<ExpandedFooterProps> = ({ pool, account }) => {
       {poolContractAddress && (
         <Flex mb="2px" justifyContent="flex-end">
           <LinkExternal
-            href={getEtherScanLink(vaultKey ? cakeVaultContractAddress : poolContractAddress, 'address')}
+            href={getEtherScanLink(vaultKey ? cakeVaultContractAddress : poolContractAddress, 'address', chainId)}
             bold={false}
             small
           >

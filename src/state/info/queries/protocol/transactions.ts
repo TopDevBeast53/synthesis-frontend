@@ -3,6 +3,7 @@ import { INFO_CLIENT } from 'config/constants/endpoints'
 import { Transaction } from 'state/info/types'
 import { MintResponse, SwapResponse, BurnResponse } from 'state/info/queries/types'
 import { mapMints, mapBurns, mapSwaps } from 'state/info/queries/helpers'
+import { ChainId } from 'sdk'
 
 /**
  * Transactions for Transaction table on the Home page
@@ -73,9 +74,9 @@ interface TransactionResults {
     burns: BurnResponse[]
 }
 
-const fetchTopTransactions = async (): Promise<Transaction[] | undefined> => {
+const fetchTopTransactions = async (chainId: ChainId): Promise<Transaction[] | undefined> => {
     try {
-        const data = await request<TransactionResults>(INFO_CLIENT, GLOBAL_TRANSACTIONS)
+        const data = await request<TransactionResults>(INFO_CLIENT[chainId], GLOBAL_TRANSACTIONS)
 
         if (!data) {
             return undefined

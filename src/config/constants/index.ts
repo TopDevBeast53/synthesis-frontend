@@ -4,9 +4,11 @@ import { mainnetTokens, testnetTokens } from './tokens'
 // Pancake test router address 0x9Ac64Cc6e4415144C455BD8E4837Fea55603e5c3
 // Pancake prod router address 0x10ED43C718714eb63d5aA57B78B54704E256024E
 // Helix test net router address 0x9DbA93422D0ce20A755d07258E3bDF6D20d56193
-const chainId = process.env.REACT_APP_CHAIN_ID
 
-export const ROUTER_ADDRESS = Number(chainId) === ChainId.MAINNET ? '0x39D660d507f1bC34DbCe94831081D6cf9131c3b9' : '0x484621036C7D18EDE8A267C44e3FBfDfb81135af'   // UpdateMe
+export const ROUTER_ADDRESS = {
+    [ChainId.MAINNET]: '0x39D660d507f1bC34DbCe94831081D6cf9131c3b9',
+    [ChainId.TESTNET]: '0x484621036C7D18EDE8A267C44e3FBfDfb81135af'
+}
 
 // a list of tokens by chain
 type ChainTokenList = {

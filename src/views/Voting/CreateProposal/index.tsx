@@ -31,6 +31,7 @@ import { DatePicker, TimePicker, DatePickerPortal } from 'views/Voting/component
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import ReactMarkdown from 'components/ReactMarkdown'
 import { PageMeta } from 'components/Layout/Page'
+import useGetChainDetail from 'hooks/useGetChainDetail'
 import { sendSnapshotData, Message, generateMetaData, generatePayloadData } from '../helpers'
 import Layout from '../components/Layout'
 import { FormErrors, Label, SecondaryLabel } from './styles'
@@ -60,6 +61,7 @@ const CreateProposal = () => {
   const [onPresentVoteDetailsModal] = useModal(<VoteDetailsModal />)
   const { name, body, endDate, endTime, snapshot } = state
   const formErrors = getFormErrors(state, t)
+  const network = useGetChainDetail()
 
   const handleSubmit = async (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault()
@@ -76,7 +78,7 @@ const CreateProposal = () => {
           start: combineDateAndTime(new Date(), new Date()),
           end: combineDateAndTime(endDate, endTime),
           choices: CHOICES_PRESET,
-          metadata: generateMetaData(),
+          metadata: generateMetaData(network.CHAIN_ID),
           type: 'single-choice',
         },
       })
@@ -228,14 +230,14 @@ const CreateProposal = () => {
                     <Text color="textSubtle" mr="16px">
                       {t('Creator')}
                     </Text>
-                    <LinkExternal href={getEtherScanLink(account, 'address')}>{truncateHash(account)}</LinkExternal>
+                    <LinkExternal href={getEtherScanLink(account, 'address', network.CHAIN_ID)}>{truncateHash(account)}</LinkExternal>
                   </Flex>
                 )}
                 <Flex alignItems="center" mb="16px">
                   <Text color="textSubtle" mr="16px">
                     {t('Snapshot')}
                   </Text>
-                  <LinkExternal href={getEtherScanLink(snapshot, 'block')}>{snapshot}</LinkExternal>
+                  <LinkExternal href={getEtherScanLink(snapshot, 'block', network.CHAIN_ID)}>{snapshot}</LinkExternal>
                 </Flex>
                 {account ? (
                   <>

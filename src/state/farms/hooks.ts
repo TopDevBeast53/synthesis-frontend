@@ -13,6 +13,7 @@ import { SerializedFarmConfig } from 'config/constants/types'
 import useMulticall from 'hooks/useMulticall'
 import erc20ABI from 'config/abi/erc20.json'
 import masterchefABI from 'config/abi/masterchef.json'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { fetchFarmsPublicDataAsync, fetchFarmUserDataAsync, nonArchivedFarms } from '.'
 import { State, SerializedFarm, DeserializedFarmUserData, DeserializedFarm, DeserializedFarmsState } from '../types'
 import useFetchFarms from './useFetchFarms'
@@ -138,7 +139,8 @@ export const useFarmFromLpSymbol = (lpSymbol: string): DeserializedFarm => {
 }
 
 export const useFarmFromLpAddress = (lpAddress: string): DeserializedFarm => {
-    const farm = useSelector((state: State) => state.farms.data.find((f) => getAddress(f.lpAddresses) === lpAddress))
+    const { chainId } = useActiveWeb3React()
+    const farm = useSelector((state: State) => state.farms.data.find((f) => getAddress(chainId, f.lpAddresses) === lpAddress))
     return deserializeFarm(farm)
 }
 
@@ -194,11 +196,12 @@ export const usePriceHelixBusd = (): BigNumber => {
 
 export const useFetchFarmUserAllowances = () => {
     const multicall = useMulticall()
+    const { chainId } = useActiveWeb3React()
     return useCallback(async (account: string, farmsToFetch: SerializedFarmConfig[]) => {
-        const masterChefAddress = getMasterChefAddress()
+        const masterChefAddress = getMasterChefAddress(chainId)
 
         const calls = farmsToFetch.map((farm) => {
-            const lpContractAddress = getAddress(farm.lpAddresses)
+            const lpContractAddress = getAddress(chainId, farm.lpAddresses)
             return { address: lpContractAddress, name: 'allowance', params: [account, masterChefAddress] }
         })
 
@@ -207,14 +210,15 @@ export const useFetchFarmUserAllowances = () => {
             return new BigNumber(lpBalance).toJSON()
         })
         return parsedLpAllowances
-    }, [multicall])
+    }, [chainId, multicall])
 }
 
 export const useFetchFarmUserTokenBalances = () => {
     const multicall = useMulticall()
+    const { chainId } = useActiveWeb3React()
     return useCallback(async (account: string, farmsToFetch: SerializedFarmConfig[]) => {
         const calls = farmsToFetch.map((farm) => {
-            const lpContractAddress = getAddress(farm.lpAddresses)
+            const lpContractAddress = getAddress(chainId, farm.lpAddresses)
             return {
                 address: lpContractAddress,
                 name: 'balanceOf',
@@ -227,15 +231,16 @@ export const useFetchFarmUserTokenBalances = () => {
             return new BigNumber(tokenBalance).toJSON()
         })
         return parsedTokenBalances
-    }, [multicall])
+    }, [chainId, multicall])
 }
 
 
 
 export const useFetchFarmUserStakedBalances = () => {
     const multicall = useMulticall()
+    const { chainId } = useActiveWeb3React()
     return useCallback(async (account: string, farmsToFetch: SerializedFarmConfig[]) => {
-        const masterChefAddress = getMasterChefAddress()
+        const masterChefAddress = getMasterChefAddress(chainId)
 
         const calls = farmsToFetch.map((farm) => {
             return {
@@ -250,13 +255,14 @@ export const useFetchFarmUserStakedBalances = () => {
             return new BigNumber(stakedBalance[0]._hex).toJSON()
         })
         return parsedStakedBalances
-    }, [multicall])
+    }, [chainId, multicall])
 }
 
 export const useFetchFarmUserEarnings = () => {
     const multicall = useMulticall()
+    const { chainId } = useActiveWeb3React()
     return useCallback(async (account: string, farmsToFetch: SerializedFarmConfig[]) => {
-        const masterChefAddress = getMasterChefAddress()
+        const masterChefAddress = getMasterChefAddress(chainId)
 
         const calls = farmsToFetch.map((farm) => {
             return {
@@ -271,5 +277,5 @@ export const useFetchFarmUserEarnings = () => {
             return new BigNumber(earnings).toJSON()
         })
         return parsedEarnings
-    }, [multicall])
+    }, [chainId, multicall])
 }

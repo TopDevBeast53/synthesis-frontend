@@ -3,6 +3,8 @@ import { getDeltaTimestamps } from 'views/Info/utils/infoQueryHelpers'
 import { useState, useEffect } from 'react'
 import { request, gql } from 'graphql-request'
 import { INFO_CLIENT } from 'config/constants/endpoints'
+import { ChainId } from 'sdk'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 export interface EthPrices {
     current: number
@@ -44,12 +46,13 @@ interface PricesResponse {
 }
 
 const fetchEthPrices = async (
+    chainId: ChainId,
     block24: number,
     block48: number,
     blockWeek: number,
 ): Promise<{ ethPrices: EthPrices | undefined; error: boolean }> => {
     try {
-        const data = await request<PricesResponse>(INFO_CLIENT, ETH_PRICES, {
+        const data = await request<PricesResponse>(INFO_CLIENT[chainId], ETH_PRICES, {
             block24,
             block48,
             blockWeek,
@@ -78,6 +81,7 @@ const fetchEthPrices = async (
 export const useEthPrices = (): EthPrices | undefined => {
     const [prices, setPrices] = useState<EthPrices | undefined>()
     const [error, setError] = useState(false)
+    const { chainId } = useActiveWeb3React()
 
     const [t24, t48, tWeek] = getDeltaTimestamps()
     const { blocks, error: blockError } = useBlocksFromTimestamps([t24, t48, tWeek])
@@ -86,6 +90,7 @@ export const useEthPrices = (): EthPrices | undefined => {
         const fetch = async () => {
             const [block24, block48, blockWeek] = blocks
             const { ethPrices, error: fetchError } = await fetchEthPrices(
+                chainId,
                 block24.number,
                 block48.number,
                 blockWeek.number,
@@ -99,7 +104,7 @@ export const useEthPrices = (): EthPrices | undefined => {
         if (!prices && !error && blocks && !blockError) {
             fetch()
         }
-    }, [error, prices, blocks, blockError])
+    }, [error, prices, blocks, blockError, chainId])
 
     return prices
 }

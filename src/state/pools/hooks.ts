@@ -15,6 +15,7 @@ import useFetchPoolsPublicDataAsync from 'hooks/useFetchPoolsPublicDataAsync'
 import { poolsConfig, SLOW_INTERVAL } from 'config/constants'
 import { getAddress, getHelixAutoPoolAddress, getIfoPoolAddress, getLotteryV2Address } from 'utils/addressHelpers'
 import { useHelix, useMasterchef } from 'hooks/useContract'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { getPoolApr } from 'utils/apr'
 import { getBalanceNumber } from 'utils/formatBalance'
 import sousChefABI from 'config/abi/sousChef.json'
@@ -344,9 +345,10 @@ export const useIfoWithApr = () => {
 }
 
 const helixPool = poolsConfig.find((pool) => pool.sousId === 0)
-const helixPoolAddress = getAddress(helixPool.contractAddress)
 export const useFetchHelixPoolPublicDataAsync = () => {
     const helixContract = useHelix()
+    const { chainId } = useActiveWeb3React()
+    const helixPoolAddress = getAddress(chainId, helixPool.contractAddress)
     return useCallback(async (dispatch, getState) => {
         const prices = getTokenPricesFromFarm(getState().farms.data)
         const stakingTokenAddress = helixPool.stakingToken.address ? helixPool.stakingToken.address.toLowerCase() : null
@@ -374,12 +376,14 @@ export const useFetchHelixPoolPublicDataAsync = () => {
                 },
             }),
         )
-    }, [helixContract])
+    }, [helixContract, helixPoolAddress])
 }
 
 export const useFetchHelixPoolUserDataAsync = (account: string) => {
     const helixContract = useHelix()
     const masterChefContract = useMasterchef()
+    const { chainId } = useActiveWeb3React()
+    const helixPoolAddress = getAddress(chainId, helixPool.contractAddress)
     return useCallback(async (dispatch) => {
         const allowance = await helixContract.allowance(account, helixPoolAddress)
         const stakingTokenBalance = await helixContract.balanceOf(account)
@@ -397,7 +401,7 @@ export const useFetchHelixPoolUserDataAsync = (account: string) => {
                 },
             }),
         )
-    }, [account, helixContract, masterChefContract])
+    }, [account, helixContract, helixPoolAddress, masterChefContract])
 }
 
 export const useFetchPoolsUserDataAsync = (account: string, fetchUserBalances: any) => {
@@ -435,9 +439,11 @@ const nonMasterPools = poolsConfig.filter((pool) => pool.sousId !== 0)
 export const useFetchUserStakeBalances = () => {
     const masterChefContract = useMasterchef()
     const multicall = useMulticall()
+    const { chainId } = useActiveWeb3React()
+
     return useCallback(async (account) => {
         const calls = nonMasterPools.map((p) => ({
-            address: getAddress(p.contractAddress),
+            address: getAddress(chainId, p.contractAddress),
             name: 'userInfo',
             params: [account],
         }))
@@ -454,7 +460,7 @@ export const useFetchUserStakeBalances = () => {
         const { amount: masterPoolAmount } = await masterChefContract.userInfo('0', account)
 
         return { ...stakedBalances, 0: new BigNumber(masterPoolAmount.toString()).toJSON() }
-    }, [masterChefContract, multicall])
+    }, [chainId, masterChefContract, multicall])
 }
 
 export const useUpdateUserPendingReward = (sousId: number, account: string) => {
@@ -468,9 +474,10 @@ export const useUpdateUserPendingReward = (sousId: number, account: string) => {
 export const useFetchUserPendingRewards = () => {
     const masterChefContract = useMasterchef()
     const multicall = useMulticall()
+    const { chainId } = useActiveWeb3React()
     return useCallback(async (account) => {
         const calls = nonMasterPools.map((p) => ({
-            address: getAddress(p.contractAddress),
+            address: getAddress(chainId, p.contractAddress),
             name: 'pendingReward',
             params: [account],
         }))
@@ -487,15 +494,16 @@ export const useFetchUserPendingRewards = () => {
         const pendingReward = await masterChefContract.pendingHelixToken('0', account)
 
         return { ...pendingRewards, 0: new BigNumber(pendingReward.toString()).toJSON() }
-    }, [masterChefContract, multicall])
+    }, [chainId, masterChefContract, multicall])
 }
 
 export const useFetchVaultFees = () => {
     const multicallv2 = useMulticallv2()
+    const { chainId } = useActiveWeb3React()
     return useCallback(async () => {
         try {
             const calls = ['performanceFee', 'callFee', 'withdrawFee', 'withdrawFeePeriod'].map((method) => ({
-                address: getHelixAutoPoolAddress(),
+                address: getHelixAutoPoolAddress(chainId),
                 name: method,
             }))
 
@@ -518,11 +526,13 @@ export const useFetchVaultFees = () => {
                 withdrawalFeePeriod: null,
             }
         }
-    }, [multicallv2])
+    }, [chainId, multicallv2])
 }
 
 export const useFetchPublicIfoPoolData = () => {
     const multicallv2 = useMulticallv2()
+    const { chainId } = useActiveWeb3React()
+
     return useCallback(async () => {
         try {
             const calls = [
@@ -533,7 +543,7 @@ export const useFetchPublicIfoPoolData = () => {
                 'startBlock',
                 'endBlock',
             ].map((method) => ({
-                address: getIfoPoolAddress(),
+                address: getIfoPoolAddress(chainId),
                 name: method,
             }))
 
@@ -567,15 +577,17 @@ export const useFetchPublicIfoPoolData = () => {
                 totalPendingHelixHarvest: null,
             }
         }
-    }, [multicallv2])
+    }, [chainId, multicallv2])
 }
 
 export const useFetchIfoPoolFeesData = () => {
     const multicallv2 = useMulticallv2()
+    const { chainId } = useActiveWeb3React()
+
     return useCallback(async () => {
         try {
             const calls = ['performanceFee', 'callFee', 'withdrawFee', 'withdrawFeePeriod'].map((method) => ({
-                address: getIfoPoolAddress(),
+                address: getIfoPoolAddress(chainId),
                 name: method,
             }))
 
@@ -598,15 +610,17 @@ export const useFetchIfoPoolFeesData = () => {
                 withdrawalFeePeriod: null,
             }
         }
-    }, [multicallv2])
+    }, [chainId, multicallv2])
 }
 
 export const useFetchCurrentLotteryIdAndMaxBuy = () => {
     const multicallv2 = useMulticallv2()
+    const { chainId } = useActiveWeb3React()
+
     return useCallback(async () => {
         try {
             const calls = ['currentLotteryId', 'maxNumberTicketsPerBuyOrClaim'].map((method) => ({
-                address: getLotteryV2Address(),
+                address: getLotteryV2Address(chainId),
                 name: method,
             }))
             const [[currentLotteryId], [maxNumberTicketsPerBuyOrClaim]] = (await multicallv2(
@@ -626,17 +640,18 @@ export const useFetchCurrentLotteryIdAndMaxBuy = () => {
                 maxNumberTicketsPerBuyOrClaim: null,
             }
         }
-    }, [multicallv2])
+    }, [chainId, multicallv2])
 }
 
 const nonBnbPools = poolsConfig.filter((pool) => pool.stakingToken.symbol !== 'ETH')
 export const useFetchPoolsAllowance = () => {
     const multicall = useMulticall()
+    const { chainId } = useActiveWeb3React()
     return useCallback(async (account) => {
         const calls = nonBnbPools.map((pool) => ({
             address: pool.stakingToken.address,
             name: 'allowance',
-            params: [account, getAddress(pool.contractAddress)],
+            params: [account, getAddress(chainId, pool.contractAddress)],
         }))
 
         const allowances = await multicall(erc20ABI, calls)
@@ -644,21 +659,22 @@ export const useFetchPoolsAllowance = () => {
             (acc, pool, index) => ({ ...acc, [pool.sousId]: new BigNumber(allowances[index]).toJSON() }),
             {},
         )
-    }, [multicall])
+    }, [chainId, multicall])
 }
 
 export const useFetchPoolsBlockLimits = () => {
     const multicall = useMulticall()
+    const { chainId } = useActiveWeb3React()
     return useCallback(async () => {
         const poolsWithEnd = poolsConfig.filter((p) => p.sousId !== 0)
         const startEndBlockCalls = poolsWithEnd.flatMap((poolConfig) => {
             return [
                 {
-                    address: getAddress(poolConfig.contractAddress),
+                    address: getAddress(chainId, poolConfig.contractAddress),
                     name: 'startBlock',
                 },
                 {
-                    address: getAddress(poolConfig.contractAddress),
+                    address: getAddress(chainId, poolConfig.contractAddress),
                     name: 'bonusEndBlock',
                 },
             ]
@@ -687,5 +703,5 @@ export const useFetchPoolsBlockLimits = () => {
                 endBlock: new BigNumber(endBlock).toJSON(),
             }
         })
-    }, [multicall])
+    }, [multicall, chainId])
 }

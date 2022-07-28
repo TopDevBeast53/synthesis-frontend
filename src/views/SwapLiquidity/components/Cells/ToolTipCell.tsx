@@ -6,14 +6,15 @@ import { getAddress } from 'utils/addressHelpers'
 import { HelpIcon, useTooltip } from 'uikit'
 import { ToolTipText } from 'views/SwapLiquidity/constants'
 import { getBalanceNumber } from 'utils/formatBalance'
+import { ChainId } from 'sdk'
 
 const ReferenceElement = styled.div`
   display: inline-block;
 `
 const Container = styled.div``
-export const getTokenSymbol = (farms, tokens, tokenInfo) => {
+export const getTokenSymbol = (chainId: ChainId, farms, tokens, tokenInfo) => {
   if (tokenInfo.isLp) {
-    const lpToken = farms.find((item) => getAddress(item.lpAddresses) === tokenInfo.token)
+    const lpToken = farms.find((item) => getAddress(chainId, item.lpAddresses) === tokenInfo.token)
     return lpToken ? lpToken.lpSymbol : ""
   }
   const token = tokens[tokenInfo.token]
@@ -22,13 +23,13 @@ export const getTokenSymbol = (farms, tokens, tokenInfo) => {
 
 export const getTokenDecimals = (farms, tokens, tokenInfo) => {
   if (tokenInfo.isLp) {
-    const lpToken = farms.find((item) => getAddress(item.lpAddresses) === tokenInfo.token)
+    const lpToken = farms.find((item) => getAddress(chainId, item.lpAddresses) === tokenInfo.token)
     return lpToken ? lpToken.token.decimals : 18
   }
   const token = tokens[tokenInfo.token]
   return token ? token.decimals : 18
 }
-const ToolTipCell = ({ seller, buyer, askAmount}) => {
+const ToolTipCell = ({ seller, buyer, askAmount }) => {
   const { data: farms } = useFarms()
   const tokens = useAllTokens()
 

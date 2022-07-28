@@ -1,6 +1,7 @@
 import { request, gql } from 'graphql-request'
 import { INFO_CLIENT } from 'config/constants/endpoints'
 import { TOKEN_BLACKLIST } from 'config/constants/info'
+import { ChainId } from 'sdk'
 
 /**
  * Data for showing Pools table on the Token page
@@ -36,13 +37,14 @@ interface PoolsForTokenResponse {
 }
 
 const fetchPoolsForToken = async (
+    chainId: ChainId,
     address: string,
 ): Promise<{
     error: boolean
     addresses?: string[]
 }> => {
     try {
-        const data = await request<PoolsForTokenResponse>(INFO_CLIENT, POOLS_FOR_TOKEN, {
+        const data = await request<PoolsForTokenResponse>(INFO_CLIENT[chainId], POOLS_FOR_TOKEN, {
             address,
             blacklist: TOKEN_BLACKLIST,
         })

@@ -13,6 +13,7 @@ import { useFetchPoolsBlockLimits } from 'state/pools/hooks'
 import useProviders from './useProviders'
 import { useMasterchef } from './useContract'
 import useMulticall from './useMulticall'
+import useActiveWeb3React from './useActiveWeb3React'
 
 const useFetchPoolsPublicDataAsync = (currentBlockNumber: number) => {
   const rpcProvider = useProviders();
@@ -67,6 +68,7 @@ const useFetchPoolsPublicDataAsync = (currentBlockNumber: number) => {
 const useFetchPoolsTotalStaking = () => {
   const masterChefContract = useMasterchef()
   const multicall = useMulticall()
+  const { chainId } = useActiveWeb3React()
   return useCallback(async () => {
     const helixPools = poolsConfig.filter((p) => p.stakingToken.symbol !== 'ETH' && p.sousId === 0)
     const nonBnbPools = poolsConfig.filter((p) => p.stakingToken.symbol !== 'ETH' && p.sousId !== 0)
@@ -76,7 +78,7 @@ const useFetchPoolsTotalStaking = () => {
       return {
         address: poolConfig.stakingToken.address,
         name: 'balanceOf',
-        params: [getAddress(poolConfig.contractAddress)],
+        params: [getAddress(chainId, poolConfig.contractAddress)],
       }
     })
 
@@ -84,7 +86,7 @@ const useFetchPoolsTotalStaking = () => {
       return {
         address: tokens.weth.address,
         name: 'balanceOf',
-        params: [getAddress(poolConfig.contractAddress)],
+        params: [getAddress(chainId, poolConfig.contractAddress)],
       }
     })
 
@@ -93,7 +95,7 @@ const useFetchPoolsTotalStaking = () => {
 
     const [totalDepositedHelix, autoHelixDeposit] = await Promise.all([
       masterChefContract.depositedHelix(),
-      masterChefContract.userInfo(0, getHelixAutoPoolAddress())
+      masterChefContract.userInfo(0, getHelixAutoPoolAddress(chainId))
     ])
     return [
       ...helixPools.map(p => ({
@@ -110,7 +112,7 @@ const useFetchPoolsTotalStaking = () => {
         totalStaked: new BigNumber(bnbPoolsTotalStaked[index]).toJSON(),
       })),
     ]
-  }, [masterChefContract, multicall])
+  }, [chainId, masterChefContract, multicall])
 }
 
 export default useFetchPoolsPublicDataAsync

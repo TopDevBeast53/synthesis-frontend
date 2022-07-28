@@ -1,11 +1,9 @@
 import { useCallback } from 'react'
 import ethers, { Contract, CallOverrides } from 'ethers'
-// import { useGasPrice } from 'state/user/hooks'
 import { get } from 'lodash'
 import * as Sentry from '@sentry/react'
 
 export function useCallWithGasPrice() {
-    // const gasPrice = useGasPrice()
 
     /**
      * Perform a contract call with a gas price returned from useGasPrice

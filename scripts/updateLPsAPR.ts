@@ -1,7 +1,6 @@
 import fs from 'fs'
 import { request, gql } from 'graphql-request'
 import BigNumber from 'bignumber.js'
-import { ChainId } from 'sdk'
 import chunk from 'lodash/chunk'
 import { sub, getUnixTime } from 'date-fns'
 import farmsConfig from '../src/config/constants/farms'
@@ -34,10 +33,10 @@ const getWeekAgoTimestamp = () => {
 const LP_HOLDERS_FEE = 0.0017
 const WEEKS_IN_A_YEAR = 52.1429
 
-const getBlockAtTimestamp = async (timestamp: number) => {
+const getBlockAtTimestamp = async (chainId: number, timestamp: number) => {
     try {
         const { blocks } = await request<BlockResponse>(
-            BLOCK_SUBGRAPH_ENDPOINT,
+            BLOCK_SUBGRAPH_ENDPOINT[chainId],
             `query getBlock($timestampGreater: Int!, $timestampLess: Int!) {
         blocks(first: 1, where: { timestamp_gt: $timestampGreater, timestamp_lt: $timestampLess }) {
           number
@@ -51,10 +50,10 @@ const getBlockAtTimestamp = async (timestamp: number) => {
     }
 }
 
-const getAprsForFarmGroup = async (addresses: string[], blockWeekAgo: number): Promise<AprMap> => {
+const getAprsForFarmGroup = async (chainId: number, addresses: string[], blockWeekAgo: number): Promise<AprMap> => {
     try {
         const { farmsAtLatestBlock, farmsOneWeekAgo } = await request<FarmsResponse>(
-            STREAMING_FAST_ENDPOINT,
+            STREAMING_FAST_ENDPOINT[chainId],
             gql`
                 query farmsBulk($addresses: [String]!, $blockWeekAgo: Int!) {
                     farmsAtLatestBlock: pairs(first: 30, where: { id_in: $addresses }) {
@@ -96,7 +95,7 @@ const getAprsForFarmGroup = async (addresses: string[], blockWeekAgo: number): P
     }
 }
 
-const fetchAndUpdateLPsAPR = async () => {
+const fetchAndUpdateLPsAPR = async (chainId: number) => {
     // pids before 250 are inactive farms from v1 and failed v2 migration
     const lowerCaseAddresses = farmsConfig
         .filter((farm) => farm.pid > 250)
@@ -105,13 +104,13 @@ const fetchAndUpdateLPsAPR = async () => {
     // Split it into chunks of 30 addresses to avoid gateway timeout
     const addressesInGroups = chunk(lowerCaseAddresses, 30)
     const weekAgoTimestamp = getWeekAgoTimestamp()
-    const blockWeekAgo = await getBlockAtTimestamp(weekAgoTimestamp)
+    const blockWeekAgo = await getBlockAtTimestamp(chainId, weekAgoTimestamp)
 
     let allAprs: AprMap = {}
     // eslint-disable-next-line no-restricted-syntax
     for (const groupOfAddresses of addressesInGroups) {
         // eslint-disable-next-line no-await-in-loop
-        const aprs = await getAprsForFarmGroup(groupOfAddresses, blockWeekAgo)
+        const aprs = await getAprsForFarmGroup(chainId, groupOfAddresses, blockWeekAgo)
         allAprs = { ...allAprs, ...aprs }
     }
 
@@ -121,4 +120,4 @@ const fetchAndUpdateLPsAPR = async () => {
     })
 }
 
-fetchAndUpdateLPsAPR()
+fetchAndUpdateLPsAPR(ChainId.MAINNET)

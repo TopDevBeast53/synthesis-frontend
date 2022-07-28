@@ -5,6 +5,8 @@ import { getChangeForPeriod, getPercentChange } from 'views/Info/utils/infoDataH
 import { ProtocolData } from 'state/info/types'
 import { getDeltaTimestamps } from 'views/Info/utils/infoQueryHelpers'
 import { useBlocksFromTimestamps } from 'views/Info/hooks/useBlocksFromTimestamps'
+import { ChainId } from 'sdk'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 interface HelixFactory {
     totalTransactions: string
@@ -19,7 +21,7 @@ interface OverviewResponse {
 /**
  * Latest Liquidity, Volume and Transaction count
  */
-const getOverviewData = async (block?: number): Promise<{ data?: OverviewResponse; error: boolean }> => {
+const getOverviewData = async (chainId: ChainId, block?: number): Promise<{ data?: OverviewResponse; error: boolean }> => {
     try {
         const query = gql`query overview {
       helixFactories(
@@ -30,7 +32,7 @@ const getOverviewData = async (block?: number): Promise<{ data?: OverviewRespons
         totalLiquidityUSD
       }
     }`
-        const data = await request<OverviewResponse>(INFO_CLIENT, query)
+        const data = await request<OverviewResponse>(INFO_CLIENT[chainId], query)
         return { data, error: false }
     } catch (error) {
         console.error('Failed to fetch info overview', error)
@@ -61,10 +63,11 @@ const useFetchProtocolData = (): ProtocolFetchState => {
     const [t24, t48] = getDeltaTimestamps()
     const { blocks, error: blockError } = useBlocksFromTimestamps([t24, t48])
     const [block24, block48] = blocks ?? []
+    const { chainId } = useActiveWeb3React()
 
     useEffect(() => {
         const fetch = async () => {
-            const { error, data } = await getOverviewData()
+            const { error, data } = await getOverviewData(chainId)
             const { error: error24, data: data24 } = await getOverviewData(block24?.number ?? undefined)
             const { error: error48, data: data48 } = await getOverviewData(block48?.number ?? undefined)
             const anyError = error || error24 || error48
@@ -110,7 +113,7 @@ const useFetchProtocolData = (): ProtocolFetchState => {
         if (allBlocksAvailable && !blockError && !fetchState.data) {
             fetch()
         }
-    }, [block24, block48, blockError, fetchState])
+    }, [block24, block48, blockError, chainId, fetchState])
 
     return fetchState
 }

@@ -236,22 +236,22 @@ export const useMasterchef = () => {
 }
 
 export const useSousChef = (id) => {
-    const { library } = useActiveWeb3React()
+    const { library, chainId } = useActiveWeb3React()
     const getContract = useGetContract()
     return useMemo(() => {
         const config = poolsConfig.find((pool) => pool.sousId === id)
         const abi = config.poolCategory === PoolCategory.BINANCE ? sousChefBnb : sousChef
-        return getContract(abi, getAddress(config.contractAddress), library.getSigner()) as SousChef
-    }, [getContract, id, library])
+        return getContract(abi, getAddress(chainId, config.contractAddress), library.getSigner()) as SousChef
+    }, [chainId, getContract, id, library])
 }
 
 export const useSousChefV2 = (id) => {
-    const { library } = useActiveWeb3React()
+    const { library, chainId } = useActiveWeb3React()
     const getContract = useGetContract()
     return useMemo(() => {
         const config = poolsConfig.find((pool) => pool.sousId === id)
-        return getContract(sousChefV2, getAddress(config.contractAddress), library.getSigner()) as SousChefV2
-    }, [id, library, getContract])
+        return getContract(sousChefV2, getAddress(chainId, config.contractAddress), library.getSigner()) as SousChefV2
+    }, [getContract, chainId, library, id])
 }
 
 export const usePointCenterIfoContract = () => {

@@ -8,6 +8,7 @@ import useTokenBalance, { useGetBnbBalance } from 'hooks/useTokenBalance'
 import React from 'react'
 import { getEtherScanLink } from 'utils'
 import { formatBigNumber, getFullDisplayBalance } from 'utils/formatBalance'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import CopyAddress from './CopyAddress'
 
 interface WalletInfoProps {
@@ -21,6 +22,7 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ hasLowBnbBalance, onDismiss }) 
   const { balance, fetchStatus } = useGetBnbBalance()
   const { balance: helixBalance, fetchStatus: helixFetchStatus } = useTokenBalance(tokens.helix.address)
   const { logout } = useAuth()
+  const { chainId } = useActiveWeb3React()
 
   const handleLogout = () => {
     onDismiss()
@@ -58,7 +60,7 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ hasLowBnbBalance, onDismiss }) 
         )}
       </Flex>
       <Flex alignItems="center" justifyContent="end" mb="24px">
-        <LinkExternal href={getEtherScanLink(account, 'address')}>{t('View on EtherScan')}</LinkExternal>
+        <LinkExternal href={getEtherScanLink(account, 'address', chainId)}>{t('View on EtherScan')}</LinkExternal>
       </Flex>
       <Button variant="secondary" width="100%" onClick={handleLogout}>
         {t('Disconnect Wallet')}

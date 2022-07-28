@@ -3,9 +3,8 @@ import { SNAPSHOT_API } from 'config/constants/endpoints'
 import { Proposal, ProposalState, Vote, VoteWhere } from 'state/types'
 import { ChainId } from 'sdk'
 
-export const getProposals = async (first = 5, skip = 0, state = ProposalState.ACTIVE): Promise<Proposal[]> => {
-    const chainId = process.env.REACT_APP_CHAIN_ID
-    const space = Number(chainId) === ChainId.MAINNET ? "helixgeometry.eth" : "silverstardev.eth"
+export const getProposals = async (chainId: number, first = 5, skip = 0, state = ProposalState.ACTIVE): Promise<Proposal[]> => {
+    const space = chainId === ChainId.MAINNET ? "helixgeometry.eth" : "silverstardev.eth"
 
     const response: { proposals: Proposal[] } = await request(
         SNAPSHOT_API,

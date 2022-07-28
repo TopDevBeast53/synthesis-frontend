@@ -35,7 +35,7 @@ export function getSolanaScanLink(data: string | number, cluster: 'mainnet' | 't
 export function getEtherScanLink(
     data: string | number,
     type: 'transaction' | 'token' | 'address' | 'block' | 'countdown',
-    chainId: ChainId = process.env.REACT_APP_CHAIN_ID === ChainId.MAINNET.toString() ? ChainId.MAINNET : ChainId.TESTNET,
+    chainId: ChainId,
 ): string {
     switch (type) {
         case 'transaction': {
@@ -59,7 +59,7 @@ export function getEtherScanLink(
 export function getEtherScanLinkForNft(
     collectionAddress: string,
     tokenId: string,
-    chainId: ChainId = process.env.REACT_APP_CHAIN_ID === ChainId.MAINNET.toString() ? ChainId.MAINNET : ChainId.TESTNET,
+    chainId: ChainId,
 ): string {
     return `${BASE_ETH_SCAN_URLS[chainId]}/token/${collectionAddress}?a=${tokenId}`
 }
