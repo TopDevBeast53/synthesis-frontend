@@ -9,18 +9,18 @@ const useWalletConnect = () => {
     const chain = useGetChainDetail()
     const walletconnect = useMemo((): WalletConnectConnector => {
         return new WalletConnectConnector({
-            rpc: { [chain.CHAIN_ID]: chain.NODE_URL },
+            rpc: { [chain.chainId]: chain.rpcUrls[0] },
             qrcode: true,
             // pollingInterval: POLLING_INTERVAL,
         })
     }, [chain]);
 
     const injected = useMemo((): InjectedConnector => {
-        return new InjectedConnector({ supportedChainIds: [chain.CHAIN_ID] })
+        return new InjectedConnector({ supportedChainIds: [chain.chainId] })
     }, [chain])
 
     const bscConnector = useMemo((): BscConnector => {
-        return new BscConnector({ supportedChainIds: [chain.CHAIN_ID] })
+        return new BscConnector({ supportedChainIds: [chain.chainId] })
     }, [chain])
 
     const connectorsByName = useMemo((): { [connectorName in ConnectorNames]: any } => {

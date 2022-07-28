@@ -16,7 +16,7 @@ const useActiveWeb3React = (): Web3ReactContextInterface<Web3Provider> => {
     const chain = useGetChainDetail();
 
     return useMemo(() => {
-        return { library: (library || rpcProvider), chainId: chainId ?? chain.CHAIN_ID, ...web3React }
+        return { library: (library || rpcProvider), chainId: chainId ?? chain.chainId, ...web3React }
     }, [library, rpcProvider, chainId, chain, web3React])
 
 }

@@ -77,8 +77,17 @@ export interface FarmAuctionContract extends Omit<FarmAuction, 'auctions'> {
 }
 
 export type CHAIN_CONFIG = {
-    CHAIN_ID: number,
-    NODE_URL: string,
-    SHOW_ONLY_TRADE: boolean,
-    TEST_CHAIN: boolean,
+    chainId: number
+    chainName: string
+    nativeCurrency: {
+        name: string
+        symbol: string
+        decimals: number
+    }
+    rpcUrls: string[]
+    blockExplorerUrls: string[]
+    logoUrl: string
+    label: string,
+    showOnlyTrade: boolean,
+    isTestChain: boolean
 }

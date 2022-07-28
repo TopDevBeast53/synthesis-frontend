@@ -19,11 +19,11 @@ const Menu = (props) => {
   const cakePriceUsd = usePriceHelixBusd()
   const { currentLanguage, setLanguage, t } = useTranslation()
   const { pathname, search } = useLocation()
-  const network = useGetChainDetail()
+  const chain = useGetChainDetail()
 
   const menuConfig = useMemo(() => {
-    return config(t).filter((menu) => network.SHOW_ONLY_TRADE ? menu.isTrade === true : true)
-  }, [network.SHOW_ONLY_TRADE, t])
+    return config(t).filter((menu) => chain.showOnlyTrade ? menu.isTrade === true : true)
+  }, [chain.showOnlyTrade, t])
 
   const activeMenuItem = getActiveMenuItem({ menuConfig, pathname })
   const activeSubMenuItem = getActiveSubMenuItem({ menuItem: activeMenuItem, pathname })

@@ -1,5 +1,4 @@
 import { useState, useEffect, useMemo } from 'react'
-import { ChainId } from 'sdk'
 import { useFarms, usePriceHelixBusd } from 'state/farms/hooks'
 import { useAppDispatch } from 'state'
 import { fetchFarmsPublicDataAsync, getNonArchivedFarms } from 'state/farms'
@@ -56,7 +55,7 @@ const useGetTopFarmsByApr = (isIntersecting: boolean) => {
           farm.poolWeight,
           helixPriceBusd,
           totalLiquidity,
-          farm.lpAddresses[ChainId.MAINNET],
+          farm.lpAddresses[chainId],
         )
         return { ...farm, apr: helixRewardsApr, lpRewardsApr }
       })
@@ -68,7 +67,7 @@ const useGetTopFarmsByApr = (isIntersecting: boolean) => {
     if (fetchStatus === FetchStatus.Fetched && !topFarms[0]) {
       getTopFarmsByApr(farms)
     }
-  }, [setTopFarms, farms, fetchStatus, helixPriceBusd, topFarms])
+  }, [setTopFarms, farms, fetchStatus, helixPriceBusd, topFarms, chainId])
 
   return { topFarms }
 }

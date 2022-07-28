@@ -1,13 +1,16 @@
 import { ChainId, JSBI, Percent, Token } from 'sdk'
 import { mainnetTokens, testnetTokens } from './tokens'
 
-// Pancake test router address 0x9Ac64Cc6e4415144C455BD8E4837Fea55603e5c3
-// Pancake prod router address 0x10ED43C718714eb63d5aA57B78B54704E256024E
-// Helix test net router address 0x9DbA93422D0ce20A755d07258E3bDF6D20d56193
+// a list of router addresses by chain
+type RouterAddressesList = {
+    readonly [chainId in ChainId]: string
+}
 
-export const ROUTER_ADDRESS = {
+export const ROUTER_ADDRESS: RouterAddressesList = {
     [ChainId.MAINNET]: '0x39D660d507f1bC34DbCe94831081D6cf9131c3b9',
-    [ChainId.TESTNET]: '0x484621036C7D18EDE8A267C44e3FBfDfb81135af'
+    [ChainId.TESTNET]: '0x484621036C7D18EDE8A267C44e3FBfDfb81135af',
+    [ChainId.RSK_MAINNET]: '', // update me
+    [ChainId.RSK_TESTNET]: '',
 }
 
 // a list of tokens by chain
@@ -24,6 +27,8 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
         mainnetTokens.usdc,
     ],
     [ChainId.TESTNET]: [testnetTokens.weth, testnetTokens.helix, testnetTokens.usdc],
+    [ChainId.RSK_MAINNET]: [],
+    [ChainId.RSK_TESTNET]: [],
 }
 
 /**
@@ -47,12 +52,16 @@ export const CUSTOM_BASES: { [chainId in ChainId]?: { [tokenAddress: string]: To
 export const SUGGESTED_BASES: ChainTokenList = {
     [ChainId.MAINNET]: [mainnetTokens.weth, mainnetTokens.dai, mainnetTokens.usdt],
     [ChainId.TESTNET]: [testnetTokens.weth, testnetTokens.dai, testnetTokens.usdc],
+    [ChainId.RSK_MAINNET]: [],
+    [ChainId.RSK_TESTNET]: [],
 }
 
 // used to construct the list of all pairs we consider by default in the frontend
 export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
     [ChainId.MAINNET]: [mainnetTokens.weth, mainnetTokens.dai, mainnetTokens.usdc, mainnetTokens.usdt],
     [ChainId.TESTNET]: [testnetTokens.weth, testnetTokens.dai, testnetTokens.usdc],
+    [ChainId.RSK_MAINNET]: [],
+    [ChainId.RSK_TESTNET]: [],
 }
 
 export const PINNED_PAIRS: { readonly [chainId in ChainId]?: [Token, Token][] } = {
