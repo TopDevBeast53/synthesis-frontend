@@ -3,10 +3,10 @@ import { useMemo } from 'react'
 import useGetChainDetail from 'hooks/useGetChainDetail'
 
 const useProviders = () => {
-    const ChainDetail = useGetChainDetail()
+    const chain = useGetChainDetail()
     const provider = useMemo(() => {
-        return new ethers.providers.StaticJsonRpcProvider(ChainDetail.NODE_URL)
-    }, [ChainDetail]);
+        return new ethers.providers.StaticJsonRpcProvider(chain.rpcUrls[0])
+    }, [chain]);
 
     return provider;
 }
