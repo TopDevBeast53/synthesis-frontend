@@ -1,6 +1,7 @@
 import BigNumber from 'bignumber.js'
 import { useAllTokens } from 'hooks/Tokens'
 import { useHelixLpSwap } from 'hooks/useContract'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import useToast from 'hooks/useToast'
 import React, { useState } from 'react'
 import { useFarms } from 'state/farms/hooks'
@@ -29,6 +30,7 @@ import { getTokenDecimals, getTokenSymbol } from 'views/SwapYield/components/Cel
 
 const DiscussOrder: React.FC<any> = ({onDismiss, ...props}) => {
   const theme = useTheme()
+  const { chainId } = useActiveWeb3React()
   const LpSwapContract = useHelixLpSwap()
   const { toastSuccess, toastError } = useToast()
   const [pendingTx, setPendingTx] = useState(false)
@@ -40,13 +42,13 @@ const DiscussOrder: React.FC<any> = ({onDismiss, ...props}) => {
   const { data: farms } = useFarms()
   const tokens = useAllTokens()
   
-  const [yAmount, setYAmount] = useState(getBalanceNumber(swapData?.ask.toString(), getTokenDecimals(farms, tokens, buyer)).toString())
+  const [yAmount, setYAmount] = useState(getBalanceNumber(swapData?.ask.toString(), getTokenDecimals(chainId, farms, tokens, buyer)).toString())
 
   const handleYAmountChange = (input) => {
     setYAmount(input)
   }
   const handleSendClick = () => {
-    const decimalYAmount = getDecimalAmount(new BigNumber(yAmount), getTokenDecimals(farms, tokens, buyer))
+    const decimalYAmount = getDecimalAmount(new BigNumber(yAmount), getTokenDecimals(chainId, farms, tokens, buyer))
     if (decimalYAmount.lte(BIG_ZERO)) {
       toastError('Error', 'Token Amount should be bigger than zero')
       return
@@ -76,7 +78,7 @@ const DiscussOrder: React.FC<any> = ({onDismiss, ...props}) => {
       <ModalBody p={bodyPadding}>
         <div style={{ marginTop: '1em' }}>
           <div style={{ display: 'flex', marginBottom: '1em', alignItems: 'center' }}>
-            <Text style={{ marginRight: '1em' }}>{getTokenSymbol(farms, tokens, buyer)}</Text>
+            <Text style={{ marginRight: '1em' }}>{getTokenSymbol(chainId, farms, tokens, buyer)}</Text>
             <BalanceInput value={yAmount} onUserInput={handleYAmountChange} />
           </div>
           <Button

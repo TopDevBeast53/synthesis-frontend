@@ -6,6 +6,7 @@ import { useFarms } from 'state/farms/hooks'
 import { AutoRenewIcon, Button, Text, Modal, ArrowDownIcon } from 'uikit'
 import { getBalanceNumber } from 'utils/formatBalance'
 import handleError from 'utils/handleError'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { ToolTipText } from 'views/SwapLiquidity/constants'
 import { RowBetween, RowFixed } from 'components/Layout/Row'
 import { AutoColumn } from 'components/Layout/Column'
@@ -13,6 +14,7 @@ import TokensCell from './TokensCell'
 import { getTokenDecimals, getTokenSymbol } from './helpers'
 
 const AcceptBidModal: React.FC<any> = ({ onDismiss, ...props }) => {
+  const { chainId } = useActiveWeb3React()
   const LpSwapContract = useHelixLpSwap()
   const { toastSuccess, toastError } = useToast()
   const [pendingTx, setPendingTx] = useState(false)
@@ -22,11 +24,11 @@ const AcceptBidModal: React.FC<any> = ({ onDismiss, ...props }) => {
 
   const tooltipText = (seller && buyer) ?
     ToolTipText(
-      getTokenSymbol(farms, tokens, seller),
-      getBalanceNumber(seller?.amount.toString(), getTokenDecimals(farms, tokens, seller)).toString(),
+      getTokenSymbol(chainId, farms, tokens, seller),
+      getBalanceNumber(seller?.amount.toString(), getTokenDecimals(chainId, farms, tokens, seller)).toString(),
       seller.isLp,
-      getTokenSymbol(farms, tokens, buyer),
-      getBalanceNumber(bidData?.amount.toString(), getTokenDecimals(farms, tokens, buyer)).toString(),
+      getTokenSymbol(chainId, farms, tokens, buyer),
+      getBalanceNumber(bidData?.amount.toString(), getTokenDecimals(chainId, farms, tokens, buyer)).toString(),
       buyer.isLp,
     )
     :
@@ -55,7 +57,7 @@ const AcceptBidModal: React.FC<any> = ({ onDismiss, ...props }) => {
           </RowFixed>
           <RowFixed gap="0px">
             <Text fontSize="18px" ml="10px">
-              {getTokenSymbol(farms, tokens, seller)}
+              {getTokenSymbol(chainId, farms, tokens, seller)}
             </Text>
           </RowFixed>
         </RowBetween>
@@ -68,7 +70,7 @@ const AcceptBidModal: React.FC<any> = ({ onDismiss, ...props }) => {
           </RowFixed>
           <RowFixed gap="0px">
             <Text fontSize="18px" ml="10px">
-              {getTokenSymbol(farms, tokens, buyer)}
+              {getTokenSymbol(chainId, farms, tokens, buyer)}
             </Text>
           </RowFixed>
         </RowBetween>

@@ -1,6 +1,6 @@
-import { useWeb3React } from '@web3-react/core'
 import { useTranslation } from 'contexts/Localization'
 import { useHelixYieldSwap, useERC20 } from 'hooks/useContract'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import useToast from 'hooks/useToast'
 import moment from 'moment'
 import React, { useContext, useMemo, useState } from 'react'
@@ -18,7 +18,7 @@ import DiscussOrder from './DiscussOrder'
 
 const YieldCPartyRow = ({ data, state, loading }) => {
   const { t } = useTranslation()
-  const { account } = useWeb3React()
+  const { account, chainId } = useActiveWeb3React()
   const { id, lockDuration, bidIds, lockUntilTimestamp, buyer, seller, ask } = data
   const { isMobile, isTablet, isDesktop } = useMatchBreakpoints()
   const yieldSwapContract = useHelixYieldSwap()
@@ -174,6 +174,7 @@ const YieldCPartyRow = ({ data, state, loading }) => {
 
           <QuestionCell>
             <ToolTipCell
+              chainId={chainId}
               seller={seller}
               buyer={buyer}
               askAmount={(state === SwapState.Pending || state === SwapState.Finished) ?
@@ -248,6 +249,7 @@ const YieldCPartyRow = ({ data, state, loading }) => {
 
             <QuestionCell>
               <ToolTipCell
+                chainId={chainId}
                 seller={seller}
                 buyer={buyer}
                 askAmount={(state === SwapState.Pending || state === SwapState.Finished) ?

@@ -1,5 +1,6 @@
 import { useHelixYieldSwap } from 'hooks/useContract'
 import useToast from 'hooks/useToast'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import moment from 'moment'
 import React, { useContext, useMemo, useState } from 'react'
 import { AutoRenewIcon, Button, useDelayedUnmount, useMatchBreakpoints, useModal } from 'uikit'
@@ -14,6 +15,7 @@ import CandidateTable from '../CandidateTable'
 import DiscussOrder from '../Modals/DiscussOrder'
 
 const ActiveRow = (props) => {
+  const { chainId } = useActiveWeb3React()
   const YieldSwapContract = useHelixYieldSwap()
   const { toastSuccess, toastError } = useToast()
   const { tableRefresh, setTableRefresh } = useContext(YieldPartyContext)
@@ -73,6 +75,7 @@ const ActiveRow = (props) => {
           </AskingTokenCell>
           <QuestionCell>
             <ToolTipCell
+              chainId={chainId}
               seller={swapData?.seller}
               buyer={swapData?.buyer}
               askAmount={swapData?.ask.toString()}
@@ -112,6 +115,7 @@ const ActiveRow = (props) => {
             </AskingTokenCell>
             <QuestionCell>
               <ToolTipCell
+                chainId={chainId}
                 seller={swapData?.seller}
                 buyer={swapData?.buyer}
                 askAmount={swapData?.ask.toString()}

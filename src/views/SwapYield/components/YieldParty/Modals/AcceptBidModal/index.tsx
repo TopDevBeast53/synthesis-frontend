@@ -2,6 +2,7 @@ import { useHelixYieldSwap } from 'hooks/useContract'
 import useToast from 'hooks/useToast'
 import React, { useState } from 'react'
 import { useAllTokens } from 'hooks/Tokens'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useFarms } from 'state/farms/hooks'
 import { AutoRenewIcon, Button, Text, Modal, ArrowDownIcon } from 'uikit'
 import { getBalanceNumber } from 'utils/formatBalance'
@@ -19,14 +20,15 @@ const AcceptBidModal: React.FC<any> = ({ onDismiss, ...props }) => {
   const { bidId, swapData, bidData } = props
   const { data: farms } = useFarms()
   const tokens = useAllTokens()
+  const { chainId } = useActiveWeb3React()
 
   const tooltipText = (swapData?.seller && swapData?.buyer) ?
     ToolTipText(
-      getTokenSymbol(farms, tokens, swapData?.seller),
-      getBalanceNumber(swapData?.seller.amount.toString(), getTokenDecimals(farms, tokens, swapData?.seller)).toString(),
+      getTokenSymbol(chainId, farms, tokens, swapData?.seller),
+      getBalanceNumber(swapData?.seller.amount.toString(), getTokenDecimals(chainId, farms, tokens, swapData?.seller)).toString(),
       swapData?.seller.isLp,
-      getTokenSymbol(farms, tokens, swapData?.buyer),
-      getBalanceNumber(bidData?.amount.toString(), getTokenDecimals(farms, tokens, swapData?.buyer)).toString(),
+      getTokenSymbol(chainId, farms, tokens, swapData?.buyer),
+      getBalanceNumber(bidData?.amount.toString(), getTokenDecimals(chainId, farms, tokens, swapData?.buyer)).toString(),
       swapData?.buyer.isLp,
     )
     :
@@ -55,7 +57,7 @@ const AcceptBidModal: React.FC<any> = ({ onDismiss, ...props }) => {
           </RowFixed>
           <RowFixed gap="0px">
             <Text fontSize="18px" ml="10px">
-              {getTokenSymbol(farms, tokens, swapData?.seller)}
+              {getTokenSymbol(chainId, farms, tokens, swapData?.seller)}
             </Text>
           </RowFixed>
         </RowBetween>
@@ -68,7 +70,7 @@ const AcceptBidModal: React.FC<any> = ({ onDismiss, ...props }) => {
           </RowFixed>
           <RowFixed gap="0px">
             <Text fontSize="18px" ml="10px">
-              {getTokenSymbol(farms, tokens, swapData?.buyer)}
+              {getTokenSymbol(chainId, farms, tokens, swapData?.buyer)}
             </Text>
           </RowFixed>
         </RowBetween>

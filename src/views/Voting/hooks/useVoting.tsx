@@ -9,8 +9,8 @@ import { getVotingAddress } from 'utils/addressHelpers'
 import votingABI from 'config/abi/Voting.json'
 
 export const useVoting = () => {
-  const votingAddress = getVotingAddress()
-  const { library, account } = useActiveWeb3React()
+  const { library, account, chainId } = useActiveWeb3React()
+  const votingAddress = getVotingAddress(chainId)
   const { callWithGasPrice } = useCallWithGasPrice()
 
   const getContract = useCallback(async () => {

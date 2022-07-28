@@ -7,6 +7,7 @@ import { HelpIcon, useTooltip } from 'uikit'
 import { ToolTipText } from 'views/SwapLiquidity/constants'
 import { getBalanceNumber } from 'utils/formatBalance'
 import { ChainId } from 'sdk'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 const ReferenceElement = styled.div`
   display: inline-block;
@@ -21,7 +22,7 @@ export const getTokenSymbol = (chainId: ChainId, farms, tokens, tokenInfo) => {
   return token ? token.symbol : ""
 }
 
-export const getTokenDecimals = (farms, tokens, tokenInfo) => {
+export const getTokenDecimals = (chainId: ChainId, farms, tokens, tokenInfo) => {
   if (tokenInfo.isLp) {
     const lpToken = farms.find((item) => getAddress(chainId, item.lpAddresses) === tokenInfo.token)
     return lpToken ? lpToken.token.decimals : 18
@@ -32,14 +33,15 @@ export const getTokenDecimals = (farms, tokens, tokenInfo) => {
 const ToolTipCell = ({ seller, buyer, askAmount }) => {
   const { data: farms } = useFarms()
   const tokens = useAllTokens()
+  const { chainId } = useActiveWeb3React()
 
   const tooltipText = (seller && buyer) ?
     ToolTipText(
-      getTokenSymbol(farms, tokens, seller),
-      getBalanceNumber(seller.amount.toString(), getTokenDecimals(farms, tokens, seller)).toString(),
+      getTokenSymbol(chainId, farms, tokens, seller),
+      getBalanceNumber(seller.amount.toString(), getTokenDecimals(chainId, farms, tokens, seller)).toString(),
       seller.isLp,
-      getTokenSymbol(farms, tokens, buyer),
-      getBalanceNumber(askAmount.toString(), getTokenDecimals(farms, tokens, buyer)).toString(),
+      getTokenSymbol(chainId, farms, tokens, buyer),
+      getBalanceNumber(askAmount.toString(), getTokenDecimals(chainId, farms, tokens, buyer)).toString(),
       buyer.isLp
     )
     :

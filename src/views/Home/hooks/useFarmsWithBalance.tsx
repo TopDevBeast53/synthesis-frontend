@@ -8,19 +8,19 @@ import { SerializedFarmConfig } from 'config/constants/types'
 import { useFastFresh } from 'hooks/useRefresh'
 import { DEFAULT_TOKEN_DECIMAL } from 'config'
 import useMulticall from 'hooks/useMulticall'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import useActiveWeb3React from 'hooks/useActiveWeb3React';
 
 export interface FarmWithBalance extends SerializedFarmConfig {
   balance: BigNumber
 }
 
 const useFarmsWithBalance = () => {
+  const { chainId } = useActiveWeb3React()
   const [farmsWithStakedBalance, setFarmsWithStakedBalance] = useState<FarmWithBalance[]>([])
   const [earningsSum, setEarningsSum] = useState<number>(null)
   const { account } = useWeb3React()
   const fastRefresh = useFastFresh()
   const multicall = useMulticall()
-  const { chainId } = useActiveWeb3React()
 
   const farmsConfig = useMemo(() => getFarms(chainId), [chainId])
 

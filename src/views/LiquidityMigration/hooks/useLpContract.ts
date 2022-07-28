@@ -5,11 +5,10 @@ import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { useCallback } from 'react'
 import { getProviderOrSigner } from 'utils'
 import { isAddress } from 'ethers/lib/utils'
-import { helixMigratorAddress } from '../constants'
-
+import { getHelixMigratorAddress } from 'utils/addressHelpers'
 
 export const useLpContract = () => {
-    const { library, account } = useActiveWeb3React()
+    const { library, account, chainId } = useActiveWeb3React()
     const { callWithGasPrice } = useCallWithGasPrice()
 
     const lpContract = useCallback((lpTokenAddress) => {
@@ -20,18 +19,18 @@ export const useLpContract = () => {
 
     const approve = useCallback(
         async (lpTokenAddress, amount) => {
-            const tx = await callWithGasPrice(lpContract(lpTokenAddress), 'approve', [helixMigratorAddress, amount])
+            const tx = await callWithGasPrice(lpContract(lpTokenAddress), 'approve', [getHelixMigratorAddress(chainId), amount])
             return tx
         },
-        [lpContract, callWithGasPrice],
+        [lpContract, callWithGasPrice, chainId],
     )
 
     const getAllowance = useCallback(
         async (lpTokenAddress) => {
-            const tx = await callWithGasPrice(lpContract(lpTokenAddress), 'allowance', [account, helixMigratorAddress])
+            const tx = await callWithGasPrice(lpContract(lpTokenAddress), 'allowance', [account, getHelixMigratorAddress(chainId)])
             return tx.toString()
         },
-        [lpContract, callWithGasPrice, account],
+        [lpContract, callWithGasPrice, account, chainId],
     )
 
     const getBalance = useCallback(

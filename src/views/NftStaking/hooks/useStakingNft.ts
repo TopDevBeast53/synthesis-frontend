@@ -6,17 +6,17 @@ import { useHelixNFTChef } from 'hooks/useContract'
 import { useCallback } from 'react'
 import { getProviderOrSigner } from 'utils'
 import { formatBigNumber } from 'utils/formatBalance'
-import { helixNFTChefAddress } from '../constants'
+import { getHelixChefNftAddress } from 'utils/addressHelpers'
 
 export const useStakingNft = () => {
-    const { library, account } = useActiveWeb3React()
+    const { library, account, chainId } = useActiveWeb3React()
     const { callWithGasPrice } = useCallWithGasPrice()
 
     const helixNFTChefContract = useHelixNFTChef()
 
     const getHelixChefNFTContract = useCallback(() => {
-        return new Contract(helixNFTChefAddress, helixChefNFTABI, getProviderOrSigner(library, account))
-    }, [library, account])
+        return new Contract(getHelixChefNftAddress(chainId), helixChefNFTABI, getProviderOrSigner(library, account))
+    }, [library, account, chainId])
 
     const stakingNft = useCallback(
         async (tokenIds: number[], isStaking: boolean) => {
