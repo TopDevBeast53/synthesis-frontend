@@ -98,16 +98,26 @@ const farms: SerializedFarmConfig[] = [
         token: serializedTokens.fxs,
         quoteToken: serializedTokens.frax,
     },
-    // {
-    //     pid: 10,
-    //     lpSymbol: 'HELIX-APE',
-    //     lpAddresses: {
-    //         1: '0x7b19B5725Bcc0d88101616a1484a087DbA7c17B4',
-    //         4: '',
-    //     },
-    //     token: serializedTokens.ape,
-    //     quoteToken: serializedTokens.helix,
-    // },
+    {
+        pid: 9,
+        lpSymbol: 'BADGER-HELIX',
+        lpAddresses: {
+            1: '0x57818FF3e6eCcE616095B0F3D513FeB8C6C81Fe7',
+            4: '',
+        },
+        token: serializedTokens.badger,
+        quoteToken: serializedTokens.helix,
+    },
+    {
+        pid: 10,
+        lpSymbol: 'APE-HELIX',
+        lpAddresses: {
+            1: '0x7b19B5725Bcc0d88101616a1484a087DbA7c17B4',
+            4: '',
+        },
+        token: serializedTokens.ape,
+        quoteToken: serializedTokens.helix,
+    },
     // {
     //   pid: 0,
     //   lpSymbol: 'HELIX',

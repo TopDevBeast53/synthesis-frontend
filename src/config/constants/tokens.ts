@@ -100,6 +100,14 @@ export const mainnetTokens = defineTokens({
         'ApeCoin',
         'https://apecoin.com/',
     ),
+    badger: new Token(
+        MAINNET,
+        '0x3472A5A71965499acd81997a54BBA8D852C6E53d',
+        18,
+        'BADGER',
+        'Badger',
+        'https://badger.finance/',
+    ),
 } as const)
 
 export const testnetTokens = defineTokens({
