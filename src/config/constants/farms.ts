@@ -18,7 +18,7 @@ const farms: SerializedFarmConfig[] = [
         token: serializedTokens.helix,
         quoteToken: serializedTokens.weth,
     },
-     {
+    {
         pid: 1,
         lpSymbol: 'HELIX-WETH',
         lpAddresses: {
@@ -27,6 +27,16 @@ const farms: SerializedFarmConfig[] = [
         },
         token: serializedTokens.helix,
         quoteToken: serializedTokens.weth,
+    },
+    {
+        pid: 11,
+        lpSymbol: 'HELIX-USDC',
+        lpAddresses: {
+            1: '0x5442eaa8b522e1A4eee64d441c5a6243baF83f0C',
+            4: '',
+        },
+        token: serializedTokens.helix,
+        quoteToken: serializedTokens.usdc,
     },
     {
         pid: 2,
@@ -116,6 +126,16 @@ const farms: SerializedFarmConfig[] = [
             4: '',
         },
         token: serializedTokens.ape,
+        quoteToken: serializedTokens.helix,
+    },
+    {
+        pid: 12,
+        lpSymbol: 'CULT-HELIX',
+        lpAddresses: {
+            1: '0x200e1e20eb37Fcd175A96A432292bf2AbA71B1e4',
+            4: '',
+        },
+        token: serializedTokens.cult,
         quoteToken: serializedTokens.helix,
     },
     // {

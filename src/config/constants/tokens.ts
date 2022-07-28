@@ -108,6 +108,14 @@ export const mainnetTokens = defineTokens({
         'Badger',
         'https://badger.finance/',
     ),
+    cult: new Token(
+        MAINNET,
+        '0xf0f9D895aCa5c8678f706FB8216fa22957685A13',
+        18,
+        'CULT',
+        'Cult DAO',
+        'https://cultdao.io/',
+    ),
 } as const)
 
 export const testnetTokens = defineTokens({
