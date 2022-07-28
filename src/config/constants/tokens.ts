@@ -116,6 +116,22 @@ export const mainnetTokens = defineTokens({
         'Cult DAO',
         'https://cultdao.io/',
     ),
+    bond: new Token(
+        MAINNET,
+        '0x0391D2021f89DC339F60Fff84546EA23E337750f',
+        18,
+        'BOND',
+        'BarnBridge Governance Token',
+        'https://barnbridge.com/',
+    ),
+    bal: new Token(
+        MAINNET,
+        '0xba100000625a3754423978a60c9317c58a424e3D',
+        18,
+        'BAL',
+        'Balancer',
+        'https://balancer.fi/',
+    ),
 } as const)
 
 export const testnetTokens = defineTokens({

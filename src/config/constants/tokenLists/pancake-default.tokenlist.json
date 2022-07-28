@@ -107,9 +107,25 @@
       "logoURI": "local://images/tokens/0x3472A5A71965499acd81997a54BBA8D852C6E53d.png"
     },
     {
-      "name": "CULT",
-      "symbol": "Cult DAO",
+      "name": "Cult DAO",
+      "symbol": "CULT",
       "address": "0xf0f9D895aCa5c8678f706FB8216fa22957685A13",
+      "chainId": 1,
+      "decimals": 18,
+      "logoURI": "local://images/tokens/0xf0f9D895aCa5c8678f706FB8216fa22957685A13.png"
+    },
+    {
+      "name": "BarnBridge Governance Token",
+      "symbol": "BOND",
+      "address": "0x0391D2021f89DC339F60Fff84546EA23E337750f",
+      "chainId": 1,
+      "decimals": 18,
+      "logoURI": "local://images/tokens/0x0391D2021f89DC339F60Fff84546EA23E337750f.png"
+    },
+    {
+      "name": "Balancer",
+      "symbol": "BAL",
+      "address": "0xba100000625a3754423978a60c9317c58a424e3D",
       "chainId": 1,
       "decimals": 18,
       "logoURI": "local://images/tokens/0xf0f9D895aCa5c8678f706FB8216fa22957685A13.png"

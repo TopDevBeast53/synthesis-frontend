@@ -138,6 +138,26 @@ const farms: SerializedFarmConfig[] = [
         token: serializedTokens.cult,
         quoteToken: serializedTokens.weth,
     },
+    {
+        pid: 13,
+        lpSymbol: 'BOND-USDC',
+        lpAddresses: {
+            1: '0x7565756FEaec1cBf51dFE71E04720b13F1C5104D',
+            4: '',
+        },
+        token: serializedTokens.bond,
+        quoteToken: serializedTokens.usdc,
+    },
+    {
+        pid: 14,
+        lpSymbol: 'BAL-HELIX',
+        lpAddresses: {
+            1: '0x6d940051f0fD76B4dE73fAc9DB8336b47F967bb1',
+            4: '',
+        },
+        token: serializedTokens.bal,
+        quoteToken: serializedTokens.helix,
+    },
     // {
     //   pid: 0,
     //   lpSymbol: 'HELIX',
