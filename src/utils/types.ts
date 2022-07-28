@@ -79,4 +79,6 @@ export interface FarmAuctionContract extends Omit<FarmAuction, 'auctions'> {
 export type CHAIN_CONFIG = {
     CHAIN_ID: number,
     NODE_URL: string,
+    SHOW_ONLY_TRADE: boolean,
+    TEST_CHAIN: boolean,
 }

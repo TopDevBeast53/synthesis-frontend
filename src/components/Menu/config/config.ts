@@ -2,7 +2,7 @@ import { MenuItemsType } from 'uikit'
 import { DropdownMenuItemType } from 'uikit/components/DropdownMenu/types'
 import { ContextApi } from 'contexts/Localization/types'
 
-export type ConfigMenuItemsType = MenuItemsType & { hideSubNav?: boolean }
+export type ConfigMenuItemsType = MenuItemsType & { hideSubNav?: boolean, isTrade: boolean }
 
 const config: (t: ContextApi['t']) => ConfigMenuItemsType[] = (t) => [
     {
@@ -10,6 +10,7 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType[] = (t) => [
         icon: 'Swap',
         href: '/swap',
         // showItemsOnMobile: false,
+        isTrade: true,
         items: [
             {
                 label: t('Exchange'),
@@ -35,6 +36,7 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType[] = (t) => [
         label: t('Earn'),
         href: '/farms',
         icon: 'Earn1',
+        isTrade: true,
         items: [
             {
                 label: t('Farms'),
@@ -79,13 +81,15 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType[] = (t) => [
         label: t('Referrals'),
         href: '/referrals',
         icon: 'Referals',
-        showItemsOnMobile:false,
+        showItemsOnMobile: false,
+        isTrade: false,
         items: [],
     },
     {
         label: t('NFT'),
         href: '/geobot-staking',
         icon: 'NFT1',
+        isTrade: false,
         items: [
             {
                 label: 'Geobot Staking',
@@ -105,14 +109,16 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType[] = (t) => [
     {
         label: t('Voting'),
         href: '/voting',
-        icon:'Vote1',
-        showItemsOnMobile:false,
+        icon: 'Vote1',
+        showItemsOnMobile: false,
+        isTrade: false
     },
     {
         label: t('Data'),
         href: '/data',
         icon: 'Chart',
-        showItemsOnMobile:false,
+        showItemsOnMobile: false,
+        isTrade: false,
     },
     // {
     //   label: t('Win'),
@@ -157,8 +163,9 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType[] = (t) => [
         href: '#',
         icon: 'More',
         hideSubNav: true,
+        isTrade: true,
         items: [
-            
+
             // {
             //     type: DropdownMenuItemType.DIVIDER,
             // },
@@ -172,7 +179,7 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType[] = (t) => [
                 href: 'https://geometry.gitbook.io/helix',
                 type: DropdownMenuItemType.EXTERNAL_LINK,
             },
-            
+
             //     {
             //       type: DropdownMenuItemType.DIVIDER,
             //     },

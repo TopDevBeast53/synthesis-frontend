@@ -11,18 +11,26 @@ const NETWORK_CONFIGS: { [chainName in CHAIN_NAME]: CHAIN_CONFIG } = {
     [CHAIN_NAME.MAINNET]: {
         CHAIN_ID: 1,
         NODE_URL: "https://eth-mainnet.g.alchemy.com/v2/VqUJXhZEYxUqofUHG6UWgxbuD3tw3yCf",
+        SHOW_ONLY_TRADE: false,
+        TEST_CHAIN: false
     },
     [CHAIN_NAME.RINKEBY]: {
         CHAIN_ID: 4,
-        NODE_URL: "https://eth-rinkeby.alchemyapi.io/v2/qDpaVG0RqZ6J9JQlq9zJb-yEIgP0HifU"
+        NODE_URL: "https://eth-rinkeby.alchemyapi.io/v2/qDpaVG0RqZ6J9JQlq9zJb-yEIgP0HifU",
+        SHOW_ONLY_TRADE: true,
+        TEST_CHAIN: true
     },
     [CHAIN_NAME.RSK_MAINNET]: {
         CHAIN_ID: 4,
         NODE_URL: "https://eth-rinkeby.alchemyapi.io/v2/qDpaVG0RqZ6J9JQlq9zJb-yEIgP0HifU",
+        SHOW_ONLY_TRADE: true,
+        TEST_CHAIN: false
     },
     [CHAIN_NAME.RSK_TESTNET]: {
         CHAIN_ID: 4,
-        NODE_URL: "https://eth-rinkeby.alchemyapi.io/v2/qDpaVG0RqZ6J9JQlq9zJb-yEIgP0HifU"
+        NODE_URL: "https://eth-rinkeby.alchemyapi.io/v2/qDpaVG0RqZ6J9JQlq9zJb-yEIgP0HifU",
+        SHOW_ONLY_TRADE: true,
+        TEST_CHAIN: true
     }
 }
 
