@@ -198,7 +198,7 @@ export const rskTestnetTokens = defineTokens({
         RSK_TESTNET,
         '0x760ae0f5319D9efEdc9B99d7E73fdaB2f84E4d87',
         18,
-        'rUSDT',
+        'USDT',
         'Wrapped RSK USDT',
         'https://tether.to/',
     ),
