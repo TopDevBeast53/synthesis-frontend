@@ -4,7 +4,6 @@ import { ModalInput } from 'components/Modal'
 import { useTranslation } from 'contexts/Localization'
 import { ethers } from 'ethers'
 import { useAllTokens } from 'hooks/Tokens'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useERC20, useHelixLpSwap } from 'hooks/useContract'
 import useToast from 'hooks/useToast'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
@@ -22,7 +21,6 @@ import {
   ModalTitle
 } from 'uikit'
 import getThemeValue from 'uikit/util/getThemeValue'
-import { getAddress } from 'utils/addressHelpers'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { getBalanceAmount, getDecimalAmount } from 'utils/formatBalance'
 import handleError from 'utils/handleError'
@@ -34,7 +32,6 @@ const DiscussOrder: React.FC<any> = ({ onDismiss, ...props }) => {
   const LpSwapContract = useHelixLpSwap()
   const { toastSuccess, toastError } = useToast()
   const [pendingTx, setPendingTx] = useState(false)
-  const { chainId } = useActiveWeb3React()
 
   const bodyPadding = '24px'
   const headerBackground = 'transparent'
@@ -46,11 +43,11 @@ const DiscussOrder: React.FC<any> = ({ onDismiss, ...props }) => {
   const [allowedValue, setAllowedValue] = useState<BigNumber>()
   const [symbolName, buyerDecimals] = useMemo(() => {
     if (buyer.isLp) {
-      const lp = farms.find((item) => getAddress(chainId, item.lpAddresses) === buyer.token)
+      const lp = farms.find((item) => item.lpAddress === buyer.token)
       return lp ? [lp.lpSymbol, lp.token.decimals] : ["", 18]
     }
     return allTokens[buyer.token] ? [allTokens[buyer.token].symbol, allTokens[buyer.token].decimals] : ["", 18]
-  }, [allTokens, buyer.isLp, buyer.token, chainId, farms])
+  }, [allTokens, buyer.isLp, buyer.token, farms])
 
   const exContract = useERC20(swapData?.toSellerToken)
   const exContractAmount = bidData ? bidData?.amount.toString() : swapData?.ask.toString()
@@ -60,13 +57,13 @@ const DiscussOrder: React.FC<any> = ({ onDismiss, ...props }) => {
 
   const maxBalance = useMemo(() => {
     if (buyer.isLp) {
-      const lp = farms.find((item) => getAddress(chainId, item.lpAddresses) === buyer.token)
+      const lp = farms.find((item) => item.lpAddress === buyer.token)
       return lp ? getBalanceAmount(lp.userData.tokenBalance, lp.token.decimals) : BIG_ZERO
     }
 
     return allTokenBalances[buyer.token] ? allTokenBalances[buyer.token].toExact() : BIG_ZERO
 
-  }, [buyer.isLp, buyer.token, allTokenBalances, farms, chainId])
+  }, [buyer.isLp, buyer.token, allTokenBalances, farms])
 
   const handleSelectMaxOfLPToken = useCallback(() => {
     setYAmount(maxBalance.toString())

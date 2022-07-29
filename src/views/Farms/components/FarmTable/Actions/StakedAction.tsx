@@ -12,7 +12,6 @@ import { useAppDispatch } from 'state'
 import { fetchFarmUserDataAsync } from 'state/farms'
 import { useFarmUser, useFetchFarmUserAllowances, useFetchFarmUserEarnings, useFetchFarmUserStakedBalances, useFetchFarmUserTokenBalances, useLpTokenPrice, usePriceHelixBusd } from 'state/farms/hooks'
 import styled from 'styled-components'
-import { getAddress } from 'utils/addressHelpers'
 import { getBalanceAmount, getBalanceNumber } from 'utils/formatBalance'
 import getLiquidityUrlPathParts from 'utils/getLiquidityUrlPathParts'
 import { logError } from 'utils/sentry'
@@ -41,7 +40,7 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
   multiplier,
   lpSymbol,
   lpLabel,
-  lpAddresses,
+  lpAddress,
   quoteToken,
   token,
   userDataReady,
@@ -64,7 +63,6 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
 
   const isApproved = account && allowance && allowance.isGreaterThan(0)
 
-  const lpAddress = getAddress(chainId, lpAddresses)
   const liquidityUrlPathParts = getLiquidityUrlPathParts({
     quoteTokenAddress: quoteToken.address,
     tokenAddress: token.address,

@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import erc20 from 'config/abi/erc20.json'
 import { chunk } from 'lodash'
-import { getAddress, getMasterChefAddress } from 'utils/addressHelpers'
+import { getMasterChefAddress } from 'utils/addressHelpers'
 import { useMulticallv2 } from 'hooks/useMulticall'
 import { ChainId } from 'sdk'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
@@ -9,8 +9,7 @@ import { SerializedFarm } from '../types'
 import { SerializedFarmConfig } from '../../config/constants/types'
 
 const fetchFarmCalls = (chainId: ChainId, farm: SerializedFarm) => {
-    const { lpAddresses, token, quoteToken } = farm
-    const lpAddress = getAddress(chainId, lpAddresses)
+    const { lpAddress, token, quoteToken } = farm
     return [
         // Balance of token in the LP contract
         {

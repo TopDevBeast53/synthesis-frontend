@@ -23,32 +23,32 @@ const getFarmBaseTokenPrice = (
     helixPriceUSDC: BigNumber,
 ): BigNumber => {
     const hasTokenPriceVsQuote = Boolean(farm.tokenPriceVsQuote)
-
-    if (farm.quoteToken.symbol === getTokens(chainId).usdc.symbol) {
+    const tokens = getTokens(chainId);
+    if (farm.quoteToken.symbol === tokens.usdc.symbol) {
         return hasTokenPriceVsQuote ? new BigNumber(farm.tokenPriceVsQuote) : BIG_ZERO
     }
 
-    if (farm.quoteToken.symbol === getTokens(chainId).usdt.symbol) {
-        return hasTokenPriceVsQuote ? new BigNumber(farm.tokenPriceVsQuote) : BIG_ZERO
-    }
-    
-    if (farm.quoteToken.symbol === getTokens(chainId).dai.symbol) {
+    if (farm.quoteToken.symbol === tokens.usdt.symbol) {
         return hasTokenPriceVsQuote ? new BigNumber(farm.tokenPriceVsQuote) : BIG_ZERO
     }
 
-    if (farm.quoteToken.symbol === getTokens(chainId).fei.symbol) {
+    if (farm.quoteToken.symbol === tokens.dai.symbol) {
         return hasTokenPriceVsQuote ? new BigNumber(farm.tokenPriceVsQuote) : BIG_ZERO
     }
 
-    if (farm.quoteToken.symbol === getTokens(chainId).frax.symbol) {
+    if (farm.quoteToken.symbol === tokens.fei.symbol) {
         return hasTokenPriceVsQuote ? new BigNumber(farm.tokenPriceVsQuote) : BIG_ZERO
     }
 
-    if (farm.quoteToken.symbol === getTokens(chainId).weth.symbol) {
+    if (farm.quoteToken.symbol === tokens.frax.symbol) {
+        return hasTokenPriceVsQuote ? new BigNumber(farm.tokenPriceVsQuote) : BIG_ZERO
+    }
+
+    if (farm.quoteToken.symbol === tokens.weth.symbol) {
         return hasTokenPriceVsQuote ? wethPriceUSDC.times(farm.tokenPriceVsQuote) : BIG_ZERO
     }
 
-    if (farm.quoteToken.symbol === getTokens(chainId).helix.symbol) {
+    if (farm.quoteToken.symbol === tokens.helix.symbol) {
         return hasTokenPriceVsQuote ? helixPriceUSDC.times(farm.tokenPriceVsQuote) : BIG_ZERO
     }
 
@@ -62,14 +62,14 @@ const getFarmBaseTokenPrice = (
     // If the farm's quote token isn't BUSD or WBNB, we then use the quote token, of the original farm's quote token
     // i.e. for farm PNT - pBTC we use the pBTC farm's quote token - BNB, (pBTC - BNB)
     // from the BNB - pBTC price, we can calculate the PNT - BUSD price
-    if (quoteTokenFarm.quoteToken.symbol === getTokens(chainId).weth.symbol) {
+    if (quoteTokenFarm.quoteToken.symbol === tokens.weth.symbol) {
         const quoteTokenInBusd = wethPriceUSDC.times(quoteTokenFarm.tokenPriceVsQuote)
         return hasTokenPriceVsQuote && quoteTokenInBusd
             ? new BigNumber(farm.tokenPriceVsQuote).times(quoteTokenInBusd)
             : BIG_ZERO
     }
 
-    if (quoteTokenFarm.quoteToken.symbol === getTokens(chainId).usdc.symbol) {
+    if (quoteTokenFarm.quoteToken.symbol === tokens.usdc.symbol) {
         const quoteTokenInBusd = quoteTokenFarm.tokenPriceVsQuote
         return hasTokenPriceVsQuote && quoteTokenInBusd
             ? new BigNumber(farm.tokenPriceVsQuote).times(quoteTokenInBusd)

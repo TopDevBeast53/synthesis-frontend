@@ -36,7 +36,7 @@ export const SUPPORTED_NETWORKS: { [key: number]: CHAIN_CONFIG } = {
         blockExplorerUrls: ['https://rinkeby.etherscan.io/'],
         logoUrl: '/images/networks/rinkeby-network.jpg',
         label: 'Rinkeby',
-        showOnlyTrade: true,
+        showOnlyTrade: false,
         isTestChain: true
     },
     [ChainId.RSK_MAINNET]: {
