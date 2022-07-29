@@ -6,7 +6,7 @@ import { BASE_ADD_LIQUIDITY_URL } from 'config'
 import { useTranslation } from 'contexts/Localization'
 import { useERC20 } from 'hooks/useContract'
 import useToast from 'hooks/useToast'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useAppDispatch } from 'state'
 import { fetchFarmUserDataAsync } from 'state/farms'
@@ -16,6 +16,7 @@ import { getBalanceAmount, getBalanceNumber } from 'utils/formatBalance'
 import getLiquidityUrlPathParts from 'utils/getLiquidityUrlPathParts'
 import { logError } from 'utils/sentry'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import { BIG_ZERO } from 'utils/bigNumber'
 import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'
 import useApproveFarm from '../../../hooks/useApproveFarm'
 import useStakeFarms from '../../../hooks/useStakeFarms'
@@ -49,7 +50,20 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
   const { t } = useTranslation()
   const { toastError } = useToast()
   const [requestedApproval, setRequestedApproval] = useState(false)
-  const { allowance, tokenBalance, stakedBalance } = useFarmUser(pid)
+  const farmUser = useFarmUser(pid)
+  const { allowance, tokenBalance, stakedBalance } = useMemo(() => {
+    if (farmUser === null)
+      return {
+        allowance: BIG_ZERO,
+        tokenBalance: BIG_ZERO,
+        stakedBalance: BIG_ZERO
+      }
+    return {
+      allowance: farmUser.allowance,
+      tokenBalance: farmUser.tokenBalance,
+      stakedBalance: farmUser.stakedBalance
+    }
+  }, [farmUser])
   const { onStake } = useStakeFarms(pid)
   const { onUnstake } = useUnstakeFarms(pid)
   const location = useLocation()

@@ -151,7 +151,6 @@ export const farmsSlice = createSlice({
                 const currentFarmData = state.data.find(farmData => farmData.pid === farm.pid)
                 return {
                     ...farm,
-                    ...(liveFarmData || {}),
                     ...(currentFarmData || {
                         userData: {
                             allowance: '0',
@@ -159,7 +158,8 @@ export const farmsSlice = createSlice({
                             stakedBalance: '0',
                             earnings: '0',
                         }
-                    })
+                    }),
+                    ...(liveFarmData || {}),
                 }
             })
         })

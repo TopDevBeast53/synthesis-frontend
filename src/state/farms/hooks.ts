@@ -179,7 +179,7 @@ export const useLpTokenPrice = (symbol: string) => {
     return useMemo(() => {
         let lpTokenPrice = BIG_ZERO
 
-        if (farm.lpTotalSupply.gt(0) && farm.lpTotalInQuoteToken.gt(0)) {
+        if (farm && farm.lpTotalSupply.gt(0) && farm.lpTotalInQuoteToken.gt(0)) {
             // Total value of base token in LP
             const valueOfBaseTokenInFarm = farmTokenPriceInUsd.times(farm.tokenAmountTotal)
             // Double it to get overall value in LP
@@ -190,7 +190,7 @@ export const useLpTokenPrice = (symbol: string) => {
         }
 
         return lpTokenPrice
-    }, [farm.lpTotalInQuoteToken, farm.lpTotalSupply, farm.tokenAmountTotal, farmTokenPriceInUsd])
+    }, [farm, farmTokenPriceInUsd])
 }
 
 /**
