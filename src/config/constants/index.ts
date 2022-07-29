@@ -1,5 +1,5 @@
 import { ChainId, JSBI, Percent, Token } from 'sdk'
-import { mainnetTokens, testnetTokens } from './tokens'
+import { mainnetTokens, rskTestnetTokens, testnetTokens } from './tokens'
 
 // a list of router addresses by chain
 type RouterAddressesList = {
@@ -26,9 +26,17 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
         mainnetTokens.usdt,
         mainnetTokens.usdc,
     ],
-    [ChainId.TESTNET]: [testnetTokens.weth, testnetTokens.helix, testnetTokens.usdc],
+    [ChainId.TESTNET]: [
+        testnetTokens.weth,
+        testnetTokens.helix,
+        testnetTokens.usdc
+    ],
     [ChainId.RSK_MAINNET]: [],
-    [ChainId.RSK_TESTNET]: [],
+    [ChainId.RSK_TESTNET]: [
+        rskTestnetTokens.helix,
+        rskTestnetTokens.weth,
+        rskTestnetTokens.usdt
+    ],
 }
 
 /**
@@ -50,18 +58,41 @@ export const CUSTOM_BASES: { [chainId in ChainId]?: { [tokenAddress: string]: To
 
 // used for display in the default list when adding liquidity
 export const SUGGESTED_BASES: ChainTokenList = {
-    [ChainId.MAINNET]: [mainnetTokens.weth, mainnetTokens.dai, mainnetTokens.usdt],
-    [ChainId.TESTNET]: [testnetTokens.weth, testnetTokens.dai, testnetTokens.usdc],
+    [ChainId.MAINNET]: [
+        mainnetTokens.weth,
+        mainnetTokens.dai,
+        mainnetTokens.usdt
+    ],
+    [ChainId.TESTNET]: [
+        testnetTokens.weth,
+        testnetTokens.dai,
+        testnetTokens.usdc
+    ],
     [ChainId.RSK_MAINNET]: [],
-    [ChainId.RSK_TESTNET]: [],
+    [ChainId.RSK_TESTNET]: [
+        rskTestnetTokens.weth,
+        rskTestnetTokens.usdt
+    ],
 }
 
 // used to construct the list of all pairs we consider by default in the frontend
 export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
-    [ChainId.MAINNET]: [mainnetTokens.weth, mainnetTokens.dai, mainnetTokens.usdc, mainnetTokens.usdt],
-    [ChainId.TESTNET]: [testnetTokens.weth, testnetTokens.dai, testnetTokens.usdc],
+    [ChainId.MAINNET]: [
+        mainnetTokens.weth,
+        mainnetTokens.dai,
+        mainnetTokens.usdc,
+        mainnetTokens.usdt
+    ],
+    [ChainId.TESTNET]: [
+        testnetTokens.weth,
+        testnetTokens.dai,
+        testnetTokens.usdc
+    ],
     [ChainId.RSK_MAINNET]: [],
-    [ChainId.RSK_TESTNET]: [],
+    [ChainId.RSK_TESTNET]: [
+        rskTestnetTokens.weth,
+        rskTestnetTokens.usdt
+    ],
 }
 
 export const PINNED_PAIRS: { readonly [chainId in ChainId]?: [Token, Token][] } = {

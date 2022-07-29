@@ -12,9 +12,15 @@ const getLiquidityUrlPathParts = ({
     quoteTokenAddress: string
     tokenAddress: string
 }): string => {
-    const wEthAddress = getTokens(chainId).weth.address
-    const firstPart = !quoteTokenAddress || quoteTokenAddress === wEthAddress ? 'ETH' : quoteTokenAddress
-    const secondPart = !tokenAddress || tokenAddress === wEthAddress ? 'ETH' : tokenAddress
+    if ([ChainId.MAINNET, ChainId.TESTNET].includes(chainId)) {
+        const wEthAddress = getTokens(chainId).weth.address
+        const firstPart = !quoteTokenAddress || quoteTokenAddress === wEthAddress ? 'ETH' : quoteTokenAddress
+        const secondPart = !tokenAddress || tokenAddress === wEthAddress ? 'ETH' : tokenAddress
+        return `${firstPart}/${secondPart}`
+    }
+    const wRbtcAddress = getTokens(chainId).weth.address
+    const firstPart = !quoteTokenAddress || quoteTokenAddress === wRbtcAddress ? 'RBTC' : quoteTokenAddress
+    const secondPart = !tokenAddress || tokenAddress === wRbtcAddress ? 'RBTC' : tokenAddress
     return `${firstPart}/${secondPart}`
 }
 

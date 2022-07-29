@@ -136,19 +136,19 @@ export default {
         1: '0x1B19916FeA44dbFb2bA76F5875191F842CF0B201',
         4: '0x72Cb0a06D1ED7432F480b176720878c674C673CA',
         30: '',
-        31: ''
+        31: '0xa8fa52ED5a03e402916343DfC498071f9b2148B0'
     },
     masterChef: {
         1: '0xa4c1135f0C0123f6683F98A8177F4c51F3179107',
         4: '0xE58b6cB4f216e79b959C37CD681d8483a0B97DA0',
         30: '',
-        31: ''
+        31: '0xE5B2B45e06F6004147e5b1FBbDd183DB0e6EEc6F'
     },
     helixAutoPool: {
         1: '0xabc7303d27658a277830a1F64B3CA77dFFA10483',
         4: '0xE3157d8338b593d5F7Bf0A5094a7Dd886aDb3bA9',
         30: '',
-        31: ''
+        31: '0x443d8b9263b0d506Fd0Acb5B5e7fC013B3841164'
     },
     helixNFT: {
         1: '0x6D90915AFcd1577DfF311d9c20d5aCD959fC7C8a',
@@ -172,19 +172,19 @@ export default {
         1: '0x559432a801cDD68ef2714c40463F05d0B32C8e18',
         4: '0x9151B9BE983a67aaABD71fAF587342aB17900b84',
         30: '',
-        31: ''
+        31: '0xba4d628ddA76aF2D7503033F3a6f7f329fF39E55'
     },
     referralRegister: {
         1: '0x333F0b40A2DCe9C51AC8744126d9c75f6C4EFb4F',
         4: '0x57370F637BB1aC6e4D667561DDF1AAbF9c7B2590',
         30: '',
-        31: ''
+        31: '0x7A7db73e79610fE42cDFD4E043DF0aCDA4c48E73'
     },
     helixVault: {
         1: '0x45ee118463cD4dc310bd0A2e8C9e211E815b809a',
         4: '0x7499e22C276CE488C8BC44ee4B884E39cC598EdB',
         30: '',
-        31: ''
+        31: '0x510085FDBD2123d3753Aa61C495af7d863746c24'
     },
     helixYieldSwap: {
         1: '0x5e901F3b57522d3C8071130cdC5c891Dad03Bb5e',
