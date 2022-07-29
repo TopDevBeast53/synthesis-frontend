@@ -92,7 +92,7 @@ const Proposal = () => {
         return vote.voter
       })
 
-      try{
+      try {
         const vps = await snapshot.utils.getScores(
           proposal.space.id,
           strategies,
@@ -106,9 +106,8 @@ const Proposal = () => {
         if (mounted) {
           setVotes(updatedVotes)
         }
-      } catch(error){
+      } catch (error) {
         console.debug(error)
-      } finally {
         if (mounted) {
           setVotes(originalVotes)
         }
