@@ -52,6 +52,10 @@ const getFarmBaseTokenPrice = (
         return hasTokenPriceVsQuote ? helixPriceUSDC.times(farm.tokenPriceVsQuote) : BIG_ZERO
     }
 
+    if (tokens.weth && farm.quoteToken.symbol === tokens.weth.symbol) {
+        return hasTokenPriceVsQuote ? wethPriceUSDC.times(farm.tokenPriceVsQuote) : BIG_ZERO
+    }
+
     // We can only calculate rewards without a quoteTokenFarm for BUSD/BNB farms
     if (!quoteTokenFarm) {
         return BIG_ZERO
@@ -70,6 +74,13 @@ const getFarmBaseTokenPrice = (
     }
 
     if (tokens.usdc && quoteTokenFarm.quoteToken.symbol === tokens.usdc.symbol) {
+        const quoteTokenInBusd = quoteTokenFarm.tokenPriceVsQuote
+        return hasTokenPriceVsQuote && quoteTokenInBusd
+            ? new BigNumber(farm.tokenPriceVsQuote).times(quoteTokenInBusd)
+            : BIG_ZERO
+    }
+
+    if (tokens.usdt && quoteTokenFarm.quoteToken.symbol === tokens.usdt.symbol) {
         const quoteTokenInBusd = quoteTokenFarm.tokenPriceVsQuote
         return hasTokenPriceVsQuote && quoteTokenInBusd
             ? new BigNumber(farm.tokenPriceVsQuote).times(quoteTokenInBusd)
@@ -114,6 +125,10 @@ const getFarmQuoteTokenPrice = (
         return helixPriceUSDC
     }
 
+    if (farm.quoteToken.symbol === 'WRBTC') {
+        return wethPriceUSDC
+    }
+
     if (!quoteTokenFarm) {
         return BIG_ZERO
     }
@@ -144,6 +159,10 @@ const getFarmQuoteTokenPrice = (
 
     if (quoteTokenFarm.quoteToken.symbol === 'FEI') {
         return quoteTokenFarm.tokenPriceVsQuote ? new BigNumber(quoteTokenFarm.tokenPriceVsQuote) : BIG_ZERO
+    }
+
+    if (quoteTokenFarm.quoteToken.symbol === 'WRBTC') {
+        return quoteTokenFarm.tokenPriceVsQuote ? wethPriceUSDC.times(quoteTokenFarm.tokenPriceVsQuote) : BIG_ZERO
     }
 
     return BIG_ZERO

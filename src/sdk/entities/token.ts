@@ -88,6 +88,22 @@ export const WETH = {
         'Wrapped ETH',
         'https://www.ethereum.org/',
     ),
+    [ChainId.RSK_MAINNET]: new Token(
+        ChainId.RSK_TESTNET,
+        '0xd07445d75A1A18A0030Bf7786990F3C1Ee71dB6e',
+        18,
+        'WRBTC',
+        'Wrapped RSK Bitcoin',
+        'https://www.rsk.co/',
+    ),
+    [ChainId.RSK_TESTNET]: new Token(
+        ChainId.RSK_TESTNET,
+        '0xd07445d75A1A18A0030Bf7786990F3C1Ee71dB6e',
+        18,
+        'WRBTC',
+        'Wrapped RSK Bitcoin',
+        'https://www.rsk.co/',
+    ),
 }
 
 // export const WRBTC = {

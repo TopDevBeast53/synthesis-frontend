@@ -1,16 +1,18 @@
 import { ChainId } from 'sdk'
-import { serializeTokensMainNet, serializeTokensTestNet } from './tokens'
+import { serializeTokensMainNet, serializeTokensRSKMainNet, serializeTokensRSKTestNet, serializeTokensTestNet } from './tokens'
 import { SerializedFarmConfig } from './types'
 
 const getFarms = (chainId: ChainId): SerializedFarmConfig[] => {
     switch (chainId) {
         case ChainId.MAINNET:
             return getFarmsMainNet()
-        case ChainId.RSK_MAINNET:
-        case ChainId.RSK_TESTNET:
         case ChainId.TESTNET:
+            return getFarmsTestNet()
+        case ChainId.RSK_MAINNET:
+            return getFarmsRSKMainNet()
+        case ChainId.RSK_TESTNET:
         default:
-            return getFarmsTest()
+            return getFarmsRSKTestNet()
 
     }
 }
@@ -126,7 +128,7 @@ const getFarmsMainNet = (): SerializedFarmConfig[] => {
     ]
 }
 
-const getFarmsTest = (): SerializedFarmConfig[] => {
+const getFarmsTestNet = (): SerializedFarmConfig[] => {
     const serializedTokens = serializeTokensTestNet()
     return [
         {
@@ -143,13 +145,6 @@ const getFarmsTest = (): SerializedFarmConfig[] => {
             token: serializedTokens.helix,
             quoteToken: serializedTokens.weth,
         },
-        // {
-        //     pid: 11,
-        //     lpSymbol: 'HELIX-USDC',
-        //     lpAddresse: '0x5442eaa8b522e1A4eee64d441c5a6243baF83f0C',
-        //     token: serializedTokens.helix,
-        //     quoteToken: serializedTokens.usdc,
-        // },
         {
             pid: 2,
             lpSymbol: 'DAI-USDC',
@@ -181,5 +176,100 @@ const getFarmsTest = (): SerializedFarmConfig[] => {
     ]
 }
 
+const getFarmsRSKTestNet = (): SerializedFarmConfig[] => {
+    const serializedTokens = serializeTokensRSKTestNet()
+    return [
+        {
+            pid: 0,
+            lpSymbol: 'HELIX',
+            lpAddress: serializedTokens.helix.address,
+            token: serializedTokens.helix,
+            quoteToken: serializedTokens.weth,
+        },
+        {
+            pid: 1,
+            lpSymbol: 'RHELIX-WRBTC',
+            lpAddress: '0x792Ba36a0dF41141072A04C4485E393EC8dD7129',
+            token: serializedTokens.helix,
+            quoteToken: serializedTokens.weth,
+        },
+        {
+            pid: 2,
+            lpSymbol: 'RHELIX-RUSDT',
+            lpAddress: '0xb7190921ec3082d8227b02dC95A2d6f5b4AFCcDC',
+            token: serializedTokens.helix,
+            quoteToken: serializedTokens.usdt,
+        },
+        {
+            pid: 3,
+            lpSymbol: 'RUSDT-WRBTC',
+            lpAddress: '0x810b968858233e4F2873295D409f4E91998207CE',
+            token: serializedTokens.weth,
+            quoteToken: serializedTokens.usdt,
+        },
+        {
+            pid: 4,
+            lpSymbol: 'RIF-WRBTC',
+            lpAddress: '0xa38B0DEB3d32673dC2CF4bE1B3af8233048A263E',
+            token: serializedTokens.rif,
+            quoteToken: serializedTokens.weth,
+        },
+        {
+            pid: 5,
+            lpSymbol: 'SOV-WRBTC',
+            lpAddress: '0x5863A6b17B8F2898B08c92ba2CBBAdfD8C588812',
+            token: serializedTokens.sov,
+            quoteToken: serializedTokens.weth,
+        },
+    ]
+}
+
+const getFarmsRSKMainNet = (): SerializedFarmConfig[] => {
+    const serializedTokens = serializeTokensRSKMainNet()
+    return [
+        {
+            pid: 0,
+            lpSymbol: 'HELIX',
+            lpAddress: serializedTokens.helix.address,
+            token: serializedTokens.helix,
+            quoteToken: serializedTokens.weth,
+        },
+        {
+            pid: 1,
+            lpSymbol: 'RHELIX-WRBTC',
+            lpAddress: '0x792Ba36a0dF41141072A04C4485E393EC8dD7129',
+            token: serializedTokens.helix,
+            quoteToken: serializedTokens.weth,
+        },
+        {
+            pid: 2,
+            lpSymbol: 'RHELIX-RUSDT',
+            lpAddress: '0xb7190921ec3082d8227b02dC95A2d6f5b4AFCcDC',
+            token: serializedTokens.helix,
+            quoteToken: serializedTokens.usdt,
+        },
+        {
+            pid: 3,
+            lpSymbol: 'RUSDT-WRBTC',
+            lpAddress: '0x810b968858233e4F2873295D409f4E91998207CE',
+            token: serializedTokens.weth,
+            quoteToken: serializedTokens.usdt,
+        },
+        {
+            pid: 4,
+            lpSymbol: 'RIF-WRBTC',
+            lpAddress: '0xa38B0DEB3d32673dC2CF4bE1B3af8233048A263E',
+            token: serializedTokens.rif,
+            quoteToken: serializedTokens.weth,
+        },
+        {
+            pid: 5,
+            lpSymbol: 'SOV-WRBTC',
+            lpAddress: '0x5863A6b17B8F2898B08c92ba2CBBAdfD8C588812',
+            token: serializedTokens.sov,
+            quoteToken: serializedTokens.weth,
+        },
+    ]
+}
 
 export default getFarms

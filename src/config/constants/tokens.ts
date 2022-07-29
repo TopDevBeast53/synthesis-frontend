@@ -2,7 +2,7 @@ import { ChainId, Token } from 'sdk'
 import { serializeToken } from 'state/user/hooks/helpers'
 import { SerializedToken } from './types'
 
-const { MAINNET, TESTNET } = ChainId
+const { MAINNET, TESTNET, RSK_MAINNET, RSK_TESTNET } = ChainId
 
 interface TokenList {
     [symbol: string]: Token
@@ -177,35 +177,82 @@ export const testnetTokens = defineTokens({
     ),
 } as const)
 
+export const rskTestnetTokens = defineTokens({
+    helix: new Token(
+        RSK_TESTNET,
+        '0x08626CF6A212a44C877D9740f86252dBD6292364',
+        18,
+        'HELIX',
+        'Helix',
+        'https://helix.finance/',
+    ),
+    weth: new Token(
+        RSK_TESTNET,
+        '0xd07445d75A1A18A0030Bf7786990F3C1Ee71dB6e',
+        18,
+        'WRBTC',
+        'Wrapped RSK Bitcoin',
+        'https://www.rsk.co/',
+    ),
+    usdt: new Token(
+        RSK_TESTNET,
+        '0x760ae0f5319D9efEdc9B99d7E73fdaB2f84E4d87',
+        18,
+        'rUSDT',
+        'Wrapped RSK USDT',
+        'https://tether.to/',
+    ),
+    rif: new Token(
+        RSK_TESTNET,
+        '0x700E1B86F9c47E10AB94FaA7E6C8260C0F07074D',
+        18,
+        'RIF',
+        'RIF',
+        'https://www.makerdao.com/',
+    ),
+    sov: new Token(
+        RSK_TESTNET,
+        '0xf5aBC0d6239D494AED4433189e1Ccb96B50E2be8',
+        18,
+        'SOV',
+        'SOV',
+        'https://www.makerdao.com/',
+    ),
+} as const)
+
+
 const tokens = {
-    [ChainId.MAINNET]: mainnetTokens,
-    [ChainId.TESTNET]: testnetTokens,
-    [ChainId.RSK_MAINNET]: testnetTokens,
-    [ChainId.RSK_TESTNET]: testnetTokens,
+    [MAINNET]: mainnetTokens,
+    [TESTNET]: testnetTokens,
+    [RSK_MAINNET]: testnetTokens,
+    [RSK_TESTNET]: rskTestnetTokens,
 }
 
-type SerializedTokenList = typeof mainnetTokens & typeof testnetTokens;
+type SerializedTokenList = typeof mainnetTokens & typeof testnetTokens & typeof rskTestnetTokens;
 const getTokens = (chainId: ChainId): SerializedTokenList => {
     return tokens[chainId] as SerializedTokenList
 }
 
 type SerializedTokenListMainNet = Record<keyof typeof mainnetTokens, SerializedToken>
 type SerializedTokenListTestNet = Record<keyof typeof testnetTokens, SerializedToken>
+type SerializedTokenListRSKTestNet = Record<keyof typeof rskTestnetTokens, SerializedToken>
+type SerializedTokenListRSKMainNet = Record<keyof typeof rskTestnetTokens, SerializedToken>
 export const serializeTokens = (chainId: ChainId) => {
     switch (chainId) {
-        case ChainId.MAINNET:
-            return serializeTokensMainNet();
-        case ChainId.TESTNET:
-            return serializeTokensTestNet();
-        case ChainId.RSK_MAINNET:
-        case ChainId.RSK_TESTNET:
+        case MAINNET:
+            return serializeTokensMainNet()
+        case TESTNET:
+            return serializeTokensTestNet()
+        case RSK_MAINNET:
+            return serializeTokensRSKMainNet()
+        case RSK_TESTNET:
         default:
-            return serializeTokensTestNet();
+            return serializeTokensRSKTestNet()
     }
 }
 
 export const serializeTokensMainNet = () => {
-    const unserializedTokens = getTokens(ChainId.MAINNET)
+    const unserializedTokens = getTokens(MAINNET)
     const serializedTokens = Object.keys(unserializedTokens).reduce((accum, key) => {
         return { ...accum, [key]: serializeToken(unserializedTokens[key]) }
     }, {} as SerializedTokenListMainNet)
@@ -214,10 +261,28 @@ export const serializeTokensMainNet = () => {
 }
 
 export const serializeTokensTestNet = () => {
-    const unserializedTokens = getTokens(ChainId.TESTNET)
+    const unserializedTokens = getTokens(TESTNET)
     const serializedTokens = Object.keys(unserializedTokens).reduce((accum, key) => {
         return { ...accum, [key]: serializeToken(unserializedTokens[key]) }
     }, {} as SerializedTokenListTestNet)
+
+    return serializedTokens
+}
+
+export const serializeTokensRSKTestNet = () => {
+    const unserializedTokens = getTokens(RSK_TESTNET)
+    const serializedTokens = Object.keys(unserializedTokens).reduce((accum, key) => {
+        return { ...accum, [key]: serializeToken(unserializedTokens[key]) }
+    }, {} as SerializedTokenListRSKTestNet)
+
+    return serializedTokens
+}
+
+export const serializeTokensRSKMainNet = () => {
+    const unserializedTokens = getTokens(RSK_MAINNET)
+    const serializedTokens = Object.keys(unserializedTokens).reduce((accum, key) => {
+        return { ...accum, [key]: serializeToken(unserializedTokens[key]) }
+    }, {} as SerializedTokenListRSKMainNet)
 
     return serializedTokens
 }
