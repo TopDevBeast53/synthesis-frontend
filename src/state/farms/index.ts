@@ -14,18 +14,18 @@ import { ChainId } from 'sdk'
 import getFarmsPrices from './getFarmsPrices'
 import { SerializedFarmsState, SerializedFarm } from '../types'
 
-const noAccountFarmConfig = getFarms(ChainId.MAINNET).map((farm) => ({
-    ...farm,
-    userData: {
-        allowance: '0',
-        tokenBalance: '0',
-        stakedBalance: '0',
-        earnings: '0',
-    },
-}))
+// const noAccountFarmConfig = getFarms(ChainId.MAINNET).map((farm) => ({
+//     ...farm,
+//     userData: {
+//         allowance: '0',
+//         tokenBalance: '0',
+//         stakedBalance: '0',
+//         earnings: '0',
+//     },
+// }))
 
 const initialState: SerializedFarmsState = {
-    data: noAccountFarmConfig,
+    data: [],
     loadArchivedFarmsData: false,
     userDataLoaded: false,
     loadingKeys: {},
@@ -50,7 +50,6 @@ export const fetchFarmsPublicDataAsync = createAsyncThunk<
 
         const farms = await fetchFarms(farmsWithPriceHelpers)
         const farmsWithPrices = getFarmsPrices(chainId, farms)
-
         // Filter out price helper LP config farms
         const farmsWithoutHelperLps = farmsWithPrices.filter((farm: SerializedFarm) => {
             return farm.pid || farm.pid === 0
@@ -146,9 +145,22 @@ export const farmsSlice = createSlice({
     extraReducers: (builder) => {
         // Update farms with live data
         builder.addCase(fetchFarmsPublicDataAsync.fulfilled, (state, action) => {
-            state.data = state.data.map((farm) => {
+            const farms = getFarms(action.meta.arg.chainId);
+            state.data = farms.map((farm) => {
                 const liveFarmData = action.payload.find((farmData) => farmData.pid === farm.pid)
-                return { ...farm, ...liveFarmData }
+                const currentFarmData = state.data.find(farmData => farmData.pid === farm.pid)
+                return {
+                    ...farm,
+                    ...(liveFarmData || {}),
+                    ...(currentFarmData || {
+                        userData: {
+                            allowance: '0',
+                            tokenBalance: '0',
+                            stakedBalance: '0',
+                            earnings: '0',
+                        }
+                    })
+                }
             })
         })
 
@@ -157,7 +169,8 @@ export const farmsSlice = createSlice({
             action.payload.forEach((userDataEl) => {
                 const { pid } = userDataEl
                 const index = state.data.findIndex((farm) => farm.pid === pid)
-                state.data[index] = { ...state.data[index], userData: userDataEl }
+                if (index !== -1)
+                    state.data[index] = { ...state.data[index], userData: userDataEl }
             })
             state.userDataLoaded = true
         })

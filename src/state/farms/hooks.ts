@@ -27,8 +27,8 @@ const deserializeFarmUserData = (farm: SerializedFarm): DeserializedFarmUserData
 }
 
 const deserializeFarm = (farm: SerializedFarm): DeserializedFarm => {
+    if (farm === undefined) return null
     const { lpAddress, lpSymbol, pid, dual, multiplier, isCommunity, quoteTokenPriceBusd, tokenPriceBusd } = farm
-
     return {
         lpAddress,
         lpSymbol,
@@ -112,13 +112,15 @@ export const usePollCoreFarmData = () => {
 
 export const useFarms = (): DeserializedFarmsState => {
     const farms = useSelector((state: State) => state.farms)
-    const deserializedFarmsData = farms.data.map(deserializeFarm)
     const { loadArchivedFarmsData, userDataLoaded } = farms
-    return {
-        loadArchivedFarmsData,
-        userDataLoaded,
-        data: deserializedFarmsData,
-    }
+    return useMemo(() => {
+        const deserializedFarmsData = farms.data.map(deserializeFarm)
+        return {
+            loadArchivedFarmsData,
+            userDataLoaded,
+            data: deserializedFarmsData,
+        }
+    }, [farms.data, loadArchivedFarmsData, userDataLoaded])
 }
 
 export const useMemoFarms = (): DeserializedFarmsState => {
@@ -151,7 +153,9 @@ export const useFarmFromLpAddress = (lpAddress: string): DeserializedFarm => {
 }
 
 export const useFarmUser = (pid): DeserializedFarmUserData => {
-    const { userData } = useFarmFromPid(pid)
+    const farm = useFarmFromPid(pid)
+    if (farm === null) return null
+    const { userData } = farm
     const { allowance, tokenBalance, stakedBalance, earnings } = userData
     return {
         allowance,
@@ -164,12 +168,13 @@ export const useFarmUser = (pid): DeserializedFarmUserData => {
 // Return the base token price for a farm, from a given pid
 export const useBusdPriceFromPid = (pid: number): BigNumber => {
     const farm = useFarmFromPid(pid)
-    return farm && new BigNumber(farm.tokenPriceBusd)
+    return farm ? new BigNumber(farm.tokenPriceBusd) : BIG_ZERO
 }
 
 export const useLpTokenPrice = (symbol: string) => {
     const farm = useFarmFromLpSymbol(symbol)
-    const farmTokenPriceInUsd = useBusdPriceFromPid(farm.pid)
+
+    const farmTokenPriceInUsd = useBusdPriceFromPid(farm ? farm.pid : -1)
     let lpTokenPrice = BIG_ZERO
 
     if (farm.lpTotalSupply.gt(0) && farm.lpTotalInQuoteToken.gt(0)) {
@@ -191,11 +196,11 @@ export const useLpTokenPrice = (symbol: string) => {
 export const usePriceHelixBusd = (): BigNumber => {
     const helixBnbFarm = useFarmFromPid(1)
 
-    const helixPriceBusdAsString = helixBnbFarm.tokenPriceBusd
-
     const helixPriceBusd = useMemo(() => {
+        if (helixBnbFarm === null) return BIG_ZERO
+        const helixPriceBusdAsString = helixBnbFarm.tokenPriceBusd
         return new BigNumber(helixPriceBusdAsString)
-    }, [helixPriceBusdAsString])
+    }, [helixBnbFarm])
 
     return helixPriceBusd
 }
