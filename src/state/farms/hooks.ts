@@ -27,8 +27,8 @@ const deserializeFarmUserData = (farm: SerializedFarm): DeserializedFarmUserData
 }
 
 const deserializeFarm = (farm: SerializedFarm): DeserializedFarm => {
+    if (farm === undefined) return null
     const { lpAddress, lpSymbol, pid, dual, multiplier, isCommunity, quoteTokenPriceBusd, tokenPriceBusd } = farm
-
     return {
         lpAddress,
         lpSymbol,
@@ -112,13 +112,15 @@ export const usePollCoreFarmData = () => {
 
 export const useFarms = (): DeserializedFarmsState => {
     const farms = useSelector((state: State) => state.farms)
-    const deserializedFarmsData = farms.data.map(deserializeFarm)
     const { loadArchivedFarmsData, userDataLoaded } = farms
-    return {
-        loadArchivedFarmsData,
-        userDataLoaded,
-        data: deserializedFarmsData,
-    }
+    return useMemo(() => {
+        const deserializedFarmsData = farms.data.map(deserializeFarm)
+        return {
+            loadArchivedFarmsData,
+            userDataLoaded,
+            data: deserializedFarmsData,
+        }
+    }, [farms.data, loadArchivedFarmsData, userDataLoaded])
 }
 
 export const useMemoFarms = (): DeserializedFarmsState => {
@@ -137,52 +139,58 @@ export const useMemoFarms = (): DeserializedFarmsState => {
 
 export const useFarmFromPid = (pid: number): DeserializedFarm => {
     const farm = useSelector((state: State) => state.farms.data.find((f) => f.pid === pid))
-    return deserializeFarm(farm)
+    return useMemo(() => deserializeFarm(farm), [farm])
 }
 
 export const useFarmFromLpSymbol = (lpSymbol: string): DeserializedFarm => {
     const farm = useSelector((state: State) => state.farms.data.find((f) => f.lpSymbol === lpSymbol))
-    return deserializeFarm(farm)
+    return useMemo(() => deserializeFarm(farm), [farm])
 }
 
 export const useFarmFromLpAddress = (lpAddress: string): DeserializedFarm => {
     const farm = useSelector((state: State) => state.farms.data.find((f) => f.lpAddress === lpAddress))
-    return deserializeFarm(farm)
+    return useMemo(() => deserializeFarm(farm), [farm])
 }
 
 export const useFarmUser = (pid): DeserializedFarmUserData => {
-    const { userData } = useFarmFromPid(pid)
-    const { allowance, tokenBalance, stakedBalance, earnings } = userData
-    return {
-        allowance,
-        tokenBalance,
-        stakedBalance,
-        earnings,
-    }
+    const farm = useFarmFromPid(pid)
+    return useMemo(() => {
+        if (farm === null) return null
+        const { userData } = farm
+        const { allowance, tokenBalance, stakedBalance, earnings } = userData
+        return {
+            allowance,
+            tokenBalance,
+            stakedBalance,
+            earnings,
+        }
+    }, [farm])
 }
 
 // Return the base token price for a farm, from a given pid
 export const useBusdPriceFromPid = (pid: number): BigNumber => {
     const farm = useFarmFromPid(pid)
-    return farm && new BigNumber(farm.tokenPriceBusd)
+    return useMemo(() => farm ? new BigNumber(farm.tokenPriceBusd) : BIG_ZERO, [farm])
 }
 
 export const useLpTokenPrice = (symbol: string) => {
     const farm = useFarmFromLpSymbol(symbol)
-    const farmTokenPriceInUsd = useBusdPriceFromPid(farm.pid)
-    let lpTokenPrice = BIG_ZERO
+    const farmTokenPriceInUsd = useBusdPriceFromPid(farm ? farm.pid : -1)
+    return useMemo(() => {
+        let lpTokenPrice = BIG_ZERO
 
-    if (farm.lpTotalSupply.gt(0) && farm.lpTotalInQuoteToken.gt(0)) {
-        // Total value of base token in LP
-        const valueOfBaseTokenInFarm = farmTokenPriceInUsd.times(farm.tokenAmountTotal)
-        // Double it to get overall value in LP
-        const overallValueOfAllTokensInFarm = valueOfBaseTokenInFarm.times(2)
-        // Divide total value of all tokens, by the number of LP tokens
-        const totalLpTokens = getBalanceAmount(farm.lpTotalSupply)
-        lpTokenPrice = overallValueOfAllTokensInFarm.div(totalLpTokens)
-    }
+        if (farm.lpTotalSupply.gt(0) && farm.lpTotalInQuoteToken.gt(0)) {
+            // Total value of base token in LP
+            const valueOfBaseTokenInFarm = farmTokenPriceInUsd.times(farm.tokenAmountTotal)
+            // Double it to get overall value in LP
+            const overallValueOfAllTokensInFarm = valueOfBaseTokenInFarm.times(2)
+            // Divide total value of all tokens, by the number of LP tokens
+            const totalLpTokens = getBalanceAmount(farm.lpTotalSupply)
+            lpTokenPrice = overallValueOfAllTokensInFarm.div(totalLpTokens)
+        }
 
-    return lpTokenPrice
+        return lpTokenPrice
+    }, [farm.lpTotalInQuoteToken, farm.lpTotalSupply, farm.tokenAmountTotal, farmTokenPriceInUsd])
 }
 
 /**
@@ -191,11 +199,11 @@ export const useLpTokenPrice = (symbol: string) => {
 export const usePriceHelixBusd = (): BigNumber => {
     const helixBnbFarm = useFarmFromPid(1)
 
-    const helixPriceBusdAsString = helixBnbFarm.tokenPriceBusd
-
     const helixPriceBusd = useMemo(() => {
+        if (helixBnbFarm === null) return BIG_ZERO
+        const helixPriceBusdAsString = helixBnbFarm.tokenPriceBusd
         return new BigNumber(helixPriceBusdAsString)
-    }, [helixPriceBusdAsString])
+    }, [helixBnbFarm])
 
     return helixPriceBusd
 }
