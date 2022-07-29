@@ -92,18 +92,26 @@ const Proposal = () => {
         return vote.voter
       })
 
-      const vps = await snapshot.utils.getScores(
-        proposal.space.id,
-        strategies,
-        network,
-        voters,
-        Number(proposal.snapshot)
-      )
-      const updatedVotes = originalVotes.map((vote) => {
-        return { ...vote, vp: vps[0] && vps[0][vote.voter] }
-      })
-      if (mounted) {
-        setVotes(updatedVotes)
+      try{
+        const vps = await snapshot.utils.getScores(
+          proposal.space.id,
+          strategies,
+          network,
+          voters,
+          Number(proposal.snapshot)
+        )
+        const updatedVotes = originalVotes.map((vote) => {
+          return { ...vote, vp: vps[0] ? vps[0][vote.voter] : vote.vp }
+        })
+        if (mounted) {
+          setVotes(updatedVotes)
+        }
+      } catch(error){
+        console.debug(error)
+      } finally {
+        if (mounted) {
+          setVotes(originalVotes)
+        }
       }
     }
 
