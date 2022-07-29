@@ -9,8 +9,8 @@ type RouterAddressesList = {
 export const ROUTER_ADDRESS: RouterAddressesList = {
     [ChainId.MAINNET]: '0x39D660d507f1bC34DbCe94831081D6cf9131c3b9',
     [ChainId.TESTNET]: '0x484621036C7D18EDE8A267C44e3FBfDfb81135af',
-    [ChainId.RSK_MAINNET]: '', // update me
-    [ChainId.RSK_TESTNET]: '',
+    [ChainId.RSK_MAINNET]: '0x3a9D41c8f905D1744180DA36B7EB8350A67cE8e4', // update me
+    [ChainId.RSK_TESTNET]: '0x4600c109DF1E2226d7f3B10b69AAd26a2AAc1f04',
 }
 
 // a list of tokens by chain
@@ -31,7 +31,11 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
         testnetTokens.helix,
         testnetTokens.usdc
     ],
-    [ChainId.RSK_MAINNET]: [],
+    [ChainId.RSK_MAINNET]: [
+        rskTestnetTokens.helix,
+        rskTestnetTokens.weth,
+        rskTestnetTokens.usdt
+    ],
     [ChainId.RSK_TESTNET]: [
         rskTestnetTokens.helix,
         rskTestnetTokens.weth,
@@ -68,7 +72,10 @@ export const SUGGESTED_BASES: ChainTokenList = {
         testnetTokens.dai,
         testnetTokens.usdc
     ],
-    [ChainId.RSK_MAINNET]: [],
+    [ChainId.RSK_MAINNET]: [
+        rskTestnetTokens.weth,
+        rskTestnetTokens.usdt
+    ],
     [ChainId.RSK_TESTNET]: [
         rskTestnetTokens.weth,
         rskTestnetTokens.usdt
@@ -88,7 +95,10 @@ export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
         testnetTokens.dai,
         testnetTokens.usdc
     ],
-    [ChainId.RSK_MAINNET]: [],
+    [ChainId.RSK_MAINNET]: [
+        rskTestnetTokens.weth,
+        rskTestnetTokens.usdt
+    ],
     [ChainId.RSK_TESTNET]: [
         rskTestnetTokens.weth,
         rskTestnetTokens.usdt

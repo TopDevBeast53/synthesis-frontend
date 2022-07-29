@@ -220,15 +220,62 @@ export const rskTestnetTokens = defineTokens({
     ),
 } as const)
 
+export const rskMainnetTokens = defineTokens({
+    helix: new Token(
+        RSK_MAINNET,
+        '0x3D2441Fa9Aab621e72121fb1c620FDAE59eAe812',
+        18,
+        'HELIX',
+        'Helix',
+        'https://helix.finance/',
+    ),
+    weth: new Token(
+        RSK_MAINNET,
+        '0x967f8799af07df1534d48a95a5c9febe92c53ae0',
+        18,
+        'WRBTC',
+        'Wrapped RSK Bitcoin',
+        'https://www.rsk.co/',
+    ),
+    usdt: new Token(
+        RSK_MAINNET,
+        '0xef213441a85df4d7acbdae0cf78004e1e486bb96',
+        18,
+        'USDT',
+        'Wrapped RSK USDT',
+        'https://tether.to/',
+    ),
+    rif: new Token(
+        RSK_MAINNET,
+        '0x2acc95758f8b5f583470ba265eb685a8f45fc9d5',
+        18,
+        'RIF',
+        'RIF',
+        'https://www.makerdao.com/',
+    ),
+    sov: new Token(
+        RSK_MAINNET,
+        '0xefc78fc7d48b64958315949279ba181c2114abbd',
+        18,
+        'SOV',
+        'SOV',
+        'https://www.makerdao.com/',
+    ),
+} as const)
+
 
 const tokens = {
     [MAINNET]: mainnetTokens,
     [TESTNET]: testnetTokens,
-    [RSK_MAINNET]: testnetTokens,
+    [RSK_MAINNET]: rskMainnetTokens,
     [RSK_TESTNET]: rskTestnetTokens,
 }
 
-type SerializedTokenList = typeof mainnetTokens & typeof testnetTokens & typeof rskTestnetTokens;
+type SerializedTokenList = typeof mainnetTokens &
+    typeof testnetTokens &
+    typeof rskTestnetTokens &
+    typeof rskMainnetTokens
+
 const getTokens = (chainId: ChainId): SerializedTokenList => {
     return tokens[chainId] as SerializedTokenList
 }

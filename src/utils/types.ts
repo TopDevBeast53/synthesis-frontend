@@ -89,5 +89,6 @@ export type CHAIN_CONFIG = {
     logoUrl: string
     label: string,
     showOnlyTrade: boolean,
-    isTestChain: boolean
+    isTestChain: boolean,
+    apiKey?: string,
 }

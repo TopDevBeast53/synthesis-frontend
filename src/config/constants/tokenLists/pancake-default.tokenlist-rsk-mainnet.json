@@ -8,47 +8,50 @@
   },
   "tags": {},
   "logoURI": "https://pancakeswap.finance/logo.png",
-  "keywords": ["helix", "default"],
+  "keywords": [
+    "helix",
+    "default"
+  ],
   "tokens": [
     {
       "name": "Helix",
       "symbol": "HELIX",
-      "address": "0x231CC03E6d8b7368eC2aBfAfb5f73D216c8af980",
-      "chainId": 30, 
+      "address": "0x3D2441Fa9Aab621e72121fb1c620FDAE59eAe812",
+      "chainId": 30,
       "decimals": 18,
-      "logoURI": "local://images/tokens/0x231CC03E6d8b7368eC2aBfAfb5f73D216c8af980.png"
+      "logoURI": "local://images/tokens/0x3D2441Fa9Aab621e72121fb1c620FDAE59eAe812.png"
     },
     {
-      "name": "Wrapped RBTC",
+      "name": "Wrapped RSK Bitcoin",
       "symbol": "WRBTC",
-      "address": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+      "address": "0x967f8799af07df1534d48a95a5c9febe92c53ae0",
       "chainId": 30,
       "decimals": 18,
-      "logoURI": "local://images/tokens/0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2.png"
+      "logoURI": "local://images/tokens/0x967f8799af07df1534d48a95a5c9febe92c53ae0.png"
     },
     {
-      "name": "DAI",
-      "symbol": "DAI",
-      "address": "0x6B175474E89094C44Da98b954EedeAC495271d0F",
-      "chainId": 30,
-      "decimals": 18,
-      "logoURI": "local://images/tokens/0x6B175474E89094C44Da98b954EedeAC495271d0F.png"
-    },
-    {
-      "name": "USDC",
-      "symbol": "USDC",
-      "address": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
-      "chainId": 30,
-      "decimals": 6,
-      "logoURI": "local://images/tokens/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48.png"
-    },
-    {
-      "name": "USDT",
+      "name": "Wrapped RSK USDT",
       "symbol": "USDT",
-      "address": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+      "address": "0xEf213441a85DF4d7acBdAe0Cf78004E1e486BB96",
       "chainId": 30,
-      "decimals": 6,
-      "logoURI": "local://images/tokens/0xdAC17F958D2ee523a2206206994597C13D831ec7.png"
+      "decimals": 18,
+      "logoURI": "local://images/tokens/0xEf213441a85DF4d7acBdAe0Cf78004E1e486BB96.png"
+    },
+    {
+      "name": "RIF",
+      "symbol": "RIF",
+      "address": "0x2aCc95758f8b5F583470bA265Eb685a8f45fC9D5",
+      "chainId": 30,
+      "decimals": 18,
+      "logoURI": "local://images/tokens/0x2aCc95758f8b5F583470bA265Eb685a8f45fC9D5.png"
+    },
+    {
+      "name": "SOV",
+      "symbol": "SOV",
+      "address": "0xEfC78FC7D48B64958315949279bA181C2114abbD",
+      "chainId": 30,
+      "decimals": 18,
+      "logoURI": "local://images/tokens/0xEfC78FC7D48B64958315949279bA181C2114abbD.png"
     }
   ]
 }

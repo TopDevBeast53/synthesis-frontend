@@ -22,7 +22,8 @@ export const SUPPORTED_NETWORKS: { [key: number]: CHAIN_CONFIG } = {
         logoUrl: '/images/networks/mainnet-network.jpg',
         label: 'Ethereum',
         showOnlyTrade: false,
-        isTestChain: false
+        isTestChain: false,
+        apiKey: "VqUJXhZEYxUqofUHG6UWgxbuD3tw3yCf"
     },
     [ChainId.TESTNET]: {
         chainId: 4,
@@ -37,7 +38,8 @@ export const SUPPORTED_NETWORKS: { [key: number]: CHAIN_CONFIG } = {
         logoUrl: '/images/networks/rinkeby-network.jpg',
         label: 'Rinkeby',
         showOnlyTrade: false,
-        isTestChain: true
+        isTestChain: true,
+        apiKey: "VqUJXhZEYxUqofUHG6UWgxbuD3tw3yCf"
     },
     [ChainId.RSK_MAINNET]: {
         chainId: 30,
