@@ -11,7 +11,6 @@ import useIntersectionObserver from 'hooks/useIntersectionObserver'
 import { orderBy } from 'lodash'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Route, useLocation, useRouteMatch } from 'react-router-dom'
-import { ChainId } from 'sdk'
 import { useFarms, usePollFarmsWithUserData, usePriceHelixBusd } from 'state/farms/hooks'
 import { DeserializedFarm } from 'state/types'
 import { ViewMode } from 'state/user/actions'
@@ -157,7 +156,7 @@ const Farms: React.FC = () => {
         }
         const totalLiquidity = new BigNumber(farm.lpTotalInQuoteToken).times(farm.quoteTokenPriceBusd)
         const { helixRewardsApr, lpRewardsApr } = isActive
-          ? getFarmApr(new BigNumber(farm.poolWeight), helixPrice, totalLiquidity, farm.lpAddresses[ChainId.TESTNET])
+          ? getFarmApr(new BigNumber(farm.poolWeight), helixPrice, totalLiquidity, farm.lpAddress)
           : { helixRewardsApr: 0, lpRewardsApr: 0 }
 
         return { ...farm, apr: helixRewardsApr, lpRewardsApr, liquidity: totalLiquidity }

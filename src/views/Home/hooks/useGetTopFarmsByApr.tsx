@@ -55,7 +55,7 @@ const useGetTopFarmsByApr = (isIntersecting: boolean) => {
           farm.poolWeight,
           helixPriceBusd,
           totalLiquidity,
-          farm.lpAddresses[chainId],
+          farm.lpAddress,
         )
         return { ...farm, apr: helixRewardsApr, lpRewardsApr }
       })

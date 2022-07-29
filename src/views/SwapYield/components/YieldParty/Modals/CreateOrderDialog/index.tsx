@@ -2,14 +2,12 @@ import { useWeb3React } from '@web3-react/core'
 import BigNumber from 'bignumber.js'
 import { useTranslation } from 'contexts/Localization'
 import { useAllTokens } from 'hooks/Tokens'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useERC20s, useHelixYieldSwap } from 'hooks/useContract'
 import useTheme from 'hooks/useTheme'
 import React, { useEffect, useMemo, useState } from 'react'
 import { useMemoFarms } from 'state/farms/hooks'
 import { useAllTokenBalances } from 'state/wallet/hooks'
 import { ButtonMenu, ButtonMenuItem, Modal } from 'uikit'
-import { getAddress } from 'utils/addressHelpers'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { getBalanceAmount } from 'utils/formatBalance'
 import BaseOpenSwap from './BaseOpenSwap'
@@ -26,7 +24,6 @@ const CreateOrderDialog = (props) => {
   const allTokens = useAllTokens() // All Stable Token
   const allTokenBalances = useAllTokenBalances()
   const { data: farmsLP } = useMemoFarms()
-  const { chainId } = useActiveWeb3React()
 
   const [LPOptions, setLPOptions] = useState<any>()
 
@@ -54,7 +51,7 @@ const CreateOrderDialog = (props) => {
         label: lp.lpSymbol,
         value: lp,
         decimals: lp.token.decimals,
-        address: getAddress(chainId, lp.lpAddresses),
+        address: lp.lpAddress,
         maxBalance: getBalanceAmount(lp.userData.tokenBalance, lp.token.decimals),
         allowance: BIG_ZERO,
         contract: undefined,
@@ -63,7 +60,7 @@ const CreateOrderDialog = (props) => {
       return option.address
     })
     return [lpOptions, addressList]
-  }, [chainId, farmsLP])
+  }, [farmsLP])
 
   const lpContracts = useERC20s(lpAddressList)
   const tokenContracts = useERC20s(tokenAddressList)

@@ -2,14 +2,12 @@ import { useWeb3React } from '@web3-react/core'
 import BigNumber from 'bignumber.js'
 import { useTranslation } from 'contexts/Localization'
 import { useAllTokens } from 'hooks/Tokens'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useERC20s, useHelixLpSwap } from 'hooks/useContract'
 import useTheme from 'hooks/useTheme'
 import React, { useEffect, useMemo, useState } from 'react'
 import { useMemoFarms } from 'state/farms/hooks'
 import { useAllTokenBalances } from 'state/wallet/hooks'
 import { Modal } from 'uikit'
-import { getAddress } from 'utils/addressHelpers'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { getBalanceAmount } from 'utils/formatBalance'
 import BaseOpenSwap from './BaseOpenSwap'
@@ -19,7 +17,6 @@ const CreateOrderDialog = (props) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const { onDismiss } = props
-  const { chainId } = useActiveWeb3React()
 
   const LpSwapContract = useHelixLpSwap()
   const { data: farmsLP } = useMemoFarms()
@@ -33,7 +30,7 @@ const CreateOrderDialog = (props) => {
       .map((lp) => ({
         label: lp.lpSymbol,
         value: lp,
-        address: getAddress(chainId, lp.lpAddresses),
+        address: lp.lpAddress,
         decimals: lp.token.decimals,
         maxBalance: getBalanceAmount(lp.userData.tokenBalance, lp.token.decimals),
         allowance: BIG_ZERO,
@@ -50,7 +47,7 @@ const CreateOrderDialog = (props) => {
     }))
     const tempOptions = [...lpOptions, ...tokenOptions]
     const lpAddressesList = lpOptions.map((option) => {
-      return getAddress(chainId, option.value.lpAddresses)
+      return option.value.lpAddress
     })
     const tokenAddressList = tokenOptions.map((option) => {
       return option.value.address
@@ -58,7 +55,7 @@ const CreateOrderDialog = (props) => {
     const addrlist = [...lpAddressesList, ...tokenAddressList]
 
     return [tempOptions, addrlist]
-  }, [farmsLP, tokens, chainId, allTokenBalances])
+  }, [farmsLP, tokens, allTokenBalances])
 
   const allContracts = useERC20s(addressList)
 

@@ -7,7 +7,6 @@ import { getEtherScanLink } from 'utils'
 import { useTranslation } from 'contexts/Localization'
 import ExpandableSectionButton from 'components/ExpandableSectionButton'
 import { BASE_ADD_LIQUIDITY_URL } from 'config'
-import { getAddress } from 'utils/addressHelpers'
 import getLiquidityUrlPathParts from 'utils/getLiquidityUrlPathParts'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import DetailsSection from './DetailsSection'
@@ -64,7 +63,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, displayApr, removed, helixPri
     chainId
   })
   const addLiquidityUrl = `${BASE_ADD_LIQUIDITY_URL}/${liquidityUrlPathParts}`
-  const lpAddress = getAddress(chainId, farm.lpAddresses)
+  const { lpAddress } = farm
   const isPromotedFarm = farm.token.symbol === 'HELIX'
 
   return (

@@ -11,7 +11,7 @@ import snapshot from '@snapshot-labs/snapshot.js'
 import { useFarms } from 'state/farms/hooks'
 import { useGetTokens } from 'hooks/useGetTokens'
 import { useFastFresh } from 'hooks/useRefresh'
-import { getAddress, getMasterChefAddress, getHelixAutoPoolAddress, getHelixVaultAddress } from 'utils/addressHelpers'
+import { getMasterChefAddress, getHelixAutoPoolAddress, getHelixVaultAddress } from 'utils/addressHelpers'
 import { CastVoteModalProps, ConfirmVoteView } from './types'
 import MainView from './MainView'
 import DetailsView from './DetailsView'
@@ -40,7 +40,7 @@ const CastVoteModal: React.FC<CastVoteModalProps> = ({ onSuccess, proposalId, sp
     .filter((lp) => lp.pid !== 0)
     .filter((lp) => lp.lpSymbol.includes('HELIX'))
     .map((lp) => ({
-      "address": getAddress(chainId, lp.lpAddresses),
+      "address": lp.lpAddress,
       "pid": lp.pid
     }))
 

@@ -21,7 +21,7 @@ import { FetchStatus } from 'config/constants/types'
 import { useFarms } from 'state/farms/hooks'
 import { useFastFresh } from 'hooks/useRefresh'
 import { useGetTokens } from 'hooks/useGetTokens'
-import { getAddress, getMasterChefAddress, getHelixAutoPoolAddress, getHelixVaultAddress } from 'utils/addressHelpers'
+import { getMasterChefAddress, getHelixAutoPoolAddress, getHelixVaultAddress } from 'utils/addressHelpers'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { isCoreProposal } from '../helpers'
 import { ProposalStateTag, ProposalTypeTag } from '../components/Proposals/tags'
@@ -69,7 +69,7 @@ const Proposal = () => {
     .filter((lp) => lp.pid !== 0)
     .filter((lp) => lp.lpSymbol.includes('HELIX'))
     .map((lp) => ({
-      "address": getAddress(chainId, lp.lpAddresses),
+      "address": lp.lpAddress,
       "pid": lp.pid
     }))
 

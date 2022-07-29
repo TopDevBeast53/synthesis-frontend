@@ -4,7 +4,11 @@ import getFarms from './farms'
 import { Ifo } from './types'
 
 // HELIX TODO: code is not clear
-export const getCakeBnbLpToken = (chainId: ChainId) => new Token(ChainId.TESTNET, getFarms(chainId)[1].lpAddresses[ChainId.TESTNET], 18, getFarms(chainId)[0].lpSymbol)
+export const getCakeBnbLpToken = (chainId: ChainId) => new Token(
+    chainId,
+    getFarms(chainId)[0].lpAddress,
+    18,
+    getFarms(chainId)[0].lpSymbol)
 
 const ifos: Ifo[] = [
     // {

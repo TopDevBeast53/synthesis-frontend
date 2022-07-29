@@ -4,7 +4,6 @@ import { useTranslation } from 'contexts/Localization'
 import { LinkExternal, Text } from 'uikit'
 import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'
 import getLiquidityUrlPathParts from 'utils/getLiquidityUrlPathParts'
-import { getAddress } from 'utils/addressHelpers'
 import { getEtherScanLink } from 'utils'
 import { CommunityTag, CoreTag, DualTag } from 'components/Tags'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
@@ -151,7 +150,7 @@ const ActionPanel: React.FunctionComponent<ActionPanelProps> = ({
     tokenAddress: token.address,
     chainId
   })
-  const lpAddress = getAddress(chainId, farm.lpAddresses)
+  const { lpAddress } = farm
   const bsc = getEtherScanLink(lpAddress, 'address', chainId)
   // const info = `/info/pool/${lpAddress}`
 

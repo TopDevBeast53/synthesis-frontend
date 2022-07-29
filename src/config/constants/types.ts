@@ -68,7 +68,7 @@ export enum PoolCategory {
 interface FarmConfigBaseProps {
     pid: number
     lpSymbol: string
-    lpAddresses: Address
+    lpAddress: string
     multiplier?: string
     isCommunity?: boolean
     dual?: {

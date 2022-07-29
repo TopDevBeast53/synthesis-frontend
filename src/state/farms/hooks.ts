@@ -7,7 +7,7 @@ import { getBalanceAmount } from 'utils/formatBalance'
 import { getFarms } from 'config/constants'
 import { useFastFresh, useSlowFresh } from 'hooks/useRefresh'
 import { deserializeToken } from 'state/user/hooks/helpers'
-import { getAddress, getMasterChefAddress } from 'utils/addressHelpers'
+import { getMasterChefAddress } from 'utils/addressHelpers'
 import { SerializedFarmConfig } from 'config/constants/types'
 import useMulticall from 'hooks/useMulticall'
 import erc20ABI from 'config/abi/erc20.json'
@@ -27,10 +27,10 @@ const deserializeFarmUserData = (farm: SerializedFarm): DeserializedFarmUserData
 }
 
 const deserializeFarm = (farm: SerializedFarm): DeserializedFarm => {
-    const { lpAddresses, lpSymbol, pid, dual, multiplier, isCommunity, quoteTokenPriceBusd, tokenPriceBusd } = farm
+    const { lpAddress, lpSymbol, pid, dual, multiplier, isCommunity, quoteTokenPriceBusd, tokenPriceBusd } = farm
 
     return {
-        lpAddresses,
+        lpAddress,
         lpSymbol,
         pid,
         dual,
@@ -146,8 +146,7 @@ export const useFarmFromLpSymbol = (lpSymbol: string): DeserializedFarm => {
 }
 
 export const useFarmFromLpAddress = (lpAddress: string): DeserializedFarm => {
-    const { chainId } = useActiveWeb3React()
-    const farm = useSelector((state: State) => state.farms.data.find((f) => getAddress(chainId, f.lpAddresses) === lpAddress))
+    const farm = useSelector((state: State) => state.farms.data.find((f) => f.lpAddress === lpAddress))
     return deserializeFarm(farm)
 }
 
@@ -208,7 +207,7 @@ export const useFetchFarmUserAllowances = () => {
         const masterChefAddress = getMasterChefAddress(chainId)
 
         const calls = farmsToFetch.map((farm) => {
-            const lpContractAddress = getAddress(chainId, farm.lpAddresses)
+            const lpContractAddress = farm.lpAddress
             return { address: lpContractAddress, name: 'allowance', params: [account, masterChefAddress] }
         })
 
@@ -222,10 +221,9 @@ export const useFetchFarmUserAllowances = () => {
 
 export const useFetchFarmUserTokenBalances = () => {
     const multicall = useMulticall()
-    const { chainId } = useActiveWeb3React()
     return useCallback(async (account: string, farmsToFetch: SerializedFarmConfig[]) => {
         const calls = farmsToFetch.map((farm) => {
-            const lpContractAddress = getAddress(chainId, farm.lpAddresses)
+            const lpContractAddress = farm.lpAddress
             return {
                 address: lpContractAddress,
                 name: 'balanceOf',
@@ -238,7 +236,7 @@ export const useFetchFarmUserTokenBalances = () => {
             return new BigNumber(tokenBalance).toJSON()
         })
         return parsedTokenBalances
-    }, [chainId, multicall])
+    }, [multicall])
 }
 
 

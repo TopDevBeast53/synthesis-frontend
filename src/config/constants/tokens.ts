@@ -177,26 +177,47 @@ export const testnetTokens = defineTokens({
     ),
 } as const)
 
-type UnserializedToken = typeof testnetTokens & typeof mainnetTokens
-const getTokens = (chainId: ChainId) => {
-
-    // If testnet - return list comprised of testnetTokens wherever they exist, and mainnetTokens where they don't
-    if (chainId === ChainId.TESTNET) {
-        return Object.keys(mainnetTokens).reduce((accum, key) => {
-            return { ...accum, [key]: testnetTokens[key] || mainnetTokens[key] }
-        }, {} as UnserializedToken)
-    }
-
-    return mainnetTokens
+const tokens = {
+    [ChainId.MAINNET]: mainnetTokens,
+    [ChainId.TESTNET]: testnetTokens,
+    [ChainId.RSK_MAINNET]: testnetTokens,
+    [ChainId.RSK_TESTNET]: testnetTokens,
 }
 
-type SerializedTokenList = Record<keyof UnserializedToken, SerializedToken>
+type SerializedTokenList = typeof mainnetTokens & typeof testnetTokens;
+const getTokens = (chainId: ChainId): SerializedTokenList => {
+    return tokens[chainId] as SerializedTokenList
+}
 
+type SerializedTokenListMainNet = Record<keyof typeof mainnetTokens, SerializedToken>
+type SerializedTokenListTestNet = Record<keyof typeof testnetTokens, SerializedToken>
 export const serializeTokens = (chainId: ChainId) => {
-    const unserializedTokens = getTokens(chainId)
+    switch (chainId) {
+        case ChainId.MAINNET:
+            return serializeTokensMainNet();
+        case ChainId.TESTNET:
+            return serializeTokensTestNet();
+        case ChainId.RSK_MAINNET:
+        case ChainId.RSK_TESTNET:
+        default:
+            return serializeTokensTestNet();
+    }
+}
+
+export const serializeTokensMainNet = () => {
+    const unserializedTokens = getTokens(ChainId.MAINNET)
     const serializedTokens = Object.keys(unserializedTokens).reduce((accum, key) => {
         return { ...accum, [key]: serializeToken(unserializedTokens[key]) }
-    }, {} as SerializedTokenList)
+    }, {} as SerializedTokenListMainNet)
+
+    return serializedTokens
+}
+
+export const serializeTokensTestNet = () => {
+    const unserializedTokens = getTokens(ChainId.TESTNET)
+    const serializedTokens = Object.keys(unserializedTokens).reduce((accum, key) => {
+        return { ...accum, [key]: serializeToken(unserializedTokens[key]) }
+    }, {} as SerializedTokenListTestNet)
 
     return serializedTokens
 }
