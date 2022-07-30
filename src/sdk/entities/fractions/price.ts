@@ -4,7 +4,7 @@ import JSBI from 'jsbi'
 
 import { TokenAmount } from './tokenAmount'
 import { currencyEquals, Token } from '../token'
-import { BigintIsh, Rounding, TEN } from '../../constants'
+import { BigintIsh, ChainId, Rounding, TEN } from '../../constants'
 import { Currency } from '../currency'
 import type { Route } from '../route'
 import { Fraction } from './fraction'
@@ -60,12 +60,12 @@ export class Price extends Fraction {
     }
 
     // performs floor division on overflow
-    public quote(currencyAmount: CurrencyAmount): CurrencyAmount {
+    public quote(currencyAmount: CurrencyAmount, chainId: ChainId): CurrencyAmount {
         invariant(currencyEquals(currencyAmount.currency, this.baseCurrency), 'TOKEN')
         if (this.quoteCurrency instanceof Token) {
             return new TokenAmount(this.quoteCurrency, super.multiply(currencyAmount.raw).quotient)
         }
-        return CurrencyAmount.ether(super.multiply(currencyAmount.raw).quotient)
+        return CurrencyAmount.ether(super.multiply(currencyAmount.raw).quotient, chainId)
     }
 
     public toSignificant(significantDigits = 6, format?: any, rounding?: Rounding): string {
