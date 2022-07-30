@@ -41,7 +41,7 @@ const getPools = (chainId: ChainId) => {
             contractAddress: {
                 [ChainId.MAINNET]: '0xa4c1135f0C0123f6683F98A8177F4c51F3179107',    // UpdateMe 
                 [ChainId.TESTNET]: '0xc6c81F3092a6e35D2632ffd6FFb7D9baDC9B9AE6',
-                [ChainId.RSK_MAINNET]: '0x94b6327dA4f39f54EFf829BfA220d485948Fcc6E',
+                [ChainId.RSK_MAINNET]: '0x94b6327da4f39f54eff829bfa220d485948fcc6e',
                 [ChainId.RSK_TESTNET]: '0xE5B2B45e06F6004147e5b1FBbDd183DB0e6EEc6F'
             },
             poolCategory: PoolCategory.CORE,
