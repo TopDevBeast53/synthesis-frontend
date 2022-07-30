@@ -223,7 +223,7 @@ export const rskTestnetTokens = defineTokens({
 export const rskMainnetTokens = defineTokens({
     helix: new Token(
         RSK_MAINNET,
-        '0x3D2441Fa9Aab621e72121fb1c620FDAE59eAe812',
+        '0x3d2441fa9aab621e72121fb1c620fdae59eae812',
         18,
         'HELIX',
         'Helix',

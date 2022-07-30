@@ -16,10 +16,10 @@
     {
       "name": "Helix",
       "symbol": "HELIX",
-      "address": "0x3D2441Fa9Aab621e72121fb1c620FDAE59eAe812",
+      "address": "0x3d2441fa9aab621e72121fb1c620fdae59eae812",
       "chainId": 30,
       "decimals": 18,
-      "logoURI": "local://images/tokens/0x3D2441Fa9Aab621e72121fb1c620FDAE59eAe812.png"
+      "logoURI": "local://images/tokens/0x3d2441fa9aab621e72121fb1c620fdae59eae812.png"
     },
     {
       "name": "Wrapped RSK Bitcoin",
