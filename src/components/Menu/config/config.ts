@@ -82,7 +82,7 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType[] = (t) => [
         href: '/referrals',
         icon: 'Referals',
         showItemsOnMobile: false,
-        isTrade: true,
+        isTrade: false,
         items: [],
     },
     {
