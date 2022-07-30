@@ -11,3 +11,4 @@ const chainId = process.env.REACT_APP_CHAIN_ID
 export const HELIX_SPACE = Number(chainId) === ChainId.MAINNET ? "helixgeometry.eth" : "silverstardev.eth"
 export const VOTE_THRESHOLD = 500
 export const CHOICES_PRESET = ['In Favor', 'Against']
+export const STRATEGY2_SNAPSHOT = '15245369'

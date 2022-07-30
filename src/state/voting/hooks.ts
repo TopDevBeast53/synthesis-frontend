@@ -14,7 +14,17 @@ export const useGetProposal = (proposalId: string) => {
 
 export const useGetVotes = (proposalId: string) => {
     const votes = useSelector((state: State) => state.voting.votes[proposalId])
-    return votes ? votes.filter((vote) => vote._inValid !== true) : []
+    return votes
+}
+
+export const useGetVotingPower = () => {
+    const vp = useSelector((state: State) => state.voting.vp)
+    return vp
+}
+
+export const useGetVotingPowerStateLoadingStatus = () => {
+    const votingPowerStatus = useSelector((state: State) => state.voting.vpLoadingStatus)
+    return votingPowerStatus
 }
 
 export const useGetVotingStateLoadingStatus = () => {
