@@ -10,7 +10,7 @@ export const ROUTER_ADDRESS: RouterAddressesList = {
     [ChainId.MAINNET]: '0x39D660d507f1bC34DbCe94831081D6cf9131c3b9',
     [ChainId.TESTNET]: '0x484621036C7D18EDE8A267C44e3FBfDfb81135af',
     [ChainId.RSK_MAINNET]: '0x3a9D41c8f905D1744180DA36B7EB8350A67cE8e4', // update me
-    [ChainId.RSK_TESTNET]: '0x4600c109df1e2226d7f3b10b69aad26a2aac1f04',
+    [ChainId.RSK_TESTNET]: '0x2E389edDB44933c46608bd0B0f4E9BeD191dCC90',
 }
 
 // a list of tokens by chain
