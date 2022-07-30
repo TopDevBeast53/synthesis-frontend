@@ -52,7 +52,7 @@ export default function CommonBases({
           disable={selectedCurrency === ETHER[chainId]}
         >
           <CurrencyLogo currency={ETHER[chainId]} style={{ marginRight: 8 }} />
-          <Text>ETH</Text>
+          <Text>{ETHER[chainId].symbol}</Text>
         </BaseWrapper>
         {(chainId ? SUGGESTED_BASES[chainId] : []).map((token: Token) => {
           const selected = selectedCurrency instanceof Token && selectedCurrency.address === token.address

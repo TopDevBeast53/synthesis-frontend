@@ -130,7 +130,6 @@ export default function CurrencyList({
     }
     return formatted
   }, [breakIndex, chainId, currencies, showETH])
-
   // const { t } = useTranslation()
 
   const inactiveTokens: {
