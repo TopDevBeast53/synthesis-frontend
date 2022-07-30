@@ -6,7 +6,7 @@ import toFormat from 'toformat'
 import { currencyEquals } from '../token'
 import { Currency, ETHER } from '../currency'
 
-import { BigintIsh, Rounding, TEN, SolidityType } from '../../constants'
+import { BigintIsh, Rounding, TEN, SolidityType, ChainId } from '../../constants'
 import { parseBigintIsh, validateSolidityTypeInstance } from '../../utils'
 import { Fraction } from './fraction'
 
@@ -19,8 +19,8 @@ export class CurrencyAmount extends Fraction {
      * Helper that calls the constructor with the ETHER currency
      * @param amount ether amount in wei
      */
-    public static ether(amount: BigintIsh): CurrencyAmount {
-        return new CurrencyAmount(ETHER, amount)
+    public static ether(amount: BigintIsh, chainId: ChainId): CurrencyAmount {
+        return new CurrencyAmount(ETHER[chainId], amount)
     }
 
     // amount _must_ be raw, i.e. in the native representation
