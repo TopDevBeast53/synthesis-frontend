@@ -108,7 +108,7 @@ export default function AddLiquidity({
     (accumulator, field) => {
       return {
         ...accumulator,
-        [field]: maxAmountSpend(currencyBalances[field]),
+        [field]: maxAmountSpend(chainId, currencyBalances[field]),
       }
     },
     {},
@@ -149,7 +149,7 @@ export default function AddLiquidity({
     let args: Array<string | string[] | number>
     let value: BigNumber | null
     if (currencyA === ETHER[chainId] || currencyB === ETHER[chainId]) {
-      const tokenBIsETH = currencyB === ETHER
+      const tokenBIsETH = currencyB === ETHER[chainId]
       estimate = router.estimateGas.addLiquidityETH
       method = router.addLiquidityETH
       args = [
