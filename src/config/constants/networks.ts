@@ -22,7 +22,8 @@ export const SUPPORTED_NETWORKS: { [key: number]: CHAIN_CONFIG } = {
         logoUrl: '/images/networks/mainnet-network.jpg',
         label: 'Ethereum',
         showOnlyTrade: false,
-        isTestChain: false
+        isTestChain: false,
+        apiKey: "VqUJXhZEYxUqofUHG6UWgxbuD3tw3yCf"
     },
     [ChainId.TESTNET]: {
         chainId: 4,
@@ -37,7 +38,8 @@ export const SUPPORTED_NETWORKS: { [key: number]: CHAIN_CONFIG } = {
         logoUrl: '/images/networks/rinkeby-network.jpg',
         label: 'Rinkeby',
         showOnlyTrade: false,
-        isTestChain: true
+        isTestChain: true,
+        apiKey: "VqUJXhZEYxUqofUHG6UWgxbuD3tw3yCf"
     },
     [ChainId.RSK_MAINNET]: {
         chainId: 30,
@@ -47,7 +49,7 @@ export const SUPPORTED_NETWORKS: { [key: number]: CHAIN_CONFIG } = {
             symbol: 'RBTC',
             decimals: 18,
         },
-        rpcUrls: ['https://public-node.rsk.co'],
+        rpcUrls: ['https://rsk.getblock.io/mainnet/?api_key=78baefd8-efa7-420f-8a4c-8e1cd66a8353'],
         blockExplorerUrls: ['https://explorer.rsk.co'],
         logoUrl: '/images/networks/rsk-network.jpg',
         label: 'RSK Mainnet',

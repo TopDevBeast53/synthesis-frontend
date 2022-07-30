@@ -108,7 +108,7 @@ export default function AddLiquidity({
     (accumulator, field) => {
       return {
         ...accumulator,
-        [field]: maxAmountSpend(currencyBalances[field]),
+        [field]: maxAmountSpend(chainId, currencyBalances[field]),
       }
     },
     {},
@@ -148,8 +148,8 @@ export default function AddLiquidity({
     let method: (...args: any) => Promise<TransactionResponse>
     let args: Array<string | string[] | number>
     let value: BigNumber | null
-    if (currencyA === ETHER || currencyB === ETHER) {
-      const tokenBIsETH = currencyB === ETHER
+    if (currencyA === ETHER[chainId] || currencyB === ETHER[chainId]) {
+      const tokenBIsETH = currencyB === ETHER[chainId]
       estimate = router.estimateGas.addLiquidityETH
       method = router.addLiquidityETH
       args = [
@@ -265,7 +265,7 @@ export default function AddLiquidity({
 
   const handleCurrencyASelect = useCallback(
     (currencyA_: Currency) => {
-      const newCurrencyIdA = currencyId(currencyA_)
+      const newCurrencyIdA = currencyId(currencyA_, chainId)
       if (newCurrencyIdA === currencyIdB) {
         history.push(`/add/${currencyIdB}/${currencyIdA}`)
       } else if (currencyIdB) {
@@ -274,11 +274,11 @@ export default function AddLiquidity({
         history.push(`/add/${newCurrencyIdA}`)
       }
     },
-    [currencyIdB, history, currencyIdA],
+    [chainId, currencyIdB, history, currencyIdA],
   )
   const handleCurrencyBSelect = useCallback(
     (currencyB_: Currency) => {
-      const newCurrencyIdB = currencyId(currencyB_)
+      const newCurrencyIdB = currencyId(currencyB_, chainId)
       if (currencyIdA === newCurrencyIdB) {
         if (currencyIdB) {
           history.push(`/add/${currencyIdB}/${newCurrencyIdB}`)
@@ -289,7 +289,7 @@ export default function AddLiquidity({
         history.push(`/add/${currencyIdA || 'BNB'}/${newCurrencyIdB}`)
       }
     },
-    [currencyIdA, history, currencyIdB],
+    [chainId, currencyIdA, currencyIdB, history],
   )
 
   const handleDismissConfirmation = useCallback(() => {

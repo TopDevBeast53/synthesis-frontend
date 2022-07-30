@@ -1,5 +1,5 @@
 import { parseUnits } from '@ethersproject/units'
-import { Currency, CurrencyAmount, ETHER, JSBI, Token, TokenAmount, Trade } from 'sdk'
+import { ChainId, Currency, CurrencyAmount, ETHER, JSBI, Token, TokenAmount, Trade } from 'sdk'
 import { ParsedQs } from 'qs'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -51,16 +51,17 @@ export function useSwapActionHandlers(): {
     onChangeRecipient: (recipient: string | null) => void
 } {
     const dispatch = useDispatch<AppDispatch>()
+    const { chainId } = useActiveWeb3React()
     const onCurrencySelection = useCallback(
         (field: Field, currency: Currency) => {
             dispatch(
                 selectCurrency({
                     field,
-                    currencyId: currency instanceof Token ? currency.address : currency === ETHER ? 'ETH' : '',
+                    currencyId: currency instanceof Token ? currency.address : currency === ETHER[chainId] ? 'ETH' : '',
                 }),
             )
         },
-        [dispatch],
+        [chainId, dispatch],
     )
 
     const onSwitchTokens = useCallback(() => {
@@ -90,7 +91,7 @@ export function useSwapActionHandlers(): {
 }
 
 // try to parse a user entered amount for a given token
-export function tryParseAmount(value?: string, currency?: Currency): CurrencyAmount | undefined {
+export function tryParseAmount(chainId: ChainId, value?: string, currency?: Currency): CurrencyAmount | undefined {
     if (!value || !currency) {
         return undefined
     }
@@ -99,7 +100,7 @@ export function tryParseAmount(value?: string, currency?: Currency): CurrencyAmo
         if (typedValueParsed !== '0') {
             return currency instanceof Token
                 ? new TokenAmount(currency, JSBI.BigInt(typedValueParsed))
-                : CurrencyAmount.ether(JSBI.BigInt(typedValueParsed))
+                : CurrencyAmount.ether(JSBI.BigInt(typedValueParsed), chainId)
         }
     } catch (error) {
         // should fail if the user specifies too many decimal places of precision (or maybe exceed max uint?)
@@ -133,13 +134,14 @@ export function useSingleTokenSwapInfo(): { [key: string]: number } {
         [Field.INPUT]: { currencyId: inputCurrencyId },
         [Field.OUTPUT]: { currencyId: outputCurrencyId },
     } = useSwapState()
+    const { chainId } = useActiveWeb3React()
 
     const inputCurrency = useCurrency(inputCurrencyId)
     const outputCurrency = useCurrency(outputCurrencyId)
     const token0Address = getTokenAddress(inputCurrencyId)
     const token1Address = getTokenAddress(outputCurrencyId)
 
-    const parsedAmount = tryParseAmount('1', inputCurrency ?? undefined)
+    const parsedAmount = tryParseAmount(chainId, '1', inputCurrency ?? undefined)
 
     const bestTradeExactIn = useTradeExactIn(parsedAmount, outputCurrency ?? undefined)
     if (!inputCurrency || !outputCurrency || !bestTradeExactIn) {
@@ -163,7 +165,7 @@ export function useDerivedSwapInfo(): {
     v2Trade: Trade | undefined
     inputError?: string
 } {
-    const { account } = useActiveWeb3React()
+    const { account, chainId } = useActiveWeb3React()
     const { t } = useTranslation()
 
     const {
@@ -185,7 +187,7 @@ export function useDerivedSwapInfo(): {
     ])
 
     const isExactIn: boolean = independentField === Field.INPUT
-    const parsedAmount = tryParseAmount(typedValue, (isExactIn ? inputCurrency : outputCurrency) ?? undefined)
+    const parsedAmount = tryParseAmount(chainId, typedValue, (isExactIn ? inputCurrency : outputCurrency) ?? undefined)
 
     const { bestTrade: bestTradeExactIn } = useTradeExactInNoThrow(
         isExactIn ? parsedAmount : undefined,

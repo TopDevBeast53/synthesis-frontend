@@ -52,10 +52,6 @@ const getFarmBaseTokenPrice = (
         return hasTokenPriceVsQuote ? helixPriceUSDC.times(farm.tokenPriceVsQuote) : BIG_ZERO
     }
 
-    if (tokens.weth && farm.quoteToken.symbol === tokens.weth.symbol) {
-        return hasTokenPriceVsQuote ? wethPriceUSDC.times(farm.tokenPriceVsQuote) : BIG_ZERO
-    }
-
     // We can only calculate rewards without a quoteTokenFarm for BUSD/BNB farms
     if (!quoteTokenFarm) {
         return BIG_ZERO
