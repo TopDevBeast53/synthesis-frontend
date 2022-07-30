@@ -1,7 +1,7 @@
-import { Currency, ETHER, Token } from 'sdk'
+import { ChainId, Currency, ETHER, Token } from 'sdk'
 
-export function currencyId(currency: Currency): string {
-    if (currency === ETHER) return 'ETH'
+export function currencyId(currency: Currency, chainId: ChainId): string {
+    if (currency === ETHER[chainId]) return 'ETH'
     if (currency instanceof Token) return currency.address
     throw new Error('invalid currency')
 }

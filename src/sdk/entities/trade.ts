@@ -93,14 +93,14 @@ export interface BestTradeOptions {
  */
 function wrappedAmount(currencyAmount: CurrencyAmount, chainId: ChainId): TokenAmount {
     if (currencyAmount instanceof TokenAmount) return currencyAmount
-    if (currencyAmount.currency === ETHER) return new TokenAmount(WETH[chainId], currencyAmount.raw)
+    if (currencyAmount.currency === ETHER[chainId]) return new TokenAmount(WETH[chainId], currencyAmount.raw)
     invariant(false, 'CURRENCY')
     // throw new Error();
 }
 
 function wrappedCurrency(currency: Currency, chainId: ChainId): Token {
     if (currency instanceof Token) return currency
-    if (currency === ETHER) return WETH[chainId]
+    if (currency === ETHER[chainId]) return WETH[chainId]
     invariant(false, 'CURRENCY')
     // throw new Error();
 }
@@ -191,13 +191,13 @@ export class Trade {
         this.inputAmount =
             tradeType === TradeType.EXACT_INPUT
                 ? amount
-                : route.input === ETHER
+                : route.input === ETHER[route.chainId]
                 ? CurrencyAmount.ether(amounts[0].raw)
                 : amounts[0]
         this.outputAmount =
             tradeType === TradeType.EXACT_OUTPUT
                 ? amount
-                : route.output === ETHER
+                : route.output === ETHER[route.chainId]
                 ? CurrencyAmount.ether(amounts[amounts.length - 1].raw)
                 : amounts[amounts.length - 1]
         this.executionPrice = new Price(

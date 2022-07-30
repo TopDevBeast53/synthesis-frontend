@@ -1,4 +1,4 @@
-import { Currency, ETHER, Token } from 'sdk'
+import { ChainId, Currency, ETHER, Token } from 'sdk'
 import { EtherIcon } from 'uikit'
 import React, { useMemo } from 'react'
 import styled from 'styled-components'
@@ -15,7 +15,7 @@ const StyledLogo = styled(Logo) <{ size: string }>`
 `
 
 const getImageUrlFromToken = (tokens: any, token: Token) => {
-  const address = token.symbol === 'ETH' ? tokens.weth.address : token.address
+  const address = ['ETH', 'RBTC'].includes(token.symbol) ? tokens.weth.address : token.address
   return `/images/tokens/${address}.svg`
 }
 
@@ -30,10 +30,13 @@ export default function CurrencyLogo({
 }) {
   const uriLocations = useHttpLocations(currency instanceof WrappedTokenInfo ? currency.logoURI : undefined)
   const tokens = useGetTokens()
-  const {chainId} = useActiveWeb3React()
+  const { chainId } = useActiveWeb3React()
 
   const srcs: string[] = useMemo(() => {
-    if (currency === ETHER[chainId]) return []
+    if (currency === ETHER[chainId]) {
+      if ([ChainId.MAINNET, ChainId.TESTNET].includes(chainId))
+        return []
+    }
 
     if (currency instanceof Token) {
       if (currency instanceof WrappedTokenInfo) {
@@ -45,7 +48,8 @@ export default function CurrencyLogo({
   }, [chainId, currency, tokens, uriLocations])
 
   if (currency === ETHER[chainId]) {
-    return <EtherIcon width={size} style={style} />
+    if ([ChainId.MAINNET, ChainId.TESTNET].includes(chainId))
+      return <EtherIcon width={size} style={style} />
   }
 
   return <StyledLogo size={size} srcs={srcs} alt={`${currency?.symbol ?? 'token'} logo`} style={style} />
