@@ -75,8 +75,8 @@ export abstract class Router {
      * @param options options for the call parameters
      */
     public static swapCallParameters(trade: Trade, options: TradeOptions | TradeOptionsDeadline): SwapParameters {
-        const etherIn = trade.inputAmount.currency === ETHER
-        const etherOut = trade.outputAmount.currency === ETHER
+        const etherIn = trade.inputAmount.currency === ETHER[trade.route.chainId]
+        const etherOut = trade.outputAmount.currency === ETHER[trade.route.chainId]
         // the router does not support both ether in and out
         invariant(!(etherIn && etherOut), 'ETHER_IN_OUT')
         invariant(!('ttl' in options) || options.ttl > 0, 'TTL')

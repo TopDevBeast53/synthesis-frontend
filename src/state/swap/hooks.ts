@@ -51,16 +51,17 @@ export function useSwapActionHandlers(): {
     onChangeRecipient: (recipient: string | null) => void
 } {
     const dispatch = useDispatch<AppDispatch>()
+    const { chainId } = useActiveWeb3React()
     const onCurrencySelection = useCallback(
         (field: Field, currency: Currency) => {
             dispatch(
                 selectCurrency({
                     field,
-                    currencyId: currency instanceof Token ? currency.address : currency === ETHER ? 'ETH' : '',
+                    currencyId: currency instanceof Token ? currency.address : currency === ETHER[chainId] ? 'ETH' : '',
                 }),
             )
         },
-        [dispatch],
+        [chainId, dispatch],
     )
 
     const onSwitchTokens = useCallback(() => {
