@@ -1,5 +1,5 @@
 import { ChainId, JSBI, Percent, Token } from 'sdk'
-import { mainnetTokens, rskTestnetTokens, testnetTokens } from './tokens'
+import { mainnetTokens, rskMainnetTokens, rskTestnetTokens, testnetTokens } from './tokens'
 
 // a list of router addresses by chain
 type RouterAddressesList = {
@@ -32,9 +32,9 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
         testnetTokens.usdc
     ],
     [ChainId.RSK_MAINNET]: [
-        rskTestnetTokens.helix,
-        rskTestnetTokens.weth,
-        rskTestnetTokens.usdt
+        rskMainnetTokens.helix,
+        rskMainnetTokens.weth,
+        rskMainnetTokens.usdt
     ],
     [ChainId.RSK_TESTNET]: [
         rskTestnetTokens.helix,
@@ -79,8 +79,8 @@ export const SUGGESTED_BASES: ChainTokenList = {
         testnetTokens.usdc
     ],
     [ChainId.RSK_MAINNET]: [
-        rskTestnetTokens.weth,
-        rskTestnetTokens.usdt
+        rskMainnetTokens.weth,
+        rskMainnetTokens.usdt
     ],
     [ChainId.RSK_TESTNET]: [
         rskTestnetTokens.weth,
@@ -102,8 +102,8 @@ export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
         testnetTokens.usdc
     ],
     [ChainId.RSK_MAINNET]: [
-        rskTestnetTokens.weth,
-        rskTestnetTokens.usdt
+        rskMainnetTokens.weth,
+        rskMainnetTokens.usdt
     ],
     [ChainId.RSK_TESTNET]: [
         rskTestnetTokens.weth,

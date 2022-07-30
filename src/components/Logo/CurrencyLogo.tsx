@@ -2,6 +2,7 @@ import { Currency, ETHER, Token } from 'sdk'
 import { EtherIcon } from 'uikit'
 import React, { useMemo } from 'react'
 import styled from 'styled-components'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useGetTokens } from 'hooks/useGetTokens'
 import useHttpLocations from '../../hooks/useHttpLocations'
 import { WrappedTokenInfo } from '../../state/lists/hooks'
@@ -29,9 +30,10 @@ export default function CurrencyLogo({
 }) {
   const uriLocations = useHttpLocations(currency instanceof WrappedTokenInfo ? currency.logoURI : undefined)
   const tokens = useGetTokens()
+  const {chainId} = useActiveWeb3React()
 
   const srcs: string[] = useMemo(() => {
-    if (currency === ETHER) return []
+    if (currency === ETHER[chainId]) return []
 
     if (currency instanceof Token) {
       if (currency instanceof WrappedTokenInfo) {
@@ -40,9 +42,9 @@ export default function CurrencyLogo({
       return [getImageUrlFromToken(tokens, currency), getTokenLogoURL(currency.address)]
     }
     return []
-  }, [currency, tokens, uriLocations])
+  }, [chainId, currency, tokens, uriLocations])
 
-  if (currency === ETHER) {
+  if (currency === ETHER[chainId]) {
     return <EtherIcon width={size} style={style} />
   }
 
