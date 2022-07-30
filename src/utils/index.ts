@@ -99,6 +99,6 @@ export function escapeRegExp(string: string): string {
 }
 
 export function isTokenOnList(defaultTokens: TokenAddressMap, currency?: Currency): boolean {
-    if (currency === ETHER) return true
+    if (currency instanceof Token && currency === ETHER[currency.chainId]) return true
     return Boolean(currency instanceof Token && defaultTokens[currency.chainId]?.[currency.address])
 }

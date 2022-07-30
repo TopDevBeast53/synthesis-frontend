@@ -4,6 +4,7 @@ import { useWeb3React } from '@web3-react/core'
 import ERC20_INTERFACE from 'config/abi/erc20'
 import { useAllTokens } from 'hooks/Tokens'
 import { useMulticallContract } from 'hooks/useContract'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { isAddress } from 'utils'
 import { useSingleContractMultipleData, useMultipleContractSingleData } from '../multicall/hooks'
 
@@ -19,9 +20,9 @@ export function useBNBBalances(uncheckedAddresses?: (string | undefined)[]): {
         () =>
             uncheckedAddresses
                 ? uncheckedAddresses
-                      .map(isAddress)
-                      .filter((a): a is string => a !== false)
-                      .sort()
+                    .map(isAddress)
+                    .filter((a): a is string => a !== false)
+                    .sort()
                 : [],
         [uncheckedAddresses],
     )
@@ -66,13 +67,13 @@ export function useTokenBalancesWithLoadingIndicator(
             () =>
                 address && validatedTokens.length > 0
                     ? validatedTokens.reduce<{ [tokenAddress: string]: TokenAmount | undefined }>((memo, token, i) => {
-                          const value = balances?.[i]?.result?.[0]
-                          const amount = value ? JSBI.BigInt(value.toString()) : undefined
-                          if (amount) {
-                              memo[token.address] = new TokenAmount(token, amount)
-                          }
-                          return memo
-                      }, {})
+                        const value = balances?.[i]?.result?.[0]
+                        const amount = value ? JSBI.BigInt(value.toString()) : undefined
+                        if (amount) {
+                            memo[token.address] = new TokenAmount(token, amount)
+                        }
+                        return memo
+                    }, {})
                     : {},
             [address, validatedTokens, balances],
         ),
@@ -102,11 +103,12 @@ export function useCurrencyBalances(
         () => currencies?.filter((currency): currency is Token => currency instanceof Token) ?? [],
         [currencies],
     )
+    const { chainId } = useActiveWeb3React()
 
     const tokenBalances = useTokenBalances(account, tokens)
     const containsBNB: boolean = useMemo(
-        () => currencies?.some((currency) => currency === ETHER) ?? false,
-        [currencies],
+        () => currencies?.some((currency) => currency === ETHER[chainId]) ?? false,
+        [chainId, currencies],
     )
     const ethBalance = useBNBBalances(containsBNB ? [account] : [])
 
@@ -115,10 +117,10 @@ export function useCurrencyBalances(
             currencies?.map((currency) => {
                 if (!account || !currency) return undefined
                 if (currency instanceof Token) return tokenBalances[currency.address]
-                if (currency === ETHER) return ethBalance[account]
+                if (currency === ETHER[chainId]) return ethBalance[account]
                 return undefined
             }) ?? [],
-        [account, currencies, ethBalance, tokenBalances],
+        [account, chainId, currencies, ethBalance, tokenBalances],
     )
 }
 
