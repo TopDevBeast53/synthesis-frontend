@@ -5,7 +5,7 @@ import { ChainId } from 'sdk'
 /**
  * Function to return gasPrice outwith a react component
  */
-const getGasPrice = async (chainId: ChainId) => {
+const getGasPrice = async (chainId: ChainId, rpcProvider: ethers.providers.StaticJsonRpcProvider) => {
     const network = SUPPORTED_NETWORKS[chainId]
     if (network.apiKey) {
         const provider = new ethers.providers.AlchemyProvider(chainId, network.apiKey)
@@ -13,9 +13,7 @@ const getGasPrice = async (chainId: ChainId) => {
 
         return gasPriceVal.toString()
     }
-
-    const provider = new ethers.providers.StaticJsonRpcProvider(SUPPORTED_NETWORKS[chainId].rpcUrls[0])
-    const gasPriceVal = await provider.getGasPrice()
+    const gasPriceVal = await rpcProvider.getGasPrice()
 
     return gasPriceVal.toString()
 }

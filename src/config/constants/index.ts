@@ -10,7 +10,7 @@ export const ROUTER_ADDRESS: RouterAddressesList = {
     [ChainId.MAINNET]: '0x39D660d507f1bC34DbCe94831081D6cf9131c3b9',
     [ChainId.TESTNET]: '0x484621036C7D18EDE8A267C44e3FBfDfb81135af',
     [ChainId.RSK_MAINNET]: '0x3a9D41c8f905D1744180DA36B7EB8350A67cE8e4', // update me
-    [ChainId.RSK_TESTNET]: '0x4600c109DF1E2226d7f3B10b69AAd26a2AAc1f04',
+    [ChainId.RSK_TESTNET]: '0x4600c109df1e2226d7f3b10b69aad26a2aac1f04',
 }
 
 // a list of tokens by chain
@@ -49,6 +49,9 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
  */
 export const ADDITIONAL_BASES: { [chainId in ChainId]?: { [tokenAddress: string]: Token[] } } = {
     [ChainId.MAINNET]: {},
+    [ChainId.TESTNET]: {},
+    [ChainId.RSK_MAINNET]: {},
+    [ChainId.RSK_TESTNET]: {},
 }
 
 /**
@@ -58,6 +61,9 @@ export const ADDITIONAL_BASES: { [chainId in ChainId]?: { [tokenAddress: string]
  */
 export const CUSTOM_BASES: { [chainId in ChainId]?: { [tokenAddress: string]: Token[] } } = {
     [ChainId.MAINNET]: {},
+    [ChainId.TESTNET]: {},
+    [ChainId.RSK_MAINNET]: {},
+    [ChainId.RSK_TESTNET]: {},
 }
 
 // used for display in the default list when adding liquidity
@@ -106,12 +112,10 @@ export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
 }
 
 export const PINNED_PAIRS: { readonly [chainId in ChainId]?: [Token, Token][] } = {
-    [ChainId.MAINNET]: [
-        // UpdateMe remove rem
-        // [mainnetTokens.cake, mainnetTokens.weth],
-        // [mainnetTokens.busd, mainnetTokens.usdt],
-        // [mainnetTokens.dai, mainnetTokens.usdt],
-    ],
+    [ChainId.MAINNET]: [],
+    [ChainId.TESTNET]: [],
+    [ChainId.RSK_MAINNET]: [],
+    [ChainId.RSK_TESTNET]: [],
 }
 
 export const NetworkContextName = 'NETWORK'
