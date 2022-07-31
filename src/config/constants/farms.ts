@@ -188,14 +188,14 @@ const getFarmsRSKTestNet = (): SerializedFarmConfig[] => {
         },
         {
             pid: 1,
-            lpSymbol: 'RHELIX-WRBTC',
+            lpSymbol: 'HELIX-WRBTC',
             lpAddress: '0x6eb232eddf627b813466378d302892707ae6f258',
             token: serializedTokens.helix,
             quoteToken: serializedTokens.weth,
         },
         {
             pid: 2,
-            lpSymbol: 'RHELIX-RUSDT',
+            lpSymbol: 'HELIX-RUSDT',
             lpAddress: '0xba05fa8f617c548df8e9dfaaaee43999a5e80e17',
             token: serializedTokens.helix,
             quoteToken: serializedTokens.usdt,
@@ -236,14 +236,14 @@ const getFarmsRSKMainNet = (): SerializedFarmConfig[] => {
         },
         {
             pid: 1,
-            lpSymbol: 'RHELIX-WRBTC',
+            lpSymbol: 'HELIX-WRBTC',
             lpAddress: '0x3a9d41c8f905d1744180da36b7eb8350a67ce8e4',
             token: serializedTokens.helix,
             quoteToken: serializedTokens.weth,
         },
         {
             pid: 2,
-            lpSymbol: 'RHELIX-RUSDT',
+            lpSymbol: 'HELIX-RUSDT',
             lpAddress: '0x3a9d41c8f905d1744180da36b7eb8350a67ce8e4',
             token: serializedTokens.helix,
             quoteToken: serializedTokens.usdt,
