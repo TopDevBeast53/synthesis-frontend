@@ -19,6 +19,7 @@ const useFetchPoolsPublicDataAsync = (currentBlockNumber: number) => {
   const rpcProvider = useProviders();
   const fetchPoolsTotalStaking = useFetchPoolsTotalStaking()
   const fetchPoolsBlockLimits = useFetchPoolsBlockLimits()
+  const { chainId } = useActiveWeb3React()
   const pools = useGetPools()
 
   return useCallback(async (dispatch, getState) => {
@@ -62,8 +63,8 @@ const useFetchPoolsPublicDataAsync = (currentBlockNumber: number) => {
       }
     })
 
-    dispatch(setPoolsPublicData(liveData))
-  }, [currentBlockNumber, fetchPoolsBlockLimits, fetchPoolsTotalStaking, pools, rpcProvider])
+    dispatch(setPoolsPublicData({ data: liveData, chainId }))
+  }, [chainId, currentBlockNumber, fetchPoolsBlockLimits, fetchPoolsTotalStaking, pools, rpcProvider])
 }
 
 const useFetchPoolsTotalStaking = () => {
