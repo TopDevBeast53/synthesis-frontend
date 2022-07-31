@@ -38,7 +38,7 @@ export const initialPoolVaultState = Object.freeze({
 })
 
 const initialState: PoolsState = {
-    data: [...getPools(ChainId.MAINNET)],
+    data: [],
     userDataLoaded: false,
     helixAutoPool: initialPoolVaultState,
     ifoPool: initialPoolVaultState,
@@ -62,7 +62,7 @@ export const fetchPoolsStakingLimitsAsync = (chainId: ChainId) => async (dispatc
         }
     })
 
-    dispatch(setPoolsPublicData(stakingLimitData))
+    dispatch(setPoolsPublicData({ data: stakingLimitData, chainId }))
 }
 
 export const updateUserAllowance =
@@ -137,10 +137,16 @@ export const PoolsSlice = createSlice({
             state.data[poolIndex].userData = action.payload.data
         },
         setPoolsPublicData: (state, action) => {
-            const livePoolsData: SerializedPool[] = action.payload
-            state.data = state.data.map((pool) => {
+            const livePoolsData: SerializedPool[] = action.payload.data
+            const pools = getPools(action.payload.chainId)
+            state.data = pools.map((pool) => {
                 const livePoolData = livePoolsData.find((entry) => entry.sousId === pool.sousId)
-                return { ...pool, ...livePoolData }
+                const currentPoolData = state.data.find(poolData => poolData.sousId === pool.sousId)
+                return {
+                    ...pool,
+                    ...(currentPoolData || {}),
+                    ...(livePoolData || {}),
+                }
             })
         },
         setPoolsUserData: (state, action) => {

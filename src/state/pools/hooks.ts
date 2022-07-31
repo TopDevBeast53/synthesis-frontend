@@ -81,6 +81,7 @@ export function usePoolsWithVault() {
     // const ifoPool = useIfoPoolVault()
     const pools = useMemo(() => {
         const activePools = poolsWithoutAutoVault.filter((pool) => !pool.isFinished)
+        if (activePools.length === 0) return []
         const helixPool = activePools.find((pool) => pool.sousId === 0)
         const helixAutoVault = { ...helixPool, vaultKey: VaultKey.HelixAutoPool }
         // const ifoPoolVault = { ...helixPool, vaultKey: VaultKey.IfoPool }
