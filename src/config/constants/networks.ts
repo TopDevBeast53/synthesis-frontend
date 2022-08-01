@@ -4,7 +4,7 @@ import { ChainId } from 'sdk'
 export const CHAIN_IDS_TO_NAMES = {
     [ChainId.MAINNET]: 'mainnet',
     [ChainId.TESTNET]: 'rinkeby',
-    [ChainId.RSK_MAINNET]: 'rsk_mainnet',
+    [ChainId.RSK_MAINNET]: 'bitcoin_rsk',
     [ChainId.RSK_TESTNET]: 'rsk_testnet',
 }
 
@@ -52,7 +52,7 @@ export const SUPPORTED_NETWORKS: { [key: number]: CHAIN_CONFIG } = {
         rpcUrls: ['https://rsk.getblock.io/mainnet/?api_key=78baefd8-efa7-420f-8a4c-8e1cd66a8353'],
         blockExplorerUrls: ['https://explorer.rsk.co'],
         logoUrl: '/images/networks/rsk-network.jpg',
-        label: 'RSK Mainnet',
+        label: 'Bitcoin RSK',
         showOnlyTrade: true,
         isTestChain: false
     },
