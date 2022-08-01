@@ -101,6 +101,10 @@ const getFarmQuoteTokenPrice = (
         return BIG_ONE
     }
 
+    if (farm.quoteToken.symbol === 'rUSDT') {
+        return BIG_ONE
+    }
+
     if (farm.quoteToken.symbol === 'DAI') {
         return BIG_ONE
     }
@@ -142,6 +146,10 @@ const getFarmQuoteTokenPrice = (
     }
 
     if (quoteTokenFarm.quoteToken.symbol === 'USDT') {
+        return quoteTokenFarm.tokenPriceVsQuote ? new BigNumber(quoteTokenFarm.tokenPriceVsQuote) : BIG_ZERO
+    }
+
+    if (quoteTokenFarm.quoteToken.symbol === 'rUSDT') {
         return quoteTokenFarm.tokenPriceVsQuote ? new BigNumber(quoteTokenFarm.tokenPriceVsQuote) : BIG_ZERO
     }
 
