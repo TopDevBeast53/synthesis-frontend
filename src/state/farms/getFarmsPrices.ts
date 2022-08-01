@@ -166,7 +166,7 @@ const getFarmQuoteTokenPrice = (
 
 const getFarmsPrices = (chainId: ChainId, farms: SerializedFarm[]) => {
     const wethUSDCFarm = farms.find((farm) => farm.pid === 3)
-    const wethPriceUSDC = wethUSDCFarm.tokenPriceVsQuote ? BIG_ONE.times(wethUSDCFarm.tokenPriceVsQuote) : BIG_ZERO
+    const wethPriceUSDC = wethUSDCFarm && wethUSDCFarm.tokenPriceVsQuote ? BIG_ONE.times(wethUSDCFarm.tokenPriceVsQuote) : BIG_ZERO
     const helixWETHFarm = farms.find((farm) => farm.pid === 1)
     const helixPriceUSDC = helixWETHFarm.tokenPriceVsQuote ? wethPriceUSDC.times(helixWETHFarm.tokenPriceVsQuote) : BIG_ZERO
     const farmsWithPrices = farms.map((farm) => {
