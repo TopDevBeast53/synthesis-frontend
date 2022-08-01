@@ -255,13 +255,13 @@ const getFarmsRSKMainNet = (): SerializedFarmConfig[] => {
             token: serializedTokens.weth,
             quoteToken: serializedTokens.usdt,
         },
-        // {
-        //     pid: 4,
-        //     lpSymbol: 'RIF-WRBTC',
-        //     lpAddress: '0xa38B0DEB3d32673dC2CF4bE1B3af8233048A263E',
-        //     token: serializedTokens.rif,
-        //     quoteToken: serializedTokens.weth,
-        // },
+        {
+            pid: 4,
+            lpSymbol: 'RIF-WRBTC',
+            lpAddress: '0x0c80ccc24e21a8376d39924e4ec0dd1f54fda367',
+            token: serializedTokens.rif,
+            quoteToken: serializedTokens.weth,
+        },
         // {
         //     pid: 5,
         //     lpSymbol: 'SOV-WRBTC',
