@@ -234,13 +234,13 @@ const getFarmsRSKMainNet = (): SerializedFarmConfig[] => {
             token: serializedTokens.helix,
             quoteToken: serializedTokens.weth,
         },
-        // {
-        //     pid: 1,
-        //     lpSymbol: 'HELIX-WRBTC',
-        //     lpAddress: '0x3a9d41c8f905d1744180da36b7eb8350a67ce8e4',
-        //     token: serializedTokens.helix,
-        //     quoteToken: serializedTokens.weth,
-        // },
+        {
+            pid: 1,
+            lpSymbol: 'HELIX-WRBTC',
+            lpAddress: '0x81b255faa5828ed50e1b00f4d3b815a5085a1dae',
+            token: serializedTokens.helix,
+            quoteToken: serializedTokens.weth,
+        },
         // {
         //     pid: 2,
         //     lpSymbol: 'HELIX-RUSDT',
