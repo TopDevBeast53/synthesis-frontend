@@ -14,6 +14,7 @@ import {
     DeserializedFarmConfig,
     FetchStatus,
 } from 'config/constants/types'
+import { ChainId } from 'sdk'
 import { NftToken, State as NftMarketState } from './nftMarket/types'
 
 export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, State, unknown, AnyAction>
@@ -118,7 +119,8 @@ export interface SerializedFarmsState {
     data: SerializedFarm[]
     loadArchivedFarmsData: boolean
     userDataLoaded: boolean
-    loadingKeys: Record<string, boolean>
+    loadingKeys: Record<string, boolean>,
+    chainId: ChainId
 }
 
 export interface DeserializedFarmsState {

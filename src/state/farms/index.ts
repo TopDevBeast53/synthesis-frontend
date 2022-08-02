@@ -29,6 +29,7 @@ const initialState: SerializedFarmsState = {
     loadArchivedFarmsData: false,
     userDataLoaded: false,
     loadingKeys: {},
+    chainId: -1
 }
 
 export const getNonArchivedFarms = (chainId: ChainId) => getFarms(chainId).filter(({ pid }) => !isArchivedPid(pid))
@@ -144,6 +145,12 @@ export const farmsSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         // Update farms with live data
+        builder.addCase(fetchFarmsPublicDataAsync.pending, (state, action) => {
+            if (state.chainId !== action.meta.arg.chainId) {
+                state.chainId = action.meta.arg.chainId
+                state.data = []
+            }
+        })
         builder.addCase(fetchFarmsPublicDataAsync.fulfilled, (state, action) => {
             const farms = getFarms(action.meta.arg.chainId);
             state.data = farms.map((farm) => {
