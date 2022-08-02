@@ -106,7 +106,7 @@ export const usePollCoreFarmData = () => {
     const { chainId } = useActiveWeb3React()
 
     useEffect(() => {
-        dispatch(fetchFarmsPublicDataAsync({ pids: [1, 3], fetchFarms, chainId }))
+        dispatch(fetchFarmsPublicDataAsync({ pids: [1, 2, 3, 11], fetchFarms, chainId }))
     }, [chainId, dispatch, fastRefresh, fetchFarms])
 }
 

@@ -24,6 +24,11 @@ const getFarmBaseTokenPrice = (
 ): BigNumber => {
     const hasTokenPriceVsQuote = Boolean(farm.tokenPriceVsQuote)
     const tokens = getTokens(chainId);
+
+    if (tokens.helix && farm.token.symbol === tokens.helix.symbol) {
+        return helixPriceUSDC
+    }
+
     if (tokens.usdc && farm.quoteToken.symbol === tokens.usdc.symbol) {
         return hasTokenPriceVsQuote ? new BigNumber(farm.tokenPriceVsQuote) : BIG_ZERO
     }
@@ -177,10 +182,27 @@ const getFarmsPrices = (chainId: ChainId, farms: SerializedFarm[]) => {
     const wethPriceUSDC = wethUSDCFarm && wethUSDCFarm.tokenPriceVsQuote ? BIG_ONE.times(wethUSDCFarm.tokenPriceVsQuote) : BIG_ZERO
     const helixWETHFarm = farms.find((farm) => farm.pid === 1)
     const helixPriceUSDC = helixWETHFarm.tokenPriceVsQuote ? wethPriceUSDC.times(helixWETHFarm.tokenPriceVsQuote) : BIG_ZERO
+    let helixUSDCFarm = null
+    switch (chainId) {
+        case ChainId.MAINNET:
+            helixUSDCFarm = farms.find((farm) => farm.pid === 11)
+            break;
+        case ChainId.RSK_MAINNET:
+        case ChainId.RSK_TESTNET:
+            helixUSDCFarm = farms.find((farm) => farm.pid === 2)
+            break;
+        default:
+            helixUSDCFarm = null
+    }
+    const helixPriceUSDCFarm = helixUSDCFarm && helixUSDCFarm.tokenPriceVsQuote ? BIG_ONE.times(helixUSDCFarm.tokenPriceVsQuote) : BIG_ZERO
+    let helixPriceUSDCAvg = helixPriceUSDC
+    if (!helixPriceUSDCFarm.isEqualTo(BIG_ZERO)) {
+        helixPriceUSDCAvg = helixPriceUSDCAvg.plus(helixPriceUSDCFarm).div(2)
+    }
     const farmsWithPrices = farms.map((farm) => {
         const quoteTokenFarm = getFarmFromTokenSymbol(farms, farm.quoteToken.symbol)
-        const tokenPriceBusd = getFarmBaseTokenPrice(chainId, farm, quoteTokenFarm, wethPriceUSDC, helixPriceUSDC)
-        const quoteTokenPriceBusd = getFarmQuoteTokenPrice(farm, quoteTokenFarm, wethPriceUSDC, helixPriceUSDC)
+        const tokenPriceBusd = getFarmBaseTokenPrice(chainId, farm, quoteTokenFarm, wethPriceUSDC, helixPriceUSDCAvg)
+        const quoteTokenPriceBusd = getFarmQuoteTokenPrice(farm, quoteTokenFarm, wethPriceUSDC, helixPriceUSDCAvg)
         return {
             ...farm,
             tokenPriceBusd: tokenPriceBusd.toJSON(),
