@@ -49,7 +49,7 @@ export const SUPPORTED_NETWORKS: { [key: number]: CHAIN_CONFIG } = {
             symbol: 'RBTC',
             decimals: 18,
         },
-        rpcUrls: ['https://rsk.getblock.io/mainnet/78baefd8-efa7-420f-8a4c-8e1cd66a8353'],
+        rpcUrls: ['https://rsk.getblock.io/mainnet/?api_key=78baefd8-efa7-420f-8a4c-8e1cd66a8353'],
         blockExplorerUrls: ['https://explorer.rsk.co'],
         logoUrl: '/images/networks/rsk-network.jpg',
         label: 'Bitcoin RSK',
