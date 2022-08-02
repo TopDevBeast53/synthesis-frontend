@@ -8,6 +8,7 @@ import { getEtherScanLink } from 'utils'
 import { formatBigNumber, getFullDisplayBalance } from 'utils/formatBalance'
 import { useGetTokens } from 'hooks/useGetTokens'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import { ETHER } from 'sdk'
 import CopyAddress from './CopyAddress'
 
 interface WalletInfoProps {
@@ -37,13 +38,13 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ hasLowBnbBalance, onDismiss }) 
       {hasLowBnbBalance && (
         <Message variant="warning" mb="24px">
           <Box>
-            <Text fontWeight="bold">{t('ETH Balance Low')}</Text>
-            <Text as="p">{t('You need ETH for transaction fees.')}</Text>
+            <Text fontWeight="bold">{t(`${ETHER[chainId].symbol} Balance Low`)}</Text>
+            <Text as="p">{t(`You need ${ETHER[chainId].symbol} for transaction fees.`)}</Text>
           </Box>
         </Message>
       )}
       <Flex alignItems="center" justifyContent="space-between">
-        <Text color="textSubtle">{t('ETH Balance')}</Text>
+        <Text color="textSubtle">{t(`${ETHER[chainId].symbol} Balance`)}</Text>
         {fetchStatus !== FetchStatus.Fetched ? (
           <Skeleton height="22px" width="60px" />
         ) : (
