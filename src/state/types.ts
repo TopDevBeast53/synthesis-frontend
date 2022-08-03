@@ -480,12 +480,13 @@ export interface Vote {
         choices: Proposal['choices']
     }
     choice: number
-    metadata?: {
-        votingPower: string
-        verificationHash: string
-    }
     vp: number
-    _inValid?: boolean
+}
+
+export interface VotingPower {
+    vp: number
+    vp_by_strategy: number[]
+    vp_state: string
 }
 
 export interface VotingState {
@@ -497,6 +498,8 @@ export interface VotingState {
     votes: {
         [key: string]: Vote[]
     }
+    vpLoadingStatus: FetchStatus
+    vp: VotingPower
 }
 
 export interface LotteryRoundUserTickets {

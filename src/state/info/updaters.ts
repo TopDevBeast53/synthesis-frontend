@@ -7,6 +7,7 @@ import usePoolDatas from 'state/info/queries/pools/poolData'
 import useFetchedTokenDatas from 'state/info/queries/tokens/tokenData'
 import useTopTokenAddresses from 'state/info/queries/tokens/topTokens'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import usePreviousValue from 'hooks/usePreviousValue'
 import {
     useProtocolData,
     useProtocolChartData,
@@ -20,28 +21,31 @@ import {
 } from './hooks'
 
 export const ProtocolUpdater: React.FC = () => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [protocolData, setProtocolData] = useProtocolData()
     const { data: fetchedProtocolData, error } = useFetchProtocolData()
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [chartData, updateChartData] = useProtocolChartData()
     const { data: fetchedChartData, error: chartError } = useFetchGlobalChartData()
 
     const [transactions, updateTransactions] = useProtocolTransactions()
     const { chainId } = useActiveWeb3React()
+    const prevChainId = usePreviousValue(chainId)
 
     // update overview data if available and not set
     useEffect(() => {
-        if (protocolData === undefined && fetchedProtocolData && !error) {
+        if ((fetchedProtocolData && !error)) {
             setProtocolData(fetchedProtocolData)
         }
-    }, [error, fetchedProtocolData, protocolData, setProtocolData])
+    }, [error, fetchedProtocolData, setProtocolData])
 
     // update global chart data if available and not set
     useEffect(() => {
-        if (chartData === undefined && fetchedChartData && !chartError) {
+        if ((fetchedChartData && !chartError)) {
             updateChartData(fetchedChartData)
         }
-    }, [chartData, chartError, fetchedChartData, updateChartData])
+    }, [chartError, fetchedChartData, updateChartData])
 
     useEffect(() => {
         const fetch = async () => {
@@ -50,10 +54,10 @@ export const ProtocolUpdater: React.FC = () => {
                 updateTransactions(data)
             }
         }
-        if (!transactions) {
+        if (!transactions || prevChainId !== chainId) {
             fetch()
         }
-    }, [chainId, transactions, updateTransactions])
+    }, [chainId, transactions, updateTransactions, prevChainId])
 
     return null
 }
@@ -61,16 +65,18 @@ export const ProtocolUpdater: React.FC = () => {
 export const PoolUpdater: React.FC = () => {
     const updatePoolData = useUpdatePoolData()
     const addPoolKeys = useAddPoolKeys()
+    const { chainId } = useActiveWeb3React()
+    const prevChainId = usePreviousValue(chainId)
 
     const allPoolData = useAllPoolData()
     const addresses = useTopPoolAddresses()
 
     // add top pools on first load
     useEffect(() => {
-        if (addresses.length > 0) {
+        if (addresses.length > 0 || chainId !== prevChainId) {
             addPoolKeys(addresses)
         }
-    }, [addPoolKeys, addresses])
+    }, [addPoolKeys, addresses, chainId, prevChainId])
 
     // detect for which addresses we havent loaded pool data yet
     const unfetchedPoolAddresses = useMemo(() => {
@@ -88,6 +94,8 @@ export const PoolUpdater: React.FC = () => {
     useEffect(() => {
         if (poolDatas && !poolDataError) {
             updatePoolData(Object.values(poolDatas))
+        } else {
+            updatePoolData([])
         }
     }, [poolDataError, poolDatas, updatePoolData])
 
@@ -97,16 +105,18 @@ export const PoolUpdater: React.FC = () => {
 export const TokenUpdater = (): null => {
     const updateTokenDatas = useUpdateTokenData()
     const addTokenKeys = useAddTokenKeys()
+    const { chainId } = useActiveWeb3React()
+    const prevChainId = usePreviousValue(chainId)
 
     const allTokenData = useAllTokenData()
     const addresses = useTopTokenAddresses()
 
     // add top tokens on first load
     useEffect(() => {
-        if (addresses.length > 0) {
+        if (addresses.length > 0 || chainId !== prevChainId) {
             addTokenKeys(addresses)
         }
-    }, [addTokenKeys, addresses])
+    }, [addTokenKeys, addresses, chainId, prevChainId])
 
     // detect for which addresses we havent loaded token data yet
     const unfetchedTokenAddresses = useMemo(() => {
@@ -124,6 +134,8 @@ export const TokenUpdater = (): null => {
     useEffect(() => {
         if (tokenDatas && !tokenDataError) {
             updateTokenDatas(Object.values(tokenDatas))
+        } else {
+            updateTokenDatas([])
         }
     }, [tokenDataError, tokenDatas, updateTokenDatas])
 

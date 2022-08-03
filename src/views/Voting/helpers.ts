@@ -1,8 +1,7 @@
-// import { SNAPSHOT_HUB_API, SNAPSHOT_VOTING_API } from 'config/constants/endpoints'
 import { SNAPSHOT_HUB_API } from 'config/constants/endpoints'
 import getTokens from 'config/constants/tokens'
 import { Proposal, ProposalState, ProposalType, Vote } from 'state/types'
-// import { simpleRpcProvider } from 'hooks/useProviders'
+import { ChainId } from 'sdk'
 import { ADMINS, HELIX_SPACE, SNAPSHOT_VERSION } from './config'
 
 export const isCoreProposal = (proposal: Proposal) => {
@@ -45,11 +44,11 @@ export const generateMetaData = (chainId: number) => {
 /**
  * Returns data that is required on all snapshot payloads
  */
-export const generatePayloadData = () => {
+export const generatePayloadData = (chainId: ChainId) => {
     return {
         version: SNAPSHOT_VERSION,
         timestamp: (Date.now() / 1e3).toFixed(),
-        space: HELIX_SPACE,
+        space: HELIX_SPACE[chainId],
     }
 }
 

@@ -16,7 +16,6 @@ import {
 } from 'uikit'
 import { useHistory } from 'react-router'
 import { Link } from 'react-router-dom'
-import { useWeb3React } from '@web3-react/core'
 import isEmpty from 'lodash/isEmpty'
 import { useCurrentBlock } from 'state/block'
 import { SnapshotCommand } from 'state/types'
@@ -52,10 +51,9 @@ const CreateProposal = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [fieldsState, setFieldsState] = useState<{ [key: string]: boolean }>({})
   const { t } = useTranslation()
-  const { account } = useWeb3React()
   const currentBlock = useCurrentBlock()
   const { push } = useHistory()
-  const { library, connector, chainId } = useActiveWeb3React()
+  const { account, library, connector, chainId } = useActiveWeb3React()
   const { toastSuccess, toastError } = useToast()
   const [onPresentVoteDetailsModal] = useModal(<VoteDetailsModal />)
   const { name, body, endDate, endTime, snapshot } = state
@@ -67,7 +65,7 @@ const CreateProposal = () => {
     try {
       setIsLoading(true)
       const proposal = JSON.stringify({
-        ...generatePayloadData(),
+        ...generatePayloadData(chainId),
         type: SnapshotCommand.PROPOSAL,
         payload: {
           name,

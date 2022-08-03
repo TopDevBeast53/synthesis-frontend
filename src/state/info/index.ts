@@ -41,12 +41,14 @@ export default createReducer(initialState, (builder) =>
         })
         // Pools actions
         .addCase(updatePoolData, (state, { payload: { pools } }) => {
+            const byAddress = {}
             pools.forEach((poolData) => {
-                state.pools.byAddress[poolData.address] = {
+                byAddress[poolData.address] = {
                     ...state.pools.byAddress[poolData.address],
                     data: poolData,
                 }
             })
+            state.pools.byAddress = byAddress
         })
         .addCase(addPoolKeys, (state, { payload: { poolAddresses } }) => {
             poolAddresses.forEach((address) => {
@@ -67,12 +69,14 @@ export default createReducer(initialState, (builder) =>
         })
         // Tokens actions
         .addCase(updateTokenData, (state, { payload: { tokens } }) => {
+            const byAddress = {}
             tokens.forEach((tokenData) => {
-                state.tokens.byAddress[tokenData.address] = {
+                byAddress[tokenData.address] = {
                     ...state.tokens.byAddress[tokenData.address],
                     data: tokenData,
                 }
             })
+            state.tokens.byAddress = byAddress
         })
         .addCase(addTokenKeys, (state, { payload: { tokenAddresses } }) => {
             tokenAddresses.forEach((address) => {

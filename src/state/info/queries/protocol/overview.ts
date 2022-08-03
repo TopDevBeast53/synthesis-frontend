@@ -4,9 +4,10 @@ import { INFO_CLIENT } from 'config/constants/endpoints'
 import { getChangeForPeriod, getPercentChange } from 'views/Info/utils/infoDataHelpers'
 import { ProtocolData } from 'state/info/types'
 import { getDeltaTimestamps } from 'views/Info/utils/infoQueryHelpers'
-import { useBlocksFromTimestamps } from 'views/Info/hooks/useBlocksFromTimestamps'
+import { getBlocksFromTimestamps } from 'views/Info/hooks/useBlocksFromTimestamps'
 import { ChainId } from 'sdk'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import usePreviousValue from 'hooks/usePreviousValue'
 
 interface HelixFactory {
     totalTransactions: string
@@ -57,19 +58,28 @@ interface ProtocolFetchState {
 }
 
 const useFetchProtocolData = (): ProtocolFetchState => {
+    const { chainId } = useActiveWeb3React()
+    const prevChainId = usePreviousValue(chainId)
     const [fetchState, setFetchState] = useState<ProtocolFetchState>({
         error: false,
     })
     const [t24, t48] = getDeltaTimestamps()
-    const { blocks, error: blockError } = useBlocksFromTimestamps([t24, t48])
-    const [block24, block48] = blocks ?? []
-    const { chainId } = useActiveWeb3React()
+
+    useEffect(() => {
+        if (prevChainId !== chainId) {
+            setFetchState({
+                error: false,
+            })
+        }
+    }, [chainId, prevChainId])
 
     useEffect(() => {
         const fetch = async () => {
+            const blocks = await getBlocksFromTimestamps(chainId, [t24, t48])
+            const [block24, block48] = blocks ?? []
             const { error, data } = await getOverviewData(chainId)
-            const { error: error24, data: data24 } = await getOverviewData(block24?.number ?? undefined)
-            const { error: error48, data: data48 } = await getOverviewData(block48?.number ?? undefined)
+            const { error: error24, data: data24 } = await getOverviewData(chainId, block24?.number ?? undefined)
+            const { error: error48, data: data48 } = await getOverviewData(chainId, block48?.number ?? undefined)
             const anyError = error || error24 || error48
             const overviewData = formatHelixFactoryResponse(data?.helixFactories?.[0])
             const overviewData24 = formatHelixFactoryResponse(data24?.helixFactories?.[0])
@@ -109,11 +119,11 @@ const useFetchProtocolData = (): ProtocolFetchState => {
                 })
             }
         }
-        const allBlocksAvailable = block24?.number && block48?.number
-        if (allBlocksAvailable && !blockError && !fetchState.data) {
+        const allBlocksAvailable = t24 && t48
+        if (allBlocksAvailable && !fetchState.data) {
             fetch()
         }
-    }, [block24, block48, blockError, chainId, fetchState])
+    }, [t24, t48, chainId, fetchState])
 
     return fetchState
 }

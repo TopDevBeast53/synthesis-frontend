@@ -1,87 +1,39 @@
 import React, { useState, useEffect } from 'react'
 import { Box, Modal } from 'uikit'
-import { useWeb3React } from '@web3-react/core'
 import { useTranslation } from 'contexts/Localization'
 import { SnapshotCommand } from 'state/types'
 import { signMessage } from 'utils/web3React'
+import { useAppDispatch } from 'state'
 import useToast from 'hooks/useToast'
-import useWeb3Provider from 'hooks/useActiveWeb3React'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import useTheme from 'hooks/useTheme'
-import snapshot from '@snapshot-labs/snapshot.js'
-import { useFarms } from 'state/farms/hooks'
-import { useGetTokens } from 'hooks/useGetTokens'
-import { useFastFresh } from 'hooks/useRefresh'
-import { getMasterChefAddress, getHelixAutoPoolAddress, getHelixVaultAddress } from 'utils/addressHelpers'
+import { fetchVotingPower } from 'state/voting'
+import { FetchStatus } from 'config/constants/types'
+import { useGetVotingPower, useGetVotingPowerStateLoadingStatus } from 'state/voting/hooks'
 import { CastVoteModalProps, ConfirmVoteView } from './types'
 import MainView from './MainView'
 import DetailsView from './DetailsView'
 import { generatePayloadData, Message, sendSnapshotData } from '../../helpers'
 
-const CastVoteModal: React.FC<CastVoteModalProps> = ({ onSuccess, proposalId, spaceId, vote, block, onDismiss }) => {
+const CastVoteModal: React.FC<CastVoteModalProps> = ({ onSuccess, proposalId, spaceId, vote, onDismiss }) => {
   const [view, setView] = useState<ConfirmVoteView>(ConfirmVoteView.MAIN)
   const [isPending, setIsPending] = useState(false)
-  const { account } = useWeb3React()
+  const { account, chainId } = useActiveWeb3React()
+  const dispatch = useAppDispatch()
   const { t } = useTranslation()
-  const tokens = useGetTokens()
   const { toastError } = useToast()
-  const { library, connector, chainId } = useWeb3Provider()
+  const { library, connector } = useActiveWeb3React()
   const { theme } = useTheme()
 
-  const [totalVp, setTotalVp] = useState('')
-  const [isLoadingHelix, setIsLoadingHelix] = useState(true)
-
-  const fastRefresh = useFastFresh()
-  const { data: farmsLP } = useFarms()
-  const masterChefAddress = getMasterChefAddress(chainId)
-  const autoHelixAddress = getHelixAutoPoolAddress(chainId)
-  const vaultAddress = getHelixVaultAddress(chainId)
-
-  const helixLPs = farmsLP
-    .filter((lp) => lp.pid !== 0)
-    .filter((lp) => lp.lpSymbol.includes('HELIX'))
-    .map((lp) => ({
-      "address": lp.lpAddress,
-      "pid": lp.pid
-    }))
-
-  const strategies = [{
-    "name": "helix",
-    "params": {
-      "address": `${tokens.helix.address}`,
-      "masterChef": `${masterChefAddress}`,
-      "autoHelix": `${autoHelixAddress}`,
-      "vault": `${vaultAddress}`,
-      "helixLPs": helixLPs,
-      "symbol": "HELIX",
-      "decimals": 18
-    }
-  }]
+  const votingPower = useGetVotingPower()
+  const votingPowerLoadingStatus = useGetVotingPowerStateLoadingStatus()
+  const isVotingPowerLoading = votingPowerLoadingStatus === FetchStatus.Fetching
 
   useEffect(() => {
-    let mounted = true;
-
-    async function getScore() {
-      const vp = await snapshot.utils.getScores(
-        spaceId,
-        strategies,
-        chainId.toString(),
-        [account],
-        block
-      )
-      setIsLoadingHelix(false)
-      if (mounted) {
-        setTotalVp(vp[0][account] ? vp[0][account] : '')
-      }
+    if (account && spaceId && proposalId) {
+      dispatch(fetchVotingPower({ voter: account, space: spaceId, proposal: proposalId }))
     }
-
-    if (account && strategies) {
-      getScore()
-    }
-    return () => {
-      mounted = false
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fastRefresh, account, chainId])
+  }, [proposalId, account, spaceId, dispatch])
 
   const isStartView = view === ConfirmVoteView.MAIN
   const handleBack = isStartView ? null : () => setView(ConfirmVoteView.MAIN)
@@ -100,13 +52,13 @@ const CastVoteModal: React.FC<CastVoteModalProps> = ({ onSuccess, proposalId, sp
     try {
       setIsPending(true)
       const voteMsg = JSON.stringify({
-        ...generatePayloadData(),
+        ...generatePayloadData(chainId),
         type: SnapshotCommand.VOTE,
         payload: {
           proposal: proposalId,
           choice: vote.value,
           metadata: {
-            votingPower: totalVp,
+            votingPower: votingPower.vp,
           },
         },
       })
@@ -140,15 +92,15 @@ const CastVoteModal: React.FC<CastVoteModalProps> = ({ onSuccess, proposalId, sp
         {view === ConfirmVoteView.MAIN && (
           <MainView
             vote={vote}
-            isLoading={isLoadingHelix}
+            isLoading={isVotingPowerLoading}
             isPending={isPending}
-            total={Number(totalVp)}
+            total={votingPower.vp}
             onConfirm={handleConfirmVote}
             onViewDetails={handleViewDetails}
             onDismiss={handleDismiss}
           />
         )}
-        {view === ConfirmVoteView.DETAILS && <DetailsView total={Number(totalVp)} isLoading={isLoadingHelix} />}
+        {view === ConfirmVoteView.DETAILS && <DetailsView total={votingPower.vp} isLoading={isVotingPowerLoading} />}
       </Box>
     </Modal>
   )

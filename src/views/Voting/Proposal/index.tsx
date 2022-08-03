@@ -12,7 +12,6 @@ import {
   useGetProposalLoadingStatus,
 } from 'state/voting/hooks'
 import { fetchProposal, fetchVotes } from 'state/voting'
-import { getAllVotes } from 'state/voting/helpers'
 import { useTranslation } from 'contexts/Localization'
 import Container from 'components/Layout/Container'
 import ReactMarkdown from 'components/ReactMarkdown'
@@ -31,6 +30,7 @@ import Results from './Results'
 import Vote from './Vote'
 import Votes from './Votes'
 import { PageMeta } from '../../../components/Layout/Page'
+import { STRATEGY2_SNAPSHOT } from '../config'
 
 const Proposal = () => {
   const fastRefresh = useFastFresh()
@@ -43,7 +43,7 @@ const Proposal = () => {
   const votesGraphql = useGetVotes(id)
   const voteLoadingStatus = useGetVotingStateLoadingStatus()
   const proposalLoadingStatus = useGetProposalLoadingStatus()
-  const hasAccountVoted = account && votesGraphql.some((vote) => vote.voter.toLowerCase() === account.toLowerCase())
+  const hasAccountVoted = account && votesGraphql && votesGraphql.some((vote) => vote.voter.toLowerCase() === account.toLowerCase())
   const { id: proposalId = null, snapshot: snapshotId = null } = proposal ?? {}
   const isPageLoading = voteLoadingStatus === FetchStatus.Fetching || proposalLoadingStatus === FetchStatus.Fetching
   const { data: farmsLP } = useFarms()
@@ -66,7 +66,7 @@ const Proposal = () => {
   }, [proposalId, snapshotId, dispatch])
 
   const helixLPs = farmsLP
-    .filter((lp) => lp.pid !== 0)
+    .filter((lp) => snapshotId < STRATEGY2_SNAPSHOT ? lp.pid === 1 : lp.pid !== 0)
     .filter((lp) => lp.lpSymbol.includes('HELIX'))
     .map((lp) => ({
       "address": lp.lpAddress,
@@ -90,34 +90,40 @@ const Proposal = () => {
     let mounted = true;
 
     async function getScore() {
-      const originalVotes = await getAllVotes(proposal.id, Number(proposal.snapshot))
-      const voters = originalVotes.map((vote) => {
+      const voters = votesGraphql.map((vote) => {
         return vote.voter
       })
 
-      const vps = await snapshot.utils.getScores(
-        proposal.space.id,
-        strategies,
-        chainId.toString(),
-        voters,
-        Number(proposal.snapshot)
-      )
-      const updatedVotes = originalVotes.map((vote) => {
-        return { ...vote, vp: vps[0] && vps[0][vote.voter] }
-      })
-      if (mounted) {
-        setVotes(updatedVotes)
+      try {
+        const vps = await snapshot.utils.getScores(
+          proposal.space.id,
+          strategies,
+          chainId.toString(),
+          voters,
+          Number(proposal.snapshot)
+        )
+        const updatedVotes = votesGraphql.map((vote) => {
+          return { ...vote, vp: vps[0] ? vps[0][vote.voter] : vote.vp }
+        })
+        if (mounted) {
+          setVotes(updatedVotes)
+        }
+      } catch (error) {
+        console.debug(error)
+        if (mounted) {
+          setVotes(votesGraphql)
+        }
       }
     }
 
-    if (!!proposal && strategies) {
+    if (!!proposal && strategies && votesGraphql) {
       getScore()
     }
     return () => {
       mounted = false
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fastRefresh, chainId])
+  }, [fastRefresh, votesGraphql, chainId])
 
   if (!proposal || !votes) {
     return <PageLoader />

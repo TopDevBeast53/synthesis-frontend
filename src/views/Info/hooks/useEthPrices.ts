@@ -1,10 +1,11 @@
-import { useBlocksFromTimestamps } from 'views/Info/hooks/useBlocksFromTimestamps'
+import { getBlocksFromTimestamps } from 'views/Info/hooks/useBlocksFromTimestamps'
 import { getDeltaTimestamps } from 'views/Info/utils/infoQueryHelpers'
 import { useState, useEffect } from 'react'
 import { request, gql } from 'graphql-request'
 import { INFO_CLIENT } from 'config/constants/endpoints'
 import { ChainId } from 'sdk'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import usePreviousValue from 'hooks/usePreviousValue'
 
 export interface EthPrices {
     current: number
@@ -82,13 +83,21 @@ export const useEthPrices = (): EthPrices | undefined => {
     const [prices, setPrices] = useState<EthPrices | undefined>()
     const [error, setError] = useState(false)
     const { chainId } = useActiveWeb3React()
+    const prevChainId = usePreviousValue(chainId)
 
     const [t24, t48, tWeek] = getDeltaTimestamps()
-    const { blocks, error: blockError } = useBlocksFromTimestamps([t24, t48, tWeek])
+
+    useEffect(() => {
+        if (chainId !== prevChainId) {
+            setPrices(undefined)
+            setError(false)
+        }
+    }, [chainId, prevChainId])
 
     useEffect(() => {
         const fetch = async () => {
-            const [block24, block48, blockWeek] = blocks
+            const blocks = await getBlocksFromTimestamps(chainId, [t24, t48, tWeek])
+            const [block24, block48, blockWeek] = blocks ?? []
             const { ethPrices, error: fetchError } = await fetchEthPrices(
                 chainId,
                 block24.number,
@@ -101,10 +110,12 @@ export const useEthPrices = (): EthPrices | undefined => {
                 setPrices(ethPrices)
             }
         }
-        if (!prices && !error && blocks && !blockError) {
+        const allBlocksAvailable = t24 && t48 && tWeek
+
+        if (!prices && !error && allBlocksAvailable) {
             fetch()
         }
-    }, [error, prices, blocks, blockError, chainId])
+    }, [error, prices, chainId, t24, t48, tWeek])
 
     return prices
 }

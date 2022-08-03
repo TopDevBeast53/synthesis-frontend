@@ -4,6 +4,7 @@ import { INFO_CLIENT } from 'config/constants/endpoints'
 import { TOKEN_BLACKLIST } from 'config/constants/info'
 import { getDeltaTimestamps } from 'views/Info/utils/infoQueryHelpers'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import usePreviousValue from 'hooks/usePreviousValue'
 
 interface TopPoolsResponse {
     pairDayDatas: {
@@ -52,16 +53,23 @@ const useTopPoolAddresses = (): string[] => {
     const [topPoolAddresses, setTopPoolAddresses] = useState([])
     const [timestamp24hAgo] = getDeltaTimestamps()
     const { chainId } = useActiveWeb3React()
+    const prevChainId = usePreviousValue(chainId)
+
+    useEffect(() => {
+        if (prevChainId !== chainId) {
+            setTopPoolAddresses([])
+        }
+    }, [chainId, prevChainId])
 
     useEffect(() => {
         const fetch = async () => {
             const addresses = await fetchTopPools(chainId, timestamp24hAgo)
             setTopPoolAddresses(addresses)
         }
-        if (topPoolAddresses.length === 0) {
+        if (topPoolAddresses.length === 0 || prevChainId !== chainId) {
             fetch()
         }
-    }, [topPoolAddresses, timestamp24hAgo, chainId])
+    }, [topPoolAddresses, timestamp24hAgo, chainId, prevChainId])
 
     return topPoolAddresses
 }

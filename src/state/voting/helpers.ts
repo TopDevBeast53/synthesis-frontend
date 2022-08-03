@@ -1,10 +1,11 @@
 import request, { gql } from 'graphql-request'
 import { SNAPSHOT_API } from 'config/constants/endpoints'
-import { Proposal, ProposalState, Vote, VoteWhere } from 'state/types'
+import { Proposal, ProposalState, Vote, VoteWhere, VotingPower } from 'state/types'
 import { ChainId } from 'sdk'
+import { HELIX_SPACE } from 'views/Voting/config'
 
-export const getProposals = async (chainId: number, first = 5, skip = 0, state = ProposalState.ACTIVE): Promise<Proposal[]> => {
-    const space = chainId === ChainId.MAINNET ? "helixgeometry.eth" : "silverstardev.eth"
+export const getProposals = async (chainId: ChainId, first = 5, skip = 0, state = ProposalState.ACTIVE): Promise<Proposal[]> => {
+    const space = HELIX_SPACE[chainId]
 
     const response: { proposals: Proposal[] } = await request(
         SNAPSHOT_API,
@@ -92,6 +93,23 @@ export const getVotes = async (first: number, skip: number, where: VoteWhere): P
     return response.votes
 }
 
+export const getVotingPower = async (voter: string, space: string, proposal: string): Promise<VotingPower> => {
+    const response: { vp: VotingPower } = await request(
+        SNAPSHOT_API,
+        gql`
+            query getVotingPower($voter: String!, $space: String!, $proposal: String!) {
+                vp(voter: $voter, space: $space, proposal: $proposal) {
+                    vp
+                    vp_by_strategy
+                    vp_state
+                }
+            }
+        `,
+        { voter, space, proposal },
+    )
+    return response.vp
+}
+
 export const getAllVotes = async (proposalId: string, block?: number, votesPerChunk = 1000): Promise<Vote[]> => {
     return new Promise((resolve, reject) => {
         let votes: Vote[] = []
@@ -113,4 +131,9 @@ export const getAllVotes = async (proposalId: string, block?: number, votesPerCh
 
         fetchVoteChunk(0)
     })
+}
+
+export const getVP = async (voter: string, space: string, proposal: string): Promise<VotingPower> => {
+    const votingPower = await getVotingPower(voter, space, proposal)
+    return votingPower
 }

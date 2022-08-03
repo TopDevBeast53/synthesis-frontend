@@ -1,14 +1,20 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { FetchStatus } from 'config/constants/types'
-import { merge } from 'lodash'
-import { Proposal, ProposalState, VotingState, Vote, State } from 'state/types'
-import { getAllVotes, getProposal, getProposals } from './helpers'
+// import { merge } from 'lodash'
+import { Proposal, ProposalState, VotingState, Vote, VotingPower } from 'state/types'
+import { getAllVotes, getVP, getProposal, getProposals } from './helpers'
 
 const initialState: VotingState = {
   proposalLoadingStatus: FetchStatus.Idle,
   proposals: {},
   voteLoadingStatus: FetchStatus.Idle,
   votes: {},
+  vpLoadingStatus: FetchStatus.Idle,
+  vp: {
+    vp: 0,
+    vp_by_strategy: [],
+    vp_state: ''
+  },
 }
 
 // Thunks
@@ -33,15 +39,12 @@ export const fetchVotes = createAsyncThunk<
   return { votes: response, proposalId }
 })
 
-export const verifyVotes = createAsyncThunk<
-  { results: { [key: string]: boolean }; proposalId: string },
-  { proposalId: string; snapshot?: string, getVoteVerificationStatuses: any },
-  { state: State }
->('voting/verifyVotes', async ({ proposalId, snapshot, getVoteVerificationStatuses }, { getState }) => {
-  const state = getState()
-  const proposalVotes = state.voting.votes[proposalId]
-  const response = await getVoteVerificationStatuses(proposalVotes, Number(snapshot))
-  return { results: response, proposalId }
+export const fetchVotingPower = createAsyncThunk<
+  VotingPower,
+  { voter: string; space: string; proposal: string }
+>('voting/fetchVotingPower', async ({ voter, space, proposal }) => {
+  const response = await getVP(voter, space, proposal)
+  return response
 })
 
 export const votingSlice = createSlice({
@@ -49,20 +52,6 @@ export const votingSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    // Verify Votes
-    builder.addCase(verifyVotes.fulfilled, (state, action) => {
-      const { proposalId, results } = action.payload
-
-      if (state.votes[proposalId]) {
-        state.votes[proposalId] = state.votes[proposalId].map((vote) => {
-          return {
-            ...vote,
-            _inValid: results[vote.id] === false,
-          }
-        })
-      }
-    })
-
     // Fetch Proposals
     builder.addCase(fetchProposals.pending, (state) => {
       state.proposalLoadingStatus = FetchStatus.Fetching
@@ -75,7 +64,8 @@ export const votingSlice = createSlice({
         }
       }, {})
 
-      state.proposals = merge({}, state.proposals, proposals)
+      // state.proposals = merge({}, state.proposals, proposals) 
+      state.proposals = proposals
       state.proposalLoadingStatus = FetchStatus.Fetched
     })
 
@@ -100,6 +90,15 @@ export const votingSlice = createSlice({
         [proposalId]: votes,
       }
       state.voteLoadingStatus = FetchStatus.Fetched
+    })
+
+    // Fetch Voting Power
+    builder.addCase(fetchVotingPower.pending, (state) => {
+      state.vpLoadingStatus = FetchStatus.Fetching
+    })
+    builder.addCase(fetchVotingPower.fulfilled, (state, action) => {
+      state.vp = action.payload
+      state.vpLoadingStatus = FetchStatus.Fetched
     })
   },
 })

@@ -3,12 +3,13 @@ import { useState, useEffect } from 'react'
 import { request, gql } from 'graphql-request'
 import { INFO_CLIENT } from 'config/constants/endpoints'
 import { getDeltaTimestamps } from 'views/Info/utils/infoQueryHelpers'
-import { useBlocksFromTimestamps } from 'views/Info/hooks/useBlocksFromTimestamps'
+import { getBlocksFromTimestamps } from 'views/Info/hooks/useBlocksFromTimestamps'
 import { getPercentChange, getChangeForPeriod, getAmountChange } from 'views/Info/utils/infoDataHelpers'
 import { TokenData } from 'state/info/types'
 import { useEthPrices } from 'views/Info/hooks/useEthPrices'
 import { ChainId } from 'sdk'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import usePreviousValue from 'hooks/usePreviousValue'
 
 interface TokenFields {
     id: string
@@ -120,13 +121,20 @@ interface TokenDatas {
 const useFetchedTokenDatas = (tokenAddresses: string[]): TokenDatas => {
     const [fetchState, setFetchState] = useState<TokenDatas>({ error: false })
     const [t24h, t48h, t7d, t14d] = getDeltaTimestamps()
-    const { blocks, error: blockError } = useBlocksFromTimestamps([t24h, t48h, t7d, t14d])
-    const [block24h, block48h, block7d, block14d] = blocks ?? []
     const ethPrices = useEthPrices()
     const { chainId } = useActiveWeb3React()
+    const prevChainId = usePreviousValue(chainId)
+
+    useEffect(() => {
+        if (prevChainId !== chainId) {
+            setFetchState({ error: false })
+        }
+    }, [chainId, prevChainId])
 
     useEffect(() => {
         const fetch = async () => {
+            const blocks = await getBlocksFromTimestamps(chainId, [t24h, t48h, t7d, t14d])
+            const [block24h, block48h, block7d, block14d] = blocks ?? []
             const { error, data } = await fetchTokenData(
                 chainId,
                 block24h.number,
@@ -196,11 +204,11 @@ const useFetchedTokenDatas = (tokenAddresses: string[]): TokenDatas => {
                 setFetchState({ data: formatted, error: false })
             }
         }
-        const allBlocksAvailable = block24h?.number && block48h?.number && block7d?.number && block14d?.number
-        if (tokenAddresses.length > 0 && allBlocksAvailable && !blockError && ethPrices) {
+        const allBlocksAvailable = t24h && t48h && t7d && t14d
+        if (tokenAddresses.length > 0 && allBlocksAvailable && ethPrices && !fetchState.data) {
             fetch()
         }
-    }, [tokenAddresses, block24h, block48h, block7d, block14d, blockError, ethPrices, chainId])
+    }, [tokenAddresses, t24h, t48h, t7d, t14d, ethPrices, chainId, fetchState])
 
     return fetchState
 }

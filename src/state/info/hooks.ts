@@ -84,24 +84,28 @@ export const usePoolDatas = (poolAddresses: string[]): PoolData[] => {
     const allPoolData = useAllPoolData()
     const addNewPoolKeys = useAddPoolKeys()
 
-    const untrackedAddresses = poolAddresses.reduce((accum: string[], address) => {
-        if (!Object.keys(allPoolData).includes(address)) {
-            accum.push(address)
-        }
-        return accum
-    }, [])
+    const untrackedAddresses = useMemo(() => {
+        return poolAddresses.reduce((accum: string[], address) => {
+            if (!Object.keys(allPoolData).includes(address)) {
+                accum.push(address)
+            }
+            return accum
+        }, [])
+    }, [poolAddresses, allPoolData])
 
     useEffect(() => {
-        if (untrackedAddresses) {
+        if (untrackedAddresses.length) {
             addNewPoolKeys(untrackedAddresses)
         }
     }, [addNewPoolKeys, untrackedAddresses])
 
-    const poolsWithData = poolAddresses
-        .map((address) => {
-            return allPoolData[address]?.data
-        })
-        .filter((pool) => pool)
+    const poolsWithData = useMemo(() => {
+        return poolAddresses
+            .map((address) => {
+                return allPoolData[address]?.data
+            })
+            .filter((pool) => pool)
+    }, [allPoolData, poolAddresses])
 
     return poolsWithData
 }

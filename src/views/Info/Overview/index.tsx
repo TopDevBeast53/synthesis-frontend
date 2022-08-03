@@ -52,15 +52,28 @@ const Overview: React.FC = () => {
 
   // Getting latest liquidity and volumeUSD to display on top of chart when not hovered
   useEffect(() => {
-    if (volumeHover == null && protocolData) {
+    if (volumeHover === undefined && protocolData) {
       setVolumeHover(protocolData.volumeUSD)
     }
   }, [protocolData, volumeHover])
+  
   useEffect(() => {
-    if (liquidityHover == null && protocolData) {
+    if (protocolData) {
+      setVolumeHover(protocolData.volumeUSD)
+    }
+  }, [protocolData])
+  
+  useEffect(() => {
+    if (liquidityHover === undefined && protocolData) {
       setLiquidityHover(protocolData.liquidityUSD)
     }
   }, [liquidityHover, protocolData])
+
+  useEffect(() => {
+    if (protocolData) {
+      setLiquidityHover(protocolData.liquidityUSD)
+    }
+  }, [protocolData])
 
   const formattedLiquidityData = useMemo(() => {
     if (chartData) {
