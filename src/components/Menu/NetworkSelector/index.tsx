@@ -11,6 +11,7 @@ import { ParsedQs } from 'qs'
 import { replaceURLParam } from 'utils/routes'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { ChainId } from 'sdk'
+import routeConfig from '../config/config'
 
 // import { isChainAllowed, switchChain } from 'utils/switchChain'
 
@@ -194,13 +195,30 @@ export default function NetworkSelector() {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async (targetChain: number, skipToggle?: boolean) => {
       try {
-        // await switchChain(connector, targetChain)
-        history.replace({ search: replaceURLParam(history.location.search, 'chain', getChainNameFromId(targetChain)) })
+        const { location: { pathname, search }, replace, push } = history
+        const route = routeConfig(t).find(route_ => {
+          if (route_.href && route_.href.includes(pathname)) return true
+          if (route_.items) {
+            const item = route_.items.find(item_ => item_.href && item_.href.includes(pathname))
+            return item !== undefined
+          }
+          return false
+        })
+        if (route === undefined || chainId === undefined) {
+          push({ pathname: '/', search: replaceURLParam(search, 'chain', getChainNameFromId(targetChain)) })
+          return
+        }
+        const chain = SUPPORTED_NETWORKS[targetChain]
+        if (chain.showOnlyTrade && !route.isTrade) {
+          push({ pathname: '/', search: replaceURLParam(search, 'chain', getChainNameFromId(targetChain)) })
+          return
+        }
+        replace({ search: replaceURLParam(search, 'chain', getChainNameFromId(targetChain)) })
       } catch (error) {
         console.error('Failed to switch networks', error)
       }
     },
-    [history]
+    [chainId, history, t]
   )
 
   useEffect(() => {
