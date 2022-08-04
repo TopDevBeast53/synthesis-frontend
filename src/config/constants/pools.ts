@@ -46,7 +46,12 @@ const getPools = (chainId: ChainId) => {
             },
             poolCategory: PoolCategory.CORE,
             harvest: true,
-            tokenPerBlock: '2.278481012658228',
+            tokenPerBlock: {
+                [ChainId.MAINNET]: '2.278481012658228',
+                [ChainId.TESTNET]: '2.278481012658228',
+                [ChainId.RSK_MAINNET]: '2.278481012658228',
+                [ChainId.RSK_TESTNET]: '2.278481012658228',
+            },
             sortOrder: 1,
             isFinished: false,
         },

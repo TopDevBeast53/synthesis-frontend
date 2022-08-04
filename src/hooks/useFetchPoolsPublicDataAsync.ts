@@ -49,7 +49,8 @@ const useFetchPoolsPublicDataAsync = (currentBlockNumber: number) => {
           stakingTokenPrice,
           earningTokenPrice,
           getBalanceNumber(new BigNumber(totalStaking.totalStaked), pool.stakingToken.decimals),
-          parseFloat(pool.tokenPerBlock),
+          parseFloat(pool.tokenPerBlock[chainId]),
+          chainId
         )
         : 0
 

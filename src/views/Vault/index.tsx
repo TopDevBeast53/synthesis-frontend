@@ -138,11 +138,11 @@ const Vault: React.FC = () => {
 
       setDeposits(deposits_.map(deposit => ({
         ...deposit,
-        apr: getVaultApr(totalStakedVault, tokenPerBlock, deposit.weight)
+        apr: getVaultApr(totalStakedVault, tokenPerBlock, deposit.weight, chainId)
       })))
       setLoading(false)
     }
-  }, [helixVaultContract, account, helixEnabled, refresh, fastRefresh, tokenPerBlock, totalStakedVault])
+  }, [helixVaultContract, account, helixEnabled, refresh, fastRefresh, tokenPerBlock, totalStakedVault, chainId])
 
   // TODO aren't arrays in dep array checked just by reference, i.e. it will rerender every time reference changes?
 

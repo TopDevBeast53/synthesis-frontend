@@ -1,4 +1,3 @@
-import { useWeb3React } from '@web3-react/core'
 import BigNumber from 'bignumber.js'
 import FlexLayout from 'components/Layout/Flex'
 import Page from 'components/Layout/Page'
@@ -7,6 +6,7 @@ import PageHeader from 'components/PageHeader'
 import SearchInput from 'components/SearchInput'
 import Select, { OptionProps } from 'components/Select/Select'
 import { useTranslation } from 'contexts/Localization'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import useIntersectionObserver from 'hooks/useIntersectionObserver'
 import { orderBy } from 'lodash'
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
@@ -115,7 +115,7 @@ const Farms: React.FC = () => {
   const helixPrice = usePriceHelixBusd()
   const [query, setQuery] = useState('')
   const [viewMode, setViewMode] = useUserFarmsViewMode()
-  const { account } = useWeb3React()
+  const { account, chainId } = useActiveWeb3React()
   const [sortOption, setSortOption] = useState('hot')
   const { observerRef, isIntersecting } = useIntersectionObserver()
   const chosenFarmsLength = useRef(0)
@@ -156,7 +156,7 @@ const Farms: React.FC = () => {
         }
         const totalLiquidity = new BigNumber(farm.lpTotalInQuoteToken).times(farm.quoteTokenPriceBusd)
         const { helixRewardsApr, lpRewardsApr } = isActive
-          ? getFarmApr(new BigNumber(farm.poolWeight), helixPrice, totalLiquidity, farm.lpAddress)
+          ? getFarmApr(new BigNumber(farm.poolWeight), helixPrice, totalLiquidity, farm.lpAddress, chainId)
           : { helixRewardsApr: 0, lpRewardsApr: 0 }
 
         return { ...farm, apr: helixRewardsApr, lpRewardsApr, liquidity: totalLiquidity }
@@ -170,7 +170,7 @@ const Farms: React.FC = () => {
       }
       return farmsToDisplayWithAPR
     },
-    [helixPrice, query, isActive],
+    [query, isActive, helixPrice, chainId],
   )
 
   const handleChangeQuery = (event: React.ChangeEvent<HTMLInputElement>) => {

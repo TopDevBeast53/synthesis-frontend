@@ -1,4 +1,4 @@
-import { BSC_BLOCK_TIME } from 'config'
+import { BLOCK_TIME } from 'config'
 import { useTranslation } from 'contexts/Localization'
 import { Translate } from 'contexts/Localization/types'
 import React from 'react'
@@ -7,6 +7,7 @@ import { Card, Box, InfoIcon, Text, useTooltip } from 'uikit'
 import { useSubgraphHealthIndicatorManager } from 'state/user/hooks'
 import useSubgraphHealth, { SubgraphStatus } from 'hooks/useSubgraphHealth'
 import { useLocation } from 'react-router-dom'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 const StyledCard = styled(Card)`
   border-radius: 8px;
@@ -21,7 +22,7 @@ const IndicatorWrapper = styled(Box)`
   gap: 7px;
 `
 
-const Dot = styled(Box)<{ $color: string }>`
+const Dot = styled(Box) <{ $color: string }>`
   width: 12px;
   height: 12px;
   border-radius: 50%;
@@ -29,27 +30,27 @@ const Dot = styled(Box)<{ $color: string }>`
 `
 
 const indicator = (t: Translate) =>
-  ({
-    delayed: {
-      label: t('Delayed'),
-      color: 'failure',
-      description: t(
-        'Subgraph is currently experiencing delays due to BSC issues. Performance may suffer until subgraph is restored.',
-      ),
-    },
-    slow: {
-      label: t('Slight delay'),
-      color: 'warning',
-      description: t(
-        'Subgraph is currently experiencing delays due to BSC issues. Performance may suffer until subgraph is restored.',
-      ),
-    },
-    healthy: {
-      label: t('Fast'),
-      color: 'success',
-      description: t('No issues with the subgraph.'),
-    },
-  } as const)
+({
+  delayed: {
+    label: t('Delayed'),
+    color: 'failure',
+    description: t(
+      'Subgraph is currently experiencing delays due to BSC issues. Performance may suffer until subgraph is restored.',
+    ),
+  },
+  slow: {
+    label: t('Slight delay'),
+    color: 'warning',
+    description: t(
+      'Subgraph is currently experiencing delays due to BSC issues. Performance may suffer until subgraph is restored.',
+    ),
+  },
+  healthy: {
+    label: t('Fast'),
+    color: 'success',
+    description: t('No issues with the subgraph.'),
+  },
+} as const)
 
 type Indicator = keyof ReturnType<typeof indicator>
 
@@ -83,10 +84,11 @@ const SubgraphHealth = () => {
   const [alwaysShowIndicator] = useSubgraphHealthIndicatorManager()
   const forceIndicatorDisplay = status === SubgraphStatus.WARNING || status === SubgraphStatus.NOT_OK
   const showIndicator = alwaysShowIndicator || forceIndicatorDisplay
+  const { chainId } = useActiveWeb3React()
 
   const indicatorProps = indicator(t)
 
-  const secondRemainingBlockSync = blockDifference * BSC_BLOCK_TIME
+  const secondRemainingBlockSync = blockDifference * BLOCK_TIME[chainId]
 
   const indicatorValue = getIndicator(status)
 

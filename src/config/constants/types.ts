@@ -1,19 +1,19 @@
 import BigNumber from 'bignumber.js'
-import { Token } from 'sdk'
+import { ChainId, Token } from 'sdk'
 
 export type TranslatableText =
     | string
     | {
-          key: string
-          data?: {
-              [key: string]: string | number
-          }
-      }
+        key: string
+        data?: {
+            [key: string]: string | number
+        }
+    }
 export interface Address {
-    1: string   // UpdateMe
-    4?: string
-    30?: string
-    31?: string
+    [ChainId.MAINNET]: string   // UpdateMe
+    [ChainId.TESTNET]?: string
+    [ChainId.RSK_MAINNET]?: string
+    [ChainId.RSK_TESTNET]?: string
 }
 
 export interface SerializedToken {
@@ -92,7 +92,12 @@ interface PoolConfigBaseProps {
     sousId: number
     contractAddress: Address
     poolCategory: PoolCategory
-    tokenPerBlock: string
+    tokenPerBlock: {
+        [ChainId.MAINNET]: string   // UpdateMe
+        [ChainId.TESTNET]?: string
+        [ChainId.RSK_MAINNET]?: string
+        [ChainId.RSK_TESTNET]?: string
+    }
     sortOrder?: number
     harvest?: boolean
     isFinished?: boolean

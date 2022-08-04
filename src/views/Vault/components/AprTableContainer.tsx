@@ -5,6 +5,7 @@ import { getVaultApr } from "utils/apr"
 import { logError } from "utils/sentry"
 import { Flex } from 'uikit'
 import Container from 'components/Layout/Container'
+import useActiveWeb3React from "hooks/useActiveWeb3React"
 import { useHelixLockVault } from "../hooks/useHelixLockVault"
 import AprTable, { Duration } from "./AprTable"
 
@@ -19,6 +20,7 @@ const AprTableContainer: FC<AprTableProps> = ({ tokenPerBlock, totalStakedVault 
 
   const { getDurations } = useHelixLockVault()
   const helixVaultContract = useHelixVault()
+  const { chainId } = useActiveWeb3React()
 
   useEffect(() => {
     load()
@@ -31,7 +33,7 @@ const AprTableContainer: FC<AprTableProps> = ({ tokenPerBlock, totalStakedVault 
           return {
             ...item,
             days,
-            apr: getVaultApr(totalStakedVault, tokenPerBlock, Number(item.weight.toString()))
+            apr: getVaultApr(totalStakedVault, tokenPerBlock, Number(item.weight.toString()), chainId)
           }
         }, [])
 
@@ -41,7 +43,7 @@ const AprTableContainer: FC<AprTableProps> = ({ tokenPerBlock, totalStakedVault 
       }
       setLoading(false);
     }
-  }, [getDurations, helixVaultContract, totalStakedVault, tokenPerBlock])
+  }, [getDurations, helixVaultContract, totalStakedVault, tokenPerBlock, chainId])
 
   return (
     <Container>

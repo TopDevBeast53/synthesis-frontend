@@ -371,7 +371,8 @@ export const useFetchHelixPoolPublicDataAsync = () => {
             stakingTokenPrice,
             earningTokenPrice,
             getBalanceNumber(new BigNumber(totalStaking ? totalStaking.toString() : 0), helixPool.stakingToken.decimals),
-            parseFloat(helixPool.tokenPerBlock),
+            parseFloat(helixPool.tokenPerBlock[chainId]),
+            chainId
         )
 
         dispatch(
@@ -385,7 +386,7 @@ export const useFetchHelixPoolPublicDataAsync = () => {
                 },
             }),
         )
-    }, [helixContract, helixPool.earningToken.address, helixPool.stakingToken.address, helixPool.stakingToken.decimals, helixPool.tokenPerBlock, helixPoolAddress])
+    }, [chainId, helixContract, helixPool.earningToken.address, helixPool.stakingToken.address, helixPool.stakingToken.decimals, helixPool.tokenPerBlock, helixPoolAddress])
 }
 
 export const useFetchHelixPoolUserDataAsync = (account: string) => {

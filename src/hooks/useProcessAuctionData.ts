@@ -1,10 +1,12 @@
 import { add, differenceInHours, toDate } from 'date-fns'
-import { BSC_BLOCK_TIME, DEFAULT_TOKEN_DECIMAL } from 'config'
+import { BLOCK_TIME, DEFAULT_TOKEN_DECIMAL } from 'config'
 import useProviders from 'hooks/useProviders'
 import { AuctionsResponse, FarmAuctionContractStatus } from 'utils/types'
 import { Auction, AuctionStatus } from 'config/constants/types'
 import { ethersToBigNumber } from 'utils/bigNumber'
 import { useCallback } from 'react'
+import { ChainId } from 'sdk'
+import useActiveWeb3React from './useActiveWeb3React'
 
 // Determine if the auction is:
 // - Live and biddable
@@ -35,9 +37,9 @@ const getAuctionStatus = (
   return AuctionStatus.ToBeAnnounced
 }
 
-const getDateForBlock = async (rpcProvider, currentBlock: number, block: number) => {
+const getDateForBlock = async (rpcProvider, currentBlock: number, block: number, chainId: ChainId) => {
   const blocksUntilBlock = block - currentBlock
-  const secondsUntilStart = blocksUntilBlock * BSC_BLOCK_TIME
+  const secondsUntilStart = blocksUntilBlock * BLOCK_TIME[chainId]
   // if block already happened we can get timestamp via .getBlock(block)
   if (currentBlock > block) {
     try {
@@ -53,6 +55,7 @@ const getDateForBlock = async (rpcProvider, currentBlock: number, block: number)
 // Get additional auction information based on the date received from smart contract
 const useProcessAuctionData = () => {
   const rpcProvider = useProviders()
+  const { chainId } = useActiveWeb3React()
   return useCallback(async (auctionId: number, auctionResponse: AuctionsResponse): Promise<Auction> => {
     const processedAuctionData = {
       ...auctionResponse,
@@ -64,8 +67,8 @@ const useProcessAuctionData = () => {
     }
 
     const currentBlock = await rpcProvider.getBlockNumber()
-    const startDate = await getDateForBlock(rpcProvider, currentBlock, processedAuctionData.startBlock)
-    const endDate = await getDateForBlock(rpcProvider, currentBlock, processedAuctionData.endBlock)
+    const startDate = await getDateForBlock(rpcProvider, currentBlock, processedAuctionData.startBlock, chainId)
+    const endDate = await getDateForBlock(rpcProvider, currentBlock, processedAuctionData.endBlock, chainId)
 
     const auctionStatus = getAuctionStatus(
       currentBlock,
@@ -82,7 +85,7 @@ const useProcessAuctionData = () => {
       ...processedAuctionData,
       status: auctionStatus,
     }
-  }, [rpcProvider])
+  }, [chainId, rpcProvider])
 }
 
 export default useProcessAuctionData

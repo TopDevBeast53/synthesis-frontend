@@ -1,12 +1,13 @@
 import BigNumber from 'bignumber.js'
 import { useState, useCallback } from 'react'
-import { BSC_BLOCK_TIME } from 'config'
+import { BLOCK_TIME } from 'config'
 import ifoV2Abi from 'config/abi/ifoV2.json'
 import { useGetTokens } from 'hooks/useGetTokens'
 import { Ifo, IfoStatus } from 'config/constants/types'
 import { ethers } from 'ethers'
 import { useLpTokenPrice, usePriceHelixBusd } from 'state/farms/hooks'
 import { useMulticallv2 } from 'hooks/useMulticall'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { PublicIfoData } from '../../types'
 import { getStatus } from '../helpers'
@@ -34,6 +35,7 @@ const useGetPublicIfoData = (ifo: Ifo): PublicIfoData => {
     const lpTokenPriceInUsd = useLpTokenPrice(ifo.currency.symbol)
     const currencyPriceInUSD = ifo.currency === tokens.helix ? cakePriceUsd : lpTokenPriceInUsd
     const multicallv2 = useMulticallv2()
+    const { chainId } = useActiveWeb3React()
 
     const [state, setState] = useState({
         isInitialized: false,
@@ -123,8 +125,8 @@ const useGetPublicIfoData = (ifo: Ifo): PublicIfoData => {
             setState((prev) => ({
                 ...prev,
                 isInitialized: true,
-                secondsUntilEnd: blocksRemaining * BSC_BLOCK_TIME,
-                secondsUntilStart: (startBlockNum - currentBlock) * BSC_BLOCK_TIME,
+                secondsUntilEnd: blocksRemaining * BLOCK_TIME[chainId],
+                secondsUntilStart: (startBlockNum - currentBlock) * BLOCK_TIME[chainId],
                 poolBasic: { ...poolBasicFormatted, taxRate: 0 },
                 poolUnlimited: { ...poolUnlimitedFormatted, taxRate: taxRateNum },
                 status,
@@ -136,7 +138,7 @@ const useGetPublicIfoData = (ifo: Ifo): PublicIfoData => {
                 numberPoints: numberPoints ? numberPoints[0].toNumber() : 0,
             }))
         },
-        [multicallv2, address, releaseBlockNumber],
+        [multicallv2, address, releaseBlockNumber, chainId],
     )
 
     return { ...state, currencyPriceInUSD, fetchIfoData }
