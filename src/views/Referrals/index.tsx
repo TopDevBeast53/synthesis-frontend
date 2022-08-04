@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, useCallback, useEffect, useMemo } from 'react'
 import { useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 import { ethers } from 'ethers'
@@ -93,8 +93,8 @@ const useClaimRewards = () => {
   return addRefCb
 }
 
-function getReferralLink(address: string): string {
-  return `${BASE_URL}/referrals?ref=${address}`
+function getReferralLink(address: string, chain: string): string {
+  return `${BASE_URL}/referrals?ref=${address}&chain=${chain}`
 }
 
 export default function Referrals() {
@@ -168,6 +168,14 @@ export default function Referrals() {
 
   }, [getBalance, fastRefresh])
 
+  const { ref, chain } = useMemo(() => {
+    const url = new URLSearchParams(search);
+    return {
+      ref: url.get('ref'),
+      chain: url.get('chain')
+    }
+  }, [search])
+
   if (!account) {
     return (
       <Page>
@@ -182,7 +190,6 @@ export default function Referrals() {
       </Page>
     )
   }
-  const ref = new URLSearchParams(search).get('ref')
   const showAcceptReferral = ref && !myReferrer && !isReferrerLoading
   return (
     <Page>
@@ -196,7 +203,7 @@ export default function Referrals() {
             <Text color="secondary" fontSize="13px" textTransform="uppercase" fontWeight="bold" mb="8px">
               Your Referral Link
             </Text>
-            <CopyAddress account={getReferralLink(account)} />
+            <CopyAddress account={getReferralLink(account, chain)} />
           </Flex>
           <Flex flexDirection="column" style={{ paddingTop: '24px' }}>
             <Text color="secondary" fontSize="13px" textTransform="uppercase" fontWeight="bold" mb="8px">
