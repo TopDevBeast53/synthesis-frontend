@@ -18,7 +18,6 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
                 label: t('Trade'),
                 icon: 'Swap',
                 href: '/swap',
-                // showItemsOnMobile: false,
                 items: [
                     {
                         label: t('Exchange'),
@@ -65,25 +64,6 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
                     },
                 ],
             },
-            // {
-            //     label: t('Yield Swaps'),
-            //     href: '/lps-swap',
-            //     mobileLabel:"YS",
-            //     icon: 'YieldSwap',
-            //     items: [
-            //         {
-            //             label: t('Swap LPs'),
-            //             href: '/lps-swap',
-            //         },
-            //         // {
-            //         //     type: DropdownMenuItemType.DIVIDER,
-            //         // },
-            //         // {
-            //         //     label: t('Swap Yield'),
-            //         //     href: '/yield-swap',
-            //         // },
-            //     ],
-            // },
             {
                 label: t('Referrals'),
                 href: '/referrals',
@@ -100,15 +80,6 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
                         label: 'Geobot Staking',
                         href: '/geobot-staking',
                     },
-                    {
-                        type: DropdownMenuItemType.DIVIDER,
-                    },
-                    {
-                        label: 'Geobot bridge',
-                        href: 'https://nexus.helix.finance',
-                        target: '_blank',
-                        type: DropdownMenuItemType.EXTERNAL_LINK,
-                    },
                 ],
             },
             {
@@ -118,90 +89,40 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
                 showItemsOnMobile: false,
             },
             {
+                label: t('Bridge'),
+                icon: 'Bridge',
+                href: 'https://app.multichain.org/#/router',
+                type: DropdownMenuItemType.EXTERNAL_LINK,
+                items: [
+                    {
+                        label: t('HELIX'),
+                        href: 'https://app.multichain.org/#/router',
+                        type: DropdownMenuItemType.EXTERNAL_LINK,
+                    },
+                    {
+                        label: t('Geobots'),
+                        href: 'https://nexus.helix.finance/',
+                        type: DropdownMenuItemType.EXTERNAL_LINK,
+                    }
+                ],
+            },
+            {
                 label: t('Data'),
                 href: '/data',
                 icon: 'Chart',
                 showItemsOnMobile: false,
             },
-            // {
-            //   label: t('Win'),
-            //   href: '/prediction',
-            //   icon: 'Trophy',
-            //   items: [
-            //     {
-            //       label: t('Trading Competition'),
-            //       href: '/competition',
-            //     },
-            //     {
-            //       label: t('Prediction (BETA)'),
-            //       href: '/prediction',
-            //     },
-            //     {
-            //       label: t('Lottery'),
-            //       href: '/lottery',
-            //     },
-            //   ],
-            // },
-            // {
-            //   label: t('NFT'),
-            //   href: `${nftsBaseUrl}`,
-            //   icon: 'Nft',
-            //   items: [
-            //     {
-            //       label: t('Overview'),
-            //       href: `${nftsBaseUrl}`,
-            //     },
-            //     {
-            //       label: t('Collections'),
-            //       href: `${nftsBaseUrl}/collections`,
-            //     },
-            //     {
-            //       label: t('Activity'),
-            //       href: `${nftsBaseUrl}/activity`,
-            //     },
-            //   ],
-            // },
             {
                 label: '',
                 href: '#',
                 icon: 'More',
                 hideSubNav: true,
                 items: [
-
-                    // {
-                    //     type: DropdownMenuItemType.DIVIDER,
-                    // },
-                    //     {
-                    //       label: t('IFO'),
-                    //       href: '/ifo',
-                    //       status: menuStatus.SOON,
-                    //     },
                     {
                         label: 'Docs',
                         href: 'https://geometry.gitbook.io/helix',
                         type: DropdownMenuItemType.EXTERNAL_LINK,
                     },
-
-                    //     {
-                    //       type: DropdownMenuItemType.DIVIDER,
-                    //     },
-                    //     {
-                    //       label: t('Leaderboard'),
-                    //       href: '/teams',
-                    //     },
-                    //     {
-                    //       type: DropdownMenuItemType.DIVIDER,
-                    //     },
-                    //     {
-                    //       label: t('Blog'),
-                    //       href: 'https://medium.com/pancakeswap',
-                    //       type: DropdownMenuItemType.EXTERNAL_LINK,
-                    //     },
-                    //     {
-                    //       label: t('Docs'),
-                    //       href: 'https://docs.pancakeswap.finance',
-                    //       type: DropdownMenuItemType.EXTERNAL_LINK,
-                    //     },
                 ],
             },
         ],
@@ -211,7 +132,6 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
                 label: t('Trade'),
                 icon: 'Swap',
                 href: '/swap',
-                // showItemsOnMobile: false,
                 items: [
                     {
                         label: t('Exchange'),
@@ -258,25 +178,6 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
                     },
                 ],
             },
-            // {
-            //     label: t('Yield Swaps'),
-            //     href: '/lps-swap',
-            //     mobileLabel:"YS",
-            //     icon: 'YieldSwap',
-            //     items: [
-            //         {
-            //             label: t('Swap LPs'),
-            //             href: '/lps-swap',
-            //         },
-            //         // {
-            //         //     type: DropdownMenuItemType.DIVIDER,
-            //         // },
-            //         // {
-            //         //     label: t('Swap Yield'),
-            //         //     href: '/yield-swap',
-            //         // },
-            //     ],
-            // },
             {
                 label: t('Referrals'),
                 href: '/referrals',
@@ -293,15 +194,6 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
                         label: 'Geobot Staking',
                         href: '/geobot-staking',
                     },
-                    {
-                        type: DropdownMenuItemType.DIVIDER,
-                    },
-                    {
-                        label: 'Geobot bridge',
-                        href: 'https://nexus.helix.finance',
-                        target: '_blank',
-                        type: DropdownMenuItemType.EXTERNAL_LINK,
-                    },
                 ],
             },
             {
@@ -311,90 +203,40 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
                 showItemsOnMobile: false,
             },
             {
+                label: t('Bridge'),
+                icon: 'Bridge',
+                href: 'https://app.multichain.org/#/router',
+                type: DropdownMenuItemType.EXTERNAL_LINK,
+                items: [
+                    {
+                        label: t('HELIX'),
+                        href: 'https://app.multichain.org/#/router',
+                        type: DropdownMenuItemType.EXTERNAL_LINK,
+                    },
+                    {
+                        label: t('Geobots'),
+                        href: 'https://nexus.helix.finance/',
+                        type: DropdownMenuItemType.EXTERNAL_LINK,
+                    }
+                ],
+            },
+            {
                 label: t('Data'),
                 href: '/data',
                 icon: 'Chart',
                 showItemsOnMobile: false,
             },
-            // {
-            //   label: t('Win'),
-            //   href: '/prediction',
-            //   icon: 'Trophy',
-            //   items: [
-            //     {
-            //       label: t('Trading Competition'),
-            //       href: '/competition',
-            //     },
-            //     {
-            //       label: t('Prediction (BETA)'),
-            //       href: '/prediction',
-            //     },
-            //     {
-            //       label: t('Lottery'),
-            //       href: '/lottery',
-            //     },
-            //   ],
-            // },
-            // {
-            //   label: t('NFT'),
-            //   href: `${nftsBaseUrl}`,
-            //   icon: 'Nft',
-            //   items: [
-            //     {
-            //       label: t('Overview'),
-            //       href: `${nftsBaseUrl}`,
-            //     },
-            //     {
-            //       label: t('Collections'),
-            //       href: `${nftsBaseUrl}/collections`,
-            //     },
-            //     {
-            //       label: t('Activity'),
-            //       href: `${nftsBaseUrl}/activity`,
-            //     },
-            //   ],
-            // },
             {
                 label: '',
                 href: '#',
                 icon: 'More',
                 hideSubNav: true,
                 items: [
-
-                    // {
-                    //     type: DropdownMenuItemType.DIVIDER,
-                    // },
-                    //     {
-                    //       label: t('IFO'),
-                    //       href: '/ifo',
-                    //       status: menuStatus.SOON,
-                    //     },
                     {
                         label: 'Docs',
                         href: 'https://geometry.gitbook.io/helix',
                         type: DropdownMenuItemType.EXTERNAL_LINK,
                     },
-
-                    //     {
-                    //       type: DropdownMenuItemType.DIVIDER,
-                    //     },
-                    //     {
-                    //       label: t('Leaderboard'),
-                    //       href: '/teams',
-                    //     },
-                    //     {
-                    //       type: DropdownMenuItemType.DIVIDER,
-                    //     },
-                    //     {
-                    //       label: t('Blog'),
-                    //       href: 'https://medium.com/pancakeswap',
-                    //       type: DropdownMenuItemType.EXTERNAL_LINK,
-                    //     },
-                    //     {
-                    //       label: t('Docs'),
-                    //       href: 'https://docs.pancakeswap.finance',
-                    //       type: DropdownMenuItemType.EXTERNAL_LINK,
-                    //     },
                 ],
             },
         ],
@@ -404,7 +246,6 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
                 label: t('Trade'),
                 icon: 'Swap',
                 href: '/swap',
-                // showItemsOnMobile: false,
                 items: [
                     {
                         label: t('Exchange'),
@@ -451,143 +292,42 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
                     },
                 ],
             },
-            // {
-            //     label: t('Yield Swaps'),
-            //     href: '/lps-swap',
-            //     mobileLabel:"YS",
-            //     icon: 'YieldSwap',
-            //     items: [
-            //         {
-            //             label: t('Swap LPs'),
-            //             href: '/lps-swap',
-            //         },
-            //         // {
-            //         //     type: DropdownMenuItemType.DIVIDER,
-            //         // },
-            //         // {
-            //         //     label: t('Swap Yield'),
-            //         //     href: '/yield-swap',
-            //         // },
-            //     ],
-            // },
-            // {
-            //     label: t('Referrals'),
-            //     href: '/referrals',
-            //     icon: 'Referals',
-            //     showItemsOnMobile: false,
-            //     items: [],
-            // },
-            // {
-            //     label: t('NFT'),
-            //     href: '/geobot-staking',
-            //     icon: 'NFT1',
-            //     items: [
-            //         {
-            //             label: 'Geobot Staking',
-            //             href: '/geobot-staking',
-            //         },
-            //         {
-            //             type: DropdownMenuItemType.DIVIDER,
-            //         },
-            //         {
-            //             label: 'Geobot bridge',
-            //             href: 'https://nexus.helix.finance',
-            //             target: '_blank',
-            //             type: DropdownMenuItemType.EXTERNAL_LINK,
-            //         },
-            //     ],
-            // },
-            // {
-            //     label: t('Voting'),
-            //     href: '/voting',
-            //     icon: 'Vote1',
-            //     showItemsOnMobile: false,
-            // },
-            // {
-            //     label: t('Data'),
-            //     href: '/data',
-            //     icon: 'Chart',
-            //     showItemsOnMobile: false,
-            // },
-            // {
-            //   label: t('Win'),
-            //   href: '/prediction',
-            //   icon: 'Trophy',
-            //   items: [
-            //     {
-            //       label: t('Trading Competition'),
-            //       href: '/competition',
-            //     },
-            //     {
-            //       label: t('Prediction (BETA)'),
-            //       href: '/prediction',
-            //     },
-            //     {
-            //       label: t('Lottery'),
-            //       href: '/lottery',
-            //     },
-            //   ],
-            // },
-            // {
-            //   label: t('NFT'),
-            //   href: `${nftsBaseUrl}`,
-            //   icon: 'Nft',
-            //   items: [
-            //     {
-            //       label: t('Overview'),
-            //       href: `${nftsBaseUrl}`,
-            //     },
-            //     {
-            //       label: t('Collections'),
-            //       href: `${nftsBaseUrl}/collections`,
-            //     },
-            //     {
-            //       label: t('Activity'),
-            //       href: `${nftsBaseUrl}/activity`,
-            //     },
-            //   ],
-            // },
+            {
+                label: t('Referrals'),
+                href: '/referrals',
+                icon: 'Referals',
+                showItemsOnMobile: false,
+                items: [],
+            },
+            {
+                label: t('Bridge'),
+                icon: 'Bridge',
+                href: 'https://app.multichain.org/#/router',
+                type: DropdownMenuItemType.EXTERNAL_LINK,
+                items: [
+                    {
+                        label: t('HELIX'),
+                        href: 'https://app.multichain.org/#/router',
+                        type: DropdownMenuItemType.EXTERNAL_LINK,
+                    },
+                    {
+                        label: t('Geobots'),
+                        href: 'https://nexus.helix.finance/',
+                        type: DropdownMenuItemType.EXTERNAL_LINK,
+                    }
+                ],
+            },
             {
                 label: '',
                 href: '#',
                 icon: 'More',
                 hideSubNav: true,
                 items: [
-
-                    // {
-                    //     type: DropdownMenuItemType.DIVIDER,
-                    // },
-                    //     {
-                    //       label: t('IFO'),
-                    //       href: '/ifo',
-                    //       status: menuStatus.SOON,
-                    //     },
                     {
                         label: 'Docs',
                         href: 'https://geometry.gitbook.io/helix',
                         type: DropdownMenuItemType.EXTERNAL_LINK,
                     },
-
-                    //     {
-                    //       type: DropdownMenuItemType.DIVIDER,
-                    //     },
-                    //     {
-                    //       label: t('Leaderboard'),
-                    //       href: '/teams',
-                    //     },
-                    //     {
-                    //       type: DropdownMenuItemType.DIVIDER,
-                    //     },
-                    //     {
-                    //       label: t('Blog'),
-                    //       href: 'https://medium.com/pancakeswap',
-                    //       type: DropdownMenuItemType.EXTERNAL_LINK,
-                    //     },
-                    //     {
-                    //       label: t('Docs'),
-                    //       href: 'https://docs.pancakeswap.finance',
-                    //       type: DropdownMenuItemType.EXTERNAL_LINK,
-                    //     },
                 ],
             },
         ],
@@ -597,7 +337,6 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
                 label: t('Trade'),
                 icon: 'Swap',
                 href: '/swap',
-                // showItemsOnMobile: false,
                 items: [
                     {
                         label: t('Exchange'),
@@ -644,143 +383,42 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
                     },
                 ],
             },
-            // {
-            //     label: t('Yield Swaps'),
-            //     href: '/lps-swap',
-            //     mobileLabel:"YS",
-            //     icon: 'YieldSwap',
-            //     items: [
-            //         {
-            //             label: t('Swap LPs'),
-            //             href: '/lps-swap',
-            //         },
-            //         // {
-            //         //     type: DropdownMenuItemType.DIVIDER,
-            //         // },
-            //         // {
-            //         //     label: t('Swap Yield'),
-            //         //     href: '/yield-swap',
-            //         // },
-            //     ],
-            // },
-            // {
-            //     label: t('Referrals'),
-            //     href: '/referrals',
-            //     icon: 'Referals',
-            //     showItemsOnMobile: false,
-            //     items: [],
-            // },
-            // {
-            //     label: t('NFT'),
-            //     href: '/geobot-staking',
-            //     icon: 'NFT1',
-            //     items: [
-            //         {
-            //             label: 'Geobot Staking',
-            //             href: '/geobot-staking',
-            //         },
-            //         {
-            //             type: DropdownMenuItemType.DIVIDER,
-            //         },
-            //         {
-            //             label: 'Geobot bridge',
-            //             href: 'https://nexus.helix.finance',
-            //             target: '_blank',
-            //             type: DropdownMenuItemType.EXTERNAL_LINK,
-            //         },
-            //     ],
-            // },
-            // {
-            //     label: t('Voting'),
-            //     href: '/voting',
-            //     icon: 'Vote1',
-            //     showItemsOnMobile: false,
-            // },
-            // {
-            //     label: t('Data'),
-            //     href: '/data',
-            //     icon: 'Chart',
-            //     showItemsOnMobile: false,
-            // },
-            // {
-            //   label: t('Win'),
-            //   href: '/prediction',
-            //   icon: 'Trophy',
-            //   items: [
-            //     {
-            //       label: t('Trading Competition'),
-            //       href: '/competition',
-            //     },
-            //     {
-            //       label: t('Prediction (BETA)'),
-            //       href: '/prediction',
-            //     },
-            //     {
-            //       label: t('Lottery'),
-            //       href: '/lottery',
-            //     },
-            //   ],
-            // },
-            // {
-            //   label: t('NFT'),
-            //   href: `${nftsBaseUrl}`,
-            //   icon: 'Nft',
-            //   items: [
-            //     {
-            //       label: t('Overview'),
-            //       href: `${nftsBaseUrl}`,
-            //     },
-            //     {
-            //       label: t('Collections'),
-            //       href: `${nftsBaseUrl}/collections`,
-            //     },
-            //     {
-            //       label: t('Activity'),
-            //       href: `${nftsBaseUrl}/activity`,
-            //     },
-            //   ],
-            // },
+            {
+                label: t('Referrals'),
+                href: '/referrals',
+                icon: 'Referals',
+                showItemsOnMobile: false,
+                items: [],
+            },
+            {
+                label: t('Bridge'),
+                icon: 'Bridge',
+                href: 'https://app.multichain.org/#/router',
+                type: DropdownMenuItemType.EXTERNAL_LINK,
+                items: [
+                    {
+                        label: t('HELIX'),
+                        href: 'https://app.multichain.org/#/router',
+                        type: DropdownMenuItemType.EXTERNAL_LINK,
+                    },
+                    {
+                        label: t('Geobots'),
+                        href: 'https://nexus.helix.finance/',
+                        type: DropdownMenuItemType.EXTERNAL_LINK,
+                    }
+                ],
+            },
             {
                 label: '',
                 href: '#',
                 icon: 'More',
                 hideSubNav: true,
                 items: [
-
-                    // {
-                    //     type: DropdownMenuItemType.DIVIDER,
-                    // },
-                    //     {
-                    //       label: t('IFO'),
-                    //       href: '/ifo',
-                    //       status: menuStatus.SOON,
-                    //     },
                     {
                         label: 'Docs',
                         href: 'https://geometry.gitbook.io/helix',
                         type: DropdownMenuItemType.EXTERNAL_LINK,
                     },
-
-                    //     {
-                    //       type: DropdownMenuItemType.DIVIDER,
-                    //     },
-                    //     {
-                    //       label: t('Leaderboard'),
-                    //       href: '/teams',
-                    //     },
-                    //     {
-                    //       type: DropdownMenuItemType.DIVIDER,
-                    //     },
-                    //     {
-                    //       label: t('Blog'),
-                    //       href: 'https://medium.com/pancakeswap',
-                    //       type: DropdownMenuItemType.EXTERNAL_LINK,
-                    //     },
-                    //     {
-                    //       label: t('Docs'),
-                    //       href: 'https://docs.pancakeswap.finance',
-                    //       type: DropdownMenuItemType.EXTERNAL_LINK,
-                    //     },
                 ],
             },
         ]
