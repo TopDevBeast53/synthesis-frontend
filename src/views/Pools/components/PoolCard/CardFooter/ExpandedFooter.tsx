@@ -26,6 +26,7 @@ import { getEtherScanLink } from 'utils'
 import Balance from 'components/Balance'
 import { getPoolBlockInfo } from 'views/Pools/helpers'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import { CHAIN_IDS_TO_NAMES } from 'config/constants/networks'
 // import { BIG_ZERO } from 'utils/bigNumber'
 
 interface ExpandedFooterProps {
@@ -166,14 +167,14 @@ const ExpandedFooter: React.FC<ExpandedFooterProps> = ({ pool, account }) => {
         </LinkExternal>
       </Flex> */}
       <Flex mb="2px" justifyContent="flex-end">
-        <LinkExternal href={earningToken.projectLink} bold={false} small>
+        <LinkExternal href={`${earningToken.projectLink}?chain=${CHAIN_IDS_TO_NAMES[chainId]}`} bold={false} small>
           {t('View Project Site')}
         </LinkExternal>
       </Flex>
       {poolContractAddress && (
         <Flex mb="2px" justifyContent="flex-end">
           <LinkExternal
-            href={getEtherScanLink(vaultKey ? cakeVaultContractAddress : poolContractAddress, 'address', chainId)}
+            href={`${getEtherScanLink(vaultKey ? cakeVaultContractAddress : poolContractAddress, 'address', chainId)}?chain=${CHAIN_IDS_TO_NAMES[chainId]}`}
             bold={false}
             small
           >

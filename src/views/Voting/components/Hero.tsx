@@ -4,6 +4,8 @@ import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'contexts/Localization'
 import Container from 'components/Layout/Container'
+import { CHAIN_IDS_TO_NAMES } from 'config/constants/networks'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import DesktopImage from './DesktopImage'
 
 const StyledHero = styled(Box)`
@@ -14,6 +16,7 @@ const StyledHero = styled(Box)`
 
 const Hero = () => {
   const { t } = useTranslation()
+  const { chainId } = useActiveWeb3React()
 
   return (
     <StyledHero>
@@ -29,7 +32,7 @@ const Hero = () => {
             <Button
               startIcon={<ProposalIcon color="currentColor" width="24px" />}
               as={Link}
-              to="/voting/proposal/create"
+              to={{ pathname: "/voting/proposal/create", search: `chain=${CHAIN_IDS_TO_NAMES[chainId]}` }}
             >
               {t('Make a Proposal')}
             </Button>

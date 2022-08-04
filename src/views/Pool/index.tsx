@@ -5,6 +5,7 @@ import { Text, Flex, CardBody, CardFooter, Button, AddIcon } from 'uikit'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'contexts/Localization'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import { CHAIN_IDS_TO_NAMES } from 'config/constants/networks'
 import FullPositionCard from '../../components/PositionCard'
 import { useTokenBalancesWithLoadingIndicator } from '../../state/wallet/hooks'
 import { usePairs } from '../../hooks/usePairs'
@@ -19,7 +20,7 @@ const Body = styled(CardBody)`
 `
 
 export default function Pool() {
-  const { account } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
   const { t } = useTranslation()
 
   // fetch the user's balances of all tracked V2 LP tokens
@@ -94,14 +95,14 @@ export default function Pool() {
               <Text color="textSubtle" mb="8px">
                 {t("Don't see a pool you joined?")}
               </Text>
-              <Button id="import-pool-link" variant="secondary" scale="sm" as={Link} to="/find">
+              <Button id="import-pool-link" variant="secondary" scale="sm" as={Link} to={{ pathname: "/find" , search: `chain=${CHAIN_IDS_TO_NAMES[chainId]}` }}>
                 {t('Find other LP tokens')}
               </Button>
             </Flex>
           )}
         </Body>
         <CardFooter style={{ textAlign: 'center' }}>
-          <Button id="join-pool-button" as={Link} to="/add" width="100%" startIcon={<AddIcon color="white" />}>
+          <Button id="join-pool-button" as={Link} to={{ pathname: "/add" , search: `chain=${CHAIN_IDS_TO_NAMES[chainId]}` }} width="100%" startIcon={<AddIcon color="white" />}>
             {t('Add Liquidity')}
           </Button>
         </CardFooter>

@@ -17,7 +17,8 @@ import {
   Box,
 } from 'uikit'
 import { useTranslation } from 'contexts/Localization'
-import { useWeb3React } from '@web3-react/core'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import { CHAIN_IDS_TO_NAMES } from 'config/constants/networks'
 import { useAppDispatch } from 'state'
 import { BIG_TEN } from 'utils/bigNumber'
 import { usePriceHelixBusd } from 'state/farms/hooks'
@@ -88,7 +89,7 @@ const VaultStakeModal: React.FC<VaultStakeModalProps> = ({
 }) => {
   const dispatch = useAppDispatch()
   const { stakingToken, earningToken, apr, rawApr, stakingTokenPrice, earningTokenPrice, vaultKey } = pool
-  const { account } = useWeb3React()
+  const { account, chainId } = useActiveWeb3React()
   const vaultPoolContract = useVaultPoolContract(pool.vaultKey)
   const { callWithGasPrice } = useCallWithGasPrice()
   const {
@@ -341,7 +342,7 @@ const VaultStakeModal: React.FC<VaultStakeModalProps> = ({
         {pendingTx ? t('Confirming') : t('Confirm')}
       </Button>
       {!isRemovingStake && (
-        <Button mt="8px" as="a" external href={getTokenLink} variant="secondary">
+        <Button mt="8px" as="a" href={`${getTokenLink}?chain=${CHAIN_IDS_TO_NAMES[chainId]}`} external variant="secondary">
           {t('Get %symbol%', { symbol: stakingToken.symbol })}
         </Button>
       )}

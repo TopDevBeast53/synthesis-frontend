@@ -20,6 +20,7 @@ import styled from 'styled-components'
 import { getEtherScanLink } from 'utils'
 import truncateHash from 'utils/truncateHash'
 import { useTranslation } from 'contexts/Localization'
+import { CHAIN_IDS_TO_NAMES } from 'config/constants/networks'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import WalletStatsModal from '../WalletStatsModal'
 import { NetWinningsRow, Row } from './styles'
@@ -78,7 +79,7 @@ const RankingCard: React.FC<RankingCardProps> = ({ rank, user }) => {
             options={{ placement: 'bottom' }}
           >
             <SubMenuItem onClick={onPresentWalletStatsModal}>{t('View Stats')}</SubMenuItem>
-            <SubMenuItem as={Link} href={getEtherScanLink(user.id, 'address', chainId)} bold={false} color="text" external>
+            <SubMenuItem as={Link} href={`${getEtherScanLink(user.id, 'address', chainId)}?chain=${CHAIN_IDS_TO_NAMES[chainId]}`} bold={false} color="text" external>
               {t('View on EtherScan')}
             </SubMenuItem>
           </SubMenu>

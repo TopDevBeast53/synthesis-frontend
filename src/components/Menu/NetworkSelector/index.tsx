@@ -194,14 +194,14 @@ export default function NetworkSelector() {
 
   const onSelectChain = useCallback(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    async (targetChain: number, skipToggle?: boolean) => {
+    async (targetChain: ChainId, skipToggle?: boolean) => {
       try {
         if (account) {
           const setupRes = await setupNetwork(targetChain)
           if (setupRes === false) return;
         }
         const { location: { pathname, search }, replace, push } = history
-        const route = routeConfig(t).find(route_ => {
+        const route = routeConfig(t)[targetChain].find(route_ => {
           if (route_.href && route_.href.includes(pathname)) return true
           if (route_.items) {
             const item = route_.items.find(item_ => item_.href && item_.href.includes(pathname))
@@ -213,11 +213,11 @@ export default function NetworkSelector() {
           push({ pathname: '/', search: replaceURLParam(search, 'chain', getChainNameFromId(targetChain)) })
           return
         }
-        const chain = SUPPORTED_NETWORKS[targetChain]
-        if (chain.showOnlyTrade && !route.isTrade) {
-          push({ pathname: '/', search: replaceURLParam(search, 'chain', getChainNameFromId(targetChain)) })
-          return
-        }
+        // const chain = SUPPORTED_NETWORKS[targetChain]
+        // if (chain.showOnlyTrade && !route.isTrade) {
+        //   push({ pathname: '/', search: replaceURLParam(search, 'chain', getChainNameFromId(targetChain)) })
+        //   return
+        // }
         replace({ search: replaceURLParam(search, 'chain', getChainNameFromId(targetChain)) })
       } catch (error) {
         console.error('Failed to switch networks', error)

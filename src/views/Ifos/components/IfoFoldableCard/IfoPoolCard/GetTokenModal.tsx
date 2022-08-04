@@ -2,6 +2,8 @@ import React from 'react'
 import { Modal, ModalBody, Text, Image, Button, Link, OpenNewIcon } from 'uikit'
 import { Token } from 'sdk'
 import { useTranslation } from 'contexts/Localization'
+import { CHAIN_IDS_TO_NAMES } from 'config/constants/networks'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 interface Props {
   currency: Token
@@ -10,6 +12,7 @@ interface Props {
 
 const GetTokenModal: React.FC<Partial<Props>> = ({ currency, onDismiss }) => {
   const { t } = useTranslation()
+  const { chainId } = useActiveWeb3React()
   return (
     <Modal title={t('%symbol% required', { symbol: currency.symbol })} onDismiss={onDismiss}>
       <ModalBody maxWidth="288px">
@@ -23,7 +26,7 @@ const GetTokenModal: React.FC<Partial<Props>> = ({ currency, onDismiss }) => {
         <Button
           as={Link}
           external
-          href={`/swap?outputCurrency=${currency.address}`}
+          href={`/swap?outputCurrency=${currency.address}?chain=${CHAIN_IDS_TO_NAMES[chainId]}`}
           endIcon={<OpenNewIcon color="white" />}
           minWidth="100%" // Bypass the width="fit-content" on Links
         >

@@ -29,6 +29,7 @@ import { DatePicker, TimePicker, DatePickerPortal } from 'views/Voting/component
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import ReactMarkdown from 'components/ReactMarkdown'
 import { PageMeta } from 'components/Layout/Page'
+import { CHAIN_IDS_TO_NAMES } from 'config/constants/networks'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { sendSnapshotData, Message, generateMetaData, generatePayloadData } from '../helpers'
 import Layout from '../components/Layout'
@@ -149,7 +150,7 @@ const CreateProposal = () => {
     <Container py="40px">
       <PageMeta />
       <Box mb="40px">
-        <Button as={Link} to="/voting" variant="text" startIcon={<ArrowBackIcon color="primary" width="24px" />} px="0">
+        <Button as={Link} to={{ pathname: "/voting", search: `chain=${CHAIN_IDS_TO_NAMES[chainId]}` }} variant="text" startIcon={<ArrowBackIcon color="primary" width="24px" />} px="0">
           {t('Back to Proposals')}
         </Button>
       </Box>

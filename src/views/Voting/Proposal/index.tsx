@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { ArrowBackIcon, Box, Button, Flex, Heading } from 'uikit'
-import { useWeb3React } from '@web3-react/core'
+import { CHAIN_IDS_TO_NAMES } from 'config/constants/networks'
 import { Link, useParams } from 'react-router-dom'
 import snapshot from '@snapshot-labs/snapshot.js'
 import { useAppDispatch } from 'state'
@@ -33,12 +33,12 @@ import { PageMeta } from '../../../components/Layout/Page'
 import { STRATEGY2_SNAPSHOT } from '../config'
 
 const Proposal = () => {
+  const { chainId, account } = useActiveWeb3React()
   const fastRefresh = useFastFresh()
   const tokens = useGetTokens()
   const { id }: { id: string } = useParams()
   const proposal = useGetProposal(id)
   const { t } = useTranslation()
-  const { account } = useWeb3React()
   const dispatch = useAppDispatch()
   const votesGraphql = useGetVotes(id)
   const voteLoadingStatus = useGetVotingStateLoadingStatus()
@@ -47,7 +47,6 @@ const Proposal = () => {
   const { id: proposalId = null, snapshot: snapshotId = null } = proposal ?? {}
   const isPageLoading = voteLoadingStatus === FetchStatus.Fetching || proposalLoadingStatus === FetchStatus.Fetching
   const { data: farmsLP } = useFarms()
-  const { chainId } = useActiveWeb3React()
   const [votes, setVotes] = useState([])
 
   const masterChefAddress = getMasterChefAddress(chainId)
@@ -133,7 +132,7 @@ const Proposal = () => {
     <Container py="40px">
       <PageMeta />
       <Box mb="40px">
-        <Button as={Link} to="/voting" variant="text" startIcon={<ArrowBackIcon color="primary" width="24px" />} px="0">
+        <Button as={Link} to={{ pathname: "/voting", search: `chain=${CHAIN_IDS_TO_NAMES[chainId]}` }} variant="text" startIcon={<ArrowBackIcon color="primary" width="24px" />} px="0">
           {t('Back to Proposals')}
         </Button>
       </Box>

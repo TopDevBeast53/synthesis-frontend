@@ -4,6 +4,7 @@ import { Button, Text, ChevronUpIcon, ChevronDownIcon, Card, CardBody, Flex, Car
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { useTranslation } from 'contexts/Localization'
+import { CHAIN_IDS_TO_NAMES } from 'config/constants/networks'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import useTotalSupply from '../../hooks/useTotalSupply'
 
@@ -228,7 +229,7 @@ export default function FullPositionCard({ pair, ...props }: PositionCardProps) 
             <Flex flexDirection="column">
               <Button
                 as={Link}
-                to={`/remove/${currencyId(currency0, chainId)}/${currencyId(currency1, chainId)}`}
+                to={{ pathname: `/remove/${currencyId(currency0, chainId)}/${currencyId(currency1, chainId)}`, search: `chain=${CHAIN_IDS_TO_NAMES[chainId]}` }}
                 variant="primary"
                 width="100%"
                 mb="8px"
@@ -237,7 +238,7 @@ export default function FullPositionCard({ pair, ...props }: PositionCardProps) 
               </Button>
               <Button
                 as={Link}
-                to={`/add/${currencyId(currency0, chainId)}/${currencyId(currency1, chainId)}`}
+                to={{ pathname: `/add/${currencyId(currency0, chainId)}/${currencyId(currency1, chainId)}`, search: `chain=${CHAIN_IDS_TO_NAMES[chainId]}` }}
                 variant="text"
                 startIcon={<AddIcon color="primary" />}
                 width="100%"

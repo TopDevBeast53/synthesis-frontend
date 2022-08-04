@@ -28,6 +28,7 @@ import { getBalanceNumber, getFullDisplayBalance } from 'utils/formatBalance'
 import { convertSharesToHelix, getPoolBlockInfo } from 'views/Pools/helpers'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useGetVaultPoolConfig } from 'views/Pools/hooks/useGetVaultPoolConfig'
+import { CHAIN_IDS_TO_NAMES } from 'config/constants/networks'
 import Harvest from './Harvest'
 import Stake from './Stake'
 import Apr from '../Apr'
@@ -263,14 +264,14 @@ const ActionPanel: React.FC<ActionPanelProps> = ({ account, pool, userDataLoaded
           </LinkExternal>
         </Flex> */}
         <Flex mb="8px" justifyContent={['flex-end', 'flex-end', 'flex-start']}>
-          <LinkExternal href={earningToken.projectLink} bold={false}>
+          <LinkExternal href={`${earningToken.projectLink}?chain=${CHAIN_IDS_TO_NAMES[chainId]}`} bold={false}>
             {t('View Project Site')}
           </LinkExternal>
         </Flex>
         {poolContractAddress && (
           <Flex mb="8px" justifyContent={['flex-end', 'flex-end', 'flex-start']}>
             <LinkExternal
-              href={getEtherScanLink(vaultKey ? vaultContractAddress : poolContractAddress, 'address', chainId)}
+              href={`${getEtherScanLink(vaultKey ? vaultContractAddress : poolContractAddress, 'address', chainId)}?chain=${CHAIN_IDS_TO_NAMES[chainId]}`}
               bold={false}
             >
               {t('View Contract')}

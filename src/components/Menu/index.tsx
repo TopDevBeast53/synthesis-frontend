@@ -6,7 +6,7 @@ import { languageList } from 'config/localization/languages'
 import { useTranslation } from 'contexts/Localization'
 import useTheme from 'hooks/useTheme'
 import { usePriceHelixBusd } from 'state/farms/hooks'
-import useGetChainDetail from 'hooks/useGetChainDetail'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import config from './config/config'
 import UserMenu from './UserMenu'
 import NetworkSelector from './NetworkSelector'
@@ -19,11 +19,11 @@ const Menu = (props) => {
   const cakePriceUsd = usePriceHelixBusd()
   const { currentLanguage, setLanguage, t } = useTranslation()
   const { pathname, search } = useLocation()
-  const chain = useGetChainDetail()
+  const { chainId } = useActiveWeb3React()
 
   const menuConfig = useMemo(() => {
-    return config(t).filter((menu) => chain.showOnlyTrade ? menu.isTrade === true : true)
-  }, [chain.showOnlyTrade, t])
+    return config(t)[chainId]
+  }, [chainId, t])
 
   const activeMenuItem = getActiveMenuItem({ menuConfig, pathname })
   const activeSubMenuItem = getActiveSubMenuItem({ menuItem: activeMenuItem, pathname })
