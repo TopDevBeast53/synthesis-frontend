@@ -79,12 +79,14 @@ export interface FarmAuctionContract extends Omit<FarmAuction, 'auctions'> {
 export type CHAIN_CONFIG = {
     chainId: number
     chainName: string
+    chainNameForMetamask: string
     nativeCurrency: {
         name: string
         symbol: string
         decimals: number
     }
     rpcUrls: string[]
+    rpcUrlsForMetamask: string[]
     blockExplorerUrls: string[]
     logoUrl: string
     label: string,

@@ -1,6 +1,7 @@
 // Set of helper functions to facilitate wallet setup
 
 import { BASE_URL } from 'config'
+import { SUPPORTED_NETWORKS } from 'config/constants/networks'
 
 /**
  * Prompt the user to add BSC as a network on Metamask, or switch to BSC if the wallet is on a different network
@@ -19,12 +20,33 @@ export const setupNetwork = async (chainId: number) => {
                 ],
             })
             return true
-        } catch (error) {
-            console.error('Failed to setup the network in Metamask:', error)
-            return false
+        } catch (error: any) {
+            if (error.code === 4902) {
+                try {
+                    await provider.request({
+                        method: 'wallet_addEthereumChain',
+                        params: [
+                            {
+                                chainId: `0x${chainId.toString(16)}`,
+                                chainName: SUPPORTED_NETWORKS[chainId].chainNameForMetamask,
+                                nativeCurrency: SUPPORTED_NETWORKS[chainId].nativeCurrency,
+                                rpcUrls: SUPPORTED_NETWORKS[chainId].rpcUrlsForMetamask,
+                                blockExplorerUrls: SUPPORTED_NETWORKS[chainId].blockExplorerUrls
+                            },
+                        ],
+                    });
+                    return true
+                } catch (adderror) {
+                    console.error('Failed to setup the network in Metamask:', adderror)
+                    return false
+                }
+            } else {
+                console.error('Failed to setup the network in Metamask:', error)
+                return false
+            }
         }
     } else {
-        console.error("Can't setup the BSC network on metamask because window.ethereum is undefined")
+        console.error("Can't setup the Network on metamask because window.ethereum is undefined")
         return false
     }
 }

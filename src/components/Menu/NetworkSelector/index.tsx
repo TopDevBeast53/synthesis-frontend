@@ -11,6 +11,7 @@ import { ParsedQs } from 'qs'
 import { replaceURLParam } from 'utils/routes'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { ChainId } from 'sdk'
+import { setupNetwork } from 'utils/wallet'
 import routeConfig from '../config/config'
 
 // import { isChainAllowed, switchChain } from 'utils/switchChain'
@@ -171,7 +172,7 @@ const getChainNameFromId = (id: string | number) => {
 }
 
 export default function NetworkSelector() {
-  const { chainId } = useActiveWeb3React()
+  const { chainId, account } = useActiveWeb3React()
   const previousChainId = usePreviousValue(chainId)
   const parsedQs = useParsedQueryString()
   const { urlChain, urlChainId } = getParsedChainId(parsedQs)
@@ -195,6 +196,10 @@ export default function NetworkSelector() {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async (targetChain: number, skipToggle?: boolean) => {
       try {
+        if (account) {
+          const setupRes = await setupNetwork(targetChain)
+          if (setupRes === false) return;
+        }
         const { location: { pathname, search }, replace, push } = history
         const route = routeConfig(t).find(route_ => {
           if (route_.href && route_.href.includes(pathname)) return true
@@ -218,7 +223,7 @@ export default function NetworkSelector() {
         console.error('Failed to switch networks', error)
       }
     },
-    [chainId, history, t]
+    [account, chainId, history, t]
   )
 
   useEffect(() => {
