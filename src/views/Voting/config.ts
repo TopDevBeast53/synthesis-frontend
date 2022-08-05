@@ -8,7 +8,11 @@ export const IPFS_GATEWAY = 'https://gateway.ipfs.io/ipfs'
 export const SNAPSHOT_VERSION = '0.1.3'
 export const HELIX_SPACE = {
     [ChainId.MAINNET]: 'helixgeometry.eth',
-    [ChainId.TESTNET]: 'silverstardev.eth'
+    [ChainId.TESTNET]: 'silverstardev.eth',
+    [ChainId.RSK_MAINNET]: 'helixgeometryrsk.eth',
+    [ChainId.RSK_TESTNET]: 'helixgeomtryrsktest.eth',
+    // [ChainId.BSC_MAINNET]: 'helixgeomtrybsc.eth',
+    // [ChainId.BSC_TESTNET]: 'helixgeomtrybsctest.eth'
 }
 export const VOTE_THRESHOLD = 500
 export const CHOICES_PRESET = ['In Favor', 'Against']

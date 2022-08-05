@@ -300,6 +300,12 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
                 items: [],
             },
             {
+                label: t('Voting'),
+                href: '/voting',
+                icon: 'Vote1',
+                showItemsOnMobile: false,
+            },
+            {
                 label: t('Bridge'),
                 icon: 'Bridge',
                 href: 'https://app.multichain.org/#/router',
@@ -389,6 +395,12 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
                 icon: 'Referals',
                 showItemsOnMobile: false,
                 items: [],
+            },
+            {
+                label: t('Voting'),
+                href: '/voting',
+                icon: 'Vote1',
+                showItemsOnMobile: false,
             },
             {
                 label: t('Bridge'),

@@ -22,6 +22,7 @@ import { useFastFresh } from 'hooks/useRefresh'
 import { useGetTokens } from 'hooks/useGetTokens'
 import { getMasterChefAddress, getHelixAutoPoolAddress, getHelixVaultAddress } from 'utils/addressHelpers'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import { ChainId } from 'sdk'
 import { isCoreProposal } from '../helpers'
 import { ProposalStateTag, ProposalTypeTag } from '../components/Proposals/tags'
 import Layout from '../components/Layout'
@@ -65,7 +66,7 @@ const Proposal = () => {
   }, [proposalId, snapshotId, dispatch])
 
   const helixLPs = farmsLP
-    .filter((lp) => snapshotId < STRATEGY2_SNAPSHOT ? lp.pid === 1 : lp.pid !== 0)
+    .filter((lp) => (chainId === ChainId.MAINNET && snapshotId < STRATEGY2_SNAPSHOT) ? lp.pid === 1 : lp.pid !== 0)
     .filter((lp) => lp.lpSymbol.includes('HELIX'))
     .map((lp) => ({
       "address": lp.lpAddress,
