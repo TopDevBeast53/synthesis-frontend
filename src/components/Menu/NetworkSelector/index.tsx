@@ -147,9 +147,9 @@ function Row({
 
 const NETWORK_SELECTOR_CHAINS = [
   ChainId.MAINNET,
-  ChainId.TESTNET,
+  // ChainId.TESTNET,
   ChainId.RSK_MAINNET,
-  ChainId.RSK_TESTNET,
+  // ChainId.RSK_TESTNET,
 ]
 
 const getParsedChainId = (parsedQs?: ParsedQs) => {
@@ -213,11 +213,6 @@ export default function NetworkSelector() {
           push({ pathname: '/', search: replaceURLParam(search, 'chain', getChainNameFromId(targetChain)) })
           return
         }
-        // const chain = SUPPORTED_NETWORKS[targetChain]
-        // if (chain.showOnlyTrade && !route.isTrade) {
-        //   push({ pathname: '/', search: replaceURLParam(search, 'chain', getChainNameFromId(targetChain)) })
-        //   return
-        // }
         replace({ search: replaceURLParam(search, 'chain', getChainNameFromId(targetChain)) })
       } catch (error) {
         console.error('Failed to switch networks', error)
