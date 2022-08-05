@@ -69,7 +69,6 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
                 href: '/referrals',
                 icon: 'Referals',
                 showItemsOnMobile: false,
-                items: [],
             },
             {
                 label: t('NFT'),
@@ -183,7 +182,6 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
                 href: '/referrals',
                 icon: 'Referals',
                 showItemsOnMobile: false,
-                items: [],
             },
             {
                 label: t('NFT'),
@@ -297,7 +295,6 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
                 href: '/referrals',
                 icon: 'Referals',
                 showItemsOnMobile: false,
-                items: [],
             },
             {
                 label: t('Voting'),
@@ -394,7 +391,6 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
                 href: '/referrals',
                 icon: 'Referals',
                 showItemsOnMobile: false,
-                items: [],
             },
             {
                 label: t('Voting'),

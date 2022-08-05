@@ -29,7 +29,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
   const [targetRef, setTargetRef] = useState<HTMLDivElement | null>(null)
   const [tooltipRef, setTooltipRef] = useState<HTMLDivElement | null>(null)
   const hasItems = items.length > 0
-  const { styles, attributes } = usePopper(targetRef, tooltipRef, {
+  const { styles, attributes, update } = usePopper(targetRef, tooltipRef, {
     strategy: isBottomNav ? 'absolute' : 'fixed',
     placement: isBottomNav ? 'top' : 'bottom-start',
     modifiers: [{ name: 'offset', options: { offset: [0, isBottomNav ? 6 : 0] } }],
@@ -61,6 +61,12 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
       setMenuOpenByIndex((prevValue) => ({ ...prevValue, [index]: isMenuShow }))
     }
   }, [isMenuShow, setMenuOpenByIndex, index])
+
+  useEffect(() => {
+    if (items.length && update) {
+      update()
+    }
+  }, [items, update])
 
   useOnClickOutside(
     {

@@ -9,13 +9,16 @@ import { SUPPORTED_NETWORKS } from 'config/constants/networks'
  */
 export const setupNetwork = async (chainId: number) => {
     const provider = window.ethereum
+    const newChainId = `0x${chainId.toString(16)}`
     if (provider) {
         try {
+            const curChainId: string = (await provider.request({ method: 'eth_chainId' })) as unknown as string;
+            if (curChainId === newChainId) return true
             await provider.request({
                 method: 'wallet_switchEthereumChain',
                 params: [
                     {
-                        chainId: `0x${chainId.toString(16)}`,
+                        chainId: newChainId,
                     },
                 ],
             })
@@ -27,7 +30,7 @@ export const setupNetwork = async (chainId: number) => {
                         method: 'wallet_addEthereumChain',
                         params: [
                             {
-                                chainId: `0x${chainId.toString(16)}`,
+                                chainId: newChainId,
                                 chainName: SUPPORTED_NETWORKS[chainId].chainNameForMetamask,
                                 nativeCurrency: SUPPORTED_NETWORKS[chainId].nativeCurrency,
                                 rpcUrls: SUPPORTED_NETWORKS[chainId].rpcUrlsForMetamask,
