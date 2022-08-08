@@ -18,6 +18,7 @@ import { logError } from 'utils/sentry'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'
+import { CHAIN_IDS_TO_NAMES } from 'config/constants/networks'
 import useApproveFarm from '../../../hooks/useApproveFarm'
 import useStakeFarms from '../../../hooks/useStakeFarms'
 import useUnstakeFarms from '../../../hooks/useUnstakeFarms'
@@ -82,7 +83,7 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
     tokenAddress: token.address,
     chainId
   })
-  const addLiquidityUrl = `${BASE_ADD_LIQUIDITY_URL}/${liquidityUrlPathParts}`
+  const addLiquidityUrl = `${BASE_ADD_LIQUIDITY_URL}/${liquidityUrlPathParts}?chain=${CHAIN_IDS_TO_NAMES[chainId]}`
 
   const handleStake = async (amount: string) => {
     await onStake(amount)

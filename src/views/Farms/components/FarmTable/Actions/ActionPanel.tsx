@@ -7,6 +7,7 @@ import getLiquidityUrlPathParts from 'utils/getLiquidityUrlPathParts'
 import { getEtherScanLink } from 'utils'
 import { CommunityTag, CoreTag, DualTag } from 'components/Tags'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import { CHAIN_IDS_TO_NAMES } from 'config/constants/networks'
 
 import HarvestAction from './HarvestAction'
 import StakedAction from './StakedAction'
@@ -159,7 +160,7 @@ const ActionPanel: React.FunctionComponent<ActionPanelProps> = ({
       <InfoContainer>
         {isActive && (
           <StakeContainer>
-            <StyledLinkExternal href={`/add/${liquidityUrlPathParts}`}>
+            <StyledLinkExternal href={`/add/${liquidityUrlPathParts}?chain=${CHAIN_IDS_TO_NAMES[chainId]}`}>
               {t('Get %symbol%', { symbol: lpLabel })}
             </StyledLinkExternal>
           </StakeContainer>

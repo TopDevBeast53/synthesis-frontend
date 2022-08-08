@@ -9,6 +9,7 @@ import ExpandableSectionButton from 'components/ExpandableSectionButton'
 import { BASE_ADD_LIQUIDITY_URL } from 'config'
 import getLiquidityUrlPathParts from 'utils/getLiquidityUrlPathParts'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import { CHAIN_IDS_TO_NAMES } from 'config/constants/networks'
 import DetailsSection from './DetailsSection'
 import CardHeading from './CardHeading'
 import CardActionsContainer from './CardActionsContainer'
@@ -62,7 +63,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, displayApr, removed, helixPri
     tokenAddress: farm.token.address,
     chainId
   })
-  const addLiquidityUrl = `${BASE_ADD_LIQUIDITY_URL}/${liquidityUrlPathParts}`
+  const addLiquidityUrl = `${BASE_ADD_LIQUIDITY_URL}/${liquidityUrlPathParts}?chain=${CHAIN_IDS_TO_NAMES[chainId]}`
   const { lpAddress } = farm
   const isPromotedFarm = farm.token.symbol === 'HELIX'
 

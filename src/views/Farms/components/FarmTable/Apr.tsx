@@ -6,6 +6,7 @@ import { BASE_ADD_LIQUIDITY_URL } from 'config'
 import getLiquidityUrlPathParts from 'utils/getLiquidityUrlPathParts'
 import { Skeleton } from 'uikit'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import { CHAIN_IDS_TO_NAMES } from 'config/constants/networks'
 
 export interface AprProps {
   value: string
@@ -58,7 +59,7 @@ const Apr: React.FC<AprProps> = ({
   const liquidityUrlPathParts = useMemo(() => getLiquidityUrlPathParts({ quoteTokenAddress, tokenAddress, chainId }),
     [chainId, quoteTokenAddress, tokenAddress])
 
-  const addLiquidityUrl = `${BASE_ADD_LIQUIDITY_URL}/${liquidityUrlPathParts}`
+  const addLiquidityUrl = `${BASE_ADD_LIQUIDITY_URL}/${liquidityUrlPathParts}?chain=${CHAIN_IDS_TO_NAMES[chainId]}`
 
   return originalValue !== 0 ? (
     <Container>
