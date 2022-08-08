@@ -77,11 +77,11 @@ const getFarmsMainNet = (): SerializedFarmConfig[] => {
             quoteToken: serializedTokens.weth,
         },
         {
-            pid: 7,
-            lpSymbol: 'TRIBE-FEI',
-            lpAddress: '0x54427EaCC21A1C96a239cf65C33be61CF616EdBF',
-            token: serializedTokens.tribe,
-            quoteToken: serializedTokens.fei,
+            pid: 15,
+            lpSymbol: 'FRAX-USDC',
+            lpAddress: '0xB53BEFA8578d15386f08cAc43066098eA62bec09',
+            token: serializedTokens.frax,
+            quoteToken: serializedTokens.usdc,
         },
         {
             pid: 8,
@@ -110,6 +110,20 @@ const getFarmsMainNet = (): SerializedFarmConfig[] => {
             lpAddress: '0x200e1e20eb37Fcd175A96A432292bf2AbA71B1e4',
             token: serializedTokens.cult,
             quoteToken: serializedTokens.weth,
+        },
+        {
+            pid: 7,
+            lpSymbol: 'TRIBE-FEI',
+            lpAddress: '0x54427EaCC21A1C96a239cf65C33be61CF616EdBF',
+            token: serializedTokens.tribe,
+            quoteToken: serializedTokens.fei,
+        },
+        {
+            pid: 16,
+            lpSymbol: 'TRIBE-HELIX',
+            lpAddress: '0xcaD466fcad58a825FF886a317Be6C57ff79a6e12',
+            token: serializedTokens.tribe,
+            quoteToken: serializedTokens.helix,
         },
         {
             pid: 13,

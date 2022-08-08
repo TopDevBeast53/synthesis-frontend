@@ -124,7 +124,7 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
                     },
                     {
                         label: 'Blog',
-                        href: 'https://medium.com/geometryfinance',
+                        href: 'https://medium.com/helixgeometry',
                         type: DropdownMenuItemType.EXTERNAL_LINK,
                     }
                 ],
@@ -242,7 +242,7 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
                     },
                     {
                         label: 'Blog',
-                        href: 'https://medium.com/geometryfinance',
+                        href: 'https://medium.com/helixgeometry',
                         type: DropdownMenuItemType.EXTERNAL_LINK,
                     },
                 ],
@@ -343,7 +343,7 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
                     },
                     {
                         label: 'Blog',
-                        href: 'https://medium.com/geometryfinance',
+                        href: 'https://medium.com/helixgeometry',
                         type: DropdownMenuItemType.EXTERNAL_LINK,
                     },
                 ],
@@ -444,7 +444,7 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
                     },
                     {
                         label: 'Blog',
-                        href: 'https://medium.com/geometryfinance',
+                        href: 'https://medium.com/helixgeometry',
                         type: DropdownMenuItemType.EXTERNAL_LINK,
                     },
                 ],
