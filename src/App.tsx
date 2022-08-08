@@ -1,4 +1,3 @@
-// import { useWeb3React } from '@web3-react/core'
 import BigNumber from 'bignumber.js'
 import SubgraphHealthIndicator from 'components/SubgraphHealthIndicator'
 import useEagerConnect from 'hooks/useEagerConnect'
@@ -68,7 +67,6 @@ BigNumber.config({
 })
 
 const App: React.FC = () => {
-  // const { account } = useWeb3React()
 
   usePollBlockNumber()
   useEagerConnect()
@@ -121,7 +119,7 @@ const App: React.FC = () => {
             <Route path="/geobot-yield-boosting">
               <NftYieldBoosting />
             </Route>
-            <Route path="/referrals">
+            <Route path="/refer">
               <Referrals />
             </Route>
             {/* <Route path="/lps-swap">

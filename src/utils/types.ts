@@ -75,3 +75,22 @@ export interface FarmAuctionContract extends Omit<FarmAuction, 'auctions'> {
     auctions: ContractFunction<AuctionsResponse>
     getWhitelistedAddresses: ContractFunction<GetWhitelistedAddressesResponse>
 }
+
+export type CHAIN_CONFIG = {
+    chainId: number
+    chainName: string
+    chainNameForMetamask: string
+    nativeCurrency: {
+        name: string
+        symbol: string
+        decimals: number
+    }
+    rpcUrls: string[]
+    rpcUrlsForMetamask: string[]
+    blockExplorerUrls: string[]
+    logoUrl: string
+    label: string,
+    showOnlyTrade: boolean,
+    isTestChain: boolean,
+    apiKey?: string,
+}

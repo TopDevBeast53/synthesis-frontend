@@ -81,6 +81,7 @@ font-size:"1em";
 const Menu: React.FC<NavProps> = ({
   linkComponent = 'a',
   userMenu,
+  networkSelector,
   banner,
   globalMenu,
   isDark,
@@ -162,7 +163,9 @@ const Menu: React.FC<NavProps> = ({
                 </a>
                 
               </StyledAuditDiv>
-              {globalMenu} {userMenu}
+              {globalMenu} 
+              {networkSelector}
+              {userMenu}
             </Flex>
           </StyledNav>
         </FixedContainer>

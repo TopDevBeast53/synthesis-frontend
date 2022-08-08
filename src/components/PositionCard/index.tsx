@@ -4,6 +4,7 @@ import { Button, Text, ChevronUpIcon, ChevronDownIcon, Card, CardBody, Flex, Car
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { useTranslation } from 'contexts/Localization'
+import { CHAIN_IDS_TO_NAMES } from 'config/constants/networks'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import useTotalSupply from '../../hooks/useTotalSupply'
 
@@ -29,12 +30,12 @@ interface PositionCardProps extends CardProps {
 }
 
 export function MinimalPositionCard({ pair, showUnwrapped = false }: PositionCardProps) {
-  const { account } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
 
   const { t } = useTranslation()
 
-  const currency0 = showUnwrapped ? pair.token0 : unwrappedToken(pair.token0)
-  const currency1 = showUnwrapped ? pair.token1 : unwrappedToken(pair.token1)
+  const currency0 = showUnwrapped ? pair.token0 : unwrappedToken(pair.token0, chainId)
+  const currency1 = showUnwrapped ? pair.token1 : unwrappedToken(pair.token1, chainId)
 
   const [showMore, setShowMore] = useState(false)
 
@@ -48,14 +49,14 @@ export function MinimalPositionCard({ pair, showUnwrapped = false }: PositionCar
 
   const [token0Deposited, token1Deposited] =
     !!pair &&
-    !!totalPoolTokens &&
-    !!userPoolBalance &&
-    // this condition is a short-circuit in the case where useTokenBalance updates sooner than useTotalSupply
-    JSBI.greaterThanOrEqual(totalPoolTokens.raw, userPoolBalance.raw)
+      !!totalPoolTokens &&
+      !!userPoolBalance &&
+      // this condition is a short-circuit in the case where useTokenBalance updates sooner than useTotalSupply
+      JSBI.greaterThanOrEqual(totalPoolTokens.raw, userPoolBalance.raw)
       ? [
-          pair.getLiquidityValue(pair.token0, totalPoolTokens, userPoolBalance, false),
-          pair.getLiquidityValue(pair.token1, totalPoolTokens, userPoolBalance, false),
-        ]
+        pair.getLiquidityValue(pair.token0, totalPoolTokens, userPoolBalance, false),
+        pair.getLiquidityValue(pair.token1, totalPoolTokens, userPoolBalance, false),
+      ]
       : [undefined, undefined]
 
   return (
@@ -135,12 +136,12 @@ export function MinimalPositionCard({ pair, showUnwrapped = false }: PositionCar
 }
 
 export default function FullPositionCard({ pair, ...props }: PositionCardProps) {
-  const { account } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
 
   const { t } = useTranslation()
 
-  const currency0 = unwrappedToken(pair.token0)
-  const currency1 = unwrappedToken(pair.token1)
+  const currency0 = unwrappedToken(pair.token0, chainId)
+  const currency1 = unwrappedToken(pair.token1, chainId)
 
   const [showMore, setShowMore] = useState(false)
 
@@ -154,14 +155,14 @@ export default function FullPositionCard({ pair, ...props }: PositionCardProps) 
 
   const [token0Deposited, token1Deposited] =
     !!pair &&
-    !!totalPoolTokens &&
-    !!userPoolBalance &&
-    // this condition is a short-circuit in the case where useTokenBalance updates sooner than useTotalSupply
-    JSBI.greaterThanOrEqual(totalPoolTokens.raw, userPoolBalance.raw)
+      !!totalPoolTokens &&
+      !!userPoolBalance &&
+      // this condition is a short-circuit in the case where useTokenBalance updates sooner than useTotalSupply
+      JSBI.greaterThanOrEqual(totalPoolTokens.raw, userPoolBalance.raw)
       ? [
-          pair.getLiquidityValue(pair.token0, totalPoolTokens, userPoolBalance, false),
-          pair.getLiquidityValue(pair.token1, totalPoolTokens, userPoolBalance, false),
-        ]
+        pair.getLiquidityValue(pair.token0, totalPoolTokens, userPoolBalance, false),
+        pair.getLiquidityValue(pair.token1, totalPoolTokens, userPoolBalance, false),
+      ]
       : [undefined, undefined]
 
   return (
@@ -228,7 +229,7 @@ export default function FullPositionCard({ pair, ...props }: PositionCardProps) 
             <Flex flexDirection="column">
               <Button
                 as={Link}
-                to={`/remove/${currencyId(currency0)}/${currencyId(currency1)}`}
+                to={{ pathname: `/remove/${currencyId(currency0, chainId)}/${currencyId(currency1, chainId)}`, search: `chain=${CHAIN_IDS_TO_NAMES[chainId]}` }}
                 variant="primary"
                 width="100%"
                 mb="8px"
@@ -237,7 +238,7 @@ export default function FullPositionCard({ pair, ...props }: PositionCardProps) 
               </Button>
               <Button
                 as={Link}
-                to={`/add/${currencyId(currency0)}/${currencyId(currency1)}`}
+                to={{ pathname: `/add/${currencyId(currency0, chainId)}/${currencyId(currency1, chainId)}`, search: `chain=${CHAIN_IDS_TO_NAMES[chainId]}` }}
                 variant="text"
                 startIcon={<AddIcon color="primary" />}
                 width="100%"

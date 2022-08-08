@@ -27,6 +27,7 @@ import {
 } from 'state/predictions/hooks'
 import { useTranslation } from 'contexts/Localization'
 import { FetchStatus } from 'config/constants/types'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { NetWinnings } from './Results/styles'
 import MobileBetsTable from './MobileBetsTable'
 import DesktopBetsTable from './Results/DesktopBetsTable'
@@ -54,6 +55,7 @@ const WalletStatsModal: React.FC<WalletStatsModalProps> = ({ account, onDismiss,
   const leaderboardLoadingState = useGetLeaderboardLoadingState()
   const isLoading = leaderboardLoadingState === FetchStatus.Fetching
   const { isDesktop } = useMatchBreakpoints()
+  const { chainId } = useActiveWeb3React()
 
   const handleDismiss = () => {
     if (onBeforeDismiss) {
@@ -76,7 +78,7 @@ const WalletStatsModal: React.FC<WalletStatsModalProps> = ({ account, onDismiss,
                 {profileAvatar.username}
               </Heading>
             )}
-            <ExternalLink href={getEtherScanLink(address, 'address')}>{truncateHash(address)}</ExternalLink>
+            <ExternalLink href={getEtherScanLink(address, 'address', chainId)}>{truncateHash(address)}</ExternalLink>
           </Box>
         </Flex>
         <IconButton variant="text" onClick={handleDismiss} aria-label="Close the dialog">

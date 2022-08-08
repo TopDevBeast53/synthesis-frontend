@@ -8,7 +8,6 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { useMemoFarms } from 'state/farms/hooks'
 import { useAllTokenBalances } from 'state/wallet/hooks'
 import { ButtonMenu, ButtonMenuItem, Modal } from 'uikit'
-import { getAddress } from 'utils/addressHelpers'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { getBalanceAmount } from 'utils/formatBalance'
 import BaseOpenSwap from './BaseOpenSwap'
@@ -20,10 +19,10 @@ const CreateOrderDialog = (props) => {
   const { t } = useTranslation()
   const { account } = useWeb3React()
   const { onDismiss } = props
-  const [swapType, setSwapType]= useState(0)
+  const [swapType, setSwapType] = useState(0)
   const YieldSwapContract = useHelixYieldSwap()
   const allTokens = useAllTokens() // All Stable Token
-  const allTokenBalances = useAllTokenBalances()  
+  const allTokenBalances = useAllTokenBalances()
   const { data: farmsLP } = useMemoFarms()
 
   const [LPOptions, setLPOptions] = useState<any>()
@@ -32,11 +31,11 @@ const CreateOrderDialog = (props) => {
     return {
       label: allTokens[key].symbol,
       value: allTokens[key],
-      address:allTokens[key].address,
-      decimals:allTokens[key].decimals,
-      maxBalance: allTokenBalances[key]? new BigNumber(allTokenBalances[key].toExact()):BIG_ZERO,
-      allowance:BIG_ZERO,
-      contract:undefined
+      address: allTokens[key].address,
+      decimals: allTokens[key].decimals,
+      maxBalance: allTokenBalances[key] ? new BigNumber(allTokenBalances[key].toExact()) : BIG_ZERO,
+      allowance: BIG_ZERO,
+      contract: undefined
     }
   })
   const tokenAddressList = Object.keys(allTokens).map(key => allTokens[key].address)
@@ -51,8 +50,8 @@ const CreateOrderDialog = (props) => {
       .map((lp) => ({
         label: lp.lpSymbol,
         value: lp,
-        decimals:lp.token.decimals,
-        address:getAddress(lp.lpAddresses),
+        decimals: lp.token.decimals,
+        address: lp.lpAddress,
         maxBalance: getBalanceAmount(lp.userData.tokenBalance, lp.token.decimals),
         allowance: BIG_ZERO,
         contract: undefined,
@@ -67,20 +66,20 @@ const CreateOrderDialog = (props) => {
   const tokenContracts = useERC20s(tokenAddressList)
 
   useEffect(() => {
-    let unmounted=false
+    let unmounted = false
     const allowanceContracts = lpContracts.map((lpContract) => {
       return lpContract.allowance(account, YieldSwapContract.address)
     })
     Promise.all(allowanceContracts).then((allowances) => {
       for (let i = 0; i < tempLPOptions.length; i++) {
         tempLPOptions[i].allowance = new BigNumber(allowances[i].toString())
-        tempLPOptions[i].contract = lpContracts[i]        
+        tempLPOptions[i].contract = lpContracts[i]
       }
       if (unmounted) return
       setLPOptions(tempLPOptions)
     })
-    return ()=>{
-      unmounted=true
+    return () => {
+      unmounted = true
     }
   }, [YieldSwapContract.address, account, lpContracts, tempLPOptions])
 
@@ -91,21 +90,21 @@ const CreateOrderDialog = (props) => {
     Promise.all(allowanceContracts).then((allowances) => {
       for (let i = 0; i < TokenOptions.length; i++) {
         TokenOptions[i].allowance = new BigNumber(allowances[i].toString())
-        TokenOptions[i].contract = tokenContracts[i]        
-      }      
+        TokenOptions[i].contract = tokenContracts[i]
+      }
     })
   })
 
   useEffect(() => {
-    let unmounted=false
+    let unmounted = false
     Promise.all([YieldSwapContract.MIN_LOCK_DURATION(), YieldSwapContract.MAX_LOCK_DURATION()]).then((values) => {
-      if(unmounted) return
+      if (unmounted) return
       setMinDuration(values[0].toNumber() / 24 / 3600)
       setMaxDuration(values[1].toNumber() / 24 / 3600)
     })
-    return ()=>{
-      unmounted=true
-    } 
+    return () => {
+      unmounted = true
+    }
   }, [YieldSwapContract, account])
 
   if (!LPOptions) return null
@@ -121,40 +120,40 @@ const CreateOrderDialog = (props) => {
     )
   }
   const propData = {
-      toBuyerTokenOptions:LPOptions, 
-      minDuration, 
-      maxDuration,                   
-      toSellerTokenOptions:TokenOptions, 
-      contractAddress:YieldSwapContract.address,
-      onDismiss,
-      handleConfirm
- }
+    toBuyerTokenOptions: LPOptions,
+    minDuration,
+    maxDuration,
+    toSellerTokenOptions: TokenOptions,
+    contractAddress: YieldSwapContract.address,
+    onDismiss,
+    handleConfirm
+  }
   return (
     <Modal title={t('Create Swap')} headerBackground={theme.colors.gradients.cardHeader} onDismiss={onDismiss}>
-      <ButtonMenu activeIndex={swapType} scale="sm" variant="subtle" onItemClick={(index)=>{setSwapType(index)}}>
+      <ButtonMenu activeIndex={swapType} scale="sm" variant="subtle" onItemClick={(index) => { setSwapType(index) }}>
         <ButtonMenuItem>{t('Yield-Stable')}</ButtonMenuItem>
         <ButtonMenuItem>{t('Stable-Yield')}</ButtonMenuItem>
-        <ButtonMenuItem>{t('Yield-Yield')}</ButtonMenuItem>        
-      </ButtonMenu>      
+        <ButtonMenuItem>{t('Yield-Yield')}</ButtonMenuItem>
+      </ButtonMenu>
       {
-          swapType === 0 ? <BaseOpenSwap {...propData} key={swapType}
+        swapType === 0 ? <BaseOpenSwap {...propData} key={swapType}
           isToBuyerTokenLp
           isToSellerTokenLp={false}
-          />            
-          : swapType === 1 ? <BaseOpenSwap {...propData} 
-          key={swapType}
-          toBuyerTokenOptions={TokenOptions} 
-          toSellerTokenOptions={LPOptions} 
-          isToBuyerTokenLp = {false}
-          isToSellerTokenLp
+        />
+          : swapType === 1 ? <BaseOpenSwap {...propData}
+            key={swapType}
+            toBuyerTokenOptions={TokenOptions}
+            toSellerTokenOptions={LPOptions}
+            isToBuyerTokenLp={false}
+            isToSellerTokenLp
           />
-          : <BaseOpenSwap {...propData} 
-          key={swapType}
-          toBuyerTokenOptions={LPOptions}
-          toSellerTokenOptions={LPOptions} 
-          isToBuyerTokenLp
-          isToSellerTokenLp
-          />
+            : <BaseOpenSwap {...propData}
+              key={swapType}
+              toBuyerTokenOptions={LPOptions}
+              toSellerTokenOptions={LPOptions}
+              isToBuyerTokenLp
+              isToSellerTokenLp
+            />
       }
     </Modal>
   )

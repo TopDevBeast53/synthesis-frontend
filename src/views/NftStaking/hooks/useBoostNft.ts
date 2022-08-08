@@ -7,20 +7,20 @@ import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { useCallback } from 'react'
 import { getProviderOrSigner } from 'utils'
 import { getDecimalAmount } from 'utils/formatBalance'
-import { helixNFTAddress, helixNFTChefAddress } from '../constants'
+import { getHelixNftAddress, getHelixChefNftAddress } from 'utils/addressHelpers'
 
 
 export const useBoostNft = () => {
-    const { library, account } = useActiveWeb3React()
+    const { library, account, chainId } = useActiveWeb3React()
     const { callWithGasPrice } = useCallWithGasPrice()    
 
     const getHelixNFTContract = useCallback(() => {
-        return new Contract(helixNFTAddress, helixNFTABI, getProviderOrSigner(library, account))
-    }, [library, account])
+        return new Contract(getHelixNftAddress(chainId), helixNFTABI, getProviderOrSigner(library, account))
+    }, [library, account, chainId])
 
     const getHelixChefNFTContract = useCallback(() => {
-        return new Contract(helixNFTChefAddress, helixChefNFTABI, getProviderOrSigner(library, account))
-    }, [library, account])
+        return new Contract(getHelixChefNftAddress(chainId), helixChefNFTABI, getProviderOrSigner(library, account))
+    }, [library, account, chainId])
 
     const getLevel = useCallback(
         async (tokenId) => {

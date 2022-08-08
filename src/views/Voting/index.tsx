@@ -3,6 +3,8 @@ import { Flex, Heading, Button, Card, Text, useMatchBreakpoints } from 'uikit'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { ProposalState, ProposalType } from 'state/types'
+import { CHAIN_IDS_TO_NAMES } from 'config/constants/networks'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import PageHeader from 'components/PageHeader'
 import { Proposals } from './components/Proposals'
 import Page from '../Page'
@@ -68,6 +70,7 @@ const Voting = () => {
   const [filterState, setFilterState] = useState(ProposalState.ACTIVE)
   const [proposalType, setProposalType] = useState(ProposalType.ALL)
   const { isTablet } = useMatchBreakpoints()
+  const { chainId } = useActiveWeb3React()
 
   return (
     <>
@@ -96,7 +99,7 @@ const Voting = () => {
 
             <GeneralCard style={{ minWidth: '210px', maxWidth:isTablet ? "340px" :"380px", marginTop:"15px" }}>
               <GeneralCardCaption>What&apos;s your proposal?</GeneralCardCaption>
-              <Button as={Link} to="/voting/proposal/create" style={{ margin: '4px' }}>
+              <Button as={Link} to={{ pathname: "/voting/proposal/create", search: `chain=${CHAIN_IDS_TO_NAMES[chainId]}` }} style={{ margin: '4px' }}>
                 Create a Proposal
               </Button>
             </GeneralCard>

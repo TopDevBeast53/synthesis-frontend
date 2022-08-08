@@ -4,6 +4,8 @@ import { ViewMode } from 'state/user/actions'
 import styled from 'styled-components'
 import { ButtonMenu, ButtonMenuItem, Toggle, Text, NotificationDot } from 'uikit'
 import { useTranslation } from 'contexts/Localization'
+import { CHAIN_IDS_TO_NAMES } from 'config/constants/networks'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import ToggleView from './ToggleView/ToggleView'
 
 const ToggleWrapper = styled.div`
@@ -55,17 +57,18 @@ const Wrapper = styled.div`
 const PoolTabButtons = ({ stakedOnly, setStakedOnly, hasStakeInFinishedPools, viewMode, setViewMode }) => {
   const { url, isExact } = useRouteMatch()
   const { t } = useTranslation()
+  const { chainId } = useActiveWeb3React()
 
   const viewModeToggle = <ToggleView viewMode={viewMode} onToggle={(mode: ViewMode) => setViewMode(mode)} />
 
   const liveOrFinishedSwitch = (
     <Wrapper>
       <ButtonMenu activeIndex={isExact ? 0 : 1} scale="sm" variant="subtle">
-        <ButtonMenuItem as={Link} to={`${url}`}>
+        <ButtonMenuItem as={Link} to={{ pathname: `${url}`, search: `chain=${CHAIN_IDS_TO_NAMES[chainId]}` }}>
           {t('Live')}
         </ButtonMenuItem>
         <NotificationDot show={hasStakeInFinishedPools}>
-          <ButtonMenuItem id="finished-pools-button" as={Link} to={`${url}/history`}>
+          <ButtonMenuItem id="finished-pools-button" as={Link} to={{ pathname: `${url}/history`, search: `chain=${CHAIN_IDS_TO_NAMES[chainId]}` }}>
             {t('Finished')}
           </ButtonMenuItem>
         </NotificationDot>

@@ -6,7 +6,7 @@ import React, { useEffect, useRef } from 'react'
 import { useAppDispatch } from 'state'
 import { useInitialBlock } from 'state/block/hooks'
 import { initializePredictions } from 'state/predictions'
-import { useGetPredictionsStatus, useIsChartPaneOpen } from 'state/predictions/hooks'
+import { useGetClaimStatuses, useGetLedgerData, useGetPredictionData, useGetPredictionsStatus, useGetRoundsData, useIsChartPaneOpen } from 'state/predictions/hooks'
 import { PredictionStatus } from 'state/types'
 import { useUserPredictionAcceptedRisk, useUserPredictionChartDisclaimerShow } from 'state/user/hooks'
 import ChartDisclaimer from './components/ChartDisclaimer'
@@ -31,6 +31,10 @@ const Predictions = () => {
   const handleAcceptRiskSuccess = () => setHasAcceptedRisk(true)
   const [onPresentRiskDisclaimer] = useModal(<RiskDisclaimer onSuccess={handleAcceptRiskSuccess} />, false)
   const [onPresentChartDisclaimer] = useModal(<ChartDisclaimer />, false)
+  const getRoundsData = useGetRoundsData()
+  const getClaimStatuses = useGetClaimStatuses()
+  const getLedgerData = useGetLedgerData()
+  const getPredictionData = useGetPredictionData()
 
   // TODO: memoize modal's handlers
   const onPresentRiskDisclaimerRef = useRef(onPresentRiskDisclaimer)
@@ -53,9 +57,9 @@ const Predictions = () => {
   useEffect(() => {
     if (initialBlock > 0) {
       // Do not start initialization until the first block has been retrieved
-      dispatch(initializePredictions(account))
+      dispatch(initializePredictions({ account, getRoundsData, getClaimStatuses, getLedgerData, getPredictionData }))
     }
-  }, [initialBlock, dispatch, account])
+  }, [initialBlock, dispatch, account, getRoundsData, getClaimStatuses, getLedgerData, getPredictionData])
 
   usePollPredictions()
   usePollOraclePrice()

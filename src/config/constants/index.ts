@@ -1,12 +1,17 @@
 import { ChainId, JSBI, Percent, Token } from 'sdk'
-import { mainnetTokens, testnetTokens } from './tokens'
+import { mainnetTokens, rskMainnetTokens, rskTestnetTokens, testnetTokens } from './tokens'
 
-// Pancake test router address 0x9Ac64Cc6e4415144C455BD8E4837Fea55603e5c3
-// Pancake prod router address 0x10ED43C718714eb63d5aA57B78B54704E256024E
-// Helix test net router address 0x9DbA93422D0ce20A755d07258E3bDF6D20d56193
-const chainId = process.env.REACT_APP_CHAIN_ID
+// a list of router addresses by chain
+type RouterAddressesList = {
+    readonly [chainId in ChainId]: string
+}
 
-export const ROUTER_ADDRESS = Number(chainId) === ChainId.MAINNET ? '0x39D660d507f1bC34DbCe94831081D6cf9131c3b9' : '0x484621036C7D18EDE8A267C44e3FBfDfb81135af'   // UpdateMe
+export const ROUTER_ADDRESS: RouterAddressesList = {
+    [ChainId.MAINNET]: '0x39D660d507f1bC34DbCe94831081D6cf9131c3b9',
+    [ChainId.TESTNET]: '0x484621036C7D18EDE8A267C44e3FBfDfb81135af',
+    [ChainId.RSK_MAINNET]: '0x3a9D41c8f905D1744180DA36B7EB8350A67cE8e4', // update me
+    [ChainId.RSK_TESTNET]: '0x2E389edDB44933c46608bd0B0f4E9BeD191dCC90',
+}
 
 // a list of tokens by chain
 type ChainTokenList = {
@@ -21,7 +26,21 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
         mainnetTokens.usdt,
         mainnetTokens.usdc,
     ],
-    [ChainId.TESTNET]: [testnetTokens.weth, testnetTokens.helix, testnetTokens.usdc],
+    [ChainId.TESTNET]: [
+        testnetTokens.weth,
+        testnetTokens.helix,
+        testnetTokens.usdc
+    ],
+    [ChainId.RSK_MAINNET]: [
+        rskMainnetTokens.helix,
+        rskMainnetTokens.weth,
+        rskMainnetTokens.usdt
+    ],
+    [ChainId.RSK_TESTNET]: [
+        rskTestnetTokens.helix,
+        rskTestnetTokens.weth,
+        rskTestnetTokens.usdt
+    ],
 }
 
 /**
@@ -30,6 +49,9 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
  */
 export const ADDITIONAL_BASES: { [chainId in ChainId]?: { [tokenAddress: string]: Token[] } } = {
     [ChainId.MAINNET]: {},
+    [ChainId.TESTNET]: {},
+    [ChainId.RSK_MAINNET]: {},
+    [ChainId.RSK_TESTNET]: {},
 }
 
 /**
@@ -39,27 +61,61 @@ export const ADDITIONAL_BASES: { [chainId in ChainId]?: { [tokenAddress: string]
  */
 export const CUSTOM_BASES: { [chainId in ChainId]?: { [tokenAddress: string]: Token[] } } = {
     [ChainId.MAINNET]: {},
+    [ChainId.TESTNET]: {},
+    [ChainId.RSK_MAINNET]: {},
+    [ChainId.RSK_TESTNET]: {},
 }
 
 // used for display in the default list when adding liquidity
 export const SUGGESTED_BASES: ChainTokenList = {
-    [ChainId.MAINNET]: [mainnetTokens.weth, mainnetTokens.dai, mainnetTokens.usdt],
-    [ChainId.TESTNET]: [testnetTokens.weth, testnetTokens.dai, testnetTokens.usdc],
+    [ChainId.MAINNET]: [
+        mainnetTokens.weth,
+        mainnetTokens.dai,
+        mainnetTokens.usdt
+    ],
+    [ChainId.TESTNET]: [
+        testnetTokens.weth,
+        testnetTokens.dai,
+        testnetTokens.usdc
+    ],
+    [ChainId.RSK_MAINNET]: [
+        rskMainnetTokens.weth,
+        rskMainnetTokens.usdt
+    ],
+    [ChainId.RSK_TESTNET]: [
+        rskTestnetTokens.weth,
+        rskTestnetTokens.usdt
+    ],
 }
 
 // used to construct the list of all pairs we consider by default in the frontend
 export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
-    [ChainId.MAINNET]: [mainnetTokens.weth, mainnetTokens.dai, mainnetTokens.usdc, mainnetTokens.usdt],
-    [ChainId.TESTNET]: [testnetTokens.weth, testnetTokens.dai, testnetTokens.usdc],
+    [ChainId.MAINNET]: [
+        mainnetTokens.weth,
+        mainnetTokens.dai,
+        mainnetTokens.usdc,
+        mainnetTokens.usdt
+    ],
+    [ChainId.TESTNET]: [
+        testnetTokens.weth,
+        testnetTokens.dai,
+        testnetTokens.usdc
+    ],
+    [ChainId.RSK_MAINNET]: [
+        rskMainnetTokens.weth,
+        rskMainnetTokens.usdt
+    ],
+    [ChainId.RSK_TESTNET]: [
+        rskTestnetTokens.weth,
+        rskTestnetTokens.usdt
+    ],
 }
 
 export const PINNED_PAIRS: { readonly [chainId in ChainId]?: [Token, Token][] } = {
-    [ChainId.MAINNET]: [
-        // UpdateMe remove rem
-        // [mainnetTokens.cake, mainnetTokens.weth],
-        // [mainnetTokens.busd, mainnetTokens.usdt],
-        // [mainnetTokens.dai, mainnetTokens.usdt],
-    ],
+    [ChainId.MAINNET]: [],
+    [ChainId.TESTNET]: [],
+    [ChainId.RSK_MAINNET]: [],
+    [ChainId.RSK_TESTNET]: [],
 }
 
 export const NetworkContextName = 'NETWORK'
@@ -102,6 +158,6 @@ export const BLOCKED_ADDRESSES: string[] = [
 export const FAST_INTERVAL = 10000
 export const SLOW_INTERVAL = 60000
 
-export { default as farmsConfig } from './farms'
-export { default as poolsConfig } from './pools'
+export { default as getFarms } from './farms'
+export { default as getPools } from './pools'
 export { default as ifosConfig } from './ifo'

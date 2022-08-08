@@ -8,8 +8,9 @@ import { useIfoPoolCreditBlock, useVaultPoolByKey } from 'state/pools/hooks'
 import { DeserializedPool, VaultKey } from 'state/types'
 import { convertSharesToHelix } from 'views/Pools/helpers'
 import { FlexGap } from 'components/Layout/Flex'
-import { vaultPoolConfig } from 'config/constants/pools'
 import { getEtherScanLink } from 'utils'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import { useGetVaultPoolConfig } from 'views/Pools/hooks/useGetVaultPoolConfig'
 import AprRow from '../PoolCard/AprRow'
 import { StyledCard } from '../PoolCard/StyledCard'
 import CardFooter from '../PoolCard/CardFooter'
@@ -31,6 +32,7 @@ interface HelixVaultProps extends CardProps {
 export const CreditCalcBlock = () => {
   const { creditStartBlock, creditEndBlock, hasEndBlockOver } = useIfoPoolCreditBlock()
   const { t } = useTranslation()
+  const { chainId } = useActiveWeb3React()
 
   const { tooltip, tooltipVisible, targetRef } = useTooltip(
     hasEndBlockOver ? (
@@ -65,7 +67,7 @@ export const CreditCalcBlock = () => {
       <Flex mr="6px" alignItems="center">
         <Link
           external
-          href={getEtherScanLink(hasEndBlockOver ? creditEndBlock : creditStartBlock, 'block')}
+          href={getEtherScanLink(hasEndBlockOver ? creditEndBlock : creditStartBlock, 'block', chainId)}
           mr="4px"
           color={hasEndBlockOver ? 'warning' : 'primary'}
           fontSize="14px"
@@ -89,6 +91,7 @@ const HelixVaultCard: React.FC<HelixVaultProps> = ({ pool, showStakedOnly, defau
     fees: { performanceFeeAsDecimal },
     pricePerFullShare,
   } = useVaultPoolByKey(pool.vaultKey)
+  const vaultPoolConfig = useGetVaultPoolConfig()
 
   const { helixAsBigNumber } = convertSharesToHelix(userShares, pricePerFullShare)
 

@@ -27,7 +27,7 @@ import useApproveConfirmTransaction from 'hooks/useApproveConfirmTransaction'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { DEFAULT_TOKEN_DECIMAL } from 'config'
 import { useERC20 } from 'hooks/useContract'
-import tokens from 'config/constants/tokens'
+import { useGetTokens } from 'hooks/useGetTokens'
 
 interface Props {
   poolId: PoolIds
@@ -81,6 +81,7 @@ const ContributeModal: React.FC<Props> = ({
   const { callWithGasPrice } = useCallWithGasPrice()
   const raisingTokenContract = useERC20(currency.address)
   const { t } = useTranslation()
+  const tokens = useGetTokens()
   const valueWithTokenDecimals = new BigNumber(value).times(DEFAULT_TOKEN_DECIMAL)
   const label = currency === tokens.helix ? t('Max. HELIX entry') : t('Max. token entry')
 

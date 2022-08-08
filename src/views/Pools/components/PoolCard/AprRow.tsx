@@ -7,7 +7,7 @@ import RoiCalculatorModal from 'components/RoiCalculatorModal'
 import { DeserializedPool } from 'state/types'
 import BigNumber from 'bignumber.js'
 import { BIG_ZERO } from 'utils/bigNumber'
-import { vaultPoolConfig } from 'config/constants/pools'
+import { useGetVaultPoolConfig } from 'views/Pools/hooks/useGetVaultPoolConfig'
 
 const ApyLabelContainer = styled(Flex)`
   cursor: pointer;
@@ -36,6 +36,7 @@ const AprRow: React.FC<AprRowProps> = ({ pool, stakedBalance, performanceFee = 0
     userData,
     vaultKey,
   } = pool
+  const vaultPoolConfig = useGetVaultPoolConfig()
 
   const stakingTokenBalance = userData?.stakingTokenBalance ? new BigNumber(userData.stakingTokenBalance) : BIG_ZERO
 

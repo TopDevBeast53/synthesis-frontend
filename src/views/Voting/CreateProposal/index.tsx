@@ -16,12 +16,10 @@ import {
 } from 'uikit'
 import { useHistory } from 'react-router'
 import { Link } from 'react-router-dom'
-import { useWeb3React } from '@web3-react/core'
 import isEmpty from 'lodash/isEmpty'
 import { useCurrentBlock } from 'state/block'
 import { SnapshotCommand } from 'state/types'
 import useToast from 'hooks/useToast'
-import useWeb3Provider from 'hooks/useActiveWeb3React'
 import { getEtherScanLink } from 'utils'
 import truncateHash from 'utils/truncateHash'
 import { signMessage } from 'utils/web3React'
@@ -31,6 +29,8 @@ import { DatePicker, TimePicker, DatePickerPortal } from 'views/Voting/component
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import ReactMarkdown from 'components/ReactMarkdown'
 import { PageMeta } from 'components/Layout/Page'
+import { CHAIN_IDS_TO_NAMES } from 'config/constants/networks'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { sendSnapshotData, Message, generateMetaData, generatePayloadData } from '../helpers'
 import Layout from '../components/Layout'
 import { FormErrors, Label, SecondaryLabel } from './styles'
@@ -52,10 +52,9 @@ const CreateProposal = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [fieldsState, setFieldsState] = useState<{ [key: string]: boolean }>({})
   const { t } = useTranslation()
-  const { account } = useWeb3React()
   const currentBlock = useCurrentBlock()
   const { push } = useHistory()
-  const { library, connector } = useWeb3Provider()
+  const { account, library, connector, chainId } = useActiveWeb3React()
   const { toastSuccess, toastError } = useToast()
   const [onPresentVoteDetailsModal] = useModal(<VoteDetailsModal />)
   const { name, body, endDate, endTime, snapshot } = state
@@ -67,7 +66,7 @@ const CreateProposal = () => {
     try {
       setIsLoading(true)
       const proposal = JSON.stringify({
-        ...generatePayloadData(),
+        ...generatePayloadData(chainId),
         type: SnapshotCommand.PROPOSAL,
         payload: {
           name,
@@ -76,7 +75,7 @@ const CreateProposal = () => {
           start: combineDateAndTime(new Date(), new Date()),
           end: combineDateAndTime(endDate, endTime),
           choices: CHOICES_PRESET,
-          metadata: generateMetaData(),
+          metadata: generateMetaData(chainId),
           type: 'single-choice',
         },
       })
@@ -151,7 +150,7 @@ const CreateProposal = () => {
     <Container py="40px">
       <PageMeta />
       <Box mb="40px">
-        <Button as={Link} to="/voting" variant="text" startIcon={<ArrowBackIcon color="primary" width="24px" />} px="0">
+        <Button as={Link} to={{ pathname: "/voting", search: `chain=${CHAIN_IDS_TO_NAMES[chainId]}` }} variant="text" startIcon={<ArrowBackIcon color="primary" width="24px" />} px="0">
           {t('Back to Proposals')}
         </Button>
       </Box>
@@ -228,14 +227,14 @@ const CreateProposal = () => {
                     <Text color="textSubtle" mr="16px">
                       {t('Creator')}
                     </Text>
-                    <LinkExternal href={getEtherScanLink(account, 'address')}>{truncateHash(account)}</LinkExternal>
+                    <LinkExternal href={getEtherScanLink(account, 'address', chainId)}>{truncateHash(account)}</LinkExternal>
                   </Flex>
                 )}
                 <Flex alignItems="center" mb="16px">
                   <Text color="textSubtle" mr="16px">
                     {t('Snapshot')}
                   </Text>
-                  <LinkExternal href={getEtherScanLink(snapshot, 'block')}>{snapshot}</LinkExternal>
+                  <LinkExternal href={getEtherScanLink(snapshot, 'block', chainId)}>{snapshot}</LinkExternal>
                 </Flex>
                 {account ? (
                   <>

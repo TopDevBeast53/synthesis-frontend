@@ -1,15 +1,9 @@
-import { Contract } from '@ethersproject/contracts'
-import { ethers } from 'ethers'
 import { getAddress } from '@ethersproject/address'
-import { AddressZero } from '@ethersproject/constants'
 import { JsonRpcSigner, Web3Provider } from '@ethersproject/providers'
 import { BigNumber } from '@ethersproject/bignumber'
-import { abi as IUniswapV2Router02ABI } from '@uniswap/v2-periphery/build/IUniswapV2Router02.json'
 import { ChainId, JSBI, Percent, Token, CurrencyAmount, Currency, ETHER } from 'sdk'
-import { ROUTER_ADDRESS } from '../config/constants'
 import { BASE_SOLANA_SCAN_URLS, BASE_ETH_SCAN_URLS } from '../config'
 import { TokenAddressMap } from '../state/lists/hooks'
-import { simpleRpcProvider } from './providers'
 
 // returns the checksummed address if the address is valid, otherwise returns false
 export function isAddress(value: any): string | false {
@@ -41,7 +35,7 @@ export function getSolanaScanLink(data: string | number, cluster: 'mainnet' | 't
 export function getEtherScanLink(
     data: string | number,
     type: 'transaction' | 'token' | 'address' | 'block' | 'countdown',
-    chainId: ChainId = process.env.REACT_APP_CHAIN_ID === ChainId.MAINNET.toString() ? ChainId.MAINNET : ChainId.TESTNET,
+    chainId: ChainId,
 ): string {
     switch (type) {
         case 'transaction': {
@@ -65,7 +59,7 @@ export function getEtherScanLink(
 export function getEtherScanLinkForNft(
     collectionAddress: string,
     tokenId: string,
-    chainId: ChainId = process.env.REACT_APP_CHAIN_ID === ChainId.MAINNET.toString() ? ChainId.MAINNET : ChainId.TESTNET,
+    chainId: ChainId,
 ): string {
     return `${BASE_ETH_SCAN_URLS[chainId]}/token/${collectionAddress}?a=${tokenId}`
 }
@@ -100,25 +94,11 @@ export function getProviderOrSigner(library: Web3Provider, account?: string): We
     return account ? getSigner(library, account) : library
 }
 
-// account is optional
-export function getContract(address: string, ABI: any, signer?: ethers.Signer | ethers.providers.Provider): Contract {
-    if (!isAddress(address) || address === AddressZero) {
-        throw Error(`Invalid 'address' parameter '${address}'.`)
-    }
-
-    return new Contract(address, ABI, signer ?? simpleRpcProvider)
-}
-
-// account is optional
-export function getRouterContract(_: number, library: Web3Provider, account?: string): Contract {
-    return getContract(ROUTER_ADDRESS, IUniswapV2Router02ABI, getProviderOrSigner(library, account))
-}
-
 export function escapeRegExp(string: string): string {
     return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // $& means the whole matched string
 }
 
 export function isTokenOnList(defaultTokens: TokenAddressMap, currency?: Currency): boolean {
-    if (currency === ETHER) return true
+    if (currency instanceof Token && currency === ETHER[currency.chainId]) return true
     return Boolean(currency instanceof Token && defaultTokens[currency.chainId]?.[currency.address])
 }

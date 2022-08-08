@@ -1,6 +1,5 @@
 import React from 'react'
 import { useFarms } from 'state/farms/hooks'
-import { getAddress } from 'utils/addressHelpers'
 import { getBalanceNumber } from 'utils/formatBalance'
 import Balance from 'components/Balance'
 import { TokenPairImage } from 'components/TokenImage'
@@ -8,7 +7,7 @@ import { TokenPairImage } from 'components/TokenImage'
 const LPTokenCell = (props) => {
   const { lpTokenAddress, balance } = props
   const { data: farms } = useFarms()
-  const lpToken = farms.find((item) => getAddress(item.lpAddresses) === lpTokenAddress)
+  const lpToken = farms.find((item) => item.lpAddress === lpTokenAddress)
   const amount = getBalanceNumber(balance, lpToken.token.decimals)
 
   return (

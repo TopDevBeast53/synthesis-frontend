@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, useCallback, useEffect, useMemo } from 'react'
 import { useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 import { ethers } from 'ethers'
@@ -10,7 +10,7 @@ import { getProviderOrSigner } from 'utils'
 import { formatBigNumber } from 'utils/formatBalance'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useFastFresh } from 'hooks/useRefresh'
-import tokens from 'config/constants/tokens'
+import { useGetTokens } from 'hooks/useGetTokens'
 import CurrencyLogo from 'components/Logo/CurrencyLogo'
 import { getReferralRegisterAddress } from 'utils/addressHelpers'
 import { BASE_URL } from 'config'
@@ -20,48 +20,46 @@ import useToast from '../../hooks/useToast'
 import CircleLoader from '../../components/Loader/CircleLoader'
 import CopyAddress from '../../components/Menu/UserMenu/CopyAddress'
 
-const HelixReferralRegisterAddress = getReferralRegisterAddress()
-
 const useGetRef = (account: string | null) => {
-  const { library } = useActiveWeb3React()
+  const { library, chainId } = useActiveWeb3React()
   return useCallback(async () => {
     const contract = new Contract(
-      HelixReferralRegisterAddress,
+      getReferralRegisterAddress(chainId),
       ReferralRegisterABI,
       getProviderOrSigner(library, account),
     )
     if (!account) return null
     const result = await contract.referrers(account)
     return result
-  }, [library, account])
+  }, [library, account, chainId])
 }
 
 const useGetReferees = (account: string | null) => {
-  const { library } = useActiveWeb3React()
+  const { library, chainId } = useActiveWeb3React()
   return useCallback(async () => {
     const contract = new Contract(
-      HelixReferralRegisterAddress,
+      getReferralRegisterAddress(chainId),
       ReferralRegisterABI,
       getProviderOrSigner(library, account),
     )
     if (!account) return null
     const result = await contract.getReferees(account)
     return result
-  }, [library, account])
+  }, [library, account, chainId])
 }
 
 const useGetBalance = (account: string | null) => {
-  const { library } = useActiveWeb3React()
+  const { library, chainId } = useActiveWeb3React()
   return useCallback(async () => {
     const contract = new Contract(
-      HelixReferralRegisterAddress,
+      getReferralRegisterAddress(chainId),
       ReferralRegisterABI,
       getProviderOrSigner(library, account),
     )
     if (!account) return null
     const result = await contract.rewards(account)
     return result
-  }, [library, account])
+  }, [library, account, chainId])
 }
 
 const BodyWrapper = styled(Card)`
@@ -80,27 +78,28 @@ function AppBody({ children }: { children: React.ReactNode }) {
 }
 
 const useClaimRewards = () => {
-  const { library, account } = useActiveWeb3React()
+  const { library, account, chainId } = useActiveWeb3React()
   const { callWithGasPrice } = useCallWithGasPrice()
   const addRefCb = useCallback(async () => {
     const contract = new Contract(
-      HelixReferralRegisterAddress,
+      getReferralRegisterAddress(chainId),
       ReferralRegisterABI,
       getProviderOrSigner(library, account),
     )
     const tx = await callWithGasPrice(contract, 'withdraw', [])
     const result = await tx.wait()
     return result
-  }, [callWithGasPrice, library, account])
+  }, [callWithGasPrice, library, account, chainId])
   return addRefCb
 }
 
-function getReferralLink(address: string): string {
-  return `${BASE_URL}/referrals?ref=${address}`
+function getReferralLink(address: string, chain: string): string {
+  return `${BASE_URL}/refer?ref=${address}&chain=${chain}`
 }
 
 export default function Referrals() {
   const { account } = useActiveWeb3React()
+  const tokens = useGetTokens()
   const fastRefresh = useFastFresh()
   const getRef = useGetRef(account)
   const getReferees = useGetReferees(account)
@@ -169,6 +168,14 @@ export default function Referrals() {
 
   }, [getBalance, fastRefresh])
 
+  const { ref, chain } = useMemo(() => {
+    const url = new URLSearchParams(search);
+    return {
+      ref: url.get('ref'),
+      chain: url.get('chain')
+    }
+  }, [search])
+
   if (!account) {
     return (
       <Page>
@@ -183,7 +190,6 @@ export default function Referrals() {
       </Page>
     )
   }
-  const ref = new URLSearchParams(search).get('ref')
   const showAcceptReferral = ref && !myReferrer && !isReferrerLoading
   return (
     <Page>
@@ -197,7 +203,7 @@ export default function Referrals() {
             <Text color="secondary" fontSize="13px" textTransform="uppercase" fontWeight="bold" mb="8px">
               Your Referral Link
             </Text>
-            <CopyAddress account={getReferralLink(account)} />
+            <CopyAddress account={getReferralLink(account, chain)} />
           </Flex>
           <Flex flexDirection="column" style={{ paddingTop: '24px' }}>
             <Text color="secondary" fontSize="13px" textTransform="uppercase" fontWeight="bold" mb="8px">

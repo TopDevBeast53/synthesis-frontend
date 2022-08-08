@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'
 import { useMatchBreakpoints } from 'uikit'
@@ -70,7 +70,12 @@ const FarmMobileCell = styled.td`
 
 const Row: React.FunctionComponent<RowPropsWithLoading> = (props) => {
   const { details, userDataReady } = props
-  const hasStakedAmount = !!useFarmUser(details.pid).stakedBalance.toNumber()
+  const farmUser = useFarmUser(details.pid)
+
+  const hasStakedAmount = useMemo(() => {
+    return farmUser ? !!farmUser.stakedBalance.toNumber() : false
+  }, [farmUser])
+
   const [actionPanelExpanded, setActionPanelExpanded] = useState(hasStakedAmount)
   const shouldRenderChild = useDelayedUnmount(actionPanelExpanded, 300)
   const { t } = useTranslation()
@@ -141,8 +146,8 @@ const Row: React.FunctionComponent<RowPropsWithLoading> = (props) => {
     return (
       <StyledTr onClick={toggleActionPanel}>
         <td>
-          <div style={{position:"relative"}}>
-            <table style={{width:"100%"}}>
+          <div style={{ position: "relative" }}>
+            <table style={{ width: "100%" }}>
               <tbody>
                 <tr>
                   <FarmMobileCell>
@@ -155,8 +160,8 @@ const Row: React.FunctionComponent<RowPropsWithLoading> = (props) => {
               </tbody>
             </table>
           </div>
-          <div style={{position:"relative"}}>
-            <table style={{width:"100%"}}>
+          <div style={{ position: "relative" }}>
+            <table style={{ width: "100%" }}>
               <tbody>
                 <tr>
                   <EarnedMobileCell>

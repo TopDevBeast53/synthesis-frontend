@@ -3,6 +3,7 @@ import { INFO_CLIENT } from 'config/constants/endpoints'
 import { Transaction } from 'state/info/types'
 import { MintResponse, SwapResponse, BurnResponse } from 'state/info/queries/types'
 import { mapMints, mapBurns, mapSwaps } from 'state/info/queries/helpers'
+import { ChainId } from 'sdk'
 
 /**
  * Data to display transaction table on Token page
@@ -133,9 +134,9 @@ interface TransactionResults {
     burnsAs1: BurnResponse[]
 }
 
-const fetchTokenTransactions = async (address: string): Promise<{ data?: Transaction[]; error: boolean }> => {
+const fetchTokenTransactions = async (chainId: ChainId, address: string): Promise<{ data?: Transaction[]; error: boolean }> => {
     try {
-        const data = await request<TransactionResults>(INFO_CLIENT, TOKEN_TRANSACTIONS, {
+        const data = await request<TransactionResults>(INFO_CLIENT[chainId], TOKEN_TRANSACTIONS, {
             address,
         })
         const mints0 = data.mintsAs0.map(mapMints)

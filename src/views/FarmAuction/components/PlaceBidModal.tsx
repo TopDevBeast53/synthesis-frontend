@@ -19,7 +19,7 @@ import { ConnectedBidder, FetchStatus } from 'config/constants/types'
 import { usePriceHelixBusd } from 'state/farms/hooks'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { ToastDescriptionWithTx } from 'components/Toast'
-import tokens from 'config/constants/tokens'
+import { useGetTokens } from 'hooks/useGetTokens'
 
 const StyledModal = styled(Modal)`
   min-width: 280px;
@@ -57,6 +57,7 @@ const PlaceBidModal: React.FC<PlaceBidModalProps> = ({
   const { t } = useTranslation()
   const { theme } = useTheme()
   const { callWithGasPrice } = useCallWithGasPrice()
+  const tokens = useGetTokens()
 
   const [bid, setBid] = useState('')
   const [isMultipleOfTen, setIsMultipleOfTen] = useState(false)

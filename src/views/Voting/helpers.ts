@@ -1,7 +1,7 @@
-import { SNAPSHOT_HUB_API, SNAPSHOT_VOTING_API } from 'config/constants/endpoints'
-import tokens from 'config/constants/tokens'
+import { SNAPSHOT_HUB_API } from 'config/constants/endpoints'
+import getTokens from 'config/constants/tokens'
 import { Proposal, ProposalState, ProposalType, Vote } from 'state/types'
-import { simpleRpcProvider } from 'utils/providers'
+import { ChainId } from 'sdk'
 import { ADMINS, HELIX_SPACE, SNAPSHOT_VERSION } from './config'
 
 export const isCoreProposal = (proposal: Proposal) => {
@@ -33,22 +33,22 @@ export interface Message {
 /**
  * Generates metadata required by snapshot to validate payload
  */
-export const generateMetaData = () => {
+export const generateMetaData = (chainId: number) => {
     return {
         plugins: {},
-        network: process.env.REACT_APP_CHAIN_ID,
-        strategies: [{ name: 'helix', params: { symbol: 'HELIX', address: tokens.helix.address, decimals: 18 } }],
+        network: chainId,
+        strategies: [{ name: 'helix', params: { symbol: 'HELIX', address: getTokens(chainId).helix.address, decimals: 18 } }],
     }
 }
 
 /**
  * Returns data that is required on all snapshot payloads
  */
-export const generatePayloadData = () => {
+export const generatePayloadData = (chainId: ChainId) => {
     return {
         version: SNAPSHOT_VERSION,
         timestamp: (Date.now() / 1e3).toFixed(),
-        space: HELIX_SPACE,
+        space: HELIX_SPACE[chainId],
     }
 }
 
@@ -74,22 +74,22 @@ export const sendSnapshotData = async (message: Message) => {
     return data
 }
 
-export const getVotingPower = async (account: string, poolAddresses: string[], block?: number) => {
-    const blockNumber = block || (await simpleRpcProvider.getBlockNumber())
-    const response = await fetch(`${SNAPSHOT_VOTING_API}/power`, {
-        method: 'post',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            address: account,
-            block: blockNumber,
-            poolAddresses,
-        }),
-    })
-    const data = await response.json()
-    return data.data
-}
+// export const getVotingPower = async (account: string, poolAddresses: string[], block?: number) => {
+//     const blockNumber = block || (await simpleRpcProvider.getBlockNumber())
+//     const response = await fetch(`${SNAPSHOT_VOTING_API}/power`, {
+//         method: 'post',
+//         headers: {
+//             'Content-Type': 'application/json',
+//         },
+//         body: JSON.stringify({
+//             address: account,
+//             block: blockNumber,
+//             poolAddresses,
+//         }),
+//     })
+//     const data = await response.json()
+//     return data.data
+// }
 
 export const calculateVoteResults = (votes: Vote[]): { [key: string]: Vote[] } => {
     return votes.reduce((accum, vote) => {

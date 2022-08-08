@@ -1,6 +1,8 @@
+import { ChainId } from 'sdk'
 import { PairDataTimeWindowEnum } from '../types'
 
 export type fetchPairDataParams = {
+    chainId: ChainId
     pairId: string
     timeWindow: PairDataTimeWindowEnum
 }

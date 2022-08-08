@@ -13,7 +13,7 @@ import {
   Link,
   TelegramIcon,
 } from 'uikit'
-import tokens from 'config/constants/tokens'
+import { useGetTokens } from 'hooks/useGetTokens'
 import { useTranslation } from 'contexts/Localization'
 import { PublicIfoData } from 'views/Ifos/types'
 import { Ifo } from 'config/constants/types'
@@ -21,6 +21,7 @@ import { BIG_TEN } from 'utils/bigNumber'
 import { getEtherScanLink } from 'utils'
 import { formatBigNumber } from 'utils/formatBalance'
 import { FlexGap } from 'components/Layout/Flex'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 const SmartContractIcon: React.FC<SvgProps> = (props) => {
   return (
@@ -55,7 +56,7 @@ const Container = styled(Flex)`
   }
 `
 
-const AchievementFlex = styled(Flex)<{ isFinished: boolean }>`
+const AchievementFlex = styled(Flex) <{ isFinished: boolean }>`
   ${({ isFinished }) => (isFinished ? 'filter: grayscale(100%)' : '')};
   text-align: left;
 `
@@ -66,7 +67,9 @@ const InlinePrize = styled(Flex)`
 `
 
 const IfoAchievement: React.FC<Props> = ({ ifo, publicIfoData }) => {
+  const { chainId } = useActiveWeb3React()
   const { t } = useTranslation()
+  const tokens = useGetTokens()
   const tokenName = ifo.token.symbol?.toLowerCase()
   const campaignTitle = ifo.name
   const minLpForAchievement = publicIfoData.thresholdPoints
@@ -106,7 +109,7 @@ const IfoAchievement: React.FC<Props> = ({ ifo, publicIfoData }) => {
             <Link external href={ifo.articleUrl}>
               <LanguageIcon color="textSubtle" />
             </Link>
-            <Link external href={getEtherScanLink(ifo.address, 'address')}>
+            <Link external href={getEtherScanLink(ifo.address, 'address', chainId)}>
               <SmartContractIcon color="textSubtle" />
             </Link>
             {ifo.twitterUrl && (

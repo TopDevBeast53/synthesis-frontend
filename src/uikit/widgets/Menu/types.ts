@@ -18,6 +18,7 @@ export interface LinkStatus {
 export interface NavProps {
     linkComponent?: ElementType
     userMenu?: ReactElement
+    networkSelector?: ReactElement
     banner?: ReactElement
     globalMenu?: ReactElement
     links: Array<MenuItemsType>

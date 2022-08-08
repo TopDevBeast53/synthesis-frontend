@@ -7,7 +7,7 @@ import { DeserializedPool } from 'state/types'
 import { useTranslation } from 'contexts/Localization'
 import BigNumber from 'bignumber.js'
 import { BIG_ZERO } from 'utils/bigNumber'
-import { vaultPoolConfig } from 'config/constants/pools'
+import { useGetVaultPoolConfig } from 'views/Pools/hooks/useGetVaultPoolConfig'
 
 const AprLabelContainer = styled(Flex)`
   &:hover {
@@ -35,6 +35,7 @@ const Apr: React.FC<AprProps> = ({ pool, showIcon, stakedBalance, performanceFee
     vaultKey,
   } = pool
   const { t } = useTranslation()
+  const vaultPoolConfig = useGetVaultPoolConfig()
 
   const stakingTokenBalance = userData?.stakingTokenBalance ? new BigNumber(userData.stakingTokenBalance) : BIG_ZERO
 

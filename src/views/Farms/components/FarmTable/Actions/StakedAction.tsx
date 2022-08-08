@@ -1,5 +1,4 @@
 import { AddIcon, Button, Heading, IconButton, MinusIcon, Skeleton, Text, useModal } from 'uikit'
-import { useWeb3React } from '@web3-react/core'
 import { BigNumber } from 'bignumber.js'
 import Balance from 'components/Balance'
 import ConnectWalletButton from 'components/ConnectWalletButton'
@@ -7,16 +6,17 @@ import { BASE_ADD_LIQUIDITY_URL } from 'config'
 import { useTranslation } from 'contexts/Localization'
 import { useERC20 } from 'hooks/useContract'
 import useToast from 'hooks/useToast'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useAppDispatch } from 'state'
 import { fetchFarmUserDataAsync } from 'state/farms'
-import { useFarmUser, useLpTokenPrice, usePriceHelixBusd } from 'state/farms/hooks'
+import { useFarmUser, useFetchFarmUserAllowances, useFetchFarmUserEarnings, useFetchFarmUserStakedBalances, useFetchFarmUserTokenBalances, useLpTokenPrice, usePriceHelixBusd } from 'state/farms/hooks'
 import styled from 'styled-components'
-import { getAddress } from 'utils/addressHelpers'
 import { getBalanceAmount, getBalanceNumber } from 'utils/formatBalance'
 import getLiquidityUrlPathParts from 'utils/getLiquidityUrlPathParts'
 import { logError } from 'utils/sentry'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import { BIG_ZERO } from 'utils/bigNumber'
 import { FarmWithStakedValue } from 'views/Farms/components/FarmCard/FarmCard'
 import useApproveFarm from '../../../hooks/useApproveFarm'
 import useStakeFarms from '../../../hooks/useStakeFarms'
@@ -41,7 +41,7 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
   multiplier,
   lpSymbol,
   lpLabel,
-  lpAddresses,
+  lpAddress,
   quoteToken,
   token,
   userDataReady,
@@ -49,32 +49,55 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
 }) => {
   const { t } = useTranslation()
   const { toastError } = useToast()
-  const { account } = useWeb3React()
   const [requestedApproval, setRequestedApproval] = useState(false)
-  const { allowance, tokenBalance, stakedBalance } = useFarmUser(pid)
+  const farmUser = useFarmUser(pid)
+  const { allowance, tokenBalance, stakedBalance } = useMemo(() => {
+    if (farmUser === null)
+      return {
+        allowance: BIG_ZERO,
+        tokenBalance: BIG_ZERO,
+        stakedBalance: BIG_ZERO
+      }
+    return {
+      allowance: farmUser.allowance,
+      tokenBalance: farmUser.tokenBalance,
+      stakedBalance: farmUser.stakedBalance
+    }
+  }, [farmUser])
   const { onStake } = useStakeFarms(pid)
   const { onUnstake } = useUnstakeFarms(pid)
   const location = useLocation()
   const lpPrice = useLpTokenPrice(lpSymbol)
   const helixPrice = usePriceHelixBusd()
+  const fetchFarmUserAllowances = useFetchFarmUserAllowances()
+  const fetchFarmUserTokenBalances = useFetchFarmUserTokenBalances()
+  const fetchFarmUserStakedBalances = useFetchFarmUserStakedBalances()
+  const fetchFarmUserEarnings = useFetchFarmUserEarnings()
+  const { chainId, account } = useActiveWeb3React()
 
   const isApproved = account && allowance && allowance.isGreaterThan(0)
 
-  const lpAddress = getAddress(lpAddresses)
   const liquidityUrlPathParts = getLiquidityUrlPathParts({
     quoteTokenAddress: quoteToken.address,
     tokenAddress: token.address,
+    chainId
   })
   const addLiquidityUrl = `${BASE_ADD_LIQUIDITY_URL}/${liquidityUrlPathParts}`
 
   const handleStake = async (amount: string) => {
     await onStake(amount)
-    dispatch(fetchFarmUserDataAsync({ account, pids: [pid] }))
+    dispatch(fetchFarmUserDataAsync({
+      account, pids: [pid], chainId, fetchFarmUserAllowances,
+      fetchFarmUserEarnings, fetchFarmUserStakedBalances, fetchFarmUserTokenBalances
+    }))
   }
 
   const handleUnstake = async (amount: string) => {
     await onUnstake(amount)
-    dispatch(fetchFarmUserDataAsync({ account, pids: [pid] }))
+    dispatch(fetchFarmUserDataAsync({
+      account, pids: [pid], chainId, fetchFarmUserAllowances,
+      fetchFarmUserEarnings, fetchFarmUserStakedBalances, fetchFarmUserTokenBalances
+    }))
   }
 
   const displayBalance = useCallback(() => {
@@ -114,14 +137,17 @@ const Staked: React.FunctionComponent<StackedActionProps> = ({
     try {
       setRequestedApproval(true)
       await onApprove()
-      dispatch(fetchFarmUserDataAsync({ account, pids: [pid] }))
+      dispatch(fetchFarmUserDataAsync({
+        account, pids: [pid], chainId, fetchFarmUserAllowances,
+        fetchFarmUserEarnings, fetchFarmUserStakedBalances, fetchFarmUserTokenBalances
+      }))
     } catch (e) {
       toastError(t('Error'), t('Please try again. Confirm the transaction and make sure you are paying enough gas!'))
       logError(e)
     } finally {
       setRequestedApproval(false)
     }
-  }, [onApprove, dispatch, account, pid, t, toastError])
+  }, [onApprove, dispatch, account, pid, chainId, fetchFarmUserAllowances, fetchFarmUserEarnings, fetchFarmUserStakedBalances, fetchFarmUserTokenBalances, toastError, t])
 
   if (!account) {
     return (

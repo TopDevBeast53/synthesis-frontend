@@ -1,5 +1,5 @@
 import React, { CSSProperties, MutableRefObject, useCallback, useMemo } from 'react'
-import { Currency, CurrencyAmount, currencyEquals, ETHER, Token } from 'sdk'
+import { ChainId, Currency, CurrencyAmount, currencyEquals, ETHER, Token } from 'sdk'
 import { Text } from 'uikit'
 import styled from 'styled-components'
 import { FixedSizeList } from 'react-window'
@@ -18,8 +18,8 @@ import CircleLoader from '../Loader/CircleLoader'
 import { isTokenOnList } from '../../utils'
 import ImportRow from './ImportRow'
 
-function currencyKey(currency: Currency): string {
-  return currency instanceof Token ? currency.address : currency === ETHER ? 'ETHER' : ''
+function currencyKey(currency: Currency, chainId: ChainId): string {
+  return currency instanceof Token ? currency.address : currency === ETHER[chainId] ? 'ETHER' : ''
 }
 
 const StyledBalanceText = styled(Text)`
@@ -68,8 +68,8 @@ function CurrencyRow({
   otherSelected: boolean
   style: CSSProperties
 }) {
-  const { account } = useActiveWeb3React()
-  const key = currencyKey(currency)
+  const { account, chainId } = useActiveWeb3React()
+  const key = currencyKey(currency, chainId)
   const selectedTokenList = useCombinedActiveList()
   const isOnSelectedList = isTokenOnList(selectedTokenList, currency)
   const customAdded = useIsUserAddedToken(currency)
@@ -121,16 +121,15 @@ export default function CurrencyList({
   setImportToken: (token: Token) => void
   breakIndex: number | undefined
 }) {
+  const { chainId } = useActiveWeb3React()
+
   const itemData: (Currency | undefined)[] = useMemo(() => {
-    let formatted: (Currency | undefined)[] = showETH ? [Currency.ETHER, ...currencies] : currencies
+    let formatted: (Currency | undefined)[] = showETH ? [Currency.ETHER[chainId], ...currencies] : currencies
     if (breakIndex !== undefined) {
       formatted = [...formatted.slice(0, breakIndex), undefined, ...formatted.slice(breakIndex, formatted.length)]
     }
     return formatted
-  }, [breakIndex, currencies, showETH])
-
-  const { chainId } = useActiveWeb3React()
-
+  }, [breakIndex, chainId, currencies, showETH])
   // const { t } = useTranslation()
 
   const inactiveTokens: {
@@ -195,7 +194,7 @@ export default function CurrencyList({
     ],
   )
 
-  const itemKey = useCallback((index: number, data: any) => currencyKey(data[index]), [])
+  const itemKey = useCallback((index: number, data: any) => currencyKey(data[index], chainId), [chainId])
 
   return (
     <FixedSizeList

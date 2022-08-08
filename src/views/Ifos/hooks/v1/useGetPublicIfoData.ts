@@ -1,10 +1,11 @@
 import { useState, useCallback } from 'react'
 import BigNumber from 'bignumber.js'
-import { BSC_BLOCK_TIME } from 'config'
+import { BLOCK_TIME } from 'config'
 import { Ifo, IfoStatus, PoolIds } from 'config/constants/types'
 import { useLpTokenPrice } from 'state/farms/hooks'
 import { BIG_ZERO } from 'utils/bigNumber'
-import { multicallv2 } from 'utils/multicall'
+import { useMulticallv2 } from 'hooks/useMulticall'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import ifoV1Abi from 'config/abi/ifoV1.json'
 import { PublicIfoData } from '../../types'
 import { getStatus } from '../helpers'
@@ -35,6 +36,9 @@ const useGetPublicIfoData = (ifo: Ifo): PublicIfoData => {
             sumTaxesOverflow: BIG_ZERO, //  Not used
         },
     })
+    const multicallv2 = useMulticallv2()
+    const { chainId } = useActiveWeb3React()
+
     const fetchIfoData = useCallback(
         async (currentBlock: number) => {
             const ifoCalls = ['startBlock', 'endBlock', 'raisingAmount', 'totalAmount'].map((method) => ({
@@ -62,9 +66,9 @@ const useGetPublicIfoData = (ifo: Ifo): PublicIfoData => {
                 isInitialized: true,
                 status,
                 blocksRemaining,
-                secondsUntilStart: (startBlockNum - currentBlock) * BSC_BLOCK_TIME,
+                secondsUntilStart: (startBlockNum - currentBlock) * BLOCK_TIME[chainId],
                 progress,
-                secondsUntilEnd: blocksRemaining * BSC_BLOCK_TIME,
+                secondsUntilEnd: blocksRemaining * BLOCK_TIME[chainId],
                 startBlockNum,
                 endBlockNum,
                 [PoolIds.poolUnlimited]: {
@@ -74,7 +78,7 @@ const useGetPublicIfoData = (ifo: Ifo): PublicIfoData => {
                 },
             }))
         },
-        [address, releaseBlockNumber],
+        [address, chainId, multicallv2, releaseBlockNumber],
     )
 
     return { ...state, currencyPriceInUSD: lpTokenPriceInUsd, fetchIfoData }

@@ -1,10 +1,14 @@
 import { Token, ChainId } from 'sdk'
 // import tokens from './tokens'
-import farms from './farms'
+import getFarms from './farms'
 import { Ifo } from './types'
 
 // HELIX TODO: code is not clear
-export const cakeBnbLpToken = new Token(ChainId.TESTNET, farms[1].lpAddresses[ChainId.TESTNET], 18, farms[0].lpSymbol)
+export const getCakeBnbLpToken = (chainId: ChainId) => new Token(
+    chainId,
+    getFarms(chainId)[0].lpAddress,
+    18,
+    getFarms(chainId)[0].lpSymbol)
 
 const ifos: Ifo[] = [
     // {

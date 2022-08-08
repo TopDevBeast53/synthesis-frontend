@@ -7,7 +7,7 @@ import styled from 'styled-components'
 import Select from 'components/Select/Select'
 import { useTranslation } from 'contexts/Localization'
 import { useHelixVault } from 'hooks/useContract'
-import tokens from 'config/constants/tokens'
+import { useGetTokens } from 'hooks/useGetTokens'
 import useTheme from 'hooks/useTheme'
 import useToast from 'hooks/useToast'
 import BigNumber from 'bignumber.js'
@@ -17,6 +17,7 @@ import { getFullDisplayBalance, formatNumber, getDecimalAmount } from 'utils/for
 import { getVaultApr } from 'utils/apr'
 import { getInterestBreakdown } from 'utils/compoundApyHelpers'
 import RoiCalculatorModal from 'components/RoiCalculatorModal'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import PercentageButton from './VaultCard/Modals/PercentageButton'
 import { useHelixLockVault } from '../hooks/useHelixLockVault'
 
@@ -47,6 +48,7 @@ const AnnualRoiDisplay = styled(Text)`
 
 const AddRowModal: React.FC<ModalProps> = ({ stakingTokenBalance, stakingTokenPrice, totalStakedVault, tokenPerBlock, onAdd, onDismiss }) => {
   const { t } = useTranslation()
+  const tokens = useGetTokens()
   const { theme } = useTheme()
   const tokenDecimals = tokens.helix.decimals
   const tokenSymbol = tokens.helix.symbol
@@ -63,6 +65,7 @@ const AddRowModal: React.FC<ModalProps> = ({ stakingTokenBalance, stakingTokenPr
   const [durationIndex, setDurationIndex] = useState(0)
   const [durations, setDurations] = useState<Duration[]>([]);
   const [showRoiCalculator, setShowRoiCalculator] = useState(false)
+  const { chainId } = useActiveWeb3React()
 
   const getTokenLink = `/swap?outputCurrency=${tokens.helix.address}`
 
@@ -103,14 +106,14 @@ const AddRowModal: React.FC<ModalProps> = ({ stakingTokenBalance, stakingTokenPr
 
         const durations_ = res.map((item: DurationStructOutput) => ({
           ...item,
-          apr: getVaultApr(totalStakedVault, tokenPerBlock, Number(item.weight.toString()))
+          apr: getVaultApr(totalStakedVault, tokenPerBlock, Number(item.weight.toString()), chainId)
         }))
         setDurations(durations_);
       } catch (err) {
         logError(err)
       }
     }
-  }, [getDurations, helixVaultContract, totalStakedVault, tokenPerBlock])
+  }, [getDurations, helixVaultContract, totalStakedVault, tokenPerBlock, chainId])
 
   const handleDeposit = async () => {
     setPendingTx(true)

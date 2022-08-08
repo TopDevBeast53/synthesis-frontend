@@ -3,6 +3,9 @@ import { request, gql } from 'graphql-request'
 import { INFO_CLIENT } from 'config/constants/endpoints'
 import { TOKEN_BLACKLIST } from 'config/constants/info'
 import { getDeltaTimestamps } from 'views/Info/utils/infoQueryHelpers'
+import { ChainId } from 'sdk'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import usePreviousValue from 'hooks/usePreviousValue'
 
 interface TopTokensResponse {
     tokenDayDatas: {
@@ -15,7 +18,7 @@ interface TopTokensResponse {
  * The actual data is later requested in tokenData.ts
  * Note: dailyTxns_gt: 300 is there to prevent fetching incorrectly priced tokens with high dailyVolumeUSD
  */
-const fetchTopTokens = async (timestamp24hAgo: number): Promise<string[]> => {
+const fetchTopTokens = async (chainId: ChainId, timestamp24hAgo: number): Promise<string[]> => {
     try {
         const query = gql`
             query topTokens($blacklist: [String!], $timestamp24hAgo: Int) {
@@ -29,7 +32,7 @@ const fetchTopTokens = async (timestamp24hAgo: number): Promise<string[]> => {
                 }
             }
         `
-        const data = await request<TopTokensResponse>(INFO_CLIENT, query, {
+        const data = await request<TopTokensResponse>(INFO_CLIENT[chainId], query, {
             blacklist: TOKEN_BLACKLIST,
             timestamp24hAgo,
         })
@@ -47,16 +50,18 @@ const fetchTopTokens = async (timestamp24hAgo: number): Promise<string[]> => {
 const useTopTokenAddresses = (): string[] => {
     const [topTokenAddresses, setTopTokenAddresses] = useState([])
     const [timestamp24hAgo] = getDeltaTimestamps()
+    const { chainId } = useActiveWeb3React()
+    const prevChainId = usePreviousValue(chainId)
 
     useEffect(() => {
         const fetch = async () => {
-            const addresses = await fetchTopTokens(timestamp24hAgo)
+            const addresses = await fetchTopTokens(chainId, timestamp24hAgo)
             setTopTokenAddresses(addresses)
         }
-        if (topTokenAddresses.length === 0) {
+        if (topTokenAddresses.length === 0 || prevChainId !== chainId) {
             fetch()
         }
-    }, [topTokenAddresses, timestamp24hAgo])
+    }, [topTokenAddresses, timestamp24hAgo, chainId, prevChainId])
 
     return topTokenAddresses
 }

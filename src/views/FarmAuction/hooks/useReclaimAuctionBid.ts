@@ -4,6 +4,7 @@ import BigNumber from 'bignumber.js'
 import { BidderAuction } from 'config/constants/types'
 import { useFarmAuctionContract } from 'hooks/useContract'
 import { RECLAIM_AUCTIONS_TO_FETCH } from 'config'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { processBidderAuctions, sortAuctionBidders } from '../helpers'
 
 interface ReclaimableAuction {
@@ -88,6 +89,7 @@ const useReclaimAuctionBid = (): [ReclaimableAuction | null, () => void] => {
     const checkNextAuction = () => {
         dispatch({ type: 'checkNextAuction' })
     }
+    const { chainId } = useActiveWeb3React()
 
     // Reset checking if account was switched
     useEffect(() => {
@@ -128,7 +130,7 @@ const useReclaimAuctionBid = (): [ReclaimableAuction | null, () => void] => {
                 const isClaimable = await farmAuctionContract.claimable(auctionToCheck.id, account)
                 if (isClaimable) {
                     const [auctionBidders] = await farmAuctionContract.viewBidsPerAuction(auctionToCheck.id, 0, 500)
-                    const sortedBidders = sortAuctionBidders(auctionBidders)
+                    const sortedBidders = sortAuctionBidders(chainId, auctionBidders)
                     const accountBidderData = sortedBidders.find((bidder) => bidder.account === account)
                     const position = accountBidderData?.position
                     const auctionToReclaim = { id: auctionToCheck.id, amount: auctionToCheck.amount, position }
@@ -146,7 +148,7 @@ const useReclaimAuctionBid = (): [ReclaimableAuction | null, () => void] => {
             const auctionToCheck = auctions[nextAuctionToCheck]
             checkIfAuctionIsClaimable(auctionToCheck)
         }
-    }, [account, state, farmAuctionContract])
+    }, [account, state, farmAuctionContract, chainId])
 
     return [state.auctionToReclaim, checkNextAuction]
 }

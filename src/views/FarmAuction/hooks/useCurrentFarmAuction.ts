@@ -7,7 +7,9 @@ import useLastUpdated from 'hooks/useLastUpdated'
 import { useFastFresh } from 'hooks/useRefresh'
 import { AUCTION_BIDDERS_TO_FETCH } from 'config'
 import { BIG_ZERO } from 'utils/bigNumber'
-import { sortAuctionBidders, processAuctionData } from '../helpers'
+import useProcessAuctionData from 'hooks/useProcessAuctionData'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import { sortAuctionBidders } from '../helpers'
 
 export const useCurrentFarmAuction = (account: string) => {
     const [currentAuction, setCurrentAuction] = useState<Auction | null>(null)
@@ -19,6 +21,8 @@ export const useCurrentFarmAuction = (account: string) => {
     const fastRefresh = useFastFresh()
 
     const farmAuctionContract = useFarmAuctionContract()
+    const processAuctionData = useProcessAuctionData()
+    const { chainId } = useActiveWeb3React()
 
     // Get latest auction id and its data
     useEffect(() => {
@@ -33,7 +37,7 @@ export const useCurrentFarmAuction = (account: string) => {
             }
         }
         fetchCurrentAuction()
-    }, [farmAuctionContract, fastRefresh])
+    }, [farmAuctionContract, fastRefresh, processAuctionData])
 
     // Fetch bidders for current auction
     useEffect(() => {
@@ -44,7 +48,7 @@ export const useCurrentFarmAuction = (account: string) => {
                     0,
                     AUCTION_BIDDERS_TO_FETCH,
                 )
-                const sortedBidders = sortAuctionBidders(currentAuctionBidders, currentAuction)
+                const sortedBidders = sortAuctionBidders(chainId, currentAuctionBidders, currentAuction)
                 setBidders(sortedBidders)
             } catch (error) {
                 console.error('Failed to fetch bidders', error)
@@ -53,7 +57,7 @@ export const useCurrentFarmAuction = (account: string) => {
         if (currentAuction) {
             fetchBidders()
         }
-    }, [currentAuction, farmAuctionContract, lastUpdated, fastRefresh])
+    }, [currentAuction, farmAuctionContract, lastUpdated, fastRefresh, chainId])
 
     // Check if connected wallet is whitelisted
     useEffect(() => {
@@ -86,7 +90,7 @@ export const useCurrentFarmAuction = (account: string) => {
                     return bidderData
                 }
             }
-            const bidderInfo = getBidderInfo(account)
+            const bidderInfo = getBidderInfo(account, chainId)
             const defaultBidderData = {
                 position: null,
                 samePositionAsAbove: false,
@@ -106,7 +110,7 @@ export const useCurrentFarmAuction = (account: string) => {
                 })
             }
         }
-    }, [account, connectedBidder, bidders])
+    }, [account, connectedBidder, bidders, chainId])
 
     return {
         currentAuction,

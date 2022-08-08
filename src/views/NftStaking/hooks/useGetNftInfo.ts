@@ -8,18 +8,18 @@ import { useHelixNFT } from 'hooks/useContract'
 import { useCallback } from 'react'
 import { getProviderOrSigner } from 'utils'
 import { formatBigNumber } from 'utils/formatBalance'
-import { helixNFTAddress } from '../constants'
+import { getHelixNftAddress } from 'utils/addressHelpers'
 import { TokenInfo } from '../type'
 
 
 export const useGetNftInfo = () => {
-    const { library, account } = useActiveWeb3React()
+    const { library, account, chainId } = useActiveWeb3React()
     const { callWithGasPrice } = useCallWithGasPrice()
     const helixNFTContract = useHelixNFT()
 
     const getHelixNFTContract = useCallback(() => {
-        return new Contract(helixNFTAddress, helixNFTABI, getProviderOrSigner(library, account))
-    }, [library, account])
+        return new Contract(getHelixNftAddress(chainId), helixNFTABI, getProviderOrSigner(library, account))
+    }, [library, account, chainId])
 
     const getLastTokenId = useCallback(async () => {
         const tx = await callWithGasPrice(getHelixNFTContract(), 'getLastTokenId', [])

@@ -1,0 +1,57 @@
+{
+  "name": "Helix Default List",
+  "timestamp": "2021-05-06T00:00:00Z",
+  "version": {
+    "major": 3,
+    "minor": 0,
+    "patch": 0
+  },
+  "tags": {},
+  "logoURI": "https://pancakeswap.finance/logo.png",
+  "keywords": [
+    "helix",
+    "default"
+  ],
+  "tokens": [
+    {
+      "name": "Helix",
+      "symbol": "HELIX",
+      "address": "0x3d2441fa9aab621e72121fb1c620fdae59eae812",
+      "chainId": 30,
+      "decimals": 18,
+      "logoURI": "local://images/tokens/0x3d2441fa9aab621e72121fb1c620fdae59eae812.png"
+    },
+    {
+      "name": "Wrapped RSK Bitcoin",
+      "symbol": "WRBTC",
+      "address": "0x967f8799af07df1534d48a95a5c9febe92c53ae0",
+      "chainId": 30,
+      "decimals": 18,
+      "logoURI": "local://images/tokens/0x967f8799af07df1534d48a95a5c9febe92c53ae0.png"
+    },
+    {
+      "name": "Wrapped RSK USDT",
+      "symbol": "USDT",
+      "address": "0xef213441a85df4d7acbdae0cf78004e1e486bb96",
+      "chainId": 30,
+      "decimals": 18,
+      "logoURI": "local://images/tokens/0xef213441a85df4d7acbdae0cf78004e1e486bb96.png"
+    },
+    {
+      "name": "RIF",
+      "symbol": "RIF",
+      "address": "0x2acc95758f8b5f583470ba265eb685a8f45fc9d5",
+      "chainId": 30,
+      "decimals": 18,
+      "logoURI": "local://images/tokens/0x2acc95758f8b5f583470ba265eb685a8f45fc9d5.png"
+    },
+    {
+      "name": "SOV",
+      "symbol": "SOV",
+      "address": "0xefc78fc7d48b64958315949279ba181c2114abbd",
+      "chainId": 30,
+      "decimals": 18,
+      "logoURI": "local://images/tokens/0xefc78fc7d48b64958315949279ba181c2114abbd.png"
+    }
+  ]
+}

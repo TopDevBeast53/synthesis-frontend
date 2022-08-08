@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import styled from 'styled-components'
 import { useFarmUser } from 'state/farms/hooks'
 import { useTranslation } from 'contexts/Localization'
@@ -6,6 +6,7 @@ import { Text } from 'uikit'
 import { Token } from 'sdk'
 import { getBalanceNumber } from 'utils/formatBalance'
 import { TokenPairImage } from 'components/TokenImage'
+import { BIG_ZERO } from 'utils/bigNumber'
 
 export interface FarmProps {
   label: string
@@ -34,7 +35,12 @@ const TokenWrapper = styled.div`
 `
 
 const Farm: React.FunctionComponent<FarmProps> = ({ token, quoteToken, label, pid }) => {
-  const { stakedBalance } = useFarmUser(pid)
+  const farmUser = useFarmUser(pid)
+  const stakedBalance = useMemo(() => {
+    return farmUser ? farmUser.stakedBalance : BIG_ZERO
+  }, [farmUser])
+
+
   const { t } = useTranslation()
   const rawStakedBalance = getBalanceNumber(stakedBalance)
 

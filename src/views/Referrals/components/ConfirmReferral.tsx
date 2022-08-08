@@ -11,20 +11,18 @@ import { getReferralRegisterAddress } from 'utils/addressHelpers'
 import QuestionHelper from '../../../components/QuestionHelper'
 import useToast from '../../../hooks/useToast'
 
-const HelixReferralRegisterAddress = getReferralRegisterAddress()
-
 const useRegisterReferral = (referrerAddress: string) => {
-  const { library, account } = useActiveWeb3React()
+  const { library, account, chainId } = useActiveWeb3React()
   const { callWithGasPrice } = useCallWithGasPrice()
   const addRefCb = useCallback(async () => {
     const contract = new Contract(
-      HelixReferralRegisterAddress,
+      getReferralRegisterAddress(chainId),
       ReferralRegisterABI,
       getProviderOrSigner(library, account),
     )
     const tx = await callWithGasPrice(contract, 'addReferrer', [referrerAddress])
     return tx.wait()
-  }, [callWithGasPrice, referrerAddress, library, account])
+  }, [callWithGasPrice, referrerAddress, library, account, chainId])
   return addRefCb
 }
 
@@ -80,7 +78,7 @@ export default function ConfirmReferral(props: Props) {
     }
   }
   if (redirect) {
-    return <Redirect to="/referrals" />
+    return <Redirect to="/refer" />
   }
 
   return (

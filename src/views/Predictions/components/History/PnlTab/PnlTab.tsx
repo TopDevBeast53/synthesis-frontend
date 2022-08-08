@@ -10,6 +10,7 @@ import { multiplyPriceByAmount } from 'utils/prices'
 import { useBNBBusdPrice } from 'hooks/useBUSDPrice'
 import { useGetCurrentEpoch } from 'state/predictions/hooks'
 import { Bet, BetPosition } from 'state/types'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { formatBnb, getMultiplier, getNetPayout } from '../helpers'
 import PnlChart from './PnlChart'
 import SummaryRow from './SummaryRow'
@@ -106,6 +107,7 @@ const PnlTab: React.FC<PnlTabProps> = ({ hasBetHistory, bets }) => {
   const { account } = useWeb3React()
   const currentEpoch = useGetCurrentEpoch()
   const bnbBusdPrice = useBNBBusdPrice()
+  const { chainId } = useActiveWeb3React()
 
   const summary = getPnlSummary(bets, currentEpoch)
 
@@ -185,7 +187,7 @@ const PnlTab: React.FC<PnlTabProps> = ({ hasBetHistory, bets }) => {
         <SummaryRow type="entered" summary={summary} bnbBusdPrice={bnbBusdPrice} />
 
         <Flex justifyContent="center" mt="24px">
-          <Link href={`${getEtherScanLink(account, 'address')}#internaltx`} mb="16px" external>
+          <Link href={`${getEtherScanLink(account, 'address', chainId)}#internaltx`} mb="16px" external>
             <Button mt="8px" width="100%">
               {t('View Reclaimed & Won')}
               <OpenNewIcon color="white" ml="4px" />

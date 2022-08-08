@@ -1,5 +1,5 @@
 import { parseUnits } from '@ethersproject/units'
-import { Currency, CurrencyAmount, ETHER, JSBI, Token, TokenAmount, Trade } from 'sdk'
+import { ChainId, Currency, CurrencyAmount, ETHER, JSBI, Token, TokenAmount, Trade } from 'sdk'
 import { ParsedQs } from 'qs'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -36,9 +36,9 @@ import {
 } from './normalizers'
 import { PairDataTimeWindowEnum } from './types'
 import { derivedPairByDataIdSelector, pairByDataIdSelector } from './selectors'
-import { DEFAULT_INPUT_CURRENCY, DEFAULT_OUTPUT_CURRENCY } from './constants'
 import fetchDerivedPriceData from './fetch/fetchDerivedPriceData'
 import { pairHasEnoughLiquidity } from './fetch/utils'
+import { DEFAULT_INPUT_CURRENCY, DEFAULT_OUTPUT_CURRENCY } from './constants'
 
 export function useSwapState(): AppState['swap'] {
     return useSelector<AppState, AppState['swap']>((state) => state.swap)
@@ -51,16 +51,17 @@ export function useSwapActionHandlers(): {
     onChangeRecipient: (recipient: string | null) => void
 } {
     const dispatch = useDispatch<AppDispatch>()
+    const { chainId } = useActiveWeb3React()
     const onCurrencySelection = useCallback(
         (field: Field, currency: Currency) => {
             dispatch(
                 selectCurrency({
                     field,
-                    currencyId: currency instanceof Token ? currency.address : currency === ETHER ? 'ETH' : '',
+                    currencyId: currency instanceof Token ? currency.address : currency === ETHER[chainId] ? 'ETH' : '',
                 }),
             )
         },
-        [dispatch],
+        [chainId, dispatch],
     )
 
     const onSwitchTokens = useCallback(() => {
@@ -90,7 +91,7 @@ export function useSwapActionHandlers(): {
 }
 
 // try to parse a user entered amount for a given token
-export function tryParseAmount(value?: string, currency?: Currency): CurrencyAmount | undefined {
+export function tryParseAmount(chainId: ChainId, value?: string, currency?: Currency): CurrencyAmount | undefined {
     if (!value || !currency) {
         return undefined
     }
@@ -99,7 +100,7 @@ export function tryParseAmount(value?: string, currency?: Currency): CurrencyAmo
         if (typedValueParsed !== '0') {
             return currency instanceof Token
                 ? new TokenAmount(currency, JSBI.BigInt(typedValueParsed))
-                : CurrencyAmount.ether(JSBI.BigInt(typedValueParsed))
+                : CurrencyAmount.ether(JSBI.BigInt(typedValueParsed), chainId)
         }
     } catch (error) {
         // should fail if the user specifies too many decimal places of precision (or maybe exceed max uint?)
@@ -133,13 +134,14 @@ export function useSingleTokenSwapInfo(): { [key: string]: number } {
         [Field.INPUT]: { currencyId: inputCurrencyId },
         [Field.OUTPUT]: { currencyId: outputCurrencyId },
     } = useSwapState()
+    const { chainId } = useActiveWeb3React()
 
     const inputCurrency = useCurrency(inputCurrencyId)
     const outputCurrency = useCurrency(outputCurrencyId)
     const token0Address = getTokenAddress(inputCurrencyId)
     const token1Address = getTokenAddress(outputCurrencyId)
 
-    const parsedAmount = tryParseAmount('1', inputCurrency ?? undefined)
+    const parsedAmount = tryParseAmount(chainId, '1', inputCurrency ?? undefined)
 
     const bestTradeExactIn = useTradeExactIn(parsedAmount, outputCurrency ?? undefined)
     if (!inputCurrency || !outputCurrency || !bestTradeExactIn) {
@@ -163,7 +165,7 @@ export function useDerivedSwapInfo(): {
     v2Trade: Trade | undefined
     inputError?: string
 } {
-    const { account } = useActiveWeb3React()
+    const { account, chainId } = useActiveWeb3React()
     const { t } = useTranslation()
 
     const {
@@ -185,7 +187,7 @@ export function useDerivedSwapInfo(): {
     ])
 
     const isExactIn: boolean = independentField === Field.INPUT
-    const parsedAmount = tryParseAmount(typedValue, (isExactIn ? inputCurrency : outputCurrency) ?? undefined)
+    const parsedAmount = tryParseAmount(chainId, typedValue, (isExactIn ? inputCurrency : outputCurrency) ?? undefined)
 
     const { bestTrade: bestTradeExactIn } = useTradeExactInNoThrow(
         isExactIn ? parsedAmount : undefined,
@@ -322,9 +324,9 @@ function validatedRecipient(recipient: any): string | null {
     return null
 }
 
-export function queryParametersToSwapState(parsedQs: ParsedQs): SwapState {
-    let inputCurrency = parseCurrencyFromURLParameter(parsedQs.inputCurrency) || DEFAULT_INPUT_CURRENCY
-    let outputCurrency = parseCurrencyFromURLParameter(parsedQs.outputCurrency) || DEFAULT_OUTPUT_CURRENCY
+export function queryParametersToSwapState(parsedQs: ParsedQs, defaultInputCurrency, defaultOutputCurrency): SwapState {
+    let inputCurrency = parseCurrencyFromURLParameter(parsedQs.inputCurrency) || defaultInputCurrency
+    let outputCurrency = parseCurrencyFromURLParameter(parsedQs.outputCurrency) || defaultOutputCurrency
     if (inputCurrency === outputCurrency) {
         if (typeof parsedQs.outputCurrency === 'string') {
             inputCurrency = ''
@@ -363,7 +365,7 @@ export function useDefaultsFromURLSearch():
 
     useEffect(() => {
         if (!chainId) return
-        const parsed = queryParametersToSwapState(parsedQs)
+        const parsed = queryParametersToSwapState(parsedQs, DEFAULT_INPUT_CURRENCY[chainId], DEFAULT_OUTPUT_CURRENCY[chainId])
 
         dispatch(
             replaceSwapState({
@@ -405,6 +407,7 @@ export const useFetchPairPrices = ({
     const pairData = useSelector(pairByDataIdSelector({ pairId, timeWindow }))
     const derivedPairData = useSelector(derivedPairByDataIdSelector({ pairId, timeWindow }))
     const dispatch = useDispatch()
+    const { chainId } = useActiveWeb3React()
 
     useEffect(() => {
         const fetchDerivedData = async () => {
@@ -415,7 +418,7 @@ export const useFetchPairPrices = ({
                 // Try to get at least derived data for chart
                 // This is used when there is no direct data for pool
                 // i.e. when multihops are necessary
-                const derivedData = await fetchDerivedPriceData(token0Address, token1Address, timeWindow)
+                const derivedData = await fetchDerivedPriceData(chainId, token0Address, token1Address, timeWindow)
                 if (derivedData) {
                     const normalizedDerivedData = normalizeDerivedChartData(derivedData)
                     dispatch(updateDerivedPairData({ pairData: normalizedDerivedData, pairId, timeWindow }))
@@ -432,7 +435,7 @@ export const useFetchPairPrices = ({
 
         const fetchAndUpdatePairPrice = async () => {
             setIsLoading(true)
-            const { data } = await fetchPairPriceData({ pairId, timeWindow })
+            const { data } = await fetchPairPriceData({ chainId, pairId, timeWindow })
             if (data) {
                 // Find out if Liquidity Pool has enough liquidity
                 // low liquidity pool might mean that the price is incorrect
@@ -456,22 +459,12 @@ export const useFetchPairPrices = ({
         if (!pairData && !derivedPairData && pairId && !isLoading) {
             fetchAndUpdatePairPrice()
         }
-    }, [
-        pairId,
-        timeWindow,
-        pairData,
-        currentSwapPrice,
-        token0Address,
-        token1Address,
-        derivedPairData,
-        dispatch,
-        isLoading,
-    ])
+    }, [pairId, timeWindow, pairData, currentSwapPrice, token0Address, token1Address, derivedPairData, dispatch, isLoading, chainId])
 
     useEffect(() => {
         const updatePairId = () => {
             try {
-                const pairAddress = getLpAddress(token0Address, token1Address)?.toLowerCase()
+                const pairAddress = getLpAddress(token0Address, token1Address, chainId)?.toLowerCase()
                 if (pairAddress !== pairId) {
                     setPairId(pairAddress)
                 }
@@ -481,7 +474,7 @@ export const useFetchPairPrices = ({
         }
 
         updatePairId()
-    }, [token0Address, token1Address, pairId])
+    }, [token0Address, token1Address, pairId, chainId])
 
     const normalizedPairData = useMemo(
         () => normalizePairDataByActiveToken({ activeToken: token0Address, pairData }),

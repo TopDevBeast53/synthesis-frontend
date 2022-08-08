@@ -6,7 +6,7 @@ import { useTranslation } from 'contexts/Localization'
 import { useAppDispatch } from 'state'
 import { Bet } from 'state/types'
 import { fetchNodeHistory } from 'state/predictions'
-import { useGetCurrentHistoryPage, useGetHasHistoryLoaded, useGetIsFetchingHistory } from 'state/predictions/hooks'
+import { useGetClaimStatuses, useGetCurrentHistoryPage, useGetHasHistoryLoaded, useGetIsFetchingHistory, useGetRoundsData } from 'state/predictions/hooks'
 import HistoricalBet from './HistoricalBet'
 import V1ClaimCheck from '../v1/V1ClaimCheck'
 
@@ -22,9 +22,11 @@ const RoundsTab: React.FC<RoundsTabProps> = ({ hasBetHistory, bets }) => {
   const hasHistoryLoaded = useGetHasHistoryLoaded()
   const currentHistoryPage = useGetCurrentHistoryPage()
   const isFetchingHistory = useGetIsFetchingHistory()
+  const getRoundsData = useGetRoundsData()
+  const getClaimStatuses = useGetClaimStatuses()
 
   const handleClick = () => {
-    dispatch(fetchNodeHistory({ account, page: currentHistoryPage + 1 }))
+    dispatch(fetchNodeHistory({ account, page: currentHistoryPage + 1, getRoundsData, getClaimStatuses }))
   }
 
   return hasBetHistory ? (

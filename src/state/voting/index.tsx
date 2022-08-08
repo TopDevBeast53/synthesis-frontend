@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { FetchStatus } from 'config/constants/types'
-import { merge } from 'lodash'
+// import { merge } from 'lodash'
 import { Proposal, ProposalState, VotingState, Vote, VotingPower } from 'state/types'
 import { getAllVotes, getVP, getProposal, getProposals } from './helpers'
 
@@ -18,10 +18,10 @@ const initialState: VotingState = {
 }
 
 // Thunks
-export const fetchProposals = createAsyncThunk<Proposal[], { first?: number; skip?: number; state?: ProposalState }>(
+export const fetchProposals = createAsyncThunk<Proposal[], { chainId: number; first?: number; skip?: number; state?: ProposalState }>(
   'voting/fetchProposals',
-  async ({ first, skip = 0, state = ProposalState.ACTIVE }) => {
-    const response = await getProposals(first, skip, state)
+  async ({ chainId, first, skip = 0, state = ProposalState.ACTIVE }) => {
+    const response = await getProposals(chainId, first, skip, state)
     return response
   },
 )
@@ -52,7 +52,6 @@ export const votingSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-
     // Fetch Proposals
     builder.addCase(fetchProposals.pending, (state) => {
       state.proposalLoadingStatus = FetchStatus.Fetching
@@ -65,7 +64,8 @@ export const votingSlice = createSlice({
         }
       }, {})
 
-      state.proposals = merge({}, state.proposals, proposals)
+      // state.proposals = merge({}, state.proposals, proposals) 
+      state.proposals = proposals
       state.proposalLoadingStatus = FetchStatus.Fetched
     })
 

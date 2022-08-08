@@ -3,7 +3,7 @@ import { useWeb3React } from '@web3-react/core'
 import BigNumber from 'bignumber.js'
 import { Ifo, PoolIds } from 'config/constants/types'
 import { useERC20, useIfoV2Contract } from 'hooks/useContract'
-import { multicallv2 } from 'utils/multicall'
+import { useMulticallv2 } from 'hooks/useMulticall'
 import ifoV2Abi from 'config/abi/ifoV2.json'
 import { BIG_ZERO } from 'utils/bigNumber'
 import useIfoAllowance from '../useIfoAllowance'
@@ -41,6 +41,7 @@ const useGetWalletIfoData = (ifo: Ifo): WalletIfoData => {
     const contract = useIfoV2Contract(address)
     const currencyContract = useERC20(currency.address)
     const allowance = useIfoAllowance(currencyContract, address)
+    const multicallv2 = useMulticallv2()
 
     const setPendingTx = (status: boolean, poolId: PoolIds) =>
         setState((prevState) => ({
@@ -90,7 +91,7 @@ const useGetWalletIfoData = (ifo: Ifo): WalletIfoData => {
                 hasClaimed: userInfo[1][1],
             },
         }))
-    }, [account, address])
+    }, [account, address, multicallv2])
 
     const resetIfoData = useCallback(() => {
         setState({ ...initialState })

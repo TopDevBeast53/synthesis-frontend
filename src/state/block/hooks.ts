@@ -1,7 +1,7 @@
 import { FAST_INTERVAL, SLOW_INTERVAL } from 'config/constants'
 import { useAppDispatch } from 'state'
 import { useSelector } from 'react-redux'
-import { simpleRpcProvider } from 'utils/providers'
+import useProviders from 'hooks/useProviders'
 import useSWR, { useSWRConfig } from 'swr'
 import useSWRImmutable from 'swr/immutable'
 import { State } from '../types'
@@ -12,10 +12,11 @@ const REFRESH_BLOCK_INTERVAL = 6000
 export const usePollBlockNumber = () => {
     const { cache, mutate } = useSWRConfig()
     const dispatch = useAppDispatch()
+    const rpcProvider = useProviders()
     const { data } = useSWR(
         'blockNumber',
         async () => {
-            const blockNumber = await simpleRpcProvider.getBlockNumber()
+            const blockNumber = await rpcProvider.getBlockNumber()
             if (!cache.get('initialBlockNumber')) {
                 mutate('initialBlockNumber', blockNumber)
             }

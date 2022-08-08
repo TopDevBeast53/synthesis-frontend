@@ -1,7 +1,6 @@
 import React from 'react'
 import { useFarms } from 'state/farms/hooks'
 import styled from 'styled-components'
-import { getAddress } from 'utils/addressHelpers'
 import { getBalanceNumber } from 'utils/formatBalance'
 import { useMatchBreakpoints } from 'uikit'
 import { TokenPairImage } from 'components/TokenImage'
@@ -13,18 +12,18 @@ const Container = styled.div`
 `
 const LPTokenCell = (props) => {
   const { lpTokenAddress, balance } = props
-  const { data: farms } = useFarms()  
-  const lpToken = farms.find((item) => getAddress(item.lpAddresses) === lpTokenAddress)
+  const { data: farms } = useFarms()
+  const lpToken = farms.find((item) => item.lpAddress === lpTokenAddress)
   const amount = getBalanceNumber(balance, lpToken.token.decimals)
-  const {isMobile} = useMatchBreakpoints()
-  return(
+  const { isMobile } = useMatchBreakpoints()
+  return (
     <>
       <Container>
         {!isMobile && <TokenPairImage primaryToken={lpToken?.token} secondaryToken={lpToken?.quoteToken} width={32} height={32} />}
         <BaseTokenCell tokenSymbol={lpToken?.lpSymbol} balance={amount} />
       </Container>
     </>
-  ) 
+  )
 }
 
 export default LPTokenCell

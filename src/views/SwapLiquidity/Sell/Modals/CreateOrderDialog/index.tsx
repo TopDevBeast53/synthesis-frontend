@@ -8,7 +8,6 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { useMemoFarms } from 'state/farms/hooks'
 import { useAllTokenBalances } from 'state/wallet/hooks'
 import { Modal } from 'uikit'
-import { getAddress } from 'utils/addressHelpers'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { getBalanceAmount } from 'utils/formatBalance'
 import BaseOpenSwap from './BaseOpenSwap'
@@ -31,7 +30,7 @@ const CreateOrderDialog = (props) => {
       .map((lp) => ({
         label: lp.lpSymbol,
         value: lp,
-        address: getAddress(lp.lpAddresses),
+        address: lp.lpAddress,
         decimals: lp.token.decimals,
         maxBalance: getBalanceAmount(lp.userData.tokenBalance, lp.token.decimals),
         allowance: BIG_ZERO,
@@ -48,7 +47,7 @@ const CreateOrderDialog = (props) => {
     }))
     const tempOptions = [...lpOptions, ...tokenOptions]
     const lpAddressesList = lpOptions.map((option) => {
-      return getAddress(option.value.lpAddresses)
+      return option.value.lpAddress
     })
     const tokenAddressList = tokenOptions.map((option) => {
       return option.value.address

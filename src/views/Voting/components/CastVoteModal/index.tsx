@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { Box, Modal } from 'uikit'
-import { useWeb3React } from '@web3-react/core'
 import { useTranslation } from 'contexts/Localization'
 import { SnapshotCommand } from 'state/types'
 import { signMessage } from 'utils/web3React'
 import { useAppDispatch } from 'state'
 import useToast from 'hooks/useToast'
-import useWeb3Provider from 'hooks/useActiveWeb3React'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import useTheme from 'hooks/useTheme'
 import { fetchVotingPower } from 'state/voting'
 import { FetchStatus } from 'config/constants/types'
@@ -19,11 +18,11 @@ import { generatePayloadData, Message, sendSnapshotData } from '../../helpers'
 const CastVoteModal: React.FC<CastVoteModalProps> = ({ onSuccess, proposalId, spaceId, vote, onDismiss }) => {
   const [view, setView] = useState<ConfirmVoteView>(ConfirmVoteView.MAIN)
   const [isPending, setIsPending] = useState(false)
-  const { account } = useWeb3React()
+  const { account, chainId } = useActiveWeb3React()
   const dispatch = useAppDispatch()
   const { t } = useTranslation()
   const { toastError } = useToast()
-  const { library, connector } = useWeb3Provider()
+  const { library, connector } = useActiveWeb3React()
   const { theme } = useTheme()
 
   const votingPower = useGetVotingPower()
@@ -53,7 +52,7 @@ const CastVoteModal: React.FC<CastVoteModalProps> = ({ onSuccess, proposalId, sp
     try {
       setIsPending(true)
       const voteMsg = JSON.stringify({
-        ...generatePayloadData(),
+        ...generatePayloadData(chainId),
         type: SnapshotCommand.VOTE,
         payload: {
           proposal: proposalId,

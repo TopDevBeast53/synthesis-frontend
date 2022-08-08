@@ -17,7 +17,8 @@ import {
   Box,
 } from 'uikit'
 import { useTranslation } from 'contexts/Localization'
-import { useWeb3React } from '@web3-react/core'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import { CHAIN_IDS_TO_NAMES } from 'config/constants/networks'
 import { useAppDispatch } from 'state'
 import { BIG_TEN } from 'utils/bigNumber'
 import { usePriceHelixBusd } from 'state/farms/hooks'
@@ -33,9 +34,10 @@ import { DeserializedPool, VaultKey } from 'state/types'
 import { getInterestBreakdown } from 'utils/compoundApyHelpers'
 import RoiCalculatorModal from 'components/RoiCalculatorModal'
 import { ToastDescriptionWithTx } from 'components/Toast'
-import { vaultPoolConfig } from 'config/constants/pools'
+import useFetchVaultUser from 'state/pools/useFetchVaultUser'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import { logError } from 'utils/sentry'
+import { useGetVaultPoolConfig } from 'views/Pools/hooks/useGetVaultPoolConfig'
 import { convertHelixToShares, convertSharesToHelix } from '../../helpers'
 import FeeSummary from './FeeSummary'
 
@@ -87,7 +89,7 @@ const VaultStakeModal: React.FC<VaultStakeModalProps> = ({
 }) => {
   const dispatch = useAppDispatch()
   const { stakingToken, earningToken, apr, rawApr, stakingTokenPrice, earningTokenPrice, vaultKey } = pool
-  const { account } = useWeb3React()
+  const { account, chainId } = useActiveWeb3React()
   const vaultPoolContract = useVaultPoolContract(pool.vaultKey)
   const { callWithGasPrice } = useCallWithGasPrice()
   const {
@@ -105,6 +107,8 @@ const VaultStakeModal: React.FC<VaultStakeModalProps> = ({
   const helixPriceBusd = usePriceHelixBusd()
   const usdValueStaked = new BigNumber(stakeAmount).times(helixPriceBusd)
   const formattedUsdValueStaked = helixPriceBusd.gt(0) && stakeAmount ? formatNumber(usdValueStaked.toNumber()) : ''
+  const fetchVaultUser = useFetchVaultUser()
+  const vaultPoolConfig = useGetVaultPoolConfig()
 
   const callOptions = {
     gasLimit: vaultPoolConfig[pool.vaultKey].gasLimit,
@@ -166,7 +170,7 @@ const VaultStakeModal: React.FC<VaultStakeModalProps> = ({
           )
           setPendingTx(false)
           onDismiss()
-          dispatch(fetchHelixVaultUserData({ account }))
+          dispatch(fetchHelixVaultUserData({ account, fetchVaultUser }))
         }
       } catch (error) {
         logError(error)
@@ -193,7 +197,7 @@ const VaultStakeModal: React.FC<VaultStakeModalProps> = ({
           )
           setPendingTx(false)
           onDismiss()
-          dispatch(fetchHelixVaultUserData({ account }))
+          dispatch(fetchHelixVaultUserData({ account, fetchVaultUser }))
         }
       } catch (error) {
         logError(error)
@@ -217,7 +221,7 @@ const VaultStakeModal: React.FC<VaultStakeModalProps> = ({
         )
         setPendingTx(false)
         onDismiss()
-        dispatch(fetchHelixVaultUserData({ account }))
+        dispatch(fetchHelixVaultUserData({ account, fetchVaultUser }))
       }
     } catch (error) {
       logError(error)
@@ -338,7 +342,7 @@ const VaultStakeModal: React.FC<VaultStakeModalProps> = ({
         {pendingTx ? t('Confirming') : t('Confirm')}
       </Button>
       {!isRemovingStake && (
-        <Button mt="8px" as="a" external href={getTokenLink} variant="secondary">
+        <Button mt="8px" as="a" href={`${getTokenLink}?chain=${CHAIN_IDS_TO_NAMES[chainId]}`} external variant="secondary">
           {t('Get %symbol%', { symbol: stakingToken.symbol })}
         </Button>
       )}

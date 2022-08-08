@@ -2,6 +2,8 @@ import React from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import { Flex, HelpIcon, Button, PrizeIcon } from 'uikit'
+import { CHAIN_IDS_TO_NAMES } from 'config/constants/networks'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import FlexRow from './FlexRow'
 import { PricePairLabel, TimerLabel } from './Label'
 import PrevNextNav from './PrevNextNav'
@@ -58,6 +60,8 @@ const ButtonWrapper = styled.div`
 `
 
 const Menu = () => {
+  const { chainId } = useActiveWeb3React()
+
   return (
     <FlexRow alignItems="center" p="16px">
       <SetCol>
@@ -84,7 +88,7 @@ const Menu = () => {
             </Button>
           </HelpButtonWrapper>
           <LeaderboardButtonWrapper>
-            <Button as={Link} variant="subtle" to="/prediction/leaderboard" width="48px">
+            <Button as={Link} variant="subtle" to={{ pathname: "/prediction/leaderboard", search: `chain=${CHAIN_IDS_TO_NAMES[chainId]}` }} width="48px">
               <PrizeIcon color="white" />
             </Button>
           </LeaderboardButtonWrapper>

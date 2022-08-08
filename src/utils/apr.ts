@@ -1,6 +1,7 @@
 import BigNumber from 'bignumber.js'
 import { BLOCKS_PER_YEAR, HELIX_PER_YEAR } from 'config'
 import lpAprs from 'config/constants/lpAprs.json'
+import { ChainId } from 'sdk'
 
 /**
  * Get the APR value in %
@@ -15,8 +16,9 @@ export const getPoolApr = (
     rewardTokenPrice: number,
     totalStaked: number,
     tokenPerBlock: number,
+    chainId: ChainId
 ): number => {
-    const totalRewardPricePerYear = new BigNumber(rewardTokenPrice).times(tokenPerBlock).times(BLOCKS_PER_YEAR)
+    const totalRewardPricePerYear = new BigNumber(rewardTokenPrice).times(tokenPerBlock).times(BLOCKS_PER_YEAR[chainId])
     const totalStakingTokenInPool = new BigNumber(stakingTokenPrice).times(totalStaked)
     const apr = totalRewardPricePerYear.div(totalStakingTokenInPool).times(100)
     return apr.isNaN() || !apr.isFinite() ? null : apr.toNumber()
@@ -26,8 +28,9 @@ export const getVaultApr = (
     totalStaked: number,
     tokenPerBlock: number,
     weight: number,
+    chainId: ChainId
 ): number => {
-    const totalRewardPricePerYear = new BigNumber(tokenPerBlock).times(BLOCKS_PER_YEAR)
+    const totalRewardPricePerYear = new BigNumber(tokenPerBlock).times(BLOCKS_PER_YEAR[chainId])
     const totalStakingTokenInPool = new BigNumber(totalStaked)
     const apr = totalRewardPricePerYear.div(totalStakingTokenInPool).times(weight)
     return apr.isNaN() || !apr.isFinite() ? null : apr.toNumber()
@@ -46,8 +49,9 @@ export const getFarmApr = (
     helixPriceUsd: BigNumber,
     poolLiquidityUsd: BigNumber,
     farmAddress: string,
+    chainId: ChainId
 ): { helixRewardsApr: number; lpRewardsApr: number } => {
-    const yearlyHelixRewardAllocation = poolWeight ? poolWeight.times(HELIX_PER_YEAR) : new BigNumber(NaN)
+    const yearlyHelixRewardAllocation = poolWeight ? poolWeight.times(HELIX_PER_YEAR[chainId]) : new BigNumber(NaN)
     const helixRewardsApr = yearlyHelixRewardAllocation.times(helixPriceUsd).div(poolLiquidityUsd).times(100)
     let helixRewardsAprAsNumber = null
     if (!helixRewardsApr.isNaN() && helixRewardsApr.isFinite()) {

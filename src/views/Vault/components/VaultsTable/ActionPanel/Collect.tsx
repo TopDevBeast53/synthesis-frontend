@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useWeb3React } from '@web3-react/core'
 import Balance from 'components/Balance'
-import tokens from 'config/constants/tokens'
+import { useGetTokens } from 'hooks/useGetTokens'
 import { useTranslation } from 'contexts/Localization'
 import useToast from 'hooks/useToast'
 import { usePriceHelixBusd } from 'state/farms/hooks'
@@ -27,6 +27,7 @@ const HarvestAction: React.FunctionComponent<HarvestActionProps> = ({
   updateStakedBalance,
 }) => {
   const { t } = useTranslation()
+  const tokens = useGetTokens()
   const { account } = useWeb3React()
   const { claimReward, compoundReward } = useHelixLockVault()
   const { toastError, toastSuccess } = useToast()

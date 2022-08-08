@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
-import { BSC_BLOCK_TIME } from 'config'
-import { simpleRpcProvider } from 'utils/providers'
+import { BLOCK_TIME } from 'config'
+import useProviders from 'hooks/useProviders'
+import useActiveWeb3React from './useActiveWeb3React'
 
 /**
  * Returns a countdown in seconds of a given block
@@ -8,13 +9,15 @@ import { simpleRpcProvider } from 'utils/providers'
 const useBlockCountdown = (blockNumber: number) => {
     const timer = useRef<ReturnType<typeof setTimeout>>(null)
     const [secondsRemaining, setSecondsRemaining] = useState(0)
+    const rpcProvider = useProviders()
+    const { chainId } = useActiveWeb3React()
 
     useEffect(() => {
         const startCountdown = async () => {
-            const currentBlock = await simpleRpcProvider.getBlockNumber()
+            const currentBlock = await rpcProvider.getBlockNumber()
 
             if (blockNumber > currentBlock) {
-                setSecondsRemaining((blockNumber - currentBlock) * BSC_BLOCK_TIME)
+                setSecondsRemaining((blockNumber - currentBlock) * BLOCK_TIME[chainId])
 
                 // Clear previous interval
                 if (timer.current) {
@@ -38,7 +41,7 @@ const useBlockCountdown = (blockNumber: number) => {
         return () => {
             clearInterval(timer.current)
         }
-    }, [setSecondsRemaining, blockNumber, timer])
+    }, [setSecondsRemaining, blockNumber, timer, rpcProvider, chainId])
 
     return secondsRemaining
 }

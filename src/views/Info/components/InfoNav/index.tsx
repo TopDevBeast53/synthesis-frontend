@@ -3,6 +3,8 @@ import styled from 'styled-components'
 import { Link, useRouteMatch } from 'react-router-dom'
 import { Box, Flex, ButtonMenu, ButtonMenuItem } from 'uikit'
 import { useTranslation } from 'contexts/Localization'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import { CHAIN_IDS_TO_NAMES } from 'config/constants/networks'
 import Search from 'views/Info/components/InfoSearch'
 
 const NavWrapper = styled(Flex)`
@@ -21,6 +23,7 @@ const InfoNav = () => {
   const { t } = useTranslation()
   const isPools = useRouteMatch(['/data/trading-pools', '/data/trading-pool', '/data/pair'])
   const isTokens = useRouteMatch(['/data/tokens', '/data/token'])
+  const { chainId } = useActiveWeb3React()
   let activeIndex = 0
   if (isPools) {
     activeIndex = 1
@@ -32,13 +35,13 @@ const InfoNav = () => {
     <NavWrapper>
       <Box>
         <ButtonMenu activeIndex={activeIndex} scale="sm" variant="subtle">
-          <ButtonMenuItem as={Link} to="/data">
+          <ButtonMenuItem as={Link} to={{ pathname: "/data", search: `chain=${CHAIN_IDS_TO_NAMES[chainId]}` }}>
             {t('Overview')}
           </ButtonMenuItem>
-          <ButtonMenuItem as={Link} to="/data/trading-pools">
+          <ButtonMenuItem as={Link} to={{ pathname: "/data/trading-pools", search: `chain=${CHAIN_IDS_TO_NAMES[chainId]}` }}>
             {t('Trading Pools')}
           </ButtonMenuItem>
-          <ButtonMenuItem as={Link} to="/data/tokens">
+          <ButtonMenuItem as={Link} to={{ pathname: "/data/tokens", search: `chain=${CHAIN_IDS_TO_NAMES[chainId]}` }}>
             {t('Tokens')}
           </ButtonMenuItem>
         </ButtonMenu>

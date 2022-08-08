@@ -7,6 +7,7 @@ import { useBlock } from 'state/block/hooks'
 import Balance from 'components/Balance'
 import { useTranslation } from 'contexts/Localization'
 import { getPoolBlockInfo } from 'views/Pools/helpers'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import BaseCell, { CellContent } from './BaseCell'
 
 interface FinishCellProps {
@@ -21,6 +22,7 @@ const EndsInCell: React.FC<FinishCellProps> = ({ pool }) => {
   const { sousId, totalStaked, startBlock, endBlock, isFinished } = pool
   const { currentBlock } = useBlock()
   const { t } = useTranslation()
+  const { chainId } = useActiveWeb3React()
 
   const { shouldShowBlockCountdown, blocksUntilStart, blocksRemaining, hasPoolStarted, blocksToDisplay } =
     getPoolBlockInfo(pool, currentBlock)
@@ -38,7 +40,7 @@ const EndsInCell: React.FC<FinishCellProps> = ({ pool }) => {
       <Flex flex="1">
         <Link
           external
-          href={getEtherScanLink(hasPoolStarted ? endBlock : startBlock, 'countdown')}
+          href={getEtherScanLink(hasPoolStarted ? endBlock : startBlock, 'countdown', chainId)}
           onClick={(e) => e.stopPropagation()}
         >
           <TimerIcon ml="4px" />

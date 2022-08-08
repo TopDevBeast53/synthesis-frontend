@@ -3,9 +3,12 @@ import { Tags, TokenInfo, TokenList } from '@uniswap/token-lists'
 import { useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import { DEFAULT_LIST_OF_LISTS } from 'config/constants/lists'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { AppState } from '../index'
-import DEFAULT_TOKEN_LIST from '../../config/constants/tokenLists/pancake-default.tokenlist.json'
+import DEFAULT_TOKEN_LIST_MAINNET from '../../config/constants/tokenLists/pancake-default.tokenlist.json'
 import DEFAULT_TOKEN_LIST_TESTNET from '../../config/constants/tokenLists/pancake-default.tokenlist-testnet.json'
+import DEFAULT_TOKEN_LIST_RSK_MAINNET from '../../config/constants/tokenLists/pancake-default.tokenlist-rsk-mainnet.json'
+import DEFAULT_TOKEN_LIST_RSK_TESTNET from '../../config/constants/tokenLists/pancake-default.tokenlist-rsk-testnet.json'
 import { UNSUPPORTED_LIST_URLS } from '../../config/constants/lists'
 import UNSUPPORTED_TOKEN_LIST from '../../config/constants/tokenLists/pancake-unsupported.tokenlist.json'
 
@@ -54,6 +57,8 @@ export type TokenAddressMap = Readonly<{
 const EMPTY_LIST: TokenAddressMap = {
     [ChainId.MAINNET]: {},
     [ChainId.TESTNET]: {},
+    [ChainId.RSK_MAINNET]: {},
+    [ChainId.RSK_TESTNET]: {},
 }
 
 const listCache: WeakMap<TokenList, TokenAddressMap> | null =
@@ -106,6 +111,8 @@ function combineMaps(map1: TokenAddressMap, map2: TokenAddressMap): TokenAddress
     return {
         [ChainId.MAINNET]: { ...map1[ChainId.MAINNET], ...map2[ChainId.MAINNET] },
         [ChainId.TESTNET]: { ...map1[ChainId.TESTNET], ...map2[ChainId.TESTNET] },
+        [ChainId.RSK_MAINNET]: { ...map1[ChainId.RSK_MAINNET], ...map2[ChainId.RSK_MAINNET] },
+        [ChainId.RSK_TESTNET]: { ...map1[ChainId.RSK_TESTNET], ...map2[ChainId.RSK_TESTNET] },
     }
 }
 
@@ -150,12 +157,18 @@ export function useInactiveListUrls(): string[] {
 }
 
 // get all the tokens from active lists, combine with local default tokens
-export function useCombinedActiveList(): TokenAddressMap {
-    const chainId = process.env.REACT_APP_CHAIN_ID
+const tokenMap = {
+    [ChainId.MAINNET]: DEFAULT_TOKEN_LIST_MAINNET,
+    [ChainId.TESTNET]: DEFAULT_TOKEN_LIST_TESTNET,
+    [ChainId.RSK_MAINNET]: DEFAULT_TOKEN_LIST_RSK_MAINNET,
+    [ChainId.RSK_TESTNET]: DEFAULT_TOKEN_LIST_RSK_TESTNET,
 
+}
+export function useCombinedActiveList(): TokenAddressMap {
+    const { chainId } = useActiveWeb3React()
     const activeListUrls = useActiveListUrls()
     const activeTokens = useCombinedTokenMapFromUrls(activeListUrls)
-    const defaultTokenMap = listToTokenMap(ChainId.MAINNET === Number(chainId) ? DEFAULT_TOKEN_LIST : DEFAULT_TOKEN_LIST_TESTNET)
+    const defaultTokenMap = listToTokenMap(tokenMap[chainId])
     return combineMaps(activeTokens, defaultTokenMap)
 }
 
@@ -167,7 +180,7 @@ export function useCombinedInactiveList(): TokenAddressMap {
 
 // used to hide warnings on import for default tokens
 export function useDefaultTokenList(): TokenAddressMap {
-    return listToTokenMap(DEFAULT_TOKEN_LIST)
+    return listToTokenMap(DEFAULT_TOKEN_LIST_MAINNET)
 }
 
 // list of tokens not supported on interface, used to show warnings and prevent swaps and adds

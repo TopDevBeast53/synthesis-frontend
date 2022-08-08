@@ -6,7 +6,6 @@ import {
     LedgerData,
     BetPosition,
     PredictionsState,
-    PredictionStatus,
     ReduxNodeLedger,
     ReduxNodeRound,
     Round,
@@ -14,11 +13,7 @@ import {
     PredictionUser,
     HistoryFilter,
 } from 'state/types'
-import { multicallv2 } from 'utils/multicall'
-import { getPredictionsContract } from 'utils/contractHelpers'
-import predictionsAbi from 'config/abi/predictions.json'
-import { getPredictionsAddress } from 'utils/addressHelpers'
-import { PredictionsClaimableResponse, PredictionsLedgerResponse, PredictionsRoundsResponse } from 'utils/types'
+import { PredictionsLedgerResponse, PredictionsRoundsResponse } from 'utils/types'
 import {
     BetResponse,
     getRoundBaseFields,
@@ -283,17 +278,6 @@ export const getBet = async (betId: string): Promise<BetResponse> => {
     return response.bet
 }
 
-export const getLedgerData = async (account: string, epochs: number[]) => {
-    const address = getPredictionsAddress()
-    const ledgerCalls = epochs.map((epoch) => ({
-        address,
-        name: 'ledger',
-        params: [epoch, account],
-    }))
-    const response = await multicallv2<PredictionsLedgerResponse[]>(predictionsAbi, ledgerCalls)
-    return response
-}
-
 export const LEADERBOARD_RESULTS_PER_PAGE = 20
 
 interface GetPredictionUsersOptions {
@@ -344,65 +328,10 @@ export const getPredictionUser = async (account: string): Promise<UserResponse> 
     return response.user
 }
 
-export const getClaimStatuses = async (
-    account: string,
-    epochs: number[],
-): Promise<PredictionsState['claimableStatuses']> => {
-    const address = getPredictionsAddress()
-    const claimableCalls = epochs.map((epoch) => ({
-        address,
-        name: 'claimable',
-        params: [epoch, account],
-    }))
-    const claimableResponses = await multicallv2<[PredictionsClaimableResponse][]>(predictionsAbi, claimableCalls)
-
-    return claimableResponses.reduce((accum, claimableResponse, index) => {
-        const epoch = epochs[index]
-        const [claimable] = claimableResponse
-
-        return {
-            ...accum,
-            [epoch]: claimable,
-        }
-    }, {})
-}
-
 export type MarketData = Pick<
     PredictionsState,
     'status' | 'currentEpoch' | 'intervalSeconds' | 'minBetAmount' | 'bufferSeconds'
 >
-export const getPredictionData = async (): Promise<MarketData> => {
-    const address = getPredictionsAddress()
-    const staticCalls = ['currentEpoch', 'intervalSeconds', 'minBetAmount', 'paused', 'bufferSeconds'].map(
-        (method) => ({
-            address,
-            name: method,
-        }),
-    )
-    const [[currentEpoch], [intervalSeconds], [minBetAmount], [paused], [bufferSeconds]] = await multicallv2(
-        predictionsAbi,
-        staticCalls,
-    )
-
-    return {
-        status: paused ? PredictionStatus.PAUSED : PredictionStatus.LIVE,
-        currentEpoch: currentEpoch.toNumber(),
-        intervalSeconds: intervalSeconds.toNumber(),
-        minBetAmount: minBetAmount.toString(),
-        bufferSeconds: bufferSeconds.toNumber(),
-    }
-}
-
-export const getRoundsData = async (epochs: number[]): Promise<PredictionsRoundsResponse[]> => {
-    const address = getPredictionsAddress()
-    const calls = epochs.map((epoch) => ({
-        address,
-        name: 'rounds',
-        params: [epoch],
-    }))
-    const response = await multicallv2<PredictionsRoundsResponse[]>(predictionsAbi, calls)
-    return response
-}
 
 export const makeFutureRoundResponse = (epoch: number, startTimestamp: number): ReduxNodeRound => {
     return {
@@ -522,14 +451,17 @@ export const parseBigNumberObj = <T = Record<string, any>, K = Record<string, an
     }, {}) as K
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const fetchUsersRoundsLength = async (account: string) => {
-    try {
-        const contract = getPredictionsContract()
-        const length = await contract.getUserRoundsLength(account)
-        return length
-    } catch {
-        return ethers.BigNumber.from(0)
-    }
+    // [White tempcode]
+    return ethers.BigNumber.from(0)
+    // try {
+    //     const contract = getPredictionsContract()
+    //     const length = await contract.getUserRoundsLength(account)
+    //     return length
+    // } catch {
+    //     return ethers.BigNumber.from(0)
+    // }
 }
 
 /**
@@ -537,22 +469,26 @@ export const fetchUsersRoundsLength = async (account: string) => {
  */
 export const fetchUserRounds = async (
     account: string,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     cursor = 0,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     size = ROUNDS_PER_PAGE,
 ): Promise<{ [key: string]: ReduxNodeLedger }> => {
-    const contract = getPredictionsContract()
+    // [White tempcode]
+    return null;
+    // const contract = getPredictionsContract()
 
-    try {
-        const [rounds, ledgers] = await contract.getUserRounds(account, cursor, size)
+    // try {
+    //     const [rounds, ledgers] = await contract.getUserRounds(account, cursor, size)
 
-        return rounds.reduce((accum, round, index) => {
-            return {
-                ...accum,
-                [round.toString()]: serializePredictionsLedgerResponse(ledgers[index] as PredictionsLedgerResponse),
-            }
-        }, {})
-    } catch {
-        // When the results run out the contract throws an error.
-        return null
-    }
+    //     return rounds.reduce((accum, round, index) => {
+    //         return {
+    //             ...accum,
+    //             [round.toString()]: serializePredictionsLedgerResponse(ledgers[index] as PredictionsLedgerResponse),
+    //         }
+    //     }, {})
+    // } catch {
+    //     // When the results run out the contract throws an error.
+    //     return null
+    // }
 }

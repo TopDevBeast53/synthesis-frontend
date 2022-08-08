@@ -3,7 +3,7 @@ import { useTranslation } from 'contexts/Localization'
 import useTheme from 'hooks/useTheme'
 import useToast from 'hooks/useToast'
 import React, { useState } from 'react'
-import tokens from 'config/constants/tokens'
+import { useGetTokens } from 'hooks/useGetTokens'
 import { Token } from 'sdk'
 import styled from 'styled-components'
 import { AutoRenewIcon, BalanceInput, Button, Flex, Image, Link, Modal, Slider, Text } from 'uikit'
@@ -11,6 +11,8 @@ import { formatNumber, getDecimalAmount, getFullDisplayBalance } from 'utils/for
 import { usePriceHelixBusd } from 'state/farms/hooks'
 import { logError } from 'utils/sentry'
 import { useHelixLockVault } from 'views/Vault/hooks/useHelixLockVault'
+import { CHAIN_IDS_TO_NAMES } from 'config/constants/networks'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import PercentageButton from './PercentageButton'
 
 interface StakeModalProps {
@@ -39,7 +41,9 @@ const StakeModal: React.FC<StakeModalProps> = ({
   onDismiss,
 }) => {
   const { t } = useTranslation()
+  const tokens = useGetTokens()
   const { theme } = useTheme()
+  const { chainId } = useActiveWeb3React()
   const { toastSuccess, toastError } = useToast()
   const [pendingTx, setPendingTx] = useState(false)
   const [stakeAmount, setStakeAmount] = useState('')
@@ -198,7 +202,7 @@ const StakeModal: React.FC<StakeModalProps> = ({
         {pendingTx ? t('Confirming') : t('Confirm')}
       </Button>
       {!isRemovingStake && (
-        <StyledLink external href={getTokenLink}>
+        <StyledLink external href={`${getTokenLink}?chain=${CHAIN_IDS_TO_NAMES[chainId]}`}>
           <Button width="100%" mt="8px" variant="secondary">
             {t('Get %symbol%', { symbol })}
           </Button>

@@ -14,7 +14,7 @@ import BigNumber from 'bignumber.js'
 import Balance from 'components/Balance'
 import { CompoundingPoolTag } from 'components/Tags'
 import { TokenPairImage } from 'components/TokenImage'
-import tokens from 'config/constants/tokens'
+import { useGetTokens } from 'hooks/useGetTokens'
 import { useTranslation } from 'contexts/Localization'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useBUSDHelixAmount } from 'hooks/useBUSDPrice'
@@ -64,6 +64,7 @@ const StyledCardBody = styled(CardBody)`
 const IfoPoolVaultCardMobile: React.FC = () => {
   const { pool, userDataLoaded } = useIfoWithApr()
   const { account } = useActiveWeb3React()
+  const tokens = useGetTokens()
   const { t } = useTranslation()
   const credit = useIfoPoolCredit()
   const {

@@ -5,6 +5,7 @@ import { useTranslation } from 'contexts/Localization'
 import { getEtherScanLink } from 'utils'
 import { Flex, Text, Link, Heading } from 'uikit'
 import { Result } from 'state/predictions/helpers'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { PayoutRow, RoundResultHistory } from '../RoundResult'
 import BetResult from './BetResult'
 import { getMultiplier } from './helpers'
@@ -25,6 +26,7 @@ const BetDetails: React.FC<BetDetailsProps> = ({ bet, result }) => {
   const { totalAmount, bullAmount, bearAmount } = bet.round
   const bullMultiplier = getMultiplier(totalAmount, bullAmount)
   const bearMultiplier = getMultiplier(totalAmount, bearAmount)
+  const { chainId } = useActiveWeb3React()
 
   return (
     <StyledBetDetails>
@@ -44,7 +46,7 @@ const BetDetails: React.FC<BetDetailsProps> = ({ bet, result }) => {
       {bet.round.lockBlock && (
         <Flex alignItems="center" justifyContent="space-between" mb="8px">
           <Text>{t('Opening Block')}</Text>
-          <Link href={getEtherScanLink(bet.round.lockBlock, 'block')} external>
+          <Link href={getEtherScanLink(bet.round.lockBlock, 'block', chainId)} external>
             {bet.round.lockBlock}
           </Link>
         </Flex>
@@ -52,7 +54,7 @@ const BetDetails: React.FC<BetDetailsProps> = ({ bet, result }) => {
       {bet.round.closeBlock && (
         <Flex alignItems="center" justifyContent="space-between">
           <Text>{t('Closing Block')}</Text>
-          <Link href={getEtherScanLink(bet.round.closeBlock, 'block')} external>
+          <Link href={getEtherScanLink(bet.round.closeBlock, 'block', chainId)} external>
             {bet.round.closeBlock}
           </Link>
         </Flex>

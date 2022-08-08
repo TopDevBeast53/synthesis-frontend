@@ -99,7 +99,7 @@ function CurrencySearch({
       if (e.key === 'Enter') {
         const s = debouncedQuery.toLowerCase().trim()
         if (s === 'eth') {
-          handleCurrencySelect(ETHER)
+          handleCurrencySelect(ETHER[chainId])
         } else if (filteredSortedTokens.length > 0) {
           if (
             filteredSortedTokens[0].symbol?.toLowerCase() === debouncedQuery.trim().toLowerCase() ||
@@ -110,7 +110,7 @@ function CurrencySearch({
         }
       }
     },
-    [filteredSortedTokens, handleCurrencySelect, debouncedQuery],
+    [debouncedQuery, filteredSortedTokens, handleCurrencySelect, chainId],
   )
 
   // if no results on main list, show option to expand into inactive

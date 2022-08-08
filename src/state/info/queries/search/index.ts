@@ -4,6 +4,7 @@ import { INFO_CLIENT } from 'config/constants/endpoints'
 import { useTokenDatas, usePoolDatas } from 'state/info/hooks'
 import { TokenData, PoolData } from 'state/info/types'
 import { MINIMUM_SEARCH_CHARACTERS } from 'config/constants/info'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 const TOKEN_SEARCH = gql`
     query tokens($symbol: String, $name: String, $id: String) {
@@ -75,6 +76,7 @@ const useFetchSearchResults = (
         loading: false, // Search query is in progress
         error: false, // GraphQL returned error
     })
+    const { chainId } = useActiveWeb3React()
 
     const searchStringTooShort = searchString.length < MINIMUM_SEARCH_CHARACTERS
 
@@ -91,14 +93,14 @@ const useFetchSearchResults = (
     useEffect(() => {
         const search = async () => {
             try {
-                const tokens = await request<TokenSearchResponse>(INFO_CLIENT, TOKEN_SEARCH, {
+                const tokens = await request<TokenSearchResponse>(INFO_CLIENT[chainId], TOKEN_SEARCH, {
                     symbol: searchString.toUpperCase(),
                     // Most well known tokens have first letter capitalized
                     name: searchString.charAt(0).toUpperCase() + searchString.slice(1),
                     id: searchString.toLowerCase(),
                 })
                 const tokenIds = getIds([tokens.asAddress, tokens.asSymbol, tokens.asName])
-                const pools = await request<PoolSearchResponse>(INFO_CLIENT, POOL_SEARCH, {
+                const pools = await request<PoolSearchResponse>(INFO_CLIENT[chainId], POOL_SEARCH, {
                     tokens: tokenIds,
                     id: searchString.toLowerCase(),
                 })
@@ -121,7 +123,7 @@ const useFetchSearchResults = (
         if (!searchStringTooShort) {
             search()
         }
-    }, [searchString, searchStringTooShort])
+    }, [chainId, searchString, searchStringTooShort])
 
     // Save ids to Redux
     // Token and Pool updater will then go fetch full data for these addresses

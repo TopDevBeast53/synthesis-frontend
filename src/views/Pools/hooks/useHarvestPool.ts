@@ -1,11 +1,12 @@
 import { useCallback } from 'react'
 import { useWeb3React } from '@web3-react/core'
 import { useAppDispatch } from 'state'
-import { updateUserBalance, updateUserPendingReward } from 'state/actions'
+import { updateUserBalance } from 'state/actions'
 import { harvestFarm } from 'utils/calls'
 import { BIG_ZERO } from 'utils/bigNumber'
-// import getGasPrice from 'utils/getGasPrice'
 import { useMasterchef, useSousChef } from 'hooks/useContract'
+import useFetchUserBalances from 'hooks/useFetchUserBalances'
+import { useUpdateUserPendingReward } from 'state/pools/hooks'
 // import { DEFAULT_GAS_LIMIT } from 'config'
 
 const options = {
@@ -13,14 +14,12 @@ const options = {
 }
 
 const harvestPool = async (sousChefContract) => {
-    // const gasPrice = await getGasPrice()
     const tx = await sousChefContract.deposit('0', { ...options })
     const receipt = await tx.wait()
     return receipt.status
 }
 
 const harvestPoolBnb = async (sousChefContract) => {
-    // const gasPrice = await getGasPrice()
     const tx = await sousChefContract.deposit({ ...options, value: BIG_ZERO })
     const receipt = await tx.wait()
     return receipt.status
@@ -31,6 +30,8 @@ const useHarvestPool = (sousId, isUsingBnb = false) => {
     const { account } = useWeb3React()
     const sousChefContract = useSousChef(sousId)
     const masterChefContract = useMasterchef()
+    const fetchUserBalances = useFetchUserBalances()
+    const updateUserPendingReward = useUpdateUserPendingReward(sousId, account)
 
     const handleHarvest = useCallback(async () => {
         if (sousId === 0) {
@@ -40,9 +41,9 @@ const useHarvestPool = (sousId, isUsingBnb = false) => {
         } else {
             await harvestPool(sousChefContract)
         }
-        dispatch(updateUserPendingReward(sousId, account))
-        dispatch(updateUserBalance(sousId, account))
-    }, [account, dispatch, isUsingBnb, masterChefContract, sousChefContract, sousId])
+        dispatch(updateUserPendingReward)
+        dispatch(updateUserBalance(sousId, account, fetchUserBalances))
+    }, [sousId, isUsingBnb, dispatch, updateUserPendingReward, account, fetchUserBalances, masterChefContract, sousChefContract])
 
     return { onReward: handleHarvest }
 }

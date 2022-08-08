@@ -11,6 +11,7 @@ import { ToastDescriptionWithTx } from 'components/Toast'
 import { VaultKey } from 'state/types'
 import { logError } from 'utils/sentry'
 import { useSWRContract, UseSWRContractKey } from 'hooks/useSWRContract'
+import { useFetchPoolsAllowance } from 'state/pools/hooks'
 
 export const useApprovePool = (lpContract: Contract, sousId, earningTokenSymbol) => {
   const [requestedApproval, setRequestedApproval] = useState(false)
@@ -20,6 +21,7 @@ export const useApprovePool = (lpContract: Contract, sousId, earningTokenSymbol)
   const dispatch = useAppDispatch()
   const { account } = useWeb3React()
   const sousChefContract = useSousChef(sousId)
+  const fetchPoolsAllowance = useFetchPoolsAllowance()
 
   const handleApprove = useCallback(async () => {
     try {
@@ -27,7 +29,7 @@ export const useApprovePool = (lpContract: Contract, sousId, earningTokenSymbol)
       const tx = await callWithGasPrice(lpContract, 'approve', [sousChefContract.address, ethers.constants.MaxUint256])
       const receipt = await tx.wait()
 
-      dispatch(updateUserAllowance(sousId, account))
+      dispatch(updateUserAllowance(sousId, account, fetchPoolsAllowance))
       if (receipt.status) {
         toastSuccess(
           t('Contract Enabled'),
@@ -45,18 +47,7 @@ export const useApprovePool = (lpContract: Contract, sousId, earningTokenSymbol)
       logError(e)
       toastError(t('Error'), t('Please try again. Confirm the transaction and make sure you are paying enough gas!'))
     }
-  }, [
-    account,
-    dispatch,
-    lpContract,
-    sousChefContract,
-    sousId,
-    earningTokenSymbol,
-    t,
-    toastError,
-    toastSuccess,
-    callWithGasPrice,
-  ])
+  }, [callWithGasPrice, lpContract, sousChefContract.address, dispatch, sousId, account, fetchPoolsAllowance, toastSuccess, t, earningTokenSymbol, toastError])
 
   return { handleApprove, requestedApproval }
 }

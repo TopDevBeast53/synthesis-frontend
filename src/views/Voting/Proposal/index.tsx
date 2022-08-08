@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { ArrowBackIcon, Box, Button, Flex, Heading } from 'uikit'
-import { useWeb3React } from '@web3-react/core'
+import { CHAIN_IDS_TO_NAMES } from 'config/constants/networks'
 import { Link, useParams } from 'react-router-dom'
 import snapshot from '@snapshot-labs/snapshot.js'
 import { useAppDispatch } from 'state'
@@ -19,8 +19,10 @@ import PageLoader from 'components/Loader/PageLoader'
 import { FetchStatus } from 'config/constants/types'
 import { useFarms } from 'state/farms/hooks'
 import { useFastFresh } from 'hooks/useRefresh'
-import tokens from 'config/constants/tokens'
-import { getAddress, getMasterChefAddress, getHelixAutoPoolAddress, getHelixVaultAddress } from 'utils/addressHelpers'
+import { useGetTokens } from 'hooks/useGetTokens'
+import { getMasterChefAddress, getHelixAutoPoolAddress, getHelixVaultAddress } from 'utils/addressHelpers'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import { ChainId } from 'sdk'
 import { isCoreProposal } from '../helpers'
 import { ProposalStateTag, ProposalTypeTag } from '../components/Proposals/tags'
 import Layout from '../components/Layout'
@@ -32,11 +34,12 @@ import { PageMeta } from '../../../components/Layout/Page'
 import { STRATEGY2_SNAPSHOT } from '../config'
 
 const Proposal = () => {
+  const { chainId, account } = useActiveWeb3React()
   const fastRefresh = useFastFresh()
+  const tokens = useGetTokens()
   const { id }: { id: string } = useParams()
   const proposal = useGetProposal(id)
   const { t } = useTranslation()
-  const { account } = useWeb3React()
   const dispatch = useAppDispatch()
   const votesGraphql = useGetVotes(id)
   const voteLoadingStatus = useGetVotingStateLoadingStatus()
@@ -45,11 +48,11 @@ const Proposal = () => {
   const { id: proposalId = null, snapshot: snapshotId = null } = proposal ?? {}
   const isPageLoading = voteLoadingStatus === FetchStatus.Fetching || proposalLoadingStatus === FetchStatus.Fetching
   const { data: farmsLP } = useFarms()
-  const masterChefAddress = getMasterChefAddress()
-  const autoHelixAddress = getHelixAutoPoolAddress()
-  const vaultAddress = getHelixVaultAddress()
-  const network = process.env.REACT_APP_CHAIN_ID
   const [votes, setVotes] = useState([])
+
+  const masterChefAddress = getMasterChefAddress(chainId)
+  const autoHelixAddress = getHelixAutoPoolAddress(chainId)
+  const vaultAddress = getHelixVaultAddress(chainId)
 
   useEffect(() => {
     dispatch(fetchProposal(id))
@@ -63,10 +66,10 @@ const Proposal = () => {
   }, [proposalId, snapshotId, dispatch])
 
   const helixLPs = farmsLP
-    .filter((lp) => snapshotId < STRATEGY2_SNAPSHOT ? lp.pid === 1 : lp.pid !== 0)
+    .filter((lp) => (chainId === ChainId.MAINNET && snapshotId < STRATEGY2_SNAPSHOT) ? lp.pid === 1 : lp.pid !== 0)
     .filter((lp) => lp.lpSymbol.includes('HELIX'))
     .map((lp) => ({
-      "address": getAddress(lp.lpAddresses),
+      "address": lp.lpAddress,
       "pid": lp.pid
     }))
 
@@ -95,7 +98,7 @@ const Proposal = () => {
         const vps = await snapshot.utils.getScores(
           proposal.space.id,
           strategies,
-          network,
+          chainId.toString(),
           voters,
           Number(proposal.snapshot)
         )
@@ -120,7 +123,7 @@ const Proposal = () => {
       mounted = false
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fastRefresh, votesGraphql])
+  }, [fastRefresh, votesGraphql, chainId])
 
   if (!proposal || !votes) {
     return <PageLoader />
@@ -130,7 +133,7 @@ const Proposal = () => {
     <Container py="40px">
       <PageMeta />
       <Box mb="40px">
-        <Button as={Link} to="/voting" variant="text" startIcon={<ArrowBackIcon color="primary" width="24px" />} px="0">
+        <Button as={Link} to={{ pathname: "/voting", search: `chain=${CHAIN_IDS_TO_NAMES[chainId]}` }} variant="text" startIcon={<ArrowBackIcon color="primary" width="24px" />} px="0">
           {t('Back to Proposals')}
         </Button>
       </Box>

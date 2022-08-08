@@ -3,6 +3,8 @@ import { request, gql } from 'graphql-request'
 import { INFO_CLIENT } from 'config/constants/endpoints'
 import { TOKEN_BLACKLIST } from 'config/constants/info'
 import { getDeltaTimestamps } from 'views/Info/utils/infoQueryHelpers'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import usePreviousValue from 'hooks/usePreviousValue'
 
 interface TopPoolsResponse {
     pairDayDatas: {
@@ -13,7 +15,7 @@ interface TopPoolsResponse {
 /**
  * Initial pools to display on the home page
  */
-const fetchTopPools = async (timestamp24hAgo: number): Promise<string[]> => {
+const fetchTopPools = async (chainId: number, timestamp24hAgo: number): Promise<string[]> => {
     try {
         const query = gql`
             query topPools($blacklist: [String!], $timestamp24hAgo: Int) {
@@ -32,7 +34,7 @@ const fetchTopPools = async (timestamp24hAgo: number): Promise<string[]> => {
                 }
             }
         `
-        const data = await request<TopPoolsResponse>(INFO_CLIENT, query, {
+        const data = await request<TopPoolsResponse>(INFO_CLIENT[chainId], query, {
             blacklist: TOKEN_BLACKLIST,
             timestamp24hAgo,
         })
@@ -50,16 +52,24 @@ const fetchTopPools = async (timestamp24hAgo: number): Promise<string[]> => {
 const useTopPoolAddresses = (): string[] => {
     const [topPoolAddresses, setTopPoolAddresses] = useState([])
     const [timestamp24hAgo] = getDeltaTimestamps()
+    const { chainId } = useActiveWeb3React()
+    const prevChainId = usePreviousValue(chainId)
+
+    useEffect(() => {
+        if (prevChainId !== chainId) {
+            setTopPoolAddresses([])
+        }
+    }, [chainId, prevChainId])
 
     useEffect(() => {
         const fetch = async () => {
-            const addresses = await fetchTopPools(timestamp24hAgo)
+            const addresses = await fetchTopPools(chainId, timestamp24hAgo)
             setTopPoolAddresses(addresses)
         }
-        if (topPoolAddresses.length === 0) {
+        if (topPoolAddresses.length === 0 || prevChainId !== chainId) {
             fetch()
         }
-    }, [topPoolAddresses, timestamp24hAgo])
+    }, [topPoolAddresses, timestamp24hAgo, chainId, prevChainId])
 
     return topPoolAddresses
 }

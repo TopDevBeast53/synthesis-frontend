@@ -30,8 +30,8 @@ export const getCustomMeta = (path: string, t: ContextApi['t']): PageMeta => {
         basePath = '/lps-swap'
     } else if (path.startsWith('/yield-swap')) {
         basePath = '/yield-swap'
-    } else if (path.startsWith('/referrals')) {
-        basePath = '/referrals'
+    } else if (path.startsWith('/refer')) {
+        basePath = '/refer'
     } else if (path.startsWith('/geobot-staking')) {
         basePath = '/geobot-staking'
     } else if (path.startsWith('/migration')) {
@@ -61,9 +61,9 @@ export const getCustomMeta = (path: string, t: ContextApi['t']): PageMeta => {
             return {
                 title: `${t('Yield Swap')} | ${t('Helix')}`,
             }
-        case '/referrals':
+        case '/refer':
             return {
-                title: `${t('Referrals')} | ${t('Helix')}`,
+                title: `${t('Refer')} | ${t('Helix')}`,
             }
         case '/geobot-staking':
             return {

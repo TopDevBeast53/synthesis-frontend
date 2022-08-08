@@ -2,7 +2,7 @@ import { ChainId, Token } from 'sdk'
 import { serializeToken } from 'state/user/hooks/helpers'
 import { SerializedToken } from './types'
 
-const { MAINNET, TESTNET } = ChainId
+const { MAINNET, TESTNET, RSK_MAINNET, RSK_TESTNET } = ChainId
 
 interface TokenList {
     [symbol: string]: Token
@@ -177,29 +177,161 @@ export const testnetTokens = defineTokens({
     ),
 } as const)
 
-const tokens = () => {
-    const chainId = process.env.REACT_APP_CHAIN_ID
+export const rskTestnetTokens = defineTokens({
+    helix: new Token(
+        RSK_TESTNET,
+        '0x08626CF6A212a44C877D9740f86252dBD6292364',
+        18,
+        'HELIX',
+        'Helix',
+        'https://helix.finance/',
+    ),
+    weth: new Token(
+        RSK_TESTNET,
+        '0xd07445d75A1A18A0030Bf7786990F3C1Ee71dB6e',
+        18,
+        'WRBTC',
+        'Wrapped RSK Bitcoin',
+        'https://www.rsk.co/',
+    ),
+    usdt: new Token(
+        RSK_TESTNET,
+        '0x760ae0f5319D9efEdc9B99d7E73fdaB2f84E4d87',
+        18,
+        'rUSDT',
+        'Wrapped RSK USDT',
+        'https://tether.to/',
+    ),
+    rif: new Token(
+        RSK_TESTNET,
+        '0x700E1B86F9c47E10AB94FaA7E6C8260C0F07074D',
+        18,
+        'RIF',
+        'RIF',
+        'https://www.makerdao.com/',
+    ),
+    sov: new Token(
+        RSK_TESTNET,
+        '0xf5aBC0d6239D494AED4433189e1Ccb96B50E2be8',
+        18,
+        'SOV',
+        'SOV',
+        'https://www.makerdao.com/',
+    ),
+} as const)
 
-    // If testnet - return list comprised of testnetTokens wherever they exist, and mainnetTokens where they don't
-    if (parseInt(chainId, 10) === ChainId.TESTNET) {
-        return Object.keys(mainnetTokens).reduce((accum, key) => {
-            return { ...accum, [key]: testnetTokens[key] || mainnetTokens[key] }
-        }, {} as typeof testnetTokens & typeof mainnetTokens)
-    }
+export const rskMainnetTokens = defineTokens({
+    helix: new Token(
+        RSK_MAINNET,
+        '0x3d2441fa9aab621e72121fb1c620fdae59eae812',
+        18,
+        'HELIX',
+        'Helix',
+        'https://helix.finance/',
+    ),
+    weth: new Token(
+        RSK_MAINNET,
+        '0x967f8799af07df1534d48a95a5c9febe92c53ae0',
+        18,
+        'WRBTC',
+        'Wrapped RSK Bitcoin',
+        'https://www.rsk.co/',
+    ),
+    usdt: new Token(
+        RSK_MAINNET,
+        '0xef213441a85df4d7acbdae0cf78004e1e486bb96',
+        18,
+        'rUSDT',
+        'Wrapped RSK USDT',
+        'https://tether.to/',
+    ),
+    rif: new Token(
+        RSK_MAINNET,
+        '0x2acc95758f8b5f583470ba265eb685a8f45fc9d5',
+        18,
+        'RIF',
+        'RIF',
+        'https://www.makerdao.com/',
+    ),
+    sov: new Token(
+        RSK_MAINNET,
+        '0xefc78fc7d48b64958315949279ba181c2114abbd',
+        18,
+        'SOV',
+        'SOV',
+        'https://www.makerdao.com/',
+    ),
+} as const)
 
-    return mainnetTokens
+
+const tokens = {
+    [MAINNET]: mainnetTokens,
+    [TESTNET]: testnetTokens,
+    [RSK_MAINNET]: rskMainnetTokens,
+    [RSK_TESTNET]: rskTestnetTokens,
 }
 
-const unserializedTokens = tokens()
+type SerializedTokenList = typeof mainnetTokens &
+    typeof testnetTokens &
+    typeof rskTestnetTokens &
+    typeof rskMainnetTokens
 
-type SerializedTokenList = Record<keyof typeof unserializedTokens, SerializedToken>
+const getTokens = (chainId: ChainId): SerializedTokenList => {
+    return tokens[chainId] as SerializedTokenList
+}
 
-export const serializeTokens = () => {
+type SerializedTokenListMainNet = Record<keyof typeof mainnetTokens, SerializedToken>
+type SerializedTokenListTestNet = Record<keyof typeof testnetTokens, SerializedToken>
+type SerializedTokenListRSKTestNet = Record<keyof typeof rskTestnetTokens, SerializedToken>
+type SerializedTokenListRSKMainNet = Record<keyof typeof rskTestnetTokens, SerializedToken>
+export const serializeTokens = (chainId: ChainId) => {
+    switch (chainId) {
+        case MAINNET:
+            return serializeTokensMainNet()
+        case TESTNET:
+            return serializeTokensTestNet()
+        case RSK_MAINNET:
+            return serializeTokensRSKMainNet()
+        case RSK_TESTNET:
+        default:
+            return serializeTokensRSKTestNet()
+    }
+}
+
+export const serializeTokensMainNet = () => {
+    const unserializedTokens = getTokens(MAINNET)
     const serializedTokens = Object.keys(unserializedTokens).reduce((accum, key) => {
         return { ...accum, [key]: serializeToken(unserializedTokens[key]) }
-    }, {} as SerializedTokenList)
+    }, {} as SerializedTokenListMainNet)
 
     return serializedTokens
 }
 
-export default unserializedTokens
+export const serializeTokensTestNet = () => {
+    const unserializedTokens = getTokens(TESTNET)
+    const serializedTokens = Object.keys(unserializedTokens).reduce((accum, key) => {
+        return { ...accum, [key]: serializeToken(unserializedTokens[key]) }
+    }, {} as SerializedTokenListTestNet)
+
+    return serializedTokens
+}
+
+export const serializeTokensRSKTestNet = () => {
+    const unserializedTokens = getTokens(RSK_TESTNET)
+    const serializedTokens = Object.keys(unserializedTokens).reduce((accum, key) => {
+        return { ...accum, [key]: serializeToken(unserializedTokens[key]) }
+    }, {} as SerializedTokenListRSKTestNet)
+
+    return serializedTokens
+}
+
+export const serializeTokensRSKMainNet = () => {
+    const unserializedTokens = getTokens(RSK_MAINNET)
+    const serializedTokens = Object.keys(unserializedTokens).reduce((accum, key) => {
+        return { ...accum, [key]: serializeToken(unserializedTokens[key]) }
+    }, {} as SerializedTokenListRSKMainNet)
+
+    return serializedTokens
+}
+
+export default getTokens

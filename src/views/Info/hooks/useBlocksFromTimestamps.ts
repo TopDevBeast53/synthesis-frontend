@@ -3,12 +3,14 @@ import { useState, useEffect } from 'react'
 import { multiQuery } from 'views/Info/utils/infoQueryHelpers'
 import { BLOCKS_CLIENT } from 'config/constants/endpoints'
 import { Block } from 'state/info/types'
+import { ChainId } from 'sdk'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import usePreviousValue from 'hooks/usePreviousValue'
 
 const getBlockSubqueries = (timestamps: number[]) =>
     timestamps.map((timestamp) => {
-        return `t${timestamp}:blocks(first: 1, orderBy: timestamp, orderDirection: desc, where: { timestamp_gt: ${timestamp}, timestamp_lt: ${
-            timestamp + 600
-        } }) {
+        return `t${timestamp}:blocks(first: 1, orderBy: timestamp, orderDirection: desc, where: { timestamp_gt: ${timestamp}, timestamp_lt: ${timestamp + 600
+            } }) {
       number
     }`
     })
@@ -24,9 +26,10 @@ const blocksQueryConstructor = (subqueries: string[]) => {
  * @param {Array} timestamps
  */
 export const getBlocksFromTimestamps = async (
+    chainId: ChainId,
     timestamps: number[],
     sortDirection: 'asc' | 'desc' = 'desc',
-    skipCount = 500,
+    skipCount = 1000,
 ): Promise<Block[]> => {
     if (timestamps?.length === 0) {
         return []
@@ -35,7 +38,7 @@ export const getBlocksFromTimestamps = async (
     const fetchedData: any = await multiQuery(
         blocksQueryConstructor,
         getBlockSubqueries(timestamps),
-        BLOCKS_CLIENT,
+        BLOCKS_CLIENT[chainId],
         skipCount,
     )
 
@@ -77,14 +80,22 @@ export const useBlocksFromTimestamps = (
 } => {
     const [blocks, setBlocks] = useState<Block[]>()
     const [error, setError] = useState(false)
-
+    const { chainId } = useActiveWeb3React()
+    const prevChainId = usePreviousValue(chainId)
     const timestampsString = JSON.stringify(timestamps)
     const blocksString = blocks ? JSON.stringify(blocks) : undefined
 
     useEffect(() => {
+        if (chainId !== prevChainId) {
+            setBlocks(undefined)
+            setError(false)
+        }
+    }, [chainId, prevChainId])
+
+    useEffect(() => {
         const fetchData = async () => {
             const timestampsArray = JSON.parse(timestampsString)
-            const result = await getBlocksFromTimestamps(timestampsArray, sortDirection, skipCount)
+            const result = await getBlocksFromTimestamps(chainId, timestampsArray, sortDirection, skipCount)
             if (result.length === 0) {
                 setError(true)
             } else {
@@ -92,10 +103,10 @@ export const useBlocksFromTimestamps = (
             }
         }
         const blocksArray = blocksString ? JSON.parse(blocksString) : undefined
-        if (!blocksArray && !error) {
+        if ((!blocksArray && !error) || prevChainId !== chainId) {
             fetchData()
         }
-    }, [blocksString, error, skipCount, sortDirection, timestampsString])
+    }, [blocksString, chainId, error, skipCount, sortDirection, timestampsString, prevChainId])
 
     return {
         blocks,

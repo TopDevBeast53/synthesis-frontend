@@ -1,28 +1,33 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import BigNumber from 'bignumber.js'
 import { useWeb3React } from '@web3-react/core'
-import multicall from 'utils/multicall'
 import { getMasterChefAddress } from 'utils/addressHelpers'
 import masterChefABI from 'config/abi/masterchef.json'
-import { farmsConfig } from 'config/constants'
+import { getFarms } from 'config/constants'
 import { SerializedFarmConfig } from 'config/constants/types'
 import { useFastFresh } from 'hooks/useRefresh'
 import { DEFAULT_TOKEN_DECIMAL } from 'config'
+import useMulticall from 'hooks/useMulticall'
+import useActiveWeb3React from 'hooks/useActiveWeb3React';
 
 export interface FarmWithBalance extends SerializedFarmConfig {
   balance: BigNumber
 }
 
 const useFarmsWithBalance = () => {
+  const { chainId } = useActiveWeb3React()
   const [farmsWithStakedBalance, setFarmsWithStakedBalance] = useState<FarmWithBalance[]>([])
   const [earningsSum, setEarningsSum] = useState<number>(null)
   const { account } = useWeb3React()
   const fastRefresh = useFastFresh()
+  const multicall = useMulticall()
+
+  const farmsConfig = useMemo(() => getFarms(chainId), [chainId])
 
   useEffect(() => {
     const fetchBalances = async () => {
       const calls = farmsConfig.map((farm) => ({
-        address: getMasterChefAddress(),
+        address: getMasterChefAddress(chainId),
         name: 'pendingCake',
         params: [farm.pid, account],
       }))
@@ -45,7 +50,7 @@ const useFarmsWithBalance = () => {
     if (account) {
       fetchBalances()
     }
-  }, [account, fastRefresh])
+  }, [account, chainId, farmsConfig, fastRefresh, multicall])
 
   return { farmsWithStakedBalance, earningsSum }
 }

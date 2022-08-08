@@ -3,9 +3,11 @@ import { useEffect, useState } from 'react'
 import { request, gql } from 'graphql-request'
 import { INFO_CLIENT } from 'config/constants/endpoints'
 import { getDeltaTimestamps } from 'views/Info/utils/infoQueryHelpers'
-import { useBlocksFromTimestamps } from 'views/Info/hooks/useBlocksFromTimestamps'
+import { getBlocksFromTimestamps } from 'views/Info/hooks/useBlocksFromTimestamps'
 import { PoolData } from 'state/info/types'
 import { getChangeForPeriod, getLpFeesAndApr, getPercentChange } from 'views/Info/utils/infoDataHelpers'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import usePreviousValue from 'hooks/usePreviousValue'
 
 interface PoolFields {
     id: string
@@ -80,6 +82,7 @@ const POOL_AT_BLOCK = (block: number | null, pools: string[]) => {
 }
 
 const fetchPoolData = async (
+    chainId: number,
     block24h: number,
     block48h: number,
     block7d: number,
@@ -96,7 +99,7 @@ const fetchPoolData = async (
         twoWeeksAgo: ${POOL_AT_BLOCK(block14d, poolAddresses)}
       }
     `
-        const data = await request<PoolsQueryResponse>(INFO_CLIENT, query)
+        const data = await request<PoolsQueryResponse>(INFO_CLIENT[chainId], query)
         return { data, error: false }
     } catch (error) {
         console.error('Failed to fetch pool data', error)
@@ -135,14 +138,24 @@ interface PoolDatas {
  * Fetch top pools by liquidity
  */
 const usePoolDatas = (poolAddresses: string[]): PoolDatas => {
+    const { chainId } = useActiveWeb3React()
+    const prevChainId = usePreviousValue(chainId)
     const [fetchState, setFetchState] = useState<PoolDatas>({ error: false })
     const [t24h, t48h, t7d, t14d] = getDeltaTimestamps()
-    const { blocks, error: blockError } = useBlocksFromTimestamps([t24h, t48h, t7d, t14d])
-    const [block24h, block48h, block7d, block14d] = blocks ?? []
+
+    useEffect(() => {
+        if (prevChainId !== chainId) {
+            setFetchState({ error: false })
+        }
+    }, [chainId, prevChainId])
 
     useEffect(() => {
         const fetch = async () => {
+            const blocks = await getBlocksFromTimestamps(chainId, [t24h, t48h, t7d, t14d])
+            const [block24h, block48h, block7d, block14d] = blocks ?? []
+
             const { error, data } = await fetchPoolData(
+                chainId,
                 block24h.number,
                 block48h.number,
                 block7d.number,
@@ -228,11 +241,11 @@ const usePoolDatas = (poolAddresses: string[]): PoolDatas => {
             }
         }
 
-        const allBlocksAvailable = block24h?.number && block48h?.number && block7d?.number && block14d?.number
-        if (poolAddresses.length > 0 && allBlocksAvailable && !blockError) {
+        const allBlocksAvailable = t24h && t48h && t7d && t14d
+        if (poolAddresses.length > 0 && allBlocksAvailable && !fetchState.data) {
             fetch()
         }
-    }, [poolAddresses, block24h, block48h, block7d, block14d, blockError])
+    }, [poolAddresses, chainId, t24h, t48h, t7d, t14d, fetchState])
 
     return fetchState
 }

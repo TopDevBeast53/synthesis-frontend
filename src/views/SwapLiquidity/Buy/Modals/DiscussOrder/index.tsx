@@ -21,12 +21,11 @@ import {
   ModalTitle
 } from 'uikit'
 import getThemeValue from 'uikit/util/getThemeValue'
-import { getAddress } from 'utils/addressHelpers'
 import { BIG_ZERO } from 'utils/bigNumber'
 import { getBalanceAmount, getDecimalAmount } from 'utils/formatBalance'
 import handleError from 'utils/handleError'
 
-const DiscussOrder: React.FC<any> = ({onDismiss, ...props}) => {
+const DiscussOrder: React.FC<any> = ({ onDismiss, ...props }) => {
   const theme = useTheme()
   const { t } = useTranslation()
   const { account } = useWeb3React()
@@ -39,47 +38,47 @@ const DiscussOrder: React.FC<any> = ({onDismiss, ...props}) => {
   const minWidth = '320px'
   const { bidData, bidId, swapData, sendAsk, buyer } = props
   const allTokens = useAllTokens() // All Stable Token
-  const allTokenBalances = useAllTokenBalances()  
-  const { data: farms } = useMemoFarms()  
+  const allTokenBalances = useAllTokenBalances()
+  const { data: farms } = useMemoFarms()
   const [allowedValue, setAllowedValue] = useState<BigNumber>()
-  const [symbolName, buyerDecimals] = useMemo(()=>{    
-    if(buyer.isLp){
-      const lp = farms.find((item) => getAddress(item.lpAddresses) === buyer.token)      
-      return lp ?  [lp.lpSymbol, lp.token.decimals] : ["", 18]
-    }    
+  const [symbolName, buyerDecimals] = useMemo(() => {
+    if (buyer.isLp) {
+      const lp = farms.find((item) => item.lpAddress === buyer.token)
+      return lp ? [lp.lpSymbol, lp.token.decimals] : ["", 18]
+    }
     return allTokens[buyer.token] ? [allTokens[buyer.token].symbol, allTokens[buyer.token].decimals] : ["", 18]
-  },[allTokens, buyer, farms])
+  }, [allTokens, buyer.isLp, buyer.token, farms])
 
   const exContract = useERC20(swapData?.toSellerToken)
   const exContractAmount = bidData ? bidData?.amount.toString() : swapData?.ask.toString()
 
-  const [yAmount, setYAmount] = useState(getBalanceAmount(exContractAmount, buyerDecimals).toString()) 
+  const [yAmount, setYAmount] = useState(getBalanceAmount(exContractAmount, buyerDecimals).toString())
   const decimalYAmount = getDecimalAmount(new BigNumber(yAmount), buyerDecimals)
 
-  const maxBalance = useMemo(()=>{
-    if(buyer.isLp){
-      const lp = farms.find((item) => getAddress(item.lpAddresses) === buyer.token)
-      return lp ?  getBalanceAmount(lp.userData.tokenBalance, lp.token.decimals) : BIG_ZERO
+  const maxBalance = useMemo(() => {
+    if (buyer.isLp) {
+      const lp = farms.find((item) => item.lpAddress === buyer.token)
+      return lp ? getBalanceAmount(lp.userData.tokenBalance, lp.token.decimals) : BIG_ZERO
     }
-    
+
     return allTokenBalances[buyer.token] ? allTokenBalances[buyer.token].toExact() : BIG_ZERO
 
-  }, [allTokenBalances, farms, buyer])  
+  }, [buyer.isLp, buyer.token, allTokenBalances, farms])
 
   const handleSelectMaxOfLPToken = useCallback(() => {
     setYAmount(maxBalance.toString())
   }, [maxBalance, setYAmount])
 
   useEffect(() => {
-    let unmounted=false;
+    let unmounted = false;
     exContract.allowance(account, LpSwapContract.address).then((res) => {
-      if (unmounted) return      
+      if (unmounted) return
       setAllowedValue(new BigNumber(res.toString()))
     })
-    return ()=>{
-      unmounted=true
+    return () => {
+      unmounted = true
     }
-  },[exContract, LpSwapContract, account])
+  }, [exContract, LpSwapContract, account])
 
   function doValidation() {
     if (allowedValue.lte(decimalYAmount)) {
@@ -180,8 +179,8 @@ const DiscussOrder: React.FC<any> = ({onDismiss, ...props}) => {
               ? 'Approving'
               : t('Confirming')
             : allowedValue.lte(decimalYAmount)
-            ? 'Approve'
-            : t('Confirm')}
+              ? 'Approve'
+              : t('Confirm')}
         </Button>
       </ModalBody>
     </ModalContainer>

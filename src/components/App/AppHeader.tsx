@@ -4,6 +4,8 @@ import { Text, Flex, Heading, HeadingLeftAligned, IconButton, ArrowBackIcon, Not
 import { Link } from 'react-router-dom'
 import { useExpertModeManager } from 'state/user/hooks'
 import GlobalSettings from 'components/Menu/GlobalSettings'
+import { CHAIN_IDS_TO_NAMES } from 'config/constants/networks'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import Transactions from './Transactions'
 import QuestionHelper from '../QuestionHelper'
 
@@ -26,12 +28,13 @@ const AppHeaderContainer = styled(Flex)`
 
 const AppHeader: React.FC<Props> = ({ title, subtitle, helper, backTo, noConfig = false, pool = false }) => {
   const [expertMode] = useExpertModeManager()
+  const { chainId } = useActiveWeb3React()
 
   return (
     <AppHeaderContainer>
       <Flex alignItems="center" mr={noConfig ? 0 : '16px'}>
         {backTo && (
-          <IconButton as={Link} to={backTo}>
+          <IconButton as={Link} to={{ pathname: backTo, search: `chain=${CHAIN_IDS_TO_NAMES[chainId]}` }}>
             <ArrowBackIcon width="32px" />
           </IconButton>
         )}

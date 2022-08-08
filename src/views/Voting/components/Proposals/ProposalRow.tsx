@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom'
 import { ArrowForwardIcon, Box, IconButton, Flex, Text } from 'uikit'
 import styled from 'styled-components'
 import { Proposal } from 'state/types'
+import { CHAIN_IDS_TO_NAMES } from 'config/constants/networks'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { isCoreProposal } from '../../helpers'
 import TimeFrame from './TimeFrame'
 import { ProposalStateTag, ProposalTypeTag } from './tags'
@@ -24,9 +26,10 @@ const StyledProposalRow = styled(Link)`
 
 const ProposalRow: React.FC<ProposalRowProps> = ({ proposal }) => {
   const votingLink = `/voting/proposal/${proposal.id}`
+  const { chainId } = useActiveWeb3React()
 
   return (
-    <StyledProposalRow to={votingLink}>
+    <StyledProposalRow to={{ pathname: votingLink, search: `chain=${CHAIN_IDS_TO_NAMES[chainId]}` }}>
       <Box as="span" style={{ flex: 1 }}>
         <Text bold mb="8px">
           {proposal.title}

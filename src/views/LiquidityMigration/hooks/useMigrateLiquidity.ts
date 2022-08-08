@@ -6,17 +6,17 @@ import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 import helixMigratorABI from 'config/abi/HelixMigrator.json'
-import { helixMigratorAddress } from '../constants'
+import { getHelixMigratorAddress } from 'utils/addressHelpers'
 
 export const useMigrateLiquidity = () => {
-    const { library, account } = useActiveWeb3React()
+    const { library, account, chainId } = useActiveWeb3React()
     const { callWithGasPrice } = useCallWithGasPrice()
 
     const handleMigrateLiquidity: (externalRouter: string, lpTokenAddress: string, tokenA: string, tokenB: string) => Promise<ethers.providers.TransactionReceipt> =
         useCallback(
             async (externalRouter, lpTokenAddress, tokenA, tokenB) => {
                 const migratorContract = new Contract(
-                    helixMigratorAddress,
+                    getHelixMigratorAddress(chainId),
                     helixMigratorABI,
                     getProviderOrSigner(library, account),
                 )
@@ -29,7 +29,7 @@ export const useMigrateLiquidity = () => {
 
                 return tx.wait()
             },
-            [callWithGasPrice, library, account],
+            [callWithGasPrice, library, account, chainId],
         )
 
     return { migrateLiquidity: handleMigrateLiquidity }

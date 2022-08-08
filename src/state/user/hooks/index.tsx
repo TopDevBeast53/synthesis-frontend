@@ -1,11 +1,12 @@
-import { ChainId, Pair, Token } from 'sdk'
+import { Pair, Token } from 'sdk'
 import flatMap from 'lodash/flatMap'
-import { useCallback, useMemo } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { BASES_TO_TRACK_LIQUIDITY_FOR, PINNED_PAIRS } from 'config/constants'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useAllTokens } from 'hooks/Tokens'
-import { ethers } from 'ethers'
+import getGasPrice from 'utils/getGasPrice'
+import useProviders from 'hooks/useProviders'
 import { AppDispatch, AppState } from '../../index'
 import {
   addSerializedPair,
@@ -37,7 +38,7 @@ import {
   setChartViewMode,
   setSubgraphHealthIndicatorDisplayed,
 } from '../actions'
-import { deserializeToken, GAS_PRICE_GWEI, serializeToken } from './helpers'
+import { deserializeToken, serializeToken } from './helpers'
 
 export function useAudioModeManager(): [boolean, () => void] {
   const dispatch = useDispatch<AppDispatch>()
@@ -339,18 +340,20 @@ export function useRemoveUserAddedToken(): (chainId: number, address: string) =>
 }
 
 export function useGasPrice(): string {
-  const chainId = process.env.REACT_APP_CHAIN_ID
-  const apiKey = process.env.REACT_APP_ALCHEMY_API_KEY
+  const { chainId } = useActiveWeb3React()
   const dispatch = useDispatch()
-  const provider = new ethers.providers.AlchemyProvider(parseInt(chainId), apiKey)
-  const getPriceGwei = async () => {
-    const gasPriceVal = await provider.getGasPrice() 
-    dispatch(updateGasPrice({ gasPrice: gasPriceVal.toString() }))
-  }
+  const rpcProvider = useProviders()
 
-  getPriceGwei()
+  useEffect(() => {
+    const getPriceGwei = async () => {
+      const gasPriceVal = await getGasPrice(chainId, rpcProvider)
+      dispatch(updateGasPrice({ gasPrice: gasPriceVal }))
+    }
+
+    getPriceGwei()
+  }, [chainId, dispatch, rpcProvider])
   const userGas = useSelector<AppState, AppState['user']['gasPrice']>((state) => state.user.gasPrice)
-  return chainId === ChainId.MAINNET.toString() ? userGas : GAS_PRICE_GWEI.testnet
+  return userGas
 }
 
 export function useGasPriceManager(): [string, (userGasPrice: string) => void] {
@@ -409,21 +412,21 @@ export function useTrackedTokenPairs(): [Token, Token][] {
     () =>
       chainId
         ? flatMap(Object.keys(tokens), (tokenAddress) => {
-            const token = tokens[tokenAddress]
-            // for each token on the current chain,
-            return (
-              // loop though all bases on the current chain
-              (BASES_TO_TRACK_LIQUIDITY_FOR[chainId] ?? [])
-                // to construct pairs of the given token with each base
-                .map((base) => {
-                  if (base.address === token.address) {
-                    return null
-                  }
-                  return [base, token]
-                })
-                .filter((p): p is [Token, Token] => p !== null)
-            )
-          })
+          const token = tokens[tokenAddress]
+          // for each token on the current chain,
+          return (
+            // loop though all bases on the current chain
+            (BASES_TO_TRACK_LIQUIDITY_FOR[chainId] ?? [])
+              // to construct pairs of the given token with each base
+              .map((base) => {
+                if (base.address === token.address) {
+                  return null
+                }
+                return [base, token]
+              })
+              .filter((p): p is [Token, Token] => p !== null)
+          )
+        })
         : [],
     [tokens, chainId],
   )
@@ -441,10 +444,11 @@ export function useTrackedTokenPairs(): [Token, Token][] {
     })
   }, [savedSerializedPairs, chainId])
 
-  const combinedList = useMemo(
-    () => userPairs.concat(generatedPairs).concat(pinnedPairs),
-    [generatedPairs, pinnedPairs, userPairs],
-  )
+  const combinedList = useMemo(() => userPairs.concat(generatedPairs).concat(pinnedPairs), [
+    generatedPairs,
+    pinnedPairs,
+    userPairs,
+  ])
 
   return useMemo(() => {
     // dedupes pairs of tokens in the combined list
@@ -474,7 +478,7 @@ export const useWatchlistTokens = (): [string[], (address: string) => void] => {
 
 export const useWatchlistPools = (): [string[], (address: string) => void] => {
   const dispatch = useDispatch<AppDispatch>()
-  const savedPools = useSelector((state: AppState) => state.user.watchlistPools) ?? []
+  const savedPools = useSelector((state: AppState) => state.user.watchlistPools ?? [])
   const updateSavedPools = useCallback(
     (address: string) => {
       dispatch(addWatchlistPool({ address }))
