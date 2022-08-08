@@ -32,8 +32,8 @@ export const BLOCK_TIME = {
 export const HELIX_PER_BLOCK = {
     [ChainId.MAINNET]: 4.5,
     [ChainId.TESTNET]: 4.5,
-    [ChainId.RSK_MAINNET]: 4.5,
-    [ChainId.RSK_TESTNET]: 4.5,
+    [ChainId.RSK_MAINNET]: 5.625,
+    [ChainId.RSK_TESTNET]: 5.625,
 }
 export const BLOCKS_PER_YEAR = {
     [ChainId.MAINNET]: (60 / BLOCK_TIME[ChainId.MAINNET]) * 60 * 24 * 365,

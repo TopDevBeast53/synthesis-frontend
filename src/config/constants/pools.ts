@@ -49,8 +49,8 @@ const getPools = (chainId: ChainId) => {
             tokenPerBlock: {
                 [ChainId.MAINNET]: '2.278481012658228',
                 [ChainId.TESTNET]: '2.278481012658228',
-                [ChainId.RSK_MAINNET]: '2.278481012658228',
-                [ChainId.RSK_TESTNET]: '2.278481012658228',
+                [ChainId.RSK_MAINNET]: '2.195121951219512',
+                [ChainId.RSK_TESTNET]: '2.195121951219512',
             },
             sortOrder: 1,
             isFinished: false,
