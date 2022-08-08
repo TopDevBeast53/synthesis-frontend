@@ -10,11 +10,7 @@ import ERC20 from './abis/ERC20.json'
 import { ChainId } from './constants'
 import { Token } from './entities/token'
 
-let TOKEN_DECIMALS_CACHE: { [chainId: number]: { [address: string]: number } } = {
-    [ChainId.MAINNET]: {
-        '0xE0B7927c4aF23765Cb51314A0E0521A9645F0E2A': 9, // DGD
-    },
-}
+let TOKEN_DECIMALS_CACHE: { [chainId: number]: { [address: string]: number } } = {}
 
 /**
  * Contains methods for constructing instances of pairs and tokens from on-chain data.

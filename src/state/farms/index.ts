@@ -14,16 +14,6 @@ import { ChainId } from 'sdk'
 import getFarmsPrices from './getFarmsPrices'
 import { SerializedFarmsState, SerializedFarm } from '../types'
 
-// const noAccountFarmConfig = getFarms(ChainId.MAINNET).map((farm) => ({
-//     ...farm,
-//     userData: {
-//         allowance: '0',
-//         tokenBalance: '0',
-//         stakedBalance: '0',
-//         earnings: '0',
-//     },
-// }))
-
 const initialState: SerializedFarmsState = {
     data: [],
     loadArchivedFarmsData: false,
