@@ -7,13 +7,9 @@ BigNumber.config({
     DECIMAL_PLACES: 80,
 })
 
-export const BLOCK_TIME = {
-    [ChainId.MAINNET]: 13.4,
-    [ChainId.TESTNET]: 13.4,
-    [ChainId.RSK_MAINNET]: 34,
-    [ChainId.RSK_TESTNET]: 34,
-}
-
+/**
+ * Block Explorer URLs
+ */
 export const BASE_ETH_SCAN_URLS = {
     [ChainId.MAINNET]: 'https://etherscan.io',  // UpdateMe https://etherscan.io
     [ChainId.TESTNET]: 'https://rinkeby.etherscan.io',
@@ -23,13 +19,16 @@ export const BASE_ETH_SCAN_URLS = {
 
 export const BASE_SOLANA_SCAN_URLS = 'https://explorer.solana.com/'
 
-// HELIX_PER_BLOCK details
-// 40 HELIXis minted per block
-// 20 HELIXper block is sent to Burn pool (A farm just for burning cake)
-// 10 HELIXper block goes to HELIXsyrup pool
-// 9 HELIXper block goes to Yield farms and lottery
-// HELIX_PER_BLOCK in config/index.ts = 40 as we only change the amount sent to the burn pool which is effectively a farm.
-// CAKE/Block in src/views/Home/components/CakeDataRow.tsx = 15 (40 - Amount sent to burn pool)
+/**
+ * HELIX_PER_BLOCK details
+ */
+
+export const BLOCK_TIME = {
+    [ChainId.MAINNET]: 13.4,
+    [ChainId.TESTNET]: 13.4,
+    [ChainId.RSK_MAINNET]: 34,
+    [ChainId.RSK_TESTNET]: 34,
+}
 export const HELIX_PER_BLOCK = {
     [ChainId.MAINNET]: 4.5,
     [ChainId.TESTNET]: 4.5,
@@ -58,3 +57,20 @@ export const AUCTION_WHITELISTED_BIDDERS_TO_FETCH = 500
 export const IPFS_GATEWAY = 'https://ipfs.io/ipfs'
 // In reality its 10000 because of fast refresh, a bit less here to cover for possible long request times
 export const PANCAKE_BUNNIES_UPDATE_FREQUENCY = 8000
+
+/**
+ * Voting page
+ */
+export const VOTING_SUBGRAPH_PATH = {
+    [ChainId.MAINNET]: "qiangkaiwen/helix",
+    [ChainId.TESTNET]: "qiangkaiwen/helix-rinkeby"
+}
+
+export const VOTING_SNAPSHOT_SPACE = {
+    [ChainId.MAINNET]: 'helixgeometry.eth',
+    [ChainId.TESTNET]: 'silverstardev.eth',
+    [ChainId.RSK_MAINNET]: 'helixgeometryrsk.eth',
+    [ChainId.RSK_TESTNET]: 'helixgeomtryrsktest.eth',
+    // [ChainId.BSC_MAINNET]: 'helixgeomtrybsc.eth',
+    // [ChainId.BSC_TESTNET]: 'helixgeomtrybsctest.eth'
+}

@@ -2,7 +2,8 @@ import { SNAPSHOT_HUB_API } from 'config/constants/endpoints'
 import getTokens from 'config/constants/tokens'
 import { Proposal, ProposalState, ProposalType, Vote } from 'state/types'
 import { ChainId } from 'sdk'
-import { ADMINS, HELIX_SPACE, SNAPSHOT_VERSION } from './config'
+import { VOTING_SNAPSHOT_SPACE } from 'config'
+import { ADMINS, SNAPSHOT_VERSION } from './config'
 
 export const isCoreProposal = (proposal: Proposal) => {
     return ADMINS.includes(proposal.author.toLowerCase())
@@ -48,7 +49,7 @@ export const generatePayloadData = (chainId: ChainId) => {
     return {
         version: SNAPSHOT_VERSION,
         timestamp: (Date.now() / 1e3).toFixed(),
-        space: HELIX_SPACE[chainId],
+        space: VOTING_SNAPSHOT_SPACE[chainId],
     }
 }
 
