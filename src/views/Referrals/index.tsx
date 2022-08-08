@@ -94,7 +94,7 @@ const useClaimRewards = () => {
 }
 
 function getReferralLink(address: string, chain: string): string {
-  return `${BASE_URL}/referrals?ref=${address}&chain=${chain}`
+  return `${BASE_URL}/refer?ref=${address}&chain=${chain}`
 }
 
 export default function Referrals() {

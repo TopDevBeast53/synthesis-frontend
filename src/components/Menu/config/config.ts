@@ -65,21 +65,10 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
                 ],
             },
             {
-                label: t('Referrals'),
-                href: '/referrals',
+                label: t('Refer'),
+                href: '/refer',
                 icon: 'Referals',
                 showItemsOnMobile: false,
-            },
-            {
-                label: t('NFT'),
-                href: '/geobot-staking',
-                icon: 'NFT1',
-                items: [
-                    {
-                        label: 'Geobot Staking',
-                        href: '/geobot-staking',
-                    },
-                ],
             },
             {
                 label: t('Voting'),
@@ -106,6 +95,17 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
                 ],
             },
             {
+                label: t('NFT'),
+                href: '/geobot-staking',
+                icon: 'NFT1',
+                items: [
+                    {
+                        label: 'Geobot Staking',
+                        href: '/geobot-staking',
+                    },
+                ],
+            },
+            {
                 label: t('Data'),
                 href: '/data',
                 icon: 'Chart',
@@ -122,6 +122,11 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
                         href: 'https://geometry.gitbook.io/helix',
                         type: DropdownMenuItemType.EXTERNAL_LINK,
                     },
+                    {
+                        label: 'Blog',
+                        href: 'https://medium.com/geometryfinance',
+                        type: DropdownMenuItemType.EXTERNAL_LINK,
+                    }
                 ],
             },
         ],
@@ -178,8 +183,8 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
                 ],
             },
             {
-                label: t('Referrals'),
-                href: '/referrals',
+                label: t('Refer'),
+                href: '/refer',
                 icon: 'Referals',
                 showItemsOnMobile: false,
             },
@@ -233,6 +238,11 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
                     {
                         label: 'Docs',
                         href: 'https://geometry.gitbook.io/helix',
+                        type: DropdownMenuItemType.EXTERNAL_LINK,
+                    },
+                    {
+                        label: 'Blog',
+                        href: 'https://medium.com/geometryfinance',
                         type: DropdownMenuItemType.EXTERNAL_LINK,
                     },
                 ],
@@ -291,8 +301,8 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
                 ],
             },
             {
-                label: t('Referrals'),
-                href: '/referrals',
+                label: t('Refer'),
+                href: '/refer',
                 icon: 'Referals',
                 showItemsOnMobile: false,
             },
@@ -329,6 +339,11 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
                     {
                         label: 'Docs',
                         href: 'https://geometry.gitbook.io/helix',
+                        type: DropdownMenuItemType.EXTERNAL_LINK,
+                    },
+                    {
+                        label: 'Blog',
+                        href: 'https://medium.com/geometryfinance',
                         type: DropdownMenuItemType.EXTERNAL_LINK,
                     },
                 ],
@@ -387,8 +402,8 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
                 ],
             },
             {
-                label: t('Referrals'),
-                href: '/referrals',
+                label: t('Refer'),
+                href: '/refer',
                 icon: 'Referals',
                 showItemsOnMobile: false,
             },
@@ -425,6 +440,11 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
                     {
                         label: 'Docs',
                         href: 'https://geometry.gitbook.io/helix',
+                        type: DropdownMenuItemType.EXTERNAL_LINK,
+                    },
+                    {
+                        label: 'Blog',
+                        href: 'https://medium.com/geometryfinance',
                         type: DropdownMenuItemType.EXTERNAL_LINK,
                     },
                 ],

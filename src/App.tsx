@@ -119,7 +119,7 @@ const App: React.FC = () => {
             <Route path="/geobot-yield-boosting">
               <NftYieldBoosting />
             </Route>
-            <Route path="/referrals">
+            <Route path="/refer">
               <Referrals />
             </Route>
             {/* <Route path="/lps-swap">

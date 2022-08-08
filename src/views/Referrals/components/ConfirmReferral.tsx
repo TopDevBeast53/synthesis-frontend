@@ -78,7 +78,7 @@ export default function ConfirmReferral(props: Props) {
     }
   }
   if (redirect) {
-    return <Redirect to="/referrals" />
+    return <Redirect to="/refer" />
   }
 
   return (
