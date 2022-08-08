@@ -2,10 +2,10 @@ import request, { gql } from 'graphql-request'
 import { SNAPSHOT_API } from 'config/constants/endpoints'
 import { Proposal, ProposalState, Vote, VoteWhere, VotingPower } from 'state/types'
 import { ChainId } from 'sdk'
-import { HELIX_SPACE } from 'views/Voting/config'
+import { VOTING_SNAPSHOT_SPACE } from 'config'
 
 export const getProposals = async (chainId: ChainId, first = 5, skip = 0, state = ProposalState.ACTIVE): Promise<Proposal[]> => {
-    const space = HELIX_SPACE[chainId]
+    const space = VOTING_SNAPSHOT_SPACE[chainId]
 
     const response: { proposals: Proposal[] } = await request(
         SNAPSHOT_API,
