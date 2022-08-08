@@ -1,5 +1,4 @@
-import { ChainId, Currency, ETHER, Token } from 'sdk'
-import { EtherIcon } from 'uikit'
+import { Currency, ETHER, Token } from 'sdk'
 import React, { useMemo } from 'react'
 import styled from 'styled-components'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
@@ -38,7 +37,6 @@ export default function CurrencyLogo({
 
   const srcs: string[] = useMemo(() => {
     if (currency === ETHER[chainId]) {
-      if ([ChainId.MAINNET, ChainId.TESTNET].includes(chainId)) return []
       return [getImageURLForDefaultToken(tokens)]
     }
 
@@ -50,10 +48,6 @@ export default function CurrencyLogo({
     }
     return []
   }, [chainId, currency, tokens, uriLocations])
-
-  if (currency === ETHER[chainId]) {
-    if ([ChainId.MAINNET, ChainId.TESTNET].includes(chainId)) return <EtherIcon width={size} style={style} />
-  }
 
   return <StyledLogo size={size} srcs={srcs} alt={`${currency?.symbol ?? 'token'} logo`} style={style} />
 }
