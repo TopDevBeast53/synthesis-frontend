@@ -189,7 +189,7 @@ export default {
         4: '0xE58b6cB4f216e79b959C37CD681d8483a0B97DA0',
         30: '0xd5bfd8f6a590a4ae8e9b86266e78e24b8244eef8',
         31: '0xf66c580Bf224044226a3c1f865B500C42703cF0e',
-        56: '0xb1D5F4659d3CF82043338E786259F6B9A4e7979A',   // deployed 8/05/2022
+        56: '0x3a391bF56927B69a3A14Aab10731C5d7d7A7b8c3',   // deployed 8/10/2022
         97: '0x570489f4278de24E7421b83C518ABc8B1AfA7D10',
     },
     helixAutoPool: {

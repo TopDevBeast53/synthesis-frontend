@@ -109,11 +109,11 @@ export const SUGGESTED_BASES: ChainTokenList = {
     ],
     [ChainId.BSC_MAINNET]: [
         bscMainnetTokens.weth,
-        bscMainnetTokens.usdt
+        bscMainnetTokens.busd
     ],
     [ChainId.BSC_TESTNET]: [
         bscTestnetTokens.weth,
-        bscTestnetTokens.usdt
+        bscTestnetTokens.busd
     ]
 }
 
@@ -140,11 +140,11 @@ export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
     ],
     [ChainId.BSC_MAINNET]: [
         bscMainnetTokens.weth,
-        bscMainnetTokens.usdt
+        bscMainnetTokens.busd
     ],
     [ChainId.BSC_TESTNET]: [
         bscTestnetTokens.weth,
-        bscTestnetTokens.usdt
+        bscTestnetTokens.busd
     ]
 }
 
@@ -211,12 +211,12 @@ export const DEFAULT_INPUT_CURRENCY = {
     [ChainId.BSC_TESTNET]: '0x08626CF6A212a44C877D9740f86252dBD6292364'
 }
 
-// USDC
+
 export const DEFAULT_OUTPUT_CURRENCY = {
-    [ChainId.MAINNET]: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
-    [ChainId.TESTNET]: '0x4DBCdF9B62e891a7cec5A2568C3F4FAF9E8Abe2b',
-    [ChainId.RSK_MAINNET]: '0xef213441a85df4d7acbdae0cf78004e1e486bb96',
-    [ChainId.RSK_TESTNET]: '0x760ae0f5319D9efEdc9B99d7E73fdaB2f84E4d87',
-    [ChainId.BSC_MAINNET]: '0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d',
-    [ChainId.BSC_TESTNET]: '0x64544969ed7EBf5f083679233325356EbE738930'
+    [ChainId.MAINNET]: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48', // USDC
+    [ChainId.TESTNET]: '0x4DBCdF9B62e891a7cec5A2568C3F4FAF9E8Abe2b', // USDC
+    [ChainId.RSK_MAINNET]: '0xef213441a85df4d7acbdae0cf78004e1e486bb96', // USDT
+    [ChainId.RSK_TESTNET]: '0x760ae0f5319D9efEdc9B99d7E73fdaB2f84E4d87', // USDT
+    [ChainId.BSC_MAINNET]: '0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56', // BUSD
+    [ChainId.BSC_TESTNET]: '0xeD24FC36d5Ee211Ea25A80239Fb8C4Cfd80f12Ee'  // BUSD
 }

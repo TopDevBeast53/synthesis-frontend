@@ -314,6 +314,55 @@ const getFarmsBSCMainNet = (): SerializedFarmConfig[] => {
             token: serializedTokens.helix,
             quoteToken: serializedTokens.weth,
         },
+        {
+            pid: 2,
+            lpSymbol: 'HELIX-BUSD',
+            lpAddress: '0xbA4BF3A8aa1F566B29F7d13C6fE410D9A6F0cC61',
+            token: serializedTokens.helix,
+            quoteToken: serializedTokens.busd,
+        },
+        {
+            pid: 3,
+            lpSymbol: 'WBNB-BUSD',
+            lpAddress: '0x4258bE0fD967DbFc6D19955828a27cB6D8Ba9344',
+            token: serializedTokens.weth,
+            quoteToken: serializedTokens.busd,
+        },
+        {
+            pid: 4,
+            lpSymbol: 'USDC-BUSD',
+            lpAddress: '0x53E5f05ee4fb500D0dc1f8c32b947952a1114be1',
+            token: serializedTokens.usdc,
+            quoteToken: serializedTokens.busd,
+        },
+        {
+            pid: 5,
+            lpSymbol: 'USDT-BUSD',
+            lpAddress: '0x47BF097Aa893c02C23c76774FbBDeb7AF693ce8a',
+            token: serializedTokens.usdt,
+            quoteToken: serializedTokens.busd,
+        },
+        {
+            pid: 6,
+            lpSymbol: 'USDC-USDT',
+            lpAddress: '0x795839bdE85dadEeb38f9B988E34afF1F20dA063',
+            token: serializedTokens.usdc,
+            quoteToken: serializedTokens.usdt,
+        },
+        {
+            pid: 7,
+            lpSymbol: 'USDC-WBNB',
+            lpAddress: '0x6D6480E533455aF9112C47E8feD2b8810e78b29D',
+            token: serializedTokens.usdc,
+            quoteToken: serializedTokens.weth,
+        },
+        {
+            pid: 8,
+            lpSymbol: 'CAKE-WBNB',
+            lpAddress: '0x45A83465940195AAD94fb0734D4AEc08A35C5bf0',
+            token: serializedTokens.cake,
+            quoteToken: serializedTokens.weth,
+        },
     ]
 }
 

@@ -331,29 +331,13 @@ export const bscTestnetTokens = defineTokens({
         'Wrapped RSK Bitcoin',
         'https://www.rsk.co/',
     ),
-    usdt: new Token(
+    busd: new Token(
         BSC_TESTNET,
-        '0xef213441a85df4d7acbdae0cf78004e1e486bb96',
+        '0xeD24FC36d5Ee211Ea25A80239Fb8C4Cfd80f12Ee',
         18,
-        'rUSDT',
-        'Wrapped RSK USDT',
-        'https://tether.to/',
-    ),
-    rif: new Token(
-        BSC_TESTNET,
-        '0x2acc95758f8b5f583470ba265eb685a8f45fc9d5',
-        18,
-        'RIF',
-        'RIF',
-        'https://www.makerdao.com/',
-    ),
-    sov: new Token(
-        BSC_TESTNET,
-        '0xefc78fc7d48b64958315949279ba181c2114abbd',
-        18,
-        'SOV',
-        'SOV',
-        'https://www.makerdao.com/',
+        'BUSD',
+        'Binance USD',
+        'https://www.paxos.com/busd/',
     ),
 } as const)
 
