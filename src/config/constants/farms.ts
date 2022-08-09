@@ -307,6 +307,13 @@ const getFarmsBSCMainNet = (): SerializedFarmConfig[] => {
             token: serializedTokens.helix,
             quoteToken: serializedTokens.weth,
         },
+        {
+            pid: 1,
+            lpSymbol: 'HELIX-WBNB',
+            lpAddress: '0xe3B4C21856153Ef65b8BfBaEb9ca18282c4535e7',
+            token: serializedTokens.helix,
+            quoteToken: serializedTokens.weth,
+        },
     ]
 }
 

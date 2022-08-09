@@ -297,7 +297,7 @@ export const bscMainnetTokens = defineTokens({
         'https://www.centre.io/usdc',
     ),
     busd: new Token(
-        MAINNET,
+        BSC_MAINNET,
         '0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56',
         18,
         'BUSD',
@@ -305,7 +305,7 @@ export const bscMainnetTokens = defineTokens({
         'https://www.paxos.com/busd/',
     ),
     cake: new Token(
-        MAINNET,
+        BSC_MAINNET,
         '0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82',
         18,
         'CAKE',
