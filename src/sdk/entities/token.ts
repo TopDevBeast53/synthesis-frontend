@@ -104,4 +104,20 @@ export const WETH = {
         'Wrapped RSK Bitcoin',
         'https://www.rsk.co/',
     ),
+    [ChainId.BSC_MAINNET]: new Token(
+        ChainId.BSC_MAINNET,
+        '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',
+        18,
+        'WBNB',
+        'Wrapped BNB',
+        'https://www.binance.com/',
+    ),
+    [ChainId.BSC_TESTNET]: new Token(
+        ChainId.BSC_TESTNET,
+        '0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd',
+        18,
+        'tWBNB',
+        'Test Wrapped BNB',
+        'https://www.binance.com/',
+    ),
 }

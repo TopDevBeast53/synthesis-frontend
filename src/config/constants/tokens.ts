@@ -2,7 +2,7 @@ import { ChainId, Token } from 'sdk'
 import { serializeToken } from 'state/user/hooks/helpers'
 import { SerializedToken } from './types'
 
-const { MAINNET, TESTNET, RSK_MAINNET, RSK_TESTNET } = ChainId
+const { MAINNET, TESTNET, RSK_MAINNET, RSK_TESTNET, BSC_MAINNET, BSC_TESTNET } = ChainId
 
 interface TokenList {
     [symbol: string]: Token
@@ -14,7 +14,7 @@ export const mainnetTokens = defineTokens({
     // Update Me: update svg file name equal to the token address
     helix: new Token(
         MAINNET,
-        '0x231CC03E6d8b7368eC2aBfAfb5f73D216c8af980', // update me 0x231CC03E6d8b7368eC2aBfAfb5f73D216c8af980
+        '0x231CC03E6d8b7368eC2aBfAfb5f73D216c8af980',
         18,
         'HELIX',
         'Helix',
@@ -263,18 +263,116 @@ export const rskMainnetTokens = defineTokens({
     ),
 } as const)
 
+export const bscMainnetTokens = defineTokens({
+    helix: new Token(
+        BSC_MAINNET,
+        '0xFd9B1448A8874b03e6E8476049dB259A82569a41',
+        18,
+        'HELIX',
+        'Helix',
+        'https://helix.finance/',
+    ),
+    weth: new Token(
+        BSC_MAINNET,
+        '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',
+        18,
+        'Wrapped BNB',
+        'WBNB',
+        'https://www.binance.com/',
+    ),
+    usdt: new Token(
+        BSC_MAINNET,
+        '0x55d398326f99059fF775485246999027B3197955',
+        18,
+        'USDT',
+        'Tether USD',
+        'https://tether.to/',
+    ),
+    usdc: new Token(
+        BSC_MAINNET,
+        '0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d',
+        18,
+        'USDC',
+        'Binance-Peg USD Coin',
+        'https://www.centre.io/usdc',
+    ),
+    busd: new Token(
+        MAINNET,
+        '0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56',
+        18,
+        'BUSD',
+        'Binance USD',
+        'https://www.paxos.com/busd/',
+    ),
+    cake: new Token(
+        MAINNET,
+        '0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82',
+        18,
+        'CAKE',
+        'PancakeSwap Token',
+        'https://pancakeswap.finance/',
+    ),
+} as const)
+
+export const bscTestnetTokens = defineTokens({
+    helix: new Token(
+        BSC_TESTNET,
+        '0x3d2441fa9aab621e72121fb1c620fdae59eae812',
+        18,
+        'HELIX',
+        'Helix',
+        'https://helix.finance/',
+    ),
+    weth: new Token(
+        BSC_TESTNET,
+        '0x967f8799af07df1534d48a95a5c9febe92c53ae0',
+        18,
+        'WRBTC',
+        'Wrapped RSK Bitcoin',
+        'https://www.rsk.co/',
+    ),
+    usdt: new Token(
+        BSC_TESTNET,
+        '0xef213441a85df4d7acbdae0cf78004e1e486bb96',
+        18,
+        'rUSDT',
+        'Wrapped RSK USDT',
+        'https://tether.to/',
+    ),
+    rif: new Token(
+        BSC_TESTNET,
+        '0x2acc95758f8b5f583470ba265eb685a8f45fc9d5',
+        18,
+        'RIF',
+        'RIF',
+        'https://www.makerdao.com/',
+    ),
+    sov: new Token(
+        BSC_TESTNET,
+        '0xefc78fc7d48b64958315949279ba181c2114abbd',
+        18,
+        'SOV',
+        'SOV',
+        'https://www.makerdao.com/',
+    ),
+} as const)
+
 
 const tokens = {
     [MAINNET]: mainnetTokens,
     [TESTNET]: testnetTokens,
     [RSK_MAINNET]: rskMainnetTokens,
     [RSK_TESTNET]: rskTestnetTokens,
+    [BSC_MAINNET]: bscMainnetTokens,
+    [BSC_TESTNET]: bscTestnetTokens,
 }
 
 type SerializedTokenList = typeof mainnetTokens &
     typeof testnetTokens &
     typeof rskTestnetTokens &
-    typeof rskMainnetTokens
+    typeof rskMainnetTokens &
+    typeof bscMainnetTokens &
+    typeof bscTestnetTokens
 
 const getTokens = (chainId: ChainId): SerializedTokenList => {
     return tokens[chainId] as SerializedTokenList
@@ -284,6 +382,8 @@ type SerializedTokenListMainNet = Record<keyof typeof mainnetTokens, SerializedT
 type SerializedTokenListTestNet = Record<keyof typeof testnetTokens, SerializedToken>
 type SerializedTokenListRSKTestNet = Record<keyof typeof rskTestnetTokens, SerializedToken>
 type SerializedTokenListRSKMainNet = Record<keyof typeof rskTestnetTokens, SerializedToken>
+type SerializedTokenListBSCMainNet = Record<keyof typeof bscMainnetTokens, SerializedToken>
+type SerializedTokenListBSCTestNet = Record<keyof typeof bscTestnetTokens, SerializedToken>
 export const serializeTokens = (chainId: ChainId) => {
     switch (chainId) {
         case MAINNET:
@@ -293,8 +393,13 @@ export const serializeTokens = (chainId: ChainId) => {
         case RSK_MAINNET:
             return serializeTokensRSKMainNet()
         case RSK_TESTNET:
-        default:
             return serializeTokensRSKTestNet()
+        case BSC_MAINNET:
+            return serializeTokensBSCMainNet()
+        case BSC_TESTNET:
+            return serializeTokensBSCTestNet()
+        default:
+            return serializeTokensMainNet()
     }
 }
 
@@ -330,6 +435,24 @@ export const serializeTokensRSKMainNet = () => {
     const serializedTokens = Object.keys(unserializedTokens).reduce((accum, key) => {
         return { ...accum, [key]: serializeToken(unserializedTokens[key]) }
     }, {} as SerializedTokenListRSKMainNet)
+
+    return serializedTokens
+}
+
+export const serializeTokensBSCMainNet = () => {
+    const unserializedTokens = getTokens(BSC_MAINNET)
+    const serializedTokens = Object.keys(unserializedTokens).reduce((accum, key) => {
+        return { ...accum, [key]: serializeToken(unserializedTokens[key]) }
+    }, {} as SerializedTokenListBSCMainNet)
+
+    return serializedTokens
+}
+
+export const serializeTokensBSCTestNet = () => {
+    const unserializedTokens = getTokens(BSC_TESTNET)
+    const serializedTokens = Object.keys(unserializedTokens).reduce((accum, key) => {
+        return { ...accum, [key]: serializeToken(unserializedTokens[key]) }
+    }, {} as SerializedTokenListBSCTestNet)
 
     return serializedTokens
 }

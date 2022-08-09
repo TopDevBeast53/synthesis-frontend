@@ -191,6 +191,10 @@ const getFarmsPrices = (chainId: ChainId, farms: SerializedFarm[]) => {
         case ChainId.RSK_TESTNET:
             helixUSDCFarm = farms.find((farm) => farm.pid === 2)
             break;
+        case ChainId.BSC_MAINNET:
+        case ChainId.BSC_TESTNET:
+            helixUSDCFarm = farms.find((farm) => farm.pid === 2)
+            break;
         default:
             helixUSDCFarm = null
     }

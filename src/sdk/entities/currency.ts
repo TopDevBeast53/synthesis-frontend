@@ -23,6 +23,8 @@ export class Currency {
         [ChainId.TESTNET]: new Currency(18, 'ETH', 'ETH'),
         [ChainId.RSK_MAINNET]: new Currency(18, 'RBTC', 'RBTC'),
         [ChainId.RSK_TESTNET]: new Currency(18, 'RBTC', 'RBTC'),
+        [ChainId.BSC_MAINNET]: new Currency(18, 'BNB', 'BNB'),
+        [ChainId.BSC_TESTNET]: new Currency(18, 'BNB', 'BNB'),
     }
 
     /**

@@ -6,6 +6,8 @@ export const CHAIN_IDS_TO_NAMES = {
     [ChainId.TESTNET]: 'rinkeby',
     [ChainId.RSK_MAINNET]: 'bitcoin_rsk',
     [ChainId.RSK_TESTNET]: 'rsk_testnet',
+    [ChainId.BSC_MAINNET]: 'bsc_mainnet',
+    [ChainId.BSC_TESTNET]: 'bsc_testnet'
 }
 
 export const SUPPORTED_NETWORKS: { [key: number]: CHAIN_CONFIG } = {
@@ -79,4 +81,38 @@ export const SUPPORTED_NETWORKS: { [key: number]: CHAIN_CONFIG } = {
         showOnlyTrade: true,
         isTestChain: true
     },
+    [ChainId.BSC_MAINNET]: {
+        chainId: 56,
+        chainName: CHAIN_IDS_TO_NAMES[ChainId.BSC_MAINNET],
+        chainNameForMetamask: "BSC Mainnet",
+        nativeCurrency: {
+            name: 'BNB',
+            symbol: 'BNB',
+            decimals: 18,
+        },
+        rpcUrls: ['https://multi-polished-frog.bsc.quiknode.pro/a88df2a809c021090a74b62200b5cd2ba73a7bcb/'],
+        rpcUrlsForMetamask: ['https://bsc-dataseed1.ninicoin.io'],
+        blockExplorerUrls: ['https://bscscan.com'],
+        logoUrl: '/images/networks/bnb-network.png',
+        label: 'BSC Mainnet',
+        showOnlyTrade: true,
+        isTestChain: false
+    },
+    [ChainId.BSC_TESTNET]: {
+        chainId: 97,
+        chainName: CHAIN_IDS_TO_NAMES[ChainId.BSC_TESTNET],
+        chainNameForMetamask: "BSC Testnet",
+        nativeCurrency: {
+            name: 'Test BNB',
+            symbol: 'tBNB',
+            decimals: 18,
+        },
+        rpcUrls: ['https://sleek-red-patina.bsc-testnet.quiknode.pro/4bb5df7d53d77afb1de5c12aba9ab66a2b993520/'],
+        rpcUrlsForMetamask: ['https://data-seed-prebsc-1-s1.binance.org:8545/'],
+        blockExplorerUrls: ['https://testnet.bscscan.com'],
+        logoUrl: '/images/networks/bnb-network.jpg',
+        label: 'BSC Testnet',
+        showOnlyTrade: true,
+        isTestChain: true
+    }
 }

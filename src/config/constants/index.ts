@@ -1,5 +1,12 @@
 import { ChainId, JSBI, Percent, Token } from 'sdk'
-import { mainnetTokens, rskMainnetTokens, rskTestnetTokens, testnetTokens } from './tokens'
+import {
+    mainnetTokens,
+    rskMainnetTokens,
+    rskTestnetTokens,
+    testnetTokens,
+    bscMainnetTokens,
+    bscTestnetTokens
+} from './tokens'
 
 // a list of router addresses by chain
 type RouterAddressesList = {
@@ -11,6 +18,8 @@ export const ROUTER_ADDRESS: RouterAddressesList = {
     [ChainId.TESTNET]: '0x484621036C7D18EDE8A267C44e3FBfDfb81135af',
     [ChainId.RSK_MAINNET]: '0x3a9D41c8f905D1744180DA36B7EB8350A67cE8e4', // update me
     [ChainId.RSK_TESTNET]: '0x2E389edDB44933c46608bd0B0f4E9BeD191dCC90',
+    [ChainId.BSC_MAINNET]: '0x8404d326C4BF82075C50567123683BF798C3725f',
+    [ChainId.BSC_TESTNET]: '0xc161e5396f4CC1b37BB85aF1FeEFD4Ab186206E7',
 }
 
 // a list of tokens by chain
@@ -41,6 +50,14 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
         rskTestnetTokens.weth,
         rskTestnetTokens.usdt
     ],
+    [ChainId.BSC_MAINNET]: [
+        bscMainnetTokens.helix,
+        bscMainnetTokens.weth
+    ],
+    [ChainId.BSC_TESTNET]: [
+        bscTestnetTokens.helix,
+        bscTestnetTokens.weth
+    ]
 }
 
 /**
@@ -52,6 +69,8 @@ export const ADDITIONAL_BASES: { [chainId in ChainId]?: { [tokenAddress: string]
     [ChainId.TESTNET]: {},
     [ChainId.RSK_MAINNET]: {},
     [ChainId.RSK_TESTNET]: {},
+    [ChainId.BSC_MAINNET]: {},
+    [ChainId.BSC_TESTNET]: {}
 }
 
 /**
@@ -64,6 +83,8 @@ export const CUSTOM_BASES: { [chainId in ChainId]?: { [tokenAddress: string]: To
     [ChainId.TESTNET]: {},
     [ChainId.RSK_MAINNET]: {},
     [ChainId.RSK_TESTNET]: {},
+    [ChainId.BSC_MAINNET]: {},
+    [ChainId.BSC_TESTNET]: {}
 }
 
 // used for display in the default list when adding liquidity
@@ -86,6 +107,14 @@ export const SUGGESTED_BASES: ChainTokenList = {
         rskTestnetTokens.weth,
         rskTestnetTokens.usdt
     ],
+    [ChainId.BSC_MAINNET]: [
+        bscMainnetTokens.weth,
+        bscMainnetTokens.usdt
+    ],
+    [ChainId.BSC_TESTNET]: [
+        bscTestnetTokens.weth,
+        bscTestnetTokens.usdt
+    ]
 }
 
 // used to construct the list of all pairs we consider by default in the frontend
@@ -109,6 +138,14 @@ export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
         rskTestnetTokens.weth,
         rskTestnetTokens.usdt
     ],
+    [ChainId.BSC_MAINNET]: [
+        bscMainnetTokens.weth,
+        bscMainnetTokens.usdt
+    ],
+    [ChainId.BSC_TESTNET]: [
+        bscTestnetTokens.weth,
+        bscTestnetTokens.usdt
+    ]
 }
 
 export const PINNED_PAIRS: { readonly [chainId in ChainId]?: [Token, Token][] } = {
@@ -116,6 +153,8 @@ export const PINNED_PAIRS: { readonly [chainId in ChainId]?: [Token, Token][] } 
     [ChainId.TESTNET]: [],
     [ChainId.RSK_MAINNET]: [],
     [ChainId.RSK_TESTNET]: [],
+    [ChainId.BSC_MAINNET]: [],
+    [ChainId.BSC_TESTNET]: []
 }
 
 export const NetworkContextName = 'NETWORK'
@@ -168,6 +207,8 @@ export const DEFAULT_INPUT_CURRENCY = {
     [ChainId.TESTNET]: '0x79DD2dad8D04F9279F94580DBEd2306A0aE118Bd',
     [ChainId.RSK_MAINNET]: '0x3d2441fa9aab621e72121fb1c620fdae59eae812',
     [ChainId.RSK_TESTNET]: '0x08626CF6A212a44C877D9740f86252dBD6292364',
+    [ChainId.BSC_MAINNET]: '0xFd9B1448A8874b03e6E8476049dB259A82569a41',
+    [ChainId.BSC_TESTNET]: '0x08626CF6A212a44C877D9740f86252dBD6292364'
 }
 
 // USDC
@@ -176,4 +217,6 @@ export const DEFAULT_OUTPUT_CURRENCY = {
     [ChainId.TESTNET]: '0x4DBCdF9B62e891a7cec5A2568C3F4FAF9E8Abe2b',
     [ChainId.RSK_MAINNET]: '0xef213441a85df4d7acbdae0cf78004e1e486bb96',
     [ChainId.RSK_TESTNET]: '0x760ae0f5319D9efEdc9B99d7E73fdaB2f84E4d87',
+    [ChainId.BSC_MAINNET]: '0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d',
+    [ChainId.BSC_TESTNET]: '0x64544969ed7EBf5f083679233325356EbE738930'
 }

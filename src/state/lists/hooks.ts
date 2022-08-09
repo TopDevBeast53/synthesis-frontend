@@ -9,6 +9,8 @@ import DEFAULT_TOKEN_LIST_MAINNET from '../../config/constants/tokenLists/pancak
 import DEFAULT_TOKEN_LIST_TESTNET from '../../config/constants/tokenLists/pancake-default.tokenlist-testnet.json'
 import DEFAULT_TOKEN_LIST_RSK_MAINNET from '../../config/constants/tokenLists/pancake-default.tokenlist-rsk-mainnet.json'
 import DEFAULT_TOKEN_LIST_RSK_TESTNET from '../../config/constants/tokenLists/pancake-default.tokenlist-rsk-testnet.json'
+import DEFAULT_TOKEN_LIST_BSC_MAINNET from '../../config/constants/tokenLists/pancake-default.tokenlist-bsc-mainnet.json'
+import DEFAULT_TOKEN_LIST_BSC_TESTNET from '../../config/constants/tokenLists/pancake-default.tokenlist-bsc-testnet.json'
 import { UNSUPPORTED_LIST_URLS } from '../../config/constants/lists'
 import UNSUPPORTED_TOKEN_LIST from '../../config/constants/tokenLists/pancake-unsupported.tokenlist.json'
 
@@ -59,6 +61,8 @@ const EMPTY_LIST: TokenAddressMap = {
     [ChainId.TESTNET]: {},
     [ChainId.RSK_MAINNET]: {},
     [ChainId.RSK_TESTNET]: {},
+    [ChainId.BSC_MAINNET]: {},
+    [ChainId.BSC_TESTNET]: {},
 }
 
 const listCache: WeakMap<TokenList, TokenAddressMap> | null =
@@ -113,6 +117,8 @@ function combineMaps(map1: TokenAddressMap, map2: TokenAddressMap): TokenAddress
         [ChainId.TESTNET]: { ...map1[ChainId.TESTNET], ...map2[ChainId.TESTNET] },
         [ChainId.RSK_MAINNET]: { ...map1[ChainId.RSK_MAINNET], ...map2[ChainId.RSK_MAINNET] },
         [ChainId.RSK_TESTNET]: { ...map1[ChainId.RSK_TESTNET], ...map2[ChainId.RSK_TESTNET] },
+        [ChainId.BSC_MAINNET]: { ...map1[ChainId.BSC_MAINNET], ...map2[ChainId.BSC_MAINNET] },
+        [ChainId.BSC_TESTNET]: { ...map1[ChainId.BSC_TESTNET], ...map2[ChainId.BSC_TESTNET] },
     }
 }
 
@@ -162,6 +168,8 @@ const tokenMap = {
     [ChainId.TESTNET]: DEFAULT_TOKEN_LIST_TESTNET,
     [ChainId.RSK_MAINNET]: DEFAULT_TOKEN_LIST_RSK_MAINNET,
     [ChainId.RSK_TESTNET]: DEFAULT_TOKEN_LIST_RSK_TESTNET,
+    [ChainId.BSC_MAINNET]: DEFAULT_TOKEN_LIST_BSC_MAINNET,
+    [ChainId.BSC_TESTNET]: DEFAULT_TOKEN_LIST_BSC_TESTNET,
 
 }
 export function useCombinedActiveList(): TokenAddressMap {

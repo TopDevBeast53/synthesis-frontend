@@ -1,5 +1,12 @@
 import { ChainId } from 'sdk'
-import { serializeTokensMainNet, serializeTokensRSKMainNet, serializeTokensRSKTestNet, serializeTokensTestNet } from './tokens'
+import {
+    serializeTokensMainNet,
+    serializeTokensRSKMainNet,
+    serializeTokensRSKTestNet,
+    serializeTokensTestNet,
+    serializeTokensBSCMainNet,
+    serializeTokensBSCTestNet,
+} from './tokens'
 import { SerializedFarmConfig } from './types'
 
 const getFarms = (chainId: ChainId): SerializedFarmConfig[] => {
@@ -11,9 +18,13 @@ const getFarms = (chainId: ChainId): SerializedFarmConfig[] => {
         case ChainId.RSK_MAINNET:
             return getFarmsRSKMainNet()
         case ChainId.RSK_TESTNET:
-        default:
             return getFarmsRSKTestNet()
-
+        case ChainId.BSC_MAINNET:
+            return getFarmsBSCMainNet()
+        case ChainId.BSC_TESTNET:
+            return getFarmsBSCTestNet()
+        default:
+            return []
     }
 }
 
@@ -281,6 +292,32 @@ const getFarmsRSKMainNet = (): SerializedFarmConfig[] => {
             lpSymbol: 'SOV-WRBTC',
             lpAddress: '0x57c3d1e11d79bb117997be1ab861f6d6768e7b63',
             token: serializedTokens.sov,
+            quoteToken: serializedTokens.weth,
+        },
+    ]
+}
+
+const getFarmsBSCMainNet = (): SerializedFarmConfig[] => {
+    const serializedTokens = serializeTokensBSCMainNet()
+    return [
+        {
+            pid: 0,
+            lpSymbol: 'HELIX',
+            lpAddress: serializedTokens.helix.address,
+            token: serializedTokens.helix,
+            quoteToken: serializedTokens.weth,
+        },
+    ]
+}
+
+const getFarmsBSCTestNet = (): SerializedFarmConfig[] => {
+    const serializedTokens = serializeTokensBSCTestNet()
+    return [
+        {
+            pid: 0,
+            lpSymbol: 'HELIX',
+            lpAddress: serializedTokens.helix.address,
+            token: serializedTokens.helix,
             quoteToken: serializedTokens.weth,
         },
     ]

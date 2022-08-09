@@ -150,6 +150,8 @@ const NETWORK_SELECTOR_CHAINS = [
   // ChainId.TESTNET,
   ChainId.RSK_MAINNET,
   // ChainId.RSK_TESTNET,
+  ChainId.BSC_MAINNET,
+  // ChainId.BSC_TESTNET,
 ]
 
 const getParsedChainId = (parsedQs?: ParsedQs) => {

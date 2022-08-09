@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { request, gql } from 'graphql-request'
 import { GRAPH_HEALTH } from 'config/constants/endpoints'
 import useProviders from 'hooks/useProviders'
-import { VOTING_SUBGRAPH_PATH } from 'config'
+import { DATA_SUBGRAPH_PATH } from 'config'
 import { useSlowFresh } from './useRefresh'
 import useActiveWeb3React from './useActiveWeb3React'
 
@@ -58,7 +58,7 @@ const useSubgraphHealth = () => {
                             }
                         }
                     `,
-                    { subgraph: VOTING_SUBGRAPH_PATH[chainId] }
+                    { subgraph: DATA_SUBGRAPH_PATH[chainId] }
                 )
 
                 const currentBlock = await rpcProvider.getBlockNumber()

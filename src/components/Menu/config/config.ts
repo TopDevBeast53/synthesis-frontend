@@ -9,6 +9,8 @@ export type ConfigMenuItemsType = {
     [ChainId.TESTNET]: ConfigMenuItemType[]
     [ChainId.RSK_MAINNET]: ConfigMenuItemType[]
     [ChainId.RSK_TESTNET]: ConfigMenuItemType[]
+    [ChainId.BSC_MAINNET]: ConfigMenuItemType[]
+    [ChainId.BSC_TESTNET]: ConfigMenuItemType[]
 }
 
 const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
@@ -350,6 +352,208 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
             },
         ],
         [ChainId.RSK_TESTNET]: [
+
+            {
+                label: t('Trade'),
+                icon: 'Swap',
+                href: '/swap',
+                items: [
+                    {
+                        label: t('Exchange'),
+                        href: '/swap',
+                    },
+                    {
+                        type: DropdownMenuItemType.DIVIDER,
+                    },
+                    {
+                        label: t('Liquidity'),
+                        href: '/liquidity',
+                    },
+                    {
+                        type: DropdownMenuItemType.DIVIDER,
+                    },
+                    {
+                        label: 'Migrate',
+                        href: '/migration',
+                    },
+                ],
+            },
+            {
+                label: t('Earn'),
+                href: '/farms',
+                icon: 'Earn1',
+                items: [
+                    {
+                        label: t('Farms'),
+                        href: '/farms',
+                    },
+                    {
+                        type: DropdownMenuItemType.DIVIDER,
+                    },
+                    {
+                        label: t('Pools'),
+                        href: '/pools',
+                    },
+                    {
+                        type: DropdownMenuItemType.DIVIDER,
+                    },
+                    {
+                        label: t('Vaults'),
+                        href: '/vaults',
+                    },
+                ],
+            },
+            {
+                label: t('Refer'),
+                href: '/refer',
+                icon: 'Referals',
+                showItemsOnMobile: false,
+            },
+            {
+                label: t('Voting'),
+                href: '/voting',
+                icon: 'Vote1',
+                showItemsOnMobile: false,
+            },
+            {
+                label: t('Bridge'),
+                icon: 'Bridge',
+                href: 'https://app.multichain.org/#/router',
+                type: DropdownMenuItemType.EXTERNAL_LINK,
+                items: [
+                    {
+                        label: t('HELIX'),
+                        href: 'https://app.multichain.org/#/router',
+                        type: DropdownMenuItemType.EXTERNAL_LINK,
+                    },
+                    {
+                        label: t('Geobots'),
+                        href: 'https://nexus.helix.finance/',
+                        type: DropdownMenuItemType.EXTERNAL_LINK,
+                    }
+                ],
+            },
+            {
+                label: '',
+                href: '#',
+                icon: 'More',
+                hideSubNav: true,
+                items: [
+                    {
+                        label: 'Docs',
+                        href: 'https://geometry.gitbook.io/helix',
+                        type: DropdownMenuItemType.EXTERNAL_LINK,
+                    },
+                    {
+                        label: 'Blog',
+                        href: 'https://medium.com/helixgeometry',
+                        type: DropdownMenuItemType.EXTERNAL_LINK,
+                    },
+                ],
+            },
+        ],
+        [ChainId.BSC_MAINNET]: [
+
+            {
+                label: t('Trade'),
+                icon: 'Swap',
+                href: '/swap',
+                items: [
+                    {
+                        label: t('Exchange'),
+                        href: '/swap',
+                    },
+                    {
+                        type: DropdownMenuItemType.DIVIDER,
+                    },
+                    {
+                        label: t('Liquidity'),
+                        href: '/liquidity',
+                    },
+                    {
+                        type: DropdownMenuItemType.DIVIDER,
+                    },
+                    {
+                        label: 'Migrate',
+                        href: '/migration',
+                    },
+                ],
+            },
+            {
+                label: t('Earn'),
+                href: '/farms',
+                icon: 'Earn1',
+                items: [
+                    {
+                        label: t('Farms'),
+                        href: '/farms',
+                    },
+                    {
+                        type: DropdownMenuItemType.DIVIDER,
+                    },
+                    {
+                        label: t('Pools'),
+                        href: '/pools',
+                    },
+                    {
+                        type: DropdownMenuItemType.DIVIDER,
+                    },
+                    {
+                        label: t('Vaults'),
+                        href: '/vaults',
+                    },
+                ],
+            },
+            {
+                label: t('Refer'),
+                href: '/refer',
+                icon: 'Referals',
+                showItemsOnMobile: false,
+            },
+            {
+                label: t('Voting'),
+                href: '/voting',
+                icon: 'Vote1',
+                showItemsOnMobile: false,
+            },
+            {
+                label: t('Bridge'),
+                icon: 'Bridge',
+                href: 'https://app.multichain.org/#/router',
+                type: DropdownMenuItemType.EXTERNAL_LINK,
+                items: [
+                    {
+                        label: t('HELIX'),
+                        href: 'https://app.multichain.org/#/router',
+                        type: DropdownMenuItemType.EXTERNAL_LINK,
+                    },
+                    {
+                        label: t('Geobots'),
+                        href: 'https://nexus.helix.finance/',
+                        type: DropdownMenuItemType.EXTERNAL_LINK,
+                    }
+                ],
+            },
+            {
+                label: '',
+                href: '#',
+                icon: 'More',
+                hideSubNav: true,
+                items: [
+                    {
+                        label: 'Docs',
+                        href: 'https://geometry.gitbook.io/helix',
+                        type: DropdownMenuItemType.EXTERNAL_LINK,
+                    },
+                    {
+                        label: 'Blog',
+                        href: 'https://medium.com/helixgeometry',
+                        type: DropdownMenuItemType.EXTERNAL_LINK,
+                    },
+                ],
+            },
+        ],
+        [ChainId.BSC_TESTNET]: [
 
             {
                 label: t('Trade'),
