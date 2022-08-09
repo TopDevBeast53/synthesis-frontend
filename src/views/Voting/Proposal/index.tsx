@@ -65,6 +65,8 @@ const Proposal = () => {
     }
   }, [proposalId, snapshotId, dispatch])
 
+  // In case of MAINNET, because of adding new HELIX-TOKEN pairs, we had to update strategy in snapshot.org.
+  // But previous proposal should be handled with ex-strategy. So added condition by checking block number.
   const helixLPs = farmsLP
     .filter((lp) => (chainId === ChainId.MAINNET && snapshotId < STRATEGY2_SNAPSHOT) ? lp.pid === 1 : lp.pid !== 0)
     .filter((lp) => lp.lpSymbol.includes('HELIX'))
