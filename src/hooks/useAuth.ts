@@ -21,7 +21,7 @@ import useActiveWeb3React from './useActiveWeb3React'
 const useAuth = () => {
     const { t } = useTranslation()
     const dispatch = useAppDispatch()
-    const { chainId, activate, deactivate } = useActiveWeb3React()
+    const { chainId, activate, deactivate, account } = useActiveWeb3React()
     const { toastError } = useToast()
     const connectorsByName = useWalletConnect()
     const clearUserStates = useClearUserStates()
@@ -32,9 +32,11 @@ const useAuth = () => {
             if (connector) {
                 activate(connector, async (error: Error) => {
                     if (error instanceof UnsupportedChainIdError) {
-                        const hasSetup = await setupNetwork(chainId)
-                        if (hasSetup) {
-                            activate(connector)
+                        if (!account) {
+                            const hasSetup = await setupNetwork(chainId)
+                            if (hasSetup) {
+                                activate(connector)
+                            }
                         }
                     } else {
                         window.localStorage.removeItem(connectorLocalStorageKey)
@@ -58,7 +60,7 @@ const useAuth = () => {
                 toastError(t('Unable to find connector'), t('The connector config is wrong'))
             }
         },
-        [connectorsByName, activate, chainId, toastError, t],
+        [connectorsByName, activate, account, chainId, toastError, t],
     )
 
     const logout = useCallback(() => {
