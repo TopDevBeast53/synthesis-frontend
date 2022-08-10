@@ -6,7 +6,7 @@ export const CHAIN_IDS_TO_NAMES = {
     [ChainId.TESTNET]: 'rinkeby',
     [ChainId.RSK_MAINNET]: 'bitcoin_rsk',
     [ChainId.RSK_TESTNET]: 'rsk_testnet',
-    [ChainId.BSC_MAINNET]: 'bsc_mainnet',
+    [ChainId.BSC_MAINNET]: 'bsc',
     [ChainId.BSC_TESTNET]: 'bsc_testnet'
 }
 
@@ -84,7 +84,7 @@ export const SUPPORTED_NETWORKS: { [key: number]: CHAIN_CONFIG } = {
     [ChainId.BSC_MAINNET]: {
         chainId: 56,
         chainName: CHAIN_IDS_TO_NAMES[ChainId.BSC_MAINNET],
-        chainNameForMetamask: "BSC Mainnet",
+        chainNameForMetamask: "BSC",
         nativeCurrency: {
             name: 'BNB',
             symbol: 'BNB',
@@ -94,7 +94,7 @@ export const SUPPORTED_NETWORKS: { [key: number]: CHAIN_CONFIG } = {
         rpcUrlsForMetamask: ['https://bsc-dataseed.binance.org/'],
         blockExplorerUrls: ['https://bscscan.com'],
         logoUrl: '/images/networks/bnb-network.png',
-        label: 'BSC Mainnet',
+        label: 'BSC',
         showOnlyTrade: true,
         isTestChain: false
     },

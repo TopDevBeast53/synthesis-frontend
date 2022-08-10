@@ -5,7 +5,7 @@ import {
   TokenImage as UIKitTokenImage,
   ImageProps,
 } from 'uikit'
-import { Token } from 'sdk'
+import { Token, ETHER } from 'sdk'
 import { useGetTokens } from 'hooks/useGetTokens'
 
 interface TokenPairImageProps extends Omit<UIKitTokenPairImageProps, 'primarySrc' | 'secondarySrc'> {
@@ -14,7 +14,7 @@ interface TokenPairImageProps extends Omit<UIKitTokenPairImageProps, 'primarySrc
 }
 
 const getImageUrlFromToken = (tokens: any, token: Token) => {
-  const address = token.symbol === 'ETH' ? tokens.weth.address : token.address
+  const address = ETHER[token.chainId].symbol === token.symbol ? tokens.weth.address : token.address
   return `/images/tokens/${address}.svg`
 }
 

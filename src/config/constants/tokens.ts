@@ -276,8 +276,8 @@ export const bscMainnetTokens = defineTokens({
         BSC_MAINNET,
         '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',
         18,
-        'Wrapped BNB',
         'WBNB',
+        'Wrapped BNB',
         'https://www.binance.com/',
     ),
     usdt: new Token(
