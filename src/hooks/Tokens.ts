@@ -197,8 +197,8 @@ export function useToken(tokenAddress?: string): Token | undefined | null {
 }
 
 export function useCurrency(currencyId: string | undefined): Currency | null | undefined {
-    const isBNB = ['ETH', 'RBTC'].includes(currencyId?.toUpperCase())
     const { chainId } = useActiveWeb3React()
+    const isBNB = ETHER[chainId].symbol.toUpperCase() === currencyId?.toUpperCase()
     const token = useToken(isBNB ? undefined : currencyId)
     return isBNB ? ETHER[chainId] : token
 }

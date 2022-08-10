@@ -8,13 +8,13 @@ import { WrappedTokenInfo } from '../../state/lists/hooks'
 import getTokenLogoURL from '../../utils/getTokenLogoURL'
 import Logo from './Logo'
 
-const StyledLogo = styled(Logo)<{ size: string }>`
+const StyledLogo = styled(Logo) <{ size: string }>`
   width: ${({ size }) => size};
   height: ${({ size }) => size};
 `
 
 const getImageUrlFromToken = (tokens: any, token: Token) => {
-  const address = ['ETH', 'RBTC'].includes(token.symbol) ? tokens.weth.address : token.address
+  const address = ETHER[token.chainId].symbol === token.symbol ? tokens.weth.address : token.address
   return `/images/tokens/${address}.svg`
 }
 
