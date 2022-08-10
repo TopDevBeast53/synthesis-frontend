@@ -35,7 +35,7 @@
       "logoURI": "local://images/tokens/0x5592EC0cfb4dbc12D3aB100b257153436a1f0FEa.png"
     },
     {
-      "name": "USDC",
+      "name": "USD Coin",
       "symbol": "USDC",
       "address": "0x4DBCdF9B62e891a7cec5A2568C3F4FAF9E8Abe2b",
       "chainId": 4,

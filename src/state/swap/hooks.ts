@@ -57,7 +57,7 @@ export function useSwapActionHandlers(): {
             dispatch(
                 selectCurrency({
                     field,
-                    currencyId: currency instanceof Token ? currency.address : currency === ETHER[chainId] ? 'ETH' : '',
+                    currencyId: currency instanceof Token ? currency.address : currency === ETHER[chainId] ? ETHER[chainId].symbol : '',
                 }),
             )
         },

@@ -49,7 +49,7 @@ export const mainnetTokens = defineTokens({
         '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
         6,
         'USDC',
-        'USDC',
+        'USD Coin',
         'https://www.centre.io/usdc',
     ),
     wbtc: new Token(
@@ -156,7 +156,7 @@ export const testnetTokens = defineTokens({
         '0x4DBCdF9B62e891a7cec5A2568C3F4FAF9E8Abe2b',
         6,
         'USDC',
-        'USDC',
+        'USD Coin',
         'https://www.centre.io/usdc',
     ),
     usdt: new Token(
