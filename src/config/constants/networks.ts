@@ -91,7 +91,7 @@ export const SUPPORTED_NETWORKS: { [key: number]: CHAIN_CONFIG } = {
             decimals: 18,
         },
         rpcUrls: ['https://multi-polished-frog.bsc.quiknode.pro/a88df2a809c021090a74b62200b5cd2ba73a7bcb/'],
-        rpcUrlsForMetamask: ['https://bsc-dataseed1.ninicoin.io'],
+        rpcUrlsForMetamask: ['https://bsc-dataseed.binance.org/'],
         blockExplorerUrls: ['https://bscscan.com'],
         logoUrl: '/images/networks/bnb-network.png',
         label: 'BSC Mainnet',
