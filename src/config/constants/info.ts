@@ -8,11 +8,23 @@ export const TOTAL_FEE = 0.001
 export const LP_HOLDERS_FEE = 0.001
 export const TREASURY_FEE = 0
 export const BUYBACK_FEE = 0
-
+/**
+ * Timestamp of factory contract creation 
+ */
 export const HELIX_START = {
     [ChainId.MAINNET]: 1656971517, // Jul-04-2022 09:51:57 PM +UTC
     [ChainId.TESTNET]: 1656628275, // Jun-30-2022 10:31:15 PM +UTC
+    [ChainId.BSC_MAINNET]: 1659716993, // Aug-05-2022 04:29:53 PM +UTC
 }
+/**
+ * Subgraph health indicator
+ */
+export const DATA_SUBGRAPH_PATH = {
+    [ChainId.MAINNET]: "qiangkaiwen/helix",
+    [ChainId.TESTNET]: "qiangkaiwen/helix-rinkeby",
+    [ChainId.BSC_MAINNET]: "qiangkaiwen/helix-bsc"
+}
+
 export const ONE_DAY_UNIX = 86400 // 24h * 60m * 60s
 export const ONE_HOUR_SECONDS = 3600
 

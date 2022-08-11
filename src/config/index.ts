@@ -71,11 +71,6 @@ export const PANCAKE_BUNNIES_UPDATE_FREQUENCY = 8000
 /**
  * Voting page
  */
-export const DATA_SUBGRAPH_PATH = {
-    [ChainId.MAINNET]: "qiangkaiwen/helix",
-    [ChainId.TESTNET]: "qiangkaiwen/helix-rinkeby"
-}
-
 export const VOTING_SNAPSHOT_SPACE = {
     [ChainId.MAINNET]: 'helixgeometry.eth',
     [ChainId.TESTNET]: 'silverstardev.eth',
