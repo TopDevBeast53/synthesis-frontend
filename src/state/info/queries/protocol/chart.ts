@@ -5,8 +5,8 @@ import { INFO_CLIENT } from 'config/constants/endpoints'
 import { HELIX_START } from 'config/constants/info'
 import { ChartEntry } from 'state/info/types'
 import { ChainId } from 'sdk'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import usePreviousValue from 'hooks/usePreviousValue'
+import { useChainIdData } from 'state/info/hooks'
 import { helixDayDatasResponse } from '../types'
 import { fetchChartData, mapDayData } from '../helpers'
 
@@ -46,7 +46,7 @@ const useFetchGlobalChartData = (): {
 } => {
     const [overviewChartData, setOverviewChartData] = useState<ChartEntry[] | undefined>()
     const [error, setError] = useState(false)
-    const { chainId } = useActiveWeb3React()
+    const { chainId } = useChainIdData()
     const prevChainId = usePreviousValue(chainId)
 
     useEffect(() => {

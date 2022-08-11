@@ -3,8 +3,8 @@ import { request, gql } from 'graphql-request'
 import { INFO_CLIENT } from 'config/constants/endpoints'
 import { TOKEN_BLACKLIST } from 'config/constants/info'
 import { getDeltaTimestamps } from 'views/Info/utils/infoQueryHelpers'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import usePreviousValue from 'hooks/usePreviousValue'
+import { useChainIdData } from 'state/info/hooks'
 
 interface TopPoolsResponse {
     pairDayDatas: {
@@ -52,7 +52,7 @@ const fetchTopPools = async (chainId: number, timestamp24hAgo: number): Promise<
 const useTopPoolAddresses = (): string[] => {
     const [topPoolAddresses, setTopPoolAddresses] = useState([])
     const [timestamp24hAgo] = getDeltaTimestamps()
-    const { chainId } = useActiveWeb3React()
+    const { chainId } = useChainIdData()
     const prevChainId = usePreviousValue(chainId)
 
     useEffect(() => {

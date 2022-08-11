@@ -4,8 +4,8 @@ import { multiQuery } from 'views/Info/utils/infoQueryHelpers'
 import { BLOCKS_CLIENT } from 'config/constants/endpoints'
 import { Block } from 'state/info/types'
 import { ChainId } from 'sdk'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import usePreviousValue from 'hooks/usePreviousValue'
+import { useChainIdData } from 'state/info/hooks'
 
 const getBlockSubqueries = (timestamps: number[]) =>
     timestamps.map((timestamp) => {
@@ -80,7 +80,7 @@ export const useBlocksFromTimestamps = (
 } => {
     const [blocks, setBlocks] = useState<Block[]>()
     const [error, setError] = useState(false)
-    const { chainId } = useActiveWeb3React()
+    const { chainId } = useChainIdData()
     const prevChainId = usePreviousValue(chainId)
     const timestampsString = JSON.stringify(timestamps)
     const blocksString = blocks ? JSON.stringify(blocks) : undefined

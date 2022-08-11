@@ -24,12 +24,11 @@ import { CurrencyLogo, DoubleCurrencyLogo } from 'views/Info/components/Currency
 import { formatAmount } from 'views/Info/utils/formatInfoNumbers'
 import Percent from 'views/Info/components/Percent'
 import SaveIcon from 'views/Info/components/SaveIcon'
-import { usePoolDatas, usePoolChartData, usePoolTransactions } from 'state/info/hooks'
+import { usePoolDatas, usePoolChartData, usePoolTransactions, useChainIdData } from 'state/info/hooks'
 import TransactionTable from 'views/Info/components/InfoTables/TransactionsTable'
 import { useWatchlistPools } from 'state/user/hooks'
 import { useTranslation } from 'contexts/Localization'
 import ChartCard from 'views/Info/components/InfoCharts/ChartCard'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 const ContentLayout = styled.div`
   display: grid;
@@ -88,7 +87,7 @@ const PoolPage: React.FC<RouteComponentProps<{ address: string }>> = ({
   const transactions = usePoolTransactions(address)
 
   const [watchlistPools, addPoolToWatchlist] = useWatchlistPools()
-  const { chainId } = useActiveWeb3React()
+  const { chainId } = useChainIdData()
 
   return (
     <Page symbol={poolData ? `${poolData?.token0.symbol} / ${poolData?.token1.symbol}` : null}>

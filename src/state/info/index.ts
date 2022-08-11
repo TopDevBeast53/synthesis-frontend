@@ -1,4 +1,5 @@
 /* eslint-disable no-param-reassign */
+import { ChainId } from 'sdk'
 import { createReducer } from '@reduxjs/toolkit'
 import { InfoState } from './types'
 import {
@@ -15,6 +16,7 @@ import {
     updateTokenChartData,
     updateTokenPriceData,
     updateTokenTransactions,
+    updateChainId
 } from './actions'
 
 const initialState: InfoState = {
@@ -25,6 +27,7 @@ const initialState: InfoState = {
     },
     pools: { byAddress: {} },
     tokens: { byAddress: {} },
+    chainId: ChainId.MAINNET
 }
 
 export default createReducer(initialState, (builder) =>
@@ -112,5 +115,8 @@ export default createReducer(initialState, (builder) =>
                     },
                 }
             },
-        ),
+        )
+        .addCase(updateChainId, (state, { payload: { chainId } }) => {
+            state.chainId = chainId
+        }),
 )

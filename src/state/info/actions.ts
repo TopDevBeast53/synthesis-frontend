@@ -36,3 +36,5 @@ export const updateTokenPriceData = createAction<{
     priceData?: PriceChartEntry[]
     oldestFetchedTimestamp: number
 }>('info/tokens/updateTokenPriceData')
+
+export const updateChainId = createAction<{ chainId: number }>('info/updateChainId')

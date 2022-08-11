@@ -149,5 +149,6 @@ export interface TokensState {
 export interface InfoState {
     protocol: ProtocolState
     pools: PoolsState
-    tokens: TokensState
+    tokens: TokensState,
+    chainId: number
 }

@@ -6,8 +6,8 @@ import { getDeltaTimestamps } from 'views/Info/utils/infoQueryHelpers'
 import { getBlocksFromTimestamps } from 'views/Info/hooks/useBlocksFromTimestamps'
 import { PoolData } from 'state/info/types'
 import { getChangeForPeriod, getLpFeesAndApr, getPercentChange } from 'views/Info/utils/infoDataHelpers'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import usePreviousValue from 'hooks/usePreviousValue'
+import { useChainIdData } from 'state/info/hooks'
 
 interface PoolFields {
     id: string
@@ -138,7 +138,7 @@ interface PoolDatas {
  * Fetch top pools by liquidity
  */
 const usePoolDatas = (poolAddresses: string[]): PoolDatas => {
-    const { chainId } = useActiveWeb3React()
+    const { chainId } = useChainIdData()
     const prevChainId = usePreviousValue(chainId)
     const [fetchState, setFetchState] = useState<PoolDatas>({ error: false })
     const [t24h, t48h, t7d, t14d] = getDeltaTimestamps()

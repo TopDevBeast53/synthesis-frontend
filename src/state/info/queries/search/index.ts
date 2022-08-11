@@ -1,10 +1,9 @@
 import { useState, useEffect } from 'react'
 import { request, gql } from 'graphql-request'
 import { INFO_CLIENT } from 'config/constants/endpoints'
-import { useTokenDatas, usePoolDatas } from 'state/info/hooks'
+import { useTokenDatas, usePoolDatas, useChainIdData } from 'state/info/hooks'
 import { TokenData, PoolData } from 'state/info/types'
 import { MINIMUM_SEARCH_CHARACTERS } from 'config/constants/info'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 const TOKEN_SEARCH = gql`
     query tokens($symbol: String, $name: String, $id: String) {
@@ -76,7 +75,7 @@ const useFetchSearchResults = (
         loading: false, // Search query is in progress
         error: false, // GraphQL returned error
     })
-    const { chainId } = useActiveWeb3React()
+    const { chainId } = useChainIdData()
 
     const searchStringTooShort = searchString.length < MINIMUM_SEARCH_CHARACTERS
 

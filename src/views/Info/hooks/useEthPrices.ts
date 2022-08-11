@@ -4,8 +4,8 @@ import { useState, useEffect } from 'react'
 import { request, gql } from 'graphql-request'
 import { INFO_CLIENT } from 'config/constants/endpoints'
 import { ChainId } from 'sdk'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import usePreviousValue from 'hooks/usePreviousValue'
+import { useChainIdData } from 'state/info/hooks'
 
 export interface EthPrices {
     current: number
@@ -82,7 +82,7 @@ const fetchEthPrices = async (
 export const useEthPrices = (): EthPrices | undefined => {
     const [prices, setPrices] = useState<EthPrices | undefined>()
     const [error, setError] = useState(false)
-    const { chainId } = useActiveWeb3React()
+    const { chainId } = useChainIdData()
     const prevChainId = usePreviousValue(chainId)
 
     const [t24, t48, tWeek] = getDeltaTimestamps()

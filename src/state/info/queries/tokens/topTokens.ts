@@ -4,8 +4,8 @@ import { INFO_CLIENT } from 'config/constants/endpoints'
 import { TOKEN_BLACKLIST } from 'config/constants/info'
 import { getDeltaTimestamps } from 'views/Info/utils/infoQueryHelpers'
 import { ChainId } from 'sdk'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import usePreviousValue from 'hooks/usePreviousValue'
+import { useChainIdData } from 'state/info/hooks'
 
 interface TopTokensResponse {
     tokenDayDatas: {
@@ -50,7 +50,7 @@ const fetchTopTokens = async (chainId: ChainId, timestamp24hAgo: number): Promis
 const useTopTokenAddresses = (): string[] => {
     const [topTokenAddresses, setTopTokenAddresses] = useState([])
     const [timestamp24hAgo] = getDeltaTimestamps()
-    const { chainId } = useActiveWeb3React()
+    const { chainId } = useChainIdData()
     const prevChainId = usePreviousValue(chainId)
 
     useEffect(() => {

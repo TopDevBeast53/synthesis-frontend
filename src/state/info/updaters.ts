@@ -6,7 +6,6 @@ import useTopPoolAddresses from 'state/info/queries/pools/topPools'
 import usePoolDatas from 'state/info/queries/pools/poolData'
 import useFetchedTokenDatas from 'state/info/queries/tokens/tokenData'
 import useTopTokenAddresses from 'state/info/queries/tokens/topTokens'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import usePreviousValue from 'hooks/usePreviousValue'
 import {
     useProtocolData,
@@ -18,6 +17,7 @@ import {
     useAllTokenData,
     useUpdateTokenData,
     useAddTokenKeys,
+    useChainIdData,
 } from './hooks'
 
 export const ProtocolUpdater: React.FC = () => {
@@ -30,7 +30,7 @@ export const ProtocolUpdater: React.FC = () => {
     const { data: fetchedChartData, error: chartError } = useFetchGlobalChartData()
 
     const [transactions, updateTransactions] = useProtocolTransactions()
-    const { chainId } = useActiveWeb3React()
+    const { chainId } = useChainIdData()
     const prevChainId = usePreviousValue(chainId)
 
     // update overview data if available and not set
@@ -65,7 +65,7 @@ export const ProtocolUpdater: React.FC = () => {
 export const PoolUpdater: React.FC = () => {
     const updatePoolData = useUpdatePoolData()
     const addPoolKeys = useAddPoolKeys()
-    const { chainId } = useActiveWeb3React()
+    const { chainId } = useChainIdData()
     const prevChainId = usePreviousValue(chainId)
 
     const allPoolData = useAllPoolData()
@@ -105,7 +105,7 @@ export const PoolUpdater: React.FC = () => {
 export const TokenUpdater = (): null => {
     const updateTokenDatas = useUpdateTokenData()
     const addTokenKeys = useAddTokenKeys()
-    const { chainId } = useActiveWeb3React()
+    const { chainId } = useChainIdData()
     const prevChainId = usePreviousValue(chainId)
 
     const allTokenData = useAllTokenData()

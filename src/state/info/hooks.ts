@@ -10,7 +10,6 @@ import fetchTokenChartData from 'state/info/queries/tokens/chartData'
 import fetchTokenTransactions from 'state/info/queries/tokens/transactions'
 import fetchTokenPriceData from 'state/info/queries/tokens/priceData'
 import fetchPoolsForToken from 'state/info/queries/tokens/poolsForToken'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import {
     updateProtocolData,
     updateProtocolChartData,
@@ -25,6 +24,7 @@ import {
     updateTokenChartData,
     updateTokenPriceData,
     updateTokenTransactions,
+    updateChainId,
 } from './actions'
 import { ProtocolData, PoolData, TokenData, ChartEntry, PriceChartEntry } from './types'
 
@@ -115,7 +115,7 @@ export const usePoolChartData = (address: string): ChartEntry[] | undefined => {
     const pool = useSelector((state: AppState) => state.info.pools.byAddress[address])
     const chartData = pool?.chartData
     const [error, setError] = useState(false)
-    const { chainId } = useActiveWeb3React()
+    const { chainId } = useChainIdData()
 
     useEffect(() => {
         const fetch = async () => {
@@ -140,7 +140,7 @@ export const usePoolTransactions = (address: string): Transaction[] | undefined 
     const pool = useSelector((state: AppState) => state.info.pools.byAddress[address])
     const transactions = pool?.transactions
     const [error, setError] = useState(false)
-    const { chainId } = useActiveWeb3React()
+    const { chainId } = useChainIdData()
 
     useEffect(() => {
         const fetch = async () => {
@@ -228,7 +228,7 @@ export const usePoolsForToken = (address: string): string[] | undefined => {
     const token = useSelector((state: AppState) => state.info.tokens.byAddress[address])
     const poolsForToken = token.poolAddresses
     const [error, setError] = useState(false)
-    const { chainId } = useActiveWeb3React()
+    const { chainId } = useChainIdData()
 
     useEffect(() => {
         const fetch = async () => {
@@ -253,7 +253,7 @@ export const useTokenChartData = (address: string): ChartEntry[] | undefined => 
     const token = useSelector((state: AppState) => state.info.tokens.byAddress[address])
     const { chartData } = token
     const [error, setError] = useState(false)
-    const { chainId } = useActiveWeb3React()
+    const { chainId } = useChainIdData()
 
     useEffect(() => {
         const fetch = async () => {
@@ -282,7 +282,7 @@ export const useTokenPriceData = (
     const token = useSelector((state: AppState) => state.info.tokens.byAddress[address])
     const priceData = token?.priceData[interval]
     const [error, setError] = useState(false)
-    const { chainId } = useActiveWeb3React()
+    const { chainId } = useChainIdData()
     // construct timestamps and check if we need to fetch more data
     const oldestTimestampFetched = token?.priceData.oldestFetchedTimestamp
     const utcCurrentTime = getUnixTime(new Date()) * 1000
@@ -318,7 +318,7 @@ export const useTokenTransactions = (address: string): Transaction[] | undefined
     const token = useSelector((state: AppState) => state.info.tokens.byAddress[address])
     const { transactions } = token
     const [error, setError] = useState(false)
-    const { chainId } = useActiveWeb3React()
+    const { chainId } = useChainIdData()
 
     useEffect(() => {
         const fetch = async () => {
@@ -335,4 +335,15 @@ export const useTokenTransactions = (address: string): Transaction[] | undefined
     }, [address, chainId, dispatch, error, transactions])
 
     return transactions
+}
+
+export const useChainIdData = () => {
+    const dispatch = useDispatch<AppDispatch>()
+    const chainId = useSelector((state: AppState) => state.info.chainId)
+
+    const setChainId = useCallback((_chainId: number) => {
+        dispatch(updateChainId({ chainId: _chainId }))
+    }, [dispatch])
+
+    return { chainId, setChainId }
 }

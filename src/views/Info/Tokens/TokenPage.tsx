@@ -32,6 +32,7 @@ import {
   useTokenChartData,
   useTokenPriceData,
   useTokenTransactions,
+  useChainIdData,
 } from 'state/info/hooks'
 import PoolTable from 'views/Info/components/InfoTables/PoolsTable'
 import TransactionTable from 'views/Info/components/InfoTables/TransactionsTable'
@@ -39,7 +40,6 @@ import { useWatchlistTokens } from 'state/user/hooks'
 import { ONE_HOUR_SECONDS } from 'config/constants/info'
 import { useTranslation } from 'contexts/Localization'
 import ChartCard from 'views/Info/components/InfoCharts/ChartCard'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 const ContentLayout = styled.div`
   margin-top: 16px;
@@ -107,7 +107,7 @@ const TokenPage: React.FC<RouteComponentProps<{ address: string }>> = ({
   }, [priceData, tokenData])
 
   const [watchlistTokens, addWatchlistToken] = useWatchlistTokens()
-  const { chainId } = useActiveWeb3React()
+  const { chainId } = useChainIdData()
 
   return (
     <Page symbol={tokenData?.symbol}>

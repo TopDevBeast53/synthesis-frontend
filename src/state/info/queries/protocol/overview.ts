@@ -6,8 +6,8 @@ import { ProtocolData } from 'state/info/types'
 import { getDeltaTimestamps } from 'views/Info/utils/infoQueryHelpers'
 import { getBlocksFromTimestamps } from 'views/Info/hooks/useBlocksFromTimestamps'
 import { ChainId } from 'sdk'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import usePreviousValue from 'hooks/usePreviousValue'
+import { useChainIdData } from 'state/info/hooks'
 
 interface HelixFactory {
     totalTransactions: string
@@ -58,7 +58,7 @@ interface ProtocolFetchState {
 }
 
 const useFetchProtocolData = (): ProtocolFetchState => {
-    const { chainId } = useActiveWeb3React()
+    const { chainId } = useChainIdData()
     const prevChainId = usePreviousValue(chainId)
     const [fetchState, setFetchState] = useState<ProtocolFetchState>({
         error: false,

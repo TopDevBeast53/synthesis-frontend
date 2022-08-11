@@ -8,8 +8,8 @@ import { getPercentChange, getChangeForPeriod, getAmountChange } from 'views/Inf
 import { TokenData } from 'state/info/types'
 import { useEthPrices } from 'views/Info/hooks/useEthPrices'
 import { ChainId } from 'sdk'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import usePreviousValue from 'hooks/usePreviousValue'
+import { useChainIdData } from 'state/info/hooks'
 
 interface TokenFields {
     id: string
@@ -122,7 +122,7 @@ const useFetchedTokenDatas = (tokenAddresses: string[]): TokenDatas => {
     const [fetchState, setFetchState] = useState<TokenDatas>({ error: false })
     const [t24h, t48h, t7d, t14d] = getDeltaTimestamps()
     const ethPrices = useEthPrices()
-    const { chainId } = useActiveWeb3React()
+    const { chainId } = useChainIdData()
     const prevChainId = usePreviousValue(chainId)
 
     useEffect(() => {
