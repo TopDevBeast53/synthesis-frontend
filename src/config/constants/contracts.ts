@@ -197,7 +197,7 @@ export default {
         4: '0xE3157d8338b593d5F7Bf0A5094a7Dd886aDb3bA9',
         30: '0x4bdefd001a3b7f1d5bf16b35dd19116ab3c33e64',
         31: '0x9b33dD6C5ECa3fC6c2Bc5342956511D952106209',
-        56: '0xD3Ce0BE5D8f472bA7fB0B837c256b96847cb2c40',   // deployed 8/05/2022
+        56: '0xE3723F408749CB9462C95bDA7fd2017d5C19B85E',   // deployed 8/12/2022
         97: '0xbFB6763A426EaB71219C910F424fBd0E3a1f41A9',
     },
     helixNFT: {
