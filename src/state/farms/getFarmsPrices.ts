@@ -57,6 +57,10 @@ const getFarmBaseTokenPrice = (
         return hasTokenPriceVsQuote ? helixPriceUSDC.times(farm.tokenPriceVsQuote) : BIG_ZERO
     }
 
+    if (tokens.busd && farm.quoteToken.symbol === tokens.busd.symbol) {
+        return hasTokenPriceVsQuote ? new BigNumber(farm.tokenPriceVsQuote) : BIG_ZERO
+    }
+
     // We can only calculate rewards without a quoteTokenFarm for BUSD/BNB farms
     if (!quoteTokenFarm) {
         return BIG_ZERO
@@ -82,6 +86,13 @@ const getFarmBaseTokenPrice = (
     }
 
     if (tokens.usdt && quoteTokenFarm.quoteToken.symbol === tokens.usdt.symbol) {
+        const quoteTokenInBusd = quoteTokenFarm.tokenPriceVsQuote
+        return hasTokenPriceVsQuote && quoteTokenInBusd
+            ? new BigNumber(farm.tokenPriceVsQuote).times(quoteTokenInBusd)
+            : BIG_ZERO
+    }
+
+    if (tokens.busd && quoteTokenFarm.quoteToken.symbol === tokens.busd.symbol) {
         const quoteTokenInBusd = quoteTokenFarm.tokenPriceVsQuote
         return hasTokenPriceVsQuote && quoteTokenInBusd
             ? new BigNumber(farm.tokenPriceVsQuote).times(quoteTokenInBusd)
@@ -134,6 +145,14 @@ const getFarmQuoteTokenPrice = (
         return wethPriceUSDC
     }
 
+    if (farm.quoteToken.symbol === 'WBNB') {
+        return wethPriceUSDC
+    }
+
+    if (farm.quoteToken.symbol === 'BUSD') {
+        return BIG_ONE
+    }
+
     if (!quoteTokenFarm) {
         return BIG_ZERO
     }
@@ -172,6 +191,14 @@ const getFarmQuoteTokenPrice = (
 
     if (quoteTokenFarm.quoteToken.symbol === 'WRBTC') {
         return quoteTokenFarm.tokenPriceVsQuote ? wethPriceUSDC.times(quoteTokenFarm.tokenPriceVsQuote) : BIG_ZERO
+    }
+
+    if (quoteTokenFarm.quoteToken.symbol === 'WBNB') {
+        return quoteTokenFarm.tokenPriceVsQuote ? wethPriceUSDC.times(quoteTokenFarm.tokenPriceVsQuote) : BIG_ZERO
+    }
+
+    if (quoteTokenFarm.quoteToken.symbol === 'BUSD') {
+        return quoteTokenFarm.tokenPriceVsQuote ? new BigNumber(quoteTokenFarm.tokenPriceVsQuote) : BIG_ZERO
     }
 
     return BIG_ZERO
