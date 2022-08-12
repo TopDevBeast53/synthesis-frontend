@@ -53,8 +53,8 @@ const getPools = (chainId: ChainId) => {
                 [ChainId.TESTNET]: '2.278481012658228',
                 [ChainId.RSK_MAINNET]: '2.195121951219512',
                 [ChainId.RSK_TESTNET]: '2.195121951219512',
-                [ChainId.BSC_MAINNET]: '0.0661764705882353',
-                [ChainId.BSC_TESTNET]: '0.0661764705882353'
+                [ChainId.BSC_MAINNET]: '0.1323529411764706',
+                [ChainId.BSC_TESTNET]: '0.1323529411764706'
             },
             sortOrder: 1,
             isFinished: false,
