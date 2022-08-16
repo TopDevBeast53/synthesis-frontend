@@ -16,6 +16,7 @@ export interface Address {
     [ChainId.RSK_TESTNET]?: string
     [ChainId.BSC_MAINNET]?: string
     [ChainId.BSC_TESTNET]?: string
+    [ChainId.OKC_MAINNET]?: string
 }
 
 export interface SerializedToken {
@@ -101,6 +102,7 @@ interface PoolConfigBaseProps {
         [ChainId.RSK_TESTNET]?: string
         [ChainId.BSC_MAINNET]?: string
         [ChainId.BSC_TESTNET]?: string
+        [ChainId.OKC_MAINNET]?: string
     }
     sortOrder?: number
     harvest?: boolean

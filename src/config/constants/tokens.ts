@@ -2,7 +2,15 @@ import { ChainId, Token } from 'sdk'
 import { serializeToken } from 'state/user/hooks/helpers'
 import { SerializedToken } from './types'
 
-const { MAINNET, TESTNET, RSK_MAINNET, RSK_TESTNET, BSC_MAINNET, BSC_TESTNET } = ChainId
+const {
+    MAINNET,
+    TESTNET,
+    RSK_MAINNET,
+    RSK_TESTNET,
+    BSC_MAINNET,
+    BSC_TESTNET,
+    OKC_MAINNET,
+} = ChainId
 
 interface TokenList {
     [symbol: string]: Token
@@ -341,6 +349,49 @@ export const bscTestnetTokens = defineTokens({
     ),
 } as const)
 
+export const okcMainnetTokens = defineTokens({
+    helix: new Token(
+        OKC_MAINNET,
+        '0xb5687be50e1506820996dB6C1EF3a9CD86a7eB66',
+        18,
+        'HELIX',
+        'Helix',
+        'https://helix.finance/',
+    ),
+    weth: new Token(
+        OKC_MAINNET,
+        '0x8F8526dbfd6E38E3D8307702cA8469Bae6C56C15',
+        18,
+        'WOKT',
+        'Wrapped OKT',
+        'https://www.okx.com/okc'
+    ),
+    usdt: new Token(
+        OKC_MAINNET,
+        '0x382bB369d343125BfB2117af9c149795C6C65C50',
+        18,
+        'USDT',
+        'Tether USD',
+        'https://tether.to/',
+    ),
+    usdc: new Token(
+        OKC_MAINNET,
+        '0xc946DAf81b08146B1C7A8Da2A851Ddf2B3EAaf85',
+        18,
+        'USDC',
+        'USD Coin',
+        'https://www.centre.io/usdc',
+    ),
+    che: new Token(
+        OKC_MAINNET,
+        '0x8179D97Eb6488860d816e3EcAFE694a4153F216c',
+        18,
+        'CHE',
+        'CherrySwap Token',
+        'https://www.centre.io/usdc',
+    )
+} as const)
+
 
 const tokens = {
     [MAINNET]: mainnetTokens,
@@ -349,14 +400,17 @@ const tokens = {
     [RSK_TESTNET]: rskTestnetTokens,
     [BSC_MAINNET]: bscMainnetTokens,
     [BSC_TESTNET]: bscTestnetTokens,
+    [OKC_MAINNET]: okcMainnetTokens,
 }
 
-type SerializedTokenList = typeof mainnetTokens &
+type SerializedTokenList =
+    typeof mainnetTokens &
     typeof testnetTokens &
     typeof rskTestnetTokens &
     typeof rskMainnetTokens &
     typeof bscMainnetTokens &
-    typeof bscTestnetTokens
+    typeof bscTestnetTokens &
+    typeof okcMainnetTokens
 
 const getTokens = (chainId: ChainId): SerializedTokenList => {
     return tokens[chainId] as SerializedTokenList
@@ -368,6 +422,7 @@ type SerializedTokenListRSKTestNet = Record<keyof typeof rskTestnetTokens, Seria
 type SerializedTokenListRSKMainNet = Record<keyof typeof rskTestnetTokens, SerializedToken>
 type SerializedTokenListBSCMainNet = Record<keyof typeof bscMainnetTokens, SerializedToken>
 type SerializedTokenListBSCTestNet = Record<keyof typeof bscTestnetTokens, SerializedToken>
+type SerializedTokenListOKCMainNet = Record<keyof typeof okcMainnetTokens, SerializedToken>
 export const serializeTokens = (chainId: ChainId) => {
     switch (chainId) {
         case MAINNET:
@@ -382,6 +437,8 @@ export const serializeTokens = (chainId: ChainId) => {
             return serializeTokensBSCMainNet()
         case BSC_TESTNET:
             return serializeTokensBSCTestNet()
+        case OKC_MAINNET:
+            return serializeTokensOKCMainNet()
         default:
             return serializeTokensMainNet()
     }
@@ -437,6 +494,15 @@ export const serializeTokensBSCTestNet = () => {
     const serializedTokens = Object.keys(unserializedTokens).reduce((accum, key) => {
         return { ...accum, [key]: serializeToken(unserializedTokens[key]) }
     }, {} as SerializedTokenListBSCTestNet)
+
+    return serializedTokens
+}
+
+export const serializeTokensOKCMainNet = () => {
+    const unserializedTokens = getTokens(OKC_MAINNET)
+    const serializedTokens = Object.keys(unserializedTokens).reduce((accum, key) => {
+        return { ...accum, [key]: serializeToken(unserializedTokens[key]) }
+    }, {} as SerializedTokenListOKCMainNet)
 
     return serializedTokens
 }

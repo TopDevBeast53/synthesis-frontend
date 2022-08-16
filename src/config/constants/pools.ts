@@ -44,7 +44,8 @@ const getPools = (chainId: ChainId) => {
                 [ChainId.RSK_MAINNET]: '0xd5bfd8f6a590a4ae8e9b86266e78e24b8244eef8',
                 [ChainId.RSK_TESTNET]: '0xf66c580Bf224044226a3c1f865B500C42703cF0e',
                 [ChainId.BSC_MAINNET]: '0x3a391bF56927B69a3A14Aab10731C5d7d7A7b8c3',
-                [ChainId.BSC_TESTNET]: '0x570489f4278de24E7421b83C518ABc8B1AfA7D10'
+                [ChainId.BSC_TESTNET]: '0x570489f4278de24E7421b83C518ABc8B1AfA7D10',
+                [ChainId.OKC_MAINNET]: '0xC99F7Ad8C8DCCBd500D2d791F61b7B75d7F38432',
             },
             poolCategory: PoolCategory.CORE,
             harvest: true,
@@ -54,7 +55,8 @@ const getPools = (chainId: ChainId) => {
                 [ChainId.RSK_MAINNET]: '2.195121951219512',
                 [ChainId.RSK_TESTNET]: '2.195121951219512',
                 [ChainId.BSC_MAINNET]: '0.0661764705882353',
-                [ChainId.BSC_TESTNET]: '0.0661764705882353'
+                [ChainId.BSC_TESTNET]: '0.0661764705882353',
+                [ChainId.OKC_MAINNET]: '0.0661764705882353',
             },
             sortOrder: 1,
             isFinished: false,

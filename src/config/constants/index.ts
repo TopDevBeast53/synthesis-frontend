@@ -5,7 +5,8 @@ import {
     rskTestnetTokens,
     testnetTokens,
     bscMainnetTokens,
-    bscTestnetTokens
+    bscTestnetTokens,
+    okcMainnetTokens
 } from './tokens'
 
 // a list of router addresses by chain
@@ -20,6 +21,7 @@ export const ROUTER_ADDRESS: RouterAddressesList = {
     [ChainId.RSK_TESTNET]: '0x2E389edDB44933c46608bd0B0f4E9BeD191dCC90',
     [ChainId.BSC_MAINNET]: '0x8404d326C4BF82075C50567123683BF798C3725f',
     [ChainId.BSC_TESTNET]: '0xc161e5396f4CC1b37BB85aF1FeEFD4Ab186206E7',
+    [ChainId.OKC_MAINNET]: '0xc5B58628575dF1d27931E359220D2328e829FA5B',
 }
 
 // a list of tokens by chain
@@ -57,6 +59,12 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
     [ChainId.BSC_TESTNET]: [
         bscTestnetTokens.helix,
         bscTestnetTokens.weth
+    ],
+    [ChainId.OKC_MAINNET]: [
+        okcMainnetTokens.helix,
+        okcMainnetTokens.weth,
+        okcMainnetTokens.usdc,
+        okcMainnetTokens.usdt
     ]
 }
 
@@ -70,7 +78,8 @@ export const ADDITIONAL_BASES: { [chainId in ChainId]?: { [tokenAddress: string]
     [ChainId.RSK_MAINNET]: {},
     [ChainId.RSK_TESTNET]: {},
     [ChainId.BSC_MAINNET]: {},
-    [ChainId.BSC_TESTNET]: {}
+    [ChainId.BSC_TESTNET]: {},
+    [ChainId.OKC_MAINNET]: {},
 }
 
 /**
@@ -84,7 +93,8 @@ export const CUSTOM_BASES: { [chainId in ChainId]?: { [tokenAddress: string]: To
     [ChainId.RSK_MAINNET]: {},
     [ChainId.RSK_TESTNET]: {},
     [ChainId.BSC_MAINNET]: {},
-    [ChainId.BSC_TESTNET]: {}
+    [ChainId.BSC_TESTNET]: {},
+    [ChainId.OKC_MAINNET]: {},
 }
 
 // used for display in the default list when adding liquidity
@@ -114,6 +124,11 @@ export const SUGGESTED_BASES: ChainTokenList = {
     [ChainId.BSC_TESTNET]: [
         bscTestnetTokens.weth,
         bscTestnetTokens.busd
+    ],
+    [ChainId.OKC_MAINNET]: [
+        okcMainnetTokens.weth,
+        okcMainnetTokens.usdt,
+        okcMainnetTokens.usdc
     ]
 }
 
@@ -145,6 +160,11 @@ export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
     [ChainId.BSC_TESTNET]: [
         bscTestnetTokens.weth,
         bscTestnetTokens.busd
+    ],
+    [ChainId.OKC_MAINNET]: [
+        okcMainnetTokens.weth,
+        okcMainnetTokens.usdc,
+        okcMainnetTokens.usdt
     ]
 }
 
@@ -154,7 +174,8 @@ export const PINNED_PAIRS: { readonly [chainId in ChainId]?: [Token, Token][] } 
     [ChainId.RSK_MAINNET]: [],
     [ChainId.RSK_TESTNET]: [],
     [ChainId.BSC_MAINNET]: [],
-    [ChainId.BSC_TESTNET]: []
+    [ChainId.BSC_TESTNET]: [],
+    [ChainId.OKC_MAINNET]: [],
 }
 
 export const NetworkContextName = 'NETWORK'
@@ -208,7 +229,8 @@ export const DEFAULT_INPUT_CURRENCY = {
     [ChainId.RSK_MAINNET]: '0x3d2441fa9aab621e72121fb1c620fdae59eae812',
     [ChainId.RSK_TESTNET]: '0x08626CF6A212a44C877D9740f86252dBD6292364',
     [ChainId.BSC_MAINNET]: '0xFd9B1448A8874b03e6E8476049dB259A82569a41',
-    [ChainId.BSC_TESTNET]: '0x08626CF6A212a44C877D9740f86252dBD6292364'
+    [ChainId.BSC_TESTNET]: '0x08626CF6A212a44C877D9740f86252dBD6292364',
+    [ChainId.OKC_MAINNET]: '0xb5687be50e1506820996dB6C1EF3a9CD86a7eB66'
 }
 
 
@@ -218,5 +240,6 @@ export const DEFAULT_OUTPUT_CURRENCY = {
     [ChainId.RSK_MAINNET]: '0xef213441a85df4d7acbdae0cf78004e1e486bb96', // USDT
     [ChainId.RSK_TESTNET]: '0x760ae0f5319D9efEdc9B99d7E73fdaB2f84E4d87', // USDT
     [ChainId.BSC_MAINNET]: '0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56', // BUSD
-    [ChainId.BSC_TESTNET]: '0xeD24FC36d5Ee211Ea25A80239Fb8C4Cfd80f12Ee'  // BUSD
+    [ChainId.BSC_TESTNET]: '0xeD24FC36d5Ee211Ea25A80239Fb8C4Cfd80f12Ee',  // BUSD
+    [ChainId.OKC_MAINNET]: '0xc946DAf81b08146B1C7A8Da2A851Ddf2B3EAaf85',  // USDC
 }

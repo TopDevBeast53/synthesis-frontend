@@ -6,6 +6,7 @@ import {
     serializeTokensTestNet,
     serializeTokensBSCMainNet,
     serializeTokensBSCTestNet,
+    serializeTokensOKCMainNet,
 } from './tokens'
 import { SerializedFarmConfig } from './types'
 
@@ -23,6 +24,8 @@ const getFarms = (chainId: ChainId): SerializedFarmConfig[] => {
             return getFarmsBSCMainNet()
         case ChainId.BSC_TESTNET:
             return getFarmsBSCTestNet()
+        case ChainId.OKC_MAINNET:
+            return getFarmsOKCMainNet()
         default:
             return []
     }
@@ -368,6 +371,19 @@ const getFarmsBSCMainNet = (): SerializedFarmConfig[] => {
 
 const getFarmsBSCTestNet = (): SerializedFarmConfig[] => {
     const serializedTokens = serializeTokensBSCTestNet()
+    return [
+        {
+            pid: 0,
+            lpSymbol: 'HELIX',
+            lpAddress: serializedTokens.helix.address,
+            token: serializedTokens.helix,
+            quoteToken: serializedTokens.weth,
+        },
+    ]
+}
+
+const getFarmsOKCMainNet = (): SerializedFarmConfig[] => {
+    const serializedTokens = serializeTokensOKCMainNet()
     return [
         {
             pid: 0,

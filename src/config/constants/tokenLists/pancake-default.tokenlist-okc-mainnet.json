@@ -1,0 +1,57 @@
+{
+  "name": "Helix Default List",
+  "timestamp": "2021-05-06T00:00:00Z",
+  "version": {
+    "major": 3,
+    "minor": 0,
+    "patch": 0
+  },
+  "tags": {},
+  "logoURI": "https://pancakeswap.finance/logo.png",
+  "keywords": [
+    "helix",
+    "default"
+  ],
+  "tokens": [
+    {
+      "name": "Helix",
+      "symbol": "HELIX",
+      "address": "0xb5687be50e1506820996dB6C1EF3a9CD86a7eB66",
+      "chainId": 66,
+      "decimals": 18,
+      "logoURI": "local://images/tokens/0xb5687be50e1506820996dB6C1EF3a9CD86a7eB66.png"
+    },
+    {
+      "name": "Wrapped OKT",
+      "symbol": "WOKT",
+      "address": "0x8F8526dbfd6E38E3D8307702cA8469Bae6C56C15",
+      "chainId": 66,
+      "decimals": 18,
+      "logoURI": "local://images/tokens/0x8F8526dbfd6E38E3D8307702cA8469Bae6C56C15.png"
+    },
+    {
+      "name": "Tether USD",
+      "symbol": "USDT",
+      "address": "0x382bB369d343125BfB2117af9c149795C6C65C50",
+      "chainId": 66,
+      "decimals": 18,
+      "logoURI": "local://images/tokens/0x382bB369d343125BfB2117af9c149795C6C65C50.png"
+    },
+    {
+      "name": "USD Coin",
+      "symbol": "USDC",
+      "address": "0xc946DAf81b08146B1C7A8Da2A851Ddf2B3EAaf85",
+      "chainId": 66,
+      "decimals": 18,
+      "logoURI": "local://images/tokens/0xc946DAf81b08146B1C7A8Da2A851Ddf2B3EAaf85.png"
+    },
+    {
+      "name": "CherrySwap Token",
+      "symbol": "CHE",
+      "address": "0x8179D97Eb6488860d816e3EcAFE694a4153F216c",
+      "chainId": 66,
+      "decimals": 18,
+      "logoURI": "local://images/tokens/0x8179D97Eb6488860d816e3EcAFE694a4153F216c.png"
+    }
+  ]
+}

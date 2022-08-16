@@ -120,4 +120,12 @@ export const WETH = {
         'Test Wrapped BNB',
         'https://www.binance.com/',
     ),
+    [ChainId.OKC_MAINNET]: new Token(
+        ChainId.OKC_MAINNET,
+        '0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd',
+        18,
+        'WOKT',
+        'Wrapped OKT',
+        'https://www.okx.com/okc'
+    ),
 }
