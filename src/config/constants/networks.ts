@@ -129,7 +129,7 @@ export const SUPPORTED_NETWORKS: { [key: number]: CHAIN_CONFIG } = {
         rpcUrlsForMetamask: ['https://exchainrpc.okex.org/'],
         blockExplorerUrls: ['https://www.oklink.com/en/okc/'],
         logoUrl: '/images/networks/okc.png',
-        label: 'OKExChain',
+        label: 'OKC',
         showOnlyTrade: true,
         isTestChain: false
     }

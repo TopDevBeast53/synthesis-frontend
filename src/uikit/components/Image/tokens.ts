@@ -1,6 +1,8 @@
 /**
  * @see https://github.com/pancakeswap/pancake-frontend/blob/develop/src/config/constants/tokens.ts
  */
+
+// MAINNET
 const tokens = {
     helix: {
         symbol: 'Helix',
@@ -11,6 +13,7 @@ const tokens = {
             31: '0x08626CF6A212a44C877D9740f86252dBD6292364',
             56: '0xFd9B1448A8874b03e6E8476049dB259A82569a41',   // deployed 8/05/2022
             97: '0x08626CF6A212a44C877D9740f86252dBD6292364',
+            66: '0xb5687be50e1506820996dB6C1EF3a9CD86a7eB66',   // OKC 
         },
         decimals: 18,
         projectLink: 'https://helix.finance/',

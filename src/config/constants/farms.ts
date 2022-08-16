@@ -392,6 +392,41 @@ const getFarmsOKCMainNet = (): SerializedFarmConfig[] => {
             token: serializedTokens.helix,
             quoteToken: serializedTokens.weth,
         },
+        {
+            pid: 1,
+            lpSymbol: 'HELIX-WOKT',
+            lpAddress: '0xD871238f5BD2a1e8ba935b716e664f6518A96CA1',
+            token: serializedTokens.helix,
+            quoteToken: serializedTokens.weth,
+        },
+        {
+            pid: 2,
+            lpSymbol: 'HELIX-USDC',
+            lpAddress: '0x24ACF2545a13e02c6dA0933A866b5f16b1ad0d46',
+            token: serializedTokens.helix,
+            quoteToken: serializedTokens.usdc,
+        },
+        {
+            pid: 3,
+            lpSymbol: 'WOKT-USDC',
+            lpAddress: '0xaE78F8b1FdD0269dAfaaC1031cB899ee453b4f19',
+            token: serializedTokens.weth,
+            quoteToken: serializedTokens.usdc,
+        },
+        {
+            pid: 4,
+            lpSymbol: 'USDT-USDC',
+            lpAddress: '0x5CE7d045C55523Dbfa6eEC200E81fCE665358409',
+            token: serializedTokens.usdt,
+            quoteToken: serializedTokens.usdc,
+        },
+        {
+            pid: 5,
+            lpSymbol: 'CHE-WOKT',
+            lpAddress: '0x8ca827dA72C915Ddd86094329aE274201C9b93Bc',
+            token: serializedTokens.che,
+            quoteToken: serializedTokens.weth,
+        },
     ]
 }
 
