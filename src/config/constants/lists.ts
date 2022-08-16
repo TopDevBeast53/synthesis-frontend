@@ -1,5 +1,5 @@
-// const PANCAKE_EXTENDED = 'https://tokens.pancakeswap.finance/pancakeswap-extended.json' // UpdateMe https://tokens.uniswap.org/
-// const PANCAKE_TOP100 = 'https://www.gemini.com/uniswap/manifest.json'   // UpdateMe https://tokens.uniswap.org/
+// const PANCAKE_EXTENDED = 'https://tokens.pancakeswap.finance/pancakeswap-extended.json' // update me https://tokens.uniswap.org/
+// const PANCAKE_TOP100 = 'https://www.gemini.com/uniswap/manifest.json'   // update me https://tokens.uniswap.org/
 
 export const UNSUPPORTED_LIST_URLS: string[] = []
 

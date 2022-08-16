@@ -10,7 +10,7 @@ export type TranslatableText =
         }
     }
 export interface Address {
-    [ChainId.MAINNET]: string   // UpdateMe
+    [ChainId.MAINNET]: string
     [ChainId.TESTNET]?: string
     [ChainId.RSK_MAINNET]?: string
     [ChainId.RSK_TESTNET]?: string
@@ -96,7 +96,7 @@ interface PoolConfigBaseProps {
     contractAddress: Address
     poolCategory: PoolCategory
     tokenPerBlock: {
-        [ChainId.MAINNET]: string   // UpdateMe
+        [ChainId.MAINNET]: string
         [ChainId.TESTNET]?: string
         [ChainId.RSK_MAINNET]?: string
         [ChainId.RSK_TESTNET]?: string

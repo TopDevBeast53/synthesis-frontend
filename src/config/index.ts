@@ -11,7 +11,7 @@ BigNumber.config({
  * Block Explorer URLs
  */
 export const BASE_ETH_SCAN_URLS = {
-    [ChainId.MAINNET]: 'https://etherscan.io',  // UpdateMe https://etherscan.io
+    [ChainId.MAINNET]: 'https://etherscan.io',
     [ChainId.TESTNET]: 'https://rinkeby.etherscan.io',
     [ChainId.RSK_MAINNET]: 'https://explorer.rsk.co',
     [ChainId.RSK_TESTNET]: 'https://explorer.testnet.rsk.co',
