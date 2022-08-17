@@ -40,8 +40,8 @@ export const HELIX_PER_BLOCK = {
     [ChainId.TESTNET]: 4.5,
     [ChainId.RSK_MAINNET]: 5.625,
     [ChainId.RSK_TESTNET]: 5.625,
-    [ChainId.BSC_MAINNET]: 0.16875,
-    [ChainId.BSC_TESTNET]: 0.16875,
+    [ChainId.BSC_MAINNET]: 0.3375,
+    [ChainId.BSC_TESTNET]: 0.3375,
     [ChainId.OKC_MAINNET]: 0.16875,
 }
 export const BLOCKS_PER_YEAR = {
