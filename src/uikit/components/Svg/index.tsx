@@ -163,6 +163,7 @@ export { default as ReferalsIcon} from './Icons/Referals'
 export { default as Trade1Icon} from './Icons/Trade1'
 export { default as Vote1Icon} from './Icons/Vote1'
 export { default as YieldSwapIcon} from './Icons/YieldSwap'
+export { default as BridgeIcon} from './Icons/SwapVert'
 
 
 

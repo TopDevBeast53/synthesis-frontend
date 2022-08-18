@@ -115,7 +115,7 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
             },
             {
                 label: '',
-                href: '#',
+                href: '',
                 icon: 'More',
                 hideSubNav: true,
                 items: [
@@ -233,7 +233,7 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
             },
             {
                 label: '',
-                href: '#',
+                href: '',
                 icon: 'More',
                 hideSubNav: true,
                 items: [
@@ -334,7 +334,7 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
             },
             {
                 label: '',
-                href: '#',
+                href: '',
                 icon: 'More',
                 hideSubNav: true,
                 items: [
@@ -435,7 +435,7 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
             },
             {
                 label: '',
-                href: '#',
+                href: '',
                 icon: 'More',
                 hideSubNav: true,
                 items: [
@@ -536,7 +536,7 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
             },
             {
                 label: '',
-                href: '#',
+                href: '',
                 icon: 'More',
                 hideSubNav: true,
                 items: [
@@ -637,7 +637,7 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
             },
             {
                 label: '',
-                href: '#',
+                href: '',
                 icon: 'More',
                 hideSubNav: true,
                 items: [

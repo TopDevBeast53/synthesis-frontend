@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { useLocation } from 'react-router'
-import { Menu as UikitMenu } from 'uikit'
+import { DropdownMenuItemType, Menu as UikitMenu } from 'uikit'
 import { languageList } from 'config/localization/languages'
 import { useTranslation } from 'contexts/Localization'
 import useTheme from 'hooks/useTheme'
@@ -30,7 +30,15 @@ const Menu = (props) => {
 
   return (
     <UikitMenu
-      linkComponent={(link) => <Link to={{ pathname: link.href, search }} {...link} />}
+      linkComponent={(link) =>
+        link.type === DropdownMenuItemType.EXTERNAL_LINK ? (
+          <a href={link.href} {...link} target="_blank" rel="noreferrer">
+            {link.label}
+          </a>
+        ) : (
+          <Link to={{ pathname: link.href, search }} {...link} />
+        )
+      }
       userMenu={<UserMenu />}
       globalMenu={<GlobalSettings />}
       networkSelector={<NetworkSelector />}
