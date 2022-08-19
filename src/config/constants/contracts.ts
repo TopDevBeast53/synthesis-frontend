@@ -187,7 +187,7 @@ export default {
     },
     masterChef: {
         1: '0xa4c1135f0C0123f6683F98A8177F4c51F3179107',
-        4: '0xE58b6cB4f216e79b959C37CD681d8483a0B97DA0',
+        4: '0x2ACEDD6dC15F74b54DD4fAb741D1F32FbAe65f60',
         30: '0xd5bfd8f6a590a4ae8e9b86266e78e24b8244eef8',
         31: '0xf66c580Bf224044226a3c1f865B500C42703cF0e',
         56: '0x3a391bF56927B69a3A14Aab10731C5d7d7A7b8c3',   // deployed 8/10/2022
