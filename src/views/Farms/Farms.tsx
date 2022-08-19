@@ -365,7 +365,7 @@ const Farms: React.FC = () => {
     <>
       <PageHeader background="transparent">
         <Heading as="h1" scale="xxl" color="secondary" mb="24px">
-          {t('Helix Farms')}
+          {t('Farms')}
         </Heading>
         <Heading scale="lg" color="text">
           {t('Generate Yield from Staked LP Tokens.')}
