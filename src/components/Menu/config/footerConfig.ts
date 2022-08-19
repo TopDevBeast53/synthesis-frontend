@@ -28,15 +28,15 @@ export const footerLinks: (t: ContextApi['t']) => FooterLinkType[] = (t) => [
         label:"Earn",
         items:[
             {
-                label:"Helix Farms",
+                label:"Farms",
                 href:"/farms"
             },
             {
-                label:"Helix Pools",
+                label:"Pools",
                 href:"/pools"
             },
             {
-                label:"Helix Vaults",
+                label:"Vaults",
                 href:"/vaults"
             },
             {

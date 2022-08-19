@@ -172,28 +172,13 @@ const Vault: React.FC = () => {
   }, [helixContract, chainId])
   const buttonScale = 'md'
 
-
-  /*
-
-  <Heading as="h1" scale="xxl" color="secondary" mb="12px">
-              {t('Helix Vaults')}
-            </Heading>
-            <Heading scale="lg" color="text">
-              {t('Simple Single-Asset Staking Pools')}
-            </Heading>
-            <Heading scale="md" color="text">
-              {t('Total staked ')} {totalStake.toFixed(3)}
-            </Heading>
-
-  */
-
   return (
     <>
       <PageHeader background="transparent">
         <Flex justifyContent="space-between" flexDirection={['column', null, null, 'row']}>
           <Flex flex="1" flexDirection="column" mr={['8px', 0]}>
             <Heading as="h1" scale="xxl" color="secondary" mb="24px">
-              {t('Helix Vaults')}
+              {t('Vaults')}
             </Heading>
             <Heading scale="lg" color="text">
               {t('Locked, Higher Yield Staking for HELIX')}
