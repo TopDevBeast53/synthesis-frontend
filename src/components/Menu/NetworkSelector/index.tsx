@@ -147,7 +147,7 @@ function Row({
 
 const NETWORK_SELECTOR_CHAINS = [
   ChainId.MAINNET,
-  ChainId.TESTNET,
+  // ChainId.TESTNET,
   ChainId.RSK_MAINNET,
   // ChainId.RSK_TESTNET,
   ChainId.BSC_MAINNET,
