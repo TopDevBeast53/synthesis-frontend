@@ -222,6 +222,7 @@ const getFarmsPrices = (chainId: ChainId, farms: SerializedFarm[]) => {
         case ChainId.BSC_TESTNET:
             helixUSDCFarm = farms.find((farm) => farm.pid === 2)
             break;
+        case ChainId.OKC_MAINNET:
         default:
             helixUSDCFarm = null
     }

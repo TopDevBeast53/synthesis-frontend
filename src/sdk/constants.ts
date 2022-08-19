@@ -4,12 +4,13 @@ import JSBI from 'jsbi'
 export type BigintIsh = JSBI | bigint | string
 
 export enum ChainId {
-    MAINNET = 1,    // UpdateMe
+    MAINNET = 1,
     TESTNET = 4,
     RSK_MAINNET = 30,
     RSK_TESTNET = 31,
     BSC_MAINNET = 56,
     BSC_TESTNET = 97,
+    OKC_MAINNET = 66,
 }
 
 export enum TradeType {
@@ -30,6 +31,7 @@ export const FACTORY_ADDRESS = {
     [ChainId.RSK_TESTNET]: '0x907c82508cFb215D564161A618e196b218E4f375',
     [ChainId.BSC_MAINNET]: '0x7e599C90C5D84DF399F8EfE3462a5F5C673c0ca8',
     [ChainId.BSC_TESTNET]: '0x510085FDBD2123d3753Aa61C495af7d863746c24',
+    [ChainId.OKC_MAINNET]: '0x1ABFa8E80D33Cc250bbd2bCbac99bC84ACEAdb11',
 }
 
 export const INIT_CODE_HASH = {
@@ -39,6 +41,7 @@ export const INIT_CODE_HASH = {
     [ChainId.RSK_TESTNET]: '0x039a6c55d612c34347963d19ff309e53bd5cd2c46f88b67b0f7f65d43193e92b',
     [ChainId.BSC_MAINNET]: '0x039a6c55d612c34347963d19ff309e53bd5cd2c46f88b67b0f7f65d43193e92b',
     [ChainId.BSC_TESTNET]: '0x039a6c55d612c34347963d19ff309e53bd5cd2c46f88b67b0f7f65d43193e92b',
+    [ChainId.OKC_MAINNET]: '0x039a6c55d612c34347963d19ff309e53bd5cd2c46f88b67b0f7f65d43193e92b',
 }
 
 export const MINIMUM_LIQUIDITY = JSBI.BigInt(1000)

@@ -10,12 +10,13 @@ export type TranslatableText =
         }
     }
 export interface Address {
-    [ChainId.MAINNET]: string   // UpdateMe
+    [ChainId.MAINNET]: string
     [ChainId.TESTNET]?: string
     [ChainId.RSK_MAINNET]?: string
     [ChainId.RSK_TESTNET]?: string
     [ChainId.BSC_MAINNET]?: string
     [ChainId.BSC_TESTNET]?: string
+    [ChainId.OKC_MAINNET]?: string
 }
 
 export interface SerializedToken {
@@ -95,12 +96,13 @@ interface PoolConfigBaseProps {
     contractAddress: Address
     poolCategory: PoolCategory
     tokenPerBlock: {
-        [ChainId.MAINNET]: string   // UpdateMe
+        [ChainId.MAINNET]: string
         [ChainId.TESTNET]?: string
         [ChainId.RSK_MAINNET]?: string
         [ChainId.RSK_TESTNET]?: string
         [ChainId.BSC_MAINNET]?: string
         [ChainId.BSC_TESTNET]?: string
+        [ChainId.OKC_MAINNET]?: string
     }
     sortOrder?: number
     harvest?: boolean

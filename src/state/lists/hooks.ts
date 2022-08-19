@@ -11,6 +11,7 @@ import DEFAULT_TOKEN_LIST_RSK_MAINNET from '../../config/constants/tokenLists/pa
 import DEFAULT_TOKEN_LIST_RSK_TESTNET from '../../config/constants/tokenLists/pancake-default.tokenlist-rsk-testnet.json'
 import DEFAULT_TOKEN_LIST_BSC_MAINNET from '../../config/constants/tokenLists/pancake-default.tokenlist-bsc-mainnet.json'
 import DEFAULT_TOKEN_LIST_BSC_TESTNET from '../../config/constants/tokenLists/pancake-default.tokenlist-bsc-testnet.json'
+import DEFAULT_TOKEN_LIST_OKC_TESTNET from '../../config/constants/tokenLists/pancake-default.tokenlist-okc-mainnet.json'
 import { UNSUPPORTED_LIST_URLS } from '../../config/constants/lists'
 import UNSUPPORTED_TOKEN_LIST from '../../config/constants/tokenLists/pancake-unsupported.tokenlist.json'
 
@@ -63,6 +64,7 @@ const EMPTY_LIST: TokenAddressMap = {
     [ChainId.RSK_TESTNET]: {},
     [ChainId.BSC_MAINNET]: {},
     [ChainId.BSC_TESTNET]: {},
+    [ChainId.OKC_MAINNET]: {},
 }
 
 const listCache: WeakMap<TokenList, TokenAddressMap> | null =
@@ -119,6 +121,7 @@ function combineMaps(map1: TokenAddressMap, map2: TokenAddressMap): TokenAddress
         [ChainId.RSK_TESTNET]: { ...map1[ChainId.RSK_TESTNET], ...map2[ChainId.RSK_TESTNET] },
         [ChainId.BSC_MAINNET]: { ...map1[ChainId.BSC_MAINNET], ...map2[ChainId.BSC_MAINNET] },
         [ChainId.BSC_TESTNET]: { ...map1[ChainId.BSC_TESTNET], ...map2[ChainId.BSC_TESTNET] },
+        [ChainId.OKC_MAINNET]: { ...map1[ChainId.OKC_MAINNET], ...map2[ChainId.OKC_MAINNET] },
     }
 }
 
@@ -170,7 +173,7 @@ const tokenMap = {
     [ChainId.RSK_TESTNET]: DEFAULT_TOKEN_LIST_RSK_TESTNET,
     [ChainId.BSC_MAINNET]: DEFAULT_TOKEN_LIST_BSC_MAINNET,
     [ChainId.BSC_TESTNET]: DEFAULT_TOKEN_LIST_BSC_TESTNET,
-
+    [ChainId.OKC_MAINNET]: DEFAULT_TOKEN_LIST_OKC_TESTNET,
 }
 export function useCombinedActiveList(): TokenAddressMap {
     const { chainId } = useActiveWeb3React()

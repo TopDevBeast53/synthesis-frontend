@@ -3,12 +3,16 @@ import styled from 'styled-components'
 import { Flex } from '../Box'
 
 const StyledAlchemyImage = styled.img`
-  width: 160px;
+  width: 140px;
   height: auto;
   cursor: pointer;
   
   ${({ theme }) => theme.mediaQueries.sm} {
-    width: 200px;
+    width: 160px;
+  }
+
+  :hover {
+    opacity: 0.5;
   }
 `
 const isBadgeInViewpoint = (bounding) => {

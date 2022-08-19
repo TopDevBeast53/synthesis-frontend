@@ -74,7 +74,7 @@ export function currencyEquals(currencyA: Currency, currencyB: Currency): boolea
 export const WETH = {
     [ChainId.MAINNET]: new Token(
         ChainId.MAINNET,
-        '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2', // update me
+        '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
         18,
         'WETH',
         'Wrapped ETH',
@@ -119,5 +119,13 @@ export const WETH = {
         'tWBNB',
         'Test Wrapped BNB',
         'https://www.binance.com/',
+    ),
+    [ChainId.OKC_MAINNET]: new Token(
+        ChainId.OKC_MAINNET,
+        '0x8F8526dbfd6E38E3D8307702cA8469Bae6C56C15',
+        18,
+        'WOKT',
+        'Wrapped OKT',
+        'https://www.okx.com/okc'
     ),
 }

@@ -7,7 +7,8 @@ export const CHAIN_IDS_TO_NAMES = {
     [ChainId.RSK_MAINNET]: 'bitcoin_rsk',
     [ChainId.RSK_TESTNET]: 'rsk_testnet',
     [ChainId.BSC_MAINNET]: 'bsc',
-    [ChainId.BSC_TESTNET]: 'bsc_testnet'
+    [ChainId.BSC_TESTNET]: 'bsc_testnet',
+    [ChainId.OKC_MAINNET]: 'okc'
 }
 
 export const SUPPORTED_NETWORKS: { [key: number]: CHAIN_CONFIG } = {
@@ -114,5 +115,22 @@ export const SUPPORTED_NETWORKS: { [key: number]: CHAIN_CONFIG } = {
         label: 'BSC Testnet',
         showOnlyTrade: true,
         isTestChain: true
+    },
+    [ChainId.OKC_MAINNET]: {
+        chainId: 66,
+        chainName: CHAIN_IDS_TO_NAMES[ChainId.OKC_MAINNET],
+        chainNameForMetamask: "OKExChain",
+        nativeCurrency: {
+            name: 'OKT',
+            symbol: 'OKT',
+            decimals: 18,
+        },
+        rpcUrls: ['https://exchainrpc.okex.org/'],
+        rpcUrlsForMetamask: ['https://exchainrpc.okex.org/'],
+        blockExplorerUrls: ['https://www.oklink.com/en/okc/'],
+        logoUrl: '/images/networks/okc.png',
+        label: 'OKC',
+        showOnlyTrade: true,
+        isTestChain: false
     }
 }
