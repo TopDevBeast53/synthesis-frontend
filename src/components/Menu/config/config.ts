@@ -67,12 +67,12 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
                     },
                 ],
             },
-            {
+            /* {
                 label: t('Refer'),
                 href: '/refer',
                 icon: 'Referals',
                 showItemsOnMobile: false,
-            },
+            }, */
             {
                 label: t('Voting'),
                 href: '/voting',
@@ -303,12 +303,12 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
                     },
                 ],
             },
-            {
+            /* {
                 label: t('Refer'),
                 href: '/refer',
                 icon: 'Referals',
                 showItemsOnMobile: false,
-            },
+            }, */
             {
                 label: t('Voting'),
                 href: '/voting',
@@ -505,12 +505,12 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
                     },
                 ],
             },
-            {
+            /* {
                 label: t('Refer'),
                 href: '/refer',
                 icon: 'Referals',
                 showItemsOnMobile: false,
-            },
+            }, */
             {
                 label: t('Voting'),
                 href: '/voting',
