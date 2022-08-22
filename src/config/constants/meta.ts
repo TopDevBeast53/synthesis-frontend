@@ -36,6 +36,8 @@ export const getCustomMeta = (path: string, t: ContextApi['t']): PageMeta => {
         basePath = '/geobot-staking'
     } else if (path.startsWith('/migration')) {
         basePath = '/migration'
+    } else if (path.startsWith('/admin')) {
+        basePath = '/admin'
     } else {
         basePath = path
     }
@@ -171,6 +173,10 @@ export const getCustomMeta = (path: string, t: ContextApi['t']): PageMeta => {
         case '/pancake-squad':
             return {
                 title: `${t('Pancake Squad')} | ${t('Helix')}`,
+            }
+        case '/admin':
+            return {
+                title: `${t('Admin Panel')} | ${t('Helix')}`,
             }
         default:
             return null

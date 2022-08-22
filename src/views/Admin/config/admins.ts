@@ -1,0 +1,4 @@
+export const admins = [
+  '0x1f59f5ad0460f90881330678F1cFacE43d2F9cc8',
+  '0xee936e648cD998e9df4531dF77EF2D2AECA5921b'
+]

@@ -111,3 +111,6 @@ export const getReferralRegisterAddress = (chainId: ChainId) => {
 export const getHelixLPSwapAddress = (chainId: ChainId) => {
     return getAddress(chainId, addresses.helixLPSwap)
 }
+export const getFeeMinterAddress = (chainId: ChainId) => {
+    return getAddress(chainId, addresses.feeMinter)
+}

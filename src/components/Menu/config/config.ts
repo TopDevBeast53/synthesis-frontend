@@ -3,7 +3,7 @@ import { DropdownMenuItemType } from 'uikit/components/DropdownMenu/types'
 import { ContextApi } from 'contexts/Localization/types'
 import { ChainId } from 'sdk'
 
-export type ConfigMenuItemType = MenuItemsType & { hideSubNav?: boolean }
+export type ConfigMenuItemType = MenuItemsType & { hideSubNav?: boolean, onlyAdmin?: boolean }
 export type ConfigMenuItemsType = {
     [ChainId.MAINNET]: ConfigMenuItemType[]
     [ChainId.TESTNET]: ConfigMenuItemType[]
@@ -113,6 +113,13 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
                 href: '/data',
                 icon: 'Chart',
                 showItemsOnMobile: false,
+            },
+            {
+                label: t('Admin'),
+                href: '/admin',
+                icon: 'Admin',
+                showItemsOnMobile: false,
+                onlyAdmin: true
             },
             {
                 label: '',
@@ -233,6 +240,13 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
                 showItemsOnMobile: false,
             },
             {
+                label: t('Admin'),
+                href: '/admin',
+                icon: 'Admin',
+                showItemsOnMobile: false,
+                onlyAdmin: true
+            },
+            {
                 label: '',
                 href: '',
                 icon: 'More',
@@ -252,7 +266,6 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
             },
         ],
         [ChainId.RSK_MAINNET]: [
-
             {
                 label: t('Trade'),
                 icon: 'Swap',
@@ -332,6 +345,13 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
                         type: DropdownMenuItemType.EXTERNAL_LINK,
                     }
                 ],
+            },
+            {
+                label: t('Admin'),
+                href: '/admin',
+                icon: 'Admin',
+                showItemsOnMobile: false,
+                onlyAdmin: true
             },
             {
                 label: '',
@@ -353,7 +373,6 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
             },
         ],
         [ChainId.RSK_TESTNET]: [
-
             {
                 label: t('Trade'),
                 icon: 'Swap',
@@ -433,6 +452,13 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
                         type: DropdownMenuItemType.EXTERNAL_LINK,
                     }
                 ],
+            },
+            {
+                label: t('Admin'),
+                href: '/admin',
+                icon: 'Admin',
+                showItemsOnMobile: false,
+                onlyAdmin: true
             },
             {
                 label: '',
@@ -454,7 +480,6 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
             },
         ],
         [ChainId.BSC_MAINNET]: [
-
             {
                 label: t('Trade'),
                 icon: 'Swap',
@@ -534,6 +559,13 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
                         type: DropdownMenuItemType.EXTERNAL_LINK,
                     }
                 ],
+            },
+            {
+                label: t('Admin'),
+                href: '/admin',
+                icon: 'Admin',
+                showItemsOnMobile: false,
+                onlyAdmin: true
             },
             {
                 label: t('Data'),
@@ -561,7 +593,6 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
             },
         ],
         [ChainId.BSC_TESTNET]: [
-
             {
                 label: t('Trade'),
                 icon: 'Swap',
@@ -643,6 +674,13 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
                 ],
             },
             {
+                label: t('Admin'),
+                href: '/admin',
+                icon: 'Admin',
+                showItemsOnMobile: false,
+                onlyAdmin: true
+            },
+            {
                 label: '',
                 href: '',
                 icon: 'More',
@@ -662,7 +700,6 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
             },
         ],
         [ChainId.OKC_MAINNET]: [
-
             {
                 label: t('Trade'),
                 icon: 'Swap',
@@ -730,6 +767,13 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
                         type: DropdownMenuItemType.EXTERNAL_LINK,
                     }
                 ],
+            },
+            {
+                label: t('Admin'),
+                href: '/admin',
+                icon: 'Admin',
+                showItemsOnMobile: false,
+                onlyAdmin: true
             },
             {
                 label: '',

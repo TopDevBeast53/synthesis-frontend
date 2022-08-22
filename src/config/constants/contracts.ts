@@ -270,4 +270,12 @@ export default {
         56: '',
         97: ''
     },
+    feeMinter: {
+        1: '0xfdaE467192a8eFd6eF00Ab3eaf3f52Ad4c60C615',
+        4: '0xFe19cb3E3E97572FCd8dE6c81c3224f0B90452Bc',
+        30: '0x9Ae0bA9807482b8e14a251fc17aC9EeE0068F432',
+        31: '0xF19f5E94f94C2c9f280a7BE143857ae1e0cb2330',
+        56: '0xB7DB7C5596e93E93Dbe0eAC38Edd68eF1292ada2',
+        66: '0x6f2Beed672154232D254b00f2fd67CcA3dF691e9',
+    },
 }

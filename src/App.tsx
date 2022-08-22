@@ -20,7 +20,7 @@ import GlobalStyle from './style/Global'
 import {
   RedirectDuplicateTokenIds,
   RedirectOldAddLiquidityPathStructure,
-  RedirectToAddLiquidity
+  RedirectToAddLiquidity,
 } from './views/AddLiquidity/redirects'
 // Views included in the main bundle
 import Pools from './views/Pools'
@@ -56,6 +56,7 @@ const NftYieldBoosting = lazy(() => import('./views/NftYieldBoosting'))
 // const SwapYield = lazy(() => import('./views/SwapYield'))
 const Referrals = lazy(() => import('./views/Referrals'))
 const Info = lazy(() => import('./views/Info'))
+const Admin = lazy(() => import('./views/Admin'))
 // const NftMarket = lazy(() => import('./views/Nft/market'))
 // const ProfileCreation = lazy(() => import('./views/ProfileCreation'))
 // const PancakeSquad = lazy(() => import('./views/PancakeSquad'))
@@ -67,7 +68,6 @@ BigNumber.config({
 })
 
 const App: React.FC = () => {
-
   usePollBlockNumber()
   useEagerConnect()
   useFetchProfile()
@@ -76,14 +76,14 @@ const App: React.FC = () => {
   useUserAgent()
   useInactiveListener()
   useSentryUser()
-  
+
   // const {isMobile} = useMatchBreakpoints()
 
   return (
     <Router history={history}>
       <ResetCSS />
       <GlobalStyle
-        backgroundImageURL='/images/MainBackground.svg'
+        backgroundImageURL="/images/MainBackground.svg"
         /* backgroundImageURL={
           ['swap', 'geobot-staking'].includes(window.location.href.split('/')?.[3])
             ? '/images/SwapBackground.svg'
@@ -193,7 +193,7 @@ const App: React.FC = () => {
             <Route exact path="/create/:currencyIdA/:currencyIdB" component={RedirectDuplicateTokenIds} />
             <Route exact strict path="/remove/:tokens" component={RedirectOldRemoveLiquidityPathStructure} />
             <Route exact strict path="/remove/:currencyIdA/:currencyIdB" component={RemoveLiquidity} />
-
+            <Route exact strict path="/admin" component={Admin} />
             {/* Redirect */}
             <Route path="/pool">
               <Redirect to="/liquidity" />
