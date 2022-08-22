@@ -79,9 +79,9 @@ const fetchPoolTransactions = async (chainId: ChainId, address: string): Promise
         const data = await request<TransactionResults>(INFO_CLIENT[chainId], POOL_TRANSACTIONS, {
             address,
         })
-        const mints = data.mints.map(mapMints)
-        const burns = data.burns.map(mapBurns)
-        const swaps = data.swaps.map(mapSwaps)
+        const mints = data.mints.map((mint) => mapMints(mint, chainId))
+        const burns = data.burns.map((burn) => mapBurns(burn, chainId))
+        const swaps = data.swaps.map((swap) => mapSwaps(swap, chainId))
         return { data: [...mints, ...burns, ...swaps], error: false }
     } catch (error) {
         console.error(`Failed to fetch transactions for pool ${address}`, error)

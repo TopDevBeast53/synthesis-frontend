@@ -82,22 +82,22 @@ export const useAddPoolKeys = (): ((addresses: string[]) => void) => {
 
 export const usePoolDatas = (poolAddresses: string[]): PoolData[] => {
     const allPoolData = useAllPoolData()
-    const addNewPoolKeys = useAddPoolKeys()
+    // const addNewPoolKeys = useAddPoolKeys()
 
-    const untrackedAddresses = useMemo(() => {
-        return poolAddresses.reduce((accum: string[], address) => {
-            if (!Object.keys(allPoolData).includes(address)) {
-                accum.push(address)
-            }
-            return accum
-        }, [])
-    }, [poolAddresses, allPoolData])
+    // const untrackedAddresses = useMemo(() => {
+    //     return poolAddresses.reduce((accum: string[], address) => {
+    //         if (!Object.keys(allPoolData).includes(address)) {
+    //             accum.push(address)
+    //         }
+    //         return accum
+    //     }, [])
+    // }, [poolAddresses, allPoolData])
 
-    useEffect(() => {
-        if (untrackedAddresses.length) {
-            addNewPoolKeys(untrackedAddresses)
-        }
-    }, [addNewPoolKeys, untrackedAddresses])
+    // useEffect(() => {
+    //     if (untrackedAddresses.length) {
+    //         addNewPoolKeys(untrackedAddresses)
+    //     }
+    // }, [addNewPoolKeys, untrackedAddresses])
 
     const poolsWithData = useMemo(() => {
         return poolAddresses
@@ -110,18 +110,19 @@ export const usePoolDatas = (poolAddresses: string[]): PoolData[] => {
     return poolsWithData
 }
 
-export const usePoolChartData = (address: string): ChartEntry[] | undefined => {
+export const usePoolChartData = (key: string): ChartEntry[] | undefined => {
+    const chainId = Number(key.split('-')[1])
+    const address = key.split('-')[0]
     const dispatch = useDispatch<AppDispatch>()
-    const pool = useSelector((state: AppState) => state.info.pools.byAddress[address])
+    const pool = useSelector((state: AppState) => state.info.pools.byAddress[key])
     const chartData = pool?.chartData
     const [error, setError] = useState(false)
-    const { chainId } = useChainIdData()
 
     useEffect(() => {
         const fetch = async () => {
             const { error: fetchError, data } = await fetchPoolChartData(chainId, address)
             if (!fetchError && data) {
-                dispatch(updatePoolChartData({ poolAddress: address, chartData: data }))
+                dispatch(updatePoolChartData({ poolAddress: key, chartData: data }))
             }
             if (fetchError) {
                 setError(fetchError)
@@ -130,17 +131,18 @@ export const usePoolChartData = (address: string): ChartEntry[] | undefined => {
         if (!chartData && !error) {
             fetch()
         }
-    }, [address, dispatch, error, chartData, chainId])
+    }, [address, dispatch, error, chartData, chainId, key])
 
     return chartData
 }
 
-export const usePoolTransactions = (address: string): Transaction[] | undefined => {
+export const usePoolTransactions = (key: string): Transaction[] | undefined => {
+    const chainId = Number(key.split('-')[1])
+    const address = key.split('-')[0]
     const dispatch = useDispatch<AppDispatch>()
-    const pool = useSelector((state: AppState) => state.info.pools.byAddress[address])
+    const pool = useSelector((state: AppState) => state.info.pools.byAddress[key])
     const transactions = pool?.transactions
     const [error, setError] = useState(false)
-    const { chainId } = useChainIdData()
 
     useEffect(() => {
         const fetch = async () => {
@@ -148,13 +150,13 @@ export const usePoolTransactions = (address: string): Transaction[] | undefined 
             if (fetchError) {
                 setError(true)
             } else {
-                dispatch(updatePoolTransactions({ poolAddress: address, transactions: data }))
+                dispatch(updatePoolTransactions({ poolAddress: key, transactions: data }))
             }
         }
         if (!transactions && !error) {
             fetch()
         }
-    }, [address, chainId, dispatch, error, transactions])
+    }, [address, chainId, dispatch, error, transactions, key])
 
     return transactions
 }
@@ -211,7 +213,7 @@ export const useTokenData = (address: string | undefined): TokenData | undefined
     const allTokenData = useAllTokenData()
     const addNewTokenKeys = useAddTokenKeys()
 
-    if (!address || !isAddress(address)) {
+    if (!address || !isAddress(address.split('-')[0])) {
         return undefined
     }
 
@@ -223,18 +225,19 @@ export const useTokenData = (address: string | undefined): TokenData | undefined
     return allTokenData[address]?.data
 }
 
-export const usePoolsForToken = (address: string): string[] | undefined => {
+export const usePoolsForToken = (key: string): string[] | undefined => {
+    const chainId = Number(key.split('-')[1])
+    const address = key.split('-')[0]
     const dispatch = useDispatch<AppDispatch>()
-    const token = useSelector((state: AppState) => state.info.tokens.byAddress[address])
+    const token = useSelector((state: AppState) => state.info.tokens.byAddress[key])
     const poolsForToken = token.poolAddresses
     const [error, setError] = useState(false)
-    const { chainId } = useChainIdData()
 
     useEffect(() => {
         const fetch = async () => {
             const { error: fetchError, addresses } = await fetchPoolsForToken(chainId, address)
             if (!fetchError && addresses) {
-                dispatch(addTokenPoolAddresses({ tokenAddress: address, poolAddresses: addresses }))
+                dispatch(addTokenPoolAddresses({ tokenAddress: key, poolAddresses: addresses }))
             }
             if (fetchError) {
                 setError(fetchError)
@@ -243,23 +246,24 @@ export const usePoolsForToken = (address: string): string[] | undefined => {
         if (!poolsForToken && !error) {
             fetch()
         }
-    }, [address, chainId, dispatch, error, poolsForToken])
+    }, [address, chainId, dispatch, error, poolsForToken, key])
 
     return poolsForToken
 }
 
-export const useTokenChartData = (address: string): ChartEntry[] | undefined => {
+export const useTokenChartData = (key: string): ChartEntry[] | undefined => {
+    const chainId = Number(key.split('-')[1])
+    const address = key.split('-')[0]
     const dispatch = useDispatch<AppDispatch>()
-    const token = useSelector((state: AppState) => state.info.tokens.byAddress[address])
+    const token = useSelector((state: AppState) => state.info.tokens.byAddress[key])
     const { chartData } = token
     const [error, setError] = useState(false)
-    const { chainId } = useChainIdData()
 
     useEffect(() => {
         const fetch = async () => {
             const { error: fetchError, data } = await fetchTokenChartData(chainId, address)
             if (!fetchError && data) {
-                dispatch(updateTokenChartData({ tokenAddress: address, chartData: data }))
+                dispatch(updateTokenChartData({ tokenAddress: key, chartData: data }))
             }
             if (fetchError) {
                 setError(fetchError)
@@ -268,21 +272,22 @@ export const useTokenChartData = (address: string): ChartEntry[] | undefined => 
         if (!chartData && !error) {
             fetch()
         }
-    }, [address, dispatch, error, chartData, chainId])
+    }, [address, dispatch, error, chartData, chainId, key])
 
     return chartData
 }
 
 export const useTokenPriceData = (
-    address: string,
+    key: string,
     interval: number,
     timeWindow: Duration,
 ): PriceChartEntry[] | undefined => {
+    const chainId = Number(key.split('-')[1])
+    const address = key.split('-')[0]
     const dispatch = useDispatch<AppDispatch>()
-    const token = useSelector((state: AppState) => state.info.tokens.byAddress[address])
+    const token = useSelector((state: AppState) => state.info.tokens.byAddress[key])
     const priceData = token?.priceData[interval]
     const [error, setError] = useState(false)
-    const { chainId } = useChainIdData()
     // construct timestamps and check if we need to fetch more data
     const oldestTimestampFetched = token?.priceData.oldestFetchedTimestamp
     const utcCurrentTime = getUnixTime(new Date()) * 1000
@@ -294,7 +299,7 @@ export const useTokenPriceData = (
             if (data) {
                 dispatch(
                     updateTokenPriceData({
-                        tokenAddress: address,
+                        tokenAddress: key,
                         secondsInterval: interval,
                         priceData: data,
                         oldestFetchedTimestamp: startTimestamp,
@@ -308,17 +313,18 @@ export const useTokenPriceData = (
         if (!priceData && !error) {
             fetch()
         }
-    }, [address, chainId, dispatch, error, interval, oldestTimestampFetched, priceData, startTimestamp, timeWindow])
+    }, [address, key, chainId, dispatch, error, interval, oldestTimestampFetched, priceData, startTimestamp, timeWindow])
 
     return priceData
 }
 
-export const useTokenTransactions = (address: string): Transaction[] | undefined => {
+export const useTokenTransactions = (key: string): Transaction[] | undefined => {
+    const chainId = Number(key.split('-')[1])
+    const address = key.split('-')[0]
     const dispatch = useDispatch<AppDispatch>()
-    const token = useSelector((state: AppState) => state.info.tokens.byAddress[address])
+    const token = useSelector((state: AppState) => state.info.tokens.byAddress[key])
     const { transactions } = token
     const [error, setError] = useState(false)
-    const { chainId } = useChainIdData()
 
     useEffect(() => {
         const fetch = async () => {
@@ -326,13 +332,13 @@ export const useTokenTransactions = (address: string): Transaction[] | undefined
             if (fetchError) {
                 setError(true)
             } else if (data) {
-                dispatch(updateTokenTransactions({ tokenAddress: address, transactions: data }))
+                dispatch(updateTokenTransactions({ tokenAddress: key, transactions: data }))
             }
         }
         if (!transactions && !error) {
             fetch()
         }
-    }, [address, chainId, dispatch, error, transactions])
+    }, [address, chainId, dispatch, error, transactions, key])
 
     return transactions
 }

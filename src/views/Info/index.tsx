@@ -1,7 +1,7 @@
 import React from 'react'
 import { Route } from 'react-router-dom'
 import { PoolUpdater, ProtocolUpdater, TokenUpdater } from 'state/info/updaters'
-// import InfoChain from './components/InfoChain'
+import InfoChain from './components/InfoChain'
 import InfoNav from './components/InfoNav'
 import Overview from './Overview'
 import Pools from './Pools'
@@ -15,7 +15,7 @@ const Info: React.FC = () => {
       <ProtocolUpdater />
       <PoolUpdater />
       <TokenUpdater />
-      {/* <InfoChain /> */}
+      <InfoChain />
       <InfoNav />
       <Route path="/data" exact>
         <Overview />

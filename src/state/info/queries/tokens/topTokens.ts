@@ -6,6 +6,7 @@ import { getDeltaTimestamps } from 'views/Info/utils/infoQueryHelpers'
 import { ChainId } from 'sdk'
 import usePreviousValue from 'hooks/usePreviousValue'
 import { useChainIdData } from 'state/info/hooks'
+import { flatten } from 'lodash'
 
 interface TopTokensResponse {
     tokenDayDatas: {
@@ -55,8 +56,15 @@ const useTopTokenAddresses = (): string[] => {
 
     useEffect(() => {
         const fetch = async () => {
-            const addresses = await fetchTopTokens(chainId, timestamp24hAgo)
-            setTopTokenAddresses(addresses)
+            const chainIds = chainId ? [chainId] : [ChainId.MAINNET, ChainId.BSC_MAINNET]
+            const addresses = await Promise.all(chainIds.map(async (_chainId) => {
+                const rowAddresses = (await fetchTopTokens(_chainId, timestamp24hAgo))
+                    .map((address) => {
+                        return `${address}-${_chainId}`
+                    })
+                return rowAddresses
+            }))
+            setTopTokenAddresses(flatten(addresses))
         }
         if (topTokenAddresses.length === 0 || prevChainId !== chainId) {
             fetch()

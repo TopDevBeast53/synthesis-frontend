@@ -536,6 +536,12 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
                 ],
             },
             {
+                label: t('Data'),
+                href: '/data',
+                icon: 'Chart',
+                showItemsOnMobile: false,
+            },
+            {
                 label: '',
                 href: '',
                 icon: 'More',

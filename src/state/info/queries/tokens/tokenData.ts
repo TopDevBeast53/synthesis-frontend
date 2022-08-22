@@ -133,19 +133,22 @@ const useFetchedTokenDatas = (tokenAddresses: string[]): TokenDatas => {
 
     useEffect(() => {
         const fetch = async () => {
-            const blocks = await getBlocksFromTimestamps(chainId, [t24h, t48h, t7d, t14d])
-            const [block24h, block48h, block7d, block14d] = blocks ?? []
-            const { error, data } = await fetchTokenData(
-                chainId,
-                block24h.number,
-                block48h.number,
-                block7d.number,
-                block14d.number,
-                tokenAddresses,
-            )
-            if (error) {
-                setFetchState({ error: true })
-            } else {
+            const chainIds = chainId ? [chainId] : [ChainId.MAINNET, ChainId.BSC_MAINNET]
+            const tokenDatas = (await Promise.all(chainIds.map(async (_chainId) => {
+                const blocks = await getBlocksFromTimestamps(_chainId, [t24h, t48h, t7d, t14d])
+                const [block24h, block48h, block7d, block14d] = blocks ?? []
+                const { error, data } = await fetchTokenData(
+                    _chainId,
+                    block24h.number,
+                    block48h.number,
+                    block7d.number,
+                    block14d.number,
+                    tokenAddresses.filter((address) => address.includes(`-${_chainId}`))
+                        .map((address) => address.replace(`-${_chainId}`, '')),
+                )
+                if (error) {
+                    return null
+                }
                 const parsed = parseTokenData(data?.now)
                 const parsed24 = parseTokenData(data?.oneDayAgo)
                 const parsed48 = parseTokenData(data?.twoDaysAgo)
@@ -153,64 +156,73 @@ const useFetchedTokenDatas = (tokenAddresses: string[]): TokenDatas => {
                 const parsed14d = parseTokenData(data?.twoWeeksAgo)
 
                 // Calculate data and format
-                const formatted = tokenAddresses.reduce((accum: { [address: string]: TokenData }, address) => {
-                    const current: FormattedTokenFields | undefined = parsed[address]
-                    const oneDay: FormattedTokenFields | undefined = parsed24[address]
-                    const twoDays: FormattedTokenFields | undefined = parsed48[address]
-                    const week: FormattedTokenFields | undefined = parsed7d[address]
-                    const twoWeeks: FormattedTokenFields | undefined = parsed14d[address]
+                const formatted = tokenAddresses.filter((address) => address.includes(`-${_chainId}`))
+                    .map((address) => address.replace(`-${_chainId}`, ''))
+                    .reduce((accum: { [address: string]: TokenData }, address) => {
+                        const current: FormattedTokenFields | undefined = parsed[address]
+                        const oneDay: FormattedTokenFields | undefined = parsed24[address]
+                        const twoDays: FormattedTokenFields | undefined = parsed48[address]
+                        const week: FormattedTokenFields | undefined = parsed7d[address]
+                        const twoWeeks: FormattedTokenFields | undefined = parsed14d[address]
 
-                    const [volumeUSD, volumeUSDChange] = getChangeForPeriod(
-                        current?.tradeVolumeUSD,
-                        oneDay?.tradeVolumeUSD,
-                        twoDays?.tradeVolumeUSD,
-                    )
-                    const [volumeUSDWeek] = getChangeForPeriod(
-                        current?.tradeVolumeUSD,
-                        week?.tradeVolumeUSD,
-                        twoWeeks?.tradeVolumeUSD,
-                    )
-                    const liquidityUSD = current ? current.totalLiquidity * current.derivedUSD : 0
-                    const liquidityUSDOneDayAgo = oneDay ? oneDay.totalLiquidity * oneDay.derivedUSD : 0
-                    const liquidityUSDChange = getPercentChange(liquidityUSD, liquidityUSDOneDayAgo)
-                    const liquidityToken = current ? current.totalLiquidity : 0
-                    // Prices of tokens for now, 24h ago and 7d ago
-                    const priceUSD = current ? current.derivedETH * ethPrices.current : 0
-                    const priceUSDOneDay = oneDay ? oneDay.derivedETH * ethPrices.oneDay : 0
-                    const priceUSDWeek = week ? week.derivedETH * ethPrices.week : 0
-                    const priceUSDChange = getPercentChange(priceUSD, priceUSDOneDay)
-                    const priceUSDChangeWeek = getPercentChange(priceUSD, priceUSDWeek)
-                    const txCount = getAmountChange(current?.totalTransactions, oneDay?.totalTransactions)
+                        const [volumeUSD, volumeUSDChange] = getChangeForPeriod(
+                            current?.tradeVolumeUSD,
+                            oneDay?.tradeVolumeUSD,
+                            twoDays?.tradeVolumeUSD,
+                        )
+                        const [volumeUSDWeek] = getChangeForPeriod(
+                            current?.tradeVolumeUSD,
+                            week?.tradeVolumeUSD,
+                            twoWeeks?.tradeVolumeUSD,
+                        )
+                        const liquidityUSD = current ? current.totalLiquidity * current.derivedUSD : 0
+                        const liquidityUSDOneDayAgo = oneDay ? oneDay.totalLiquidity * oneDay.derivedUSD : 0
+                        const liquidityUSDChange = getPercentChange(liquidityUSD, liquidityUSDOneDayAgo)
+                        const liquidityToken = current ? current.totalLiquidity : 0
+                        // Prices of tokens for now, 24h ago and 7d ago
+                        const priceUSD = current ? current.derivedETH * ethPrices[_chainId].current : 0
+                        const priceUSDOneDay = oneDay ? oneDay.derivedETH * ethPrices[_chainId].oneDay : 0
+                        const priceUSDWeek = week ? week.derivedETH * ethPrices[_chainId].week : 0
+                        const priceUSDChange = getPercentChange(priceUSD, priceUSDOneDay)
+                        const priceUSDChangeWeek = getPercentChange(priceUSD, priceUSDWeek)
+                        const txCount = getAmountChange(current?.totalTransactions, oneDay?.totalTransactions)
 
-                    accum[address] = {
-                        exists: !!current,
-                        address,
-                        name: current ? current.name : '',
-                        symbol: current ? current.symbol : '',
-                        volumeUSD,
-                        volumeUSDChange,
-                        volumeUSDWeek,
-                        txCount,
-                        liquidityUSD,
-                        liquidityUSDChange,
-                        liquidityToken,
-                        priceUSD,
-                        priceUSDChange,
-                        priceUSDChangeWeek,
-                    }
+                        accum[`${address}-${_chainId}`] = {
+                            exists: !!current,
+                            address,
+                            name: current ? current.name : '',
+                            symbol: current ? current.symbol : '',
+                            volumeUSD,
+                            volumeUSDChange,
+                            volumeUSDWeek,
+                            txCount,
+                            liquidityUSD,
+                            liquidityUSDChange,
+                            liquidityToken,
+                            priceUSD,
+                            priceUSDChange,
+                            priceUSDChangeWeek,
+                            chainId: _chainId,
+                        }
 
-                    return accum
-                }, {})
-                setFetchState({ data: formatted, error: false })
-            }
-        }
-        const allBlocksAvailable = t24h && t48h && t7d && t14d
-        if (tokenAddresses.length > 0 && allBlocksAvailable && ethPrices && !fetchState.data) {
-            fetch()
-        }
+                        return accum
+                    }, {})
+                return formatted
+        }))).reduce((prev, cur) => ({ ...prev, ...cur }), {})
+
+    if (Object.keys(tokenDatas).length === 0) {
+        setFetchState({ error: false })
+        return
+    }
+    setFetchState({ data: tokenDatas, error: false })
+}
+const allBlocksAvailable = t24h && t48h && t7d && t14d
+if (tokenAddresses.length > 0 && allBlocksAvailable && ethPrices && !fetchState.data) {
+    fetch()
+}
     }, [tokenAddresses, t24h, t48h, t7d, t14d, ethPrices, chainId, fetchState])
 
-    return fetchState
+return fetchState
 }
 
 export default useFetchedTokenDatas

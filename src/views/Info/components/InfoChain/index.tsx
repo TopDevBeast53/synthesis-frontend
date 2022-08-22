@@ -4,6 +4,7 @@ import { Box, Flex, ButtonMenu, ButtonMenuItem } from 'uikit'
 import { useTranslation } from 'contexts/Localization'
 import { useChainIdData } from 'state/info/hooks'
 import { ChainId } from 'sdk'
+import { useHistory } from 'react-router-dom'
 
 const ChainWrapper = styled(Flex)`
   justify-content: center;
@@ -15,13 +16,15 @@ const ChainWrapper = styled(Flex)`
 `
 
 const InfoChain = () => {
+  const history = useHistory()
+  const { location: { pathname } } = history
   const { t } = useTranslation()
   const { chainId, setChainId } = useChainIdData()
   const activeIndex = useMemo(() => {
     switch (chainId) {
       case ChainId.MAINNET:
         return 1
-      case ChainId.TESTNET:
+      case ChainId.BSC_MAINNET:
         return 2
       default:
         return 0
@@ -29,16 +32,18 @@ const InfoChain = () => {
   }, [chainId])
 
   const onhandleItemClick = (newIndex: number) => {
+    if (pathname.includes('data/token/') || pathname.includes('data/trading-pool/')) {
+      return
+    }
     switch (newIndex) {
-      case 0:
-        setChainId(ChainId.MAINNET)
-        break
       case 1:
         setChainId(ChainId.MAINNET)
         break
       case 2:
+        setChainId(ChainId.BSC_MAINNET)
+        break
       default:
-        setChainId(ChainId.TESTNET)
+        setChainId(0)
         break
     }
   }

@@ -139,14 +139,14 @@ const fetchTokenTransactions = async (chainId: ChainId, address: string): Promis
         const data = await request<TransactionResults>(INFO_CLIENT[chainId], TOKEN_TRANSACTIONS, {
             address,
         })
-        const mints0 = data.mintsAs0.map(mapMints)
-        const mints1 = data.mintsAs1.map(mapMints)
+        const mints0 = data.mintsAs0.map((mint) => mapMints(mint, chainId))
+        const mints1 = data.mintsAs1.map((mint) => mapMints(mint, chainId))
 
-        const burns0 = data.burnsAs0.map(mapBurns)
-        const burns1 = data.burnsAs1.map(mapBurns)
+        const burns0 = data.burnsAs0.map((burn) => mapBurns(burn, chainId))
+        const burns1 = data.burnsAs1.map((burn) => mapBurns(burn, chainId))
 
-        const swaps0 = data.swapsAs0.map(mapSwaps)
-        const swaps1 = data.swapsAs1.map(mapSwaps)
+        const swaps0 = data.swapsAs0.map((swap) => mapSwaps(swap, chainId))
+        const swaps1 = data.swapsAs1.map((swap) => mapSwaps(swap, chainId))
 
         return { data: [...mints0, ...mints1, ...burns0, ...burns1, ...swaps0, ...swaps1], error: false }
     } catch (error) {

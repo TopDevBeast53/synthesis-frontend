@@ -7,6 +7,8 @@ import usePoolDatas from 'state/info/queries/pools/poolData'
 import useFetchedTokenDatas from 'state/info/queries/tokens/tokenData'
 import useTopTokenAddresses from 'state/info/queries/tokens/topTokens'
 import usePreviousValue from 'hooks/usePreviousValue'
+import { ChainId } from 'sdk'
+import { flatMap } from 'lodash'
 import {
     useProtocolData,
     useProtocolChartData,
@@ -49,9 +51,14 @@ export const ProtocolUpdater: React.FC = () => {
 
     useEffect(() => {
         const fetch = async () => {
-            const data = await fetchTopTransactions(chainId)
-            if (data) {
-                updateTransactions(data)
+            const chainIds = chainId ? [chainId] : [ChainId.MAINNET, ChainId.BSC_MAINNET]
+            const transactionDatas = await Promise.all(chainIds.map(async (_chainId) => {
+                const data = await fetchTopTransactions(_chainId)
+                return data
+            }))
+            const flattedTransactions = flatMap(transactionDatas)
+            if (flattedTransactions) {
+                updateTransactions(flattedTransactions)
             }
         }
         if (!transactions || prevChainId !== chainId) {

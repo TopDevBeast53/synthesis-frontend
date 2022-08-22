@@ -32,7 +32,6 @@ import {
   useTokenChartData,
   useTokenPriceData,
   useTokenTransactions,
-  useChainIdData,
 } from 'state/info/hooks'
 import PoolTable from 'views/Info/components/InfoTables/PoolsTable'
 import TransactionTable from 'views/Info/components/InfoTables/TransactionsTable'
@@ -40,6 +39,9 @@ import { useWatchlistTokens } from 'state/user/hooks'
 import { ONE_HOUR_SECONDS } from 'config/constants/info'
 import { useTranslation } from 'contexts/Localization'
 import ChartCard from 'views/Info/components/InfoCharts/ChartCard'
+import { CHAIN_IDS_TO_NAMES } from 'config/constants/networks'
+import { BASE_SCAN_NAMES } from 'config'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 const ContentLayout = styled.div`
   margin-top: 16px;
@@ -77,18 +79,19 @@ const TokenPage: React.FC<RouteComponentProps<{ address: string }>> = ({
   }, [])
 
   // In case somebody pastes checksummed address into url (since GraphQL expects lowercase address)
-  const address = routeAddress.toLowerCase()
+  const address = routeAddress.split('-')[0].toLowerCase()
+  const chainId = Number(routeAddress.split('-')[1])
+  const { chainId: urlChainId } = useActiveWeb3React()
 
   const cmcLink = useCMCLink(address)
 
-  const tokenData = useTokenData(address)
-  const poolsForToken = usePoolsForToken(address)
+  const tokenData = useTokenData(routeAddress)
+  const poolsForToken = usePoolsForToken(routeAddress)
   const poolDatas = usePoolDatas(poolsForToken ?? [])
-  const transactions = useTokenTransactions(address)
-  const chartData = useTokenChartData(address)
-
+  const transactions = useTokenTransactions(routeAddress)
+  const chartData = useTokenChartData(routeAddress)
   // pricing data
-  const priceData = useTokenPriceData(address, ONE_HOUR_SECONDS, DEFAULT_TIME_WINDOW)
+  const priceData = useTokenPriceData(routeAddress, ONE_HOUR_SECONDS, DEFAULT_TIME_WINDOW)
   const adjustedPriceData = useMemo(() => {
     // Include latest available price
     if (priceData && tokenData && priceData.length > 0) {
@@ -107,7 +110,6 @@ const TokenPage: React.FC<RouteComponentProps<{ address: string }>> = ({
   }, [priceData, tokenData])
 
   const [watchlistTokens, addWatchlistToken] = useWatchlistTokens()
-  const { chainId } = useChainIdData()
 
   return (
     <Page symbol={tokenData?.symbol}>
@@ -117,7 +119,7 @@ const TokenPage: React.FC<RouteComponentProps<{ address: string }>> = ({
             <Box p="16px">
               <Text>
                 {t('No trading pool has been created with this token yet. Create one')}
-                <Link style={{ display: 'inline', marginLeft: '6px' }} to={`/add/${address}`}>
+                <Link style={{ display: 'inline', marginLeft: '6px' }} to={`/add/${address}?chain=${CHAIN_IDS_TO_NAMES[chainId]}`}>
                   {t('here.')}
                 </Link>
               </Text>
@@ -128,10 +130,10 @@ const TokenPage: React.FC<RouteComponentProps<{ address: string }>> = ({
             {/* Stuff on top */}
             <Flex justifyContent="space-between" mb="24px" flexDirection={['column', 'column', 'row']}>
               <Breadcrumbs mb="32px">
-                <Link to="/data">
+                <Link to={`/data?chain=${CHAIN_IDS_TO_NAMES[chainId]}`}>
                   <Text color="primary">{t('Data')}</Text>
                 </Link>
-                <Link to="/data/tokens">
+                <Link to={`/data/tokens?chain=${CHAIN_IDS_TO_NAMES[chainId]}`}>
                   <Text color="primary">{t('Tokens')}</Text>
                 </Link>
                 <Flex>
@@ -141,7 +143,7 @@ const TokenPage: React.FC<RouteComponentProps<{ address: string }>> = ({
               </Breadcrumbs>
               <Flex justifyContent={[null, null, 'flex-end']} mt={['8px', '8px', 0]}>
                 <LinkExternal mr="8px" color="primary" href={getEtherScanLink(address, 'address', chainId)}>
-                  {t('View on EtherScan')}
+                  {t(`View on ${BASE_SCAN_NAMES[chainId]}`)}
                 </LinkExternal>
                 {cmcLink && (
                   <StyledCMCLink href={cmcLink} rel="noopener noreferrer nofollow" target="_blank">
@@ -176,14 +178,18 @@ const TokenPage: React.FC<RouteComponentProps<{ address: string }>> = ({
                 </Flex>
               </Flex>
               <Flex>
-                <Link to={`/add/${address}`}>
-                  <Button mr="8px" variant="secondary">
-                    {t('Add Liquidity')}
-                  </Button>
-                </Link>
-                <Link to={`/swap?inputCurrency=${address}`}>
-                  <Button>{t('Trade')}</Button>
-                </Link>
+                {urlChainId === chainId && (
+                  <>
+                    <Link to={`/add/${address}?chain=${CHAIN_IDS_TO_NAMES[chainId]}`}>
+                      <Button mr="8px" variant="secondary">
+                        {t('Add Liquidity')}
+                      </Button>
+                    </Link>
+                    <Link to={`/swap?inputCurrency=${address}&chain=${CHAIN_IDS_TO_NAMES[chainId]}`}>
+                      <Button>{t('Trade')}</Button>
+                    </Link>
+                  </>
+                )}
               </Flex>
             </Flex>
 

@@ -14,6 +14,10 @@ export interface EthPrices {
     week: number
 }
 
+export type EthPricesChain = {
+    [chainId: number]: EthPrices
+}
+
 const ETH_PRICES = gql`
     query prices($block24: Int!, $block48: Int!, $blockWeek: Int!) {
         current: bundle(id: "1") {
@@ -79,8 +83,8 @@ const fetchEthPrices = async (
 /**
  * Returns ETH prices at current, 24h, 48h, and 7d intervals
  */
-export const useEthPrices = (): EthPrices | undefined => {
-    const [prices, setPrices] = useState<EthPrices | undefined>()
+export const useEthPrices = (): EthPricesChain | undefined => {
+    const [prices, setPrices] = useState<EthPricesChain | undefined>()
     const [error, setError] = useState(false)
     const { chainId } = useChainIdData()
     const prevChainId = usePreviousValue(chainId)
@@ -96,19 +100,26 @@ export const useEthPrices = (): EthPrices | undefined => {
 
     useEffect(() => {
         const fetch = async () => {
-            const blocks = await getBlocksFromTimestamps(chainId, [t24, t48, tWeek])
-            const [block24, block48, blockWeek] = blocks ?? []
-            const { ethPrices, error: fetchError } = await fetchEthPrices(
-                chainId,
-                block24.number,
-                block48.number,
-                blockWeek.number,
-            )
-            if (fetchError) {
+            const chainIds = chainId ? [chainId] : [ChainId.MAINNET, ChainId.BSC_MAINNET]
+            const ethPricesData = (await Promise.all(chainIds.map(async (_chainId) => {
+                const blocks = await getBlocksFromTimestamps(_chainId, [t24, t48, tWeek])
+                const [block24, block48, blockWeek] = blocks ?? []
+                const { ethPrices, error: fetchError } = await fetchEthPrices(
+                    _chainId,
+                    block24.number,
+                    block48.number,
+                    blockWeek.number,
+                )
+                if (fetchError) {
+                    return null
+                }
+                return { [_chainId]: ethPrices }
+            }))).reduce((prev, cur) => ({ ...prev, ...cur }), {})
+            if (Object.keys(ethPricesData).length === 0) {
                 setError(true)
-            } else {
-                setPrices(ethPrices)
+                return
             }
+            setPrices(ethPricesData)
         }
         const allBlocksAvailable = t24 && t48 && tWeek
 

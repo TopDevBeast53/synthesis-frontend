@@ -9,6 +9,7 @@ import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useCombinedInactiveList } from 'state/lists/hooks'
 import { ListLogo } from 'components/Logo'
 import { useTranslation } from 'contexts/Localization'
+import { BASE_SCAN_NAMES } from 'config'
 
 interface ImportProps {
   tokens: Token[]
@@ -67,7 +68,7 @@ function ImportToken({ tokens, handleCurrencySelect }: ImportProps) {
               <Flex justifyContent="space-between" width="100%">
                 <Text mr="4px">{address}</Text>
                 <Link href={getEtherScanLink(token.address, 'address', chainId)} external>
-                  ({t('View on EtherScan')})
+                  ({t(`View on ${BASE_SCAN_NAMES[chainId]}`)})
                 </Link>
               </Flex>
             )}

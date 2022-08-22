@@ -7,6 +7,9 @@ import { PoolData } from 'state/info/types'
 import { ITEMS_PER_INFO_TABLE_PAGE } from 'config/constants/info'
 import { DoubleCurrencyLogo } from 'views/Info/components/CurrencyLogo'
 import { useTranslation } from 'contexts/Localization'
+import { useChainIdData } from 'state/info/hooks'
+import { CHAIN_IDS_TO_NAMES } from 'config/constants/networks'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { ClickableColumnHeader, TableWrapper, PageButtons, Arrow, Break } from './shared'
 
 /**
@@ -84,8 +87,11 @@ const TableLoader: React.FC = () => (
 )
 
 const DataRow = ({ poolData, index }: { poolData: PoolData; index: number }) => {
+  const { chainId } = useChainIdData()
+  const { chainId: urlChainId} = useActiveWeb3React()
+
   return (
-    <LinkWrapper to={`/data/trading-pool/${poolData.address}`}>
+    <LinkWrapper to={`/data/trading-pool/${poolData.address}-${poolData.chainId}?chain=${CHAIN_IDS_TO_NAMES[urlChainId]}`}>
       <ResponsiveGrid>
         <Text>{index + 1}</Text>
         <Flex>
@@ -93,6 +99,11 @@ const DataRow = ({ poolData, index }: { poolData: PoolData; index: number }) => 
           <Text ml="8px">
             {poolData.token0.symbol}/{poolData.token1.symbol}
           </Text>
+          {!chainId && (
+            <Text ml="8px">
+              ({CHAIN_IDS_TO_NAMES[poolData.chainId].toUpperCase()})
+            </Text>
+          )}
         </Flex>
         <Text>${formatAmount(poolData.volumeUSD)}</Text>
         <Text>${formatAmount(poolData.volumeUSDWeek)}</Text>
