@@ -73,12 +73,12 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
                 icon: 'Referals',
                 showItemsOnMobile: false,
             },
-            {
-                label: t('Voting'),
-                href: '/voting',
-                icon: 'Vote1',
-                showItemsOnMobile: false,
-            },
+            // {
+            //     label: t('Voting'),
+            //     href: '/voting',
+            //     icon: 'Vote1',
+            //     showItemsOnMobile: false,
+            // },
             {
                 label: t('Bridge'),
                 icon: 'Bridge',
@@ -202,12 +202,12 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
                     },
                 ],
             },
-            {
-                label: t('Voting'),
-                href: '/voting',
-                icon: 'Vote1',
-                showItemsOnMobile: false,
-            },
+            // {
+            //     label: t('Voting'),
+            //     href: '/voting',
+            //     icon: 'Vote1',
+            //     showItemsOnMobile: false,
+            // },
             {
                 label: t('Bridge'),
                 icon: 'Bridge',
@@ -309,12 +309,12 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
                 icon: 'Referals',
                 showItemsOnMobile: false,
             },
-            {
-                label: t('Voting'),
-                href: '/voting',
-                icon: 'Vote1',
-                showItemsOnMobile: false,
-            },
+            // {
+            //     label: t('Voting'),
+            //     href: '/voting',
+            //     icon: 'Vote1',
+            //     showItemsOnMobile: false,
+            // },
             {
                 label: t('Bridge'),
                 icon: 'Bridge',
@@ -410,12 +410,12 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
                 icon: 'Referals',
                 showItemsOnMobile: false,
             },
-            {
-                label: t('Voting'),
-                href: '/voting',
-                icon: 'Vote1',
-                showItemsOnMobile: false,
-            },
+            // {
+            //     label: t('Voting'),
+            //     href: '/voting',
+            //     icon: 'Vote1',
+            //     showItemsOnMobile: false,
+            // },
             {
                 label: t('Bridge'),
                 icon: 'Bridge',
@@ -511,12 +511,12 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
                 icon: 'Referals',
                 showItemsOnMobile: false,
             },
-            {
-                label: t('Voting'),
-                href: '/voting',
-                icon: 'Vote1',
-                showItemsOnMobile: false,
-            },
+            // {
+            //     label: t('Voting'),
+            //     href: '/voting',
+            //     icon: 'Vote1',
+            //     showItemsOnMobile: false,
+            // },
             {
                 label: t('Bridge'),
                 icon: 'Bridge',
@@ -618,12 +618,12 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
                 icon: 'Referals',
                 showItemsOnMobile: false,
             },
-            {
-                label: t('Voting'),
-                href: '/voting',
-                icon: 'Vote1',
-                showItemsOnMobile: false,
-            },
+            // {
+            //     label: t('Voting'),
+            //     href: '/voting',
+            //     icon: 'Vote1',
+            //     showItemsOnMobile: false,
+            // },
             {
                 label: t('Bridge'),
                 icon: 'Bridge',

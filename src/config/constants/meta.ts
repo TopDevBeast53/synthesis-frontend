@@ -16,8 +16,8 @@ export const getCustomMeta = (path: string, t: ContextApi['t']): PageMeta => {
         basePath = '/remove'
     } else if (path.startsWith('/teams')) {
         basePath = '/teams'
-    } else if (path.startsWith('/voting/proposal') && path !== '/voting/proposal/create') {
-        basePath = '/voting/proposal'
+    // } else if (path.startsWith('/voting/proposal') && path !== '/voting/proposal/create') {
+    //     basePath = '/voting/proposal'
     } else if (path.startsWith('/nfts/collections')) {
         basePath = '/nfts/collections'
     } else if (path.startsWith('/nfts/profile')) {
@@ -125,18 +125,18 @@ export const getCustomMeta = (path: string, t: ContextApi['t']): PageMeta => {
             return {
                 title: `${t('Leaderboard')} | ${t('Helix')}`,
             }
-        case '/voting':
-            return {
-                title: `${t('Voting')} | ${t('Helix')}`,
-            }
-        case '/voting/proposal':
-            return {
-                title: `${t('Proposals')} | ${t('Helix')}`,
-            }
-        case '/voting/proposal/create':
-            return {
-                title: `${t('Make a Proposal')} | ${t('Helix')}`,
-            }
+        // case '/voting':
+        //     return {
+        //         title: `${t('Voting')} | ${t('Helix')}`,
+        //     }
+        // case '/voting/proposal':
+        //     return {
+        //         title: `${t('Proposals')} | ${t('Helix')}`,
+        //     }
+        // case '/voting/proposal/create':
+        //     return {
+        //         title: `${t('Make a Proposal')} | ${t('Helix')}`,
+        //     }
         case '/data':
             return {
                 title: `${t('Overview')} | ${t('Helix Data & Analytics')}`,
