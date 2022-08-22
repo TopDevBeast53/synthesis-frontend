@@ -36,13 +36,13 @@ export const BLOCK_TIME = {
     [ChainId.OKC_MAINNET]: 3.8,
 }
 export const HELIX_PER_BLOCK = {
-    [ChainId.MAINNET]: 4.5,
-    [ChainId.TESTNET]: 4.5,
-    [ChainId.RSK_MAINNET]: 5.625,
-    [ChainId.RSK_TESTNET]: 5.625,
-    [ChainId.BSC_MAINNET]: 0.3375,
-    [ChainId.BSC_TESTNET]: 0.3375,
-    [ChainId.OKC_MAINNET]: 0.3375,
+    [ChainId.MAINNET]: 4.9008,
+    [ChainId.TESTNET]: 4.9008,
+    [ChainId.RSK_MAINNET]: 6.126,
+    [ChainId.RSK_TESTNET]: 6.126,
+    [ChainId.BSC_MAINNET]: 0.36756,
+    [ChainId.BSC_TESTNET]: 0.36756,
+    [ChainId.OKC_MAINNET]: 0.36756,
 }
 export const BLOCKS_PER_YEAR = {
     [ChainId.MAINNET]: (60 / BLOCK_TIME[ChainId.MAINNET]) * 60 * 24 * 365,
