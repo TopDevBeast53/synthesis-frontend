@@ -1,5 +1,4 @@
 /* eslint-disable no-param-reassign */
-import { ChainId } from 'sdk'
 import { createReducer } from '@reduxjs/toolkit'
 import { InfoState } from './types'
 import {
@@ -27,7 +26,7 @@ const initialState: InfoState = {
     },
     pools: { byAddress: {} },
     tokens: { byAddress: {} },
-    chainId: ChainId.MAINNET
+    chainId: 0
 }
 
 export default createReducer(initialState, (builder) =>
