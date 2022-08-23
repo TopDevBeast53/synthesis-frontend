@@ -1,6 +1,6 @@
 // TODO PCS refactor ternaries
 /* eslint-disable no-nested-ternary */
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 import styled from 'styled-components'
 import { Text, Skeleton } from 'uikit'
 import { BLOCK_TIME, DEFAULT_TOKEN_DECIMAL, HELIX_PER_BLOCK } from 'config'
@@ -9,6 +9,7 @@ import { TableWrapper, Break } from 'views/Info/components/InfoTables/shared'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useFeeMinterContract } from 'hooks/useContract'
 import { ethersToBigNumber } from 'utils/bigNumber'
+import { getPools } from 'config/constants'
 
 const ResponsiveGrid = styled.div`
   display: grid;
@@ -23,6 +24,8 @@ const BlockTimeTable: React.FC = () => {
   const feeMinterContract = useFeeMinterContract()
   const [mintPerBlock, setMintPerBlock] = useState(0)
   const [loading, setLoading] = useState(false)
+
+  const [pool] = useMemo(() => getPools(chainId), [chainId])
 
   useEffect(() => {
     const getMintPerBlock = async (): Promise<number> => {
@@ -74,6 +77,13 @@ const BlockTimeTable: React.FC = () => {
       <ResponsiveGrid>
         <Text>{t('Mint Per Block for Farms')}</Text>
         <Text>{HELIX_PER_BLOCK[chainId]}</Text>
+        <Text />
+      </ResponsiveGrid>
+      <Break />
+
+      <ResponsiveGrid>
+        <Text>{t('Mint Per Block for Pools')}</Text>
+        <Text>{pool.tokenPerBlock[chainId]}</Text>
         <Text />
       </ResponsiveGrid>
       <Break />

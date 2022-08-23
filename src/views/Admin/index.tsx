@@ -5,6 +5,7 @@ import { Flex, Heading } from 'uikit'
 import { useTranslation } from 'contexts/Localization'
 import Page from '../Page'
 import BlockTimeTable from './components/BlockTimeTable'
+import AllocPoints from './components/AllocPoints'
 
 const DisplayPanel = styled.div`
   position: relative;
@@ -26,6 +27,7 @@ export const CardsContainer = styled(Flex)`
   width: 100%;
   padding: 0;
   gap: 1em;
+  margin-top: 0.5em;
 
   & > * {
     width: 100%;
@@ -50,8 +52,17 @@ const Admin = () => {
       </PageHeader>
       <Page removePadding>
         <DisplayPanel style={{ minHeight: 'calc(100vh - 64px)' }}>
+          <Heading scale="lg" color="text" mt="4">
+            {t('Configurations')}
+          </Heading>
           <CardsContainer>
             <BlockTimeTable />
+          </CardsContainer>
+          <Heading scale="lg" color="text" mt="4">
+            {t('Allocation Points')}
+          </Heading>
+          <CardsContainer>
+            <AllocPoints />
           </CardsContainer>
         </DisplayPanel>
       </Page>
