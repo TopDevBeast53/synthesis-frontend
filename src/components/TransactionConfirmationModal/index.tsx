@@ -18,6 +18,7 @@ import { registerToken } from 'utils/wallet'
 import { useTranslation } from 'contexts/Localization'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { wrappedCurrency } from 'utils/wrappedCurrency'
+import { BASE_SCAN_NAMES } from 'config'
 import { RowFixed } from '../Layout/Row'
 import { AutoColumn, ColumnCenter } from '../Layout/Column'
 import { getEtherScanLink } from '../../utils'
@@ -83,7 +84,7 @@ function TransactionSubmittedContent({
           <Text fontSize="20px">{t('Transaction Submitted')}</Text>
           {chainId && hash && (
             <Link external small href={getEtherScanLink(hash, 'transaction', chainId)}>
-              {t('View on EtherScan')}
+              {t(`View on ${BASE_SCAN_NAMES[chainId]}`)}
             </Link>
           )}
           {currencyToAdd && library?.provider?.isMetaMask && (

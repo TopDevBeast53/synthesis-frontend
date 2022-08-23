@@ -20,6 +20,16 @@ export const BASE_ETH_SCAN_URLS = {
     [ChainId.OKC_MAINNET]: 'https://www.oklink.com/en/okc',
 }
 
+export const BASE_SCAN_NAMES = {
+    [ChainId.MAINNET]: 'EtherScan',
+    [ChainId.TESTNET]: 'EtherScan',
+    [ChainId.RSK_MAINNET]: 'RskScan',
+    [ChainId.RSK_TESTNET]: 'RskScan',
+    [ChainId.BSC_MAINNET]: 'BscScan',
+    [ChainId.BSC_TESTNET]: 'BscScan',
+    [ChainId.OKC_MAINNET]: 'OkcScan',
+}
+
 export const BASE_SOLANA_SCAN_URLS = 'https://explorer.solana.com/'
 
 /**

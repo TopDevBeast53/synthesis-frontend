@@ -116,8 +116,8 @@ function Row({
   targetChain: ChainId
   onSelectChain: (targetChain: number) => void
 }) {
-  const { chainId } = useActiveWeb3React()
-  if (!chainId) {
+  const { chainId, library } = useActiveWeb3React()
+  if (!chainId || !library) {
     return null
   }
   const active = chainId === targetChain
@@ -175,7 +175,7 @@ const getChainNameFromId = (id: string | number) => {
 }
 
 export default function NetworkSelector() {
-  const { chainId, account } = useActiveWeb3React()
+  const { chainId, library, account } = useActiveWeb3React()
   const previousChainId = usePreviousValue(chainId)
   const parsedQs = useParsedQueryString()
   const { urlChain, urlChainId } = getParsedChainId(parsedQs)
@@ -196,8 +196,7 @@ export default function NetworkSelector() {
   const info = chainId ? SUPPORTED_NETWORKS[chainId] : undefined
 
   const onSelectChain = useCallback(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    async (targetChain: ChainId, skipToggle?: boolean) => {
+    async (targetChain: ChainId) => {
       try {
         if (account) {
           const setupRes = await setupNetwork(targetChain)
@@ -205,9 +204,9 @@ export default function NetworkSelector() {
         }
         const { location: { pathname, search }, replace, push } = history
         const route = routeConfig(t)[targetChain].find(route_ => {
-          if (route_.href && route_.href.includes(pathname)) return true
+          if (route_.href && pathname.includes(route_.href)) return true
           if (route_.items) {
-            const item = route_.items.find(item_ => item_.href && item_.href.includes(pathname))
+            const item = route_.items.find(item_ => item_.href && (pathname.includes(item_.href)))
             return item !== undefined
           }
           return false
@@ -232,7 +231,7 @@ export default function NetworkSelector() {
       history.replace({ search: replaceURLParam(history.location.search, 'chain', getChainNameFromId(chainId)) })
       // otherwise assume network change originates from URL
     } else if (urlChainId && urlChainId !== previousUrlChainId && urlChainId !== chainId) {
-      onSelectChain(urlChainId, true).catch(() => {
+      onSelectChain(urlChainId).catch(() => {
         // we want app network <-> chainId param to be in sync, so if user changes the network by changing the URL
         // but the request fails, revert the URL back to current chainId
         history.replace({ search: replaceURLParam(history.location.search, 'chain', getChainNameFromId(chainId)) })
@@ -269,7 +268,7 @@ export default function NetworkSelector() {
     }
   }, [targetRef, tooltipRef, setIsOpen])
 
-  if (!info) {
+  if (!chainId || !info || !library) {
     return null
   }
 

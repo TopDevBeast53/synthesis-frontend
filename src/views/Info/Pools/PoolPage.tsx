@@ -24,11 +24,14 @@ import { CurrencyLogo, DoubleCurrencyLogo } from 'views/Info/components/Currency
 import { formatAmount } from 'views/Info/utils/formatInfoNumbers'
 import Percent from 'views/Info/components/Percent'
 import SaveIcon from 'views/Info/components/SaveIcon'
-import { usePoolDatas, usePoolChartData, usePoolTransactions, useChainIdData } from 'state/info/hooks'
+import { usePoolDatas, usePoolChartData, usePoolTransactions } from 'state/info/hooks'
 import TransactionTable from 'views/Info/components/InfoTables/TransactionsTable'
 import { useWatchlistPools } from 'state/user/hooks'
 import { useTranslation } from 'contexts/Localization'
 import ChartCard from 'views/Info/components/InfoCharts/ChartCard'
+import { CHAIN_IDS_TO_NAMES } from 'config/constants/networks'
+import { BASE_SCAN_NAMES } from 'config'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 const ContentLayout = styled.div`
   display: grid;
@@ -80,14 +83,15 @@ const PoolPage: React.FC<RouteComponentProps<{ address: string }>> = ({
   }, [])
 
   // In case somebody pastes checksummed address into url (since GraphQL expects lowercase address)
-  const address = routeAddress.toLowerCase()
+  const address = routeAddress.split('-')[0].toLowerCase()
+  const chainId = Number(routeAddress.split('-')[1])
+  const { chainId: urlChainId } = useActiveWeb3React()
 
-  const poolData = usePoolDatas([address])[0]
-  const chartData = usePoolChartData(address)
-  const transactions = usePoolTransactions(address)
+  const poolData = usePoolDatas([routeAddress])[0]
+  const chartData = usePoolChartData(routeAddress)
+  const transactions = usePoolTransactions(routeAddress)
 
   const [watchlistPools, addPoolToWatchlist] = useWatchlistPools()
-  const { chainId } = useChainIdData()
 
   return (
     <Page symbol={poolData ? `${poolData?.token0.symbol} / ${poolData?.token1.symbol}` : null}>
@@ -95,10 +99,10 @@ const PoolPage: React.FC<RouteComponentProps<{ address: string }>> = ({
         <>
           <Flex justifyContent="space-between" mb="16px" flexDirection={['column', 'column', 'row']}>
             <Breadcrumbs mb="32px">
-              <Link to="/data">
+              <Link to={`/data?chain=${CHAIN_IDS_TO_NAMES[chainId]}`}>
                 <Text color="primary">{t('Data')}</Text>
               </Link>
-              <Link to="/data/trading-pools">
+              <Link to={`/data/trading-pools?chain=${CHAIN_IDS_TO_NAMES[chainId]}`}>
                 <Text color="primary">{t('Trading Pools')}</Text>
               </Link>
               <Flex>
@@ -107,7 +111,7 @@ const PoolPage: React.FC<RouteComponentProps<{ address: string }>> = ({
             </Breadcrumbs>
             <Flex justifyContent={[null, null, 'flex-end']} mt={['8px', '8px', 0]}>
               <LinkExternal mr="8px" href={getEtherScanLink(address, 'address', chainId)}>
-                {t('View on EtherScan')}
+                {t(`View on ${BASE_SCAN_NAMES[chainId]}`)}
               </LinkExternal>
               <SaveIcon fill={watchlistPools.includes(address)} onClick={() => addPoolToWatchlist(address)} />
             </Flex>
@@ -124,7 +128,7 @@ const PoolPage: React.FC<RouteComponentProps<{ address: string }>> = ({
             </Flex>
             <Flex justifyContent="space-between" flexDirection={['column', 'column', 'column', 'row']}>
               <Flex flexDirection={['column', 'column', 'row']} mb={['8px', '8px', null]}>
-                <Link to={`/data/token/${poolData.token0.address}`}>
+                <Link to={`/data/token/${poolData.token0.address}?chain=${CHAIN_IDS_TO_NAMES[chainId]}`}>
                   <TokenButton>
                     <CurrencyLogo address={poolData.token0.address} size="24px" />
                     <Text fontSize="16px" ml="4px" style={{ whiteSpace: 'nowrap' }} width="fit-content">
@@ -136,7 +140,7 @@ const PoolPage: React.FC<RouteComponentProps<{ address: string }>> = ({
                     </Text>
                   </TokenButton>
                 </Link>
-                <Link to={`/data/token/${poolData.token1.address}`}>
+                <Link to={`/data/token/${poolData.token1.address}?chain=${CHAIN_IDS_TO_NAMES[chainId]}`}>
                   <TokenButton ml={[null, null, '10px']}>
                     <CurrencyLogo address={poolData.token1.address} size="24px" />
                     <Text fontSize="16px" ml="4px" style={{ whiteSpace: 'nowrap' }} width="fit-content">
@@ -150,14 +154,18 @@ const PoolPage: React.FC<RouteComponentProps<{ address: string }>> = ({
                 </Link>
               </Flex>
               <Flex>
-                <Link to={`/add/${poolData.token0.address}/${poolData.token1.address}`}>
-                  <Button mr="8px" variant="secondary">
-                    {t('Add Liquidity')}
-                  </Button>
-                </Link>
-                <Link to={`/swap?inputCurrency=${poolData.token0.address}&outputCurrency=${poolData.token1.address}`}>
-                  <Button>{t('Trade')}</Button>
-                </Link>
+                {urlChainId === chainId && (
+                  <>
+                    <Link to={`/add/${poolData.token0.address}/${poolData.token1.address}?chain=${CHAIN_IDS_TO_NAMES[chainId]}`}>
+                      <Button mr="8px" variant="secondary">
+                        {t('Add Liquidity')}
+                      </Button>
+                    </Link>
+                    <Link to={`/swap?inputCurrency=${poolData.token0.address}&outputCurrency=${poolData.token1.address}&chain=${CHAIN_IDS_TO_NAMES[chainId]}`}>
+                      <Button>{t('Trade')}</Button>
+                    </Link>
+                  </>
+                )}
               </Flex>
             </Flex>
           </Flex>

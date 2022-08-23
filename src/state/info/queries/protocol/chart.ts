@@ -58,12 +58,33 @@ const useFetchGlobalChartData = (): {
 
     useEffect(() => {
         const fetch = async () => {
-            const { data } = await fetchChartData(chainId, getOverviewChartData)
-            if (data) {
-                setOverviewChartData(data)
-            } else {
+            const chainIds = chainId ? [chainId] : [ChainId.MAINNET, ChainId.BSC_MAINNET]
+            const chartDatas = await Promise.all(chainIds.map(async (_chainId): Promise<ChartEntry[]> => {
+                const { data } = await fetchChartData(_chainId, getOverviewChartData)
+                return data
+            }))
+
+            const _error = chartDatas.every(_chartData => _chartData === null)
+            if (_error) {
                 setError(true)
+                return
             }
+
+            const chartData: ChartEntry[] = chartDatas[0] || []
+            chartDatas.slice(1).forEach(_chartData => {
+                if (_chartData === null) return
+                _chartData.forEach(data => {
+                    const existing = chartData.find(data_ => data_.date === data.date)
+                    if (existing) {
+                        existing.liquidityUSD += data.liquidityUSD
+                        existing.volumeUSD += data.volumeUSD
+                    } else {
+                        chartData.push(data)
+                    }
+                })
+            })
+            chartData.sort((a, b) => a.date - b.date)
+            setOverviewChartData(chartData)
         }
         if ((!overviewChartData && !error) || prevChainId !== chainId) {
             fetch()

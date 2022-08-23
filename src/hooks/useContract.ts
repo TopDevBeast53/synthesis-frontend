@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { AddressZero } from '@ethersproject/constants'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import { getAddress, getAnniversaryAchievement, getBunnyFactoryAddress, getBunnySpecialAddress, getBunnySpecialLotteryAddress, getBunnySpecialPredictionAddress, getBunnySpecialXmasAddress, getChainlinkOracleAddress, getClaimRefundAddress, getEasterNftAddress, getFarmAuctionAddress, getHelixAutoPoolAddress, getHelixChefNftAddress, getHelixLPSwapAddress, getHelixNftAddress, getHelixNftBridgeAddress, getHelixVaultAddress, getIfoPoolAddress, getLotteryV2Address, getMasterChefAddress, getMulticallAddress, getNftMarketAddress, getNftSaleAddress, getPancakeProfileAddress, getPancakeRabbitsAddress, getPancakeSquadAddress, getPointCenterIfoAddress, getPredictionsAddress, getYieldSwapAddress } from 'utils/addressHelpers'
+import { getAddress, getAnniversaryAchievement, getBunnyFactoryAddress, getBunnySpecialAddress, getBunnySpecialLotteryAddress, getBunnySpecialPredictionAddress, getBunnySpecialXmasAddress, getChainlinkOracleAddress, getClaimRefundAddress, getEasterNftAddress, getFarmAuctionAddress, getFeeMinterAddress, getHelixAutoPoolAddress, getHelixChefNftAddress, getHelixLPSwapAddress, getHelixNftAddress, getHelixNftBridgeAddress, getHelixVaultAddress, getIfoPoolAddress, getLotteryV2Address, getMasterChefAddress, getMulticallAddress, getNftMarketAddress, getNftSaleAddress, getPancakeProfileAddress, getPancakeRabbitsAddress, getPancakeSquadAddress, getPointCenterIfoAddress, getPredictionsAddress, getYieldSwapAddress } from 'utils/addressHelpers'
 import { VaultKey } from 'state/types'
 import { PoolCategory } from 'config/constants/types'
 import {
@@ -44,7 +44,8 @@ import {
     HelixNFTBridge,
     Weth,
     EnsRegistrar,
-    EnsPublicResolver
+    EnsPublicResolver,
+    FeeMinter
 } from 'config/abi/types'
 
 // Imports below migrated from Exchange useContract.ts
@@ -95,6 +96,7 @@ import ENS_PUBLIC_RESOLVER_ABI from 'config/abi/ens-public-resolver.json'
 import ENS_ABI from 'config/abi/ens-registrar.json'
 import { ERC20_BYTES32_ABI } from 'config/abi/erc20'
 import WETH_ABI from 'config/abi/weth.json'
+import feeMinterAbi from 'config/abi/feeMinter.json'
 
 import { getProviderOrSigner, isAddress } from '../utils'
 import useProviders from './useProviders'
@@ -471,4 +473,11 @@ export function useMulticallContract() {
     const { chainId } = useActiveWeb3React()
 
     return useContract<Multicall>(getMulticallAddress(chainId), MultiCallAbi, false)
+}
+
+export const useFeeMinterContract = () => {
+    const { library, chainId } = useActiveWeb3React()
+    const getContract = useGetContract()
+    return useMemo(() => getContract(feeMinterAbi, getFeeMinterAddress(chainId), library.getSigner()) as FeeMinter,
+        [getContract, library, chainId])
 }

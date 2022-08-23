@@ -2,6 +2,7 @@ import React, { useCallback } from 'react'
 import styled from 'styled-components'
 import { Text, Link } from 'uikit'
 import { useTranslation } from 'contexts/Localization'
+import { BASE_SCAN_NAMES } from 'config'
 import useENS from '../../../hooks/ENS/useENS'
 import useActiveWeb3React from '../../../hooks/useActiveWeb3React'
 import { AutoColumn } from '../../../components/Layout/Column'
@@ -103,7 +104,7 @@ export default function AddressInputPanel({
               <Text>{t('Recipient')}</Text>
               {address && chainId && (
                 <Link external small href={getEtherScanLink(name ?? address, 'address', chainId)}>
-                  ({t('View on EtherScan')})
+                  ({t(`View on ${BASE_SCAN_NAMES[chainId]}`)})
                 </Link>
               )}
             </RowBetween>

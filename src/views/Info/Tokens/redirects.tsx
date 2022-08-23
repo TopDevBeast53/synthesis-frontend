@@ -11,7 +11,7 @@ const RedirectInvalidToken = (props: RouteComponentProps<{ address: string }>) =
   } = props
 
   // In case somebody pastes checksummed address into url (since GraphQL expects lowercase address)
-  if (!isAddress(address.toLowerCase())) {
+  if (!isAddress(address.split('-')[0].toLowerCase())) {
     return <Redirect to="/" />
   }
   return <TokenPage {...props} />

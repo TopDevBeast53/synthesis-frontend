@@ -1,10 +1,11 @@
 import { ONE_DAY_UNIX, HELIX_START } from 'config/constants/info'
 import { getUnixTime } from 'date-fns'
 import { TransactionType } from 'state/info/types'
+import { ChainId } from 'sdk'
 import { ChartEntry } from '../types'
 import { MintResponse, SwapResponse, BurnResponse, TokenDayData, PairDayData, HelixDayData } from './types'
 
-export const mapMints = (mint: MintResponse) => {
+export const mapMints = (mint: MintResponse, chainId: ChainId) => {
     return {
         type: TransactionType.MINT,
         hash: mint.id.split('-')[0],
@@ -17,10 +18,11 @@ export const mapMints = (mint: MintResponse) => {
         amountUSD: parseFloat(mint.amountUSD),
         amountToken0: parseFloat(mint.amount0),
         amountToken1: parseFloat(mint.amount1),
+        chainId
     }
 }
 
-export const mapBurns = (burn: BurnResponse) => {
+export const mapBurns = (burn: BurnResponse, chainId: ChainId) => {
     return {
         type: TransactionType.BURN,
         hash: burn.id.split('-')[0],
@@ -33,10 +35,11 @@ export const mapBurns = (burn: BurnResponse) => {
         amountUSD: parseFloat(burn.amountUSD),
         amountToken0: parseFloat(burn.amount0),
         amountToken1: parseFloat(burn.amount1),
+        chainId
     }
 }
 
-export const mapSwaps = (swap: SwapResponse) => {
+export const mapSwaps = (swap: SwapResponse, chainId: ChainId) => {
     return {
         type: TransactionType.SWAP,
         hash: swap.id.split('-')[0],
@@ -49,6 +52,7 @@ export const mapSwaps = (swap: SwapResponse) => {
         amountUSD: parseFloat(swap.amountUSD),
         amountToken0: parseFloat(swap.amount0In) - parseFloat(swap.amount0Out),
         amountToken1: parseFloat(swap.amount1In) - parseFloat(swap.amount1Out),
+        chainId
     }
 }
 

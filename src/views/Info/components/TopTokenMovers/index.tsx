@@ -8,6 +8,8 @@ import { CurrencyLogo } from 'views/Info/components/CurrencyLogo'
 import { formatAmount } from 'views/Info/utils/formatInfoNumbers'
 import Percent from 'views/Info/components/Percent'
 import { useTranslation } from 'contexts/Localization'
+import { CHAIN_IDS_TO_NAMES } from 'config/constants/networks'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
 
 const CardWrapper = styled(Link)`
   display: inline-block;
@@ -36,8 +38,10 @@ export const ScrollableRow = styled.div`
 `
 
 const DataCard = ({ tokenData }: { tokenData: TokenData }) => {
+  const { chainId } = useActiveWeb3React()
+
   return (
-    <CardWrapper to={`/data/token/${tokenData.address}`}>
+    <CardWrapper to={`/data/token/${tokenData.address}-${tokenData.chainId}?chain=${CHAIN_IDS_TO_NAMES[chainId]}`}>
       <TopMoverCard>
         <Flex>
           <Box width="32px" height="32px">

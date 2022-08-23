@@ -7,6 +7,7 @@ import { useTranslation } from 'contexts/Localization'
 import useTheme from 'hooks/useTheme'
 import { usePriceHelixBusd } from 'state/farms/hooks'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import { useAdmin } from 'views/Admin/hooks/useAdmin'
 import config from './config/config'
 import UserMenu from './UserMenu'
 import NetworkSelector from './NetworkSelector'
@@ -20,10 +21,14 @@ const Menu = (props) => {
   const { currentLanguage, setLanguage, t } = useTranslation()
   const { pathname, search } = useLocation()
   const { chainId } = useActiveWeb3React()
+  const { isAdmin } = useAdmin()
 
   const menuConfig = useMemo(() => {
-    return config(t)[chainId]
-  }, [chainId, t])
+    return config(t)[chainId].filter((menuItem) => {
+      if (isAdmin) return true
+      return menuItem.onlyAdmin !== true
+    })
+  }, [chainId, isAdmin, t])
 
   const activeMenuItem = getActiveMenuItem({ menuConfig, pathname })
   const activeSubMenuItem = getActiveSubMenuItem({ menuItem: activeMenuItem, pathname })

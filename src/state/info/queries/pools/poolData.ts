@@ -8,6 +8,7 @@ import { PoolData } from 'state/info/types'
 import { getChangeForPeriod, getLpFeesAndApr, getPercentChange } from 'views/Info/utils/infoDataHelpers'
 import usePreviousValue from 'hooks/usePreviousValue'
 import { useChainIdData } from 'state/info/hooks'
+import { ChainId } from 'sdk'
 
 interface PoolFields {
     id: string
@@ -151,20 +152,22 @@ const usePoolDatas = (poolAddresses: string[]): PoolDatas => {
 
     useEffect(() => {
         const fetch = async () => {
-            const blocks = await getBlocksFromTimestamps(chainId, [t24h, t48h, t7d, t14d])
-            const [block24h, block48h, block7d, block14d] = blocks ?? []
+            const chainIds = chainId ? [chainId] : [ChainId.MAINNET, ChainId.BSC_MAINNET]
+            const poolDatas = (await Promise.all(chainIds.map(async (_chainId) => {
+                const blocks = await getBlocksFromTimestamps(_chainId, [t24h, t48h, t7d, t14d])
+                const [block24h, block48h, block7d, block14d] = blocks ?? []
 
-            const { error, data } = await fetchPoolData(
-                chainId,
-                block24h.number,
-                block48h.number,
-                block7d.number,
-                block14d.number,
-                poolAddresses,
-            )
-            if (error) {
-                setFetchState({ error: true })
-            } else {
+                const { error, data } = await fetchPoolData(
+                    _chainId,
+                    block24h.number,
+                    block48h.number,
+                    block7d.number,
+                    block14d.number,
+                    poolAddresses.map((address) => address.replace(`-${_chainId}`, '')),
+                )
+                if (error) {
+                    return null
+                }
                 const formattedPoolData = parsePoolData(data?.now)
                 const formattedPoolData24h = parsePoolData(data?.oneDayAgo)
                 const formattedPoolData48h = parsePoolData(data?.twoDaysAgo)
@@ -172,73 +175,81 @@ const usePoolDatas = (poolAddresses: string[]): PoolDatas => {
                 const formattedPoolData14d = parsePoolData(data?.twoWeeksAgo)
 
                 // Calculate data and format
-                const formatted = poolAddresses.reduce((accum: { [address: string]: PoolData }, address) => {
-                    // Undefined data is possible if pool is brand new and didn't exist one day ago or week ago.
-                    const current: FormattedPoolFields | undefined = formattedPoolData[address]
-                    const oneDay: FormattedPoolFields | undefined = formattedPoolData24h[address]
-                    const twoDays: FormattedPoolFields | undefined = formattedPoolData48h[address]
-                    const week: FormattedPoolFields | undefined = formattedPoolData7d[address]
-                    const twoWeeks: FormattedPoolFields | undefined = formattedPoolData14d[address]
+                const formatted = poolAddresses.map((address) => address.replace(`-${_chainId}`, ''))
+                    .reduce((accum: { [address: string]: PoolData }, address) => {
+                        // Undefined data is possible if pool is brand new and didn't exist one day ago or week ago.
+                        const current: FormattedPoolFields | undefined = formattedPoolData[address]
+                        const oneDay: FormattedPoolFields | undefined = formattedPoolData24h[address]
+                        const twoDays: FormattedPoolFields | undefined = formattedPoolData48h[address]
+                        const week: FormattedPoolFields | undefined = formattedPoolData7d[address]
+                        const twoWeeks: FormattedPoolFields | undefined = formattedPoolData14d[address]
 
-                    const [volumeUSD, volumeUSDChange] = getChangeForPeriod(
-                        current?.volumeUSD,
-                        oneDay?.volumeUSD,
-                        twoDays?.volumeUSD,
-                    )
-                    const [volumeUSDWeek, volumeUSDChangeWeek] = getChangeForPeriod(
-                        current?.volumeUSD,
-                        week?.volumeUSD,
-                        twoWeeks?.volumeUSD,
-                    )
+                        const [volumeUSD, volumeUSDChange] = getChangeForPeriod(
+                            current?.volumeUSD,
+                            oneDay?.volumeUSD,
+                            twoDays?.volumeUSD,
+                        )
+                        const [volumeUSDWeek, volumeUSDChangeWeek] = getChangeForPeriod(
+                            current?.volumeUSD,
+                            week?.volumeUSD,
+                            twoWeeks?.volumeUSD,
+                        )
 
-                    const liquidityUSD = current ? current.reserveUSD : 0
+                        const liquidityUSD = current ? current.reserveUSD : 0
 
-                    const liquidityUSDChange = getPercentChange(current?.reserveUSD, oneDay?.reserveUSD)
+                        const liquidityUSDChange = getPercentChange(current?.reserveUSD, oneDay?.reserveUSD)
 
-                    const liquidityToken0 = current ? current.reserve0 : 0
-                    const liquidityToken1 = current ? current.reserve1 : 0
+                        const liquidityToken0 = current ? current.reserve0 : 0
+                        const liquidityToken1 = current ? current.reserve1 : 0
 
-                    const { totalFees24h, totalFees7d, lpFees24h, lpFees7d, lpApr7d } = getLpFeesAndApr(
-                        volumeUSD,
-                        volumeUSDWeek,
-                        liquidityUSD,
-                    )
-
-                    if (current) {
-                        accum[address] = {
-                            address,
-                            token0: {
-                                address: current.token0.id,
-                                name: current.token0.name,
-                                symbol: current.token0.symbol,
-                            },
-                            token1: {
-                                address: current.token1.id,
-                                name: current.token1.name,
-                                symbol: current.token1.symbol,
-                            },
-                            token0Price: current.token0Price,
-                            token1Price: current.token1Price,
+                        const { totalFees24h, totalFees7d, lpFees24h, lpFees7d, lpApr7d } = getLpFeesAndApr(
                             volumeUSD,
-                            volumeUSDChange,
                             volumeUSDWeek,
-                            volumeUSDChangeWeek,
-                            totalFees24h,
-                            totalFees7d,
-                            lpFees24h,
-                            lpFees7d,
-                            lpApr7d,
                             liquidityUSD,
-                            liquidityUSDChange,
-                            liquidityToken0,
-                            liquidityToken1,
-                        }
-                    }
+                        )
 
-                    return accum
-                }, {})
-                setFetchState({ data: formatted, error: false })
+                        if (current) {
+                            accum[`${address}-${_chainId}`] = {
+                                address,
+                                token0: {
+                                    address: current.token0.id,
+                                    name: current.token0.name,
+                                    symbol: current.token0.symbol,
+                                },
+                                token1: {
+                                    address: current.token1.id,
+                                    name: current.token1.name,
+                                    symbol: current.token1.symbol,
+                                },
+                                token0Price: current.token0Price,
+                                token1Price: current.token1Price,
+                                volumeUSD,
+                                volumeUSDChange,
+                                volumeUSDWeek,
+                                volumeUSDChangeWeek,
+                                totalFees24h,
+                                totalFees7d,
+                                lpFees24h,
+                                lpFees7d,
+                                lpApr7d,
+                                liquidityUSD,
+                                liquidityUSDChange,
+                                liquidityToken0,
+                                liquidityToken1,
+                                chainId: _chainId
+                            }
+                        }
+
+                        return accum
+                    }, {})
+                return formatted
+
+            }))).reduce((prev, cur) => ({ ...prev, ...cur }), {})
+
+            if (poolDatas === null) {
+                setFetchState({ error: true })
             }
+            setFetchState({ data: poolDatas, error: false })
         }
 
         const allBlocksAvailable = t24h && t48h && t7d && t14d

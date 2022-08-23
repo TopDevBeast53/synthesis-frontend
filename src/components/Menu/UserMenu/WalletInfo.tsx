@@ -9,6 +9,7 @@ import { formatBigNumber, getFullDisplayBalance } from 'utils/formatBalance'
 import { useGetTokens } from 'hooks/useGetTokens'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { ETHER } from 'sdk'
+import { BASE_SCAN_NAMES } from 'config'
 import CopyAddress from './CopyAddress'
 
 interface WalletInfoProps {
@@ -60,7 +61,7 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ hasLowBnbBalance, onDismiss }) 
         )}
       </Flex>
       <Flex alignItems="center" justifyContent="end" mb="24px">
-        <LinkExternal href={getEtherScanLink(account, 'address', chainId)}>{t('View on EtherScan')}</LinkExternal>
+        <LinkExternal href={getEtherScanLink(account, 'address', chainId)}>{t(`View on ${BASE_SCAN_NAMES[chainId]}`)}</LinkExternal>
       </Flex>
       <Button variant="secondary" width="100%" onClick={handleLogout}>
         {t('Disconnect Wallet')}

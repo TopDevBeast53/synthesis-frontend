@@ -5,6 +5,8 @@ import { TOKEN_BLACKLIST } from 'config/constants/info'
 import { getDeltaTimestamps } from 'views/Info/utils/infoQueryHelpers'
 import usePreviousValue from 'hooks/usePreviousValue'
 import { useChainIdData } from 'state/info/hooks'
+import { ChainId } from 'sdk'
+import { flatten } from 'lodash'
 
 interface TopPoolsResponse {
     pairDayDatas: {
@@ -63,8 +65,15 @@ const useTopPoolAddresses = (): string[] => {
 
     useEffect(() => {
         const fetch = async () => {
-            const addresses = await fetchTopPools(chainId, timestamp24hAgo)
-            setTopPoolAddresses(addresses)
+            const chainIds = chainId ? [chainId] : [ChainId.MAINNET, ChainId.BSC_MAINNET]
+            const addresses = await Promise.all(chainIds.map(async (_chainId) => {
+                const rowAddresses = (await fetchTopPools(_chainId, timestamp24hAgo))
+                    .map((address) => {
+                        return `${address}-${_chainId}`
+                    })
+                return rowAddresses
+            }))
+            setTopPoolAddresses(flatten(addresses))
         }
         if (topPoolAddresses.length === 0 || prevChainId !== chainId) {
             fetch()

@@ -82,9 +82,9 @@ const fetchTopTransactions = async (chainId: ChainId): Promise<Transaction[] | u
             return undefined
         }
 
-        const mints = data.mints.map(mapMints)
-        const burns = data.burns.map(mapBurns)
-        const swaps = data.swaps.map(mapSwaps)
+        const mints = data.mints.map((mint) => mapMints(mint, chainId))
+        const burns = data.burns.map((burn) => mapBurns(burn, chainId))
+        const swaps = data.swaps.map((swap) => mapSwaps(swap, chainId))
 
         return [...mints, ...burns, ...swaps].sort((a, b) => {
             return parseInt(b.timestamp, 10) - parseInt(a.timestamp, 10)

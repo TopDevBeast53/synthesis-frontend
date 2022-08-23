@@ -11,6 +11,7 @@ import { Transaction, TransactionType } from 'state/info/types'
 import { ITEMS_PER_INFO_TABLE_PAGE } from 'config/constants/info'
 import { useTranslation } from 'contexts/Localization'
 import { useChainIdData } from 'state/info/hooks'
+import { CHAIN_IDS_TO_NAMES } from 'config/constants/networks'
 import { ClickableColumnHeader, TableWrapper, PageButtons, Arrow, Break } from './shared'
 
 const Wrapper = styled.div`
@@ -94,8 +95,8 @@ const TableLoader: React.FC = () => {
 }
 
 const DataRow: React.FC<{ transaction: Transaction }> = ({ transaction }) => {
-  const { chainId } = useChainIdData()
   const { t } = useTranslation()
+  const { chainId } = useChainIdData()
   const abs0 = Math.abs(transaction.amountToken0)
   const abs1 = Math.abs(transaction.amountToken1)
   const outputTokenSymbol = transaction.amountToken0 < 0 ? transaction.token0Symbol : transaction.token1Symbol
@@ -103,13 +104,25 @@ const DataRow: React.FC<{ transaction: Transaction }> = ({ transaction }) => {
 
   return (
     <ResponsiveGrid>
-      <LinkExternal href={getEtherScanLink(transaction.hash, 'transaction', chainId)}>
+      <LinkExternal href={getEtherScanLink(transaction.hash, 'transaction', transaction.chainId)}>
         <Text>
-          {transaction.type === TransactionType.MINT
-            ? t('Add %token0% and %token1%', { token0: transaction.token0Symbol, token1: transaction.token1Symbol })
-            : transaction.type === TransactionType.SWAP
-            ? t('Swap %token0% for %token1%', { token0: inputTokenSymbol, token1: outputTokenSymbol })
-            : t('Remove %token0% and %token1%', { token0: transaction.token0Symbol, token1: transaction.token1Symbol })}
+          {!chainId ? (
+
+            transaction.type === TransactionType.MINT
+              ? t('Add %token0% and %token1% (%chainId%)', { token0: transaction.token0Symbol, token1: transaction.token1Symbol, chainId: CHAIN_IDS_TO_NAMES[transaction.chainId].toUpperCase() })
+              : transaction.type === TransactionType.SWAP
+                ? t('Swap %token0% for %token1% (%chainId%)', { token0: inputTokenSymbol, token1: outputTokenSymbol, chainId: CHAIN_IDS_TO_NAMES[transaction.chainId].toUpperCase() })
+                : t('Remove %token0% and %token1% (%chainId%)', { token0: transaction.token0Symbol, token1: transaction.token1Symbol, chainId: CHAIN_IDS_TO_NAMES[transaction.chainId].toUpperCase() })
+
+          ) : (
+            transaction.type === TransactionType.MINT
+              ? t('Add %token0% and %token1%', { token0: transaction.token0Symbol, token1: transaction.token1Symbol })
+              : transaction.type === TransactionType.SWAP
+                ? t('Swap %token0% for %token1%', { token0: inputTokenSymbol, token1: outputTokenSymbol })
+                : t('Remove %token0% and %token1%', { token0: transaction.token0Symbol, token1: transaction.token1Symbol })
+
+          )}
+
         </Text>
       </LinkExternal>
       <Text>${formatAmount(transaction.amountUSD)}</Text>
@@ -119,7 +132,7 @@ const DataRow: React.FC<{ transaction: Transaction }> = ({ transaction }) => {
       <Text>
         <Text>{`${formatAmount(abs1)} ${transaction.token1Symbol}`}</Text>
       </Text>
-      <LinkExternal href={getEtherScanLink(transaction.sender, 'address', chainId)}>
+      <LinkExternal href={getEtherScanLink(transaction.sender, 'address', transaction.chainId)}>
         {truncateHash(transaction.sender)}
       </LinkExternal>
       <Text>{formatDistanceToNowStrict(parseInt(transaction.timestamp, 10) * 1000)}</Text>
@@ -144,22 +157,22 @@ const TransactionTable: React.FC<{
     const toBeAbsList = [SORT_FIELD.amountToken0, SORT_FIELD.amountToken1]
     return transactions
       ? transactions
-          .slice()
-          .sort((a, b) => {
-            if (a && b) {
-              const firstField = a[sortField as keyof Transaction]
-              const secondField = b[sortField as keyof Transaction]
-              const [first, second] = toBeAbsList.includes(sortField)
-                ? [Math.abs(firstField as number), Math.abs(secondField as number)]
-                : [firstField, secondField]
-              return first > second ? (sortDirection ? -1 : 1) * 1 : (sortDirection ? -1 : 1) * -1
-            }
-            return -1
-          })
-          .filter((x) => {
-            return txFilter === undefined || x.type === txFilter
-          })
-          .slice(ITEMS_PER_INFO_TABLE_PAGE * (page - 1), page * ITEMS_PER_INFO_TABLE_PAGE)
+        .slice()
+        .sort((a, b) => {
+          if (a && b) {
+            const firstField = a[sortField as keyof Transaction]
+            const secondField = b[sortField as keyof Transaction]
+            const [first, second] = toBeAbsList.includes(sortField)
+              ? [Math.abs(firstField as number), Math.abs(secondField as number)]
+              : [firstField, secondField]
+            return first > second ? (sortDirection ? -1 : 1) * 1 : (sortDirection ? -1 : 1) * -1
+          }
+          return -1
+        })
+        .filter((x) => {
+          return txFilter === undefined || x.type === txFilter
+        })
+        .slice(ITEMS_PER_INFO_TABLE_PAGE * (page - 1), page * ITEMS_PER_INFO_TABLE_PAGE)
       : []
   }, [transactions, page, sortField, sortDirection, txFilter])
 

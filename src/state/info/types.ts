@@ -1,3 +1,5 @@
+import { ChainId } from "sdk"
+
 export interface Block {
     number: number
     timestamp: string
@@ -38,6 +40,7 @@ export type Transaction = {
     amountUSD: number
     amountToken0: number
     amountToken1: number
+    chainId?: ChainId
 }
 
 export interface ProtocolData {
@@ -95,6 +98,8 @@ export interface PoolData {
 
     liquidityToken0: number
     liquidityToken1: number
+
+    chainId: ChainId
 }
 
 export interface PoolsState {
@@ -128,6 +133,8 @@ export type TokenData = {
     priceUSD: number
     priceUSDChange: number
     priceUSDChangeWeek: number
+
+    chainId: ChainId
 }
 
 export interface TokensState {

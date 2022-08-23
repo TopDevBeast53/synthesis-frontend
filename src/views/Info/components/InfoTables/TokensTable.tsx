@@ -7,6 +7,9 @@ import { CurrencyLogo } from 'views/Info/components/CurrencyLogo'
 import { formatAmount } from 'views/Info/utils/formatInfoNumbers'
 import Percent from 'views/Info/components/Percent'
 import { useTranslation } from 'contexts/Localization'
+import { useChainIdData } from 'state/info/hooks'
+import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import { CHAIN_IDS_TO_NAMES } from 'config/constants/networks'
 import { ClickableColumnHeader, TableWrapper, PageButtons, Arrow, Break } from './shared'
 
 /**
@@ -88,8 +91,11 @@ const TableLoader: React.FC = () => {
 
 const DataRow: React.FC<{ tokenData: TokenData; index: number }> = ({ tokenData, index }) => {
   const { isXs, isSm } = useMatchBreakpoints()
+  const { chainId } = useChainIdData()
+  const { chainId: urlChainId} = useActiveWeb3React()
+
   return (
-    <LinkWrapper to={`/data/token/${tokenData.address}`}>
+    <LinkWrapper to={`/data/token/${tokenData.address}-${tokenData.chainId}?chain=${CHAIN_IDS_TO_NAMES[urlChainId]}`}>
       <ResponsiveGrid>
         <Flex>
           <Text>{index + 1}</Text>
@@ -101,6 +107,9 @@ const DataRow: React.FC<{ tokenData: TokenData; index: number }> = ({ tokenData,
             <Flex marginLeft="10px">
               <Text>{tokenData.name}</Text>
               <Text ml="8px">({tokenData.symbol})</Text>
+              {!chainId && (
+                <Text ml="8px">({CHAIN_IDS_TO_NAMES[tokenData.chainId].toUpperCase()})</Text>
+              )}
             </Flex>
           )}
         </Flex>

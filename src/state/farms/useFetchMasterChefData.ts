@@ -49,3 +49,26 @@ export const useFetchMasterChefData = () => {
         })
     }, [chainId, multicallv2])
 }
+
+export const useFetchMasterChefAllocationData = () => {
+    const multicallv2 = useMulticallv2()
+    const { chainId } = useActiveWeb3React()
+    return useCallback(async (farms: SerializedFarmConfig[]): Promise<any[]> => {
+        const masterChefFarmCalls = farms.map((farm) => {
+            const { pid } = farm
+            return pid || pid === 0 ? {
+                address: getMasterChefAddress(chainId),
+                name: 'poolInfo',
+                params: [pid],
+            } : null
+        }).filter(masterChefCall => masterChefCall)
+
+        const masterChefCalls = [{
+            address: getMasterChefAddress(chainId),
+            name: 'totalAllocPoint',
+        }, ...masterChefFarmCalls]
+
+        const masterChefMultiCallResult = await multicallv2(masterchefABI, masterChefCalls)
+        return masterChefMultiCallResult
+    }, [chainId, multicallv2])
+}

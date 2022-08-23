@@ -1,3 +1,5 @@
+import { ChainId } from 'sdk';
+
 interface PairResponse {
     token0: {
         id: string
@@ -17,6 +19,7 @@ export interface MintResponse {
     amount0: string
     amount1: string
     amountUSD: string
+    chainId?: ChainId
 }
 
 export interface SwapResponse {
@@ -29,6 +32,7 @@ export interface SwapResponse {
     amount0Out: string
     amount1Out: string
     amountUSD: string
+    chainId?: ChainId
 }
 
 export interface BurnResponse {
@@ -39,6 +43,7 @@ export interface BurnResponse {
     amount0: string
     amount1: string
     amountUSD: string
+    chainId?: ChainId
 }
 export interface TokenDayData {
     date: number // UNIX timestamp in seconds
