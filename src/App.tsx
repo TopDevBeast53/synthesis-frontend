@@ -34,33 +34,12 @@ import Vault from './views/Vault'
 const Home = lazy(() => import('./views/Home'))
 const Farms = lazy(() => import('./views/Farms'))
 const FarmAuction = lazy(() => import('./views/FarmAuction'))
-// const Lottery = lazy(() => import('./views/Lottery'))
-// const Ifos = lazy(() => import('./views/Ifos'))
 const NotFound = lazy(() => import('./views/NotFound'))
-// const Teams = lazy(() => import('./views/Teams'))
-// const Team = lazy(() => import('./views/Teams/Team'))
-// const TradingCompetition = lazy(() => import('./views/TradingCompetition'))
-// const Predictions = lazy(() => import('./views/Predictions'))
-// const PredictionsLeaderboard = lazy(() => import('./views/Predictions/Leaderboard'))
-const Voting = lazy(() => import('./views/Voting'))
-const Proposal = lazy(() => import('./views/Voting/Proposal'))
-const CreateProposal = lazy(() => import('./views/Voting/CreateProposal'))
 const AddLiquidity = lazy(() => import('./views/AddLiquidity'))
 const Liquidity = lazy(() => import('./views/Pool'))
 const PoolFinder = lazy(() => import('./views/PoolFinder'))
 const RemoveLiquidity = lazy(() => import('./views/RemoveLiquidity'))
-const Migrator = lazy(() => import('./views/LiquidityMigration'))
-const NftStaking = lazy(() => import('./views/NftStaking'))
-const NftYieldBoosting = lazy(() => import('./views/NftYieldBoosting'))
-// const SwapLiquidity = lazy(() => import('./views/SwapLiquidity'))
-// const SwapYield = lazy(() => import('./views/SwapYield'))
-const Referrals = lazy(() => import('./views/Referrals'))
 const Info = lazy(() => import('./views/Info'))
-const Admin = lazy(() => import('./views/Admin'))
-// const NftMarket = lazy(() => import('./views/Nft/market'))
-// const ProfileCreation = lazy(() => import('./views/ProfileCreation'))
-// const PancakeSquad = lazy(() => import('./views/PancakeSquad'))
-
 // This config is required for number formatting
 BigNumber.config({
   EXPONENTIAL_AT: 1000,
@@ -76,8 +55,6 @@ const App: React.FC = () => {
   useUserAgent()
   useInactiveListener()
   useSentryUser()
-
-  // const {isMobile} = useMatchBreakpoints()
 
   return (
     <Router history={history}>
@@ -110,69 +87,6 @@ const App: React.FC = () => {
             <Route path="/vaults">
               <Vault />
             </Route>
-            <Route path="/migration">
-              <Migrator />
-            </Route>
-            <Route path="/geobot-staking">
-              <NftStaking />
-            </Route>
-            <Route path="/geobot-yield-boosting">
-              <NftYieldBoosting />
-            </Route>
-            <Route path="/refer">
-              <Referrals />
-            </Route>
-            {/* <Route path="/lps-swap">
-              <SwapLiquidity />
-            </Route> */}
-            {/* <Route path="/yield-swap">
-              <SwapYield />
-            </Route> */}
-            {/* 
-            <Route path="/lottery">
-              <Lottery />
-            </Route>
-            <Route path="/ifo">
-              <Ifos />
-            </Route>
-            <Route exact path="/teams">
-              <Teams />
-            </Route>
-            <Route path="/teams/:id">
-              <Team />
-            </Route>
-            <Route path="/create-profile">
-              <ProfileCreation />
-            </Route>
-            <Route path="/competition">
-              <TradingCompetition />
-            </Route>
-            <Route exact path="/prediction">
-              <Predictions />
-            </Route>
-            <Route path="/prediction/leaderboard">
-              <PredictionsLeaderboard />
-            </Route>
-            */}
-            <Route exact path="/voting">
-              <Voting />
-            </Route>
-            <Route exact path="/voting/proposal/create">
-              <CreateProposal />
-            </Route>
-            <Route path="/voting/proposal/:id">
-              <Proposal />
-            </Route>
-
-            {/* NFT */}
-            {/* <Route path="/nfts">
-              <NftMarket />
-            </Route>
-
-            <Route path="/pancake-squad">
-              <PancakeSquad />
-            </Route> */}
-
             {/* Info pages */}
             <Route path="/data">
               <Info />
@@ -193,24 +107,10 @@ const App: React.FC = () => {
             <Route exact path="/create/:currencyIdA/:currencyIdB" component={RedirectDuplicateTokenIds} />
             <Route exact strict path="/remove/:tokens" component={RedirectOldRemoveLiquidityPathStructure} />
             <Route exact strict path="/remove/:currencyIdA/:currencyIdB" component={RemoveLiquidity} />
-            <Route exact strict path="/admin" component={Admin} />
             {/* Redirect */}
             <Route path="/pool">
               <Redirect to="/liquidity" />
             </Route>
-            {/* <Route path="/staking">
-              <Redirect to="/pools" />
-            </Route> */}
-            {/* <Route path="/syrup">
-              <Redirect to="/pools" />
-            </Route> */}
-            {/* <Route path="/collectibles">
-              <Redirect to="/nfts" />
-            </Route> */}
-            {/* <Route path="/profile">
-              <Redirect to={`${nftsBaseUrl}/profile/${account?.toLowerCase() || ''}`} />
-            </Route> */}
-
             {/* 404 */}
             <Route component={NotFound} />
           </Switch>

@@ -33,13 +33,6 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
                         label: t('Liquidity'),
                         href: '/liquidity',
                     },
-                    {
-                        type: DropdownMenuItemType.DIVIDER,
-                    },
-                    {
-                        label: 'Migrate',
-                        href: '/migration',
-                    },
                 ],
             },
             {
@@ -67,77 +60,11 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
                     },
                 ],
             },
-            // {
-            //     label: t('Refer'),
-            //     href: '/refer',
-            //     icon: 'Referals',
-            //     showItemsOnMobile: false,
-            // },
-            // {
-            //     label: t('Voting'),
-            //     href: '/voting',
-            //     icon: 'Vote1',
-            //     showItemsOnMobile: false,
-            // },
-            {
-                label: t('Bridge'),
-                icon: 'Bridge',
-                href: 'https://app.multichain.org/#/router',
-                type: DropdownMenuItemType.EXTERNAL_LINK,
-                items: [
-                    {
-                        label: t('HELIX'),
-                        href: 'https://app.multichain.org/#/router',
-                        type: DropdownMenuItemType.EXTERNAL_LINK,
-                    },
-                    {
-                        label: t('Geobots'),
-                        href: 'https://nexus.helix.finance/',
-                        type: DropdownMenuItemType.EXTERNAL_LINK,
-                    }
-                ],
-            },
-            {
-                label: t('NFT'),
-                href: '/geobot-staking',
-                icon: 'NFT1',
-                items: [
-                    {
-                        label: 'Geobot Staking',
-                        href: '/geobot-staking',
-                    },
-                ],
-            },
             {
                 label: t('Data'),
                 href: '/data',
                 icon: 'Chart',
                 showItemsOnMobile: false,
-            },
-            {
-                label: t('Admin'),
-                href: '/admin',
-                icon: 'Admin',
-                showItemsOnMobile: false,
-                onlyAdmin: true
-            },
-            {
-                label: '',
-                href: '',
-                icon: 'More',
-                hideSubNav: true,
-                items: [
-                    {
-                        label: 'Docs',
-                        href: 'https://geometry.gitbook.io/helix',
-                        type: DropdownMenuItemType.EXTERNAL_LINK,
-                    },
-                    {
-                        label: 'Blog',
-                        href: 'https://medium.com/helixgeometry',
-                        type: DropdownMenuItemType.EXTERNAL_LINK,
-                    }
-                ],
             },
         ],
         [ChainId.TESTNET]: [
@@ -158,13 +85,6 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
                         label: t('Liquidity'),
                         href: '/liquidity',
                     },
-                    {
-                        type: DropdownMenuItemType.DIVIDER,
-                    },
-                    {
-                        label: 'Migrate',
-                        href: '/migration',
-                    },
                 ],
             },
             {
@@ -192,77 +112,11 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
                     },
                 ],
             },
-            // {
-            //     label: t('Refer'),
-            //     href: '/refer',
-            //     icon: 'Referals',
-            //     showItemsOnMobile: false,
-            // },
-            {
-                label: t('NFT'),
-                href: '/geobot-staking',
-                icon: 'NFT1',
-                items: [
-                    {
-                        label: 'Geobot Staking',
-                        href: '/geobot-staking',
-                    },
-                ],
-            },
-            // {
-            //     label: t('Voting'),
-            //     href: '/voting',
-            //     icon: 'Vote1',
-            //     showItemsOnMobile: false,
-            // },
-            {
-                label: t('Bridge'),
-                icon: 'Bridge',
-                href: 'https://app.multichain.org/#/router',
-                type: DropdownMenuItemType.EXTERNAL_LINK,
-                items: [
-                    {
-                        label: t('HELIX'),
-                        href: 'https://app.multichain.org/#/router',
-                        type: DropdownMenuItemType.EXTERNAL_LINK,
-                    },
-                    {
-                        label: t('Geobots'),
-                        href: 'https://nexus.helix.finance/',
-                        type: DropdownMenuItemType.EXTERNAL_LINK,
-                    }
-                ],
-            },
             {
                 label: t('Data'),
                 href: '/data',
                 icon: 'Chart',
                 showItemsOnMobile: false,
-            },
-            {
-                label: t('Admin'),
-                href: '/admin',
-                icon: 'Admin',
-                showItemsOnMobile: false,
-                onlyAdmin: true
-            },
-            {
-                label: '',
-                href: '',
-                icon: 'More',
-                hideSubNav: true,
-                items: [
-                    {
-                        label: 'Docs',
-                        href: 'https://geometry.gitbook.io/helix',
-                        type: DropdownMenuItemType.EXTERNAL_LINK,
-                    },
-                    {
-                        label: 'Blog',
-                        href: 'https://medium.com/helixgeometry',
-                        type: DropdownMenuItemType.EXTERNAL_LINK,
-                    },
-                ],
             },
         ],
         [ChainId.RSK_MAINNET]: [
@@ -307,68 +161,6 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
                         label: t('Pools'),
                         href: '/pools',
                     },
-                    {
-                        type: DropdownMenuItemType.DIVIDER,
-                    },
-                    {
-                        label: t('Vaults'),
-                        href: '/vaults',
-                    },
-                ],
-            },
-            // {
-            //     label: t('Refer'),
-            //     href: '/refer',
-            //     icon: 'Referals',
-            //     showItemsOnMobile: false,
-            // },
-            // {
-            //     label: t('Voting'),
-            //     href: '/voting',
-            //     icon: 'Vote1',
-            //     showItemsOnMobile: false,
-            // },
-            {
-                label: t('Bridge'),
-                icon: 'Bridge',
-                href: 'https://app.multichain.org/#/router',
-                type: DropdownMenuItemType.EXTERNAL_LINK,
-                items: [
-                    {
-                        label: t('HELIX'),
-                        href: 'https://app.multichain.org/#/router',
-                        type: DropdownMenuItemType.EXTERNAL_LINK,
-                    },
-                    {
-                        label: t('Geobots'),
-                        href: 'https://nexus.helix.finance/',
-                        type: DropdownMenuItemType.EXTERNAL_LINK,
-                    }
-                ],
-            },
-            {
-                label: t('Admin'),
-                href: '/admin',
-                icon: 'Admin',
-                showItemsOnMobile: false,
-                onlyAdmin: true
-            },
-            {
-                label: '',
-                href: '',
-                icon: 'More',
-                hideSubNav: true,
-                items: [
-                    {
-                        label: 'Docs',
-                        href: 'https://geometry.gitbook.io/helix',
-                        type: DropdownMenuItemType.EXTERNAL_LINK,
-                    },
-                    {
-                        label: 'Blog',
-                        href: 'https://medium.com/helixgeometry',
-                        type: DropdownMenuItemType.EXTERNAL_LINK,
-                    },
                 ],
             },
         ],
@@ -388,13 +180,6 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
                     {
                         label: t('Liquidity'),
                         href: '/liquidity',
-                    },
-                    {
-                        type: DropdownMenuItemType.DIVIDER,
-                    },
-                    {
-                        label: 'Migrate',
-                        href: '/migration',
                     },
                 ],
             },
@@ -420,61 +205,6 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
                     {
                         label: t('Vaults'),
                         href: '/vaults',
-                    },
-                ],
-            },
-            // {
-            //     label: t('Refer'),
-            //     href: '/refer',
-            //     icon: 'Referals',
-            //     showItemsOnMobile: false,
-            // },
-            // {
-            //     label: t('Voting'),
-            //     href: '/voting',
-            //     icon: 'Vote1',
-            //     showItemsOnMobile: false,
-            // },
-            {
-                label: t('Bridge'),
-                icon: 'Bridge',
-                href: 'https://app.multichain.org/#/router',
-                type: DropdownMenuItemType.EXTERNAL_LINK,
-                items: [
-                    {
-                        label: t('HELIX'),
-                        href: 'https://app.multichain.org/#/router',
-                        type: DropdownMenuItemType.EXTERNAL_LINK,
-                    },
-                    {
-                        label: t('Geobots'),
-                        href: 'https://nexus.helix.finance/',
-                        type: DropdownMenuItemType.EXTERNAL_LINK,
-                    }
-                ],
-            },
-            {
-                label: t('Admin'),
-                href: '/admin',
-                icon: 'Admin',
-                showItemsOnMobile: false,
-                onlyAdmin: true
-            },
-            {
-                label: '',
-                href: '',
-                icon: 'More',
-                hideSubNav: true,
-                items: [
-                    {
-                        label: 'Docs',
-                        href: 'https://geometry.gitbook.io/helix',
-                        type: DropdownMenuItemType.EXTERNAL_LINK,
-                    },
-                    {
-                        label: 'Blog',
-                        href: 'https://medium.com/helixgeometry',
-                        type: DropdownMenuItemType.EXTERNAL_LINK,
                     },
                 ],
             },
@@ -496,13 +226,6 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
                         label: t('Liquidity'),
                         href: '/liquidity',
                     },
-                    {
-                        type: DropdownMenuItemType.DIVIDER,
-                    },
-                    {
-                        label: 'Migrate',
-                        href: '/migration',
-                    },
                 ],
             },
             {
@@ -530,66 +253,11 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
                     },
                 ],
             },
-            // {
-            //     label: t('Refer'),
-            //     href: '/refer',
-            //     icon: 'Referals',
-            //     showItemsOnMobile: false,
-            // },
-            // {
-            //     label: t('Voting'),
-            //     href: '/voting',
-            //     icon: 'Vote1',
-            //     showItemsOnMobile: false,
-            // },
-            {
-                label: t('Bridge'),
-                icon: 'Bridge',
-                href: 'https://app.multichain.org/#/router',
-                type: DropdownMenuItemType.EXTERNAL_LINK,
-                items: [
-                    {
-                        label: t('HELIX'),
-                        href: 'https://app.multichain.org/#/router',
-                        type: DropdownMenuItemType.EXTERNAL_LINK,
-                    },
-                    {
-                        label: t('Geobots'),
-                        href: 'https://nexus.helix.finance/',
-                        type: DropdownMenuItemType.EXTERNAL_LINK,
-                    }
-                ],
-            },
-            {
-                label: t('Admin'),
-                href: '/admin',
-                icon: 'Admin',
-                showItemsOnMobile: false,
-                onlyAdmin: true
-            },
             {
                 label: t('Data'),
                 href: '/data',
                 icon: 'Chart',
                 showItemsOnMobile: false,
-            },
-            {
-                label: '',
-                href: '',
-                icon: 'More',
-                hideSubNav: true,
-                items: [
-                    {
-                        label: 'Docs',
-                        href: 'https://geometry.gitbook.io/helix',
-                        type: DropdownMenuItemType.EXTERNAL_LINK,
-                    },
-                    {
-                        label: 'Blog',
-                        href: 'https://medium.com/helixgeometry',
-                        type: DropdownMenuItemType.EXTERNAL_LINK,
-                    },
-                ],
             },
         ],
         [ChainId.BSC_TESTNET]: [
@@ -609,13 +277,6 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
                         label: t('Liquidity'),
                         href: '/liquidity',
                     },
-                    {
-                        type: DropdownMenuItemType.DIVIDER,
-                    },
-                    {
-                        label: 'Migrate',
-                        href: '/migration',
-                    },
                 ],
             },
             {
@@ -640,61 +301,6 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
                     {
                         label: t('Vaults'),
                         href: '/vaults',
-                    },
-                ],
-            },
-            // {
-            //     label: t('Refer'),
-            //     href: '/refer',
-            //     icon: 'Referals',
-            //     showItemsOnMobile: false,
-            // },
-            // {
-            //     label: t('Voting'),
-            //     href: '/voting',
-            //     icon: 'Vote1',
-            //     showItemsOnMobile: false,
-            // },
-            {
-                label: t('Bridge'),
-                icon: 'Bridge',
-                href: 'https://app.multichain.org/#/router',
-                type: DropdownMenuItemType.EXTERNAL_LINK,
-                items: [
-                    {
-                        label: t('HELIX'),
-                        href: 'https://app.multichain.org/#/router',
-                        type: DropdownMenuItemType.EXTERNAL_LINK,
-                    },
-                    {
-                        label: t('Geobots'),
-                        href: 'https://nexus.helix.finance/',
-                        type: DropdownMenuItemType.EXTERNAL_LINK,
-                    }
-                ],
-            },
-            {
-                label: t('Admin'),
-                href: '/admin',
-                icon: 'Admin',
-                showItemsOnMobile: false,
-                onlyAdmin: true
-            },
-            {
-                label: '',
-                href: '',
-                icon: 'More',
-                hideSubNav: true,
-                items: [
-                    {
-                        label: 'Docs',
-                        href: 'https://geometry.gitbook.io/helix',
-                        type: DropdownMenuItemType.EXTERNAL_LINK,
-                    },
-                    {
-                        label: 'Blog',
-                        href: 'https://medium.com/helixgeometry',
-                        type: DropdownMenuItemType.EXTERNAL_LINK,
                     },
                 ],
             },
@@ -716,13 +322,6 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
                         label: t('Liquidity'),
                         href: '/liquidity',
                     },
-                    {
-                        type: DropdownMenuItemType.DIVIDER,
-                    },
-                    {
-                        label: 'Migrate',
-                        href: '/migration',
-                    },
                 ],
             },
             {
@@ -747,49 +346,6 @@ const config: (t: ContextApi['t']) => ConfigMenuItemsType = (t) => {
                     {
                         label: t('Vaults'),
                         href: '/vaults',
-                    },
-                ],
-            },
-            {
-                label: t('Bridge'),
-                icon: 'Bridge',
-                href: 'https://app.multichain.org/#/router',
-                type: DropdownMenuItemType.EXTERNAL_LINK,
-                items: [
-                    {
-                        label: t('HELIX'),
-                        href: 'https://app.multichain.org/#/router',
-                        type: DropdownMenuItemType.EXTERNAL_LINK,
-                    },
-                    {
-                        label: t('Geobots'),
-                        href: 'https://nexus.helix.finance/',
-                        type: DropdownMenuItemType.EXTERNAL_LINK,
-                    }
-                ],
-            },
-            {
-                label: t('Admin'),
-                href: '/admin',
-                icon: 'Admin',
-                showItemsOnMobile: false,
-                onlyAdmin: true
-            },
-            {
-                label: '',
-                href: '',
-                icon: 'More',
-                hideSubNav: true,
-                items: [
-                    {
-                        label: 'Docs',
-                        href: 'https://geometry.gitbook.io/helix',
-                        type: DropdownMenuItemType.EXTERNAL_LINK,
-                    },
-                    {
-                        label: 'Blog',
-                        href: 'https://medium.com/helixgeometry',
-                        type: DropdownMenuItemType.EXTERNAL_LINK,
                     },
                 ],
             },
