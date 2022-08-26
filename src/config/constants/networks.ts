@@ -2,7 +2,7 @@ import { CHAIN_CONFIG } from "utils/types"
 import { ChainId } from 'sdk'
 
 export const CHAIN_IDS_TO_NAMES = {
-    [ChainId.MAINNET]: 'mainnet',
+    [ChainId.MAINNET]: 'ethereum',
     [ChainId.TESTNET]: 'rinkeby',
     [ChainId.RSK_MAINNET]: 'bitcoin_rsk',
     [ChainId.RSK_TESTNET]: 'rsk_testnet',
